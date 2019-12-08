@@ -1,7 +1,7 @@
 import React, { createRef } from "react";
 import { Container, Grid, Responsive, Sticky, Ref } from "semantic-ui-react";
 import { Switch, Route } from "react-router-dom";
-import getWidth from "./../../Utils/utils";
+import {getWidth} from "./../../Utils/utils";
 
 import DesktopAdminContentMenu from "./../../Components/Body/BodyNavigation/DesktopAdminContentMenu";
 import DesktopContentMenu from "./../../Components/Body/BodyNavigation/DesktopContentMenu";
