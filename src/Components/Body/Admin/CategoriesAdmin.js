@@ -1,18 +1,13 @@
-import React, { useState } from "react";
-import {
-  Card,
-  Grid,
-  Segment,
-  Header,
-  Divider,
-  Icon,
-  Form,
-  Checkbox
-} from "semantic-ui-react";
+import React, { useState, useEffect } from "react";
+import {Button,Card,Grid,Segment,Header,Divider,Icon,Form,Checkbox} from "semantic-ui-react";
 import { useDrag, useDrop } from "react-dnd";
 import { DndProvider } from "react-dnd";
 import Backend from "react-dnd-html5-backend";
 import update from "immutability-helper";
+
+import { withApollo } from '@apollo/react-hoc';
+import { useQuery, useMutation } from '@apollo/react-hooks';
+import {GET_PAGES_LIST,MODIFY_PAGE_POSITION} from './../../../Queries/contentQueries';
 
 const cardGroupStyle = {
   margin: "10px 0px 0px 0px"
@@ -25,36 +20,7 @@ const ItemTypes = {
   CARD: "card"
 };
 
-const ITEMS = [
-  {
-    id: 1,
-    text: "Pochette"
-  },
-  {
-    id: 2,
-    text: "Pull en laine"
-  },
-  {
-    id: 3,
-    text: "Sac"
-  },
-  {
-    id: 4,
-    text: "Couverture"
-  },
-  {
-    id: 5,
-    text: "Serviette"
-  }
-];
-
 const CategoryCard = ({ id, name, isActivated, moveCard, findCard }) => {
-  // const [activated, setActivatedIndicator] = useState(isActivated);
-
-  // const [hovered, setHoverIndicator] = useState(false);
-  // const onHoverHandler = () => {
-  //   setHoverIndicator(!hovered);
-  // };
 
   const originalIndex = findCard(id).index;
 
@@ -98,10 +64,18 @@ const CategoryCard = ({ id, name, isActivated, moveCard, findCard }) => {
   );
 };
 
-const CategoriesAdmin = () => {
-  const [cards, setCards] = useState(ITEMS);
+const CategoriesAdmin = ({initData,client}) => {
+
+
+  const [cards, setCards] = useState(initData);
+
+  console.log(cards);
+
 
   const moveCard = (id, atIndex) => {
+
+    console.log(`move card from ${id} to ${atIndex}`)
+
     const { card, index } = findCard(id);
     setCards(
       update(cards, {
@@ -119,6 +93,16 @@ const CategoriesAdmin = () => {
   };
 
   const [, drop] = useDrop({ accept: ItemTypes.CARD });
+
+  //const [savePosition, { data }] = useMutation(MODIFY_PAGE_POSITION);
+
+  const saveNewPositionsOrder = async () => {
+    cards.map(async (card, position) => {
+      const variables = {id:card.id, position:position};
+      const result = await client.mutate({mutation:MODIFY_PAGE_POSITION,variables});
+      console.log(result);
+    });
+  };
 
   return (
     <Segment>
@@ -154,21 +138,52 @@ const CategoriesAdmin = () => {
       <Card.Group ref={drop} style={{ cardGroupStyle, width: "100%" }}>
         {cards.map(card => (
           <CategoryCard
-            name={card.text}
+            name={card.label}
             key={card.id}
             id={`${card.id}`}
-            text={card.text}
+            text={card.label}
             moveCard={moveCard}
             findCard={findCard}
-            isActivated={true}
+            isActivated={card.activated}
           />
         ))}
       </Card.Group>
+
+      <br />
+
+      <Grid>
+        <Grid.Row>
+          <Grid.Column width={4}></Grid.Column>
+          <Grid.Column width={8}>
+            <Button fluid onClick={saveNewPositionsOrder}>Sauvegarder</Button>
+          </Grid.Column>
+          <Grid.Column width={4}></Grid.Column>
+        </Grid.Row>
+      </Grid>
+
     </Segment>
   );
 };
 
+const InitComponent = (props) => {
+
+  const { loading, error, data } = useQuery(GET_PAGES_LIST,{ fetchPolicy: "network-only" });
+
+  if (loading) return null;
+  if (error) return null;
+
+  
+  console.log('INIT COMPONENT');
+  console.log(data);
+  console.log('//INIT COMPONENT//');
+
+  return(
+    <CategoriesAdmin {...props} initData={data.pages}/>
+  );
+}
+
 const withDndProvider = Component => () => {
+ 
   return (
     <DndProvider backend={Backend}>
       <Component />
@@ -176,4 +191,4 @@ const withDndProvider = Component => () => {
   );
 };
 
-export default withDndProvider(CategoriesAdmin);
+export default withDndProvider(withApollo(InitComponent));
