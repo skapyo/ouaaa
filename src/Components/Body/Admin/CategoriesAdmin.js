@@ -173,14 +173,16 @@ const InitComponent = (props) => {
   if (error) return null;
 
   
-  console.log('INIT COMPONENT');
-  console.log(data);
-  console.log('//INIT COMPONENT//');
+  // console.log('INIT COMPONENT');
+  // console.log(data);
+  // console.log('//INIT COMPONENT//');
 
   return(
     <CategoriesAdmin {...props} initData={data.pages}/>
   );
 }
+
+
 
 const withDndProvider = Component => () => {
  
