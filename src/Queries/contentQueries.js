@@ -12,8 +12,8 @@ export const GET_PAGES_LIST = gql`
 `;
 
 export const MODIFY_PAGE_POSITION = gql`
-  mutation modifyPageOrder($id: Int!, $position:Int!) {
-    modifyPageOrder(id: $id, position:$position) {
+  mutation modifyPagePosition($id: Int!, $position:Int!) {
+    modifyPagePosition(id: $id, position:$position) {
       id,
       label
     }

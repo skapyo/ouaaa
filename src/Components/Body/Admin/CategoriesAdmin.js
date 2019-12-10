@@ -20,7 +20,7 @@ const ItemTypes = {
   CARD: "card"
 };
 
-const CategoryCard = ({ id, name, isActivated, moveCard, findCard }) => {
+const CategoryCard = ({ id, name, isActivated, moveCard, findCard, client }) => {
 
   const originalIndex = findCard(id).index;
 
@@ -94,15 +94,30 @@ const CategoriesAdmin = ({initData,client}) => {
 
   const [, drop] = useDrop({ accept: ItemTypes.CARD });
 
-  //const [savePosition, { data }] = useMutation(MODIFY_PAGE_POSITION);
+  /* save data after clicking the save button */
 
-  const saveNewPositionsOrder = async () => {
-    cards.map(async (card, position) => {
-      const variables = {id:card.id, position:position};
-      const result = await client.mutate({mutation:MODIFY_PAGE_POSITION,variables});
-      console.log(result);
-    });
-  };
+  const [saveLoading, setSaveLoading] = useState(false);
+  const [queryNumber, setNextQueryNumber] = useState(0);
+
+  useEffect(() => {
+      const fetch = async () => { 
+        setSaveLoading(true);
+        const resultPromises = cards.map((card, position) => {
+          const variables = {id:card.id, position:position};
+          const resultPromise = client.mutate({mutation:MODIFY_PAGE_POSITION,variables});
+          return resultPromise;
+        });
+        await Promise.all(resultPromises);
+        setSaveLoading(false);
+      }
+
+      if(queryNumber != 0) {
+        fetch();
+      }
+
+    }, [queryNumber]);
+    
+  /* --- */
 
   return (
     <Segment>
@@ -145,6 +160,7 @@ const CategoriesAdmin = ({initData,client}) => {
             moveCard={moveCard}
             findCard={findCard}
             isActivated={card.activated}
+            client={client}
           />
         ))}
       </Card.Group>
@@ -155,7 +171,7 @@ const CategoriesAdmin = ({initData,client}) => {
         <Grid.Row>
           <Grid.Column width={4}></Grid.Column>
           <Grid.Column width={8}>
-            <Button fluid onClick={saveNewPositionsOrder}>Sauvegarder</Button>
+            <Button fluid loading={saveLoading} onClick={() => setNextQueryNumber(queryNumber+1)}>Sauvegarder</Button>
           </Grid.Column>
           <Grid.Column width={4}></Grid.Column>
         </Grid.Row>
@@ -171,11 +187,6 @@ const InitComponent = (props) => {
 
   if (loading) return null;
   if (error) return null;
-
-  
-  // console.log('INIT COMPONENT');
-  // console.log(data);
-  // console.log('//INIT COMPONENT//');
 
   return(
     <CategoriesAdmin {...props} initData={data.pages}/>
