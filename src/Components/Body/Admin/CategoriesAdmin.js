@@ -86,9 +86,9 @@ const CategoriesAdmin = ({initData,client,refetch}) => {
   if(newPageError) {
     // si le nom de la categorie existe déjà
     if(newPageError.graphQLErrors[0] && newPageError.graphQLErrors[0].statusCode === '1001') 
-      alert.error("La page existe déjà, veuillez rééssayer avec un autre nom");
+      alert.error("La catégorie existe déjà, veuillez rééssayer avec un autre nom");
     else
-      alert.error("Il y a eu une erreur à la création de la page!");
+      alert.error("Il y a eu une erreur à la création de la catégorie!");
     refetch();
   }
 
