@@ -15,10 +15,6 @@ import { onError } from 'apollo-link-error';
 import { setContext } from 'apollo-link-context'
 import { ApolloProvider } from '@apollo/react-common';
 
-// import { render } from 'react-dom'
-// import { transitions, positions, Provider as AlertProvider } from 'react-alert'
-// import AlertTemplate from 'react-alert-template-basic'
-
 
 const PORT_GRAPHQL_SERVER = 8001;
 const SERVER = 'localhost';
@@ -78,18 +74,7 @@ const client2 = new ApolloClient({
   
   const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) => {
   
-    if(graphQLErrors) {
-      console.log("GraphQLError:")
-      console.log(graphQLErrors[0]);
-      console.log(" // GraphQLError //")
-    }
-
     if (networkError) {
-
-      console.log("NetworkError:")
-      console.log(networkError.statusCode);
-      console.log(" // NetworkError //")
-
       if(networkError.statusCode === 401) {
         
         localStorage.setItem(AUTH_TOKEN, '');
@@ -134,24 +119,12 @@ const client2 = new ApolloClient({
   
   const client = new ApolloClient({
       link: link,
-      cache: new InMemoryCache()
+      cache: new InMemoryCache() 
   });
-
-  // const alertOptions = {
-  //   // you can also just use 'bottom center'
-  //   position: positions.BOTTOM_CENTER,
-  //   timeout: 5000,
-  //   offset: '30px',
-  //   // you can also just use 'scale'
-  //   transition: transitions.SCALE
-  // }
   
   ReactDOM.render(
-
       <ApolloProvider client={client}>
             <HomePageLayout />
-      </ApolloProvider>
-
-    ,
+      </ApolloProvider>,
       document.getElementById('root'),
     );

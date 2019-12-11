@@ -5,27 +5,17 @@ export const GET_PAGES_LIST = gql`
   pages {
     id,
     label, 
-    description,
     position,
     activated
   }
 }
 `;
 
-export const MODIFY_PAGE_INFORMATIONS= gql`
-  mutation modifyPagesInformationsMutation($pages: [InputPageType]) {
-    modifyPagesInformations(pages: $pages) 
-  }
-`;
-
-export const ADD_NEW_PAGE= gql`
-  mutation addPageMutation($label: String!, $description:String) {
-    addPage(label:$label, description:$description) {
+export const MODIFY_PAGE_POSITION = gql`
+  mutation modifyPagePosition($id: Int!, $position:Int!) {
+    modifyPagePosition(id: $id, position:$position) {
       id,
-      label, 
-      description,
-      position,
-      activated
+      label
     }
   }
 `;

@@ -6,10 +6,8 @@ import Backend from "react-dnd-html5-backend";
 import update from "immutability-helper";
 
 import { withApollo } from '@apollo/react-hoc';
-import { useQuery ,useMutation} from '@apollo/react-hooks';
-import {GET_PAGES_LIST,MODIFY_PAGE_INFORMATIONS,ADD_NEW_PAGE} from './../../../Queries/contentQueries';
-
-import { useAlert } from 'react-alert'
+import { useQuery, useMutation } from '@apollo/react-hooks';
+import {GET_PAGES_LIST,MODIFY_PAGE_POSITION} from './../../../Queries/contentQueries';
 
 const cardGroupStyle = {
   margin: "10px 0px 0px 0px"
@@ -22,7 +20,7 @@ const ItemTypes = {
   CARD: "card"
 };
 
-const CategoryCard = ({ id, name, isActivated, moveCard, findCard, client,activatedSwitchHandler }) => {
+const CategoryCard = ({ id, name, isActivated, moveCard, findCard, client }) => {
 
   const originalIndex = findCard(id).index;
 
@@ -56,7 +54,7 @@ const CategoryCard = ({ id, name, isActivated, moveCard, findCard, client,activa
                 <Header>{name}</Header>
               </Grid.Column>
               <Grid.Column width={2}>
-                <Checkbox toggle onChange={() => activatedSwitchHandler(id)} defaultChecked={isActivated} />
+                <Checkbox toggle defaultChecked={isActivated} />
               </Grid.Column>
             </Grid.Row>
           </Grid>
@@ -66,62 +64,14 @@ const CategoryCard = ({ id, name, isActivated, moveCard, findCard, client,activa
   );
 };
 
-const CategoriesAdmin = ({initData,client,refetch}) => {
+const CategoriesAdmin = ({initData,client}) => {
 
-  // alert hook
-  // const alert = useAlert()
 
-  // Init cards content
   const [cards, setCards] = useState(initData);
-  // refresh cards content if props change (from INIT component)
-  useEffect(() => {
-    setCards(initData);
-  }, [initData])
 
-  const [newPageName, setNewPageNameValue] = useState();
-  // Mutation to add a new page
-  const [addNewPage,{data:newPageData, loading:newPageDataLoading, error:newPageError}] = useMutation(ADD_NEW_PAGE);
+  console.log(cards);
 
-  if(newPageError) {
-    //console.log(newPageError);
-    // alert.show(newPageError.message);
-  }
 
-  const newPageInputChangeHandler = (e,{value}) => {
-    setNewPageNameValue(value);
-  };
-
-  const addNewPageHandler = () => {
-
-    const execute = async (variables) => {
-      const result = await addNewPage({variables:variables});
-      return result;
-    };
-
-    const variables = {label:newPageName,description:''};
-    execute(variables);
-    setNextPageMutationNB(addNewPageMutationNB+1);
-  };
-
-  const [addNewPageMutationNB, setNextPageMutationNB] = useState(0);
-    
-  useEffect(() => {
-    if(addNewPageMutationNB!==0) {
-      refetch();
-    }
-  },[addNewPageMutationNB]);
-
-  // function to activate / desactivate a card in the state
-  const updateActiveIndicator = (id) => {
-    const { card, index } = findCard(id);
-    setCards(
-      update(cards,{
-        $splice:[[index,1,{...card, activated:!card.activated}]]
-      })
-    );
-  };
-
-  // function to move a card to another position in the state
   const moveCard = (id, atIndex) => {
 
     console.log(`move card from ${id} to ${atIndex}`)
@@ -134,7 +84,6 @@ const CategoriesAdmin = ({initData,client,refetch}) => {
     );
   };
 
-  // function to find the card in the state
   const findCard = id => {
     const card = cards.filter(c => `${c.id}` === id)[0];
     return {
@@ -146,39 +95,29 @@ const CategoriesAdmin = ({initData,client,refetch}) => {
   const [, drop] = useDrop({ accept: ItemTypes.CARD });
 
   /* save data after clicking the save button */
- 
-  // Save modifications 
-  const [saveChanges, {loading }] = useMutation(MODIFY_PAGE_INFORMATIONS);
-  
-  const saveButtonHandler = (event) => {
 
-    const execute = async (variables) => {
-        const result = await saveChanges({ variables:{pages:variables}});
-        return result;
-    };
+  const [saveLoading, setSaveLoading] = useState(false);
+  const [queryNumber, setNextQueryNumber] = useState(0);
 
-    event.preventDefault();
-    const cardsValuesUpdated = cards.map((card, index) => {
-      return {...card, position:index};
-    });
-
-    execute(cardsValuesUpdated);
-
-    setNextQueryNumber(queryNumber+1);
-  };
-
-    // Refresh if modifications saved before => don't refresh at first rendering
-    const [queryNumber, setNextQueryNumber] = useState(0);
-    
-    useEffect(() => {
-      if(queryNumber!==0) {
-        refetch();
+  useEffect(() => {
+      const fetch = async () => { 
+        setSaveLoading(true);
+        const resultPromises = cards.map((card, position) => {
+          const variables = {id:card.id, position:position};
+          const resultPromise = client.mutate({mutation:MODIFY_PAGE_POSITION,variables});
+          return resultPromise;
+        });
+        await Promise.all(resultPromises);
+        setSaveLoading(false);
       }
 
-    },[queryNumber]);
+      if(queryNumber != 0) {
+        fetch();
+      }
 
-  /* //// ---- //// */
-
+    }, [queryNumber]);
+    
+  /* --- */
 
   return (
     <Segment>
@@ -193,10 +132,10 @@ const CategoriesAdmin = ({initData,client,refetch}) => {
         </Header>
       </Divider>
 
-      <Form onSubmit={addNewPageHandler}>
+      <Form>
         <Form.Group widths="equal">
-          <Form.Input name = 'newPage' onChange={newPageInputChangeHandler} fluid placeholder="Nom de la nouvelle catégorie" />
-          <Form.Button fluid loading={newPageDataLoading} content='Submit'>Ajouter</Form.Button>
+          <Form.Input fluid placeholder="Nom de la nouvelle catégorie" />
+          <Form.Button fluid>Ajouter</Form.Button>
         </Form.Group>
       </Form>
 
@@ -222,7 +161,6 @@ const CategoriesAdmin = ({initData,client,refetch}) => {
             findCard={findCard}
             isActivated={card.activated}
             client={client}
-            activatedSwitchHandler={updateActiveIndicator}
           />
         ))}
       </Card.Group>
@@ -233,7 +171,7 @@ const CategoriesAdmin = ({initData,client,refetch}) => {
         <Grid.Row>
           <Grid.Column width={4}></Grid.Column>
           <Grid.Column width={8}>
-            <Button fluid loading={loading} onClick={(e) => saveButtonHandler(e)}>Sauvegarder</Button>
+            <Button fluid loading={saveLoading} onClick={() => setNextQueryNumber(queryNumber+1)}>Sauvegarder</Button>
           </Grid.Column>
           <Grid.Column width={4}></Grid.Column>
         </Grid.Row>
@@ -245,21 +183,17 @@ const CategoriesAdmin = ({initData,client,refetch}) => {
 
 const InitComponent = (props) => {
 
-  const { loading, error, data, refetch } = useQuery(GET_PAGES_LIST,{ fetchPolicy: "network-only" });
+  const { loading, error, data } = useQuery(GET_PAGES_LIST,{ fetchPolicy: "network-only" });
 
   if (loading) return null;
   if (error) return null;
 
-  let dataWithoutTypename = null; 
-  if(data) {
-    const omitTypename = (key, value) => (key === '__typename' ? undefined : value)
-    dataWithoutTypename = JSON.parse(JSON.stringify(data.pages), omitTypename)
-  }
-
   return(
-    <CategoriesAdmin {...props} initData={dataWithoutTypename} refetch={refetch}/>
+    <CategoriesAdmin {...props} initData={data.pages}/>
   );
 }
+
+
 
 const withDndProvider = Component => () => {
  
