@@ -82,39 +82,33 @@ const CategoriesAdmin = ({initData,client,refetch}) => {
   // Mutation to add a new page
   const [addNewPage,{data:newPageData, loading:newPageDataLoading, error:newPageError}] = useMutation(ADD_NEW_PAGE);
 
-  // gestion des erreurs GraphQL pour la créatioon d'une nouvelle page
-  if(newPageError) {
-    // si le nom de la categorie existe déjà
-    if(newPageError.graphQLErrors[0] && newPageError.graphQLErrors[0].statusCode === '1001') 
-      alert.error("La catégorie existe déjà, veuillez rééssayer avec un autre nom");
-    else
-      alert.error("Il y a eu une erreur à la création de la catégorie!");
-    refetch();
-  }
-
   const newPageInputChangeHandler = (e,{value}) => {
     setNewPageNameValue(value);
   };
 
   const addNewPageHandler = () => {
-
-    const execute = async (variables) => {
-      const result = await addNewPage({variables:variables});
-      return result;
-    };
-
     const variables = {label:newPageName,description:''};
-    execute(variables);
-    setNextPageMutationNB(addNewPageMutationNB+1);
+    addNewPage({variables:variables});
   };
 
-  const [addNewPageMutationNB, setNextPageMutationNB] = useState(0);
-    
+  // refresh the category list if add category mutation is OK
   useEffect(() => {
-    if(addNewPageMutationNB!==0) {
+    if(newPageData !== undefined) {
+      alert.success("La nouvelle catégorie a bien été ajoutée!");
       refetch();
+    } 
+  },[newPageData]);
+
+  // print error alert if error in new category creation 
+  useEffect(() => {
+    if(newPageError !== undefined) {
+      // if the category name already exists
+      if(newPageError.graphQLErrors[0] && newPageError.graphQLErrors[0].statusCode === '1001') 
+        alert.error("La catégorie existe déjà, veuillez rééssayer avec un autre nom");
+      else
+        alert.error("Il y a eu une erreur à la création de la catégorie!");
     }
-  },[addNewPageMutationNB]);
+  },[newPageError]);
 
   // function to activate / desactivate a card in the state
   const updateActiveIndicator = (id) => {
@@ -153,35 +147,28 @@ const CategoriesAdmin = ({initData,client,refetch}) => {
   /* save data after clicking the save button */
  
   // Save modifications 
-  const [saveChanges, {loading }] = useMutation(MODIFY_PAGE_INFORMATIONS);
+  const [saveChanges, {loading,data, error }] = useMutation(MODIFY_PAGE_INFORMATIONS);
   
   const saveButtonHandler = (event) => {
-
-    const execute = async (variables) => {
-        const result = await saveChanges({ variables:{pages:variables}});
-        return result;
-    };
-
     event.preventDefault();
     const cardsValuesUpdated = cards.map((card, index) => {
       return {...card, position:index};
     });
-
-    execute(cardsValuesUpdated);
-
-    setNextQueryNumber(queryNumber+1);
+    saveChanges({ variables:{pages:cardsValuesUpdated}})
   };
+  
+  useEffect(() => {
+    if(data !== undefined) {
+      alert.success("La modification de l'affichage des catégories a été sauvegardée !");
+      refetch();
+    } 
+  },[data]);
 
-    // Refresh if modifications saved before => don't refresh at first rendering
-    const [queryNumber, setNextQueryNumber] = useState(0);
-    
-    useEffect(() => {
-      if(queryNumber!==0) {
-        refetch();
-      }
-
-    },[queryNumber]);
-
+  useEffect(() => {
+    if(error !== undefined)
+      alert.error("Il y eu une erreur lors de la modification de l'affichage des catégories.");  
+  },[error]);
+ 
   /* //// ---- //// */
 
 
