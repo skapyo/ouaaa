@@ -22,7 +22,15 @@ const ItemTypes = {
   CARD: "card"
 };
 
-const CategoryCard = ({ id, name, isActivated, moveCard, findCard, client,activatedSwitchHandler }) => {
+const CategoryCard = ({ id, name, isActivated, moveCard, findCard,activatedSwitchHandler,deletedIconClickHandler }) => {
+
+  const [isDeleted, setDeletedInd] = useState(false);
+
+  const trashIconClickHander = (event) => {
+    event.preventDefault();
+    deletedIconClickHandler(id);
+    setDeletedInd(!isDeleted);
+  };
 
   const originalIndex = findCard(id).index;
 
@@ -52,11 +60,14 @@ const CategoryCard = ({ id, name, isActivated, moveCard, findCard, client,activa
         <Card.Content>
           <Grid>
             <Grid.Row>
-              <Grid.Column width={14}>
+              <Grid.Column width={13}>
                 <Header>{name}</Header>
               </Grid.Column>
               <Grid.Column width={2}>
                 <Checkbox toggle onChange={() => activatedSwitchHandler(id)} defaultChecked={isActivated} />
+              </Grid.Column>
+              <Grid.Column width={1}>
+                <Icon onClick={trashIconClickHander} color={isDeleted?'red':'grey'} size='large' name="trash alternate outline" />
               </Grid.Column>
             </Grid.Row>
           </Grid>
@@ -116,6 +127,16 @@ const CategoriesAdmin = ({initData,client,refetch}) => {
     setCards(
       update(cards,{
         $splice:[[index,1,{...card, activated:!card.activated}]]
+      })
+    );
+  };
+    
+  // function to activate / desactivate the deleted indicator
+  const updateDeletedIndicator = (id) => {
+    const { card, index } = findCard(id);
+    setCards(
+      update(cards,{
+        $splice:[[index,1,{...card, deleted:!card.deleted}]]
       })
     );
   };
@@ -213,8 +234,8 @@ const CategoriesAdmin = ({initData,client,refetch}) => {
             moveCard={moveCard}
             findCard={findCard}
             isActivated={card.activated}
-            client={client}
             activatedSwitchHandler={updateActiveIndicator}
+            deletedIconClickHandler={updateDeletedIndicator}
           />
         ))}
       </Card.Group>

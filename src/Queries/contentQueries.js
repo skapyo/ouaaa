@@ -7,7 +7,8 @@ export const GET_PAGES_LIST = gql`
     label, 
     description,
     position,
-    activated
+    activated,
+    deleted
   }
 }
 `;
