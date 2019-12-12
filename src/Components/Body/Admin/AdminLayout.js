@@ -1,8 +1,8 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
 
-import CategoriesAdmin from "./CategoriesAdmin";
-import ArticlesAddAdmin from "./ArticlesAddAdmin";
+import CategoriesAdmin from "./CategoriesAdmin/CategoriesAdmin";
+import ProductAddAdmin from "./ProductsAdmin/ProductAddAdmin";
 import ArticlesModifyAdmin from "./ArticlesModifyAdmin";
 import ArticlesPicturesAdmin from "./ArticlesPicturesAdmin";
 
@@ -12,7 +12,7 @@ const AdminLayout = () => {
       <Route path="/admin/categories" component={() => <CategoriesAdmin />} />
       <Route
         path="/admin/articles/add"
-        component={() => <ArticlesAddAdmin />}
+        component={() => <ProductAddAdmin />}
       />
       <Route
         path="/admin/articles/modify"
