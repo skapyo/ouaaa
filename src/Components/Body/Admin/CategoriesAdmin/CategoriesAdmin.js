@@ -88,6 +88,8 @@ const CategoriesAdmin = ({initData,client,refetch}) => {
     setCards(initData);
   }, [initData])
 
+  console.log(cards);
+
   const [newPageName, setNewPageNameValue] = useState();
   // Mutation to add a new page
   const [addNewPage,{data:newPageData, loading:newPageDataLoading, error:newPageError}] = useMutation(ADD_NEW_PAGE);
