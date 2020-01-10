@@ -19,6 +19,7 @@ import { render } from 'react-dom'
 import { transitions, positions, Provider as AlertProvider } from 'react-alert'
 import AlertTemplate from 'react-alert-template-basic'
 
+import {createUploadLink} from 'apollo-upload-client';
 
 const PORT_GRAPHQL_SERVER = 8001;
 const SERVER = 'localhost';
@@ -59,8 +60,9 @@ const client2 = new ApolloClient({
     return(response);
   }
   
+  // link: createUploadLink({ uri: process.env.API_URI })
   
-  const terminatingLink = new HttpLink({
+  const terminatingLink = new createUploadLink({
       uri: URI_GRAPHQL_SERVER,
     });
   

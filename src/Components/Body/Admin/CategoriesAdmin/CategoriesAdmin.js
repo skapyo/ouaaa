@@ -78,7 +78,6 @@ const CategoryCard = ({ id, name, isActivated, moveCard, findCard,activatedSwitc
 
 const CategoriesAdmin = ({initData,client,refetch}) => {
 
-  // alert hook
   const alert = useAlert()
 
   // Init cards content
