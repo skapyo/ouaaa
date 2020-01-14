@@ -2,13 +2,25 @@ import {useState} from 'react';
 import update from "immutability-helper";
 
 // initialState is a list of object. Every object should have an id field
-const useDnDStateManager = (initialState=null) => {
+const useDnDStateManager = (initialState=[]) => {
 
     const [objectsList, setObjectsList] = useState(initialState);
 
     // function to init state
     const initState = (state) => {
         setObjectsList(state);
+    };
+
+    // function to add values in state
+    const addValues = (values) => {
+        let newArrayTemp = update(objectsList,{
+            $push:values
+        });
+        setObjectsList(
+            newArrayTemp.map((value,index) => {
+                return {...value, id:index};
+            })
+        );
     };
 
     // move an object in the list from an index to another
@@ -59,7 +71,8 @@ const useDnDStateManager = (initialState=null) => {
         findObject,
         updateActiveIndicator,
         updateDeletedIndicator,
-        initState
+        initState,
+        addValues
     };
 
 }

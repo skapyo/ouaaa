@@ -27,7 +27,7 @@ const DesktopAdminContentMenu = () => {
           <Dropdown.Item as={Link} to="/admin/articles/add">
             Ajouter un article
           </Dropdown.Item>
-          <Dropdown.Item as={Link} to="/admin/articles/modify">
+          <Dropdown.Item as={Link} to="/admin/articles/select">
             Modifier un article
           </Dropdown.Item>
           <Dropdown.Item as={Link} to="/admin/articles/pictures">

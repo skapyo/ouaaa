@@ -2,9 +2,10 @@ import React from "react";
 import { Switch, Route } from "react-router-dom";
 
 import CategoriesAdmin from "./CategoriesAdmin/CategoriesAdmin";
-import ProductAddAdmin from "./ProductsAdmin/ProductAddAdmin";
-import ArticlesModifyAdmin from "./ArticlesModifyAdmin";
+import AddProductAdmin from "./ProductsAdmin/AddProductAdmin";
+import ModifyProductAdmin from './ProductsAdmin/ModifyProductAdmin';
 import ArticlesPicturesAdmin from "./ArticlesPicturesAdmin";
+import SelectProductAdmin from './ProductsAdmin/SelectProductAdmin';
 
 const AdminLayout = () => {
   return (
@@ -12,11 +13,15 @@ const AdminLayout = () => {
       <Route path="/admin/categories" component={() => <CategoriesAdmin />} />
       <Route
         path="/admin/articles/add"
-        component={() => <ProductAddAdmin />}
+        component={() => <AddProductAdmin />}
       />
       <Route
-        path="/admin/articles/modify"
-        component={() => <ArticlesModifyAdmin />}
+        path="/admin/articles/select/"
+        component={() => <SelectProductAdmin />}
+      />
+      <Route
+        path="/admin/articles/modify/:productId"
+        component={() => <ModifyProductAdmin />}
       />
       <Route
         path="/admin/articles/pictures"

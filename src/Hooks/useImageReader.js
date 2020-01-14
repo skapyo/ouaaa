@@ -21,7 +21,9 @@ const useImageReader = () => {
             file:img,
             img:URL.createObjectURL(img),
             activated:true,
-            deleted:false
+            deleted:false,
+            newpic : true,
+            serverId : null
           };
         })
         setResultState(result);

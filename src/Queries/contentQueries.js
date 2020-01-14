@@ -13,6 +13,33 @@ export const GET_PAGES_LIST = gql`
 }
 `;
 
+export const GET_PRODUCTS_LIST = gql`
+  query getProductsList($id: String!) {
+    page(id:$id) {
+      products {id,label}
+    }
+  }
+`;
+
+export const GET_PRODUCT = gql`
+  query getProduct($id: String!) {
+    product(id:$id) {
+      id,
+      label,
+      price,
+      short_description,
+      description,
+      limitedQuantity,
+      quantity,
+      pictures {
+        id,
+        path
+      }
+    }
+  }
+`;
+
+
 export const MODIFY_PAGE_INFORMATIONS= gql`
   mutation modifyPagesInformationsMutation($pages: [InputPageType]) {
     modifyPagesInformations(pages: $pages) 
@@ -57,7 +84,42 @@ mutation addProductMutation(
         label, 
         short_description,
         description,
-        price
+        price,
+        pictures {path}
+    }
+  }
+`;
+
+export const MODIFY_PRODUCT= gql`
+mutation modifyProductMutation(
+  $id: String!,
+  $label: String, 
+  $short_description:String,
+  $description:String,
+  $price:Int,
+  $pageId:Int,
+  $limitedQuantity:Boolean, 
+  $quantity:Int,
+  $files: [InputModifyPictureType]
+  ) {
+
+    modifyProduct(
+      id:$id,
+      label:$label, 
+      short_description:$short_description, 
+      description:$description, 
+      price:$price,
+      pageId:$pageId,
+      limitedQuantity:$limitedQuantity,
+      quantity:$quantity,
+      images: $files
+      ) {
+        id,
+        label, 
+        short_description,
+        description,
+        price,
+        pictures {path}
     }
   }
 `;

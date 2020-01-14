@@ -1,19 +1,24 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import {useDropArea} from 'react-use';
 
-import {GET_PAGES_LIST,ADD_NEW_PRODUCT} from '../../../../Queries/contentQueries';
+import {MODIFY_PRODUCT,ADD_NEW_PRODUCT} from '../../../../Queries/contentQueries';
 
 import { useQuery ,useMutation} from '@apollo/react-hooks';
 
 import { useDrag, useDrop } from "react-dnd";
-import { DndProvider } from "react-dnd";
-import Backend from "react-dnd-html5-backend";
+
 import update from "immutability-helper";
 import gql from "graphql-tag";
 import { useAlert } from 'react-alert'
 
-import useDnDStateManager from './../../../../Hooks/useDnDStateManager';
-import useImageReader from './../../../../Hooks/useImageReader';
+import useDnDStateManager from '../../../../Hooks/useDnDStateManager';
+import useImageReader from '../../../../Hooks/useImageReader';
+
+import withDndProvider from './../../../../Hoc/withDnDProvider';
+
+import CategoriesSelect from './../BaseComponent/CategoriesSelect';
+
+import { useHistory } from 'react-router-dom';
 
 import {
   Segment,
@@ -34,49 +39,8 @@ const ItemTypes = {
   PIC: "pic"
 };
 
-
-const stateInit = {
-  name: "",
-  price: null,
-  shortdescr: "",
-  longdescr: "",
-  nolimit:true,
-  nb_products:null
-};
-
-const CategoriesSelect = ({categorySelecthandler}) => {
-
-  console.log("CategoriesSelect render");
-
-  const {error, data:categoriesData } = useQuery(GET_PAGES_LIST);
-
-  let selectionOptions = [];
-  if(categoriesData !== undefined) {
-    console.log(categoriesData);
-    selectionOptions = categoriesData.pages.map((category) => {
-      return {key:category.id, value:category.id, text:category.label};
-    });
-  }
-
-  return (
-    <Grid>
-      <Grid.Row>
-        <Grid.Column width={1} />
-        <Grid.Column width={14}>
-          <Form.Select
-            fluid
-            placeholder="Sélectionner la catégorie"
-            options={selectionOptions}
-            onChange={categorySelecthandler}
-          />
-        </Grid.Column>
-        <Grid.Column width={1} />
-      </Grid.Row>
-    </Grid>
-  );
-};
-
 const CategoryInformations = ({formChangeHandler,formValues,checkBoxChangeHandler}) => {
+ 
   return (
     <>
       <Divider horizontal>
@@ -85,88 +49,73 @@ const CategoryInformations = ({formChangeHandler,formValues,checkBoxChangeHandle
           Les informations de l'article
         </Header>
       </Divider>
-      <CategoryInformationsInputs checkBoxChangeHandler={checkBoxChangeHandler} formChangeHandler={formChangeHandler} formValues={formValues}/>
-    </>
-  );
-};
+      <Grid>
+        <Grid.Row>
+          <Grid.Column width={1} />
+          <Grid.Column width={14}>
+            <Form.Group>
+              <Form.Field width={12}>
+                <label>Nom de l'article</label>
+                <input
+                  placeholder="Nom de l'article"
+                  name="name"
+                  onChange={formChangeHandler}
+                  value={formValues.name}
+                />
+              </Form.Field>
+              <Form.Field>
+                <label>Prix en euros</label>
+                <input
+                  placeholder="Prix en euros"
+                  name="price"
+                  onChange={formChangeHandler}
+                  value={formValues.price}
+                />
+              </Form.Field>
+            </Form.Group>
+            <br/>
 
+            <Form.Checkbox 
+              label='Article en quantité illimitée' 
+              onChange={checkBoxChangeHandler}
+              checked={formValues.nolimit?true:false}
+              // value={formValues.nolimit}
+            />
 
-const CategoryInformationsInputs = ({formChangeHandler,formValues,checkBoxChangeHandler}) => {
-  
-  const [isChecked, setIsChecked] = useState(true);
-
-  const checkBoxChangeStateHandler = (e, value) => {
-    setIsChecked(value.checked);
-    checkBoxChangeHandler(e,value);
-  };
-  
-  return (
-    <Grid>
-      <Grid.Row>
-        <Grid.Column width={1} />
-        <Grid.Column width={14}>
-          <Form.Group>
-            <Form.Field width={12}>
-              <label>Nom de l'article</label>
+            <Form.Field width={6} disabled={formValues.nolimit?true:false}>
+              <label>Nombre d'articles disponibles</label>
               <input
-                placeholder="Nom de l'article"
-                name="name"
+                placeholder="Nombre d'articles disponibles"
+                name="nb_products"
                 onChange={formChangeHandler}
-                value={formValues.name}
+                value={formValues.nb_products}
               />
             </Form.Field>
+            
+            <br />
+
             <Form.Field>
-              <label>Prix en euros</label>
+              <label>Description courte</label>
               <input
-                placeholder="Prix en euros"
-                name="price"
+                placeholder="Description courte"
+                name="shortdescr"
                 onChange={formChangeHandler}
-                value={formValues.price}
+                value={formValues.shortdescr}
               />
             </Form.Field>
-          </Form.Group>
-          <br/>
-
-          <Form.Checkbox 
-            label='Article en quantité illimitée' 
-            onChange={checkBoxChangeStateHandler}
-            checked={isChecked?true:false}
-            // value={formValues.nolimit}
-          />
-
-          <Form.Field width={6} disabled={isChecked?true:false}>
-            <label>Nombre d'articles disponibles</label>
-            <input
-              placeholder="Nombre d'articles disponibles"
-              name="nb_products"
+            <Form.Field
+              label="Description longue"
+              placeholder="Description longue"
+              control={TextArea}
+              name="longdescr"
               onChange={formChangeHandler}
-              value={formValues.nb_products}
+              value={formValues.longdescr}
             />
-          </Form.Field>
-          
-          <br />
-
-          <Form.Field>
-            <label>Description courte</label>
-            <input
-              placeholder="Description courte"
-              name="shortdescr"
-              onChange={formChangeHandler}
-              value={formValues.shortdescr}
-            />
-          </Form.Field>
-          <Form.Field
-            label="Description longue"
-            placeholder="Description longue"
-            control={TextArea}
-            name="longdescr"
-            onChange={formChangeHandler}
-            value={formValues.longdescr}
-          />
-        </Grid.Column>
-        <Grid.Column width={1} />
-      </Grid.Row>
-    </Grid>
+          </Grid.Column>
+          <Grid.Column width={1} />
+        </Grid.Row>
+      </Grid>
+    </>
   );
 };
 
@@ -198,10 +147,12 @@ const ImagesDropZone = ({onDropHandler}) => {
 };
 
 const ImagesDisplay = ({cards,moveCard,findCard,updateActiveIndicator,updateDeletedIndicator}) => {
-  
-  // const [cards,moveCard,findCard,updateActiveIndicator,updateDeletedIndicator] = useDnDStateManager(files);
- 
+     
   const [, drop] = useDrop({ accept: ItemTypes.PIC });
+
+  console.log('cards');
+  console.log(cards);
+  console.log('--cards--');
 
   return (
    <Grid>
@@ -232,8 +183,6 @@ const ImagesDisplay = ({cards,moveCard,findCard,updateActiveIndicator,updateDele
 };
 
 const ImagePrev = ({src,moveCard,findCard,id,activatedSwitchHandler,deletedIconClickHandler,deleted,activated}) => {
-
-  // console.log("ImagePrev render");
 
   const originalIndex = findCard(id).index;
 
@@ -288,12 +237,22 @@ const ImagePrev = ({src,moveCard,findCard,id,activatedSwitchHandler,deletedIconC
 };
 
 
-const ProductAddAdmin = () => {
+const ProductAdmin = ({initFormData, initImgData=[], categoryId=null,productId=null, mutationRequest}) => {
 
-  const [categorySelected, setCategorySelectInd] = useState(false);
-  const [formValues, setFormValue] = useState(stateInit);
+  const [categorySelected, setCategorySelectInd] = useState(categoryId);
+  const [formValues, setFormValue] = useState(initFormData);
 
-  console.log(formValues);
+  console.log('ProductAddAdmin render');
+
+  console.log('initData:');
+  console.log(initFormData);
+  console.log(initImgData);
+  console.log('--initData--');
+
+  console.log('categorySelected:');
+  console.log(categoryId);
+  console.log(categorySelected);
+  console.log('--categorySelected--');
 
   const [setImagesList, loading, result,imagesListState] = useImageReader();
 
@@ -303,17 +262,29 @@ const ProductAddAdmin = () => {
     findObject,
     updateActiveIndicator,
     updateDeletedIndicator,
-    initState
-  } = useDnDStateManager();
+    initState,
+    addValues
+  } = useDnDStateManager(initImgData);
 
-  const [addNewProduct,{data:newProductData, loading:newProductDataLoading, error:newProductError}] = useMutation(ADD_NEW_PRODUCT);
+  console.log('objectsList:');
+  console.log(objectsList);
+  console.log('--objectsList--');
+
+  const [
+    addNewProduct,
+    {data:newProductData, loading:newProductDataLoading, error:newProductError}
+  ] = useMutation(mutationRequest);
+
+  console.log('newProductData');
+  console.log(newProductData);
+  console.log('--newProductData--');
 
   // alert hook
   const alert = useAlert()
 
   useEffect(() => {
     if(result)
-      initState(result);
+      addValues(result);
   },result)
 
   // actions handlers
@@ -333,24 +304,84 @@ const ProductAddAdmin = () => {
 
 
   const formSubmitHandler = () => {
+    console.log('formSubmitHandler');
     console.log(formValues);
     console.log(objectsList);
-    let files = null;
-    if(objectsList)
-      files = objectsList.map((object) =>{console.log(object.file); return object.file})
-    const variables = {
-      label:formValues.name,
-      short_description:formValues.shortdescr,
-      description:formValues.longdescr,
-      price:formValues.price,
-      pageId:categorySelected,
-      limitedQuantity:formValues.nolimit,
-      quantity:formValues.nb_products,
-      files:files
-    };
-    addNewProduct({variables:variables});
+    console.log('--formSubmitHandler--');
 
+
+    let files = null;
+    
+      // files = objectsList.map((object) =>{
+      //   console.log(object.file); 
+      //   return object.file
+      // });
+      let variables = null;
+      if(!categoryId) { // if it's an add mutation
+
+        if(objectsList)
+          files = objectsList.map((object) =>{
+            console.log(object.file); 
+            return object.file
+          });
+
+        variables = {
+          label:formValues.name,
+          short_description:formValues.shortdescr,
+          description:formValues.longdescr,
+          price:formValues.price,
+          pageId:categorySelected,
+          limitedQuantity:formValues.nolimit,
+          quantity:formValues.nb_products,
+          files:files
+        };
+      } else { // if it's a modify mutation
+
+        if(objectsList)
+          files = objectsList.map((object) => {
+
+            console.log(object.newpic);
+
+            return {
+              id : object.serverId,
+              file : object.file,
+              newpic : object.newpic,
+              activated : object.activated,
+              deleted : object.deleted
+            };
+          });
+
+        variables = {
+          label:formValues.name,
+          short_description:formValues.shortdescr,
+          description:formValues.longdescr,
+          price:formValues.price,
+          pageId:categorySelected,
+          limitedQuantity:formValues.nolimit,
+          quantity:formValues.nb_products,
+          files:files
+        }
+      }
+      if(categoryId) 
+        variables={...variables, id:productId};
+      addNewProduct({variables:variables});
   };
+
+  const history = useHistory();
+
+  useEffect(() => {
+    if(newProductData && !(typeof newProductData === "undefined")) {
+      if(!productId) {
+        console.log(newProductData);
+        history.push(`/admin/articles/modify/${newProductData.addProduct.id}`);
+      }
+      else {
+        console.log(newProductData);
+        history.push(`/admin/articles/modify/${productId}`);
+      }
+
+    }
+    },[newProductData])
 
   const onDropHandler = useCallback((files) => {
     setImagesList(files);
@@ -364,12 +395,16 @@ const ProductAddAdmin = () => {
         <Divider horizontal>
           <Header as="h4">Selectionner la catégorie</Header>
         </Divider>
-        <CategoriesSelect categorySelecthandler={categorySelecthandler} />
+        <CategoriesSelect categorySelecthandler={categorySelecthandler} defaultValue={categorySelected} />
         <br />
         <br />
 
         {categorySelected ? (
-          <CategoryInformations checkBoxChangeHandler={checkBoxChangeHandler} formChangeHandler={formChangeHandler} formValues={formValues}/>
+          <CategoryInformations 
+            checkBoxChangeHandler={checkBoxChangeHandler} 
+            formChangeHandler={formChangeHandler} 
+            formValues={formValues}
+          />
           )
           :
           null
@@ -385,7 +420,8 @@ const ProductAddAdmin = () => {
               </Header>
             </Divider>
             <br />
-            {!loading && result && objectsList? 
+            {/* {!loading && result && objectsList?  */}
+            {!loading && objectsList? 
               < ImagesDisplay   
                 cards = {objectsList}
                 moveCard = {moveObject}
@@ -413,13 +449,4 @@ const ProductAddAdmin = () => {
   );
 };
 
-const withDndProvider = Component => () => {
- 
-  return (
-    <DndProvider backend={Backend}>
-      <Component />
-    </DndProvider>
-  );
-};
-
-export default withDndProvider(ProductAddAdmin);
+export default withDndProvider(ProductAdmin);
