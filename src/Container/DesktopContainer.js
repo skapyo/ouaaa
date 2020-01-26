@@ -23,7 +23,7 @@ const DesktopContainer = ({ children }) => {
 
   return (
     <Responsive getWidth={getWidth} minWidth={Responsive.onlyTablet.minWidth}>
-      <Sidebar.Pushable style={{ transform: "none" }}>
+      {/* <Sidebar.Pushable style={{ transform: "none" }}>
         <CartComponent cartVisible={cartVisible} />
 
         <Sidebar.Pusher
@@ -34,7 +34,7 @@ const DesktopContainer = ({ children }) => {
             once={false}
             onBottomPassed={showFixedMenu}
             onBottomPassedReverse={hideFixedMenu}
-          >
+          > */}
             <Segment
               inverted
               textAlign="center"
@@ -48,11 +48,11 @@ const DesktopContainer = ({ children }) => {
                 cartIconClickHandler={cartIconClickHandler}
               />
             </Segment>
-          </Visibility>
+          {/* </Visibility> */}
 
           {children}
-        </Sidebar.Pusher>
-      </Sidebar.Pushable>
+        {/* </Sidebar.Pusher>
+      </Sidebar.Pushable> */}
     </Responsive>
   );
 };

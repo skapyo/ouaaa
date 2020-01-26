@@ -8,13 +8,58 @@ const DesktopAdminContentMenu = () => {
 
   return (
     <Menu fluid vertical>
-      <Menu.Item
+
+      <Menu.Item>
+          <Menu.Header>Catégories</Menu.Header>
+          <Menu.Menu>
+            <Menu.Item
+              as={Link}
+              to="/admin/categories"
+              content="Administration des catégories"
+              name="category"
+              active={activeItem === "category"}
+              onClick={handleItemClick}
+            />
+          </Menu.Menu>
+        </Menu.Item>
+        <Menu.Item>
+        <Menu.Header>Articles</Menu.Header>
+        <Menu.Menu>
+          <Menu.Item
+              as={Link}
+              to="/admin/articles/add"
+              content="Ajouter un article"
+              name="addArticle"
+              active={activeItem === "addArticle"}
+              onClick={handleItemClick}
+            />
+            <Menu.Item
+              as={Link}
+              to="/admin/articles/select"
+              content="Modifier un article"
+              name="modArticle"
+              active={activeItem === "modArticle"}
+              onClick={handleItemClick}
+            />
+            {/* <Menu.Item
+              as={Link}
+              to="/admin/articles/add"
+              content="Ajouter un article"
+              name="addArticle"
+              active={activeItem === "addArticle"}
+              onClick={handleItemClick}
+            /> */}
+        </Menu.Menu>
+      </Menu.Item>
+
+
+      {/* <Menu.Item
         as={Link}
         to="/admin/categories"
         name="Catégories"
         active={activeItem === "Catégories"}
         onClick={handleItemClick}
-      />
+      /> */}
       {/* <Menu.Item
         as={Link}
         to="/admin/articles/add"
@@ -22,7 +67,7 @@ const DesktopAdminContentMenu = () => {
         active={activeItem === "Articles"}
         onClick={handleItemClick}
       /> */}
-      <Dropdown item text="Articles">
+      {/* <Dropdown item text="Articles">
         <Dropdown.Menu>
           <Dropdown.Item as={Link} to="/admin/articles/add">
             Ajouter un article
@@ -53,7 +98,7 @@ const DesktopAdminContentMenu = () => {
         active={activeItem === "Utilisateurs"}
         onClick={handleItemClick}
         disabled
-      />
+      /> */}
     </Menu>
   );
 };

@@ -31,7 +31,7 @@ const ModifyProductAdmin = () => {
     }
 
     // wait for data to be fetched
-    if(loading) return null;
+    if(loading) return 'loading';
    
 
     //build init data
@@ -54,13 +54,24 @@ const ModifyProductAdmin = () => {
         if(data.product.pictures) {
             imgInit = data.product.pictures.map((picture,index) => {
                 return {
-                    serverId : picture.id,
+                    id : index,
                     file : null,
-                    img : picture.path,
+                    img : picture.originalPicturePath,
+                    croppedImg : {
+                        crop:{
+                          x : picture.croppedX,
+                          y : picture.croppedY
+                        },
+                        rotation : picture.croppedRotation,
+                        zoom : picture.croppedZoom,
+                        file : null,
+                        img : picture.croppedPicturePath,
+                        modified : false
+                      },
                     activated : true,
                     deleted : false,
-                    id : index,
-                    newpic : false
+                    newpic : false,
+                    serverId : picture.id,
                 };
             });
         }

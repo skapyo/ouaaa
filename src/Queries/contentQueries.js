@@ -21,6 +21,29 @@ export const GET_PRODUCTS_LIST = gql`
   }
 `;
 
+export const GET_PRODUCTS_BY_CATEGORY = gql`
+  query getProductsByCategory($id: String!) {
+    page(id:$id) {
+      id,
+      label,
+      description,
+      products {
+        id,
+        label,
+        short_description,
+        description, 
+        price,
+        isLiked,
+        pictures {
+          id,
+          label,
+          croppedPicturePath
+        }
+      }
+    }
+  }
+`;
+
 export const GET_PRODUCT = gql`
   query getProduct($id: String!) {
     product(id:$id) {
@@ -31,9 +54,18 @@ export const GET_PRODUCT = gql`
       description,
       limitedQuantity,
       quantity,
+      page {
+        id,
+        label
+      },
       pictures {
         id,
-        path
+        originalPicturePath,
+        croppedPicturePath,
+        croppedX,
+        croppedY,
+        croppedZoom,
+        croppedRotation
       }
     }
   }
@@ -67,7 +99,7 @@ mutation addProductMutation(
   $pageId:Int,
   $limitedQuantity:Boolean, 
   $quantity:Int,
-  $files: [Upload]
+  $files: [InputPicture]
   ) {
 
     addProduct(
@@ -85,7 +117,14 @@ mutation addProductMutation(
         short_description,
         description,
         price,
-        pictures {path}
+        pictures {
+          originalPicturePath,
+          croppedPicturePath,
+          croppedX,
+          croppedY,
+          croppedZoom,
+          croppedRotation
+        }
     }
   }
 `;
@@ -119,7 +158,14 @@ mutation modifyProductMutation(
         short_description,
         description,
         price,
-        pictures {path}
+        pictures {
+          originalPicturePath,
+          croppedPicturePath,
+          croppedX,
+          croppedY,
+          croppedZoom,
+          croppedRotation
+        }
     }
   }
 `;

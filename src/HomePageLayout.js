@@ -16,7 +16,7 @@ const HomepageLayout = () => {
       />
       <Router>
         <ResponsiveContainer>
-          <Segment style={{ padding: "3em 0em" }} vertical>
+          <Segment style={{ padding: "5em 0em" }} vertical>
             <DesktopBodyLayout />
             <MobileBodyLayout />
           </Segment>

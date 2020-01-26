@@ -1,4 +1,5 @@
 import {useState,useEffect} from 'react';
+import {uuidv4} from './../Utils/utils';
 
 const useImageReader = () => {
 
@@ -16,10 +17,22 @@ const useImageReader = () => {
       if(imagesListState) {
         const result = imagesListState.map((img, index) => {
           setIdState(idState+index);
+          const url = URL.createObjectURL(img);
           return {
             id:idState+index, 
             file:img,
-            img:URL.createObjectURL(img),
+            img:url,
+            croppedImg : {
+              crop:{
+                x : 0,
+                y : 0
+              },
+              rotation : 0,
+              zoom : 1,
+              file : img,
+              img : url,
+              modified : false
+            },
             activated:true,
             deleted:false,
             newpic : true,

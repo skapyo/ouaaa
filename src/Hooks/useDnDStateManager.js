@@ -6,6 +6,10 @@ const useDnDStateManager = (initialState=[]) => {
 
     const [objectsList, setObjectsList] = useState(initialState);
 
+    console.log('objectsList -- useDnDStateManager');
+    console.log(objectsList);
+    console.log('--objectsList -- useDnDStateManager --');
+
     // function to init state
     const initState = (state) => {
         setObjectsList(state);
@@ -49,9 +53,9 @@ const useDnDStateManager = (initialState=[]) => {
     const updateActiveIndicator = (id) => {
         const { object, index } = findObject(id);
         setObjectsList(
-        update(objectsList,{
-            $splice:[[index,1,{...object, activated:!object.activated}]]
-        })
+            update(objectsList,{
+                $splice:[[index,1,{...object, activated:!object.activated}]]
+            })
         );
     };
         
@@ -59,10 +63,31 @@ const useDnDStateManager = (initialState=[]) => {
     const updateDeletedIndicator = (id) => {
         const { object, index } = findObject(id);
         setObjectsList(
-        update(objectsList,{
-            $splice:[[index,1,{...object, deleted:!object.deleted}]]
-        })
+            update(objectsList,{
+                $splice:[[index,1,{...object, deleted:!object.deleted}]]
+            })
         );
+    };
+
+
+    // FOR PRODUCT: function to update the croppedArea
+    const updateKeyIndicator = (id, key, value) => {
+        console.log('updateKeyIndicator');
+        console.log(id);
+        console.log(key);
+        console.log(value);
+        
+        const { object, index } = findObject(id);
+        console.log(object);
+        console.log(index);
+        // const tempObject = {...object, [key]:value};
+        // console.log(tempObject);
+        setObjectsList(
+            update(objectsList,{
+                $splice:[[index,1,{...object, [key]:value}]]
+            })
+        );
+        console.log('--updateKeyIndicator--');
     };
 
     return {
@@ -72,7 +97,8 @@ const useDnDStateManager = (initialState=[]) => {
         updateActiveIndicator,
         updateDeletedIndicator,
         initState,
-        addValues
+        addValues,
+        updateKeyIndicator
     };
 
 }
