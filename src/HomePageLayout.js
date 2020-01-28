@@ -7,7 +7,16 @@ import DesktopBodyLayout from "./Container/BodyLayout/DesktopBodyLayout";
 import MobileBodyLayout from "./Container/BodyLayout/MobileBodyLayout";
 import Footer from "./Components/Footer/Footer";
 
+import useWindowSize from './Hooks/useWindowSize';
+
 const HomepageLayout = () => {
+
+  const {height} = useWindowSize();
+  const minHeight = height - 240;
+  console.log(minHeight);
+  const minHeightString = `${minHeight}px`;
+  console.log(minHeightString);
+
   return (
     <>
       <link
@@ -16,7 +25,12 @@ const HomepageLayout = () => {
       />
       <Router>
         <ResponsiveContainer>
-          <Segment style={{ padding: "5em 0em" }} vertical>
+          <Segment style={{
+            padding: "90px 0 20px 0",
+            "min-height": minHeightString
+            }}
+            vertical
+            >
             <DesktopBodyLayout />
             <MobileBodyLayout />
           </Segment>

@@ -22,7 +22,7 @@ const DesktopBodyLayout = () => {
         />
         <Route
           path="/produit"
-          component={() => <DesktopBodyLayoutWithMenu />}
+          component={() => <ContentLayout />}
         />
         <Route
           path="/"
@@ -44,7 +44,7 @@ const DesktopBodyLayoutWithMenu = () => {
         <Grid.Row>
           {/* <Grid.Column width={1} /> */}
           <Grid.Column width={4}>
-            <Rail as={Sticky} context={contextRef} offset={70} position='left'>
+            <Sticky  context={contextRef} offset={100} position='left'>
               <Switch>
                 <Route
                   path="/admin"
@@ -52,15 +52,15 @@ const DesktopBodyLayoutWithMenu = () => {
                 />
                 <Route path="/" component={() => <DesktopContentMenu />} />
               </Switch>
-            </Rail>
+            </Sticky>
           </Grid.Column>
-          <Grid.Column width={16}>
+          <Grid.Column width={12}>
             <Switch>
               <Route path="/admin" component={() => <AdminLayout />} />
               <Route
-          path="/produit"
-          component={() => <ContentLayout />}
-        />
+                path="/produit"
+                component={() => <ContentLayout />}
+              />
               <Route
                 path="/"
                 component={() => <ContentLayout />}

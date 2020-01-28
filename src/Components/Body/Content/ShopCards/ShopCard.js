@@ -20,36 +20,15 @@ const ShopCard = ({isLiked, imageURL, id}) => {
     setLikedIndicator(!imageLiked);
   };
 
-  const [isDimmed,setDimmed] = useState(false);
-  const handleShow = () => setDimmed(true);
-  const handleHide = () => setDimmed(false);
-
   return (
     <Card >
-
       <CardLabel isLiked={imageLiked} onClickHandler={onClickHandler}  />
-      
-      {/* <Dimmer.Dimmable as ={Container} dimmed={isDimmed} onMouseEnter={handleShow}  onMouseLeave={handleHide}> */}
-        <Image 
-          as = {Link}
-          to = {`/produit/${id}`}
-          src={imageURL}  
-          // size='small'
-        />
-
-        {/* <Dimmer active={isDimmed} inverted> */}
-          
-        {/* <Button  color="teal" size="large"> */}
-          {/* <Button.Content hidden>Shop</Button.Content> */}
-          {/* <Button.Content visible> */}
-            {/* <Icon name='search' size='large' color='teal' /> */}
-          {/* </Button.Content>
-        </Button> */}
-      
-        {/* </Dimmer> */}
-
-      {/* </Dimmer.Dimmable> */}
-
+      <Image 
+        as = {Link}
+        to = {`/produit/${id}`}
+        src={imageURL}  
+        // size='small'
+      />
       <Card.Content 
         textAlign="center"
         as = {Link}
@@ -60,13 +39,11 @@ const ShopCard = ({isLiked, imageURL, id}) => {
           Pochette en tissu croisé rouge
         </Card.Description>
       </Card.Content>
-
       <Card.Content extra textAlign="center">
         <Card.Header>
           <span className="prix">15 €</span>
         </Card.Header>    
       </Card.Content>
-
     </Card>
   );
 };
