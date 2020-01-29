@@ -21,6 +21,8 @@ import AlertTemplate from "react-alert-template-basic";
 
 import { createUploadLink } from "apollo-upload-client";
 
+import whyDidYouRender from '@welldone-software/why-did-you-render';
+
 const PORT_GRAPHQL_SERVER = 8001;
 const SERVER = "localhost";
 const URI_GRAPHQL_SERVER = `http://${SERVER}:${PORT_GRAPHQL_SERVER}/graphql`;
@@ -150,6 +152,11 @@ const alertOptions = {
   // you can also just use 'scale'
   transition: transitions.SCALE
 };
+
+
+
+whyDidYouRender(React);
+
 
 ReactDOM.render(
   <AlertProvider template={AlertTemplate} {...alertOptions}>

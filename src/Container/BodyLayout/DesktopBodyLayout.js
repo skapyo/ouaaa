@@ -10,6 +10,8 @@ import ContentLayout from "./../../Components/Body/Content/ContentLayout";
 import AdminLayout from "./../../Components/Body/Admin/AdminLayout";
 
 const DesktopBodyLayout = () => {
+
+  console.log('DesktopBodyLayout');
   
 
   return (

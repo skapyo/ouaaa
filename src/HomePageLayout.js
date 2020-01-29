@@ -1,4 +1,4 @@
-import React, { createContext } from "react";
+import React, { createContext, useEffect,useState } from "react";
 import { Segment } from "semantic-ui-react";
 import ResponsiveContainer from "./Container/ResponsiveContainer";
 import { BrowserRouter as Router } from "react-router-dom";
@@ -19,6 +19,15 @@ const HomepageLayout = () => {
   // console.log(minHeightString);
 
   const [isLogged, userInfo, { login, logout }] = useAuth();
+
+  // const [state, setState] = useState({ isLogged, userInfo, login, logout });
+
+  // useEffect(() => {
+  //   setState({ isLogged, userInfo, login, logout })
+  // },[isLogged, userInfo, login, logout])
+
+  // import React from 'react';
+
 
   return (
     <>

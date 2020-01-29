@@ -1,4 +1,4 @@
-import React,{ useState, useEffect } from "react";
+import React,{ useState, useEffect,useRef } from "react";
 import ShopCard from "./ShopCard";
 import { Card,Header, Divider,Breadcrumb } from "semantic-ui-react";
 import update from "immutability-helper";
@@ -10,6 +10,8 @@ import {useParams} from "react-router-dom";
 import { ScaleLoader } from "halogenium";
 
 import ReactLoading from 'react-loading';
+
+import useWhyDidYouUpdate from './../../../../Hooks/useWhyDidYouUpdate';
 
 const Loader = ({ midHeightString }) => {
   return (
@@ -86,7 +88,28 @@ const useLoaderState = (init = true) => {
   return [loading, { addListener, changeListenerValue }];
 };
 
-const ShopCardGroup = ({ itemsPerRow = 3 }) => {
+function useTraceUpdate(props) {
+  const prev = useRef(props);
+  useEffect(() => {
+    const changedProps = Object.entries(props).reduce((ps, [k, v]) => {
+      if (prev.current[k] !== v) {
+        ps[k] = [prev.current[k], v];
+      }
+      return ps;
+    }, {});
+    if (Object.keys(changedProps).length > 0) {
+      console.log('Changed props:', changedProps);
+    }
+    prev.current = props;
+  });
+}
+
+const ShopCardGroup = React.memo( (props) => {
+
+  // useWhyDidYouUpdate();
+  useTraceUpdate(props);
+
+  console.log('ShopCardGroup');
 
   const {categoryId} = useParams();
 
@@ -140,7 +163,7 @@ const ShopCardGroup = ({ itemsPerRow = 3 }) => {
       <Header as='h1'>{data.page.label}</Header>
       <Divider/>
       <br />
-      <Card.Group itemsPerRow={itemsPerRow}>
+      <Card.Group itemsPerRow={props.itemsPerRow}>
         {dataToRender.map((product) => (
           <ShopCard 
             imageURL={product.img.src} 
@@ -151,6 +174,8 @@ const ShopCardGroup = ({ itemsPerRow = 3 }) => {
       </Card.Group>
     </>
   );
-};
+});
+
+ShopCardGroup.whyDidYouRender = true;
 
 export default ShopCardGroup;

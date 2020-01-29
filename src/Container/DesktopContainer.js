@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useCallback } from "react";
 import { Sidebar, Responsive, Visibility, Segment } from "semantic-ui-react";
 import { getWidth } from "./../Utils/utils";
 import CartComponent from "./../Components/Cart/CartComponent";
@@ -14,9 +14,11 @@ const DesktopContainer = ({ children }) => {
 
   /*shop cart state*/
   const [cartVisible, setCartVisible] = useState(false);
-  const cartIconClickHandler = () => {
+
+  const cartIconClickHandler = useCallback(() => {
     setCartVisible(!cartVisible);
-  };
+  },[cartVisible]);
+
   const dimmedClickHandler = () => {
     if (cartVisible) setCartVisible(!cartVisible);
   };

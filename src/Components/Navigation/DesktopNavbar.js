@@ -1,9 +1,11 @@
-import React from "react";
+import React,{useRef, useEffect,useState,useCallback} from "react";
 import { Menu, Container, Icon, Dropdown, Input } from "semantic-ui-react";
 import UserLeftItems from "./Items/UserLeftItems";
 import LoggedInAdminRightItems from "./Items/AdminRightItems";
 import { Link } from "react-router-dom";
 import { withAuth } from "./../../Hooks/useAuth";
+import useTraceUpdate from './../../Hooks/useTraceUpdate';
+import LoginModal from "../Auth/LoginModal";
 
 const divStyle = {
   padding: "0 2em 0 2em",
@@ -36,20 +38,24 @@ const headerStyle = {
   color: "#009C95"
 };
 
+
 const DesktopNavbar = ({ fixed, cartIconClickHandler, userAuth }) => {
-  console.log("userAuth");
-  console.log(userAuth);
-  console.log("userAuth");
+
+  useTraceUpdate({ fixed, cartIconClickHandler, userAuth });
 
   const { isLogged, userInfo, login, logout } = userAuth;
 
+
+  const [loginModalOpen, setLoginModalOpenInd] = useState(false);
+
+  const onCloseHandler = useCallback(() => {
+    setLoginModalOpenInd(false);
+  },[]);
+
   return (
     <>
-      {/* <div style={divStyle}>
-
-      </div> */}
       <Menu
-        // size="large"
+  
         icon
         fixed="top"
         style={divStyle}
@@ -62,21 +68,17 @@ const DesktopNavbar = ({ fixed, cartIconClickHandler, userAuth }) => {
 
           <Menu.Menu position="right">
             <Menu.Item
-              name="closest"
+              name="admin"
               as={Link}
               to={`/admin`}
-              // active={activeItem === 'closest'}
-              // onClick={this.handleItemClick}
             >
               <Icon name="options" size="large" />
             </Menu.Item>
 
             <Menu.Item
-              name="closest"
+              name="cart"
               as={Link}
-              to={`/admin`}
-              // active={activeItem === 'closest'}
-              // onClick={this.handleItemClick}
+              to={`/cart`}
             >
               <Icon name="cart" size="large" />
             </Menu.Item>
@@ -87,19 +89,26 @@ const DesktopNavbar = ({ fixed, cartIconClickHandler, userAuth }) => {
               trigger={<Icon name="user outline" size="large" />}
             >
               <Dropdown.Menu>
-                {/* <Input icon='search' iconPosition='left' className='search' /> */}
-                <Dropdown.Item
-                  icon="sign-in"
-                  text="S'authentifier"
-                  onClick={() => login()}
-                />
-                <Dropdown.Item icon="add user" text="Créer un compte" />
-                <Dropdown.Item icon="user" text="Mon compte" />
-                <Dropdown.Item
-                  icon="sign-out"
-                  text="Se déconnecter"
-                  onClick={() => logout()}
-                />
+
+                { !isLogged ? (              
+                <>  
+                  <Dropdown.Item
+                    icon="sign-in"
+                    text="S'authentifier"
+                    onClick={() => setLoginModalOpenInd(true)}
+                  />
+                  <Dropdown.Item icon="add user" text="Créer un compte" />
+                </>
+                ):(      
+                <>          
+                  <Dropdown.Item icon="user" text="Mon compte" />
+                  <Dropdown.Item
+                    icon="sign-out"
+                    text="Se déconnecter"
+                    onClick={() => logout()}
+                  />
+                </>
+                )}
               </Dropdown.Menu>
             </Dropdown>
           </Menu.Menu>
@@ -120,24 +129,13 @@ const DesktopNavbar = ({ fixed, cartIconClickHandler, userAuth }) => {
           </div>
         </Container>
       </Menu>
-      {/* <Menu
-        fixed={fixed ? "top" : null}
-        inverted
-        pointing
-        secondary
-        color="teal"
-        size="large"
-      > */}
-      {/* <Container> */}
-      {/*  Left items of the navbar*/}
-      {/* <UserLeftItems cartIconClickHandler={cartIconClickHandler} /> */}
 
-      {/* Add test to identify loggeg user */}
-      {/* <LoggedInAdminRightItems />
-        </Container>
-      </Menu> */}
+      <LoginModal open={loginModalOpen} onCloseHandler={onCloseHandler} userAuth={userAuth}/>
+
     </>
   );
 };
+
+DesktopNavbar.whyDidYouRender = true;
 
 export default withAuth(DesktopNavbar);

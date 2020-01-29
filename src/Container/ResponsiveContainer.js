@@ -2,11 +2,16 @@ import React from 'react';
 import DesktopContainer from "./DesktopContainer";
 import MobileContainer from "./MobileContainer";
 
-const ResponsiveContainer = ({ children }) => (
-  <div>
-    <DesktopContainer>{children}</DesktopContainer>
-    <MobileContainer>{children}</MobileContainer>
-  </div>
-);
+import useTraceUpdate from './../Hooks/useTraceUpdate';
+
+const ResponsiveContainer = React.memo( ({ children }) => {
+  useTraceUpdate(children);
+  return (
+    <div>
+      <DesktopContainer>{children}</DesktopContainer>
+      <MobileContainer>{children}</MobileContainer>
+    </div>
+  );
+});
 
 export default ResponsiveContainer;

@@ -14,6 +14,8 @@ const CardLabel = ({isLiked,onClickHandler}) => {
 
 const ShopCard = ({isLiked, imageURL, id}) => {
 
+  console.log('ShopCard');
+
   const [imageLiked, setLikedIndicator] = useState(isLiked);
 
   const onClickHandler = () => {
