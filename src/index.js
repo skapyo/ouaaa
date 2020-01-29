@@ -32,8 +32,6 @@ const SUB = "sub";
 // const rootElement = document.getElementById("root");
 // ReactDOM.render(<HomePageLayout />, rootElement);
 
-// test comit
-
 const client2 = new ApolloClient({
   link: new HttpLink({
     uri: URI_GRAPHQL_SERVER
