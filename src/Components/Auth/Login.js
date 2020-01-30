@@ -1,23 +1,31 @@
-import React,{useState, useEffect} from 'react';
-import { Modal,Grid,Header,Form ,Button,Segment,Image,Message} from "semantic-ui-react";
+import React,{useState,useEffect} from 'react';
+import { Modal,Grid,Header,Form ,Button,Segment,Image,Message, Divider} from "semantic-ui-react";
+import { Link } from 'react-router-dom';
 import {LOGIN} from './../../Queries/authQueries';
 import { useMutation } from '@apollo/react-hooks';
 
-const headerStyle = {
-    "font-family": "Pacifico, cursive",
-    "font-size": "24px",
-    // 'font-style': 'normal',
-    "font-weight": "lighter",
-    color: "#009C95"
-  };
 
-const LoginModal = ({open, onCloseHandler,userAuth}) => {
+import {
+    CountProvider,
+    useCountState,
+    useCountDispatch
+  } from "./../../count-context";
+
+const Login = () => {
 
     const [loadingState, setLoadingState] = useState(false);
-
     const [formValues, setFormValue] = useState({});
 
-    const [login, {loading, error, data }] = useMutation(LOGIN,{ variables: { email: formValues.email, password:formValues.password} });
+    // const state = useCountState();
+    const stateDispatch = useCountDispatch();
+
+    const [login, {loading, error, data }] = useMutation(
+        LOGIN,
+        { variables: { 
+            email: formValues.email, 
+            password:formValues.password
+        } 
+    });
 
     const formChangeHandler = e => {
         const { name, value } = e.target;
@@ -29,30 +37,33 @@ const LoginModal = ({open, onCloseHandler,userAuth}) => {
     const submitHandler = () => {
         setLoadingState(true);
         login();
-    }
+    };
 
     useEffect(() => {
         if(data && data.login) {
             console.log(data.login);
             setLoadingState(false);
-            userAuth.login();
+            // userAuth.login();
+            stateDispatch({
+                type:'login',
+                payload:data.login
+            })
         }
-    },[data])
+    },[data]);
 
-  
     return (
-        <Modal open={open} size='mini' dimmer='blurring' onClose={onCloseHandler}>
-            <Modal.Content>
-                <Grid textAlign='center' verticalAlign='middle'>
-                    <Grid.Column style={{ maxWidth: 450 }}>
-                    <span style={headerStyle}>
-                        L'atelier d'Elisabeth
-                    </span>
-                    <br/>
+    
+            <Grid columns={2} relaxed='very' stackable textAlign='center' verticalAlign='middle'>
+                
+                <Grid.Column style={{ maxWidth: 450 }}>
+                    <br />
                     <Header as='h4' color='teal' textAlign='center'>
                         Veuillez vous connecter à votre compte
                     </Header>
-                    <Form size='large' onSubmit={submitHandler}>
+                    <Form 
+                        size='large' 
+                        onSubmit={submitHandler}
+                        >
                         <Segment>
                             <Form.Input 
                                 fluid 
@@ -86,13 +97,14 @@ const LoginModal = ({open, onCloseHandler,userAuth}) => {
                     <Message>
                         Vous n'avez pas encore de compte 
                         <br/>
-                        <a href='#'>Créer un compte</a>
+                        <Link to='/signup'>Créer un compte</Link>
                     </Message>
-                    </Grid.Column>
-                </Grid> 
-            </Modal.Content>
-        </Modal>
-    )
-}
+                </Grid.Column>
+            </Grid>
 
-export default LoginModal;
+        // </Segment>
+    )
+
+};
+
+export default Login;

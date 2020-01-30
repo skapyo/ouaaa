@@ -8,6 +8,9 @@ import DesktopContentMenu from "./../../Components/Body/BodyNavigation/DesktopCo
 
 import ContentLayout from "./../../Components/Body/Content/ContentLayout";
 import AdminLayout from "./../../Components/Body/Admin/AdminLayout";
+import Login from './../../Components/Auth/Login'
+import Signup from './../../Components/Auth/Signup'
+
 
 const DesktopBodyLayout = () => {
 
@@ -25,6 +28,14 @@ const DesktopBodyLayout = () => {
         <Route
           path="/produit"
           component={() => <ContentLayout />}
+        />
+        <Route
+          path="/login"
+          component={() => <Login />}
+        />
+        <Route
+          path="/signup"
+          component={() => <Signup />}
         />
         <Route
           path="/"

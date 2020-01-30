@@ -24,10 +24,11 @@ import { createUploadLink } from "apollo-upload-client";
 import whyDidYouRender from "@welldone-software/why-did-you-render";
 
 const PORT_GRAPHQL_SERVER = 8001;
-const SERVER = "51.158.122.16";
-// const URI_GRAPHQL_SERVER = `http://${SERVER}:${PORT_GRAPHQL_SERVER}/graphql`;
+// const SERVER = "51.158.122.16";
+const SERVER = "localhost";
+const URI_GRAPHQL_SERVER = `http://${SERVER}:${PORT_GRAPHQL_SERVER}/graphql`;
 
-const URI_GRAPHQL_SERVER = "https://u6tby.sse.codesandbox.io/graphql";
+// const URI_GRAPHQL_SERVER = "https://u6tby.sse.codesandbox.io/graphql";
 
 const AUTH_TOKEN = "auth_token";
 const REFRESH_TOKEN = "refresh_token";
@@ -156,7 +157,7 @@ const alertOptions = {
 };
 
 whyDidYouRender(React, {
-  logOnDifferentValues: true,
+  // logOnDifferentValues: true,
   trackAllPureComponents: true
 });
 

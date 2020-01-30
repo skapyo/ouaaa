@@ -1,10 +1,9 @@
 import React, { useRef, useEffect, useState, useCallback } from "react";
-import { Menu, Container, Icon, Dropdown, Input } from "semantic-ui-react";
+import { Menu, Container, Icon, Dropdown, Input ,Label} from "semantic-ui-react";
 import UserLeftItems from "./Items/UserLeftItems";
 import LoggedInAdminRightItems from "./Items/AdminRightItems";
 import { Link } from "react-router-dom";
 import { withAuth } from "./../../Hooks/useAuth";
-import useTraceUpdate from "./../../Hooks/useTraceUpdate";
 import LoginModal from "../Auth/LoginModal";
 
 import {
@@ -44,9 +43,7 @@ const headerStyle = {
   color: "#009C95"
 };
 
-const DesktopNavbar = React.memo(
-  ({ fixed, cartIconClickHandler, userAuth }) => {
-    useTraceUpdate({ fixed, cartIconClickHandler, userAuth });
+const DesktopNavbar = React.memo(({ fixed, cartIconClickHandler }) => {
 
     // const { isLogged, userInfo, login, logout } = userAuth;
     const state = useCountState();
@@ -67,26 +64,31 @@ const DesktopNavbar = React.memo(
             </Menu.Item>
 
             <Menu.Menu position="right">
-              <Menu.Item name="admin" as={Link} to={`/admin`}>
+              {state?(<Menu.Item name="admin" as={Link} to={`/admin`}>
                 <Icon name="options" size="large" />
-              </Menu.Item>
+              </Menu.Item>):null}
+              
 
-              <Menu.Item name="cart" as={Link} to={`/cart`}>
+              {state?(<Menu.Item name="cart" as={Link} to={`/cart`}>
                 <Icon name="cart" size="large" />
-              </Menu.Item>
+              </Menu.Item>):null}
+
+              {state?(<Menu.Item name="heart" as={Link} to={`/heart`}>
+                <Icon name="heart" size="large" />
+              </Menu.Item>):null}
 
               <Dropdown
                 item
                 icon={null}
-                trigger={<Icon name="user outline" size="large" />}
+                trigger={state?<Icon name="user" color='teal' size="large" />:<Icon name="user outline"  size="large" />}
               >
                 <Dropdown.Menu>
-                  {state.count === 0 ? (
+                  {!state ? (
                     <>
                       <Dropdown.Item
                         icon="sign-in"
                         text="S'authentifier"
-                        onClick={() => stateDispatch({ type: "increment" })}
+                        // onClick={() => stateDispatch({ type: "increment" })}
                       />
                       <Dropdown.Item icon="add user" text="Créer un compte" />
                     </>
@@ -96,7 +98,7 @@ const DesktopNavbar = React.memo(
                       <Dropdown.Item
                         icon="sign-out"
                         text="Se déconnecter"
-                        onClick={() => stateDispatch({ type: "decrement" })}
+                        onClick={() => stateDispatch({ type: "logout" })}
                       />
                     </>
                   )}
@@ -120,12 +122,6 @@ const DesktopNavbar = React.memo(
             </div>
           </Container>
         </Menu>
-
-        <LoginModal
-          open={loginModalOpen}
-          onCloseHandler={onCloseHandler}
-          userAuth={userAuth}
-        />
       </>
     );
   }
@@ -133,4 +129,4 @@ const DesktopNavbar = React.memo(
 
 DesktopNavbar.whyDidYouRender = true;
 
-export default withAuth(DesktopNavbar);
+export default DesktopNavbar;
