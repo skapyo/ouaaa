@@ -1,13 +1,13 @@
-import React, { useState, useContext, createContext } from "react";
+import React, { useState, useContext, createContext, useMemo } from "react";
 import { log } from "util";
 
 const useAuth = () => {
   const [isLogged, setIsLoggedInd] = useState(false);
   const [userInfo, setuserInfo] = useState(null);
 
-  const login = () => {
+  const login = useMemo(() => {
     setIsLoggedInd(true);
-  };
+  }, []);
 
   const logout = () => {
     setIsLoggedInd(false);

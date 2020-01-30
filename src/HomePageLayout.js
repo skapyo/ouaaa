@@ -1,4 +1,4 @@
-import React, { createContext, useEffect,useState } from "react";
+import React, { createContext, useEffect, useState, useReducer } from "react";
 import { Segment } from "semantic-ui-react";
 import ResponsiveContainer from "./Container/ResponsiveContainer";
 import { BrowserRouter as Router } from "react-router-dom";
@@ -11,6 +11,12 @@ import useWindowSize from "./Hooks/useWindowSize";
 
 import useAuth, { AuthContextProvider } from "./Hooks/useAuth";
 
+import {
+  CountProvider,
+  useCountState,
+  useCountDispatch
+} from "./count-context";
+
 const HomepageLayout = () => {
   const { height } = useWindowSize();
   const minHeight = height - 240;
@@ -18,7 +24,7 @@ const HomepageLayout = () => {
   const minHeightString = `${minHeight}px`;
   // console.log(minHeightString);
 
-  const [isLogged, userInfo, { login, logout }] = useAuth();
+  //const [isLogged, userInfo, { login, logout }] = useAuth();
 
   // const [state, setState] = useState({ isLogged, userInfo, login, logout });
 
@@ -28,6 +34,7 @@ const HomepageLayout = () => {
 
   // import React from 'react';
 
+  // const [state, dispatch] = useReducer(action, initState);
 
   return (
     <>
@@ -36,7 +43,8 @@ const HomepageLayout = () => {
         href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/components/icon.min.css"
       />
       <Router>
-        <AuthContextProvider value={{ isLogged, userInfo, login, logout }}>
+        {/* <AuthContextProvider value={{ isLogged, userInfo, login, logout }}> */}
+        <CountProvider>
           <ResponsiveContainer>
             <Segment
               style={{
@@ -50,7 +58,7 @@ const HomepageLayout = () => {
             </Segment>
             <Footer />
           </ResponsiveContainer>
-        </AuthContextProvider>
+        </CountProvider>
       </Router>
     </>
   );
