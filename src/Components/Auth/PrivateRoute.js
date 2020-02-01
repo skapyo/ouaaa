@@ -26,7 +26,6 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
         )}
     />
     )
-
 }
 
 const PrivateAdminRoute = ({ component: Component, ...rest }) => {
@@ -40,7 +39,7 @@ const PrivateAdminRoute = ({ component: Component, ...rest }) => {
             : 
             (
               <Redirect to={{
-                    pathname: '/login',
+                    pathname: '/',
                     state: { from: props.location }
                 }}
               />
@@ -48,8 +47,29 @@ const PrivateAdminRoute = ({ component: Component, ...rest }) => {
         )}
     />
     )
+}
+
+const SignedoutRoute = ({ component: Component, ...rest }) => {
+
+  const auth = useCountState();
+
+  return (
+    <Route {...rest} render={props => (
+        !auth ? 
+        (<Component {...props}/>) 
+        : 
+        (
+          <Redirect to={{
+                pathname: '/',
+                state: { from: props.location }
+            }}
+          />
+        )
+    )}
+/>
+)
 
 }
 
-export {PrivateAdminRoute};
+export {PrivateRoute,PrivateAdminRoute,SignedoutRoute};
 export default PrivateRoute;

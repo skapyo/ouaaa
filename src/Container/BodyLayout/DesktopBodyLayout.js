@@ -6,9 +6,10 @@ import DesktopAdminContentMenu from "./../../Components/Body/BodyNavigation/Desk
 import DesktopContentMenu from "./../../Components/Body/BodyNavigation/DesktopContentMenu";
 import ContentLayout from "./../../Components/Body/Content/ContentLayout";
 import AdminLayout from "./../../Components/Body/Admin/AdminLayout";
-import Login from './../../Components/Auth/Login'
-import Signup from './../../Components/Auth/Signup'
-import PrivateRoute from './../../Components/Auth/PrivateRoute';
+import Login from './../../Components/Auth/Login';
+import Signup from './../../Components/Auth/Signup';
+import AccountPage from './../../Components/Auth/AccountPage';
+import {PrivateRoute,SignedoutRoute,PrivateAdminRoute} from './../../Components/Auth/PrivateRoute';
 
 const DesktopBodyLayout = () => {
 
@@ -16,7 +17,7 @@ const DesktopBodyLayout = () => {
     <Responsive getWidth={getWidth} minWidth={Responsive.onlyTablet.minWidth}>
       <Container >
         <Switch>
-        <PrivateRoute
+        <PrivateAdminRoute
           path="/admin"
           component={() => <DesktopBodyLayoutWithMenu />}
         />
@@ -24,13 +25,21 @@ const DesktopBodyLayout = () => {
           path="/produit"
           component={() => <ContentLayout />}
         />
-        <Route
+        <SignedoutRoute
           path="/login"
           component={() => <Login />}
         />
-        <Route
+        <SignedoutRoute
           path="/signup"
           component={() => <Signup />}
+        />
+        <PrivateRoute
+          path="/account"
+          component={() => <AccountPage />}
+        />
+        <PrivateRoute
+          path="/favories"
+          component={() => <AccountPage />}
         />
         <Route
           path="/"
@@ -53,7 +62,7 @@ const DesktopBodyLayoutWithMenu = () => {
           <Grid.Column width={4}>
             <Sticky  context={contextRef} offset={100} position='left'>
               <Switch>
-                <PrivateRoute
+                <PrivateAdminRoute
                   path="/admin"
                   component={() => <DesktopAdminContentMenu />}
                 />
@@ -63,7 +72,7 @@ const DesktopBodyLayoutWithMenu = () => {
           </Grid.Column>
           <Grid.Column width={12}>
             <Switch>
-              <PrivateRoute path="/admin" component={() => <AdminLayout />} />
+              <PrivateAdminRoute path="/admin" component={() => <AdminLayout />} />
               <Route
                 path="/produit"
                 component={() => <ContentLayout />}

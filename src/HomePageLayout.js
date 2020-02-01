@@ -16,7 +16,7 @@ import {
   useCountDispatch
 } from "./count-context";
 
-const HomepageLayout = () => {
+const HomepageLayout = ({initSession = null}) => {
   const { height } = useWindowSize();
   const minHeight = height - 240;
   const minHeightString = `${minHeight}px`;
@@ -28,7 +28,7 @@ const HomepageLayout = () => {
         href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/components/icon.min.css"
       />
       <Router>
-         <CountProvider>
+         <CountProvider init={initSession}>
           <ResponsiveContainer>
             <Segment
               style={{

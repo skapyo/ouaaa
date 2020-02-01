@@ -74,7 +74,7 @@ const terminatingLink = new createUploadLink({
 });
 
 const authLink = setContext((_, { headers }) => {
-  const token = localStorage.getItem(config.AUTH_TOKEN);
+  const token = localStorage.getItem(config.SESSION_STORAGE.AUTH_TOKEN);
   return {
     headers: {
       ...headers,
@@ -97,12 +97,12 @@ const errorLink = onError(
       console.log(" // NetworkError //");
 
       if (networkError.statusCode === 401) {
-        localStorage.setItem(config.AUTH_TOKEN, "");
+        localStorage.setItem(config.SESSION_STORAGE.AUTH_TOKEN, "");
 
         return new Observable(observer => {
           refreshToken(
-            localStorage.getItem(config.SUB),
-            localStorage.getItem(config.REFRESH_TOKEN),
+            localStorage.getItem(config.SESSION_STORAGE.SUB),
+            localStorage.getItem(config.SESSION_STORAGE.REFRESH_TOKEN),
             client2
           )
             .then(refreshResponse => {
@@ -116,7 +116,7 @@ const errorLink = onError(
                 }
               }));
               localStorage.setItem(
-                config.AUTH_TOKEN,
+                config.SESSION_STORAGE.AUTH_TOKEN,
                 refreshResponse.data.refreshToken.token
               );
             })
@@ -163,10 +163,24 @@ whyDidYouRender(React, {
   trackAllPureComponents: true
 });
 
+// checkout previous session
+let initSession = null;
+if (localStorage.getItem(config.SESSION_STORAGE.PERSISTENT_CO) === 'true') {
+  initSession = {
+    sub : localStorage.getItem(config.SESSION_STORAGE.SUB),
+    token : localStorage.getItem(config.SESSION_STORAGE.AUTH_TOKEN),
+    refreshToken : localStorage.getItem(config.SESSION_STORAGE.REFRESH_TOKEN),
+    role : localStorage.getItem(config.SESSION_STORAGE.ROLE)
+  }
+}
+else { // if persistent connection is false or doesnt exist => clear the localstorage
+  localStorage.clear();
+}
+
 ReactDOM.render(
   <AlertProvider template={AlertTemplate} {...alertOptions}>
     <ApolloProvider client={client}>
-      <HomePageLayout />
+      <HomePageLayout initSession={initSession} />
     </ApolloProvider>
   </AlertProvider>,
   document.getElementById("root")

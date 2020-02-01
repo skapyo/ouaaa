@@ -22,9 +22,9 @@ function authReducer(state, action) {
   }
 }
 
-function CountProvider({ children }) {
+function CountProvider({ children, init=null }) {
 
-  const [state, dispatch] = React.useReducer(authReducer, null);
+  const [state, dispatch] = React.useReducer(authReducer, init);
   
   return (
     <CountStateContext.Provider value={state}>

@@ -3,7 +3,7 @@ import { Menu, Container, Icon, Dropdown, Input ,Label} from "semantic-ui-react"
 import UserLeftItems from "./Items/UserLeftItems";
 import LoggedInAdminRightItems from "./Items/AdminRightItems";
 import { Link } from "react-router-dom";
-
+import config from './../../config.json';
 
 import {
   CountProvider,
@@ -48,11 +48,14 @@ const DesktopNavbar = React.memo(({ fixed, cartIconClickHandler }) => {
     const state = useCountState();
     const stateDispatch = useCountDispatch();
 
-    const [loginModalOpen, setLoginModalOpenInd] = useState(false);
-
-    const onCloseHandler = useCallback(() => {
-      setLoginModalOpenInd(false);
-    }, []);
+    const logoutHandler = () => {
+      localStorage.removeItem(config.SESSION_STORAGE.AUTH_TOKEN);
+      localStorage.removeItem(config.SESSION_STORAGE.REFRESH_TOKEN);
+      localStorage.removeItem(config.SESSION_STORAGE.SUB);
+      localStorage.removeItem(config.SESSION_STORAGE.ROLE);
+      localStorage.removeItem(config.SESSION_STORAGE.PERSISTENT_CO);
+      stateDispatch({ type: "logout" })
+    }
 
     return (
       <>
@@ -63,7 +66,7 @@ const DesktopNavbar = React.memo(({ fixed, cartIconClickHandler }) => {
             </Menu.Item>
 
             <Menu.Menu position="right">
-              {state?(<Menu.Item name="admin" as={Link} to={`/admin`}>
+              {state && state.role === 'admin' ?(<Menu.Item name="admin" as={Link} to={`/admin`}>
                 <Icon name="options" size="large" />
               </Menu.Item>):null}
               
@@ -109,7 +112,7 @@ const DesktopNavbar = React.memo(({ fixed, cartIconClickHandler }) => {
                       <Dropdown.Item
                         icon="sign-out"
                         text="Se déconnecter"
-                        onClick={() => stateDispatch({ type: "logout" })}
+                        onClick={logoutHandler}
                       />
                     </>
                   )}
