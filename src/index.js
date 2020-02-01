@@ -23,16 +23,18 @@ import { createUploadLink } from "apollo-upload-client";
 
 import whyDidYouRender from "@welldone-software/why-did-you-render";
 
+import config from './config.json'
+
 const PORT_GRAPHQL_SERVER = 8001;
 // const SERVER = "51.158.122.16";
 const SERVER = "localhost";
 const URI_GRAPHQL_SERVER = `http://${SERVER}:${PORT_GRAPHQL_SERVER}/graphql`;
 
-// const URI_GRAPHQL_SERVER = "https://u6tby.sse.codesandbox.io/graphql";
+// const URI_GRAPHQL_SERVER = "http://51.158.122.16:8001/graphql";
 
-const AUTH_TOKEN = "auth_token";
-const REFRESH_TOKEN = "refresh_token";
-const SUB = "sub";
+// const AUTH_TOKEN = "auth_token";
+// const REFRESH_TOKEN = "refresh_token";
+// const SUB = "sub";
 
 // const rootElement = document.getElementById("root");
 // ReactDOM.render(<HomePageLayout />, rootElement);
@@ -72,7 +74,7 @@ const terminatingLink = new createUploadLink({
 });
 
 const authLink = setContext((_, { headers }) => {
-  const token = localStorage.getItem(AUTH_TOKEN);
+  const token = localStorage.getItem(config.AUTH_TOKEN);
   return {
     headers: {
       ...headers,
@@ -95,12 +97,12 @@ const errorLink = onError(
       console.log(" // NetworkError //");
 
       if (networkError.statusCode === 401) {
-        localStorage.setItem(AUTH_TOKEN, "");
+        localStorage.setItem(config.AUTH_TOKEN, "");
 
         return new Observable(observer => {
           refreshToken(
-            localStorage.getItem(SUB),
-            localStorage.getItem(REFRESH_TOKEN),
+            localStorage.getItem(config.SUB),
+            localStorage.getItem(config.REFRESH_TOKEN),
             client2
           )
             .then(refreshResponse => {
@@ -114,7 +116,7 @@ const errorLink = onError(
                 }
               }));
               localStorage.setItem(
-                AUTH_TOKEN,
+                config.AUTH_TOKEN,
                 refreshResponse.data.refreshToken.token
               );
             })

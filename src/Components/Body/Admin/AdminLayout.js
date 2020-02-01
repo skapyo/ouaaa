@@ -7,30 +7,32 @@ import ModifyProductAdmin from './ProductsAdmin/ModifyProductAdmin';
 import ArticlesPicturesAdmin from "./ArticlesPicturesAdmin";
 import SelectProductAdmin from './ProductsAdmin/SelectProductAdmin';
 
+import PrivateRoute from './../../Auth/PrivateRoute';
+
 const AdminLayout = () => {
   return (
     <Switch>
-      <Route path="/admin/categories" component={() => <CategoriesAdmin />} />
-      <Route
+      <PrivateRoute path="/admin/categories" component={() => <CategoriesAdmin />} />
+      <PrivateRoute
         path="/admin/articles/add"
         component={() => <AddProductAdmin />}
       />
-      <Route
+      <PrivateRoute
         path="/admin/articles/select/"
         component={() => <SelectProductAdmin />}
       />
-      <Route
+      <PrivateRoute
         path="/admin/articles/modify/:productId"
         component={() => <ModifyProductAdmin />}
       />
-      <Route
+      <PrivateRoute
         path="/admin/articles/pictures"
         component={() => <ArticlesPicturesAdmin />}
       />
-      <Route path="/admin/articles/display" component={() => null} />
+      <PrivateRoute path="/admin/articles/display" component={() => null} />
       {/* <Route path="/admin/commandes" component={() => null} />
       <Route path="/admin/utilisateurs" component={() => null} /> */}
-      <Route path="/admin" component={() => <CategoriesAdmin />} />
+      <PrivateRoute path="/admin" component={() => <CategoriesAdmin />} />
     </Switch>
   );
 };

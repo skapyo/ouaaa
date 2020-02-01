@@ -3,8 +3,7 @@ import { Menu, Container, Icon, Dropdown, Input ,Label} from "semantic-ui-react"
 import UserLeftItems from "./Items/UserLeftItems";
 import LoggedInAdminRightItems from "./Items/AdminRightItems";
 import { Link } from "react-router-dom";
-import { withAuth } from "./../../Hooks/useAuth";
-import LoginModal from "../Auth/LoginModal";
+
 
 import {
   CountProvider,
@@ -88,13 +87,25 @@ const DesktopNavbar = React.memo(({ fixed, cartIconClickHandler }) => {
                       <Dropdown.Item
                         icon="sign-in"
                         text="S'authentifier"
+                        as={Link} 
+                        to={`/login`}
                         // onClick={() => stateDispatch({ type: "increment" })}
                       />
-                      <Dropdown.Item icon="add user" text="Créer un compte" />
+                      <Dropdown.Item 
+                        icon="add user" 
+                        text="Créer un compte" 
+                        as={Link} 
+                        to={`/signup`}
+                      />
                     </>
                   ) : (
                     <>
-                      <Dropdown.Item icon="user" text="Mon compte" />
+                      <Dropdown.Item 
+                        icon="user" 
+                        text="Mon compte" 
+                        as={Link} 
+                        to={`/account`}
+                      />
                       <Dropdown.Item
                         icon="sign-out"
                         text="Se déconnecter"

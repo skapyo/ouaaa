@@ -9,6 +9,7 @@ const CountDispatchContext = React.createContext();
 function authReducer(state, action) {
   switch (action.type) {
     case "login": {
+      // localStorage.set('');
       console.log(action.payload);
       return {...action.payload};
     }

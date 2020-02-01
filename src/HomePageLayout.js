@@ -9,7 +9,6 @@ import Footer from "./Components/Footer/Footer";
 
 import useWindowSize from "./Hooks/useWindowSize";
 
-import useAuth, { AuthContextProvider } from "./Hooks/useAuth";
 
 import {
   CountProvider,
@@ -20,21 +19,7 @@ import {
 const HomepageLayout = () => {
   const { height } = useWindowSize();
   const minHeight = height - 240;
-  // console.log(minHeight);
   const minHeightString = `${minHeight}px`;
-  // console.log(minHeightString);
-
-  //const [isLogged, userInfo, { login, logout }] = useAuth();
-
-  // const [state, setState] = useState({ isLogged, userInfo, login, logout });
-
-  // useEffect(() => {
-  //   setState({ isLogged, userInfo, login, logout })
-  // },[isLogged, userInfo, login, logout])
-
-  // import React from 'react';
-
-  // const [state, dispatch] = useReducer(action, initState);
 
   return (
     <>
@@ -43,8 +28,7 @@ const HomepageLayout = () => {
         href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/components/icon.min.css"
       />
       <Router>
-        {/* <AuthContextProvider value={{ isLogged, userInfo, login, logout }}> */}
-        <CountProvider>
+         <CountProvider>
           <ResponsiveContainer>
             <Segment
               style={{

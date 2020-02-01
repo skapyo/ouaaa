@@ -3,7 +3,7 @@ import { Modal,Grid,Header,Form ,Button,Segment,Image,Message, Divider} from "se
 import { Link } from 'react-router-dom';
 import {LOGIN} from './../../Queries/authQueries';
 import { useMutation } from '@apollo/react-hooks';
-
+import config from './../../config.json';
 
 import {
     CountProvider,
@@ -14,7 +14,9 @@ import {
 const Login = () => {
 
     const [loadingState, setLoadingState] = useState(false);
-    const [formValues, setFormValue] = useState({});
+    const [formValues, setFormValue] = useState({persistentConnection:false});
+
+    console.log(formValues);
 
     // const state = useCountState();
     const stateDispatch = useCountDispatch();
@@ -32,6 +34,10 @@ const Login = () => {
         setFormValue({ ...formValues, [name]: value });
     };
 
+    const checkBoxChangeHandler = (e,value) => {
+        setFormValue({ ...formValues, persistentConnection: value.checked });
+      };
+
     console.log(formValues);
 
     const submitHandler = () => {
@@ -48,6 +54,10 @@ const Login = () => {
                 type:'login',
                 payload:data.login
             })
+            localStorage.setItem(config.REFRESH_TOKEN,data.login.refreshToken);
+            localStorage.setItem(config.SUB,data.login.sub)
+            localStorage.setItem(config.AUTH_TOKEN,data.login.token)
+            localStorage.setItem('persistentConnection',formValues.persistentConnection)
         }
     },[data]);
 
@@ -81,6 +91,12 @@ const Login = () => {
                                 type='password'
                                 name='password'
                                 onChange={formChangeHandler}
+                            />
+                            <Form.Checkbox
+                                name = 'persistentConnection'
+                                label='Rester connecté'
+                                onChange={checkBoxChangeHandler}
+                                checked={formValues.persistentConnection}
                             />
 
                             <Button 

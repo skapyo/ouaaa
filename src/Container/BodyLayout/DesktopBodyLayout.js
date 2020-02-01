@@ -1,27 +1,22 @@
 import React, { createRef } from "react";
-import { Container, Grid, Responsive, Sticky, Ref, Rail } from "semantic-ui-react";
+import { Container, Grid, Responsive, Sticky, Ref } from "semantic-ui-react";
 import { Switch, Route } from "react-router-dom";
 import {getWidth} from "./../../Utils/utils";
-
 import DesktopAdminContentMenu from "./../../Components/Body/BodyNavigation/DesktopAdminContentMenu";
 import DesktopContentMenu from "./../../Components/Body/BodyNavigation/DesktopContentMenu";
-
 import ContentLayout from "./../../Components/Body/Content/ContentLayout";
 import AdminLayout from "./../../Components/Body/Admin/AdminLayout";
 import Login from './../../Components/Auth/Login'
 import Signup from './../../Components/Auth/Signup'
-
+import PrivateRoute from './../../Components/Auth/PrivateRoute';
 
 const DesktopBodyLayout = () => {
-
-  console.log('DesktopBodyLayout');
-  
 
   return (
     <Responsive getWidth={getWidth} minWidth={Responsive.onlyTablet.minWidth}>
       <Container >
         <Switch>
-        <Route
+        <PrivateRoute
           path="/admin"
           component={() => <DesktopBodyLayoutWithMenu />}
         />
@@ -55,11 +50,10 @@ const DesktopBodyLayoutWithMenu = () => {
     <Grid>
       <Ref innerRef={contextRef}>
         <Grid.Row>
-          {/* <Grid.Column width={1} /> */}
           <Grid.Column width={4}>
             <Sticky  context={contextRef} offset={100} position='left'>
               <Switch>
-                <Route
+                <PrivateRoute
                   path="/admin"
                   component={() => <DesktopAdminContentMenu />}
                 />
@@ -69,7 +63,7 @@ const DesktopBodyLayoutWithMenu = () => {
           </Grid.Column>
           <Grid.Column width={12}>
             <Switch>
-              <Route path="/admin" component={() => <AdminLayout />} />
+              <PrivateRoute path="/admin" component={() => <AdminLayout />} />
               <Route
                 path="/produit"
                 component={() => <ContentLayout />}
@@ -80,7 +74,6 @@ const DesktopBodyLayoutWithMenu = () => {
               />
             </Switch>
           </Grid.Column>
-          {/* <Grid.Column width={1} /> */}
         </Grid.Row>
       </Ref>
     </Grid>
