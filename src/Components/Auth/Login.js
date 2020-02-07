@@ -63,9 +63,9 @@ const Login = () => {
 
     return (
     
-            <Grid columns={2} relaxed='very' stackable textAlign='center' verticalAlign='middle'>
+            <Grid relaxed='very' stackable textAlign='center' verticalAlign='middle'>
                 
-                <Grid.Column style={{ maxWidth: 450 }}>
+                <Grid.Column style={{ maxWidth: 400 }}>
                     <br />
                     <Header as='h4' color='teal' textAlign='center'>
                         Veuillez vous connecter à votre compte

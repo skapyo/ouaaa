@@ -1,26 +1,48 @@
 import React, {useState,useEffect} from "react";
 import { Image, Card, Icon ,Label, Button, Dropdown, Dimmer, Container, Header} from "semantic-ui-react";
 import { Link } from "react-router-dom";
+import {ADD_LIKED_PRODUCT,REMOVE_LIKED_PRODUCT} from './../../../../Queries/contentQueries';
+import {useMutation} from '@apollo/react-hooks';
 
 const CardLabel = ({isLiked,onClickHandler}) => {
-
   return (
   <Label corner="left" color="teal" onClick={onClickHandler}>
     <Icon name="heart" size="large" color={isLiked ? "red" : "grey"}/>
   </Label>
   );
-
 };
 
-const ShopCard = ({isLiked, imageURL, id}) => {
 
-  console.log('ShopCard');
+const ShopCard = ({product}) => {
+
+  const {id,img,label, price,isLiked} = product;
+
+  const [addLikedPoduct,{data:addData,loading:addLoading,error:addError}] = useMutation(
+    ADD_LIKED_PRODUCT,
+    {variables:{productId:id}}
+    );
+
+  const [removeLikedPoduct,{data:remData,loading:remLoading,error:remError}] = useMutation(
+    REMOVE_LIKED_PRODUCT,
+    {variables:{productId:id}}
+    );
 
   const [imageLiked, setLikedIndicator] = useState(isLiked);
 
   const onClickHandler = () => {
-    setLikedIndicator(!imageLiked);
+    if(!imageLiked) addLikedPoduct();
+    else removeLikedPoduct();
   };
+
+  useEffect(() =>  {
+    if(addData && !addError)
+      setLikedIndicator(true);
+  },[addData]);
+
+  useEffect(() =>  {
+    if(remData && !remError)
+      setLikedIndicator(false);
+  },[remData]);
 
   return (
     <Card >
@@ -28,22 +50,18 @@ const ShopCard = ({isLiked, imageURL, id}) => {
       <Image 
         as = {Link}
         to = {`/produit/${id}`}
-        src={imageURL}  
-        // size='small'
+        src={img.src}  
       />
       <Card.Content 
         textAlign="center"
         as = {Link}
         to = {`/produit/${id}`}
       >
-        <Card.Header>Pochette</Card.Header>
-        <Card.Description>
-          Pochette en tissu croisé rouge
-        </Card.Description>
+        <Header >{label}</Header>
       </Card.Content>
       <Card.Content extra textAlign="center">
         <Card.Header>
-          <span className="prix">15 €</span>
+          <span className="prix">{`${price} €`}</span>
         </Card.Header>    
       </Card.Content>
     </Card>

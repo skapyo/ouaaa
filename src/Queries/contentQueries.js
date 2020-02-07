@@ -21,6 +21,18 @@ export const GET_PRODUCTS_LIST = gql`
   }
 `;
 
+export const ADD_LIKED_PRODUCT = gql`
+  mutation addLikedProduct($productId: Int!) {
+    addLikedProduct(productId:$productId) 
+  }
+`;
+
+export const REMOVE_LIKED_PRODUCT = gql`
+  mutation removeLikedProduct($productId: Int!) {
+    removeLikedProduct(productId:$productId) 
+  }
+`;
+
 export const GET_PRODUCTS_BY_CATEGORY = gql`
   query getProductsByCategory($id: String!) {
     page(id:$id) {
@@ -52,11 +64,13 @@ export const GET_PRODUCT = gql`
       price,
       short_description,
       description,
-      limitedQuantity,
       quantity,
+      isLiked,
+      isUnlimited,
+      qavailable,
       page {
         id,
-        label
+        label 
       },
       pictures {
         id,
@@ -168,4 +182,56 @@ mutation modifyProductMutation(
         }
     }
   }
+`;
+
+export const ADD_PRODUCT_CART= gql`
+mutation addProductInCart ($productId:Int,$quantity:Int) {
+  addProductInCart(productId:$productId,quantity:$quantity) {
+      source,
+      success,
+      errorCode,
+      errorLabel,
+      errorInformationDescription,
+      errorInformation
+      
+  }
+}
+`;
+
+export const DELETE_PRODUCT_CART= gql`
+mutation delProductInCart ($productId:Int,$quantity:Int) {
+  delProductInCart(productId:$productId,quantity:$quantity) {
+      source,
+      success,
+      errorCode,
+      errorLabel,
+      errorInformationDescription,
+      errorInformation
+      
+  }
+}
+`;
+
+export const GET_CART= gql`
+{
+    cartQuery {
+    id,
+    status,
+    totalprice,
+    items {
+      id,
+      quantity,
+      product {
+        id,
+        label,
+        short_description,
+        price,
+        pictures {
+          id,
+          croppedPicturePath
+        }
+      }
+    }
+  }
+}
 `;

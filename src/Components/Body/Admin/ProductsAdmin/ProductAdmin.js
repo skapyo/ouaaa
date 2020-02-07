@@ -261,17 +261,17 @@ const ProductAdmin = ({initFormData, initImgData=[], categoryId=null,productId=n
   const [categorySelected, setCategorySelectInd] = useState(categoryId);
   const [formValues, setFormValue] = useState(initFormData);
 
-  console.log('ProductAddAdmin render');
+  // console.log('ProductAddAdmin render');
 
-  console.log('initData:');
-  console.log(initFormData);
-  console.log(initImgData);
-  console.log('--initData--');
+  // console.log('initData:');
+  // console.log(initFormData);
+  // console.log(initImgData);
+  // console.log('--initData--');
 
-  console.log('categorySelected:');
-  console.log(categoryId);
-  console.log(categorySelected);
-  console.log('--categorySelected--');
+  // console.log('categorySelected:');
+  // console.log(categoryId);
+  // console.log(categorySelected);
+  // console.log('--categorySelected--');
 
   const [setImagesList, loading, result,imagesListState] = useImageReader();
 
@@ -286,18 +286,18 @@ const ProductAdmin = ({initFormData, initImgData=[], categoryId=null,productId=n
     updateKeyIndicator
   } = useDnDStateManager(initImgData);
 
-  console.log('objectsList:');
-  console.log(objectsList);
-  console.log('--objectsList--');
+  // console.log('objectsList:');
+  // console.log(objectsList);
+  // console.log('--objectsList--');
 
   const [
     addNewProduct,
     {data:newProductData, loading:newProductDataLoading, error:newProductError}
   ] = useMutation(mutationRequest);
 
-  console.log('newProductData');
-  console.log(newProductData);
-  console.log('--newProductData--');
+  // console.log('newProductData');
+  // console.log(newProductData);
+  // console.log('--newProductData--');
 
   // alert hook
   const alert = useAlert()
@@ -324,10 +324,10 @@ const ProductAdmin = ({initFormData, initImgData=[], categoryId=null,productId=n
 
 
   const formSubmitHandler = () => {
-    console.log('formSubmitHandler');
-    console.log(formValues);
-    console.log(objectsList);
-    console.log('--formSubmitHandler--');
+    // console.log('formSubmitHandler');
+    // console.log(formValues);
+    // console.log(objectsList);
+    // console.log('--formSubmitHandler--');
 
 
     let files = null;

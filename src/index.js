@@ -158,10 +158,10 @@ const alertOptions = {
   transition: transitions.SCALE
 };
 
-whyDidYouRender(React, {
-  // logOnDifferentValues: true,
-  trackAllPureComponents: true
-});
+// whyDidYouRender(React, {
+//   // logOnDifferentValues: true,
+//   trackAllPureComponents: true
+// });
 
 // checkout previous session
 let initSession = null;

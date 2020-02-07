@@ -17,34 +17,38 @@ const DesktopBodyLayout = () => {
     <Responsive getWidth={getWidth} minWidth={Responsive.onlyTablet.minWidth}>
       <Container >
         <Switch>
-        <PrivateAdminRoute
-          path="/admin"
-          component={() => <DesktopBodyLayoutWithMenu />}
-        />
-        <Route
-          path="/produit"
-          component={() => <ContentLayout />}
-        />
-        <SignedoutRoute
-          path="/login"
-          component={() => <Login />}
-        />
-        <SignedoutRoute
-          path="/signup"
-          component={() => <Signup />}
-        />
-        <PrivateRoute
-          path="/account"
-          component={() => <AccountPage />}
-        />
-        <PrivateRoute
-          path="/favories"
-          component={() => <AccountPage />}
-        />
-        <Route
-          path="/"
-          component={() => <DesktopBodyLayoutWithMenu />}
-        />
+          <PrivateAdminRoute
+            path="/admin"
+            component={() => <DesktopBodyLayoutWithMenu />}
+          />
+          <Route
+            path="/produit"
+            component={() => <ContentLayout />}
+          />
+          <SignedoutRoute
+            path="/login"
+            component={() => <Login />}
+          />
+          <SignedoutRoute
+            path="/signup"
+            component={() => <Signup />}
+          />
+          <PrivateRoute
+            path="/account"
+            component={() => <AccountPage />}
+          />
+          <PrivateRoute
+            path="/favories"
+            component={() => <AccountPage />}
+          />
+          <PrivateRoute
+            path="/cart"
+            component={() => <ContentLayout />}
+          />
+          <Route
+            path="/"
+            component={() => <DesktopBodyLayoutWithMenu />}
+          />
         </Switch>
       </Container>
     </Responsive>

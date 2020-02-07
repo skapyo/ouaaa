@@ -1,7 +1,7 @@
 import React, { useState,useCallback } from "react";
 import { Sidebar, Responsive, Visibility, Segment } from "semantic-ui-react";
 import { getWidth } from "./../Utils/utils";
-import CartComponent from "./../Components/Cart/CartComponent";
+// import CartComponent from "./../Components/Cart/CartComponent";
 
 import DesktopNavbar from "../Components/Navigation/DesktopNavbar";
 

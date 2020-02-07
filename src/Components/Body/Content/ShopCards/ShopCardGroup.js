@@ -8,6 +8,13 @@ import Loader from './../../../Loader/Loader';
 import useLoaderState from './../../../../Hooks/useLoaderState';
 import useWindowSize from './../../../../Hooks/useWindowSize';
 
+const headerStyle = {
+  "font-family": "Ubuntu', sans-serif",
+  "font-size": "30px",
+  // 'font-style': 'normal',
+  "font-weight": "lighter",
+  color: "#009C95"
+};
 
 const ShopCardGroup = React.memo( ({itemsPerRow}) => {
 
@@ -25,10 +32,13 @@ const ShopCardGroup = React.memo( ({itemsPerRow}) => {
 
   useEffect(() =>{  
     if(!loading && data) {
+      console.log(data);
       setdataToRender( data.page.products.map((product, index) => {
+        console.log(product);
         const img = new Image();
         addListener(index);
         img.onload = () => changeListenerValue(index,false);
+        console.log(product.pictures);
         img.src = product.pictures[0].croppedPicturePath;
         return {...product,img:img }
       }))
@@ -43,15 +53,13 @@ const ShopCardGroup = React.memo( ({itemsPerRow}) => {
 
   return (
     <>
-      <Header as='h1'>{data.page.label}</Header>
-      <Divider/>
+      <Header as='h1' style={headerStyle}>{data.page.label}</Header>
+      <br />
       <br />
       <Card.Group itemsPerRow={itemsPerRow}>
         {dataToRender.map((product) => (
           <ShopCard 
-            imageURL={product.img.src} 
-            id={product.id}
-            isLiked 
+            product = {product}
           />
         ))}
       </Card.Group>

@@ -36,7 +36,7 @@ const itemStyle = {
 
 const headerStyle = {
   "font-family": "Pacifico, cursive",
-  "font-size": "20px",
+  "font-size": "24px",
   // 'font-style': 'normal',
   "font-weight": "lighter",
   color: "#009C95"
@@ -122,7 +122,7 @@ const DesktopNavbar = React.memo(({ fixed, cartIconClickHandler }) => {
           </Container>
         </Menu>
 
-        <Menu
+        {/* <Menu
           fixed="top"
           size="tiny"
           icon
@@ -135,7 +135,7 @@ const DesktopNavbar = React.memo(({ fixed, cartIconClickHandler }) => {
               &nbsp;&nbsp;>&nbsp;&nbsp;Admin &nbsp;&nbsp;>&nbsp;&nbsp; test
             </div>
           </Container>
-        </Menu>
+        </Menu> */}
       </>
     );
   }
