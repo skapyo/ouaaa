@@ -47,15 +47,7 @@ const ProductPage = () => {
 
     const {data, loading, error,refetch} = useQuery(GET_PRODUCT,{variables:{id:productId}});
 
-    const [dataToRender, setdataToRender] = useState();
-
-    const [loadingGlobalState, 
-        { 
-            addListener, 
-            changeListenerValue 
-        }
-    ] = useLoaderState();
-
+    
     const [submitListener, setListenerValue] = useState(false);
 
     const [formValues,setFormValue] = useState(formValuesInit);
@@ -71,13 +63,15 @@ const ProductPage = () => {
         }
     },[formValues])
 
-    const [selectOptions,setSelectOptions] = useState();
 
+    const [dataToRender, setdataToRender] = useState();
 
-
-    const {height} = useWindowSize();
-    const midHeight = (height - 230 - 230 - 10) / 2;
-    const midHeightString = `${midHeight}px 0 0 0`;
+    const [loadingGlobalState, 
+        { 
+            addListener, 
+            changeListenerValue 
+        }
+    ] = useLoaderState();
 
     useEffect(() =>{  
         if(!loading && data && data.product.pictures) {
@@ -143,26 +137,34 @@ const ProductPage = () => {
 
     useEffect(() => {
         if(cartActionData && cartActionData.addProductInCart.success) {
-            console.log('cart ADDED');
             refetch();
         }
     },[cartActionData])
 
-    useEffect(() => {
-        if(!loading && data && !data.product.isUnlimited) {
-            let selectOptionsTemp = [];
-            for (let i = 0; i <= data.product.qavailable; i++) {
-                selectOptionsTemp.push({
-                    key:i,
-                    value:i,
-                    text:i
-                })
-            }
-            setSelectOptions(selectOptionsTemp);
 
+    const [selectOptions,setSelectOptions] = useState();
+
+    useEffect(() => {
+        if(!loading && data) {
+            if(!data.product.isUnlimited) {
+                let selectOptionsTemp = [];
+                for (let i = 0; i <= data.product.qavailable; i++) {
+                    selectOptionsTemp.push({
+                        key:i,
+                        value:i,
+                        text:i
+                    })
+                }
+                setSelectOptions(selectOptionsTemp);
+            }
             if(cartLoading) setCartLoadingInd(false);
         }
-    },[data]);
+    },[data,cartActionData]);
+
+
+    const {height} = useWindowSize();
+    const midHeight = (height - 230 - 230 - 10) / 2;
+    const midHeightString = `${midHeight}px 0 0 0`;
 
     if (loadingGlobalState)
         return <Loader midHeightString={midHeightString} />;

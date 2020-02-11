@@ -2,8 +2,8 @@
 import React from "react";
 
 
-const CountStateContext = React.createContext();
-const CountDispatchContext = React.createContext();
+const SessionStateContext = React.createContext();
+const SessionDispatchContext = React.createContext();
 
 
 function authReducer(state, action) {
@@ -22,29 +22,29 @@ function authReducer(state, action) {
   }
 }
 
-function CountProvider({ children, init=null }) {
+function SessionProvider({ children, init=null }) {
 
   const [state, dispatch] = React.useReducer(authReducer, init);
   
   return (
-    <CountStateContext.Provider value={state}>
-      <CountDispatchContext.Provider value={dispatch}>
+    <SessionStateContext.Provider value={state}>
+      <SessionDispatchContext.Provider value={dispatch}>
         {children}
-      </CountDispatchContext.Provider>
-    </CountStateContext.Provider>
+      </SessionDispatchContext.Provider>
+    </SessionStateContext.Provider>
   );
 }
 
-function useCountState() {
-  const context = React.useContext(CountStateContext);
+function useSessionState() {
+  const context = React.useContext(SessionStateContext);
   if (context === undefined) {
     throw new Error("useCountState must be used within a CountProvider");
   }
   return context;
 }
 
-function useCountDispatch() {
-  const context = React.useContext(CountDispatchContext);
+function useSessionDispatch() {
+  const context = React.useContext(SessionDispatchContext);
   if (context === undefined) {
     throw new Error("useCountDispatch must be used within a CountProvider");
   }
@@ -52,4 +52,4 @@ function useCountDispatch() {
 }
 
 
-export { CountProvider, useCountState, useCountDispatch };
+export { SessionProvider, useSessionState, useSessionDispatch };

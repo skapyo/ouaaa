@@ -10,11 +10,7 @@ import Footer from "./Components/Footer/Footer";
 import useWindowSize from "./Hooks/useWindowSize";
 
 
-import {
-  CountProvider,
-  useCountState,
-  useCountDispatch
-} from "./count-context";
+import {SessionProvider,} from "./count-context";
 
 const HomepageLayout = ({initSession = null}) => {
   const { height } = useWindowSize();
@@ -28,7 +24,7 @@ const HomepageLayout = ({initSession = null}) => {
         href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/components/icon.min.css"
       />
       <Router>
-         <CountProvider init={initSession}>
+         <SessionProvider init={initSession}>
           <ResponsiveContainer>
             <Segment
               style={{
@@ -42,7 +38,7 @@ const HomepageLayout = ({initSession = null}) => {
             </Segment>
             <Footer />
           </ResponsiveContainer>
-        </CountProvider>
+        </SessionProvider>
       </Router>
     </>
   );

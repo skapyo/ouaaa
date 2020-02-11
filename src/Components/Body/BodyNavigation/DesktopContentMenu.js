@@ -21,7 +21,7 @@ const DesktopContentMenu = () => {
         <Menu.Item>
           <Menu.Header>Les articles</Menu.Header>
           <Menu.Menu>
-            {data.pages.map((page) => (
+            {data.pages.filter(page => page.activated == true).map((page) => (
               <Menu.Item
               as={Link} 
               to={`/categorie/${page.id}`}

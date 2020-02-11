@@ -1,14 +1,9 @@
 import _ from "lodash";
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
 import {
   Button,
   Item,
-  Sidebar,
-  Icon,
   Segment,
-  Image,
-  Container,
-  Dropdown,
   Grid,
   Header,
   Form,
@@ -18,6 +13,10 @@ import {
 import {GET_CART} from './../../../../Queries/contentQueries';
 import {useQuery,useMutation} from '@apollo/react-hooks';
 import {Breadcrumb} from './../../../Components';
+import useWindowSize from './../../../../Hooks/useWindowSize';
+import Loader from './../../../Loader/Loader';
+import useLoaderState from './../../../../Hooks/useLoaderState';
+
 
 const getOptions = (number, prefix = "Choice ") =>
   _.times(number, index => ({
@@ -44,6 +43,7 @@ const StrickyHeaderStyle = {
   };
 
 const CartItem = ({ name, price, nb,src }) => {
+  console.log(src);
   return (
     
     <Item>
@@ -64,17 +64,43 @@ const CartItem = ({ name, price, nb,src }) => {
 
 const CartPage = ({ cartVisible }) => {
 
-  const {data,loading,error} = useQuery(GET_CART);
-
-  console.log(data);
+  const {data,loading,error} = useQuery(GET_CART,{
+    fetchPolicy:"network-only"
+  });
 
   const [isCloseButtonHovered, setCloseButtonHoverInd] = useState(false);
   const closeHoveredHandler = () => {
     setCloseButtonHoverInd(!isCloseButtonHovered);
   };
 
-  if(loading) 
-    return 'loading';
+  // const [dataToRender, setdataToRender] = useState();
+
+  const [loadingGlobalState, 
+      { 
+          addListener, 
+          changeListenerValue 
+      }
+  ] = useLoaderState();
+
+  useEffect(() => {  
+    if(data && data.cartQuery.items.length > 0 ) {
+      data.cartQuery.items.map((item,index) => {
+        if(item.product.pictures[0] && item.product.pictures[0].croppedPicturePath) {
+          const img = new Image();
+          addListener(index);
+          img.onload = () => changeListenerValue(index,false);
+          img.src = item.product.pictures[0].croppedPicturePath;
+        }
+      })
+    }
+  },[loading]);
+
+  const {height} = useWindowSize();
+  const midHeight = (height - 230 - 230 - 10) / 2;
+  const midHeightString = `${midHeight}px 0 0 0`;
+
+  if(loadingGlobalState) 
+    return <Loader midHeightString={midHeightString} />;
 
   return (
     <>
@@ -93,7 +119,7 @@ const CartPage = ({ cartVisible }) => {
                 <Grid verticalAlign='left'>
                   <Grid.Column width='16'>
                       <Item.Group divided relaxed >
-                        {data && data.cartQuery.items ?
+                        {data && data.cartQuery.items.length > 0 ?
                         data.cartQuery.items.map((item) => (
                           <CartItem 
                             name={item.product.label} 
@@ -117,7 +143,7 @@ const CartPage = ({ cartVisible }) => {
                       <Segment>
                         <Header as='h1' style={StrickyHeaderStyle}>Résumé de la commande:</Header>
                         <br/>
-                        {data && data.cartQuery.items ? 
+                        {data && data.cartQuery.items.length > 0 ? 
                           data.cartQuery.items.map((item) => (
                             <span style={{display:'block'}}>{`${item.product.label}: ${item.quantity} pièces`}</span>
                           ))
@@ -127,7 +153,7 @@ const CartPage = ({ cartVisible }) => {
                         <br/>
                       <Header as='h3' >{`Prix total: ${data.cartQuery.totalprice}€`}</Header>
                         <br/>
-                        <Button fluid color='teal'>
+                        <Button fluid color='teal' disabled={data && data.cartQuery.items.length > 0 ?false:true}>
                             Passer commande
                         </Button>
                         <Message  info>

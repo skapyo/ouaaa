@@ -1,15 +1,11 @@
 import React from 'react';
 import { Redirect, Route } from "react-router-dom";
 
-import {
-    CountProvider,
-    useCountState,
-    useCountDispatch
-  } from "./../../count-context";
+import {useSessionState} from "./../../count-context";
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
 
-    const auth = useCountState();
+    const auth = useSessionState();
 
     return (
         <Route {...rest} render={props => (
@@ -30,7 +26,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
 
 const PrivateAdminRoute = ({ component: Component, ...rest }) => {
 
-    const auth = useCountState();
+    const auth = useSessionState();
 
     return (
         <Route {...rest} render={props => (
@@ -51,7 +47,7 @@ const PrivateAdminRoute = ({ component: Component, ...rest }) => {
 
 const SignedoutRoute = ({ component: Component, ...rest }) => {
 
-  const auth = useCountState();
+  const auth = useSessionState();
 
   return (
     <Route {...rest} render={props => (

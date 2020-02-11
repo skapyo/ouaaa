@@ -5,11 +5,7 @@ import {LOGIN} from './../../Queries/authQueries';
 import { useMutation } from '@apollo/react-hooks';
 import config from './../../config.json';
 
-import {
-    CountProvider,
-    useCountState,
-    useCountDispatch
-  } from "./../../count-context";
+import {useSessionDispatch} from "./../../count-context";
 
 const Login = () => {
 
@@ -19,7 +15,7 @@ const Login = () => {
     console.log(formValues);
 
     // const state = useCountState();
-    const stateDispatch = useCountDispatch();
+    const stateDispatch = useSessionDispatch();
 
     const [login, {loading, error, data }] = useMutation(
         LOGIN,

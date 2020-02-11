@@ -41,64 +41,29 @@ const DesktopAdminContentMenu = () => {
               active={activeItem === "modArticle"}
               onClick={handleItemClick}
             />
-            {/* <Menu.Item
+            <Menu.Item
               as={Link}
-              to="/admin/articles/add"
-              content="Ajouter un article"
-              name="addArticle"
-              active={activeItem === "addArticle"}
+              // to="/admin/articles/select"
+              content="Administration des articles"
+              name="adminArticle"
+              active={activeItem === "adminArticle"}
               onClick={handleItemClick}
-            /> */}
+            />
         </Menu.Menu>
       </Menu.Item>
-
-
-      {/* <Menu.Item
-        as={Link}
-        to="/admin/categories"
-        name="Catégories"
-        active={activeItem === "Catégories"}
-        onClick={handleItemClick}
-      /> */}
-      {/* <Menu.Item
-        as={Link}
-        to="/admin/articles/add"
-        name="Articles"
-        active={activeItem === "Articles"}
-        onClick={handleItemClick}
-      /> */}
-      {/* <Dropdown item text="Articles">
-        <Dropdown.Menu>
-          <Dropdown.Item as={Link} to="/admin/articles/add">
-            Ajouter un article
-          </Dropdown.Item>
-          <Dropdown.Item as={Link} to="/admin/articles/select">
-            Modifier un article
-          </Dropdown.Item>
-          <Dropdown.Item as={Link} to="/admin/articles/pictures">
-            Gérer les photos
-          </Dropdown.Item>
-          <Dropdown.Item as={Link} to="/admin/articles/display">
-            Gérer l'affichage des articles
-          </Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown>
-      <Menu.Item
-        as={Link}
-        to="/admin/commandes"
-        name="Commandes"
-        active={activeItem === "Commandes"}
-        onClick={handleItemClick}
-        disabled
-      />
-      <Menu.Item
-        as={Link}
-        to="/admin/utilisateurs"
-        name="Utilisateurs"
-        active={activeItem === "Utilisateurs"}
-        onClick={handleItemClick}
-        disabled
-      /> */}
+      <Menu.Item>
+        <Menu.Header>Gestion du stock</Menu.Header>
+        <Menu.Menu>
+          <Menu.Item
+              as={Link}
+              to="/admin/stock/select"
+              content="Séléctionner un article"
+              name="stock"
+              active={activeItem === "stock"}
+              onClick={handleItemClick}
+            />
+        </Menu.Menu>
+      </Menu.Item>
     </Menu>
   );
 };

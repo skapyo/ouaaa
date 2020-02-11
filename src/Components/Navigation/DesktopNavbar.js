@@ -5,11 +5,7 @@ import LoggedInAdminRightItems from "./Items/AdminRightItems";
 import { Link } from "react-router-dom";
 import config from './../../config.json';
 
-import {
-  CountProvider,
-  useCountState,
-  useCountDispatch
-} from "./../../count-context";
+import {useSessionState,useSessionDispatch} from "./../../count-context";
 
 const divStyle = {
   padding: "0 2em 0 2em",
@@ -45,8 +41,8 @@ const headerStyle = {
 const DesktopNavbar = React.memo(({ fixed, cartIconClickHandler }) => {
 
     // const { isLogged, userInfo, login, logout } = userAuth;
-    const state = useCountState();
-    const stateDispatch = useCountDispatch();
+    const state = useSessionState();
+    const stateDispatch = useSessionDispatch();
 
     const logoutHandler = () => {
       localStorage.removeItem(config.SESSION_STORAGE.AUTH_TOKEN);
