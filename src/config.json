@@ -5,5 +5,10 @@
         "SUB" : "sub",
         "ROLE" : "role",
         "PERSISTENT_CO" : "persistentConnection"
+    },
+    "API_SERVER": {
+        "HTTP":"http",
+        "URL":"127.0.0.1",
+        "PORT":"8001"
     }
 }

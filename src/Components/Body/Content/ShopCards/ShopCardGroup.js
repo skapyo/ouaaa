@@ -7,6 +7,8 @@ import {useParams} from "react-router-dom";
 import Loader from './../../../Loader/Loader';
 import useLoaderState from './../../../../Hooks/useLoaderState';
 import useWindowSize from './../../../../Hooks/useWindowSize';
+import {getImageUrl} from './../../../../Utils/utils';
+
 
 const headerStyle = {
   "font-family": "Ubuntu', sans-serif",
@@ -39,7 +41,7 @@ const ShopCardGroup = React.memo( ({itemsPerRow}) => {
         addListener(index);
         img.onload = () => changeListenerValue(index,false);
         console.log(product.pictures);
-        img.src = product.pictures[0].croppedPicturePath;
+        img.src = getImageUrl(product.pictures[0].croppedPicturePath);
         return {...product,img:img }
       }))
     }

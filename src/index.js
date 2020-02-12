@@ -25,19 +25,7 @@ import whyDidYouRender from "@welldone-software/why-did-you-render";
 
 import config from "./config.json";
 
-const PORT_GRAPHQL_SERVER = 8001;
-// const SERVER = "51.158.122.16";
-const SERVER = "localhost";
-// const URI_GRAPHQL_SERVER = `http://${SERVER}:${PORT_GRAPHQL_SERVER}/graphql`;
-
-const URI_GRAPHQL_SERVER = "http://51.158.122.16:8001/graphql";
-
-// const AUTH_TOKEN = "auth_token";
-// const REFRESH_TOKEN = "refresh_token";
-// const SUB = "sub";
-
-// const rootElement = document.getElementById("root");
-// ReactDOM.render(<HomePageLayout />, rootElement);
+const URI_GRAPHQL_SERVER = `${config.API_SERVER.HTTP}://${config.API_SERVER.URL}:${config.API_SERVER.PORT}/graphql`;
 
 const client2 = new ApolloClient({
   link: new HttpLink({

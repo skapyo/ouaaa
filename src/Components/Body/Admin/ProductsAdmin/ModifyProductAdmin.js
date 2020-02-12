@@ -4,8 +4,8 @@ import {useQuery} from '@apollo/react-hooks';
 import {GET_PRODUCT} from './../../../../Queries/contentQueries';
 import {useAlert} from 'react-alert'
 import ProductAdmin from './ProductAdmin';
-
 import {MODIFY_PRODUCT} from './../../../../Queries/contentQueries';
+import {getImageUrl} from './../../../../Utils/utils';
 
 const ModifyProductAdmin = () => {
 
@@ -56,7 +56,7 @@ const ModifyProductAdmin = () => {
                 return {
                     id : index,
                     file : null,
-                    img : picture.originalPicturePath,
+                    img : getImageUrl(picture.originalPicturePath),
                     croppedImg : {
                         crop:{
                           x : picture.croppedX,
@@ -65,7 +65,7 @@ const ModifyProductAdmin = () => {
                         rotation : picture.croppedRotation,
                         zoom : picture.croppedZoom,
                         file : null,
-                        img : picture.croppedPicturePath,
+                        img : getImageUrl(picture.croppedPicturePath),
                         modified : false
                       },
                     activated : true,

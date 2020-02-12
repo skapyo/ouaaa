@@ -1,4 +1,5 @@
 import {Responsive} from "semantic-ui-react";
+import config from './../config.json';
 
 export const getWidth = () => {
   const isSSR = typeof window === "undefined";
@@ -12,3 +13,7 @@ export const uuidv4 = () => {
     return v.toString(16);
   });
 }
+
+export const getImageUrl = (url) => {
+  return `${config.API_SERVER.HTTP}://${config.API_SERVER.URL}:${config.API_SERVER.PORT}${url}`;
+} 

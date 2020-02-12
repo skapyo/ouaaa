@@ -16,6 +16,9 @@ import useWindowSize from './../../../../Hooks/useWindowSize';
 import {Breadcrumb} from '../../../Components/';
 import isNumber from 'is-number';
 import { BreakingChangeType } from 'graphql';
+import {getImageUrl} from './../../../../Utils/utils';
+
+
 
 const headerStyle = {
     "font-family": "Ubuntu', sans-serif",
@@ -79,7 +82,7 @@ const ProductPage = () => {
             const img = new Image();
             addListener(index);
             img.onload = () => changeListenerValue(index,false);
-            img.src = picture.croppedPicturePath;
+            img.src = getImageUrl(picture.croppedPicturePath);
             return {
                 original: img.src,
                 thumbnail: img.src,

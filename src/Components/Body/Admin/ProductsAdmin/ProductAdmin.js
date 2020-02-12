@@ -1,27 +1,17 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import {useDropArea} from 'react-use';
-
 import {MODIFY_PRODUCT,ADD_NEW_PRODUCT} from '../../../../Queries/contentQueries';
-
 import { useQuery ,useMutation} from '@apollo/react-hooks';
-
 import { useDrag, useDrop } from "react-dnd";
-
 import update from "immutability-helper";
 import gql from "graphql-tag";
 import { useAlert } from 'react-alert'
-
 import useDnDStateManager from '../../../../Hooks/useDnDStateManager';
 import useImageReader from '../../../../Hooks/useImageReader';
-
 import withDndProvider from './../../../../Hoc/withDnDProvider';
-
 import CategoriesSelect from './../BaseComponent/CategoriesSelect';
-
 import { useHistory } from 'react-router-dom';
-
 import ImageCropper from './../BaseComponent/ImageCropper/ImageCropper';
-
 import {
   Segment,
   Header,
@@ -36,6 +26,10 @@ import {
   Placeholder,
   Card, Ref, MountNode, Modal
 } from "semantic-ui-react";
+import {getImageUrl} from './../../../../Utils/utils';
+
+
+
 
 const ItemTypes = {
   PIC: "pic"

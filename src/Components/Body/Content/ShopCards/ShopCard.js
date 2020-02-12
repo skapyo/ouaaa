@@ -3,6 +3,8 @@ import { Image, Card, Icon ,Label, Button, Dropdown, Dimmer, Container, Header} 
 import { Link } from "react-router-dom";
 import {ADD_LIKED_PRODUCT,REMOVE_LIKED_PRODUCT} from './../../../../Queries/contentQueries';
 import {useMutation} from '@apollo/react-hooks';
+import {getImageUrl} from './../../../../Utils/utils';
+
 
 const CardLabel = ({isLiked,onClickHandler}) => {
   return (

@@ -16,7 +16,7 @@ import {Breadcrumb} from './../../../Components';
 import useWindowSize from './../../../../Hooks/useWindowSize';
 import Loader from './../../../Loader/Loader';
 import useLoaderState from './../../../../Hooks/useLoaderState';
-
+import {getImageUrl} from './../../../../Utils/utils';
 
 const getOptions = (number, prefix = "Choice ") =>
   _.times(number, index => ({
@@ -89,7 +89,7 @@ const CartPage = ({ cartVisible }) => {
           const img = new Image();
           addListener(index);
           img.onload = () => changeListenerValue(index,false);
-          img.src = item.product.pictures[0].croppedPicturePath;
+          img.src = getImageUrl(item.product.pictures[0].croppedPicturePath);
         }
       })
     }
@@ -125,7 +125,7 @@ const CartPage = ({ cartVisible }) => {
                             name={item.product.label} 
                             price={item.product.price} 
                             nb={item.quantity} 
-                            src={item.product.pictures[0].croppedPicturePath}
+                            src={getImageUrl(item.product.pictures[0].croppedPicturePath)}
                           />
                         ))
                         :
