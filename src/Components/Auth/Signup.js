@@ -1,18 +1,20 @@
 import React,{useState,useEffect} from 'react';
-import {Input, Modal,Grid,Header,Form ,Button,Segment,Image,Message, Divider, Icon} from "semantic-ui-react";
+import {Input, Modal,Grid,Header,Form ,Button,Segment,Image,Message, Divider, Icon, Popup, List} from "semantic-ui-react";
 import { Link } from 'react-router-dom';
 import { useMutation } from '@apollo/react-hooks';
 import {SIGNUP} from './../../Queries/authQueries';
-
 import {useSessionDispatch} from "./../../count-context";
+import {validateEmail} from './../../Utils/utils';
+
 
 const Signup = () => {
 
     const [loadingState, setLoadingState] = useState(false);
     const [formValues, setFormValue] = useState({});
+    const [formControlMessage, setFormControlMessage] = useState([]);
     const [buttonDisabledInd, setButtonDisbledInd] = useState(true);
+    const [buttonHovered, setButtonHoveredInd] = useState(false);
 
-    // const state = useCountState();
     const stateDispatch = useSessionDispatch();
 
     const [signup, {loading, error, data }] = useMutation(
@@ -27,33 +29,61 @@ const Signup = () => {
         });
 
     const formChangeHandler = (e,data) => {
-        // const { name, value } = e.target;
-        console.log(data);
         setFormValue({ ...formValues, [data.name]: data.value });
     };
 
+
+
     useEffect(() => {
-        if(formValues.email && formValues.email.length > 0)
+        let bool = 0; // if one of the field tests is KO, bool will be 0
+        let controlMessages = [];
+
+        // email is not empty and email is valid
+        if(!formValues.email || (formValues.email && !validateEmail(formValues.email))) {
+            controlMessages.push({field:'email', message:"Le format de l'email n'est pas valide"});
+        }       
+        // lastname is not empty
+        if(!formValues.lastname || (formValues.lastname && formValues.lastname.trim().length <= 0)) {
+            controlMessages.push({field:'lastname', message:"Le champ nom n'est pas renseigné"});
+        }  
+        // surname is not empty
+        if(!formValues.surname || (formValues.surname && formValues.surname.trim().length <= 0)) {
+            controlMessages.push({field:'surname', message:"Le champ prénom n'est pas renseigné"});         
+        }   
+        // surname is not empty
+        if(!formValues.password1 || (formValues.password1 && formValues.password1.trim().length <= 0)) {
+            controlMessages.push({field:'password1', message:"Le champ mot de passe n°1 n'est pas renseigné"});         
+        }   
+        // surname is not empty
+        if(!formValues.password2 || (formValues.password2 && formValues.password2.trim().length <= 0)) {
+            controlMessages.push({field:'password2', message:"Le champ mot de passe n°2 n'est pas renseigné"});         
+        }   
+        // passwords are equals
+        if(formValues.password1 && formValues.password2 && formValues.password1 !== formValues.password2) {
+            controlMessages.push({field:'passwords', message:"Les mots de passe ne sont pas les mêmes"});
+        }    
+
+        if(controlMessages.length == 0) {
+            bool = 1;
+        }
+
+        setFormControlMessage(controlMessages);
+
+        if(bool == 1) 
+            setButtonDisbledInd(false);
+        else {
             setButtonDisbledInd(true);
+        }
+
     },[formValues])
 
-    console.log('formValues');
-    console.log(formValues);
-    console.log('formValues');
 
     const [surnameControl, setSurnameControl] = useState();
 
     const submitHandler = () => {
-
-        // if(formValues.surname.length === 0)
-        //     setSurnameControl('test');
-
         setLoadingState(true);
         signup();
     }
-
-
-
 
 
     useEffect(() => {
@@ -75,7 +105,6 @@ const Signup = () => {
                 Veuillez renseigner vos informations pour la création de votre compte
             </Header>
             <Form 
-                // size='huge' 
                 onSubmit={submitHandler}
                 >
                 <Segment>
@@ -88,20 +117,8 @@ const Signup = () => {
                             name="surname"
                             onChange={formChangeHandler}
                             value={formValues.surname}
-                            // error={{
-                            //     content: 'Please enter a valid email address',
-                            //     // pointing: 'below',
-                            //   }}
+                            error={ buttonDisabledInd && buttonHovered && formControlMessage.find(e => e.field == "surname") != null ? true:false}
                         />
-                            {/* <label>Prénom</label>
-                            <input
-                                placeholder="Prénom"
-                                name="surname"
-                                onChange={formChangeHandler}
-                                value={formValues.surname}
-                                error
-                            /> */}
-                        {/* </Form.Field> */}
                         <Form.Field width={8}
                             required
                             control={Input}
@@ -110,15 +127,8 @@ const Signup = () => {
                             name="lastname"
                             onChange={formChangeHandler}
                             value={formValues.lastname}
+                            error={ buttonDisabledInd && buttonHovered && formControlMessage.find(e => e.field == "lastname") != null ? true:false}
                         />
-                            {/* <label>Nom</label>
-                            <input
-                                placeholder="Nom"
-                                name="lastname"
-                                onChange={formChangeHandler}
-                                value={formValues.lastname}
-                            />
-                        </Form.Field> */}
                         
                     </Form.Group>
                     <br/>
@@ -131,15 +141,8 @@ const Signup = () => {
                             name="email"
                             onChange={formChangeHandler}
                             value={formValues.email}
+                            error={ buttonDisabledInd && buttonHovered && formControlMessage.find(e => e.field == "email") != null ? true:false}
                         />
-                                {/* <label>Email</label>
-                                <input
-                                    placeholder="Email"
-                                    name="email"
-                                    onChange={formChangeHandler}
-                                    value={formValues.email}
-                                />
-                        </Form.Field> */}
                         <Form.Field width={8}
                             control={Input}
                             label='Numéro de téléphone'
@@ -148,14 +151,6 @@ const Signup = () => {
                             onChange={formChangeHandler}
                             value={formValues.phone}
                         />
-                                {/* <label>Numéro de téléphone</label>
-                                <input
-                                    placeholder="Numéro de téléphone"
-                                    name="phone"
-                                    onChange={formChangeHandler}
-                                    value={formValues.phone}
-                                />
-                        </Form.Field> */}
                     </Form.Group>
                     <br />
                     <Form.Group>
@@ -168,6 +163,7 @@ const Signup = () => {
                             name="password1"
                             onChange={formChangeHandler}
                             value={formValues.password1}
+                            error={ buttonDisabledInd && buttonHovered && formControlMessage.find(e => e.field == "password1" || e.field == "passwords" ?true:false) != null ? true:false}
                         />
                         <Form.Field width={8} 
                             required
@@ -178,40 +174,39 @@ const Signup = () => {
                             name="password2"
                             onChange={formChangeHandler}
                             value={formValues.password2}
+                            error={ buttonDisabledInd && buttonHovered && formControlMessage.find(e => e.field == "password2" || e.field == "passwords" ?true:false) != null ? true:false}
                         />
-                                {/* <label>Mot de passe</label>
-                                <input
-                                    placeholder="Mot de passe"
-                                    name="password1"
-                                    type='password'
-                                    onChange={formChangeHandler}
-                                    value={formValues.password1}
-                                />
-                        </Form.Field> */}
-                        {/* <Form.Field width={8}>
-                                <label>Confirmation du mot de passe</label>
-                                <input
-                                    placeholder="Mot de passe"
-                                    name="password2"
-                                    type='password'
-                                    onChange={formChangeHandler}
-                                    value={formValues.password2}
-                                />
-                        </Form.Field> */}
                     </Form.Group>
                     <br />
                     <Grid>
                         <Grid.Column textAlign="center">
-                            <Button 
-                                    color='teal' 
-                                    loading
-                                    size='large' 
-                                    loading={loadingState}
-                                    content='submit'
-                                    disabled={buttonDisabledInd}
-                                >
-                                Créer un compte
-                            </Button>
+                            <Popup 
+                                trigger = {     
+                                    <div 
+                                        style={{display: 'inline-block'}}
+                                        onMouseOver={() => setButtonHoveredInd(true)}
+                                        onMouseLeave={() => setButtonHoveredInd(false)}
+                                        >                 
+                                            <Button 
+                                                color='teal' 
+                                                loading
+                                                size='large' 
+                                                loading={loadingState}
+                                                content='Créer un compte'
+                                                disabled={buttonDisabledInd}
+                                            />
+                                    </div>   
+                                }
+                                disabled={!buttonDisabledInd}
+                                // basic
+                                wide
+                            >
+                                <List bulleted>
+                                    {formControlMessage.map((item) => {
+                                        return (<List.Item>{item.message}</List.Item>)
+                                    })}
+                                </List>
+                            </Popup>
                         </Grid.Column>
                     </Grid>
                 </Segment>
