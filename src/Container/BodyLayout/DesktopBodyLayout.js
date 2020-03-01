@@ -9,6 +9,9 @@ import AdminLayout from "./../../Components/Body/Admin/AdminLayout";
 import Login from './../../Components/Auth/Login';
 import Signup from './../../Components/Auth/Signup';
 import AccountPage from './../../Components/Auth/AccountPage';
+import SendValidationEmail from './../../Components/Auth/SendValidationEmail';
+import EmailValidation from './../../Components/Auth/EmailValidation';
+import ChangePassword from "../../Components/Auth/ChangePassword";
 import {PrivateRoute,SignedoutRoute,PrivateAdminRoute} from './../../Components/Auth/PrivateRoute';
 
 const DesktopBodyLayout = () => {
@@ -32,6 +35,18 @@ const DesktopBodyLayout = () => {
           <SignedoutRoute
             path="/signup"
             component={() => <Signup />}
+          />
+          <SignedoutRoute
+            path="/sendValidationEmail/:email"
+            component={() => <SendValidationEmail />}
+          />
+          <SignedoutRoute
+            path="/emailValidation/:email/:token"
+            component={() => <EmailValidation />}
+          />
+          <SignedoutRoute
+            path="/changePassword/"
+            component={() => <ChangePassword />}
           />
           <PrivateRoute
             path="/account"

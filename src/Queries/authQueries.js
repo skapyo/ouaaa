@@ -17,15 +17,25 @@ export const LOGIN = gql`
 
 export const SIGNUP = gql`
   mutation register($email: String!, $password: String!,$surname:String!, $lastname:String!, $phone:String) {
-    register(email:$email,password:$password,surname:$surname, lastname:$lastname, phone:$phone) {
-      surname,
-      lastname,
-      sub,
-      token,
-      iat,
-      exp,
-      refreshToken,
-      role
-    }
+    register(email:$email,password:$password,surname:$surname, lastname:$lastname, phone:$phone) 
+  }
+`;
+
+
+export const VALIDATE_EMAIL= gql`
+  mutation validateEmail ($email:String, $token:String) {
+    validateEmail(email:$email,token:$token)
+  }
+`;
+
+export const SEND_VALIDATION_EMAIL= gql`
+  mutation sendValidationEmail ($email:String) {
+    sendValidationEmail(email:$email)
+  }
+`;
+
+export const SEND_CHANGE_PSSWD_EMAIL= gql`
+  mutation sendValidationEmail ($email:String) {
+    sendValidationEmail(email:$email)
   }
 `;

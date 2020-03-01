@@ -1,27 +1,24 @@
 import React,{useState,useEffect} from 'react';
 import { Modal,Grid,Header,Form ,Button,Segment,Image,Message, Divider,Popup} from "semantic-ui-react";
 import { Link } from 'react-router-dom';
-import {LOGIN} from './../../Queries/authQueries';
+import {SEND_CHANGE_PSSWD_EMAIL} from '../../Queries/authQueries';
 import { useMutation } from '@apollo/react-hooks';
 import config from './../../config.json';
 
-import {useSessionDispatch} from "./../../count-context";
-import {validateEmail} from './../../Utils/utils';
+import {useSessionDispatch} from "../../count-context";
+import {validateEmail} from '../../Utils/utils';
 
-const Login = () => {
+const ChangePassword = () => {
 
     const [loadingState, setLoadingState] = useState(false);
     const [formValues, setFormValue] = useState({persistentConnection:false});
     const [formControlMessage, setFormControlMessage] = useState([]);
     const [buttonDisabledInd, setButtonDisbledInd] = useState(true);
 
-    const stateDispatch = useSessionDispatch();
-
     const [login, {loading, error, data }] = useMutation(
-        LOGIN,
+        SEND_CHANGE_PSSWD_EMAIL,
         { variables: { 
-            email: formValues.email, 
-            password:formValues.password
+            email: formValues.email
         } 
     });
 
@@ -29,10 +26,6 @@ const Login = () => {
         const { name, value } = e.target;
         setFormValue({ ...formValues, [name]: value });
     };
-
-    const checkBoxChangeHandler = (e,value) => {
-        setFormValue({ ...formValues, persistentConnection: value.checked });
-      };
 
     const submitHandler = () => {
         setLoadingState(true);
@@ -47,15 +40,10 @@ const Login = () => {
         if(!formValues.email || (formValues.email && !validateEmail(formValues.email))) {
             controlMessages.push({field:'email', message:"Le format de l'email n'est pas valide"});
         }       
-        // lastname is not empty
-        if(!formValues.password || (formValues.password && formValues.password.trim().length <= 0)) {
-            controlMessages.push({field:'password', message:"Le mot de passe n'est pas renseigné"});
-        }  
 
         if(controlMessages.length == 0) {
             bool = 1;
         }
-
         setFormControlMessage(controlMessages);
 
         if(bool == 1) 
@@ -63,7 +51,6 @@ const Login = () => {
         else {
             setButtonDisbledInd(true);
         }
-
     },[formValues])
 
     useEffect(() => {
@@ -71,21 +58,6 @@ const Login = () => {
             setLoadingState(false);
     },[error])
 
-    useEffect(() => {
-        if(data && data.login) {
-            console.log(data.login);
-            localStorage.setItem(config.SESSION_STORAGE.REFRESH_TOKEN,data.login.refreshToken);
-            localStorage.setItem(config.SESSION_STORAGE.SUB,data.login.sub);
-            localStorage.setItem(config.SESSION_STORAGE.AUTH_TOKEN,data.login.token);
-            localStorage.setItem(config.SESSION_STORAGE.ROLE,data.login.role);
-            localStorage.setItem(config.SESSION_STORAGE.PERSISTENT_CO,formValues.persistentConnection);
-            stateDispatch({
-                type:'login',
-                payload:data.login
-            });
-            setLoadingState(false);
-        }
-    },[data]);
 
     return (
     
@@ -94,7 +66,7 @@ const Login = () => {
                 <Grid.Column style={{ maxWidth: 400 }}>
                     <br />
                     <Header as='h4' color='teal' textAlign='center'>
-                        Veuillez vous connecter à votre compte
+                        Modifier son mot de passe
                     </Header>
                     <Form  
                         error={error?true:false}
@@ -104,28 +76,10 @@ const Login = () => {
                         <Segment>
                             <Form.Input 
                                 fluid 
-                                icon='user' 
-                                iconPosition='left' 
                                 placeholder='Adresse email' 
                                 name='email'
                                 onChange={formChangeHandler}
                             />
-                            <Form.Input
-                                fluid
-                                icon='lock'
-                                iconPosition='left'
-                                placeholder='Password'
-                                type='password'
-                                name='password'
-                                onChange={formChangeHandler}
-                            />
-                            <Form.Checkbox
-                                name = 'persistentConnection'
-                                label='Rester connecté'
-                                onChange={checkBoxChangeHandler}
-                                checked={formValues.persistentConnection}
-                            />
-
                             <Button 
                                 color='teal' 
                                 fluid 
@@ -134,7 +88,7 @@ const Login = () => {
                                 content='submit'
                                 disabled={buttonDisabledInd}
                                 >
-                                Se connecter
+                                M'envoyer un lien par email
                             </Button>
                             <Message
                                 error
@@ -151,11 +105,6 @@ const Login = () => {
                         </Segment>
                     </Form>
                     <Message>
-                        Vous avez oublié votre mot de passe
-                        <br/>
-                        <Link to='/changePassword'>Réinitialiser son mot de passe</Link>
-                        <br/>
-                        <br/>
                         Vous n'avez pas encore de compte 
                         <br/>
                         <Link to='/signup'>Créer un compte</Link>
@@ -168,4 +117,4 @@ const Login = () => {
 
 };
 
-export default Login;
+export default ChangePassword;

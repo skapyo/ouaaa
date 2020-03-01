@@ -28,11 +28,10 @@ const Signup = () => {
             } 
         });
 
+
     const formChangeHandler = (e,data) => {
         setFormValue({ ...formValues, [data.name]: data.value });
     };
-
-
 
     useEffect(() => {
         let bool = 0; // if one of the field tests is KO, bool will be 0
@@ -77,8 +76,13 @@ const Signup = () => {
 
     },[formValues])
 
+    useEffect(() => {
+        if(error) 
+            setLoadingState(false);
+    },[error])
 
-    const [surnameControl, setSurnameControl] = useState();
+
+    // const [surnameControl, setSurnameControl] = useState();
 
     const submitHandler = () => {
         setLoadingState(true);
@@ -90,10 +94,10 @@ const Signup = () => {
         if(data && data.register) {
             console.log(data.register);
             setLoadingState(false);
-            stateDispatch({
-                type:'login',
-                payload:data.register
-            })
+            // stateDispatch({
+            //     type:'login',
+            //     payload:data.register
+            // })
         }
     },[data])
 
@@ -105,6 +109,7 @@ const Signup = () => {
                 Veuillez renseigner vos informations pour la création de votre compte
             </Header>
             <Form 
+                error={error?true:false}
                 onSubmit={submitHandler}
                 >
                 <Segment>
@@ -118,7 +123,7 @@ const Signup = () => {
                             onChange={formChangeHandler}
                             value={formValues.surname}
                             error={ buttonDisabledInd && buttonHovered && formControlMessage.find(e => e.field == "surname") != null ? true:false}
-                        />
+                        /> 
                         <Form.Field width={8}
                             required
                             control={Input}
@@ -209,11 +214,26 @@ const Signup = () => {
                             </Popup>
                         </Grid.Column>
                     </Grid>
+                    <Message
+                        error
+                        content={error && error.graphQLErrors[0] && error.graphQLErrors[0].message ? error.graphQLErrors[0].message:'Il y a eu une erreur pendant la création de votre compte, veuillez rééssayer'}
+                    />
+                    {!loadingState && !error && data && data.register ? 
+                        (                    
+                            <Message 
+                                info
+                                content={`Un email de validation a été envoyé à ${formValues.email}`}
+                            />
+                        )
+                        :
+                        null
+                    }
                 </Segment>
             </Form>
-            <Message attached='bottom' info>
-                <Icon name='help' size='large' color='teal'/>
+            <Message attached='bottom'>
                 Vous avez déjà un compte ?&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<Link to='/login'>Se connecter</Link>&nbsp;.
+                {/* <br/>
+                Vous avez perdu votre mot de passe?&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<Link to='/login'>Réinitialiser son mot de passe</Link>&nbsp;. */}
             </Message>
         </>
 
