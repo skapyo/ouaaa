@@ -7,8 +7,8 @@
         "PERSISTENT_CO" : "persistentConnection"
     },
     "API_SERVER": {
-        "HTTP":"http",
-        "URL":"51.158.122.16",
-        "PORT":"8001"
+        "HTTP":"https",
+        "URL":"atelier-elisabeth.fr",
+        "PORT":"443"
     }
 }
