@@ -36,6 +36,12 @@ export const SEND_VALIDATION_EMAIL= gql`
 
 export const SEND_CHANGE_PSSWD_EMAIL= gql`
   mutation sendValidationEmail ($email:String) {
-    sendValidationEmail(email:$email)
+    sendResetPswdEmail(email:$email)
+  }
+`;
+
+export const CHANGE_PASSWORD = gql`
+  mutation resetPassword ($email:String,$token:String,$password:String) {
+    resetPassword(email:$email,token:$token,password:$password)
   }
 `;

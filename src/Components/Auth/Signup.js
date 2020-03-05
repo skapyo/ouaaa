@@ -49,11 +49,11 @@ const Signup = () => {
         if(!formValues.surname || (formValues.surname && formValues.surname.trim().length <= 0)) {
             controlMessages.push({field:'surname', message:"Le champ prénom n'est pas renseigné"});         
         }   
-        // surname is not empty
+        // password1 is not empty
         if(!formValues.password1 || (formValues.password1 && formValues.password1.trim().length <= 0)) {
             controlMessages.push({field:'password1', message:"Le champ mot de passe n°1 n'est pas renseigné"});         
         }   
-        // surname is not empty
+        // password2 is not empty
         if(!formValues.password2 || (formValues.password2 && formValues.password2.trim().length <= 0)) {
             controlMessages.push({field:'password2', message:"Le champ mot de passe n°2 n'est pas renseigné"});         
         }   
@@ -194,7 +194,6 @@ const Signup = () => {
                                         >                 
                                             <Button 
                                                 color='teal' 
-                                                loading
                                                 size='large' 
                                                 loading={loadingState}
                                                 content='Créer un compte'

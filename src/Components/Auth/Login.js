@@ -153,7 +153,7 @@ const Login = () => {
                     <Message>
                         Vous avez oublié votre mot de passe
                         <br/>
-                        <Link to='/changePassword'>Réinitialiser son mot de passe</Link>
+                        <Link to='/resetPassword'>Réinitialiser son mot de passe</Link>
                         <br/>
                         <br/>
                         Vous n'avez pas encore de compte 

@@ -1,27 +1,25 @@
 import React,{useState,useEffect} from 'react';
-import {useParams} from "react-router-dom";
 import { List,Modal,Grid,Header,Form ,Button,Segment,Image,Message, Divider,Popup} from "semantic-ui-react";
-import { useMutation } from '@apollo/react-hooks';
 import { Link } from 'react-router-dom';
-import {validateEmail} from '../../Utils/utils';
-import {CHANGE_PASSWORD} from '../../Queries/authQueries';
+import {SEND_CHANGE_PSSWD_EMAIL} from '../../Queries/authQueries';
+import { useMutation } from '@apollo/react-hooks';
+import config from './../../config.json';
 
-const ResetPassword = () => {
-    
-    const {email,token} = useParams();
+import {useSessionDispatch} from "../../count-context";
+import {validateEmail} from '../../Utils/utils';
+
+const SendResetPasswordEmail = () => {
+
     const [loadingState, setLoadingState] = useState(false);
     const [formValues, setFormValue] = useState({persistentConnection:false});
     const [formControlMessage, setFormControlMessage] = useState([]);
     const [buttonDisabledInd, setButtonDisbledInd] = useState(true);
     const [buttonHovered, setButtonHoveredInd] = useState(false);
 
-
-    const [changePassword, {loading, error, data }] = useMutation(
-        CHANGE_PASSWORD,
+    const [sendEmail, {loading, error, data }] = useMutation(
+        SEND_CHANGE_PSSWD_EMAIL,
         { variables: { 
-            email : email,
-            token : token,
-            password : formValues.password1
+            email: formValues.email
         } 
     });
 
@@ -32,24 +30,22 @@ const ResetPassword = () => {
 
     const submitHandler = () => {
         setLoadingState(true);
-        changePassword();
+        sendEmail();
     };
 
     useEffect(() => {
         let bool = 0; // if one of the field tests is KO, bool will be 0
         let controlMessages = [];
 
-        // password1 is not empty
-        if(!formValues.password1 || (formValues.password1 && formValues.password1.trim().length <= 0)) {
-            controlMessages.push({field:'password1', message:"Le champ mot de passe n°1 n'est pas renseigné"});         
-        }   
-        // password2 is not empty
-        if(!formValues.password2 || (formValues.password2 && formValues.password2.trim().length <= 0)) {
-            controlMessages.push({field:'password2', message:"Le champ mot de passe n°2 n'est pas renseigné"});         
-        }   
-        // passwords are equals
-        if(formValues.password1 && formValues.password2 && formValues.password1 !== formValues.password2) {
-            controlMessages.push({field:'passwords', message:"Les mots de passe ne sont pas les mêmes"});
+
+        // email is not empty and email is valid
+        if(!formValues.email) {
+            controlMessages.push({field:'email', message:"L'email n'est pas renseigné"});
+        }      
+
+        // email is not empty and email is valid
+        if(formValues.email && !validateEmail(formValues.email)) {
+            controlMessages.push({field:'email', message:"Le format de l'email n'est pas valide"});
         }       
 
         if(controlMessages.length == 0) {
@@ -70,7 +66,7 @@ const ResetPassword = () => {
     },[error])
 
     useEffect(() => {
-        if(data && data.resetPassword) {
+        if(data && data.sendResetPswdEmail) {
             setLoadingState(false);
         }
     },[data])
@@ -93,19 +89,10 @@ const ResetPassword = () => {
                         <Segment>
                             <Form.Input 
                                 fluid 
-                                placeholder='Mot de passe' 
-                                name='password1'
-                                type='password'
+                                placeholder='Adresse email' 
+                                name='email'
                                 onChange={formChangeHandler}
-                                error={ buttonDisabledInd && buttonHovered && formControlMessage.find(e => e.field == "password1" || e.field == "passwords" ?true:false) != null ? true:false}
-                            />
-                            <Form.Input 
-                                fluid 
-                                placeholder='Confirmation du mot de passe'
-                                name='password2'
-                                type='password'
-                                onChange={formChangeHandler}
-                                error={ buttonDisabledInd && buttonHovered && formControlMessage.find(e => e.field == "password2" || e.field == "passwords" ?true:false) != null ? true:false}
+                                error={ buttonDisabledInd && buttonHovered && formControlMessage.find(e => e.field == "email") != null ? true:false}
                             />
                             <Popup 
                                 trigger = {     
@@ -116,10 +103,9 @@ const ResetPassword = () => {
                                         >                 
                                             <Button 
                                                 color='teal' 
-                                                fluid
                                                 size='large' 
                                                 loading={loadingState}
-                                                content='Réinitialiser mon mot de passe'
+                                                content="M'envoyer un email de réinitialisation"
                                                 disabled={buttonDisabledInd}
                                             />
                                     </div>   
@@ -134,15 +120,11 @@ const ResetPassword = () => {
                                     })}
                                 </List>
                             </Popup>
-                            <Message
-                                error
-                                content={error && error.graphQLErrors[0] && error.graphQLErrors[0].message ? error.graphQLErrors[0].message:'Il y a eu une erreur pendant la création de votre compte, veuillez rééssayer'}
-                            />
-                            {!loadingState && !error && data && data.resetPassword ? 
+                            {!loadingState && !error && data ? 
                                 (                    
                                     <Message 
                                         info
-                                        content={`Votre mot de passe a bien été réinitialisé.`}
+                                        content={`Si l'adresse email ${formValues.email} correspond à un compte utilisateur, un email de réinitialisation a été envoyé.`}
                                     />
                                 )
                                 :
@@ -150,17 +132,17 @@ const ResetPassword = () => {
                             }
                         </Segment>
                     </Form>
-                    {/* <Message>
+                    <Message>
                         Vous n'avez pas encore de compte 
                         <br/>
                         <Link to='/signup'>Créer un compte</Link>
-                    </Message> */}
+                    </Message>
                 </Grid.Column>
             </Grid>
 
         // </Segment>
     )
 
-}
+};
 
-export default ResetPassword;
+export default SendResetPasswordEmail;

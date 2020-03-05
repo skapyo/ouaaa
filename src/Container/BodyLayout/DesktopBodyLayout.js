@@ -11,7 +11,8 @@ import Signup from './../../Components/Auth/Signup';
 import AccountPage from './../../Components/Auth/AccountPage';
 import SendValidationEmail from './../../Components/Auth/SendValidationEmail';
 import EmailValidation from './../../Components/Auth/EmailValidation';
-import ChangePassword from "../../Components/Auth/ChangePassword";
+import SendResetPasswordEmail from "../../Components/Auth/SendResetPasswordEmail";
+import ResetPassword from "../../Components/Auth/ResetPassword";
 import {PrivateRoute,SignedoutRoute,PrivateAdminRoute} from './../../Components/Auth/PrivateRoute';
 
 const DesktopBodyLayout = () => {
@@ -45,8 +46,13 @@ const DesktopBodyLayout = () => {
             component={() => <EmailValidation />}
           />
           <SignedoutRoute
-            path="/changePassword/"
-            component={() => <ChangePassword />}
+            exact
+            path="/resetPassword"
+            component={() => <SendResetPasswordEmail />}
+          />
+          <SignedoutRoute
+            path="/resetPassword/:email/:token"
+            component={() => <ResetPassword />}
           />
           <PrivateRoute
             path="/account"
