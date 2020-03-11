@@ -14,6 +14,8 @@ import EmailValidation from './../../Components/Auth/EmailValidation';
 import SendResetPasswordEmail from "../../Components/Auth/SendResetPasswordEmail";
 import ResetPassword from "../../Components/Auth/ResetPassword";
 import {PrivateRoute,SignedoutRoute,PrivateAdminRoute} from './../../Components/Auth/PrivateRoute';
+import OrderContainer from "../../Components/Body/Content/Order/OrderContainer";
+import OrdersPage from "../../Components/Body/Content/Order/OrdersPage";
 
 const DesktopBodyLayout = () => {
 
@@ -57,6 +59,14 @@ const DesktopBodyLayout = () => {
           <PrivateRoute
             path="/account"
             component={() => <AccountPage />}
+          />
+          <PrivateRoute
+            path="/commandes"
+            component={() => <OrdersPage />}
+          />
+          <PrivateRoute
+            path="/commande/:orderId"
+            component={() => <OrderContainer />}
           />
           <PrivateRoute
             path="/favories"

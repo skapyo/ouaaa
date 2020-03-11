@@ -52,7 +52,20 @@ const DesktopAdminContentMenu = () => {
         </Menu.Menu>
       </Menu.Item>
       <Menu.Item>
-        <Menu.Header>Gestion du stock</Menu.Header>
+        <Menu.Header>Gestion des commandes</Menu.Header>
+        <Menu.Menu>
+          <Menu.Item
+              as={Link}
+              to="/admin/orders"
+              content="Visualiser les commandes"
+              name="commandes"
+              active={activeItem === "commandes"}
+              onClick={handleItemClick}
+            />
+        </Menu.Menu>
+      </Menu.Item>
+      <Menu.Item>
+        <Menu.Header>Autres fonctionnalités</Menu.Header>
         <Menu.Menu>
           <Menu.Item
               as={Link}

@@ -1,7 +1,7 @@
 import React from "react";
 import ShopCardGroup from "./ShopCards/ShopCardGroup";
 import ProductPage from "./ProductPage/ProductPage";
-import CartPage from './Cart/CartPage';
+import Cart from './Cart/Cart';
 import { Switch, Route } from "react-router-dom";
 
 const ContentLayout = () => {
@@ -13,7 +13,7 @@ const ContentLayout = () => {
         component={() => <ShopCardGroup itemsPerRow={3}/>}
       />
       <Route path="/produit/:productId" component={() => <ProductPage />} />
-      <Route path="/cart" component={() => <CartPage />} />
+      <Route path="/cart" component={() => <Cart />} />
     </Switch>
   );
 };

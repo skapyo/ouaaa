@@ -8,22 +8,16 @@ import {
   Header,
   Form,
   Sticky,
-  Message
+  Label,
+  List
 } from "semantic-ui-react";
-import {GET_CART} from './../../../../Queries/contentQueries';
+import {CANCEL_ORDER} from '../../../../Queries/contentQueries';
 import {useQuery,useMutation} from '@apollo/react-hooks';
-import {Breadcrumb} from './../../../Components';
-import useWindowSize from './../../../../Hooks/useWindowSize';
-import Loader from './../../../Loader/Loader';
-import useLoaderState from './../../../../Hooks/useLoaderState';
-import {getImageUrl} from './../../../../Utils/utils';
-
-const getOptions = (number, prefix = "Choice ") =>
-  _.times(number, index => ({
-    key: index,
-    text: `${prefix}${index}`,
-    value: index
-  }));
+import {Breadcrumb} from '../../../Components';
+import useWindowSize from '../../../../Hooks/useWindowSize';
+import Loader from '../../../Loader/Loader';
+import useLoaderState from '../../../../Hooks/useLoaderState';
+import {getImageUrl} from '../../../../Utils/utils';
 
   
 const headerStyle = {
@@ -53,7 +47,7 @@ const CartItem = ({ name, price, nb,src }) => {
         <Item.Description>{`Quantité: ${nb}`}</Item.Description>
         <Item.Description>{`Prix unitaire: ${price}€`}</Item.Description>
         <Item.Extra >
-  <Segment basic floated='right'>{`Prix: ${nb} x ${price}€ = `}<span style={StrickyHeaderStyle}>{`${nb*price}€`}</span></Segment>
+          <Segment basic floated='right'>{`Prix: ${nb} x ${price}€ = `}<span style={StrickyHeaderStyle}>{`${nb*price}€`}</span></Segment>
         </Item.Extra>
       </Item.Content>
     </Item>
@@ -62,12 +56,13 @@ const CartItem = ({ name, price, nb,src }) => {
   );
 };
 
-const CartPage = ({ cartVisible }) => {
+const Order = ({ data,loading,error,refetch }) => {
 
-  const {data,loading,error} = useQuery(GET_CART,{
-    fetchPolicy:"network-only"
-  });
+//   const {data,loading,error} = useQuery(GET_CART,{
+//     fetchPolicy:"network-only"
+//   });
 
+  const [disabled, setDisabledInd] = useState(false);
   const [isCloseButtonHovered, setCloseButtonHoverInd] = useState(false);
   const closeHoveredHandler = () => {
     setCloseButtonHoverInd(!isCloseButtonHovered);
@@ -83,8 +78,8 @@ const CartPage = ({ cartVisible }) => {
   ] = useLoaderState();
 
   useEffect(() => {  
-    if(data && data.cartQuery.items.length > 0 ) {
-      data.cartQuery.items.map((item,index) => {
+    if(data && data.ordersUserQuery[0].items.length > 0 ) {
+      data.ordersUserQuery[0].items.map((item,index) => {
         if(item.product.pictures[0] && item.product.pictures[0].croppedPicturePath) {
           const img = new Image();
           addListener(index);
@@ -95,6 +90,18 @@ const CartPage = ({ cartVisible }) => {
     }
   },[loading]);
 
+  const id = data && data.ordersUserQuery[0].id || null;
+  const [cancelOrderMutation,{data:cancelOrdertData, loading:cancelOrderLoading, error:cancelOrderError}] = useMutation(CANCEL_ORDER,{variables:{orderId:id}});
+
+  const cancelOrder = () => {
+    cancelOrderMutation();
+  };
+
+  useEffect(() => {
+    if(cancelOrdertData && cancelOrdertData.cancelOrder)
+      refetch();
+  },[cancelOrdertData]);
+
   const {height} = useWindowSize();
   const midHeight = (height - 230 - 230 - 10) / 2;
   const midHeightString = `${midHeight}px 0 0 0`;
@@ -104,8 +111,8 @@ const CartPage = ({ cartVisible }) => {
 
   return (
     <>
-      <Breadcrumb lastItem='Mon panier' />
-      <Header as='h1' style={headerStyle}>Mon panier</Header>
+      <Breadcrumb options={[{to:'/commandes',label:'Mes commandes'}]} lastItem={`commande n° ${data.ordersUserQuery[0].id}`} />
+      <Header as='h1' style={headerStyle}>Ma commande</Header>
       <br />
       <br />
       <Grid stackable>
@@ -119,8 +126,8 @@ const CartPage = ({ cartVisible }) => {
                 <Grid verticalAlign='left'>
                   <Grid.Column width='16'>
                       <Item.Group divided relaxed >
-                        {data && data.cartQuery.items.length > 0 ?
-                        data.cartQuery.items.map((item) => (
+                        {data && data.ordersUserQuery[0].items.length > 0 ?
+                        data.ordersUserQuery[0].items.map((item) => (
                           <CartItem 
                             name={item.product.label} 
                             price={item.product.price} 
@@ -142,27 +149,52 @@ const CartPage = ({ cartVisible }) => {
                   <Sticky offset={100}>
                       <Segment>
                         <Header as='h1' style={StrickyHeaderStyle}>Résumé de la commande:</Header>
+                        {/* <br/> */}
+                        <Header as='h5'>Articles:</Header>
+                        <List bulleted>
+                            {data && data.ordersUserQuery[0].items.length > 0 ? 
+                            data.ordersUserQuery[0].items.map((item) => (
+                                // <span style={{display:'block'}}>{`${item.product.label}: ${item.quantity} pièces`}</span>
+                                <List.Item>{`${item.product.label}: ${item.quantity} pièces`}</List.Item>
+                            ))
+                            :
+                            'aucun article séléctionné'
+                            }
+                        </List>
+
+                        {/* <br/> */}
+                        <Header as='h3' >{`Prix total: ${data.ordersUserQuery[0].totalprice}€`}</Header>
                         <br/>
-                        {data && data.cartQuery.items.length > 0 ? 
-                          data.cartQuery.items.map((item) => (
-                            <span style={{display:'block'}}>{`${item.product.label}: ${item.quantity} pièces`}</span>
-                          ))
-                         :
-                         'aucun article séléctionné'
-                        }
+                        <Grid>
+                            <Grid.Row>
+                                <Grid.Column width={9}><Header as='h5' >Statut de la commande:</Header></Grid.Column>
+                                {(data && data.ordersUserQuery[0].status != "annulée") && (
+                                <Grid.Column width={7}><Header as='h5' color='teal'>{data.ordersUserQuery[0].status}</Header></Grid.Column>
+                                )}
+                                {(data && data.ordersUserQuery[0].status == "annulée") && (
+                                <Grid.Column width={7}><Header as='h5' color='red'>annulée</Header></Grid.Column>
+                                )}
+                            </Grid.Row>
+                        </Grid>
                         <br/>
-                      <Header as='h3' >{`Prix total: ${data.cartQuery.totalprice}€`}</Header>
-                        <br/>
-                        <Button fluid color='teal' disabled={data && data.cartQuery.items.length > 0 ?false:true}>
-                            Passer commande
-                        </Button>
-                        <Message  info>
+                        {(data && data.ordersUserQuery[0].status != "annulée") && (
+                            <Button 
+                            fluid 
+                            color='red' 
+                            disabled={data && data.ordersUserQuery[0].items.length > 0 ?false:true}
+                            onClick={cancelOrder}  
+                          >
+                              Annuler la commande
+                          </Button>
+                        ) }
+
+                        {/* <Message  info>
                           <Header>
                             Information
                           </Header>
                           
                           Il n'a pas de paiement en ligne sur le site. Une fois la commande passée, un email sera envoyé à Elisabeth qui vous contactera.
-                        </Message>   
+                        </Message>    */}
                       </Segment>
                   </Sticky>
               </Grid.Column>
@@ -173,4 +205,4 @@ const CartPage = ({ cartVisible }) => {
   );
 };
 
-export default CartPage;
+export default Order;

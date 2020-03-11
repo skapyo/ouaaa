@@ -105,9 +105,15 @@ const DesktopNavbar = React.memo(({ fixed, cartIconClickHandler }) => {
                         as={Link} 
                         to={`/account`}
                       />
+                      <Dropdown.Item 
+                        icon="truck" 
+                        text="Mes commandes" 
+                        as={Link} 
+                        to={`/commandes`}
+                      />
                       <Dropdown.Item
                         icon="sign-out"
-                        text="Se déconnecter"
+                        text="Déconnexion"
                         onClick={logoutHandler}
                       />
                     </>
@@ -117,21 +123,6 @@ const DesktopNavbar = React.memo(({ fixed, cartIconClickHandler }) => {
             </Menu.Menu>
           </Container>
         </Menu>
-
-        {/* <Menu
-          fixed="top"
-          size="tiny"
-          icon
-          style={div2Style}
-          className="borderless"
-        >
-          <Container style={{ display: "flex", "align-items": "center" }}>
-            <Icon name="home" size="large" />
-            <div style={{ display: "flex", "align-items": "center" }}>
-              &nbsp;&nbsp;>&nbsp;&nbsp;Admin &nbsp;&nbsp;>&nbsp;&nbsp; test
-            </div>
-          </Container>
-        </Menu> */}
       </>
     );
   }

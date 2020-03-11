@@ -184,19 +184,7 @@ mutation modifyProductMutation(
   }
 `;
 
-export const ADD_PRODUCT_CART= gql`
-mutation addProductInCart ($productId:Int,$quantity:Int) {
-  addProductInCart(productId:$productId,quantity:$quantity) {
-      source,
-      success,
-      errorCode,
-      errorLabel,
-      errorInformationDescription,
-      errorInformation
-      
-  }
-}
-`;
+
 
 export const DELETE_PRODUCT_CART= gql`
 mutation delProductInCart ($productId:Int,$quantity:Int) {
@@ -236,3 +224,72 @@ export const GET_CART= gql`
 }
 `;
 
+export const ADD_PRODUCT_CART= gql`
+mutation addProductInCart ($productId:Int,$quantity:Int) {
+  addProductInCart(productId:$productId,quantity:$quantity) {
+      source,
+      success,
+      errorCode,
+      errorLabel,
+      errorInformationDescription,
+      errorInformation
+      
+  }
+}
+`;
+
+export const SUBMIT_ORDER= gql`
+mutation submitOrder {
+  submitOrder
+}
+`;
+
+export const GET_USER_ORDER_DETAILS=gql`
+query ordersUserQuery($id: Int) {
+  ordersUserQuery(id:$id) {
+    id,
+    status,
+    totalprice,
+    items {
+      id,
+      quantity,
+      product {
+        id,
+        label,
+        short_description,
+        price,
+        pictures {
+          id,
+          croppedPicturePath
+        }
+      }
+    }
+  }
+}
+`
+
+export const GET_ALL_ORDERS=gql`
+query ordersUserQuery {
+  ordersUserQuery {
+    id,
+    status,
+    totalprice,
+    items {
+      id,
+      quantity,
+      product {
+        id,
+        label,
+        short_description,
+        price,
+      }
+    }
+  }
+}
+`
+
+export const CANCEL_ORDER=gql`
+mutation cancelOrder($orderId:Int) {
+  cancelOrder(orderId:$orderId)
+}
+`
