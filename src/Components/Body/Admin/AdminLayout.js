@@ -6,6 +6,7 @@ import AddProductAdmin from "./ProductsAdmin/AddProductAdmin";
 import ModifyProductAdmin from './ProductsAdmin/ModifyProductAdmin';
 import SelectProductAdmin from './ProductsAdmin/SelectProductAdmin';
 import OrdersAdmin from './OrdersAdmin/OrdersAdmin'
+import ProductAdmin2 from './ProductsAdmin/display/ProductAdmin2';
 
 import PrivateAdminRoute from './../../Auth/PrivateRoute';
 
@@ -25,7 +26,7 @@ const AdminLayout = () => {
         path="/admin/articles/modify/:productId"
         component={() => <ModifyProductAdmin />}
       />
-      <PrivateAdminRoute path="/admin/articles/display" component={() => null} />
+      <PrivateAdminRoute path="/admin/category/:categoryId" component={() => <ProductAdmin2/>} />
       <PrivateAdminRoute path="/admin/orders" component={() =>  <OrdersAdmin/>} />
       <PrivateAdminRoute path="/admin" component={() => <CategoriesAdmin />} />
     </Switch>

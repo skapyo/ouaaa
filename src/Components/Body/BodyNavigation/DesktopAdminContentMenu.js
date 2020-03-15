@@ -43,7 +43,7 @@ const DesktopAdminContentMenu = () => {
             />
             <Menu.Item
               as={Link}
-              // to="/admin/articles/select"
+              to="/admin/category/63"
               content="Administration des articles"
               name="adminArticle"
               active={activeItem === "adminArticle"}

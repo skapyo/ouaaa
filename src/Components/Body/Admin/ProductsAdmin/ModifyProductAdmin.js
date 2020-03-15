@@ -90,39 +90,3 @@ const ModifyProductAdmin = () => {
 
 export default ModifyProductAdmin;
 
-
-// useEffect(() => {
-
-    //     const test = async () => {
-    //         if(data !== undefined) {
-    //             if(data.product && data.product.pictures) {
-    //                 imgInit = data.product.pictures.map((picture) => {
-    //                     console.log(picture);
-    //                     var myBlob = null;
-    //                     var xhr = new XMLHttpRequest();
-    //                     xhr.open('GET', picture.path, true);
-    //                     xhr.responseType = 'blob';
-    //                     xhr.onload = () => {
-    //                         if (xhr.status == 200) {
-    //                             myBlob = xhr.response;
-    //                             console.log(myBlob);
-    //                             // myBlob is now the blob that the object URL pointed to.
-    //                         }
-    //                     };
-    //                     xhr.send();
-        
-    //                     // return {
-    //                     //     id:picture.id,
-    //                     //     file:myBlob,
-    //                     //     img:picture.path,
-    //                     //     activated:true,
-    //                     //     deleted:false
-    //                     // }
-    //                 });
-    //                 const result = await Promise.all(imgInit);
-    //                 console.log(result);
-    //             }
-    //         }
-    //     }
-    //     test();
-    // });

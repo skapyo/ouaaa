@@ -37,7 +37,6 @@ const client2 = new ApolloClient({
 const QUERY = gql`
   mutation refreshtoken($sub: String, $refreshToken: String) {
     refreshToken(sub: $sub, refreshtoken: $refreshToken) {
-      name
       sub
       token
       iat
