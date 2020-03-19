@@ -146,9 +146,9 @@ const ImagesDisplay = ({cards,moveCard,findCard,updateActiveIndicator,updateDele
      
   const [, drop] = useDrop({ accept: ItemTypes.PIC });
 
-  console.log('cards');
-  console.log(cards);
-  console.log('--cards--');
+  // console.log('cards');
+  // console.log(cards);
+  // console.log('--cards--');
 
   return (
    <Grid>
@@ -254,18 +254,6 @@ const ProductAdmin = ({initFormData, initImgData=[], categoryId=null,productId=n
 
   const [categorySelected, setCategorySelectInd] = useState(categoryId);
   const [formValues, setFormValue] = useState(initFormData);
-
-  // console.log('ProductAddAdmin render');
-
-  // console.log('initData:');
-  // console.log(initFormData);
-  // console.log(initImgData);
-  // console.log('--initData--');
-
-  // console.log('categorySelected:');
-  // console.log(categoryId);
-  // console.log(categorySelected);
-  // console.log('--categorySelected--');
 
   const [setImagesList, loading, result,imagesListState] = useImageReader();
 

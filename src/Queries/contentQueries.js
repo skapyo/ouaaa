@@ -293,3 +293,44 @@ mutation cancelOrder($orderId:Int) {
   cancelOrder(orderId:$orderId)
 }
 `
+
+export const MODIFY_PRODUCTS_DISPLAY= gql`
+mutation modifyProductsDisplayMutation($categoryId:String, $productsDisplay: [InputProductDisplayType]) {
+  modifyProductsDisplayMutation(categoryId:$categoryId,productsDisplay:$productsDisplay) {
+      id,
+      label,
+      short_description,
+      description, 
+      price,
+      position,
+      activated,
+      deleted
+      pictures {
+        id,
+        label,
+        croppedPicturePath
+      }
+    }
+  }
+`;
+
+
+export const GET_PRODUCTS_BY_CATEGORY_ADMIN = gql`
+  query getProductsByCategoryAdmin($categoryId: String!) {
+    productsQuery(categoryId:$categoryId) {
+      id,
+      label,
+      short_description,
+      description, 
+      price,
+      position,
+      activated,
+      deleted
+      pictures {
+        id,
+        label,
+        croppedPicturePath
+      }
+    }
+  }
+`;
