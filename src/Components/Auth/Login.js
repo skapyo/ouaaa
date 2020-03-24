@@ -96,13 +96,13 @@ const Login = () => {
                     <Header as='h4' color='teal' textAlign='center'>
                         Veuillez vous connecter à votre compte
                     </Header>
-                    <Form  
+                    <Form
                         error={error?true:false}
-                        size='large' 
+                        size='large'
                         onSubmit={submitHandler}
                         >
                         <Segment>
-                            <Form.Input 
+                            <Form.Input
                                 fluid 
                                 icon='user' 
                                 iconPosition='left' 
