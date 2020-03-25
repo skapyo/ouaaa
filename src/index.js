@@ -25,7 +25,7 @@ import whyDidYouRender from "@welldone-software/why-did-you-render";
 
 import config from "./config.json";
 
-const URI_GRAPHQL_SERVER = `${config.API_SERVER.HTTP}://${config.API_SERVER.URL}:${config.API_SERVER.PORT}/graphql`;
+const URI_GRAPHQL_SERVER = `${config.API_SERVER.HTTP}://${config.API_SERVER.URL}/graphql`;
 
 const client2 = new ApolloClient({
   link: new HttpLink({
