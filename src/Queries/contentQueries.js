@@ -109,7 +109,7 @@ mutation addProductMutation(
   $label: String!, 
   $short_description:String,
   $description:String,
-  $price:Int,
+  $price:Float,
   $pageId:Int,
   $limitedQuantity:Boolean, 
   $quantity:Int,
