@@ -275,7 +275,7 @@ query ordersUserQuery($id: Int) {
 `;
 
 export const GET_ALL_ORDERS=gql`
-query ordersUserQuery {k
+query ordersUserQuery {
   ordersUserQuery {
     id,
     status,

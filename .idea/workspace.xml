@@ -1,37 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="29dfeb29-d6d2-4b11-aa9b-9849930833f2" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/Components/Body/Admin/UsersAdmin/UsersAdmin.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="29dfeb29-d6d2-4b11-aa9b-9849930833f2" name="Default Changelist" comment="Mise a jour">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Components/Auth/Login.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Auth/Login.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Components/Auth/PrivateRoute.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Auth/PrivateRoute.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Components/Auth/SendResetPasswordEmail.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Auth/SendResetPasswordEmail.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Components/Auth/Signup.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Auth/Signup.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Components/Body/Admin/AdminLayout.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Body/Admin/AdminLayout.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Components/Body/Admin/ProductsAdmin/display/Card.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Body/Admin/ProductsAdmin/display/Card.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Components/Body/Admin/ProductsAdmin/display/ProductDisplayAdmin.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Body/Admin/ProductsAdmin/display/ProductDisplayAdmin.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Components/Body/BodyNavigation/DesktopAdminContentMenu.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Body/BodyNavigation/DesktopAdminContentMenu.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Components/Body/Content/Cart/Cart.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Body/Content/Cart/Cart.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Components/Body/Content/ContentLayout.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Body/Content/ContentLayout.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Components/Body/Content/Order/Order.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Body/Content/Order/Order.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Components/Body/Content/ProductPage/ProductPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Body/Content/ProductPage/ProductPage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Components/Body/Content/ShopCards/ShopCardGroup.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Body/Content/ShopCards/ShopCardGroup.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Components/Components/DragDrop/DragdropContainer.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Components/Components/DragDrop/DragdropElement.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Components/Navigation/DesktopNavbar.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Navigation/DesktopNavbar.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Container/BodyLayout/DesktopBodyLayout.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Container/BodyLayout/DesktopBodyLayout.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HomePageLayout.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/HomePageLayout.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Hooks/useAuth.js.del" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Hooks/useDnDStateManager.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Hooks/useDnDStateManager.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Hooks/useLoaderState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Hooks/useLoaderState.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Hooks/useTraceUpdate.js.del" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Hooks/useWhyDidYouUpdate.js.del" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Queries/contentQueries.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Queries/contentQueries.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Utils/utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Utils/utils.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/count-context.js" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -44,18 +19,6 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/index.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="33" column="28" lean-forward="true" selection-start-line="33" selection-start-column="28" selection-end-line="33" selection-end-column="28" />
-              <folding>
-                <element signature="e#0#26#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Components/Body/Content/ShopCards/ShopCardGroup.js">
           <provider selected="true" editor-type-id="text-editor">
@@ -66,9 +29,43 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Components/Body/Content/ShopCards/ShopCard.js">
+        <entry file="file://$PROJECT_DIR$/src/Components/Body/BodyNavigation/DesktopContentMenu.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state>
+            <state relative-caret-position="17">
+              <caret line="1" column="37" selection-start-line="1" selection-start-column="37" selection-end-line="1" selection-end-column="37" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Components/Body/Content/ContentLayout.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="119">
+              <caret line="7" column="19" selection-start-line="7" selection-start-column="6" selection-end-line="7" selection-end-column="19" />
+              <folding>
+                <element signature="e#0#26#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Container/BodyLayout/DesktopBodyLayout.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="158">
+              <caret line="101" column="28" lean-forward="true" selection-start-line="101" selection-start-column="28" selection-end-line="101" selection-end-column="28" />
+              <folding>
+                <element signature="e#0#41#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Components/Body/Content/ProductPage/ProductPage.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="406">
+              <caret line="196" column="53" selection-start-line="196" selection-start-column="53" selection-end-line="196" selection-end-column="53" />
               <folding>
                 <element signature="e#0#48#0" expanded="true" />
               </folding>
@@ -77,28 +74,40 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Queries/contentQueries.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="199">
-              <caret line="149" column="24" selection-start-line="149" selection-start-column="24" selection-end-line="149" selection-end-column="24" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/public/index.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="318">
-              <caret line="112" column="10" lean-forward="true" selection-start-line="112" selection-start-column="10" selection-end-line="112" selection-end-column="10" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Components/Navigation/DesktopNavbar.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="24" column="24" selection-start-line="24" selection-start-column="24" selection-end-line="24" selection-end-column="24" />
+            <state relative-caret-position="383">
+              <caret line="70" column="34" selection-start-line="70" selection-start-column="34" selection-end-line="70" selection-end-column="34" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/Components/Body/Content/Cart/Cart.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="174">
+              <caret line="70" column="68" selection-start-line="70" selection-start-column="68" selection-end-line="70" selection-end-column="68" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Queries/contentQueries.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="473">
+              <caret line="277" column="23" lean-forward="true" selection-start-line="277" selection-start-column="23" selection-end-line="277" selection-end-column="23" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Components/Body/Content/ShopCards/ShopCard.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="289">
+              <caret line="17" column="14" selection-start-line="17" selection-start-column="6" selection-end-line="17" selection-end-column="14" />
+              <folding>
+                <element signature="e#0#48#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -108,51 +117,14 @@
           <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Components/Body/Content/ContentLayout.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="34">
-              <caret line="2" column="47" selection-start-line="2" selection-start-column="47" selection-end-line="2" selection-end-column="47" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Components/Body/Content/ProductPage/ProductPage.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="211">
-              <caret line="167" selection-start-line="167" selection-end-line="167" />
-              <folding>
-                <element signature="e#0#48#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Container/BodyLayout/DesktopBodyLayout.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="31" column="37" selection-start-line="31" selection-start-column="37" selection-end-line="31" selection-end-column="37" />
-            </state>
-          </provider>
-        </entry>
-      </file>
     </leaf>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>development server</find>
-      <find>eact-scripts start</find>
-      <find>refreshToken</find>
-      <find>create-react</find>
-      <find>formChangeHandler</find>
-      <find>buttonDisabledInd</find>
       <find>loadingState</find>
       <find>submitHandler</find>
       <find>SERVER.URL</find>
       <find>AddProduct</find>
-      <find>$price</find>
       <find>addProduct</find>
       <find>ategoryId={data.product.page.</find>
       <find>ModifyProduct</find>
@@ -166,9 +138,19 @@
       <find>Pacifi</find>
       <find>L'atelier d'Elisabeth</find>
       <find>BASE_U</find>
-      <find>ContentLayout</find>
       <find>API_SERVER</find>
       <find>Elisabeth</find>
+      <find>$price</find>
+      <find>React App</find>
+      <find>ShopCard</find>
+      <find>ContentLayout</find>
+      <find>onHeartClickHandler</find>
+      <find>heart</find>
+      <find>cartQuery</find>
+      <find>GET_CART</find>
+      <find>Get_all</find>
+      <find>loading</find>
+      <find>debugger</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -190,15 +172,16 @@
         <option value="$PROJECT_DIR$/src/HomePageLayout.js" />
         <option value="$PROJECT_DIR$/src/Components/Body/Admin/ProductsAdmin/ModifyProductAdmin.js" />
         <option value="$PROJECT_DIR$/src/index.js" />
-        <option value="$PROJECT_DIR$/src/Queries/contentQueries.js" />
-        <option value="$PROJECT_DIR$/public/index.html" />
         <option value="$PROJECT_DIR$/src/Components/Body/Content/ShopCards/ShopCardGroup.js" />
         <option value="$PROJECT_DIR$/src/Components/Body/Content/ContentLayout.js" />
-        <option value="$PROJECT_DIR$/src/Components/Navigation/DesktopNavbar.js" />
         <option value="$PROJECT_DIR$/src/Utils/utils.js" />
-        <option value="$PROJECT_DIR$/src/Components/Body/Content/Cart/Cart.js" />
         <option value="$PROJECT_DIR$/src/Components/Body/Content/Order/Order.js" />
         <option value="$PROJECT_DIR$/src/Components/Body/Content/ProductPage/ProductPage.js" />
+        <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/public/index.html" />
+        <option value="$PROJECT_DIR$/src/Components/Navigation/DesktopNavbar.js" />
+        <option value="$PROJECT_DIR$/src/Queries/contentQueries.js" />
+        <option value="$PROJECT_DIR$/src/Components/Body/Content/Cart/Cart.js" />
       </list>
     </option>
   </component>
@@ -209,9 +192,9 @@
     </treeState>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="352" />
-    <option name="y" value="253" />
-    <option name="width" value="974" />
+    <option name="x" value="357" />
+    <option name="y" value="168" />
+    <option name="width" value="1453" />
     <option name="height" value="1046" />
   </component>
   <component name="ProjectView">
@@ -257,6 +240,22 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="Components" type="462c0819:PsiDirectoryNode" />
               <item name="Body" type="462c0819:PsiDirectoryNode" />
+              <item name="Admin" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="schipper-horticulture-client" type="b2602c69:ProjectViewProjectNode" />
+              <item name="client" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="Components" type="462c0819:PsiDirectoryNode" />
+              <item name="Body" type="462c0819:PsiDirectoryNode" />
+              <item name="BodyNavigation" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="schipper-horticulture-client" type="b2602c69:ProjectViewProjectNode" />
+              <item name="client" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="Components" type="462c0819:PsiDirectoryNode" />
+              <item name="Body" type="462c0819:PsiDirectoryNode" />
               <item name="Content" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -276,20 +275,6 @@
               <item name="Body" type="462c0819:PsiDirectoryNode" />
               <item name="Content" type="462c0819:PsiDirectoryNode" />
               <item name="ShopCards" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="schipper-horticulture-client" type="b2602c69:ProjectViewProjectNode" />
-              <item name="client" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="Components" type="462c0819:PsiDirectoryNode" />
-              <item name="Footer" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="schipper-horticulture-client" type="b2602c69:ProjectViewProjectNode" />
-              <item name="client" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="Components" type="462c0819:PsiDirectoryNode" />
-              <item name="Navigation" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -370,7 +355,7 @@
       <workItem from="1585236428029" duration="4372000" />
       <workItem from="1585243839919" duration="427000" />
       <workItem from="1585244297414" duration="376000" />
-      <workItem from="1585244744182" duration="2691000" />
+      <workItem from="1585244744182" duration="9385000" />
     </task>
     <task id="LOCAL-00001" summary="url">
       <created>1585135162947</created>
@@ -379,17 +364,37 @@
       <option name="project" value="LOCAL" />
       <updated>1585135162947</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Mise a jour">
+      <created>1585247496722</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1585247496722</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Mise a jour">
+      <created>1585248262306</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1585248262307</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Mise a jour">
+      <created>1585249312577</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1585249312577</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="27138000" />
+    <option name="totallyTimeSpent" value="33832000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="352" y="253" width="974" height="1046" extended-state="0" />
-    <editor active="true" />
+    <frame x="357" y="168" width="1453" height="1046" extended-state="0" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.32166302" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.21105528" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -399,12 +404,12 @@
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.55904657" />
-      <window_info anchor="bottom" id="Debug" order="3" visible="true" weight="0.48521358" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.28477547" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" order="8" weight="0.312026" />
+      <window_info anchor="bottom" id="Version Control" order="8" weight="0.21885157" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Terminal" order="10" />
       <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
@@ -436,8 +441,11 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="CHECK_NEW_TODO" value="false" />
     <MESSAGE value="url" />
-    <option name="LAST_COMMIT_MESSAGE" value="url" />
+    <MESSAGE value="Mise a jour" />
+    <option name="LAST_COMMIT_MESSAGE" value="Mise a jour" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -487,6 +495,18 @@
           <line>88</line>
           <option name="timeStamp" value="10" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/Components/Body/Content/Cart/Cart.js</url>
+          <line>148</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="11" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/Components/Body/Content/Cart/Cart.js</url>
+          <line>70</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="12" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
@@ -516,13 +536,6 @@
     <option name="serverIp" value="localhost" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/Components/Body/BodyNavigation/DesktopContentMenu.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="37" selection-start-line="1" selection-start-column="37" selection-end-line="1" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/node_modules/semantic-ui-react/index.d.ts">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -681,34 +694,51 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Queries/contentQueries.js">
+    <entry file="file://$PROJECT_DIR$/public/Test2.jpg">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="199">
-          <caret line="149" column="24" selection-start-line="149" selection-start-column="24" selection-end-line="149" selection-end-column="24" />
+        <state relative-caret-position="187">
+          <caret line="29" column="34" selection-start-line="29" selection-start-column="34" selection-end-line="29" selection-end-column="34" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="5" selection-start-line="4" selection-start-column="5" selection-end-line="4" selection-end-column="5" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/public/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="318">
-          <caret line="112" column="10" lean-forward="true" selection-start-line="112" selection-start-column="10" selection-end-line="112" selection-end-column="10" />
+        <state relative-caret-position="344">
+          <caret line="25" column="11" selection-start-line="25" selection-start-column="11" selection-end-line="25" selection-end-column="11" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/Test2.jpg">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Components/Body/Content/HomePage/HomePage.js">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Components/Body/Content/ShopCards/ShopCard.js">
+    <entry file="file://$PROJECT_DIR$/src/Components/Body/BodyNavigation/DesktopAdminContentMenu.js">
       <provider selected="true" editor-type-id="text-editor">
         <state>
           <folding>
-            <element signature="e#0#48#0" expanded="true" />
+            <element signature="e#0#40#0" expanded="true" />
           </folding>
         </state>
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Components/Body/BodyNavigation/DesktopContentMenu.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="37" selection-start-line="1" selection-start-column="37" selection-end-line="1" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Components/Body/Content/HomePage/HomePage.js">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Components/Body/Content/ShopCards/ShopCardGroup.js">
       <provider selected="true" editor-type-id="text-editor">
@@ -717,24 +747,40 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Container/BodyLayout/DesktopBodyLayout.js">
+    <entry file="file://$PROJECT_DIR$/src/Components/Body/Content/ShopCards/ShopCard.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="31" column="37" selection-start-line="31" selection-start-column="37" selection-end-line="31" selection-end-column="37" />
+        <state relative-caret-position="289">
+          <caret line="17" column="14" selection-start-line="17" selection-start-column="6" selection-end-line="17" selection-end-column="14" />
+          <folding>
+            <element signature="e#0#48#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Components/Body/Content/ContentLayout.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="47" selection-start-line="2" selection-start-column="47" selection-end-line="2" selection-end-column="47" />
+        <state relative-caret-position="119">
+          <caret line="7" column="19" selection-start-line="7" selection-start-column="6" selection-end-line="7" selection-end-column="19" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Container/BodyLayout/DesktopBodyLayout.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="158">
+          <caret line="101" column="28" lean-forward="true" selection-start-line="101" selection-start-column="28" selection-end-line="101" selection-end-column="28" />
+          <folding>
+            <element signature="e#0#41#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Components/Body/Content/ProductPage/ProductPage.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="211">
-          <caret line="167" selection-start-line="167" selection-end-line="167" />
+        <state relative-caret-position="406">
+          <caret line="196" column="53" selection-start-line="196" selection-start-column="53" selection-end-line="196" selection-end-column="53" />
           <folding>
             <element signature="e#0#48#0" expanded="true" />
           </folding>
@@ -743,18 +789,22 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Components/Navigation/DesktopNavbar.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="24" column="24" selection-start-line="24" selection-start-column="24" selection-end-line="24" selection-end-column="24" />
+        <state relative-caret-position="383">
+          <caret line="70" column="34" selection-start-line="70" selection-start-column="34" selection-end-line="70" selection-end-column="34" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/index.js">
+    <entry file="file://$PROJECT_DIR$/src/Queries/contentQueries.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="33" column="28" lean-forward="true" selection-start-line="33" selection-start-column="28" selection-end-line="33" selection-end-column="28" />
-          <folding>
-            <element signature="e#0#26#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="473">
+          <caret line="277" column="23" lean-forward="true" selection-start-line="277" selection-start-column="23" selection-end-line="277" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Components/Body/Content/Cart/Cart.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="174">
+          <caret line="70" column="68" selection-start-line="70" selection-start-column="68" selection-end-line="70" selection-end-column="68" />
         </state>
       </provider>
     </entry>

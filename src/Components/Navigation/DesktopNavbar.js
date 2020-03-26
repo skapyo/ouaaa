@@ -57,9 +57,7 @@ const DesktopNavbar = React.memo(() => {
                 <Icon name="cart" size="large" />
               </Menu.Item>):null}
 
-              {state?(<Menu.Item name="heart" as={Link} to={`/heart`}>
-                <Icon name="heart" size="large" />
-              </Menu.Item>):null}
+
                   <Dropdown
                 item
                 icon={null}

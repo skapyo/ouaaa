@@ -66,7 +66,8 @@ const Cart = ({ cartVisible }) => {
       }
   ] = useLoaderState();
 
-  useEffect(() => {  
+  useEffect(() => {
+
     if(data && data.cartQuery && data.cartQuery.items.length > 0 ) {
       data.cartQuery.items.map((item,index) => {
         if(item.product.pictures[0] && item.product.pictures[0].croppedPicturePath) {
@@ -77,7 +78,7 @@ const Cart = ({ cartVisible }) => {
         };
       });
     };
-    if(data) {
+    if(data && data.cartQuery && data.cartQuery.items.length == 0) {
       addListener(1);
       changeListenerValue(1,false);
     };
