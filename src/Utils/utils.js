@@ -12,18 +12,18 @@ export const uuidv4 = () => {
     var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
     return v.toString(16);
   });
-}
+};
 
 export const getImageUrl = (url) => {
-  return `${config.API_SERVER.HTTP}://${config.API_SERVER.URL}:${config.API_SERVER.PORT}${url}`;
-} 
+  return `${config.API_SERVER.HTTP}://${config.API_SERVER.URL}${url}`;
+} ;
 
 export const validateEmail = (email) => {
   var re = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
   return re.test(String(email).toLowerCase());
-}
+};
 
 export const omitTypename = (object) => {
-  const omitTypename = (key, value) => (key === '__typename' ? undefined : value)
-  return JSON.parse(JSON.stringify(object), omitTypename)
-}
+  const omitTypename = (key, value) => (key === '__typename' ? undefined : value);
+  return JSON.parse(JSON.stringify(object), omitTypename);
+};

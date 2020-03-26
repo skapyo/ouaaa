@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react'
+import {useState, useEffect, useCallback} from 'react';
 import update from "immutability-helper";
 
 // function to find the card in the state
@@ -19,16 +19,16 @@ const useLoaderState = (init = true) => {
   
     // function to add values in state
     // value = {key,value}
-    const addListener = listener => {
+    const addListener = useCallback((listener) => {
       setListenersList((prevState, props) => {
         return update(prevState, {
           $push: [{ key: listener, value: true }]
         });
       });
-    };
+    },[setListenersList]);
   
-    const changeListenerValue = (key, value) => {
-      console.log(`changeListenerValue: ${key}, ${value}`)
+    const changeListenerValue = useCallback((key, value) => {
+      console.log(`changeListenerValue: ${key}, ${value}`);
       setListenersList((prevState, props) => {
         const { index } = findListener(prevState, key);
         console.log(index);
@@ -36,7 +36,7 @@ const useLoaderState = (init = true) => {
           $splice: [[index, 1, { key: key, value: value }]]
         });
       });
-    };
+    },[setListenersList]);
   
     useEffect(() => {
       if (

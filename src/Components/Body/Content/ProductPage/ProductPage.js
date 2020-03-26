@@ -1,5 +1,5 @@
 import React, {useEffect,useState} from 'react';
-import {useParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import {useQuery,useMutation} from '@apollo/react-hooks';
 import {
     GET_PRODUCT,
@@ -17,7 +17,7 @@ import {Breadcrumb} from '../../../Components/';
 import isNumber from 'is-number';
 import { BreakingChangeType } from 'graphql';
 import {getImageUrl} from './../../../../Utils/utils';
-
+import{useSessionState} from './../../../../Session/session';
 
 
 const headerStyle = {
@@ -42,32 +42,20 @@ const spanEspace = {
 
 const formValuesInit = {
     quantity:''
-}
+};
 
 const ProductPage = () => {
 
     const {productId} = useParams();
 
-    const {data, loading, error,refetch} = useQuery(GET_PRODUCT,{variables:{id:productId}});
+    const session = useSessionState();
 
-    
     const [submitListener, setListenerValue] = useState(false);
-
     const [formValues,setFormValue] = useState(formValuesInit);
-
-    const formChangeHandler = (e,data) => {
-        setFormValue({ ...formValues, [data.name]: data.value });
-    };
-
-    useEffect(() => {
-        if(formValues) {
-            if(isNumber(formValues.quantity) && formValues.quantity != 0 ) setListenerValue(true);
-            else setListenerValue(false);
-        }
-    },[formValues])
-
-
     const [dataToRender, setdataToRender] = useState();
+    const [productLiked, setLikedIndicator] = useState();
+    const [cartLoading, setCartLoadingInd] = useState(false);
+    const [selectOptions,setSelectOptions] = useState();
 
     const [loadingGlobalState, 
         { 
@@ -75,6 +63,41 @@ const ProductPage = () => {
             changeListenerValue 
         }
     ] = useLoaderState();
+
+    const {data, loading, error,refetch} = useQuery(GET_PRODUCT,{variables:{id:productId}});
+    const [addLikedPoduct,{data:addData,loading:addLoading,error:addError}] = useMutation(
+        ADD_LIKED_PRODUCT,
+        {variables:{productId:productId}}
+        );
+    const [removeLikedPoduct,{data:remData,loading:remLoading,error:remError}] = useMutation(
+        REMOVE_LIKED_PRODUCT,
+        {variables:{productId:productId}}
+        );
+    const [addProductInCart,{data:cartActionData,loading:cartActionLoading,error:cartActionError}] = useMutation(
+        ADD_PRODUCT_CART,
+        {variables:{productId:productId,quantity:formValues.quantity}}
+    );
+
+    const formChangeHandler = (e,data) => {
+        setFormValue({ ...formValues, [data.name]: data.value });
+    };
+
+    const onHeartClickHandler = () => {
+        if(!productLiked) addLikedPoduct();
+        else removeLikedPoduct();
+    };
+    
+    const formSubmitHandler = () => {
+        setCartLoadingInd(true);
+        addProductInCart();
+    };
+
+    useEffect(() => {
+        if(formValues) {
+            if(isNumber(formValues.quantity) && formValues.quantity != 0 ) setListenerValue(true);
+            else setListenerValue(false);
+        }
+    },[formValues]);
 
     useEffect(() =>{  
         if(!loading && data && data.product.pictures) {
@@ -89,26 +112,7 @@ const ProductPage = () => {
             };
           }));
         }
-    },[loading]);
-
-    const [addLikedPoduct,{data:addData,loading:addLoading,error:addError}] = useMutation(
-        ADD_LIKED_PRODUCT,
-        {variables:{productId:productId}}
-        );
-    
-    const [removeLikedPoduct,{data:remData,loading:remLoading,error:remError}] = useMutation(
-        REMOVE_LIKED_PRODUCT,
-        {variables:{productId:productId}}
-        );
-
-    const [productLiked, setLikedIndicator] = useState();
-    
-    console.log(productLiked);
-
-    const onHeartClickHandler = () => {
-        if(!productLiked) addLikedPoduct();
-        else removeLikedPoduct();
-    };
+    },[loading,addListener,changeListenerValue,data]);
 
     useEffect(() => {
         if(data) {
@@ -119,33 +123,18 @@ const ProductPage = () => {
     useEffect(() =>  {
         if(addData && !addError)
         setLikedIndicator(true);
-    },[addData]);
+    },[addData,setLikedIndicator,addError]);
 
     useEffect(() =>  {
         if(remData && !remError)
         setLikedIndicator(false);
-    },[remData]);
-
-    const [addProductInCart,{data:cartActionData,loading:cartActionLoading,error:cartActionError}] = useMutation(
-        ADD_PRODUCT_CART,
-        {variables:{productId:productId,quantity:formValues.quantity}}
-    );
-
-    const [cartLoading, setCartLoadingInd] = useState(false);
-
-    const formSubmitHandler = () => {
-        setCartLoadingInd(true);
-        addProductInCart();
-    };
+    },[remData,setLikedIndicator,remError]);
 
     useEffect(() => {
         if(cartActionData && cartActionData.addProductInCart.success) {
             refetch();
         }
-    },[cartActionData])
-
-
-    const [selectOptions,setSelectOptions] = useState();
+    },[cartActionData,refetch]);
 
     useEffect(() => {
         if(!loading && data) {
@@ -156,14 +145,13 @@ const ProductPage = () => {
                         key:i,
                         value:i,
                         text:i
-                    })
+                    });
                 }
                 setSelectOptions(selectOptionsTemp);
             }
             if(cartLoading) setCartLoadingInd(false);
         }
-    },[data,cartActionData]);
-
+    },[data,cartActionData,cartLoading,loading]);
 
     const {height} = useWindowSize();
     const midHeight = (height - 230 - 230 - 10) / 2;
@@ -176,7 +164,8 @@ const ProductPage = () => {
         return 'error';
 
     return (
-        <>  
+        <>
+
             <Breadcrumb options={[{to:`/categorie/${data.product.page.id}`,label:data.product.page.label}]} lastItem={data.product.label} />
             <Header as='h1' style={headerStyle}>{data.product.label}</Header>
             <br />
@@ -259,7 +248,7 @@ const ProductPage = () => {
                                 <Header>
                                     Information
                                 </Header>
-                                    Il n'a pas de paiement en ligne sur le site. Une fois la commande validée dans le panier, un email sera envoyé à Elisabeth qui vous contactera.
+                                    Il n'a pas de paiement en ligne sur le site. Une fois la commande validée dans le panier, un email sera envoyé à Schipper Horticulture qui vous contactera.
                                 </Message>                      
                             </Segment>
                             

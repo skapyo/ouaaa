@@ -62,6 +62,14 @@ const DesktopAdminContentMenu = () => {
               active={activeItem === "commandes"}
               onClick={handleItemClick}
             />
+            <Menu.Item
+              as={Link}
+              to="/admin/likedProducts"
+              content="Visualiser les articles likés"
+              name="liked"
+              active={activeItem === "liked"}
+              onClick={handleItemClick}
+            />
         </Menu.Menu>
       </Menu.Item>
       <Menu.Item>
@@ -69,10 +77,10 @@ const DesktopAdminContentMenu = () => {
         <Menu.Menu>
           <Menu.Item
               as={Link}
-              to="/admin/stock/select"
-              content="Séléctionner un article"
-              name="stock"
-              active={activeItem === "stock"}
+              to="/admin/users"
+              content="Administration des utilisateurs"
+              name="users"
+              active={activeItem === "users"}
               onClick={handleItemClick}
             />
         </Menu.Menu>

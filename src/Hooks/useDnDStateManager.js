@@ -1,15 +1,18 @@
-import {useState,useCallback} from 'react';
+import {useState,useCallback, useMemo} from 'react';
 import update from "immutability-helper";
 
 // initialState is a list of object. Every object should have an id field
 const useDnDStateManager = (initialState=[]) => {
 
     const [objectsList, setObjectsList] = useState(initialState);
+    const [objectsListSaved, setobjectsListSaved] = useState(initialState);
+
 
     // function to init state
     const initState = useCallback((state) => {
         setObjectsList(state);
-    },[setObjectsList]);
+        setobjectsListSaved(state);
+    },[setObjectsList,setobjectsListSaved]);
 
     // function to add values in state
     const addValues = (values) => {
@@ -73,7 +76,32 @@ const useDnDStateManager = (initialState=[]) => {
                 $splice:[[index,1,{...object, [key]:value}]]
             })
         );
-    },[findObject,setObjectsList,objectsList,update]);
+    },[findObject,setObjectsList,objectsList]);
+
+    
+    const isModified = useMemo(() => {
+        if(!objectsList || !objectsListSaved)
+            return true;
+
+        // Check if the arrays are the same length
+        if (objectsList.length !== objectsListSaved.length) return true;
+        
+        // Check if all items exist and are in the same order
+        for (var i = 0; i < objectsList.length; i++) {
+            if (JSON.stringify(objectsList[i]) != JSON.stringify(objectsListSaved[i])) return true;
+        }
+    
+        // Otherwise, return true
+        return false;
+
+    },[objectsList,objectsListSaved]);
+
+
+    const idExists = useCallback((id,value) => {
+        const result = objectsList.find(o => o[id]);
+        if(result) return true;
+        return false;
+    },[objectsList]);
 
     return {
         objectsList,
@@ -83,9 +111,11 @@ const useDnDStateManager = (initialState=[]) => {
         updateDeletedIndicator,
         initState,
         addValues,
-        updateKeyIndicator
+        updateKeyIndicator,
+        isModified,
+        idExists
     };
 
-}
+};
 
 export default useDnDStateManager;

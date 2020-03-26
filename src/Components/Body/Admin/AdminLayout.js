@@ -4,8 +4,10 @@ import CategoriesAdmin from "./CategoriesAdmin/CategoriesAdmin";
 import AddProductAdmin from "./ProductsAdmin/AddProductAdmin";
 import ModifyProductAdmin from './ProductsAdmin/ModifyProductAdmin';
 import SelectProductAdmin from './ProductsAdmin/SelectProductAdmin';
-import OrdersAdmin from './OrdersAdmin/OrdersAdmin'
+import OrdersAdmin from './OrdersAdmin/OrdersAdmin';
 import ProductDisplayAdmin from './ProductsAdmin/display/ProductDisplayAdmin';
+import UsersAdmin from './UsersAdmin/UsersAdmin';
+import StockAdmin from './Stock/StockAdmin';
 
 import PrivateAdminRoute from './../../Auth/PrivateRoute';
 
@@ -27,6 +29,8 @@ const AdminLayout = () => {
       />
       <PrivateAdminRoute path="/admin/products/" component={() => <ProductDisplayAdmin/>} />
       <PrivateAdminRoute path="/admin/orders" component={() =>  <OrdersAdmin/>} />
+      <PrivateAdminRoute path="/admin/users" component={() => <UsersAdmin />} />
+      <PrivateAdminRoute path="/admin/stock/:productId" component={() => <StockAdmin />} />
       <PrivateAdminRoute path="/admin" component={() => <CategoriesAdmin />} />
     </Switch>
   );

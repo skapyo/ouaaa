@@ -1,7 +1,7 @@
 import React from 'react';
 import { Redirect, Route } from "react-router-dom";
 
-import {useSessionState} from "./../../count-context";
+import {useSessionState} from "./../../Session/session";
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
 

@@ -126,6 +126,6 @@ const DesktopBodyLayoutWithMenu = () => {
       </Ref>
     </Grid>
   );
-}
+};
 
 export default DesktopBodyLayout;

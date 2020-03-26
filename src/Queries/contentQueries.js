@@ -149,7 +149,7 @@ mutation modifyProductMutation(
   $label: String, 
   $short_description:String,
   $description:String,
-  $price:Int,
+  $price:Float,
   $pageId:Int,
   $limitedQuantity:Boolean, 
   $quantity:Int,
@@ -224,17 +224,23 @@ export const GET_CART= gql`
 }
 `;
 
+// export const ADD_PRODUCT_CART= gql`
+// mutation addProductInCart ($productId:Int,$quantity:Int) {
+//   addProductInCart(productId:$productId,quantity:$quantity) {
+//       source,
+//       success,
+//       errorCode,
+//       errorLabel,
+//       errorInformationDescription,
+//       errorInformation
+      
+//   }
+// }
+// `;
+
 export const ADD_PRODUCT_CART= gql`
 mutation addProductInCart ($productId:Int,$quantity:Int) {
-  addProductInCart(productId:$productId,quantity:$quantity) {
-      source,
-      success,
-      errorCode,
-      errorLabel,
-      errorInformationDescription,
-      errorInformation
-      
-  }
+  addProductInCart(productId:$productId,quantity:$quantity) 
 }
 `;
 
@@ -266,10 +272,10 @@ query ordersUserQuery($id: Int) {
     }
   }
 }
-`
+`;
 
 export const GET_ALL_ORDERS=gql`
-query ordersUserQuery {
+query ordersUserQuery {k
   ordersUserQuery {
     id,
     status,
@@ -286,13 +292,13 @@ query ordersUserQuery {
     }
   }
 }
-`
+`;
 
 export const CANCEL_ORDER=gql`
 mutation cancelOrder($orderId:Int) {
   cancelOrder(orderId:$orderId)
 }
-`
+`;
 
 export const MODIFY_PRODUCTS_DISPLAY= gql`
 mutation modifyProductsDisplayMutation($categoryId:String, $productsDisplay: [InputProductDisplayType]) {

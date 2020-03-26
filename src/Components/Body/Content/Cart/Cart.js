@@ -1,4 +1,3 @@
-import _ from "lodash";
 import React, { useState ,useEffect} from "react";
 import {
   Button,
@@ -18,18 +17,9 @@ import Loader from '../../../Loader/Loader';
 import useLoaderState from '../../../../Hooks/useLoaderState';
 import {getImageUrl} from '../../../../Utils/utils';
 
-const getOptions = (number, prefix = "Choice ") =>
-  _.times(number, index => ({
-    key: index,
-    text: `${prefix}${index}`,
-    value: index
-  }));
-
-  
 const headerStyle = {
   "font-family": "Ubuntu', sans-serif",
   "font-size": "30px",
-  // 'font-style': 'normal',
   "font-weight": "lighter",
   color: "#009C95"
 };
@@ -37,7 +27,6 @@ const headerStyle = {
 const StrickyHeaderStyle = {
   "font-family": "Ubuntu', sans-serif",
   "font-size": "20px",
-  // 'font-style': 'normal',
   "font-weight": "lighter",
   color: "#009C95"
   };
@@ -45,7 +34,6 @@ const StrickyHeaderStyle = {
 const CartItem = ({ name, price, nb,src }) => {
   console.log(src);
   return (
-    
     <Item>
       <Item.Image src={src} size="small" />
       <Item.Content verticalAlign='middle'>
@@ -53,12 +41,10 @@ const CartItem = ({ name, price, nb,src }) => {
         <Item.Description>{`Quantité: ${nb}`}</Item.Description>
         <Item.Description>{`Prix unitaire: ${price}€`}</Item.Description>
         <Item.Extra >
-  <Segment basic floated='right'>{`Prix: ${nb} x ${price}€ = `}<span style={StrickyHeaderStyle}>{`${nb*price}€`}</span></Segment>
+          <Segment basic floated='right'>{`Prix: ${nb} x ${price}€ = `}<span style={StrickyHeaderStyle}>{`${nb*price}€`}</span></Segment>
         </Item.Extra>
       </Item.Content>
     </Item>
-    // </Grid>
-
   );
 };
 
@@ -73,8 +59,6 @@ const Cart = ({ cartVisible }) => {
     setCloseButtonHoverInd(!isCloseButtonHovered);
   };
 
-  // const [dataToRender, setdataToRender] = useState();
-
   const [loadingGlobalState, 
       { 
           addListener, 
@@ -83,21 +67,21 @@ const Cart = ({ cartVisible }) => {
   ] = useLoaderState();
 
   useEffect(() => {  
-    if(data && data.cartQuery.items.length > 0 ) {
+    if(data && data.cartQuery && data.cartQuery.items.length > 0 ) {
       data.cartQuery.items.map((item,index) => {
         if(item.product.pictures[0] && item.product.pictures[0].croppedPicturePath) {
           const img = new Image();
           addListener(index);
           img.onload = () => changeListenerValue(index,false);
           img.src = getImageUrl(item.product.pictures[0].croppedPicturePath);
-        }
-      })
-    }
-    if(data && data.cartQuery.items.length == 0) {
+        };
+      });
+    };
+    if(data) {
       addListener(1);
       changeListenerValue(1,false);
-    }
-  },[loading]);
+    };
+  },[loading,addListener,changeListenerValue,data]);
 
   const [submitOrderMutation,{data:orderSubmitData, loading:orderSubmitLoading, error:orderSubmitError}] = useMutation(SUBMIT_ORDER);
 
@@ -108,6 +92,9 @@ const Cart = ({ cartVisible }) => {
   const {height} = useWindowSize();
   const midHeight = (height - 230 - 230 - 10) / 2;
   const midHeightString = `${midHeight}px 0 0 0`;
+
+  console.log("loadingGlobalState");
+  console.log(loadingGlobalState);
 
   if(loadingGlobalState) 
     return <Loader midHeightString={midHeightString} />;
@@ -122,14 +109,11 @@ const Cart = ({ cartVisible }) => {
           <Grid.Row>
               <Grid.Column width={11}>
               <Grid stackable textAlign='center' verticalAlign='middle'>
-                
                 <Grid.Column style={{ maxWidth: '80vh' }}>
-                  
-                  
                 <Grid verticalAlign='left'>
                   <Grid.Column width='16'>
                       <Item.Group divided relaxed >
-                        {data && data.cartQuery.items.length > 0 ?
+                        {data.cartQuery && data.cartQuery.items.length > 0 ?
                         data.cartQuery.items.map((item) => (
                           <CartItem 
                             name={item.product.label} 
@@ -150,35 +134,36 @@ const Cart = ({ cartVisible }) => {
               </Grid.Column>
               <Grid.Column width={5}>                     
                   <Sticky offset={100}>
-                      <Segment>
-                        <Header as='h1' style={StrickyHeaderStyle}>Résumé de la commande:</Header>
-                        <br/>
-                        {data && data.cartQuery.items.length > 0 ? 
-                          data.cartQuery.items.map((item) => (
-                            <span style={{display:'block'}}>{`${item.product.label}: ${item.quantity} pièces`}</span>
-                          ))
-                         :
-                         'aucun article séléctionné'
-                        }
-                        <br/>
-                      <Header as='h3' >{`Prix total: ${data.cartQuery.totalprice}€`}</Header>
-                        <br/>
-                        <Button 
-                          fluid 
-                          color='teal' 
-                          disabled={data && data.cartQuery.items.length > 0 ?false:true}
-                          onClick={submitOrder}  
-                        >
-                            Passer commande
-                        </Button>
-                        <Message  info>
-                          <Header>
-                            Information
-                          </Header>
-                          
-                          Il n'a pas de paiement en ligne sur le site. Une fois la commande passée, un email sera envoyé à Elisabeth qui vous contactera.
-                        </Message>   
-                      </Segment>
+                    <Segment>
+                      <Header as='h1' style={StrickyHeaderStyle}>Résumé de la commande:</Header>
+                      <br/>
+                      {data.cartQuery && data.cartQuery.items.length > 0 ? 
+                        data.cartQuery.items.map((item) => (
+                          <span style={{display:'block'}}>{`${item.product.label}: ${item.quantity} pièces`}</span>
+                        ))
+                        :
+                        'aucun article séléctionné'
+                      }
+                      <br/>
+                      {data.cartQuery && data.cartQuery.totalprice && (
+                        <Header as='h3' >{`Prix total: ${data.cartQuery.totalprice}€`}</Header>
+                      )}
+                      <br/>
+                      <Button 
+                        fluid 
+                        color='teal' 
+                        disabled={data.cartQuery && data.cartQuery.items.length > 0 ? false : true}
+                        onClick={submitOrder}  
+                      >
+                          Passer commande
+                      </Button>
+                      <Message  info>
+                        <Header>
+                          Information
+                        </Header> 
+                        Il n'a pas de paiement en ligne sur le site. Une fois la commande passée, un email sera envoyé à Schipper Horticulture qui vous contactera.
+                      </Message>   
+                    </Segment>
                   </Sticky>
               </Grid.Column>
           </Grid.Row>

@@ -1,11 +1,8 @@
 import React,{useState,useEffect} from 'react';
-import { List,Modal,Grid,Header,Form ,Button,Segment,Image,Message, Divider,Popup} from "semantic-ui-react";
+import { List,Grid,Header,Form ,Button,Segment,Message,Popup} from "semantic-ui-react";
 import { Link } from 'react-router-dom';
 import {SEND_CHANGE_PSSWD_EMAIL} from '../../Queries/authQueries';
 import { useMutation } from '@apollo/react-hooks';
-import config from './../../config.json';
-
-import {useSessionDispatch} from "../../count-context";
 import {validateEmail} from '../../Utils/utils';
 
 const SendResetPasswordEmail = () => {

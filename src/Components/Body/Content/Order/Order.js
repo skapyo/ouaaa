@@ -193,7 +193,7 @@ const Order = ({ data,loading,error,refetch }) => {
                             Information
                           </Header>
                           
-                          Il n'a pas de paiement en ligne sur le site. Une fois la commande passée, un email sera envoyé à Elisabeth qui vous contactera.
+                          Il n'a pas de paiement en ligne sur le site. Une fois la commande passée, un email sera envoyé à Schipper Horticulture qui vous contactera.
                         </Message>    */}
                       </Segment>
                   </Sticky>

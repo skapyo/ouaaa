@@ -1,6 +1,7 @@
-import React,{useState, useCallback} from 'react';
+import React,{useCallback} from 'react';
+import { useHistory } from 'react-router-dom';
 import { Card,Header, Icon, Label,Image,Grid } from "semantic-ui-react";
-import {useParams,Link} from "react-router-dom";
+import {Link} from "react-router-dom";
 import { useDrag, useDrop } from "react-dnd";
 import {getImageUrl} from './../../../../../Utils/utils';
 
@@ -19,6 +20,8 @@ const ItemTypes = {
   };
   
 const ShopCard = ({product,moveCard,findCard,id,updateKeyIndicator}) => {
+
+    const history = useHistory();
 
     const {label, activated,deleted,pictures} = product;
 
@@ -52,6 +55,11 @@ const ShopCard = ({product,moveCard,findCard,id,updateKeyIndicator}) => {
       updateKeyIndicator(id,'deleted',!deleted);
     },[id,deleted,updateKeyIndicator]);
 
+    const goToProductStockDetails = useCallback(() => {
+      const url = `/admin/stock/${id}`;
+      history.push(url);
+    },[history,id]);
+
     return (
         <div ref={node => drag(drop(node))} className='ui card' style={{ opacity}}>
           <Image 
@@ -70,7 +78,16 @@ const ShopCard = ({product,moveCard,findCard,id,updateKeyIndicator}) => {
             <Grid>
               <Grid.Row>
                 <Grid.Column width= {2}></Grid.Column>
-                <Grid.Column width= {6}>
+                <Grid.Column width= {4}>
+                  <Icon 
+                    fitted 
+                    name='shop' 
+                    size='large' 
+                    color='black'
+                    onClick={goToProductStockDetails}
+                  />
+                </Grid.Column>
+                <Grid.Column width= {4}>
                   <Icon 
                     color={activated? 'green' : 'red' } 
                     fitted 
@@ -79,7 +96,7 @@ const ShopCard = ({product,moveCard,findCard,id,updateKeyIndicator}) => {
                     onClick={activatedIconCliCkHandler}
                   />
                 </Grid.Column>
-                <Grid.Column width= {6}>
+                <Grid.Column width= {4}>
                   <Icon 
                     color={deleted? 'red' : 'black' } 
                     fitted 

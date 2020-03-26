@@ -1,11 +1,8 @@
-import React, { useRef, useEffect, useState, useCallback } from "react";
-import { Menu, Container, Icon, Dropdown, Input ,Label} from "semantic-ui-react";
-import UserLeftItems from "./Items/UserLeftItems";
-import LoggedInAdminRightItems from "./Items/AdminRightItems";
+import React from "react";
+import { Menu, Container, Icon, Dropdown} from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import config from './../../config.json';
-
-import {useSessionState,useSessionDispatch} from "./../../count-context";
+import {useSessionState,useSessionDispatch} from "./../../Session/session";
 
 const divStyle = {
   padding: "0 2em 0 2em",
@@ -14,33 +11,21 @@ const divStyle = {
   height: "50px"
 };
 
-const div2Style = {
-  padding: "0 2em 0 2em",
-  // "border-bottom": "0.5px solid ligh grey",
-  "backgound-color": "white",
-  fixed: "top",
-  "z-index": "10",
-  "margin-top": "50px",
-  position: "fixed",
-  "min-height": "30px",
-  color: "grey"
-};
-
-const itemStyle = {
-  border: "none"
-};
-
 const headerStyle = {
-  "font-family": "Pacifico, cursive",
+  "font-family": "folks",
   "font-size": "24px",
-  // 'font-style': 'normal',
   "font-weight": "lighter",
   color: "#009C95"
 };
+const linkStyle = {
+    "text-align":"center",
+    "vertical-align": "middle",
+    color: "#009C95",
+    "padding-top": "14px",
+    "padding-left": "100px"
+};
+const DesktopNavbar = React.memo(() => {
 
-const DesktopNavbar = React.memo(({ fixed, cartIconClickHandler }) => {
-
-    // const { isLogged, userInfo, login, logout } = userAuth;
     const state = useSessionState();
     const stateDispatch = useSessionDispatch();
 
@@ -50,16 +35,17 @@ const DesktopNavbar = React.memo(({ fixed, cartIconClickHandler }) => {
       localStorage.removeItem(config.SESSION_STORAGE.SUB);
       localStorage.removeItem(config.SESSION_STORAGE.ROLE);
       localStorage.removeItem(config.SESSION_STORAGE.PERSISTENT_CO);
-      stateDispatch({ type: "logout" })
-    }
+      stateDispatch({ type: "logout" });
+    };
 
     return (
       <>
         <Menu icon fixed="top" style={divStyle} className="borderless">
           <Container>
             <Menu.Item as={Link} to={`/`} header style={headerStyle}>
-              L'atelier d'Elisabeth
+              Schipper Horticulture
             </Menu.Item>
+              <Link position="middle"  style={linkStyle} to= "/commande.xlsx"  target="_blank" download> Télécharger directement la liste des produits à renvoyer à schipper.horti@wanadoo.fr </Link>
 
             <Menu.Menu position="right">
               {state && state.role === 'admin' ?(<Menu.Item name="admin" as={Link} to={`/admin`}>
@@ -74,8 +60,7 @@ const DesktopNavbar = React.memo(({ fixed, cartIconClickHandler }) => {
               {state?(<Menu.Item name="heart" as={Link} to={`/heart`}>
                 <Icon name="heart" size="large" />
               </Menu.Item>):null}
-
-              <Dropdown
+                  <Dropdown
                 item
                 icon={null}
                 trigger={state?<Icon name="user" color='teal' size="large" />:<Icon name="user outline"  size="large" />}
@@ -88,7 +73,6 @@ const DesktopNavbar = React.memo(({ fixed, cartIconClickHandler }) => {
                         text="S'authentifier"
                         as={Link} 
                         to={`/login`}
-                        // onClick={() => stateDispatch({ type: "increment" })}
                       />
                       <Dropdown.Item 
                         icon="add user" 
@@ -127,7 +111,5 @@ const DesktopNavbar = React.memo(({ fixed, cartIconClickHandler }) => {
     );
   }
 );
-
-DesktopNavbar.whyDidYouRender = true;
 
 export default DesktopNavbar;

@@ -2,8 +2,6 @@ import React,{useState,useEffect,useCallback,useMemo} from 'react';
 import {useLazyQuery,useMutation} from '@apollo/react-hooks';
 import { Card,Header, Icon, Label ,Divider, Segment,Button, Checkbox} from "semantic-ui-react";
 import {GET_PRODUCTS_BY_CATEGORY_ADMIN,MODIFY_PRODUCTS_DISPLAY} from '../../../../../Queries/contentQueries';
-import useWindowSize from '../../../../../Hooks/useWindowSize';
-import Loader from '../../../../Loader/Loader';
 import AdminCard from './Card';
 import {useDrop } from "react-dnd";
 import { DndProvider } from "react-dnd";
@@ -13,28 +11,16 @@ import useDnDStateManager from '../../../../../Hooks/useDnDStateManager';
 import {omitTypename} from '../../../../../Utils/utils';
 
 
-const headerStyle = {
-    "font-family": "Ubuntu', sans-serif",
-    "font-size": "30px",
-    // 'font-style': 'normal',
-    "font-weight": "lighter",
-    color: "#009C95"
-  };
-
-
 const ItemTypes = {
   CARD: "card"
 };
 
-const ProductAdmin2 = () => {
+const ProductDisplayAdmin = () => {
 
     // State
-    const {objectsList,initState,moveObject,findObject,updateKeyIndicator} = useDnDStateManager();
+    const {objectsList,initState,moveObject,findObject,updateKeyIndicator,idExists,isModified} = useDnDStateManager();
     const [categorySelected, setCategorySelectInd] = useState(null);
-    const [positions, setPositions] = useState(null);
-    const [displayDeleted, setDisplayDeletedInd] = useState(true)
-    const [objectsListSaved, setobjectsListSaved] = useState();
-    const [saved, setSavedInd] = useState(true);
+    const [displayDeleted, setDisplayDeletedInd] = useState(true);
 
     // drop init
     const [, drop] = useDrop({ accept: ItemTypes.CARD });
@@ -50,9 +36,8 @@ const ProductAdmin2 = () => {
     useEffect(() => {
       if(data) {
         initState(omitTypename(data.productsQuery));
-        setobjectsListSaved(omitTypename(data.productsQuery));
       }
-    },[data,initState,omitTypename]);
+    },[data,initState]);
 
     useEffect(() => {
       if(categorySelected) {
@@ -62,50 +47,13 @@ const ProductAdmin2 = () => {
           }
         });
       };
-    },[categorySelected]);
+    },[categorySelected,fetch]);
 
     useEffect(() => {
-      console.log('new DATA');
-      console.log(newData);
-      console.log('--new DATA--');
       if(newData) {
         initState(omitTypename(newData.modifyProductsDisplayMutation));
-        setobjectsListSaved(omitTypename(newData.modifyProductsDisplayMutation));
-        setSavedInd(true);
       }
-    },[newData]);
-
-    var arraysMatch = function (arr1, arr2) {
-
-      if(!arr1 || !arr2)
-        return false;
-
-      // Check if the arrays are the same length
-      if (arr1.length !== arr2.length) return false;
-
-      console.log("lenght ok ");
-    
-      // Check if all items exist and are in the same order
-      for (var i = 0; i < arr1.length; i++) {
-        if (JSON.stringify(arr1[i]) != JSON.stringify(arr2[i])) return false;
-      }
-    
-      // Otherwise, return true
-      return true;
-    
-    };
-
-    useEffect(() => {
-      console.log("save effect");
-      console.log(objectsListSaved);
-      console.log(objectsList);
-      console.log(arraysMatch(objectsListSaved,objectsList));
-
-      if(!arraysMatch(objectsListSaved,objectsList) ) {
-        setSavedInd(false);
-      }
-      else setSavedInd(true);
-    },[objectsList]);
+    },[newData,initState]);
 
     // actions handlers
     const categorySelecthandler = useCallback((event, {value}) => {
@@ -120,7 +68,7 @@ const ProductAdmin2 = () => {
     const saveButtonClickHandler = useCallback(() => {
       const productsDisplay = objectsList.map((card,index) => {
         return {id:card.id, position:index,activated:card.activated,deleted:card.deleted};
-      })
+      });
       saveNewDisplay(
         {variables:{
           categoryId:categorySelected,
@@ -129,13 +77,14 @@ const ProductAdmin2 = () => {
       });
     },[categorySelected,objectsList,saveNewDisplay]);
 
-    console.log("--objectsList--");
-    console.log(objectsList);
-    console.log("-- >> objectsList << --");
-
     const filterFunction = (o) => {
       return !displayDeleted ? (o.deleted != true) : true;
-    }
+    };
+
+    const hasDeletedProduct = useMemo(() => {
+      return idExists('deleted');
+    },[idExists]);
+
 
   if (error) 
     return 'error';
@@ -165,13 +114,14 @@ const ProductAdmin2 = () => {
               circular 
               icon='save' 
               content='sauvegarder' 
-              disabled={saved?true:false}
+              disabled={!isModified}
               loading={newDataLoading}
               onClick={saveButtonClickHandler}
             />
             <Button 
               circular 
               icon={displayDeleted ? "eye slash" : "eye"}
+              disabled={!hasDeletedProduct}
               content={displayDeleted ? "Masquer les articles supprimés" : "Afficher les articles supprimés"}
               onClick = {deletedDisplayButtonHandler}  
             />
@@ -197,7 +147,7 @@ const ProductAdmin2 = () => {
       
     );
 
-}
+};
 
 const withDndProvider = Component => () => {
  
@@ -208,4 +158,4 @@ const withDndProvider = Component => () => {
   );
 };
 
-export default withDndProvider(ProductAdmin2);
+export default withDndProvider(ProductDisplayAdmin);

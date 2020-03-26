@@ -3,7 +3,7 @@ import ShopCard from "./ShopCard";
 import { Card,Header, Divider } from "semantic-ui-react";
 import {useQuery} from '@apollo/react-hooks';
 import {GET_PRODUCTS_BY_CATEGORY} from './../../../../Queries/contentQueries';
-import {useParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import Loader from './../../../Loader/Loader';
 import useLoaderState from './../../../../Hooks/useLoaderState';
 import useWindowSize from './../../../../Hooks/useWindowSize';
@@ -41,7 +41,9 @@ const ShopCardGroup = React.memo( ({itemsPerRow}) => {
         addListener(index);
         img.onload = () => changeListenerValue(index,false);
         console.log(product.pictures);
-        img.src = getImageUrl(product.pictures[0].croppedPicturePath);
+        if(product.pictures.length!=0) {
+          img.src = getImageUrl(product.pictures[0].croppedPicturePath);
+        }
         return {...product,img:img }
       }))
     }
@@ -55,6 +57,7 @@ const ShopCardGroup = React.memo( ({itemsPerRow}) => {
 
   return (
     <>
+
       <Header as='h1' style={headerStyle}>{data.page.label}</Header>
       <br />
       <br />
