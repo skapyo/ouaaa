@@ -32,7 +32,7 @@ const ShopCardGroup = React.memo( ({itemsPerRow}) => {
   
   const [dataToRender, setdataToRender] = useState();
 
-  useEffect(() =>{  
+  useEffect(() =>{
     if(!loading && data) {
       console.log(data);
       setdataToRender( data.page.products.map((product, index) => {
@@ -40,10 +40,14 @@ const ShopCardGroup = React.memo( ({itemsPerRow}) => {
         const img = new Image();
         addListener(index);
         img.onload = () => changeListenerValue(index,false);
-        console.log(product.pictures);
-        if(product.pictures.length!=0) {
+       // console.log(product.pictures);
+
+        if(product.pictures[0] && product.pictures[0].croppedPicturePath) {
           img.src = getImageUrl(product.pictures[0].croppedPicturePath);
+        }else{
+          changeListenerValue(index,false)
         }
+      //  debugger;
         return {...product,img:img }
       }))
     }

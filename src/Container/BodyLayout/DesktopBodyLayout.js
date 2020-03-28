@@ -20,7 +20,7 @@ import OrdersPage from "../../Components/Body/Content/Order/OrdersPage";
 const DesktopBodyLayout = () => {
 
   return (
-    <Responsive getWidth={getWidth} minWidth={Responsive.onlyTablet.minWidth}>
+    <Responsive getWidth={getWidth}  minWidth={Responsive.onlyTablet.minWidth}>
       <Container >
         <Switch>
           <PrivateAdminRoute

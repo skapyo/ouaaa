@@ -25,6 +25,10 @@ const ShopCard = ({product,moveCard,findCard,id,updateKeyIndicator}) => {
 
     const {label, activated,deleted,pictures} = product;
 
+    var pictureUrl ;
+    if(pictures.length!=0) {
+        pictureUrl = pictures[0].croppedPicturePath;
+    }
     const originalIndex = findCard(id).index;
 
     const [{ isDragging }, drag] = useDrag({
@@ -59,13 +63,15 @@ const ShopCard = ({product,moveCard,findCard,id,updateKeyIndicator}) => {
       const url = `/admin/stock/${id}`;
       history.push(url);
     },[history,id]);
-
+    const imageCss = {
+        "image-orientation":"from-image"
+    };
     return (
         <div ref={node => drag(drop(node))} className='ui card' style={{ opacity}}>
-          <Image 
+          <Image  style={imageCss}
           as = {Link}
           to = {`/admin/articles/modify/${id}`}
-          src={getImageUrl(pictures[0].croppedPicturePath)}  
+          src={getImageUrl(pictureUrl)}
           />
           <Card.Content 
           textAlign="center"
