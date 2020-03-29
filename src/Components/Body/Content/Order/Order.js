@@ -35,13 +35,15 @@ const StrickyHeaderStyle = {
     "font-weight": "lighter",
     color: "#009C95"
 };
-
+const imageCss = {
+    "image-orientation":"from-image"
+};
 const CartItem = ({ name, price, nb,src }) => {
     console.log(src);
     return (
 
         <Item>
-            <Item.Image src={src} size="small" />
+            <Item.Image src={src}  style={imageCss} size="small" />
             <Item.Content verticalAlign='middle'>
                 <Item.Header>{name}</Item.Header>
                 <Item.Description>{`Quantité: ${nb}`}</Item.Description>
@@ -80,12 +82,15 @@ const Order = ({ data,loading,error,refetch }) => {
     useEffect(() => {
         if(data && data.ordersUserQuery[0].items.length > 0 ) {
             data.ordersUserQuery[0].items.map((item,index) => {
-                if(item.product.pictures[0] && item.product.pictures[0].croppedPicturePath) {
-                    const img = new Image();
-                    addListener(index);
-                    img.onload = () => changeListenerValue(index,false);
-                    img.src = getImageUrl(item.product.pictures[0].croppedPicturePath);
+                const img = new Image();
+                addListener(index);
+                img.onload = () => changeListenerValue(index, false);
+                if (item.product.pictures[0] != null) {
+                     img.src = getImageUrl(item.product.pictures[0].croppedPicturePath) ;
+                 }else{
+                    changeListenerValue(index, false);
                 }
+
             });
         }
     },[loading,addListener,changeListenerValue,data]);
@@ -132,7 +137,7 @@ const Order = ({ data,loading,error,refetch }) => {
                                                         name={item.product.label}
                                                         price={item.product.price}
                                                         nb={item.quantity}
-                                                        src={getImageUrl(item.product.pictures[0].croppedPicturePath)}
+                                                        src={item.product.pictures.length!=0?getImageUrl(item.product.pictures[0].croppedPicturePath):null}
                                                     />
                                                 ))
                                                 :

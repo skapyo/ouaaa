@@ -8,6 +8,6 @@
   text-align: center;
 }
 
-.image-gallery-image, .image-gallery-thumbnail-image{
+.image-gallery-image, .image-gallery-thumbnail-image, .image-orientation{
   image-orientation:  from-image ;
 }

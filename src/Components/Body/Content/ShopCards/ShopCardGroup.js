@@ -41,11 +41,11 @@ const ShopCardGroup = React.memo( ({itemsPerRow}) => {
         addListener(index);
         img.onload = () => changeListenerValue(index,false);
        // console.log(product.pictures);
-
+        changeListenerValue(index,false)
         if(product.pictures[0] && product.pictures[0].croppedPicturePath) {
           img.src = getImageUrl(product.pictures[0].croppedPicturePath);
         }else{
-          changeListenerValue(index,false)
+
         }
       //  debugger;
         return {...product,img:img }

@@ -33,11 +33,14 @@ const StrickyHeaderStyle = {
     color: "#009C95"
 };
 
+const imageCss = {
+    "image-orientation":"from-image"
+};
 const CartItem = ({ name, price, nb,src }) => {
     console.log(src);
     return (
         <Item>
-            <Item.Image src={src} size="small" />
+            <Item.Image src={src}  style={imageCss} size="small" />
             <Item.Content verticalAlign='middle'>
                 <Item.Header>{name}</Item.Header>
                 <Item.Description>{`Quantité: ${nb}`}</Item.Description>
@@ -65,7 +68,9 @@ const Cart = () => {
                     addListener(index);
                     img.onload = () => changeListenerValue(index,false);
                     img.src = getImageUrl(item.product.pictures[0].croppedPicturePath);
-                };
+                }else{
+                    changeListenerValue(index,false)
+                }
             });
         };
         if(data && data.cartQuery && data.cartQuery.items.length == 0) {
@@ -114,7 +119,7 @@ const Cart = () => {
                                                         name={item.product.label}
                                                         price={item.product.price}
                                                         nb={item.quantity}
-                                                        src={getImageUrl(item.product.pictures[0].croppedPicturePath)}
+                                                        src={item.product.pictures.length!=0?getImageUrl(item.product.pictures[0].croppedPicturePath):null}
                                                     />
                                                 ))
                                                 :

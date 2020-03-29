@@ -118,12 +118,11 @@ const ProductPage = () => {
             }else{
                 setdataToRender([""].map((picture, index) => {
 
-                    const img = new Image();
                     // addListener(index);debugger;
                     changeListenerValue(index, false);
                     return {
-                        original: img.src,
-                        thumbnail: img.src,
+                        original: null,
+                        thumbnail: null,
                     };
                 }));
             }
