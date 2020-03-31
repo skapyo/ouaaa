@@ -114,7 +114,7 @@ const CategoryInformations = ({formChangeHandler,formValues,checkBoxChangeHandle
 
             <Form.Checkbox
                 name="fleurie"
-                label='fleurie's
+                label='Fleurie's
                 value={formValues.fleurie?true:false}
 
                 // value={formValues.nolimit}
