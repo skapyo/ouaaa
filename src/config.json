@@ -1,0 +1,13 @@
+{
+    "SESSION_STORAGE": {
+        "AUTH_TOKEN" : "auth_token",
+        "REFRESH_TOKEN" : "refresh_token",
+        "SUB" : "sub",
+        "ROLE" : "role",
+        "PERSISTENT_CO" : "persistentConnection"
+    },
+    "API_SERVER": {
+        "HTTP":"http",
+        "URL":"localhost:8001"
+    }
+}

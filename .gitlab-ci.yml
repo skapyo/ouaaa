@@ -1,0 +1,10 @@
+before_script:
+  - docker info
+
+build_image:
+  script:
+    - docker build -t  schipper-horticulture-client:dev .
+    - docker stop  schipper-horticulture-client
+    - docker rm  schipper-horticulture-client
+    - cd /home/debian/docker/schipper-horticulture/
+    - docker-compose up -d

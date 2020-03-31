@@ -67,6 +67,7 @@ const ProductPage = () => {
     ] = useLoaderState();
 
     const {data, loading, error,refetch} = useQuery(GET_PRODUCT,{variables:{id:productId}});
+  debugger;
     const [addLikedPoduct,{data:addData,loading:addLoading,error:addError}] = useMutation(
         ADD_LIKED_PRODUCT,
         {variables:{productId:productId}}
@@ -174,6 +175,159 @@ const ProductPage = () => {
     const midHeight = (height - 230 - 230 - 10) / 2;
     const midHeightString = `${midHeight}px 0 0 0`;
 
+    function Description() {
+
+        if (data.product.description!=null) {
+            return (<Grid.Row>
+                <Grid.Column width={12}>
+                    <br/>
+                    <Header style={headerStyle} >Description: </Header>
+                    <br/>
+                    {data.product.description==null?"":data.product.description.split('\n').map( (it, i) => <div key={'x'+i}>{it}</div> )}
+                    <br />
+                </Grid.Column>
+                <Grid.Column width={4}>
+
+                </Grid.Column>
+            </Grid.Row>);
+        }
+        return null;
+    }
+
+    function Conditionnement() {
+
+        if (data.product.conditionnement!=null) {
+            return (<Grid.Row>
+                <Grid.Column width={12}>
+                    <br/>
+                    <Header style={headerStyle} >Conditionnement: </Header>
+                    <br/>
+                    <div>{data.product.conditionnement}</div>
+                    <br />
+                </Grid.Column>
+                <Grid.Column width={4}>
+                    {}
+                </Grid.Column>
+            </Grid.Row>);
+        }
+        return null;
+    }
+
+
+    function Fleurie() {
+
+        if (data.product.fleurie!=null) {
+            return (<Grid.Row>
+                <Grid.Column width={12}>
+                    <br/>
+                    <Header style={headerStyle} >Fleurie : </Header>
+                    <br/>
+                    <div>{data.product.fleurie}</div>
+                    <br />
+                </Grid.Column>
+                <Grid.Column width={4}>
+                    {}
+                </Grid.Column>
+            </Grid.Row>);
+        }
+        return null;
+    }
+
+    function Resistance() {
+
+        if (data.product.resistance!=null) {
+            return (<Grid.Row>
+                <Grid.Column width={12}>
+                    <br/>
+                    <Header style={headerStyle} >Resistance : </Header>
+                    <br/>
+                    <div>{data.product.resistance}</div>
+                    <br />
+                </Grid.Column>
+                <Grid.Column width={4}>
+                    {}
+                </Grid.Column>
+            </Grid.Row>);
+        }
+        return null;
+    }
+    function Couleur() {
+
+        if (data.product.couleur!=null) {
+            return (<Grid.Row>
+                <Grid.Column width={12}>
+                    <br/>
+                    <Header style={headerStyle} >Couleur : </Header>
+                    <br/>
+                    <div>{data.product.couleur}</div>
+                    <br />
+                </Grid.Column>
+                <Grid.Column width={4}>
+                    {}
+                </Grid.Column>
+            </Grid.Row>);
+        }
+        return null;
+    }
+
+    function Type() {
+
+        if (data.product.type!=null) {
+            return (<Grid.Row>
+                <Grid.Column width={12}>
+                    <br/>
+                    <Header style={headerStyle} >Type : </Header>
+                    <br/>
+                    <div>{data.product.type}</div>
+                    <br />
+                </Grid.Column>
+                <Grid.Column width={4}>
+                    {}
+                </Grid.Column>
+            </Grid.Row>);
+        }
+        return null;
+    }
+
+    function Hauteur() {
+
+        if (data.product.hauteur!=null) {
+            return (<Grid.Row>
+                <Grid.Column width={12}>
+                    <br/>
+                    <Header style={headerStyle} >Hauteur : </Header>
+                    <br/>
+                    <div>{data.product.hauteur}</div>
+                    <br />
+                </Grid.Column>
+                <Grid.Column width={4}>
+                    {}
+                </Grid.Column>
+            </Grid.Row>);
+        }
+        return null;
+    }
+
+    function Feuillage() {
+
+        if (data.product.feuillage!=null) {
+            return (<Grid.Row>
+                <Grid.Column width={12}>
+                    <br/>
+                    <Header style={headerStyle} >Feuillage : </Header>
+                    <br/>
+                    <div>{data.product.feuillage}</div>
+                    <br />
+                </Grid.Column>
+                <Grid.Column width={4}>
+                    {}
+                </Grid.Column>
+            </Grid.Row>);
+        }
+        return null;
+    }
+
+
     if (loadingGlobalState)
         return <Loader midHeightString={midHeightString} />;
 
@@ -195,6 +349,7 @@ const ProductPage = () => {
                             showFullscreenButton = {false}
                             showPlayButton = {false}
                             showNav = {false}
+                            hidden= {true}
                             slideOnThumbnailOver = {true}
                         />
                     </Grid.Column>
@@ -272,18 +427,15 @@ const ProductPage = () => {
 
                     </Grid.Column>
                 </Grid.Row>
-                <Grid.Row>
-                    <Grid.Column width={12}>
-                        <br/>
-                        <Header style={headerStyle} >Description: </Header>
-                        <br/>
-                        {data.product.description==null?"":data.product.description.split('\n').map( (it, i) => <div key={'x'+i}>{it}</div> )}
-                        <br />
-                    </Grid.Column>
-                    <Grid.Column width={4}>
 
-                    </Grid.Column>
-                </Grid.Row>
+                <Description/>
+                <Conditionnement/>
+                <Fleurie/>
+                <Resistance/>
+                <Couleur/>
+                <Type/>
+                <Hauteur/>
+                <Feuillage/>
             </Grid>
         </>
     );

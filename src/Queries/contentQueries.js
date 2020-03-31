@@ -46,6 +46,13 @@ export const GET_PRODUCTS_BY_CATEGORY = gql`
         description, 
         price,
         isLiked,
+        fleurie,
+        conditionnement,
+        hauteur,
+        resistance,
+        couleur,
+        type,
+        feuillage,
         pictures {
           id,
           label,
@@ -68,6 +75,13 @@ export const GET_PRODUCT = gql`
       isLiked,
       isUnlimited,
       qavailable,
+      fleurie,
+      conditionnement,
+      hauteur,
+      resistance,
+      couleur,
+      type,
+      feuillage,
       page {
         id,
         label 
@@ -113,6 +127,13 @@ mutation addProductMutation(
   $pageId:Int,
   $limitedQuantity:Boolean, 
   $quantity:Int,
+  $fleurie:Boolean,
+  $conditionnement:String,,
+  $hauteur:String,,
+  $resistance:String,,
+  $couleur:String,,
+  $type:String,,
+  $feuillage:String,
   $files: [InputPicture]
   ) {
 
@@ -130,6 +151,13 @@ mutation addProductMutation(
         label, 
         short_description,
         description,
+        fleurie,
+        conditionnement,
+        hauteur,
+        resistance,
+        couleur,
+        type,
+        feuillage,
         price,
         pictures {
           originalPicturePath,
@@ -153,6 +181,13 @@ mutation modifyProductMutation(
   $pageId:Int,
   $limitedQuantity:Boolean, 
   $quantity:Int,
+  $fleurie:Boolean,
+  $conditionnement:String,,
+  $hauteur:String,,
+  $resistance:String,,
+  $couleur:String,,
+  $type:String,,
+  $feuillage:String,
   $files: [InputModifyPictureType]
   ) {
 
@@ -172,6 +207,13 @@ mutation modifyProductMutation(
         short_description,
         description,
         price,
+        fleurie,
+        conditionnement,
+        hauteur,
+        resistance,
+        couleur,
+        type,
+        feuillage,
         pictures {
           originalPicturePath,
           croppedPicturePath,
@@ -214,6 +256,13 @@ export const GET_CART= gql`
         label,
         short_description,
         price,
+        fleurie,
+        conditionnement,
+        hauteur,
+        resistance,
+        couleur,
+        type,
+        feuillage,
         pictures {
           id,
           croppedPicturePath
@@ -264,6 +313,13 @@ query ordersUserQuery($id: Int) {
         label,
         short_description,
         price,
+        fleurie,
+        conditionnement,
+        hauteur,
+        resistance,
+        couleur,
+        type,
+        feuillage,
         pictures {
           id,
           croppedPicturePath
@@ -287,6 +343,13 @@ query ordersUserQuery {
         id,
         label,
         short_description,
+        fleurie,
+        conditionnement,
+        hauteur,
+        resistance,
+        couleur,
+        type,
+        feuillage,
         price,
       }
     }
@@ -310,6 +373,13 @@ mutation modifyProductsDisplayMutation($categoryId:String, $productsDisplay: [In
       price,
       position,
       activated,
+      fleurie,
+      conditionnement,
+      hauteur,
+      resistance,
+      couleur,
+      type,
+      feuillage,
       deleted
       pictures {
         id,
@@ -331,6 +401,13 @@ export const GET_PRODUCTS_BY_CATEGORY_ADMIN = gql`
       price,
       position,
       activated,
+      fleurie,
+      conditionnement,
+      hauteur,
+      resistance,
+      couleur,
+      type,
+      feuillage,
       deleted
       pictures {
         id,

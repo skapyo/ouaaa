@@ -21,7 +21,7 @@ const ModifyProductAdmin = () => {
         variables:{id:productId},
         fetchPolicy:"network-only"
     });
-debugger;
+
     // init alert
     const alert = useAlert();
 

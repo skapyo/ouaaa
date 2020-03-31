@@ -29,7 +29,27 @@ import {
 import {getImageUrl} from './../../../../Utils/utils';
 
 
-
+const optionsResistance = [
+  { key: 'v', text: 'Vivace', value: 'VIVACE' }
+]
+const optionsType = [
+  { key: 'rg', text: 'ROSIER GRIMPANT', value: 'ROSIER GRIMPANT' },
+  { key: 'rp', text: 'ROSIER PAYSAGER A PORT ETALE', value: 'ROSIER PAYSAGER A PORT ETALE' },
+  { key: 'vd', text: 'VEGETAUX DE HAIES', value: 'VEGETAUX DE HAIES' },
+  { key: 'af', text: 'ARBUSTES A FLEURS ET A FEUILLAGE', value: 'ARBUSTES A FLEURS ET A FEUILLAGE' },
+  { key: 'ac', text: 'ARBUSTES COUVRE SOL', value: 'ARBUSTES COUVRE SOL' },
+  { key: 'co', text: 'CONIFERES', value: 'CONIFERES' },
+  { key: 'ej', text: 'ERABLE DU JAPON', value: 'ERABLE DU JAPON' },
+  { key: 'ao', text: 'ARBRE D\'ORNEMENT', value: 'ARBRE D\'ORNEMENT' },
+  { key: 'af', text: 'ARBRE FRUITIER', value: 'ARBRE FRUITIER' },
+  { key: 'pa', text: 'PALMIER', value: 'PALMIER' },
+  { key: 'pg', text: 'plante grimpantes', value: 'plante grimpantes' },
+  { key: 'to', text: 'TOPIAIRES', value: 'TOPIAIRES' }
+]
+const optionsFeuillage = [
+  { key: 'p', text: 'PERSISTANT', value: 'PERSISTANT' },
+  { key: 'c', text: 'CADUC', value: 'CADUC' }
+]
 
 const ItemTypes = {
   PIC: "pic"
@@ -90,23 +110,89 @@ const CategoryInformations = ({formChangeHandler,formValues,checkBoxChangeHandle
             
             <br />
 
+
+
+            <Form.Checkbox
+                name="fleurie"
+                label='fleurie's
+                value={formValues.fleurie?true:false}
+
+                // value={formValues.nolimit}
+            />
+            <Form.Field
+                label="Résistancee"
+                control={Select}
+                placeholder="Vivace"
+                name="resistance"
+                options={optionsResistance}
+                onChange={formChangeHandler}
+                value={formValues.resistance}
+            />
+          <Form.Field>
+            <label>Conditionnement</label>
+            <input
+                placeholder="Conditionnement"
+                name="conditionnement"
+                onChange={formChangeHandler}
+                value={formValues.conditionnement}
+            />
+          </Form.Field>
             <Form.Field>
-              <label>Description courte</label>
+              <label>Couleur</label>
               <input
+                  placeholder="Couleur"
+                  name="couleur"
+                  onChange={formChangeHandler}
+                  value={formValues.couleur}
+              />
+            </Form.Field>
+
+            <Form.Field
+                label="Type"
+                control={Select}
+                placeholder="Type"
+                name="type"
+                options={optionsType}
+                onChange={formChangeHandler}
+                value={formValues.type}
+            />
+            <Form.Field>
+              <label>Hauteur</label>
+              <input
+                  placeholder="Hauteur"
+                  name="hauteur"
+                  onChange={formChangeHandler}
+                  value={formValues.hauteur}
+              />
+            </Form.Field>
+              <Form.Field
+                  label="Feuillage"
+                  control={Select}
+                  placeholder="Feuillage"
+                  name="type"
+                  options={optionsFeuillage}
+                  onChange={formChangeHandler}
+                  value={formValues.feuillage}
+              />
+          <Form.Field>
+            <label>Description courte</label>
+            <input
                 placeholder="Description courte"
                 name="shortdescr"
                 onChange={formChangeHandler}
                 value={formValues.shortdescr}
-              />
-            </Form.Field>
-            <Form.Field
-              label="Description longue"
-              placeholder="Description longue"
-              control={TextArea}
-              name="longdescr"
-              onChange={formChangeHandler}
-              value={formValues.longdescr}
             />
+          </Form.Field>
+
+            <Form.Field
+                label="Description longue"
+                placeholder="Description longue"
+                control={TextArea}
+                name="longdescr"
+                onChange={formChangeHandler}
+                value={formValues.longdescr}
+            />
+
           </Grid.Column>
           <Grid.Column width={1} />
         </Grid.Row>
@@ -339,6 +425,13 @@ const ProductAdmin = ({initFormData, initImgData=[], categoryId=null,productId=n
           pageId:categorySelected,
           limitedQuantity:formValues.nolimit,
           quantity:formValues.nb_products,
+          fleurie:formValues.fleurie,
+          resistance:formValues.resistance,
+          conditionnement:formValues.conditionnement,
+          couleur:formValues.couleur,
+          type:formValues.type,
+          hauteur:formValues.hauteur,
+          feuillage:formValues.feuillage,
           files:files
         };
       } else { // if it's a modify mutation
@@ -373,6 +466,13 @@ const ProductAdmin = ({initFormData, initImgData=[], categoryId=null,productId=n
           pageId:categorySelected,
           limitedQuantity:formValues.nolimit,
           quantity:formValues.nb_products,
+          fleurie:formValues.fleurie,
+          resistance:formValues.resistance,
+          conditionnement:formValues.conditionnement,
+          couleur:formValues.couleur,
+          type:formValues.type,
+          hauteur:formValues.hauteur,
+          feuillage:formValues.feuillage,
           files:files
         }
       }
