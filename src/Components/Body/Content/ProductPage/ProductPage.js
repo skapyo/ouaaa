@@ -67,7 +67,7 @@ const ProductPage = () => {
     ] = useLoaderState();
 
     const {data, loading, error,refetch} = useQuery(GET_PRODUCT,{variables:{id:productId}});
-  debugger;
+
     const [addLikedPoduct,{data:addData,loading:addLoading,error:addError}] = useMutation(
         ADD_LIKED_PRODUCT,
         {variables:{productId:productId}}
