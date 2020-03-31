@@ -45,6 +45,13 @@ const ModifyProductAdmin = () => {
             shortdescr: data.product.short_description,
             longdescr: data.product.description,
             nolimit:data.product.limitedQuantity,
+            fleurie:data.product.fleurie,
+            resistance:data.product.resistance,
+            conditionnement:data.product.conditionnement,
+            couleur:data.product.couleur,
+            type:data.product.type,
+            hauteur:data.product.hauteur,
+            feuillage:data.product.feuillage,
             nb_products:data.product.quantity
         };
         console.log('stateINIT:');

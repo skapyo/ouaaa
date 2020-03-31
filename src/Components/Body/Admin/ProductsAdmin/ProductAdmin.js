@@ -30,7 +30,7 @@ import {getImageUrl} from './../../../../Utils/utils';
 
 
 const optionsResistance = [
-  { key: 'v', text: 'Vivace', value: 'VIVACE' }
+  { key: 'v', text: 'Vivace', value: 'vivace' }
 ]
 const optionsType = [
   { key: 'rg', text: 'ROSIER GRIMPANT', value: 'ROSIER GRIMPANT' },
