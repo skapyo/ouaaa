@@ -17,13 +17,7 @@ const headerStyle = {
   "font-weight": "lighter",
   color: "#009C95"
 };
-const linkStyle = {
-    "text-align":"center",
-    "vertical-align": "middle",
-    color: "#009C95",
-    "padding-top": "14px",
-    "padding-left": "100px"
-};
+
 const DesktopNavbar = React.memo(() => {
 
     const state = useSessionState();
@@ -45,8 +39,7 @@ const DesktopNavbar = React.memo(() => {
             <Menu.Item as={Link} to={`/`} header style={headerStyle}>
               Schipper Horticulture
             </Menu.Item>
-              <Link position="middle"  style={linkStyle} to= "https://static.commande.schipper-horticulture.fr/Bon_de_commande.xlsx"  target="_blank" download> Télécharger directement la liste des produits à renvoyer à schipper.horti@wanadoo.fr </Link>
-
+              <a href="https://static.commande.schipper-horticulture.fr/Bon_de_commande.xlsx" class="downloadLink"  target="_blank" >Télécharger directement la liste des produits à renvoyer à schipper.horti@wanadoo.fr </a>
             <Menu.Menu position="right">
               {state && state.role === 'admin' ?(<Menu.Item name="admin" as={Link} to={`/admin`}>
                 <Icon name="options" size="large" />

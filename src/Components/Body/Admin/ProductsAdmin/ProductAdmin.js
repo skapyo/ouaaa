@@ -123,7 +123,7 @@ const CategoryInformations = ({formChangeHandler,selectChangeHandler,formValues,
 
             </Form.Field>
             <Form.Field
-                label="Résistancee"
+                label="Résistance"
                 control={Select}
                 placeholder="Vivace"
                 name="resistance"

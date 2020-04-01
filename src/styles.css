@@ -11,3 +11,10 @@
 .image-gallery-image, .image-gallery-thumbnail-image, .image-orientation{
   image-orientation:  from-image ;
 }
+.downloadLink {
+  text-align: center;
+  vertical-align: middle;
+  color: #009C95;
+  padding-top: 14px;
+  padding-left: 100px;
+}
