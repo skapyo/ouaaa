@@ -145,6 +145,13 @@ mutation addProductMutation(
       pageId:$pageId,
       limitedQuantity:$limitedQuantity,
       quantity:$quantity,
+      fleurie:$fleurie,
+      conditionnement:$conditionnement,
+      hauteur:$hauteur,,
+      resistance:$resistance,,
+      couleur:$couleur,
+      type:$type,,
+      feuillage:$feuillage,
       images: $files
       ) {
         id,
@@ -182,11 +189,11 @@ mutation modifyProductMutation(
   $limitedQuantity:Boolean, 
   $quantity:Int,
   $fleurie:Boolean,
-  $conditionnement:String,,
-  $hauteur:String,,
-  $resistance:String,,
-  $couleur:String,,
-  $type:String,,
+  $conditionnement:String,
+  $hauteur:String,
+  $resistance:String,
+  $couleur:String,
+  $type:String,
   $feuillage:String,
   $files: [InputModifyPictureType]
   ) {
@@ -200,6 +207,13 @@ mutation modifyProductMutation(
       pageId:$pageId,
       limitedQuantity:$limitedQuantity,
       quantity:$quantity,
+      fleurie:$fleurie,
+      conditionnement:$conditionnement,,
+      hauteur:$hauteur,,
+      resistance:$resistance,,
+      couleur:$couleur,
+      type:$type,
+      feuillage:$feuillage,
       images: $files
       ) {
         id,

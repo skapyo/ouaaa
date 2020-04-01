@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
+import {  Checkbox } from 'semantic-ui-react'
 import {useDropArea} from 'react-use';
 import {MODIFY_PRODUCT,ADD_NEW_PRODUCT} from '../../../../Queries/contentQueries';
 import { useQuery ,useMutation} from '@apollo/react-hooks';
@@ -55,7 +56,7 @@ const ItemTypes = {
   PIC: "pic"
 };
 
-const CategoryInformations = ({formChangeHandler,formValues,checkBoxChangeHandler}) => {
+const CategoryInformations = ({formChangeHandler,selectChangeHandler,formValues,checkBoxChangeHandler}) => {
  
   return (
     <>
@@ -95,7 +96,7 @@ const CategoryInformations = ({formChangeHandler,formValues,checkBoxChangeHandle
               label='Article en quantité illimitée' 
               onChange={checkBoxChangeHandler}
               checked={formValues.nolimit?true:false}
-              // value={formValues.nolimit}
+              name="nolimit"
             />
 
             <Form.Field width={6} disabled={formValues.nolimit?true:false}>
@@ -111,21 +112,23 @@ const CategoryInformations = ({formChangeHandler,formValues,checkBoxChangeHandle
             <br />
 
 
-
-            <Form.Checkbox
+            <Form.Field>
+            <Checkbox
                 name="fleurie"
-                label='Fleurie's
-                value={formValues.fleurie?true:false}
-
+                label='Fleurieqs'
+                onChange={checkBoxChangeHandler}
+                checked={formValues.fleurie?true:false}
                 // value={formValues.nolimit}
             />
+
+            </Form.Field>
             <Form.Field
                 label="Résistancee"
                 control={Select}
                 placeholder="Vivace"
                 name="resistance"
                 options={optionsResistance}
-                onChange={formChangeHandler}
+                onChange={selectChangeHandler}
                 value={formValues.resistance}
             />
           <Form.Field>
@@ -153,7 +156,7 @@ const CategoryInformations = ({formChangeHandler,formValues,checkBoxChangeHandle
                 placeholder="Type"
                 name="type"
                 options={optionsType}
-                onChange={formChangeHandler}
+                onChange={selectChangeHandler}
                 value={formValues.type}
             />
             <Form.Field>
@@ -169,9 +172,9 @@ const CategoryInformations = ({formChangeHandler,formValues,checkBoxChangeHandle
                   label="Feuillage"
                   control={Select}
                   placeholder="Feuillage"
-                  name="type"
+                  name="feuillage"
                   options={optionsFeuillage}
-                  onChange={formChangeHandler}
+                  onChange={selectChangeHandler}
                   value={formValues.feuillage}
               />
           <Form.Field>
@@ -383,13 +386,16 @@ const ProductAdmin = ({initFormData, initImgData=[], categoryId=null,productId=n
 
   const formChangeHandler = useCallback(e => {
     const { name, value } = e.target;
+  //  debugger;
     setFormValue({ ...formValues, [name]: value });
   });
 
   const checkBoxChangeHandler = (e,value) => {
-    setFormValue({ ...formValues, nolimit: value.checked });
+    setFormValue({ ...formValues, [value.name]: value.checked });
   };
-
+  const selectChangeHandler = (e,value) => {
+    setFormValue({ ...formValues, [value.name]: value.value });
+  };
 
   const formSubmitHandler = () => {
     // console.log('formSubmitHandler');
@@ -399,7 +405,7 @@ const ProductAdmin = ({initFormData, initImgData=[], categoryId=null,productId=n
 
 
     let files = null;
-    
+   // debugger;
       let variables = null;
       if(!categoryId) { // if it's an product creation mutation
 
@@ -518,6 +524,7 @@ const ProductAdmin = ({initFormData, initImgData=[], categoryId=null,productId=n
             checkBoxChangeHandler={checkBoxChangeHandler} 
             formChangeHandler={formChangeHandler} 
             formValues={formValues}
+            selectChangeHandler={selectChangeHandler}
           />
           )
           :
