@@ -14,7 +14,6 @@ const ModifyProductAdmin = () => {
 
     // init product id from url params
     const {productId} = useParams();
-    console.log(productId);
     
     // init query to fetch the product infos from the server
     const { loading, error, data } = useQuery(GET_PRODUCT,{
@@ -54,9 +53,6 @@ const ModifyProductAdmin = () => {
             feuillage:data.product.feuillage,
             nb_products:data.product.quantity
         };
-        console.log('stateINIT:');
-        console.log(stateInit);
-        console.log('--stateINIT--');
 
         if(data.product.pictures) {
             imgInit = data.product.pictures.map((picture,index) => {
@@ -82,9 +78,6 @@ const ModifyProductAdmin = () => {
                 };
             });
         }
-        console.log('imgInit:');
-        console.log(imgInit);
-        console.log('--imgInit--');
     };
 
     return (<ProductAdmin 

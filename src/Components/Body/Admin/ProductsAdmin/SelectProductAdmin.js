@@ -18,9 +18,6 @@ const SelectProductAdmin = () => {
     const [categorySelected, setCategorySelectInd] = useState(false);
      // init states to store selected product id
     const [productSelected, setProductSelectInd] = useState(false);
-    
-    console.log(categorySelected);
-    console.log(productSelected);
 
     // store selected category id in state
     const categorySelecthandler = (event, {value}) => {

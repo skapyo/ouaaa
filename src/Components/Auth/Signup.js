@@ -92,7 +92,6 @@ const Signup = () => {
 
     useEffect(() => {
         if(data && data.register) {
-            console.log(data.register);
             setLoadingState(false);
             // stateDispatch({
             //     type:'login',

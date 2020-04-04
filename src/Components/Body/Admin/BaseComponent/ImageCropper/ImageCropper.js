@@ -31,12 +31,6 @@ const ImageCropper = ({src, open, onClose, classes,croppedImg,updateKeyIndicator
     const [croppedImage, setCroppedImage] = useState(croppedImg.img)
 
 
-    console.log('Crop values');
-    console.log(crop);
-    console.log(rotation);
-    console.log(zoom);
-    console.log(croppedAreaPixels);
-    console.log('--Crop values--');
 
     const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
       setCroppedAreaPixels(croppedAreaPixels)
@@ -48,13 +42,12 @@ const ImageCropper = ({src, open, onClose, classes,croppedImg,updateKeyIndicator
           src,
           croppedAreaPixels,
           rotation
-        )
-        console.log('donee', { croppedImage })
-        setCroppedImage(croppedImage)
+        );
+          setCroppedImage(croppedImage);
       } catch (e) {
-        console.error(e)
+          console.error(e);
       }
-    }, [croppedAreaPixels, rotation])
+    }, [croppedAreaPixels, rotation,src]);
 
     const saveCroppedImage = () => {
       updateKeyIndicator(
@@ -102,7 +95,7 @@ const ImageCropper = ({src, open, onClose, classes,croppedImg,updateKeyIndicator
                       onMediaLoaded={mediaSize => {
                         // Adapt zoom based on media size to fit max height
                         // setZoom(CONTAINER_HEIGHT / mediaSize.naturalHeight)
-                        console.log(mediaSize);
+                          // console.log(mediaSize);
                       }}
                       />
                   </div>

@@ -274,8 +274,6 @@ const ImagePrev = ({file,originalImg,croppedImg,moveCard,findCard,id,activatedSw
 
   const originalIndex = findCard(id).index;
 
-  console.log(originalIndex);
-
   const [{ isDragging }, drag] = useDrag({
     item: { type: ItemTypes.PIC, id, originalIndex },
     collect: monitor => ({
@@ -411,7 +409,6 @@ const ProductAdmin = ({initFormData, initImgData=[], categoryId=null,productId=n
 
         if(objectsList)
           files = objectsList.map((object) =>{
-            console.log(object.croppedImg.file); 
             // return object.file
             return {
               originalPicture:object.file,
@@ -444,8 +441,6 @@ const ProductAdmin = ({initFormData, initImgData=[], categoryId=null,productId=n
 
         if(objectsList)
           files = objectsList.map((object) => {
-
-            console.log(object.newpic);
 
             return {
               id : object.serverId,
@@ -501,11 +496,11 @@ const ProductAdmin = ({initFormData, initImgData=[], categoryId=null,productId=n
       }
 
     }
-    },[newProductData])
+  },[newProductData,history,productId]);
 
   const onDropHandler = useCallback((files) => {
     setImagesList(files);
-  });
+  },[setImagesList]);
 
   return (
     <Segment>

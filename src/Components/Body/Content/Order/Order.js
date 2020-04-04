@@ -1,15 +1,16 @@
 import _ from "lodash";
 import React, { useState ,useEffect} from "react";
 import {
-    Button,
-    Item,
-    Segment,
-    Grid,
-    Header,
-    Form,
-    Sticky,
-    Label,
-    List
+  Button,
+  Item,
+  Segment,
+  Grid,
+  Header,
+  Form,
+  Sticky,
+  Label,
+  List,
+  Dimmer
 } from "semantic-ui-react";
 import {CANCEL_ORDER} from '../../../../Queries/contentQueries';
 import {useQuery,useMutation} from '@apollo/react-hooks';
@@ -21,39 +22,36 @@ import {getImageUrl} from '../../../../Utils/utils';
 
 
 const headerStyle = {
-    "font-family": "Ubuntu', sans-serif",
-    "font-size": "30px",
-    // 'font-style': 'normal',
-    "font-weight": "lighter",
-    color: "#009C95"
+  "font-family": "Ubuntu', sans-serif",
+  "font-size": "30px",
+  // 'font-style': 'normal',
+  "font-weight": "lighter",
+  color: "#009C95"
 };
 
 const StrickyHeaderStyle = {
-    "font-family": "Ubuntu', sans-serif",
-    "font-size": "20px",
-    // 'font-style': 'normal',
-    "font-weight": "lighter",
-    color: "#009C95"
-};
-const imageCss = {
-    "image-orientation":"from-image"
-};
-const CartItem = ({ name, price, nb,src }) => {
-    console.log(src);
-    return (
+  "font-family": "Ubuntu', sans-serif",
+  "font-size": "20px",
+  // 'font-style': 'normal',
+  "font-weight": "lighter",
+  color: "#009C95"
+  };
 
-        <Item>
-            <Item.Image src={src}  style={imageCss} size="small" />
-            <Item.Content verticalAlign='middle'>
-                <Item.Header>{name}</Item.Header>
-                <Item.Description>{`Quantité: ${nb}`}</Item.Description>
-                <Item.Description>{`Prix unitaire: ${price}€`}</Item.Description>
-                <Item.Extra >
-                    <Segment basic floated='right'>{`Prix: ${nb} x ${price}€ = `}<span style={StrickyHeaderStyle}>{`${nb*price}€`}</span></Segment>
-                </Item.Extra>
-            </Item.Content>
-        </Item>
-        // </Grid>
+const CartItem = ({ name, price, nb,src }) => {
+  return (
+
+    <Item>
+      <Item.Image src={src} size="small" />
+      <Item.Content verticalAlign='middle'>
+      <Item.Header>{name}</Item.Header>
+        <Item.Description>{`Quantité: ${nb}`}</Item.Description>
+        <Item.Description>{`Prix unitaire: ${price}€`}</Item.Description>
+        <Item.Extra >
+          <Segment basic floated='right'>{`Prix: ${nb} x ${price}€ = `}<span style={StrickyHeaderStyle}>{`${nb*price}€`}</span></Segment>
+        </Item.Extra>
+      </Item.Content>
+    </Item>
+    // </Grid>
 
     );
 };
@@ -64,108 +62,110 @@ const Order = ({ data,loading,error,refetch }) => {
 //     fetchPolicy:"network-only"
 //   });
 
-    const [disabled, setDisabledInd] = useState(false);
-    const [isCloseButtonHovered, setCloseButtonHoverInd] = useState(false);
-    const closeHoveredHandler = () => {
-        setCloseButtonHoverInd(!isCloseButtonHovered);
-    };
+  const [disabled, setDisabledInd] = useState(false);
+  const [isCloseButtonHovered, setCloseButtonHoverInd] = useState(false);
+  const [firstLoading, setFirstLoadingInd] = useState(true);
+  const closeHoveredHandler = () => {
+    setCloseButtonHoverInd(!isCloseButtonHovered);
+  };
 
-    // const [dataToRender, setdataToRender] = useState();
+  // const [dataToRender, setdataToRender] = useState();
 
-    const [loadingGlobalState,
-        {
-            addListener,
-            changeListenerValue
-        }
-    ] = useLoaderState();
+  const [loadingGlobalState,
+      {
+          addListener,
+          changeListenerValue
+      }
+  ] = useLoaderState();
 
-    useEffect(() => {
-        if(data && data.ordersUserQuery[0].items.length > 0 ) {
-            data.ordersUserQuery[0].items.map((item,index) => {
-                const img = new Image();
-                addListener(index);
-                img.onload = () => changeListenerValue(index, false);
-                if (item.product.pictures[0] != null) {
-                     img.src = getImageUrl(item.product.pictures[0].croppedPicturePath) ;
-                 }else{
-                    changeListenerValue(index, false);
-                }
+  useEffect(() => {
+    if(data && data.ordersUserQuery)
+      setFirstLoadingInd(false);
+    if(data && data.ordersUserQuery[0].items.length > 0 && firstLoading) {
+      data.ordersUserQuery[0].items.map((item,index) => {
+          if (item.product.pictures[0] != null && item.product.pictures[0] && item.product.pictures[0].croppedPicturePath) {
+              const img = new Image();
+              addListener(index);
+              img.onload = () => changeListenerValue(index,false);
+              img.src = getImageUrl(item.product.pictures[0].croppedPicturePath);
+          }else{
+              changeListenerValue(index, false);
+          }
+      });
+    }
+  },[loading,addListener,changeListenerValue,data,firstLoading]);
 
-            });
-        }
-    },[loading,addListener,changeListenerValue,data]);
+  const id = data && data.ordersUserQuery[0].id || null;
+  const [cancelOrderMutation,{data:cancelOrdertData, loading:cancelOrderLoading, error:cancelOrderError}] = useMutation(CANCEL_ORDER,{variables:{orderId:id}});
 
-    const id = data && data.ordersUserQuery[0].id || null;
-    const [cancelOrderMutation,{data:cancelOrdertData, loading:cancelOrderLoading, error:cancelOrderError}] = useMutation(CANCEL_ORDER,{variables:{orderId:id}});
+  const cancelOrder = () => {
+    cancelOrderMutation();
+  };
 
-    const cancelOrder = () => {
-        cancelOrderMutation();
-    };
+  useEffect(() => {
+    if(cancelOrdertData && cancelOrdertData.cancelOrder)
+      refetch();
+  },[cancelOrdertData,refetch]);
 
-    useEffect(() => {
-        if(cancelOrdertData && cancelOrdertData.cancelOrder)
-            refetch();
-    },[cancelOrdertData,refetch]);
+  const {height} = useWindowSize();
+  const midHeight = (height - 230 - 230 - 10) / 2;
+  const midHeightString = `${midHeight}px 0 0 0`;
 
-    const {height} = useWindowSize();
-    const midHeight = (height - 230 - 230 - 10) / 2;
-    const midHeightString = `${midHeight}px 0 0 0`;
+  if(loadingGlobalState)
+    return <Loader midHeightString={midHeightString} />;
 
-    if(loadingGlobalState)
-        return <Loader midHeightString={midHeightString} />;
+  return (
+    <>
+      <Breadcrumb options={[{to:'/commandes',label:'Mes commandes'}]} lastItem={`commande n° ${data.ordersUserQuery[0].id}`} />
+      <Header as='h1' style={headerStyle}>Ma commande</Header>
+      <br />
+      <br />
+      <Grid stackable>
+          <Grid.Row>
+              <Grid.Column width={11}>
+              <Grid stackable textAlign='center' verticalAlign='middle'>
 
-    return (
-        <>
-            <Breadcrumb options={[{to:'/commandes',label:'Mes commandes'}]} lastItem={`commande n° ${data.ordersUserQuery[0].id}`} />
-            <Header as='h1' style={headerStyle}>Ma commande</Header>
-            <br />
-            <br />
-            <Grid stackable>
-                <Grid.Row>
-                    <Grid.Column width={11}>
-                        <Grid stackable textAlign='center' verticalAlign='middle'>
-
-                            <Grid.Column style={{ maxWidth: '80vh' }}>
+                <Grid.Column style={{ maxWidth: '80vh' }}>
 
 
-                                <Grid verticalAlign='left'>
-                                    <Grid.Column width='16'>
-                                        <Item.Group divided relaxed >
-                                            {data && data.ordersUserQuery[0].items.length > 0 ?
-                                                data.ordersUserQuery[0].items.map((item) => (
-                                                    <CartItem
-                                                        name={item.product.label}
-                                                        price={item.product.price}
-                                                        nb={item.quantity}
-                                                        src={item.product.pictures.length!=0?getImageUrl(item.product.pictures[0].croppedPicturePath):null}
-                                                    />
-                                                ))
-                                                :
-                                                'le panier est vide'
-                                            }
-                                        </Item.Group>
-                                    </Grid.Column>
-                                </Grid>
-
-                            </Grid.Column>
-                        </Grid>
+                <Grid verticalAlign='left'>
+                  <Grid.Column width='16'>
+                      <Item.Group divided relaxed >
+                        {data && data.ordersUserQuery[0].items.length > 0 ?
+                        data.ordersUserQuery[0].items.map((item) => (
+                          <CartItem
+                            name={item.product.label}
+                            price={item.product.price}
+                            nb={item.quantity}
+                            src={item.product.pictures.length!=0?getImageUrl(item.product.pictures[0].croppedPicturePath):null}
+                          />
+                        ))
+                        :
+                        'le panier est vide'
+                        }
+                      </Item.Group>
                     </Grid.Column>
-                    <Grid.Column width={5}>
-                        <Sticky offset={100}>
-                            <Segment>
-                                <Header as='h1' style={StrickyHeaderStyle}>Résumé de la commande:</Header>
-                                {/* <br/> */}
-                                <Header as='h5'>Articles:</Header>
-                                <List bulleted>
-                                    {data && data.ordersUserQuery[0].items.length > 0 ?
-                                        data.ordersUserQuery[0].items.map((item) => (
-                                            // <span style={{display:'block'}}>{`${item.product.label}: ${item.quantity} pièces`}</span>
-                                            <List.Item>{`${item.product.label}: ${item.quantity} pièces`}</List.Item>
-                                        ))
-                                        :
-                                        'aucun article séléctionné'
-                                    }
-                                </List>
+                </Grid>
+
+                </Grid.Column>
+              </Grid>
+              </Grid.Column>
+              <Grid.Column width={5}>
+                  <Sticky offset={100}>
+                      <Segment>
+                        <Header as='h1' style={StrickyHeaderStyle}>Résumé de la commande:</Header>
+                        {/* <br/> */}
+                        <Header as='h5'>Articles:</Header>
+                        <List bulleted>
+                            {data && data.ordersUserQuery[0].items.length > 0 ?
+                            data.ordersUserQuery[0].items.map((item) => (
+                                // <span style={{display:'block'}}>{`${item.product.label}: ${item.quantity} pièces`}</span>
+                                <List.Item>{`${item.product.label}: ${item.quantity} pièces`}</List.Item>
+                            ))
+                            :
+                            'aucun article séléctionné'
+                            }
+                        </List>
 
                                 {/* <br/> */}
                                 <Header as='h3' >{`Prix total: ${data.ordersUserQuery[0].totalprice}€`}</Header>

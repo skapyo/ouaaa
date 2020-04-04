@@ -16,7 +16,7 @@ import useWindowSize from './../../../../Hooks/useWindowSize';
 import {Breadcrumb} from '../../../Components/';
 import isNumber from 'is-number';
 import { BreakingChangeType } from 'graphql';
-import {getImageUrl} from './../../../../Utils/utils';
+import {getImageUrl,buildQuantitySelectOptions} from './../../../../Utils/utils';
 import{useSessionState} from './../../../../Session/session';
 import cogoToast from 'cogo-toast';
 
@@ -24,7 +24,6 @@ import cogoToast from 'cogo-toast';
 const headerStyle = {
     "font-family": "Ubuntu', sans-serif",
     "font-size": "30px",
-    // 'font-style': 'normal',
     "font-weight": "lighter",
     color: "#009C95"
 };
@@ -32,13 +31,8 @@ const headerStyle = {
 const StrickyHeaderStyle = {
     "font-family": "Ubuntu', sans-serif",
     "font-size": "20px",
-// 'font-style': 'normal',
     "font-weight": "lighter",
     color: "#009C95"
-};
-
-const spanEspace = {
-    width:'20px'
 };
 
 const formValuesInit = {
@@ -57,6 +51,7 @@ const ProductPage = () => {
     const [productLiked, setLikedIndicator] = useState();
     const [cartLoading, setCartLoadingInd] = useState(false);
     const [selectOptions,setSelectOptions] = useState();
+    const [firstLoading, setFirstLoadingInd] = useState(true);
 
     const [loadingGlobalState,
         {
@@ -108,7 +103,7 @@ const ProductPage = () => {
                 setdataToRender(data.product.pictures.map((picture, index) => {
 
                     const img = new Image();
-                   // addListener(index);debugger;
+                    // addListener(index);debugger;
                     changeListenerValue(index, false);
                     img.src = getImageUrl(picture.croppedPicturePath);
                     return {
@@ -157,15 +152,15 @@ const ProductPage = () => {
     useEffect(() => {
         if(!loading && data) {
             if(!data.product.isUnlimited) {
-                let selectOptionsTemp = [];
-                for (let i = 0; i <= data.product.qavailable; i++) {
-                    selectOptionsTemp.push({
-                        key:i,
-                        value:i,
-                        text:i
-                    });
-                }
-                setSelectOptions(selectOptionsTemp);
+                // let selectOptionsTemp = [];
+                // for (let i = 0; i <= data.product.qavailable; i++) {
+                //     selectOptionsTemp.push({
+                //         key:i,
+                //         value:i,
+                //         text:i
+                //     });
+                // }
+                setSelectOptions(buildQuantitySelectOptions(data.product.qavailable));
             }
             if(cartLoading) setCartLoadingInd(false);
         }

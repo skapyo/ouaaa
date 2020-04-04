@@ -73,7 +73,6 @@ const Login = () => {
 
     useEffect(() => {
         if(data && data.login) {
-            console.log(data.login);
             localStorage.setItem(config.SESSION_STORAGE.REFRESH_TOKEN,data.login.refreshToken);
             localStorage.setItem(config.SESSION_STORAGE.SUB,data.login.sub);
             localStorage.setItem(config.SESSION_STORAGE.AUTH_TOKEN,data.login.token);

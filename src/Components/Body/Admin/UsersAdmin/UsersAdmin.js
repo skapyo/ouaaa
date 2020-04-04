@@ -79,8 +79,6 @@ const UsersAdmin = () => {
         save({variables:{users:users}});
     },[objectsList,save]);
 
-    console.log(objectsList);
-
     const roleSelectChangeHandler = useCallback((id,value) => {
         updateKeyIndicator(id,'role',roleOptions.find(o => o.value == value).text);
     },[updateKeyIndicator]);

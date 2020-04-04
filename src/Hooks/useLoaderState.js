@@ -15,8 +15,6 @@ const useLoaderState = (init = true) => {
     const [loading, setLoadingInd] = useState(init);
     const [listenersList, setListenersList] = useState([]);
 
-    console.log(listenersList);
-
     // function to add values in state
     // value = {key,value}
     const addListener = useCallback((listener) => {
@@ -28,10 +26,8 @@ const useLoaderState = (init = true) => {
     },[setListenersList]);
 
     const changeListenerValue = useCallback((key, value) => {
-        console.log(`changeListenerValue: ${key}, ${value}`);
         setListenersList((prevState, props) => {
             const { index } = findListener(prevState, key);
-            console.log(index);
             return update(prevState, {
                 $splice: [[index, 1, { key: key, value: value }]]
             });

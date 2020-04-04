@@ -256,50 +256,7 @@ mutation delProductInCart ($productId:Int,$quantity:Int) {
 }
 `;
 
-export const GET_CART= gql`
-{
-    cartQuery {
-    id,
-    status,
-    totalprice,
-    items {
-      id,
-      quantity,
-      product {
-        id,
-        label,
-        short_description,
-        price,
-        fleurie,
-        conditionnement,
-        hauteur,
-        resistance,
-        couleur,
-        type,
-        feuillage,
-        pictures {
-          id,
-          croppedPicturePath
-        }
-      }
-    }
-  }
-}
-`;
 
-// export const ADD_PRODUCT_CART= gql`
-// mutation addProductInCart ($productId:Int,$quantity:Int) {
-//   addProductInCart(productId:$productId,quantity:$quantity) {
-//       source,
-//       success,
-//       errorCode,
-//       errorLabel,
-//       errorInformationDescription,
-//       errorInformation
-      
-//   }
-// }
-// `;
 
 export const ADD_PRODUCT_CART= gql`
 mutation addProductInCart ($productId:Int,$quantity:Int) {
@@ -307,11 +264,6 @@ mutation addProductInCart ($productId:Int,$quantity:Int) {
 }
 `;
 
-export const SUBMIT_ORDER= gql`
-mutation submitOrder {
-  submitOrder
-}
-`;
 
 export const GET_USER_ORDER_DETAILS=gql`
 query ordersUserQuery($id: Int) {

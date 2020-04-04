@@ -80,10 +80,10 @@ const DesktopBodyLayout = () => {
             path="/"
             component={() => <DesktopBodyLayoutWithMenu />}
           />
-          <Route
+          {/* <Route
             path="/"
             component={() => <DesktopBodyLayoutWithMenu />}
-          />
+          /> */}
         </Switch>
       </Container>
     </Responsive>
