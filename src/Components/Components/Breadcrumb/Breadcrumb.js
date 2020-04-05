@@ -14,7 +14,7 @@ const Breadcrumb = ({options,lastItem}) => {
 
     return (
     <>
-        <span style={{'margin-right':'0.5em'}}>&nbsp;</span>
+        <span >&nbsp;</span>
         <span>
             <Icon 
                 color= {homeHover?'teal':'black'}
@@ -28,13 +28,13 @@ const Breadcrumb = ({options,lastItem}) => {
         {options && options.map((option) => {
             return (
                 <>
-                    <span style={{'margin-right':'0.3em'}}>
+                    <span>
                     &nbsp;
                     </span>
                     <span>
                         >
                     </span>
-                    <span style={{'margin-right':'0.3em'}}>
+                    <span >
                     &nbsp;
                     </span>
                     <span>
@@ -43,13 +43,13 @@ const Breadcrumb = ({options,lastItem}) => {
                 </>
             )
         })}
-        <span style={{'margin-right':'0.3em'}}>
+        <span >
         &nbsp;
         </span>
         <span>
             >
         </span>
-        <span style={{'margin-right':'0.3em'}}>
+        <span>
         &nbsp;
         </span>
         <span>

@@ -1,5 +1,9 @@
 node_modules
 .VSCodeCounter
 .eslintrc
-.idea
-.idea/*
+# Intellij
+.idea/
+*.iml
+*.iws
+
+build/

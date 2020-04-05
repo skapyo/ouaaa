@@ -8,9 +8,7 @@
   text-align: center;
 }
 
-.image-gallery-image, .image-gallery-thumbnail-image, .image-orientation{
-  image-orientation:  from-image ;
-}
+
 .downloadLink {
   text-align: center;
   vertical-align: middle;
