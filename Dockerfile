@@ -6,12 +6,12 @@ WORKDIR /usr/src/app
 # Install app dependencies
 COPY package*.json ./
 
-RUN npm install --silent
+RUN npm run build
 # Copy app source code
 COPY . .
 
-#Expose port and start application
-EXPOSE 3000
-CMD ["npm", "start"]
-
-
+# Stage 2 - the production environment
+FROM nginx:1.12-alpine
+COPY --from=build-deps /usr/src/app/build /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
