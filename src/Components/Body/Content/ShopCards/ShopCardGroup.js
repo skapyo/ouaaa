@@ -34,7 +34,7 @@ const ShopCardGroup = React.memo( ({itemsPerRow}) => {
 
   useEffect(() =>{
     if(!loading && data) {
-      setdataToRender( data.page.products.map((product, index) => {
+      setdataToRender( data.category.products.map((product, index) => {
         const img = new Image();
         addListener(index);
         img.onload = () => changeListenerValue(index,false);
@@ -59,7 +59,7 @@ const ShopCardGroup = React.memo( ({itemsPerRow}) => {
   return (
     <>
 
-      <Header as='h1' style={headerStyle}>{data.page.label}</Header>
+      <Header as='h1' style={headerStyle}>{data.category.label}</Header>
       <br />
       <br />
       <Card.Group itemsPerRow={itemsPerRow}>

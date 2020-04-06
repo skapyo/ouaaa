@@ -83,7 +83,7 @@ const ModifyProductAdmin = () => {
     return (<ProductAdmin 
         initFormData={stateInit} 
         initImgData = {imgInit}
-        categoryId={data.product.page.id} 
+        categoryId={data.product.category.id}
         productId={productId}
         mutationRequest={MODIFY_PRODUCT} />);
 };

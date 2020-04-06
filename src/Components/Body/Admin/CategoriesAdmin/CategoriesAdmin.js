@@ -6,7 +6,7 @@ import Backend from "react-dnd-html5-backend";
 import update from "immutability-helper";
 
 import { useQuery ,useMutation} from '@apollo/react-hooks';
-import {GET_PAGES_LIST,MODIFY_PAGE_INFORMATIONS,ADD_NEW_PAGE} from '../../../../Queries/contentQueries';
+import {GET_CATEGORYS_LIST,MODIFY_CATEGORY_INFORMATIONS,ADD_NEW_CATEGORY} from '../../../../Queries/contentQueries';
 
 import { useAlert } from 'react-alert'
 
@@ -88,37 +88,37 @@ const CategoriesAdmin = ({initData,client,refetch}) => {
   }, [initData])
 
 
-  const [newPageName, setNewPageNameValue] = useState();
-  // Mutation to add a new page
-  const [addNewPage,{data:newPageData, loading:newPageDataLoading, error:newPageError}] = useMutation(ADD_NEW_PAGE);
+  const [newCategoryName, setNewCategoryNameValue] = useState();
+  // Mutation to add a new category
+  const [addNewCategory,{data:newCategoryData, loading:newCategoryDataLoading, error:newCategoryError}] = useMutation(ADD_NEW_CATEGORY);
 
-  const newPageInputChangeHandler = (e,{value}) => {
-    setNewPageNameValue(value);
+  const newCategoryInputChangeHandler = (e,{value}) => {
+    setNewCategoryNameValue(value);
   };
 
-  const addNewPageHandler = () => {
-    const variables = {label:newPageName,description:''};
-    addNewPage({variables:variables});
+  const addNewCategoryHandler = () => {
+    const variables = {label:newCategoryName,description:''};
+    addNewCategory({variables:variables});
   };
 
   // refresh the category list if add category mutation is OK
   useEffect(() => {
-    if(newPageData !== undefined) {
+    if(newCategoryData !== undefined) {
       alert.success("La nouvelle catégorie a bien été ajoutée!");
       refetch();
     } 
-  },[newPageData]);
+  },[newCategoryData]);
 
   // print error alert if error in new category creation 
   useEffect(() => {
-    if(newPageError !== undefined) {
+    if(newCategoryError !== undefined) {
       // if the category name already exists
-      if(newPageError.graphQLErrors[0] && newPageError.graphQLErrors[0].statusCode === '1001') 
+      if(newCategoryError.graphQLErrors[0] && newCategoryError.graphQLErrors[0].statusCode === '1001')
         alert.error("La catégorie existe déjà, veuillez rééssayer avec un autre nom");
       else
         alert.error("Il y a eu une erreur à la création de la catégorie!");
     }
-  },[newPageError]);
+  },[newCategoryError]);
 
   // function to activate / desactivate a card in the state
   const updateActiveIndicator = (id) => {
@@ -167,14 +167,14 @@ const CategoriesAdmin = ({initData,client,refetch}) => {
   /* save data after clicking the save button */
  
   // Save modifications 
-  const [saveChanges, {loading,data, error }] = useMutation(MODIFY_PAGE_INFORMATIONS);
+  const [saveChanges, {loading,data, error }] = useMutation(MODIFY_CATEGORY_INFORMATIONS);
   
   const saveButtonHandler = (event) => {
     event.preventDefault();
     const cardsValuesUpdated = cards.map((card, index) => {
       return {...card, position:index};
     });
-    saveChanges({ variables:{pages:cardsValuesUpdated}})
+    saveChanges({ variables:{categorys:cardsValuesUpdated}})
   };
   
   useEffect(() => {
@@ -205,10 +205,10 @@ const CategoriesAdmin = ({initData,client,refetch}) => {
         </Header>
       </Divider>
 
-      <Form onSubmit={addNewPageHandler}>
+      <Form onSubmit={addNewCategoryHandler}>
         <Form.Group widths="equal">
-          <Form.Input name = 'newPage' onChange={newPageInputChangeHandler} fluid placeholder="Nom de la nouvelle catégorie" />
-          <Form.Button fluid loading={newPageDataLoading} content='Submit'>Ajouter</Form.Button>
+          <Form.Input name = 'newCategory' onChange={newCategoryInputChangeHandler} fluid placeholder="Nom de la nouvelle catégorie" />
+          <Form.Button fluid loading={newCategoryDataLoading} content='Submit'>Ajouter</Form.Button>
         </Form.Group>
       </Form>
 
@@ -257,7 +257,7 @@ const CategoriesAdmin = ({initData,client,refetch}) => {
 
 const InitComponent = (props) => {
 
-  const { loading, error, data, refetch } = useQuery(GET_PAGES_LIST,{ fetchPolicy: "network-only" });
+  const { loading, error, data, refetch } = useQuery(GET_CATEGORYS_LIST,{ fetchPolicy: "network-only" });
 
   if (loading) return null;
   if (error) return null;
@@ -265,7 +265,7 @@ const InitComponent = (props) => {
   let dataWithoutTypename = null; 
   if(data) {
     const omitTypename = (key, value) => (key === '__typename' ? undefined : value)
-    dataWithoutTypename = JSON.parse(JSON.stringify(data.pages), omitTypename)
+    dataWithoutTypename = JSON.parse(JSON.stringify(data.categorys), omitTypename)
   }
 
   return(

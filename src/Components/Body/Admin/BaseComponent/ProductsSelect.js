@@ -33,7 +33,7 @@ const ProductsSelect = ({productSelecthandler, categoryId=null, disabled}) => {
     //  init select options if datas are received from server
     let selectionOptions = [];
     if(productsData !== undefined) {
-      selectionOptions = productsData.page.products.map((product) => {
+      selectionOptions = productsData.category.products.map((product) => {
         return {key:product.id, value:product.id, text:product.label};
       });
     }

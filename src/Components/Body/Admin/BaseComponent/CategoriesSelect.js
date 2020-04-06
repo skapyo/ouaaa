@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { useQuery} from '@apollo/react-hooks';
-import {GET_PAGES_LIST} from './../../../../Queries/contentQueries';
+import {GET_CATEGORYS_LIST} from './../../../../Queries/contentQueries';
 
 import {Grid,Form} from "semantic-ui-react";
 
@@ -10,7 +10,7 @@ import { useAlert } from 'react-alert'
 const CategoriesSelect = React.memo(({categorySelecthandler,defaultValue=null}) => {
     
     // init query to fetch categories infos needed
-    const {error, data:categoriesData } = useQuery(GET_PAGES_LIST,{
+    const {error, data:categoriesData } = useQuery(GET_CATEGORYS_LIST,{
       fetchPolicy:"network-only"
     });
 
@@ -25,7 +25,7 @@ const CategoriesSelect = React.memo(({categorySelecthandler,defaultValue=null}) 
     //  init select options if datas are received from server
     let selectionOptions = [];
     if(categoriesData !== undefined) {
-      selectionOptions = categoriesData.pages.map((category) => {
+      selectionOptions = categoriesData.categorys.map((category) => {
         return {key:category.id, value:category.id, text:category.label};
       });
     }

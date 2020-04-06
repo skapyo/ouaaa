@@ -331,7 +331,7 @@ const ProductPage = () => {
     return (
         <>
 
-            <Breadcrumb options={[{to:`/categorie/${data.product.page.id}`,label:data.product.page.label}]} lastItem={data.product.label} />
+            <Breadcrumb options={[{to:`/categorie/${data.product.category.id}`,label:data.product.category.label}]} lastItem={data.product.label} />
             <Header as='h1' style={headerStyle}>{data.product.label}</Header>
             <br />
             <br />

@@ -1,8 +1,8 @@
 import gql from "graphql-tag";
 
-export const GET_PAGES_LIST = gql`
+export const GET_CATEGORYS_LIST = gql`
 {
-  pages {
+  categorys {
     id,
     label, 
     description,
@@ -15,7 +15,7 @@ export const GET_PAGES_LIST = gql`
 
 export const GET_PRODUCTS_LIST = gql`
   query getProductsList($id: String!) {
-    page(id:$id) {
+    category(id:$id) {
       products {id,label}
     }
   }
@@ -35,7 +35,7 @@ export const REMOVE_LIKED_PRODUCT = gql`
 
 export const GET_PRODUCTS_BY_CATEGORY = gql`
   query getProductsByCategory($id: String!) {
-    page(id:$id) {
+    category(id:$id) {
       id,
       label,
       description,
@@ -82,7 +82,7 @@ export const GET_PRODUCT = gql`
       couleur,
       type,
       feuillage,
-      page {
+      category {
         id,
         label 
       },
@@ -100,15 +100,15 @@ export const GET_PRODUCT = gql`
 `;
 
 
-export const MODIFY_PAGE_INFORMATIONS= gql`
-  mutation modifyPagesInformationsMutation($pages: [InputPageType]) {
-    modifyPagesInformations(pages: $pages) 
+export const MODIFY_CATEGORY_INFORMATIONS= gql`
+  mutation modifyCategorysInformationsMutation($categorys: [InputCategoryType]) {
+    modifyCategorysInformations(categorys: $categorys) 
   }
 `;
 
-export const ADD_NEW_PAGE= gql`
-  mutation addPageMutation($label: String!, $description:String) {
-    addPage(label:$label, description:$description) {
+export const ADD_NEW_CATEGORY= gql`
+  mutation addCategoryMutation($label: String!, $description:String) {
+    addCategory(label:$label, description:$description) {
       id,
       label, 
       description,
@@ -124,7 +124,7 @@ mutation addProductMutation(
   $short_description:String,
   $description:String,
   $price:Float,
-  $pageId:Int,
+  $categoryId:Int,
   $limitedQuantity:Boolean, 
   $quantity:Int,
   $fleurie:Boolean,
@@ -142,7 +142,7 @@ mutation addProductMutation(
       short_description:$short_description, 
       description:$description, 
       price:$price,
-      pageId:$pageId,
+      categoryId:$categoryId,
       limitedQuantity:$limitedQuantity,
       quantity:$quantity,
       fleurie:$fleurie,
@@ -185,7 +185,7 @@ mutation modifyProductMutation(
   $short_description:String,
   $description:String,
   $price:Float,
-  $pageId:Int,
+  $categoryId:Int,
   $limitedQuantity:Boolean, 
   $quantity:Int,
   $fleurie:Boolean,
@@ -204,7 +204,7 @@ mutation modifyProductMutation(
       short_description:$short_description, 
       description:$description, 
       price:$price,
-      pageId:$pageId,
+      categoryId:$categoryId,
       limitedQuantity:$limitedQuantity,
       quantity:$quantity,
       fleurie:$fleurie,
