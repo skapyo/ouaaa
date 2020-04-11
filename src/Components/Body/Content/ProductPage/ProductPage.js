@@ -142,12 +142,23 @@ const ProductPage = () => {
     },[remData,setLikedIndicator,remError]);
 
     useEffect(() => {
+
         if(cartActionData && cartActionData.addProductInCart) {
             cogoToast.success("L'article a bien été ajouté dans le panier.",{position:'top-right'});
             // resetListenersList();
             refetch();
         }
     },[cartActionData,refetch,resetListenersList]);
+
+    useEffect(() => {
+        if(cartActionError) {
+            cogoToast.error("Veuillez vous authentifier avant d'ajouter un article au panier.", {position: 'top-right'});
+        refetch();
+}
+
+},[cartActionError]);
+
+
 
     useEffect(() => {
         if(!loading && data) {
