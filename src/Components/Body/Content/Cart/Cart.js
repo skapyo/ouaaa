@@ -136,8 +136,12 @@ const Cart = () => {
 
 
   useEffect(() => {
+
     if(data?.cartQuery)
-      setFirstLoadingInd(false); // dont activate the loader for next refreshs
+    {
+        setFirstLoadingInd(false); // dont activate the loader for next refreshs
+    }
+
     if(data?.cartQuery?.items?.length > 0 && firstLoading) {
       data.cartQuery.items.map((item,index) => {
         if(item.product.pictures[0] && item.product.pictures[0].croppedPicturePath) {
@@ -145,7 +149,10 @@ const Cart = () => {
           addListener(index);
           img.onload = () => changeListenerValue(index,false);
           img.src = getImageUrl(item.product.pictures[0].croppedPicturePath);
-        };
+        }else{
+            addListener(index);
+            changeListenerValue(index,false);
+        }
       });
     };
     if(data?.cartQuery?.items?.length == 0 && firstLoading) {
@@ -195,7 +202,7 @@ const Cart = () => {
                             name={item.product.label}
                             price={item.product.price}
                             nb={item.quantity}
-                            src={item.product.pictures.length!=0?getImageUrl(item.product.pictures[0].croppedPicturePath):null}
+                            src={getImageUrl(item.product.pictures.length!=0?item.product.pictures[0].croppedPicturePath:null)}
                             id={item.product.id}
                             refetch={refetch}
                           />
@@ -223,7 +230,7 @@ const Cart = () => {
                         'aucun article séléctionné'
                       }
                       <br/>
-                      {data.cartQuery && data.cartQuery.totalprice && (
+                      {data.cartQuery && data.cartQuery.totalprice!=null && data.cartQuery.totalprice!=0 && (
                         <Header as='h3' >{`Prix total: ${data.cartQuery.totalprice}€`}</Header>
                       )}
                       <br/>

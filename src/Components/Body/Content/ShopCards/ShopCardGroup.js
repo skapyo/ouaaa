@@ -34,6 +34,7 @@ const ShopCardGroup = React.memo( ({itemsPerRow}) => {
 
   useEffect(() =>{
     if(!loading && data) {
+    //  debugger;
       setdataToRender( data.category.products.map((product, index) => {
         const img = new Image();
         addListener(index);
