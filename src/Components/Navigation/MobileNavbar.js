@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState, useCallback} from "react";
 import { Menu, Icon } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 
@@ -19,8 +19,9 @@ const headerStyle = {
 };
 
 const MobileNavbar = ({ toggleHandler }) => {
+    const [fixed, setFixed] = useState(false);
     return (
-        <Menu style={divStyle}>
+        <Menu fixed='true' style={divStyle}>
             <Menu.Item onClick={toggleHandler} >
                 <Icon name="sidebar" />
             </Menu.Item>

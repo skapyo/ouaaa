@@ -18,7 +18,7 @@ class MobileContainer extends Component {
 
     return (
       <Responsive
-        as={Sidebar.Pushable}
+
         getWidth={getWidth}
         maxWidth={Responsive.onlyMobile.maxWidth}
       >
@@ -36,7 +36,7 @@ class MobileContainer extends Component {
             color="teal"
             vertical
           > */}
-        <MobileNavbar  toggleHandler={this.handleToggle} />
+        <MobileNavbar   toggleHandler={this.handleToggle} />
     {/* </Segment> */}
     {children}
   </Sidebar.Pusher>
