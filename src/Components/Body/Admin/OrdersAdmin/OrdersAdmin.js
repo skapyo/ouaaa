@@ -8,8 +8,8 @@ import {useQuery} from '@apollo/react-hooks';
 import Moment from 'react-moment';
 
 const GET_ORDERS_LIST = gql`
-    query getOrders {
-        ordersUserQuery {
+    query ordersAdminQuery {
+        ordersAdminQuery {
             id,
             createdAt,
             user{
@@ -37,7 +37,7 @@ const OrdersAdmin = () => {
 
     useEffect(() => {
         if(data) {
-            initState(omitTypename(data.ordersUserQuery));
+            initState(omitTypename(data.ordersAdminQuery));
         }
     },[data,initState]);
 
@@ -76,10 +76,10 @@ const OrdersAdmin = () => {
                             </ul>
                             </Table.Cell>
                             <Table.Cell>
-                                <ul>
-                                    <li> {order.user.surname} {order.user.lastname}</li>
-                                     <li> {order.user.email} {order.user.phone}</li>
-                                </ul>
+
+                                    {order.user.surname} {order.user.lastname}<br></br>
+                                     {order.user.email} {order.user.phone}
+
                             </Table.Cell>
                             <Table.Cell>{order.totalprice}</Table.Cell>
                         </Table.Row>
