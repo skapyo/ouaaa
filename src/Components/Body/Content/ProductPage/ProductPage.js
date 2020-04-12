@@ -9,7 +9,7 @@ import {
 } from './../../../../Queries/contentQueries';
 import ImageGallery from 'react-image-gallery';
 import "react-image-gallery/styles/css/image-gallery.css";
-import { Grid , Header ,Divider,Sticky, Segment, Form,Input,Select,Button,Icon,Container,Message} from 'semantic-ui-react';
+import { Grid , Header ,Divider,Sticky, Segment, Form,Input,Select,Button,Icon,Container,Message,List} from 'semantic-ui-react';
 import Loader from './../../../Loader/Loader';
 import useLoaderState from './../../../../Hooks/useLoaderState';
 import useWindowSize from './../../../../Hooks/useWindowSize';
@@ -200,138 +200,6 @@ const ProductPage = () => {
         return null;
     }
 
-    function Conditionnement() {
-
-        if (data.product.conditionnement!=null) {
-            return (<Grid.Row>
-                <Grid.Column width={12}>
-                    <br/>
-                    <Header style={headerStyle} >Conditionnement: </Header>
-                    <br/>
-                    <div>{data.product.conditionnement}</div>
-                    <br />
-                </Grid.Column>
-                <Grid.Column width={4}>
-                    {}
-                </Grid.Column>
-            </Grid.Row>);
-        }
-        return null;
-    }
-
-
-    function Fleurie() {
-
-        if (data.product.fleurie!=null) {
-            return (<Grid.Row>
-                <Grid.Column width={12}>
-                    <br/>
-                    <Header style={headerStyle} >Fleurie : </Header>
-                    <br/>
-                    <div>{data.product.fleurie}</div>
-                    <br />
-                </Grid.Column>
-                <Grid.Column width={4}>
-                    {}
-                </Grid.Column>
-            </Grid.Row>);
-        }
-        return null;
-    }
-
-    function Resistance() {
-
-        if (data.product.resistance!=null) {
-            return (<Grid.Row>
-                <Grid.Column width={12}>
-                    <br/>
-                    <Header style={headerStyle} >Resistance : </Header>
-                    <br/>
-                    <div>{data.product.resistance}</div>
-                    <br />
-                </Grid.Column>
-                <Grid.Column width={4}>
-                    {}
-                </Grid.Column>
-            </Grid.Row>);
-        }
-        return null;
-    }
-    function Couleur() {
-
-        if (data.product.couleur!=null) {
-            return (<Grid.Row>
-                <Grid.Column width={12}>
-                    <br/>
-                    <Header style={headerStyle} >Couleur : </Header>
-                    <br/>
-                    <div>{data.product.couleur}</div>
-                    <br />
-                </Grid.Column>
-                <Grid.Column width={4}>
-                    {}
-                </Grid.Column>
-            </Grid.Row>);
-        }
-        return null;
-    }
-
-    function Type() {
-
-        if (data.product.type!=null) {
-            return (<Grid.Row>
-                <Grid.Column width={12}>
-                    <br/>
-                    <Header style={headerStyle} >Type : </Header>
-                    <br/>
-                    <div>{data.product.type}</div>
-                    <br />
-                </Grid.Column>
-                <Grid.Column width={4}>
-                    {}
-                </Grid.Column>
-            </Grid.Row>);
-        }
-        return null;
-    }
-
-    function Hauteur() {
-
-        if (data.product.hauteur!=null) {
-            return (<Grid.Row>
-                <Grid.Column width={12}>
-                    <br/>
-                    <Header style={headerStyle} >Hauteur : </Header>
-                    <br/>
-                    <div>{data.product.hauteur}</div>
-                    <br />
-                </Grid.Column>
-                <Grid.Column width={4}>
-                    {}
-                </Grid.Column>
-            </Grid.Row>);
-        }
-        return null;
-    }
-
-    function Feuillage() {
-
-        if (data.product.feuillage!=null) {
-            return (<Grid.Row>
-                <Grid.Column width={12}>
-                    <br/>
-                    <Header style={headerStyle} >Feuillage : </Header>
-                    <br/>
-                    <div>{data.product.feuillage}</div>
-                    <br />
-                </Grid.Column>
-                <Grid.Column width={4}>
-                    {}
-                </Grid.Column>
-            </Grid.Row>);
-        }
-        return null;
-    }
 
 
     if (loadingGlobalState)
@@ -435,13 +303,59 @@ const ProductPage = () => {
                 </Grid.Row>
 
                 <Description/>
-                <Conditionnement/>
-                <Fleurie/>
-                <Resistance/>
-                <Couleur/>
-                <Type/>
-                <Hauteur/>
-                <Feuillage/>
+        <Grid.Row>
+            <List bulleted>
+            { data.product.conditionnement!=null && (
+                    <List.Item>Conditionnement : {data.product.conditionnement}</List.Item>
+        ) }
+            { data.product.fleurie!=null && (
+                    <List.Item>Fleurie : {data.product.fleurie}</List.Item>
+        ) }
+                    { data.product.resitance!=null && (
+                            <List.Item>Resistance : {data.product.resitance}</List.Item>
+                ) }
+                    { data.product.couleur!=null && (
+                            <List.Item>Couleur : {data.product.couleur}</List.Item>
+                ) }
+                    { data.product.type!=null && (
+                            <List.Item>Type : {data.product.type}</List.Item>
+                ) }
+                { data.product.hauteur!=null && (
+                        <List.Item>Hauteur : {data.product.hauteur}</List.Item>
+                ) }
+                { data.product.feuillage!=null && (
+                <List.Item>Feuillage : {data.product.feuillage}</List.Item>
+                ) }
+                { data.product.urlPdf!=null && (
+                <List.Item><a target="_blank" href={data.product.urlPdf}>Fiche pdf</a></List.Item>
+                ) }
+        { data.product.temperature!=null && (
+        <List.Item>Temperature : {data.product.temperature}</List.Item>
+        ) }
+        { data.product.hauteurAdulte!=null && (
+        <List.Item>Hauteur Adulte : {data.product.hauteurAdulte}</List.Item>
+        ) }
+        { data.product.largeurAdulte!=null && (
+        <List.Item>Largeur Adulte : {data.product.largeurAdulte}</List.Item>
+        ) }
+        { data.product.startFloraison!=null && (
+        <List.Item>Début de floraison : {data.product.startFloraison}</List.Item>
+        ) }
+        { data.product.endFloraison!=null && (
+        <List.Item>Fin de floraison : {data.product.endFloraison}</List.Item>
+        ) }
+        { data.product.sol!=null && (
+        <List.Item>Sol : {data.product.sol}</List.Item>
+        ) }
+        { data.product.exposition!=null && (
+        <List.Item>Exposition : {data.product.exposition}</List.Item>
+        ) }
+
+
+            </List>
+
+        </Grid.Row>
+        <Grid.Row> </Grid.Row>
             </Grid>
         </>
     );

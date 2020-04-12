@@ -57,7 +57,7 @@ const ItemTypes = {
 };
 
 const CategoryInformations = ({formChangeHandler,selectChangeHandler,formValues,checkBoxChangeHandler}) => {
- 
+
   return (
     <>
       <Divider horizontal>
@@ -92,8 +92,8 @@ const CategoryInformations = ({formChangeHandler,selectChangeHandler,formValues,
             </Form.Group>
             <br/>
 
-            <Form.Checkbox 
-              label='Article en quantité illimitée' 
+            <Form.Checkbox
+              label='Article en quantité illimitée'
               onChange={checkBoxChangeHandler}
               checked={formValues.nolimit?true:false}
               name="nolimit"
@@ -108,7 +108,7 @@ const CategoryInformations = ({formChangeHandler,selectChangeHandler,formValues,
                 value={formValues.nb_products}
               />
             </Form.Field>
-            
+
             <br />
 
 
@@ -177,6 +177,80 @@ const CategoryInformations = ({formChangeHandler,selectChangeHandler,formValues,
                   onChange={selectChangeHandler}
                   value={formValues.feuillage}
               />
+              <Form.Field>
+                  <label>URL PDF</label>
+                  <input
+            placeholder="urlPdf"
+            name="urlPdf"
+            onChange={formChangeHandler}
+            value={formValues.urlPdf}
+            />
+            </Form.Field>
+            <Form.Field>
+            <label>Temperature</label>
+                <input
+                placeholder="Temperature"
+                name="Temperature"
+                onChange={formChangeHandler}
+                value={formValues.Temperature}
+                />
+                </Form.Field>
+                <Form.Field>
+                <label>hauteurAdulte</label>
+                <input
+    placeholder="hauteurAdulte"
+    name="hauteurAdulte"
+    onChange={formChangeHandler}
+    value={formValues.hauteurAdulte}
+    />
+    </Form.Field>
+    <Form.Field>
+    <label>hauteurAdulte</label>
+    <input
+    placeholder="largeurAdulte"
+    name="largeurAdulte"
+    onChange={formChangeHandler}
+    value={formValues.hauteurAdulte}
+    />
+    </Form.Field>
+    <Form.Field>
+    <label>startFloraison</label>
+    <input
+    placeholder="startFloraison"
+    name="startFloraison"
+    onChange={formChangeHandler}
+    value={formValues.startFloraison}
+    />
+    </Form.Field>
+    <Form.Field>
+    <label>endFloraison</label>
+    <input
+    placeholder="endFloraison"
+    name="endFloraison"
+    onChange={formChangeHandler}
+    value={formValues.startFloraison}
+    />
+    </Form.Field>
+    <Form.Field>
+    <label>sol</label>
+    <input
+    placeholder="sol"
+    name="sol"
+    onChange={formChangeHandler}
+    value={formValues.startFloraison}
+    />
+    </Form.Field>
+    <Form.Field>
+    <label>exposition</label>
+    <input
+    placeholder="exposition"
+    name="exposition"
+    onChange={formChangeHandler}
+    value={formValues.exposition}
+    />
+    </Form.Field>
+
+
           <Form.Field>
             <label>Description courte</label>
             <input
@@ -206,7 +280,7 @@ const CategoryInformations = ({formChangeHandler,selectChangeHandler,formValues,
 
 
 const ImagesDropZone = ({onDropHandler}) => {
-  
+
   const [bond, state] = useDropArea({
     onFiles: files => onDropHandler(files)
   });
@@ -232,7 +306,7 @@ const ImagesDropZone = ({onDropHandler}) => {
 };
 
 const ImagesDisplay = ({cards,moveCard,findCard,updateActiveIndicator,updateDeletedIndicator,updateKeyIndicator}) => {
-     
+
   const [, drop] = useDrop({ accept: ItemTypes.PIC });
 
   // console.log('cards');
@@ -246,13 +320,13 @@ const ImagesDisplay = ({cards,moveCard,findCard,updateActiveIndicator,updateDele
       <Card.Group ref={drop} itemsPerRow={3}>
         {
           cards.map((file) => (
-            <ImagePrev 
+            <ImagePrev
               id={file.id}
               key={`image${file.id}`}
               originalImg = {file.img}
               croppedImg = {file.croppedImg}
               moveCard={moveCard}
-              findCard={findCard}  
+              findCard={findCard}
               activatedSwitchHandler={updateActiveIndicator}
               deletedIconClickHandler={updateDeletedIndicator}
               updateKeyIndicator={updateKeyIndicator}
@@ -267,7 +341,7 @@ const ImagesDisplay = ({cards,moveCard,findCard,updateActiveIndicator,updateDele
     <Grid.Column width='1'></Grid.Column>
    </Grid>
   );
-  
+
 };
 
 const ImagePrev = ({file,originalImg,croppedImg,moveCard,findCard,id,activatedSwitchHandler,deletedIconClickHandler,deleted,activated,updateKeyIndicator,croppedFile}) => {
@@ -323,13 +397,13 @@ const ImagePrev = ({file,originalImg,croppedImg,moveCard,findCard,id,activatedSw
           </Grid.Row>
         </Grid>
       </Card.Content>
-      <ImageCropper 
-        updateKeyIndicator={updateKeyIndicator} 
+      <ImageCropper
+        updateKeyIndicator={updateKeyIndicator}
         id={id}
         croppedImg = {file.croppedImg}
-        src={originalImg} 
-        open={modalOpened} 
-        onClose={() => setOpenedInd(false) } 
+        src={originalImg}
+        open={modalOpened}
+        onClose={() => setOpenedInd(false) }
       />
     </div>
   );
@@ -477,7 +551,7 @@ const ProductAdmin = ({initFormData, initImgData=[], categoryId=null,productId=n
           files:files
         }
       }
-      if(categoryId) 
+      if(categoryId)
         variables={...variables, id:productId};
       addNewProduct({variables:variables});
   };
@@ -515,9 +589,9 @@ const ProductAdmin = ({initFormData, initImgData=[], categoryId=null,productId=n
         <br />
 
         {categorySelected ? (
-          <CategoryInformations 
-            checkBoxChangeHandler={checkBoxChangeHandler} 
-            formChangeHandler={formChangeHandler} 
+          <CategoryInformations
+            checkBoxChangeHandler={checkBoxChangeHandler}
+            formChangeHandler={formChangeHandler}
             formValues={formValues}
             selectChangeHandler={selectChangeHandler}
           />
@@ -537,8 +611,8 @@ const ProductAdmin = ({initFormData, initImgData=[], categoryId=null,productId=n
             </Divider>
             <br />
             {/* {!loading && result && objectsList?  */}
-            {!loading && objectsList? 
-              < ImagesDisplay   
+            {!loading && objectsList?
+              < ImagesDisplay
                 cards = {objectsList}
                 moveCard = {moveObject}
                 findCard = {findObject}
