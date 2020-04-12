@@ -7,11 +7,13 @@ import MobileBodyLayout from "./Container/BodyLayout/MobileBodyLayout";
 import Footer from "./Components/Footer/Footer";
 import useWindowSize from "./Hooks/useWindowSize";
 import {SessionProvider} from "./Session/session";
+import {isMobileOnly} from 'react-device-detect';
 
 const HomepageLayout = ({initSession = null}) => {
     const { height } = useWindowSize();
     const minHeight = height - 240;
     const minHeightString = `${minHeight}px`;
+    const padding = isMobileOnly ? 30 : 90;
 
     return (
         <>
@@ -24,7 +26,7 @@ const HomepageLayout = ({initSession = null}) => {
                     <ResponsiveContainer>
                         <Segment
                             style={{
-                                padding: "90px 0 20px 0",
+                                padding: `${padding}px 0 20px 0`,
                                 "min-height": minHeightString
                             }}
                             vertical

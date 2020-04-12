@@ -2,6 +2,7 @@ import React from "react";
 import { Menu, Container, Icon, Dropdown} from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import config from './../../config.json';
+import {removeItemsFromLS} from './../../Session/sessionHelpers';
 import {useSessionState,useSessionDispatch} from "./../../Session/session";
 
 const divStyle = {
@@ -20,16 +21,12 @@ const headerStyle = {
 
 const DesktopNavbar = React.memo(() => {
 
-    const state = useSessionState();
-    const stateDispatch = useSessionDispatch();
+    const session = useSessionState();
+    const sessionDispatch = useSessionDispatch();
 
     const logoutHandler = () => {
-      localStorage.removeItem(config.SESSION_STORAGE.AUTH_TOKEN);
-      localStorage.removeItem(config.SESSION_STORAGE.REFRESH_TOKEN);
-      localStorage.removeItem(config.SESSION_STORAGE.SUB);
-      localStorage.removeItem(config.SESSION_STORAGE.ROLE);
-      localStorage.removeItem(config.SESSION_STORAGE.PERSISTENT_CO);
-      stateDispatch({ type: "logout" });
+        removeItemsFromLS();
+      sessionDispatch({ type: "logout" });
     };
 
     return (
@@ -41,12 +38,12 @@ const DesktopNavbar = React.memo(() => {
             </Menu.Item>
               <a href="https://static.commande.schipper-horticulture.fr/Bon_de_commande.xlsx" class="downloadLink"  target="_blank" >Télécharger directement la liste des produits à renvoyer à schipper.horti@wanadoo.fr </a>
             <Menu.Menu position="right">
-              {state && state.role === 'admin' ?(<Menu.Item name="admin" as={Link} to={`/admin`}>
+              {session && session.role === 'admin' ?(<Menu.Item name="admin" as={Link} to={`/admin`}>
                 <Icon name="options" size="large" />
               </Menu.Item>):null}
               
 
-              {state?(<Menu.Item name="cart" as={Link} to={`/cart`}>
+              {session?(<Menu.Item name="cart" as={Link} to={`/cart`}>
                 <Icon name="cart" size="large" />
               </Menu.Item>):null}
 
@@ -54,10 +51,10 @@ const DesktopNavbar = React.memo(() => {
                   <Dropdown
                 item
                 icon={null}
-                trigger={state?<Icon name="user" color='teal' size="large" />:<Icon name="user outline"  size="large" />}
+                trigger={session?<Icon name="user" color='teal' size="large" />:<Icon name="user outline"  size="large" />}
               >
                 <Dropdown.Menu>
-                  {!state ? (
+                  {!session ? (
                     <>
                       <Dropdown.Item
                         icon="sign-in"

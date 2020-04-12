@@ -12,10 +12,7 @@ const ContentLayout = () => {
 
     <Switch>
 
-        <Route
-        path="/categorie/:categoryId"
-        component={() => <ShopCardGroup itemsPerRow={3}/>}
-      />
+      <Route path="/categorie/:categoryId" component={() => <ShopCardGroup />} />
       <Route path="/produit/:productId" component={() => <ProductPage />} />
       <Route path="/cart" component={() => <Cart />} />
       <HomePage />

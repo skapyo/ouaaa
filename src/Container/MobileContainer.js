@@ -25,6 +25,7 @@ class MobileContainer extends Component {
         <MobileSidebar
           onHide={this.handleSidebarHide}
           visible={sidebarOpened}
+          handleSidebarHide={this.handleSidebarHide}
         />
 
         <Sidebar.Pusher dimmed={sidebarOpened}>

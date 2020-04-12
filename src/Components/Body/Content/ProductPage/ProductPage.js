@@ -19,6 +19,7 @@ import { BreakingChangeType } from 'graphql';
 import {getImageUrl,buildQuantitySelectOptions} from './../../../../Utils/utils';
 import{useSessionState} from './../../../../Session/session';
 import cogoToast from 'cogo-toast';
+import {isMobileOnly} from 'react-device-detect';
 
 
 const headerStyle = {
@@ -214,8 +215,8 @@ const ProductPage = () => {
             <Header as='h1' style={headerStyle}>{data.product.label}</Header>
             <br />
             <br />
-            <Grid>
-                <Grid.Row>
+            <Grid stackable>
+                 <Grid.Row>
                     <Grid.Column width={11}>
                         <ImageGallery
                             items={dataToRender}
@@ -226,20 +227,70 @@ const ProductPage = () => {
                             hidden= {true}
                             slideOnThumbnailOver = {true}
                         />
+                        <Description/>
+                        <List bulleted>
+                            { data.product.conditionnement!=null && (
+                                    <List.Item>Conditionnement : {data.product.conditionnement}</List.Item>
+                        ) }
+                            { data.product.fleurie!=null && (
+                            <List.Item>Fleurie : {data.product.fleurie}</List.Item>
+                            ) }
+                            { data.product.resitance!=null && (
+                            <List.Item>Resistance : {data.product.resitance}</List.Item>
+                            ) }
+                            { data.product.couleur!=null && (
+                            <List.Item>Couleur : {data.product.couleur}</List.Item>
+                            ) }
+                            { data.product.type!=null && (
+                            <List.Item>Type : {data.product.type}</List.Item>
+                            ) }
+                            { data.product.hauteur!=null && (
+                            <List.Item>Hauteur : {data.product.hauteur}cm</List.Item>
+                            ) }
+                            { data.product.feuillage!=null && (
+                            <List.Item>Feuillage : {data.product.feuillage}</List.Item>
+                            ) }
+                            { data.product.urlPdf!=null && (
+                            <List.Item><a target="_blank" href={data.product.urlPdf}>Fiche pdf</a></List.Item>
+                            ) }
+                            { data.product.temperature!=null && (
+                            <List.Item>Temperature : {data.product.temperature}m</List.Item>
+                            ) }
+                            { data.product.hauteurAdulte!=null && (
+                            <List.Item>Hauteur Adulte : {data.product.hauteurAdulte}m</List.Item>
+                            ) }
+                            { data.product.largeurAdulte!=null && (
+                            <List.Item>Largeur Adulte : {data.product.largeurAdulte}</List.Item>
+                            ) }
+                            { data.product.startFloraison!=null && (
+                            <List.Item>Début de floraison : {data.product.startFloraison}</List.Item>
+                            ) }
+                            { data.product.endFloraison!=null && (
+                            <List.Item>Fin de floraison : {data.product.endFloraison}</List.Item>
+                            ) }
+                            { data.product.sol!=null && (
+                            <List.Item>Sol : {data.product.sol}</List.Item>
+                            ) }
+                            { data.product.exposition!=null && (
+                            <List.Item>Exposition : {data.product.exposition}</List.Item>
+                            ) }
+
+
+                        </List>
                     </Grid.Column>
                     <Grid.Column width={5}>
-                        <Sticky offset={100}>
+                        <Sticky offset={100} active={isMobileOnly?false:true}>
                             <Segment>
 
                                 <Segment floated='right' basic style={{padding:0,margin:0}}>
 
-        { session && (<Icon
+                                 { session && (<Icon
                                         name='heart'
                                         color={productLiked ? 'red':'grey'}
                                         size='large'
 
                                     />
-        )}
+                                 )}
                                 </Segment>
 
                                 <Form onSubmit={formSubmitHandler}>
@@ -311,60 +362,6 @@ const ProductPage = () => {
                     </Grid.Column>
                 </Grid.Row>
 
-                <Description/>
-        <Grid.Row>
-            <List bulleted>
-            { data.product.conditionnement!=null && (
-                    <List.Item>Conditionnement : {data.product.conditionnement}</List.Item>
-        ) }
-            { data.product.fleurie!=null && (
-                    <List.Item>Fleurie : {data.product.fleurie}</List.Item>
-        ) }
-                    { data.product.resitance!=null && (
-                            <List.Item>Resistance : {data.product.resitance}</List.Item>
-                ) }
-                    { data.product.couleur!=null && (
-                            <List.Item>Couleur : {data.product.couleur}</List.Item>
-                ) }
-                    { data.product.type!=null && (
-                            <List.Item>Type : {data.product.type}</List.Item>
-                ) }
-                { data.product.hauteur!=null && (
-                        <List.Item>Hauteur : {data.product.hauteur}cm</List.Item>
-                ) }
-                { data.product.feuillage!=null && (
-                <List.Item>Feuillage : {data.product.feuillage}</List.Item>
-                ) }
-                { data.product.urlPdf!=null && (
-                <List.Item><a target="_blank" href={data.product.urlPdf}>Fiche pdf</a></List.Item>
-                ) }
-        { data.product.temperature!=null && (
-        <List.Item>Temperature : {data.product.temperature}m</List.Item>
-        ) }
-        { data.product.hauteurAdulte!=null && (
-        <List.Item>Hauteur Adulte : {data.product.hauteurAdulte}m</List.Item>
-        ) }
-        { data.product.largeurAdulte!=null && (
-        <List.Item>Largeur Adulte : {data.product.largeurAdulte}</List.Item>
-        ) }
-        { data.product.startFloraison!=null && (
-        <List.Item>Début de floraison : {data.product.startFloraison}</List.Item>
-        ) }
-        { data.product.endFloraison!=null && (
-        <List.Item>Fin de floraison : {data.product.endFloraison}</List.Item>
-        ) }
-        { data.product.sol!=null && (
-        <List.Item>Sol : {data.product.sol}</List.Item>
-        ) }
-        { data.product.exposition!=null && (
-        <List.Item>Exposition : {data.product.exposition}</List.Item>
-        ) }
-
-
-            </List>
-
-        </Grid.Row>
-        <Grid.Row> </Grid.Row>
             </Grid>
         </>
     );

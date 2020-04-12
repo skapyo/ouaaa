@@ -19,6 +19,7 @@ import {getImageUrl,buildQuantitySelectOptions} from '../../../../Utils/utils';
 import { useHistory } from 'react-router-dom';
 import cogoToast from 'cogo-toast';
 import gql from "graphql-tag";
+import {isMobileOnly} from 'react-device-detect';
 
 
 const headerStyle = {
@@ -219,7 +220,7 @@ const Cart = () => {
               </Grid>
               </Grid.Column>
               <Grid.Column width={5}>
-                  <Sticky offset={100}>
+                    <Sticky offset={100} active={isMobileOnly?false:true}>
                     <Segment>
                       <Header as='h1' style={StrickyHeaderStyle}>Résumé de la commande:</Header>
                       <br/>

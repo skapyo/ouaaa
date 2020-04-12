@@ -18,7 +18,7 @@ const headerStyle = {
   color: "#009C95"
 };
 
-const ShopCardGroup = React.memo( ({itemsPerRow}) => {
+const ShopCardGroup = React.memo( ({itemsPerRow=3}) => {
 
   const {categoryId} = useParams();
 
@@ -49,9 +49,9 @@ const ShopCardGroup = React.memo( ({itemsPerRow}) => {
         return {...product,img:img }
       }))
     }
-  },[loading]);
-    
-  if (loadingGlobalState)
+},[loading,addListener,changeListenerValue,data]);
+
+if (loadingGlobalState)
     return <Loader midHeightString={midHeightString} />;
 
   if (error) 
@@ -63,8 +63,8 @@ const ShopCardGroup = React.memo( ({itemsPerRow}) => {
       <Header as='h1' style={headerStyle}>{data.category.label}</Header>
       <br />
       <br />
-      <Card.Group itemsPerRow={itemsPerRow}>
-        {dataToRender.map((product) => (
+    <Card.Group itemsPerRow={itemsPerRow} stackable>
+       {dataToRender.map((product) => (
           <ShopCard 
             product = {product}
           />

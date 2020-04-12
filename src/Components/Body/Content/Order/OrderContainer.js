@@ -26,6 +26,6 @@ const OrderContainer = () => {
         />
     );
 
-}
+};
 
 export default OrderContainer;

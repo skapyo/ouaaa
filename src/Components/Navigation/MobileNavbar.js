@@ -25,7 +25,7 @@ const MobileNavbar = ({ toggleHandler }) => {
                 <Icon name="sidebar" />
             </Menu.Item>
             <Menu.Item as={Link} to={`/`} header style={headerStyle}>
-                L'atelier d'Elisabeth
+                Schipper Horticulture
             </Menu.Item>
         </Menu>
     );

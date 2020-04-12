@@ -19,6 +19,7 @@ import useWindowSize from '../../../../Hooks/useWindowSize';
 import Loader from '../../../Loader/Loader';
 import useLoaderState from '../../../../Hooks/useLoaderState';
 import {getImageUrl} from '../../../../Utils/utils';
+import {isMobileOnly} from 'react-device-detect';
 
 
 const headerStyle = {
@@ -151,7 +152,7 @@ const Order = ({ data,loading,error,refetch }) => {
               </Grid>
               </Grid.Column>
               <Grid.Column width={5}>
-                  <Sticky offset={100}>
+                <Sticky offset={100} active={isMobileOnly?false:true}>
                       <Segment>
                         <Header as='h1' style={StrickyHeaderStyle}>Résumé de la commande:</Header>
                         {/* <br/> */}
