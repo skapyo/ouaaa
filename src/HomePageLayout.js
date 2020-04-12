@@ -32,7 +32,7 @@ const HomepageLayout = ({initSession = null}) => {
                             <DesktopBodyLayout />
                             <MobileBodyLayout />
                         </Segment>
-                        <Footer />
+
                     </ResponsiveContainer>
                 </SessionProvider>
             </Router>

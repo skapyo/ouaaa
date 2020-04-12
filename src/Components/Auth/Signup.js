@@ -148,6 +148,7 @@ const Signup = () => {
                             error={ buttonDisabledInd && buttonHovered && formControlMessage.find(e => e.field == "email") != null ? true:false}
                         />
                         <Form.Field width={8}
+                             required
                             control={Input}
                             label='Numéro de téléphone'
                             placeholder="Numéro de téléphone"

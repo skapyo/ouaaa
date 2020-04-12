@@ -230,22 +230,31 @@ const ProductPage = () => {
                     <Grid.Column width={5}>
                         <Sticky offset={100}>
                             <Segment>
+
                                 <Segment floated='right' basic style={{padding:0,margin:0}}>
-                                    <Icon
+
+        { session && (<Icon
                                         name='heart'
                                         color={productLiked ? 'red':'grey'}
                                         size='large'
 
                                     />
+        )}
                                 </Segment>
+
                                 <Form onSubmit={formSubmitHandler}>
                                     <Header onClick={onHeartClickHandler} as='h1' style={StrickyHeaderStyle}>{data.product.label}</Header>
                                     <br/>
-                                    {data.product.isUnlimited ?
+                                    {false &&(data.product.isUnlimited ?
                                         'Quantité illimitée'
                                         :
-                                        `Quantité restante: ${data.product.qavailable} pièces`
+                                        `Quantité restante: ${data.product.qavailable} pièces`)
                                     }
+                                        {data.product.price!=null ?
+                                            'Prix Unitaire : '+data.product.price+'€'
+                                                :
+                                                'Pas de prix disponible'
+                                        }
                                     <br/>
                                     <br/>
                                     <br/>
@@ -321,7 +330,7 @@ const ProductPage = () => {
                             <List.Item>Type : {data.product.type}</List.Item>
                 ) }
                 { data.product.hauteur!=null && (
-                        <List.Item>Hauteur : {data.product.hauteur}</List.Item>
+                        <List.Item>Hauteur : {data.product.hauteur}cm</List.Item>
                 ) }
                 { data.product.feuillage!=null && (
                 <List.Item>Feuillage : {data.product.feuillage}</List.Item>
@@ -330,10 +339,10 @@ const ProductPage = () => {
                 <List.Item><a target="_blank" href={data.product.urlPdf}>Fiche pdf</a></List.Item>
                 ) }
         { data.product.temperature!=null && (
-        <List.Item>Temperature : {data.product.temperature}</List.Item>
+        <List.Item>Temperature : {data.product.temperature}m</List.Item>
         ) }
         { data.product.hauteurAdulte!=null && (
-        <List.Item>Hauteur Adulte : {data.product.hauteurAdulte}</List.Item>
+        <List.Item>Hauteur Adulte : {data.product.hauteurAdulte}m</List.Item>
         ) }
         { data.product.largeurAdulte!=null && (
         <List.Item>Largeur Adulte : {data.product.largeurAdulte}</List.Item>

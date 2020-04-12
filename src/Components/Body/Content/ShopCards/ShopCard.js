@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import {ADD_LIKED_PRODUCT,REMOVE_LIKED_PRODUCT} from './../../../../Queries/contentQueries';
 import {useMutation} from '@apollo/react-hooks';
 import {getImageUrl} from './../../../../Utils/utils';
-
+import {useSessionState,useSessionDispatch} from "./../../../../Session/session";
 
 const CardLabel = ({isLiked,onClickHandler}) => {
   return (
@@ -30,6 +30,7 @@ const ShopCard = ({product}) => {
     );
 
   const [imageLiked, setLikedIndicator] = useState(isLiked);
+  const state = useSessionState();
 
   const onClickHandler = () => {
     if(!imageLiked) addLikedPoduct();
@@ -50,7 +51,9 @@ const ShopCard = ({product}) => {
     };
   return (
     <Card >
+      {state && (
       <CardLabel isLiked={imageLiked} onClickHandler={onClickHandler}  />
+)}
       <Image   style={imageCss}
         as = {Link}
         to = {`/produit/${id}`}

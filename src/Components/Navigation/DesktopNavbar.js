@@ -75,12 +75,6 @@ const DesktopNavbar = React.memo(() => {
                   ) : (
                     <>
                       <Dropdown.Item 
-                        icon="user" 
-                        text="Mon compte" 
-                        as={Link} 
-                        to={`/account`}
-                      />
-                      <Dropdown.Item 
                         icon="truck" 
                         text="Mes commandes" 
                         as={Link} 

@@ -149,6 +149,7 @@ const Cart = () => {
           addListener(index);
           img.onload = () => changeListenerValue(index,false);
           img.src = getImageUrl(item.product.pictures[0].croppedPicturePath);
+          img.onerror = () => changeListenerValue(index,false);
         }else{
             addListener(index);
             changeListenerValue(index,false);
