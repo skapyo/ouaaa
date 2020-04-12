@@ -51,6 +51,14 @@ const ModifyProductAdmin = () => {
             type:data.product.type,
             hauteur:data.product.hauteur,
             feuillage:data.product.feuillage,
+            urlPdf:data.product.urlPdf,
+            temperature:data.product.temperature,
+            hauteurAdulte:data.product.hauteurAdulte,
+            largeurAdulte:data.product.largeurAdulte,
+            startFloraison:data.product.startFloraison,
+            endFloraison:data.product.endFloraison,
+            sol:data.product.sol,
+            exposition:data.product.exposition,
             nb_products:data.product.quantity
         };
 

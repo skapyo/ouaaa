@@ -509,6 +509,14 @@ const ProductAdmin = ({initFormData, initImgData=[], categoryId=null,productId=n
           type:formValues.type,
           hauteur:formValues.hauteur,
           feuillage:formValues.feuillage,
+            urlPdf:formValues.urlPdf,
+            temperature:formValues.temperature,
+            hauteurAdulte:formValues.hauteurAdulte,
+            largeurAdulte:formValues.largeurAdulte,
+            startFloraison:formValues.startFloraison,
+            endFloraison:formValues.endFloraison,
+            sol:formValues.sol,
+            exposition:formValues.exposition,
           files:files
         };
       } else { // if it's a modify mutation
@@ -548,6 +556,14 @@ const ProductAdmin = ({initFormData, initImgData=[], categoryId=null,productId=n
           type:formValues.type,
           hauteur:formValues.hauteur,
           feuillage:formValues.feuillage,
+            urlPdf:formValues.urlPdf,
+            temperature:formValues.temperature,
+            hauteurAdulte:formValues.hauteurAdulte,
+            largeurAdulte:formValues.largeurAdulte,
+            startFloraison:formValues.startFloraison,
+            endFloraison:formValues.endFloraison,
+            sol:formValues.sol,
+            exposition:formValues.exposition,
           files:files
         }
       }
