@@ -68,18 +68,18 @@ const OrdersAdmin = () => {
                             <Table.Cell>{order.id}</Table.Cell>
                             <Table.Cell><Moment format="YYYY-MM-DD HH:mm">{new Date(order.createdAt)}</Moment></Table.Cell>
                             <Table.Cell>
-                            <List bulleted>
+                            <ul>
                                     {order.items.map((item) => (
-                                    <List.Item>{`${item.product.label}: ${item.quantity} pièces * ${item.product.price}€` }</List.Item>
+                                    <li>{`${item.product.label}: ${item.quantity} pièces * ${item.product.price}€` }</li>
                             ))
                             }
-                            </List>
+                            </ul>
                             </Table.Cell>
                             <Table.Cell>
-                                <List>
-                                    <List.Item> {order.user.surname} {order.user.lastname}</List.Item>
-                                     <List.Item> {order.user.email} {order.user.phone}</List.Item>
-                                </List>
+                                <ul>
+                                    <li> {order.user.surname} {order.user.lastname}</li>
+                                     <li> {order.user.email} {order.user.phone}</li>
+                                </ul>
                             </Table.Cell>
                             <Table.Cell>{order.totalprice}</Table.Cell>
                         </Table.Row>

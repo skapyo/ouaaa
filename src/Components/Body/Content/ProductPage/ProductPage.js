@@ -228,55 +228,55 @@ const ProductPage = () => {
                             slideOnThumbnailOver = {true}
                         />
                         <Description/>
-                        <List bulleted>
+                        <ul>
                             { data.product.conditionnement!=null && (
-                                    <List.Item>Conditionnement : {data.product.conditionnement}</List.Item>
+                                   <li>Conditionnement : {data.product.conditionnement}</li>
                         ) }
                             { data.product.fleurie!=null && (
-                            <List.Item>Fleurie : {data.product.fleurie}</List.Item>
+                            <li>Fleurie : {data.product.fleurie}</li>
                             ) }
                             { data.product.resitance!=null && (
-                            <List.Item>Resistance : {data.product.resitance}</List.Item>
+                            <li>Resistance : {data.product.resitance}</li>
                             ) }
                             { data.product.couleur!=null && (
-                            <List.Item>Couleur : {data.product.couleur}</List.Item>
+                            <li>Couleur : {data.product.couleur}</li>
                             ) }
                             { data.product.type!=null && (
-                            <List.Item>Type : {data.product.type}</List.Item>
+                            <li>Type : {data.product.type}</li>
                             ) }
                             { data.product.hauteur!=null && (
-                            <List.Item>Hauteur : {data.product.hauteur}cm</List.Item>
+                            <li>Hauteur : {data.product.hauteur}cm</li>
                             ) }
                             { data.product.feuillage!=null && (
-                            <List.Item>Feuillage : {data.product.feuillage}</List.Item>
+                            <li>Feuillage : {data.product.feuillage}</li>
                             ) }
                             { data.product.urlPdf!=null && (
-                            <List.Item><a target="_blank" href={data.product.urlPdf}>Fiche pdf</a></List.Item>
+                            <li><a target="_blank" href={data.product.urlPdf}>Fiche pdf</a></li>
                             ) }
                             { data.product.temperature!=null && (
-                            <List.Item>Temperature : {data.product.temperature}m</List.Item>
+                            <li>Temperature : {data.product.temperature}m</li>
                             ) }
                             { data.product.hauteurAdulte!=null && (
-                            <List.Item>Hauteur Adulte : {data.product.hauteurAdulte}m</List.Item>
+                            <li>Hauteur Adulte : {data.product.hauteurAdulte}m</li>
                             ) }
                             { data.product.largeurAdulte!=null && (
-                            <List.Item>Largeur Adulte : {data.product.largeurAdulte}</List.Item>
+                            <li>Largeur Adulte : {data.product.largeurAdulte}</li>
                             ) }
                             { data.product.startFloraison!=null && (
-                            <List.Item>Début de floraison : {data.product.startFloraison}</List.Item>
+                            <li>Début de floraison : {data.product.startFloraison}</li>
                             ) }
                             { data.product.endFloraison!=null && (
-                            <List.Item>Fin de floraison : {data.product.endFloraison}</List.Item>
+                            <li>Fin de floraison : {data.product.endFloraison}</li>
                             ) }
                             { data.product.sol!=null && (
-                            <List.Item>Sol : {data.product.sol}</List.Item>
+                            <li>Sol : {data.product.sol}</li>
                             ) }
                             { data.product.exposition!=null && (
-                            <List.Item>Exposition : {data.product.exposition}</List.Item>
+                            <li>Exposition : {data.product.exposition}</li>
                             ) }
 
 
-                        </List>
+                        </ul>
                     </Grid.Column>
                     <Grid.Column width={5}>
                         <Sticky offset={100} active={isMobileOnly?false:true}>
