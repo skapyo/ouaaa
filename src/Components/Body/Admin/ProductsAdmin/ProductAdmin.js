@@ -189,8 +189,8 @@ const CategoryInformations = ({formChangeHandler,selectChangeHandler,formValues,
             <Form.Field>
             <label>Temperature</label>
                 <input
-                placeholder="Temperature"
-                name="Temperature"
+                placeholder="10.0"
+                name="Température gel"
                 onChange={formChangeHandler}
                 value={formValues.Temperature}
                 />

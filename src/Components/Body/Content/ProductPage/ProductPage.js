@@ -254,13 +254,13 @@ const ProductPage = () => {
                             <li><a target="_blank" href={data.product.urlPdf}>Fiche pdf</a></li>
                             ) }
                             { data.product.temperature!=null && (
-                            <li>Temperature : {data.product.temperature}m</li>
+                            <li>Température gel : {data.product.temperature}&deg;</li>
                             ) }
                             { data.product.hauteurAdulte!=null && (
-                            <li>Hauteur Adulte : {data.product.hauteurAdulte}m</li>
+                            <li>Hauteur adulte : {data.product.hauteurAdulte}m</li>
                             ) }
                             { data.product.largeurAdulte!=null && (
-                            <li>Largeur Adulte : {data.product.largeurAdulte}</li>
+                            <li>Largeur adulte : {data.product.largeurAdulte}m</li>
                             ) }
                             { data.product.startFloraison!=null && (
                             <li>Début de floraison : {data.product.startFloraison}</li>
