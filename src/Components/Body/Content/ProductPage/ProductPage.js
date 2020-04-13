@@ -37,7 +37,7 @@ const StrickyHeaderStyle = {
 };
 
 const formValuesInit = {
-    quantity:''
+    quantity:1
 };
 
 const ProductPage = () => {
@@ -77,6 +77,7 @@ const ProductPage = () => {
         {variables:{productId:productId,quantity:formValues.quantity}}
     );
 
+
     const formChangeHandler = (e,data) => {
         setFormValue({ ...formValues, [data.name]: data.value });
     };
@@ -92,6 +93,7 @@ const ProductPage = () => {
     };
 
     useEffect(() => {
+
         if(formValues) {
             if(isNumber(formValues.quantity) && formValues.quantity != 0 ) setListenerValue(true);
             else setListenerValue(false);
@@ -314,20 +316,24 @@ const ProductPage = () => {
                                             (<Form.Field fluid >
                                                 <Input
                                                     name='quantity'
+                                                    label='Quantité'
+
                                                     fluid
                                                     placeholder='Quantité'
                                                     onChange={formChangeHandler}
-                                                    value={formValues.name}
+                                                    value={formValues.quantity}
                                                 />
                                             </Form.Field>)
                                             :
                                             (<Form.Field fluid >
                                                 <Select
                                                     name='quantity'
+
+                                                    label='Quantité'
                                                     fluid
                                                     placeholder='Quantité'
                                                     onChange={formChangeHandler}
-                                                    value={formValues.name}
+                                                    value={formValues.quantity}
                                                     options={selectOptions}
                                                 />
                                             </Form.Field>)
