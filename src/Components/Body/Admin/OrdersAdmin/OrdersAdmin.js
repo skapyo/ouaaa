@@ -26,6 +26,7 @@ const GET_ORDERS_LIST = gql`
                     price
                 }
             },
+            status,
             totalprice
         }
     }
@@ -56,6 +57,7 @@ const OrdersAdmin = () => {
                     <Table.Row>
                         <Table.HeaderCell width={1}>ID</Table.HeaderCell>
                         <Table.HeaderCell width={3}>Date</Table.HeaderCell>
+                        <Table.HeaderCell width={2}>Statut</Table.HeaderCell>
                         <Table.HeaderCell width={6}>Articles</Table.HeaderCell>
                         <Table.HeaderCell width={5}>Utilisateur</Table.HeaderCell>
                         <Table.HeaderCell width={2}>Prix total</Table.HeaderCell>
@@ -67,6 +69,7 @@ const OrdersAdmin = () => {
                         <Table.Row>
                             <Table.Cell>{order.id}</Table.Cell>
                             <Table.Cell><Moment format="YYYY-MM-DD HH:mm">{new Date(order.createdAt)}</Moment></Table.Cell>
+                            <Table.Cell>{order.status}</Table.Cell>
                             <Table.Cell>
                             <ul>
                                     {order.items.map((item) => (
