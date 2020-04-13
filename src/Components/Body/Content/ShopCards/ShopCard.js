@@ -68,7 +68,9 @@ const ShopCard = ({product}) => {
       </Card.Content>
       <Card.Content extra textAlign="center">
         <Card.Header>
-          <span className="prix">{`${price} €`}</span>
+        {price!=null && (
+        <span className="prix">{`${price} €`}</span>
+        )}
         </Card.Header>    
       </Card.Content>
     </Card>
