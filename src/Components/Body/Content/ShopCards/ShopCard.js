@@ -46,15 +46,12 @@ const ShopCard = ({product}) => {
     if(remData && !remError)
       setLikedIndicator(false);
   },[remData]);
-    const imageCss = {
-        "image-orientation":"from-image"
-    };
   return (
     <Card >
       {state && (
       <CardLabel isLiked={imageLiked} onClickHandler={onClickHandler}  />
 )}
-      <Image   style={imageCss}
+      <Image
         as = {Link}
         to = {`/produit/${id}`}
         src={img.src}  
