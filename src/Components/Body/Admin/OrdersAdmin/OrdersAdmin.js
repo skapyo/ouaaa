@@ -66,7 +66,8 @@ const OrdersAdmin = () => {
 
                 <Table.Body>
                     {objectsList.map((order) => (
-                        <Table.Row>
+
+                            <Table.Row positive = {order.status == "transmise" ?true:false}  negative = {order.status != "transmise" ?true:false}>
                             <Table.Cell>{order.id}</Table.Cell>
                             <Table.Cell><Moment format="YYYY-MM-DD HH:mm">{new Date(order.createdAt)}</Moment></Table.Cell>
                             <Table.Cell>{order.status}</Table.Cell>
