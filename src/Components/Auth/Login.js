@@ -64,12 +64,12 @@ const Login = () => {
             setButtonDisbledInd(true);
         }
 
-    },[formValues])
+    },[formValues]);
 
     useEffect(() => {
         if(error) 
             setLoadingState(false);
-    },[error])
+    },[error]);
 
     useEffect(() => {
         if(data && data.login) {
@@ -84,7 +84,7 @@ const Login = () => {
             });
             setLoadingState(false);
         }
-    },[data]);
+    },[data,formValues.persistentConnection,stateDispatch]);
 
     return (
     

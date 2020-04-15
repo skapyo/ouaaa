@@ -30,7 +30,7 @@ const headerStyle = {
 };
 
 const StrickyHeaderStyle = {
-    "font-family": "Ubuntu', sans-serif",
+    "font-famiselectOptionsly": "Ubuntu', sans-serif",
     "font-size": "20px",
     "font-weight": "lighter",
     color: "#009C95"
