@@ -118,7 +118,7 @@ export const GET_PRODUCT = gql`
 
 export const MODIFY_CATEGORY_INFORMATIONS= gql`
   mutation modifyCategorysInformationsMutation($categorys: [InputCategoryType]) {
-    modifyCategorysInformations(categorys: $categorys) 
+    modifyCategorysInformations(category: $categorys) 
   }
 `;
 
