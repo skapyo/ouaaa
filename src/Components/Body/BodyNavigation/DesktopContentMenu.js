@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { Menu,Header } from "semantic-ui-react";
 import {useQuery} from '@apollo/react-hooks';
-import {GET_CATEGORYS_LIST} from './../../../Queries/contentQueries';
+import {GET_CATEGORIES_LIST} from './../../../Queries/contentQueries';
 import { Link } from "react-router-dom";
 
 const DesktopContentMenu = () => {
   const [activeItem, setActiveitem] = useState("home");
   const handleItemClick = (e, { name }) => setActiveitem(name);
 
-  const {data, loading, error} = useQuery(GET_CATEGORYS_LIST);
+  const {data, loading, error} = useQuery(GET_CATEGORIES_LIST);
 
   if (loading)
     return 'loading';
@@ -21,7 +21,7 @@ const DesktopContentMenu = () => {
         <Menu.Item>
           <Menu.Header>Les articles</Menu.Header>
           <Menu.Menu>
-            {data.categorys.filter(category => category.activated == true).map((category) => (
+            {data.categories.filter(category => category.activated == true).map((category) => (
               <Menu.Item
               as={Link} 
               to={`/categorie/${category.id}`}

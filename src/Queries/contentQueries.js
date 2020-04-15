@@ -1,8 +1,8 @@
 import gql from "graphql-tag";
 
-export const GET_CATEGORYS_LIST = gql`
+export const GET_CATEGORIES_LIST = gql`
 {
-  categorys {
+  categories {
     id,
     label, 
     description,
@@ -117,8 +117,8 @@ export const GET_PRODUCT = gql`
 
 
 export const MODIFY_CATEGORY_INFORMATIONS= gql`
-  mutation modifyCategorysInformationsMutation($categorys: [InputCategoryType]) {
-    modifyCategorysInformations(category: $categorys) 
+  mutation modifyCategorysInformationsMutation($categories: [InputCategoryType]) {
+    modifyCategorysInformations(category: $categories) 
   }
 `;
 

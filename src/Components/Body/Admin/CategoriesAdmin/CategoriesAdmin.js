@@ -6,7 +6,7 @@ import Backend from "react-dnd-html5-backend";
 import update from "immutability-helper";
 
 import { useQuery ,useMutation} from '@apollo/react-hooks';
-import {GET_CATEGORYS_LIST,MODIFY_CATEGORY_INFORMATIONS,ADD_NEW_CATEGORY} from '../../../../Queries/contentQueries';
+import {GET_CATEGORIES_LIST,MODIFY_CATEGORY_INFORMATIONS,ADD_NEW_CATEGORY} from '../../../../Queries/contentQueries';
 
 import { useAlert } from 'react-alert'
 
@@ -174,7 +174,7 @@ const CategoriesAdmin = ({initData,client,refetch}) => {
     const cardsValuesUpdated = cards.map((card, index) => {
       return {...card, position:index};
     });
-    saveChanges({ variables:{categorys:cardsValuesUpdated}})
+    saveChanges({ variables:{categories:cardsValuesUpdated}})
   };
   
   useEffect(() => {
@@ -257,7 +257,7 @@ const CategoriesAdmin = ({initData,client,refetch}) => {
 
 const InitComponent = (props) => {
 
-  const { loading, error, data, refetch } = useQuery(GET_CATEGORYS_LIST,{ fetchPolicy: "network-only" });
+  const { loading, error, data, refetch } = useQuery(GET_CATEGORIES_LIST,{ fetchPolicy: "network-only" });
 
   if (loading) return null;
   if (error) return null;
@@ -265,7 +265,7 @@ const InitComponent = (props) => {
   let dataWithoutTypename = null; 
   if(data) {
     const omitTypename = (key, value) => (key === '__typename' ? undefined : value)
-    dataWithoutTypename = JSON.parse(JSON.stringify(data.categorys), omitTypename)
+    dataWithoutTypename = JSON.parse(JSON.stringify(data.categories), omitTypename)
   }
 
   return(

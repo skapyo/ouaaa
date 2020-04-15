@@ -6,12 +6,12 @@ import {useSessionState,useSessionDispatch} from "./../../Session/session";
 import {removeItemsFromLS} from './../../Session/sessionHelpers';
 import Hidden from './../../Hoc/HiddenComponent';
 import {useQuery} from '@apollo/react-hooks';
-import {GET_CATEGORYS_LIST} from './../../Queries/contentQueries';
+import {GET_CATEGORIES_LIST} from './../../Queries/contentQueries';
 import cogoToast from 'cogo-toast';
 
 const MobileCategoriesMenuItems = ({backButtonHandler,onClickHandler}) => {
 
-    const {data, loading, error} = useQuery(GET_CATEGORYS_LIST);
+    const {data, loading, error} = useQuery(GET_CATEGORIES_LIST);
 
     if(error) {
         cogoToast.error("Il y a eu une erreur pendant le chargement de la liste des catégories...",{position:'top-right'});
@@ -30,7 +30,7 @@ const MobileCategoriesMenuItems = ({backButtonHandler,onClickHandler}) => {
         Menu principal
     </Menu.Item>
 
-    {data.categorys.filter((category) => category.activated).map((category) => (
+    {data.categories.filter((category) => category.activated).map((category) => (
     <Menu.Item
     as={Link}
         to={`/categorie/${category.id}`}
