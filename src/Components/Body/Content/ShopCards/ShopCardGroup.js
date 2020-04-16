@@ -9,7 +9,7 @@ import useWindowSize from './../../../../Hooks/useWindowSize';
 import {getImageUrl} from './../../../../Utils/utils';
 import gql from "graphql-tag";
 import { useHistory } from 'react-router-dom';
-
+import { animateScroll as scroll} from 'react-scroll'
 const headerStyle = {
   "font-family": "Ubuntu', sans-serif",
   "font-size": "30px",
@@ -42,10 +42,10 @@ const GET_CATEGORY_LABEL = gql`
         }
     }
 `;
-
+const myRef  = React.createRef();
 
 const ShopCardGroup = ({itemsPerRow=3,limit=30}) => {
-
+    var myRef  = React.createRef();
     const {categoryId,pageNumber} = useParams();
     const history = useHistory();
 
@@ -84,6 +84,7 @@ const ShopCardGroup = ({itemsPerRow=3,limit=30}) => {
     /* Pagination change callback */
     const onPageChangehandler = useCallback((_, { activePage }) => {
         history.push(`/categorie/${categoryId}/page/${activePage}`);
+        scroll.scrollTo(0)
     },[history,categoryId]);
 
     /* reset offset when page number / limit change */

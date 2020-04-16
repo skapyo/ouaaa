@@ -15,6 +15,7 @@ const ContentLayout = () => {
           <Route path="/categorie/:categoryId/" component={ShopCardGroup} />
           <Route path="/produit/:productId" component={ProductPage} />
           <Route path="/cart" component={Cart} />
+          <HomePage />
       </Switch>
   );
 };

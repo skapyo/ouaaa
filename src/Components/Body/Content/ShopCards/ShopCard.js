@@ -1,6 +1,6 @@
 import React, {useState,useEffect} from "react";
 import {
-    Image,
+    Image as ImageSemantic,
     Card,
     Icon,
     Grid,
@@ -36,7 +36,7 @@ const formValuesInit = {
 const margin = {
     "margin-top": "-1em"
 };
-const ShopCard = ({product}) => {
+const ShopCard = ({product,pageNumber}) => {
 
     const {id,label, price,isLiked} = product;
 
@@ -127,9 +127,12 @@ const ShopCard = ({product}) => {
       {state && (
       <CardLabel isLiked={imageLiked} onClickHandler={onClickHandler}  />
 )}
-      <Image
+      <ImageSemantic
         as = {Link}
-        to = {`/produit/${id}`}
+        to ={{
+            pathname:`/produit/${id}`,
+            state:{categoryPageNumber : pageNumber}
+        }}
         src={getImageUrl(product.pictures!=null && product.pictures[0]!=null ?product.pictures[0].croppedPicturePath:null)}
       />
       <Card.Content 
@@ -153,8 +156,10 @@ const ShopCard = ({product}) => {
                             animated='horizontal'
                             name='ss'
                             as = {Link}
-                            to = {`/produit/${id}`}
-
+                            to = {{
+                                pathname:`/produit/${id}`,
+                                state:{categoryPageNumber : pageNumber}
+                            }}
                         >
                             <Button.Content hidden  style={{"margin-top": "-1em"}}>
                                 En savoir plus
