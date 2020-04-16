@@ -439,7 +439,7 @@ mutation modifyProductsDisplayMutation($categoryId:String, $productsDisplay: [In
 
 export const GET_PRODUCTS_BY_CATEGORY_ADMIN = gql`
   query getProductsByCategoryAdmin($categoryId: String!) {
-    productsQuery(categoryId:$categoryId) {
+      productsAdminQuery(categoryId:$categoryId) {
       id,
       label,
       short_description,

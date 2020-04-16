@@ -38,22 +38,30 @@ const margin = {
 };
 const ShopCard = ({product}) => {
 
-  const {id,img,label, price,isLiked,isUnlimited} = product;
+    const {id,label, price,isLiked} = product;
+
+    const [loading, setLoadingInd] = useState(true);
+    const [imageLiked, setLikedIndicator] = useState(isLiked);
+
 //debugger;
-  const [addLikedPoduct,{data:addData,loading:addLoading,error:addError}] = useMutation(
-    ADD_LIKED_PRODUCT,
-    {variables:{productId:id}}
+    const [addLikedPoduct,{data:addData,error:addError}] = useMutation(
+        ADD_LIKED_PRODUCT,
+        {variables:{productId:id}}
     );
 
-  const [removeLikedPoduct,{data:remData,loading:remLoading,error:remError}] = useMutation(
-    REMOVE_LIKED_PRODUCT,
-    {variables:{productId:id}}
+    const [removeLikedPoduct,{data:remData,error:remError}] = useMutation(
+        REMOVE_LIKED_PRODUCT,
+        {variables:{productId:id}}
     );
+    /* if product change: reset loading indicator */
+    useEffect(() => {
+        setLoadingInd(true);
+    },[product]);
+
     const [selectOptions,setSelectOptions] = useState();
     const [submitListener, setListenerValue] = useState(false);
     const [cartLoading, setCartLoadingInd] = useState(false);
     const [formValues,setFormValue] = useState(formValuesInit);
-  const [imageLiked, setLikedIndicator] = useState(isLiked);
   const state = useSessionState();
     const formChangeHandler = (e,data) => {
         setFormValue({ ...formValues, [data.name]: data.value });
@@ -97,15 +105,23 @@ const ShopCard = ({product}) => {
 
     },[cartActionError]);
 
+    /* set liked ind to true */
     useEffect(() =>  {
-    if(addData && !addError)
-      setLikedIndicator(true);
-  },[addData]);
+        if(addData && !addError)
+            setLikedIndicator(true);
+    },[addData,addError]);
 
-  useEffect(() =>  {
-    if(remData && !remError)
-      setLikedIndicator(false);
-  },[remData]);
+    /* set liked ind to false */
+    useEffect(() =>  {
+        if(remData && !remError)
+            setLikedIndicator(false);
+    },[remData,remError]);
+
+    /* reset liked state if prop changes */
+    useEffect(() => {
+        setLikedIndicator(isLiked);
+    },[isLiked]);
+
   return (
     <Card >
       {state && (
@@ -114,7 +130,7 @@ const ShopCard = ({product}) => {
       <Image
         as = {Link}
         to = {`/produit/${id}`}
-        src={img.src}  
+        src={getImageUrl(product.pictures!=null && product.pictures[0]!=null ?product.pictures[0].croppedPicturePath:null)}
       />
       <Card.Content 
         textAlign="center"

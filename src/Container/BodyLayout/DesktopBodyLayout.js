@@ -109,27 +109,29 @@ const DesktopBodyLayoutWithMenu = () => {
       <Ref innerRef={contextRef}>
         <Grid.Row>
           <Grid.Column width={4}>
-            <Sticky  context={contextRef} offset={100} position='left'>
+            <Sticky context={contextRef} offset={100} position='left'>
               <Switch>
-                <PrivateAdminRoute
-                  path="/admin"
-                  component={() => <DesktopAdminContentMenu />}
-                />
-                <Route path="/" component={() => <DesktopContentMenu />} />
+
+                <PrivateAdminRoute path="/admin">
+                  <DesktopAdminContentMenu />
+                </PrivateAdminRoute>/>
+
+                <Route path="/">
+                  <DesktopContentMenu />
+                </Route>
+
               </Switch>
             </Sticky>
           </Grid.Column>
           <Grid.Column width={12}>
             <Switch>
-              <PrivateAdminRoute path="/admin" component={() => <AdminLayout />} />
-              <Route
-                path="/produit"
-                component={() => <ContentLayout />}
-              />
-              <Route
-                path="/"
-                component={() => <ContentLayout />}
-              />
+              <PrivateAdminRoute path="/admin">
+                <AdminLayout />
+              </PrivateAdminRoute>
+
+              <Route path="/" >
+                <ContentLayout />
+              </Route>
             </Switch>
           </Grid.Column>
         </Grid.Row>
