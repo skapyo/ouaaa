@@ -134,7 +134,6 @@ const ShopCard = ({product,refetch}) => {
     <Card >
         {session && (<CardLabel isLiked={isLiked} onClickHandler={onClickHandler}  />)}
 
-        )}
       <ImageSemantic
         as = {Link}
         to ={{
