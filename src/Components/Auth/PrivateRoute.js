@@ -2,7 +2,8 @@ import React from 'react';
 import { Redirect, Route } from "react-router-dom";
 import ReactGA from 'react-ga';
 import { createBrowserHistory } from 'history'
-import {useSessionState} from "./../../Session/session";
+import {useSessionState} from "../../Context/Session/session";
+
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
 

@@ -3,10 +3,12 @@ import { Menu,Header } from "semantic-ui-react";
 import {useQuery} from '@apollo/react-hooks';
 import {GET_CATEGORIES_LIST} from './../../../Queries/contentQueries';
 import { Link } from "react-router-dom";
+import { useSessionState } from "../../../Context/Session/session";
 
 const DesktopContentMenu = () => {
   const [activeItem, setActiveitem] = useState("home");
   const handleItemClick = (e, { name }) => setActiveitem(name);
+  const session = useSessionState();
 
   const {data, loading, error} = useQuery(GET_CATEGORIES_LIST);
 
@@ -18,6 +20,19 @@ const DesktopContentMenu = () => {
 
   return (
     <Menu fluid vertical>
+      {session && (
+          <Menu.Item>
+            <Menu.Header>Favoris</Menu.Header>
+            <Menu.Menu>
+              <Menu.Item
+                  as={Link}
+                  to={`/favoris`}
+                  name="Mes articles favoris"
+                  active={activeItem === "Mes articles favoris"}
+                  onClick={handleItemClick} />
+            </Menu.Menu>
+          </Menu.Item>
+      )}
         <Menu.Item>
           <Menu.Header>Les articles</Menu.Header>
           <Menu.Menu>

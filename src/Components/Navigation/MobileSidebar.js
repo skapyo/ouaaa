@@ -1,20 +1,22 @@
 import React,{useState, useCallback} from "react";
 import { Menu, Sidebar } from "semantic-ui-react";
 import { Icon } from "semantic-ui-react";
-import { Link } from "react-router-dom";
-import {useSessionState,useSessionDispatch} from "./../../Session/session";
-import {removeItemsFromLS} from './../../Session/sessionHelpers';
+import { Link, useLocation } from "react-router-dom";
+import {useSessionState,useSessionDispatch} from "../../Context/Session/session";
+import {removeItemsFromLS} from '../../Context/Session/sessionHelpers';
 import Hidden from './../../Hoc/HiddenComponent';
 import {useQuery} from '@apollo/react-hooks';
 import {GET_CATEGORIES_LIST} from './../../Queries/contentQueries';
 import cogoToast from 'cogo-toast';
+import {useDeviceContext} from './../../Context/Device/device';
 
 const MobileCategoriesMenuItems = ({backButtonHandler,onClickHandler}) => {
 
     const {data, loading, error} = useQuery(GET_CATEGORIES_LIST);
+    const device = useDeviceContext();
 
     if(error) {
-        cogoToast.error("Il y a eu une erreur pendant le chargement de la liste des catégories...",{position:'top-right'});
+        cogoToast.error("Il y a eu une erreur pendant le chargement de la liste des catégories...",{position:device.toastPosition});
         backButtonHandler();
     };
 
@@ -51,6 +53,11 @@ const MobileSidebar = ({ onHide, visible,handleSidebarHide }) => {
 
     const [activeItem, setActiveitem] = useState("home");
     const [displayCategoriesMenu, setShowCategoriesMenuInd] = useState(false);
+
+    const location = useLocation();
+
+    const device = useDeviceContext();
+
     const handleItemClick = (e, { name }) => {
         setActiveitem(name);
         handleSidebarHide();
@@ -62,6 +69,7 @@ const MobileSidebar = ({ onHide, visible,handleSidebarHide }) => {
     const logoutHandler = () => {
         removeItemsFromLS();
         stateDispatch({ type: "logout" });
+        cogoToast.success("Vous êtes maintenant déconnecté(e).",{position : device.toastPosition});
     };
 
     const showCategoriesMenu = useCallback(() => {
@@ -111,7 +119,10 @@ const MobileSidebar = ({ onHide, visible,handleSidebarHide }) => {
         <>
         <Menu.Item
         as={Link}
-        to="/login"
+        to={{
+            pathname:"/login",
+            state:{from:location}
+        }}
         name="login"
         active={activeItem === "login"}
         onClick={handleItemClick}
@@ -137,7 +148,18 @@ const MobileSidebar = ({ onHide, visible,handleSidebarHide }) => {
     :
         (
         <>
-        <Menu.Item
+            <Menu.Item
+                as={Link}
+                to="/favoris"
+                name="favorites"
+                active={activeItem === "favorites"}
+                onClick={handleItemClick}
+            >
+                <Icon name="heart" />
+                Mes favoris
+            </Menu.Item>
+
+            <Menu.Item
         as={Link}
         to="/cart"
         name="cart"
@@ -160,13 +182,11 @@ const MobileSidebar = ({ onHide, visible,handleSidebarHide }) => {
     </Menu.Item>
 
 
-    <Menu.Item
-    as={Link}
-        to="/"
-        name="signout"
-        // active={activeItem === "signout"}
-        onClick={() => {logoutHandler(); handleSidebarHide();}}
-    >
+
+            <Menu.Item
+                name="signout"
+                onClick={() => {logoutHandler(); handleSidebarHide();}}
+            >
     <Icon name="sign-out" />
         Se déconnecter
     </Menu.Item>

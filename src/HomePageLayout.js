@@ -6,7 +6,8 @@ import DesktopBodyLayout from "./Container/BodyLayout/DesktopBodyLayout";
 import MobileBodyLayout from "./Container/BodyLayout/MobileBodyLayout";
 import Footer from "./Components/Footer/Footer";
 import useWindowSize from "./Hooks/useWindowSize";
-import {SessionProvider} from "./Session/session";
+import {SessionProvider} from "./Context/Session/session";
+import {DeviceContextProvider} from "./Context/Device/device";
 import {isMobileOnly} from 'react-device-detect';
 import ReactGA from 'react-ga';
 import { createBrowserHistory } from 'history';
@@ -15,7 +16,7 @@ const HomepageLayout = ({initSession = null}) => {
     const { height } = useWindowSize();
     const minHeight = height - 240;
     const minHeightString = `${minHeight}px`;
-    const padding = isMobileOnly ? 30 : 90;
+    const padding = isMobileOnly ? 10 : 90;
     const history = createBrowserHistory();
 
 // Initialize google analytics page view tracking
@@ -31,19 +32,20 @@ const HomepageLayout = ({initSession = null}) => {
             />
             <Router history={history}>
                 <SessionProvider init={initSession}>
-                    <ResponsiveContainer>
-                        <Segment
-                            style={{
-                                padding: `${padding}px 0 20px 0`,
-                                "min-height": minHeightString
-                            }}
-                            vertical
-                        >
-                            <DesktopBodyLayout />
-                            <MobileBodyLayout />
-                        </Segment>
-
-                    </ResponsiveContainer>
+                    <DeviceContextProvider>
+                        <ResponsiveContainer>
+                            <Segment
+                                style={{
+                                    padding: `${padding}px 0 20px 0`,
+                                    "min-height": minHeightString
+                                }}
+                                vertical
+                            >
+                                <DesktopBodyLayout />
+                                <MobileBodyLayout />
+                            </Segment>
+                        </ResponsiveContainer>
+                    </DeviceContextProvider>
                 </SessionProvider>
             </Router>
         </>

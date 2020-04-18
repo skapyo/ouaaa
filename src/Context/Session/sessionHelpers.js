@@ -1,4 +1,4 @@
-import config from './../config.json';
+import config from '../../config.json';
 
 export const removeItemsFromLS = () => {
     localStorage.removeItem(config.SESSION_STORAGE.AUTH_TOKEN);

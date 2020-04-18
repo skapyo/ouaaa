@@ -19,7 +19,7 @@ import {getImageUrl,buildQuantitySelectOptions} from '../../../../Utils/utils';
 import { useHistory } from 'react-router-dom';
 import cogoToast from 'cogo-toast';
 import gql from "graphql-tag";
-import {isMobileOnly} from 'react-device-detect';
+import {useDeviceContext} from './../../../../Context/Device/device';
 
 
 const headerStyle = {
@@ -105,7 +105,7 @@ const CartItem = ({ name, price, nb,src,id,refetch }) => {
           basic
           floated='right'
         >
-          {`Prix: ${nb} x ${price}€ = `}<span style={StrickyHeaderStyle}>{`${nb*price}€`}</span>
+          {`Prix: ${nb} x ${price}€ = `}<span style={StrickyHeaderStyle}>{`${(nb*price).toFixed(2)}€`}</span>
           <br />
           <br />
           Quantité:&nbsp;&nbsp;&nbsp;
@@ -131,6 +131,8 @@ const Cart = () => {
 
   const [loadingGlobalState, { addListener, changeListenerValue }] = useLoaderState();
   const [firstLoading, setFirstLoadingInd] = useState(true);
+
+  const device = useDeviceContext();
 
   const {data,loading,error,refetch} = useQuery(GET_CART,{fetchPolicy:"no-cache"});
   const [submitOrderMutation,{data:orderSubmitData, loading:orderSubmitLoading, error:orderSubmitError}] = useMutation(SUBMIT_ORDER);
@@ -167,11 +169,11 @@ const Cart = () => {
 
   useEffect(() => {
     if(orderSubmitData?.submitOrder ) {
-      cogoToast.success("La commande a bien été transmise.",{position:'top-right'});
+      cogoToast.success("La commande a bien été transmise.",{position:device.toastPosition});
       history.push(`/commande/${orderSubmitData.submitOrder}`);
 
     };
-  },[orderSubmitData,history]);
+  },[orderSubmitData,history,device]);
 
   const submitOrder = () => {
     submitOrderMutation();
@@ -220,8 +222,8 @@ const Cart = () => {
               </Grid>
               </Grid.Column>
               <Grid.Column width={5}>
-                    <Sticky offset={100} active={isMobileOnly?false:true}>
-                    <Segment>
+                <Sticky offset={100} active={device.isMobileOnly?false:true}>
+                <Segment>
                       <Header as='h1' style={StrickyHeaderStyle}>Résumé de la commande:</Header>
                       <br/>
                       {data.cartQuery && data.cartQuery.items.length > 0 ?

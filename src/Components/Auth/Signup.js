@@ -3,7 +3,7 @@ import {Input, Modal,Grid,Header,Form ,Button,Segment,Image,Message, Divider, Ic
 import { Link } from 'react-router-dom';
 import { useMutation } from '@apollo/react-hooks';
 import {SIGNUP} from './../../Queries/authQueries';
-import {useSessionDispatch} from "./../../Session/session";
+import {useSessionDispatch} from "../../Context/Session/session";
 import {validateEmail} from './../../Utils/utils';
 
 

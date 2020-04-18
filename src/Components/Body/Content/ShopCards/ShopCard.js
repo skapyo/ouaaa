@@ -1,4 +1,4 @@
-import React, {useState,useEffect} from "react";
+import React, {useState,useEffect, useCallback} from "react";
 import {
     Image as ImageSemantic,
     Card,
@@ -14,11 +14,11 @@ import {
     Popup,
     Input, Select
 } from "semantic-ui-react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import {ADD_LIKED_PRODUCT, ADD_PRODUCT_CART, REMOVE_LIKED_PRODUCT} from './../../../../Queries/contentQueries';
 import {useMutation} from '@apollo/react-hooks';
 import {getImageUrl} from './../../../../Utils/utils';
-import {useSessionState,useSessionDispatch} from "./../../../../Session/session";
+import {useSessionState} from "../../../../Context/Session/session";
 import isNumber from "is-number";
 import cogoToast from "cogo-toast";
 
@@ -36,12 +36,16 @@ const formValuesInit = {
 const margin = {
     "margin-top": "-1em"
 };
-const ShopCard = ({product,pageNumber}) => {
+const ShopCard = ({product,refetch}) => {
 
     const {id,label, price,isLiked} = product;
 
     const [loading, setLoadingInd] = useState(true);
     const [imageLiked, setLikedIndicator] = useState(isLiked);
+
+    const session = useSessionState();
+
+    const location = useLocation();
 
 //debugger;
     const [addLikedPoduct,{data:addData,error:addError}] = useMutation(
@@ -75,10 +79,7 @@ const ShopCard = ({product,pageNumber}) => {
         ADD_PRODUCT_CART,
         {variables:{productId:id,quantity:formValues.quantity}}
     );
-  const onClickHandler = () => {
-    if(!imageLiked) addLikedPoduct();
-    else removeLikedPoduct();
-  };
+
     useEffect(() => {
 
         if(cartActionData && cartActionData.addProductInCart) {
@@ -108,30 +109,37 @@ const ShopCard = ({product,pageNumber}) => {
     /* set liked ind to true */
     useEffect(() =>  {
         if(addData && !addError)
-            setLikedIndicator(true);
-    },[addData,addError]);
+            refetch();
+    },[addData,addError,refetch]);
+
 
     /* set liked ind to false */
     useEffect(() =>  {
         if(remData && !remError)
-            setLikedIndicator(false);
-    },[remData,remError]);
+            refetch();
+    },[remData,remError,refetch]);
 
     /* reset liked state if prop changes */
     useEffect(() => {
         setLikedIndicator(isLiked);
     },[isLiked]);
 
-  return (
+    /* liked heart icon click handler */
+    const onClickHandler = useCallback(() => {
+        if(!isLiked) addLikedPoduct();
+        else removeLikedPoduct();
+    },[addLikedPoduct,removeLikedPoduct,isLiked]);
+
+    return (
     <Card >
-      {state && (
-      <CardLabel isLiked={imageLiked} onClickHandler={onClickHandler}  />
-)}
+        {session && (<CardLabel isLiked={isLiked} onClickHandler={onClickHandler}  />)}
+
+        )}
       <ImageSemantic
         as = {Link}
         to ={{
             pathname:`/produit/${id}`,
-            state:{categoryPageNumber : pageNumber}
+            state:{from : location.pathname}
         }}
         src={getImageUrl(product.pictures!=null && product.pictures[0]!=null ?product.pictures[0].croppedPicturePath:null)}
       />
@@ -158,7 +166,7 @@ const ShopCard = ({product,pageNumber}) => {
                             as = {Link}
                             to = {{
                                 pathname:`/produit/${id}`,
-                                state:{categoryPageNumber : pageNumber}
+                                state:{from : location.pathname}
                             }}
                         >
                             <Button.Content hidden  style={{"margin-top": "-1em"}}>

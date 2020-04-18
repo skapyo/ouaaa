@@ -2,8 +2,8 @@ import React from "react";
 import { Menu, Container, Icon, Dropdown} from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import config from './../../config.json';
-import {removeItemsFromLS} from './../../Session/sessionHelpers';
-import {useSessionState,useSessionDispatch} from "./../../Session/session";
+import {removeItemsFromLS} from '../../Context/Session/sessionHelpers';
+import {useSessionState,useSessionDispatch} from "../../Context/Session/session";
 
 const divStyle = {
   padding: "0 2em 0 2em",

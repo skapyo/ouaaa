@@ -34,7 +34,23 @@ const GET_PRODUCTS_BY_CATEGORY = gql`
     }
 `;
 
-const GET_CATEGORY_LABEL = gql`
+const GET_FAVORITES = gql`
+    query getLikedProducts {
+        getLikedProducts {
+            id,
+            label,
+            short_description,
+            description,
+            price,
+            isLiked,
+            pictures {
+                croppedPicturePath
+            }
+        }
+    }
+`;
+
+const GET_CATEGORY_INFOS = gql`
     query getCategoryLabel($categoryId: String!) {
         category(id:$categoryId) {
             label,
@@ -44,7 +60,8 @@ const GET_CATEGORY_LABEL = gql`
 `;
 const myRef  = React.createRef();
 
-const ShopCardGroup = ({itemsPerRow=3,limit=30}) => {
+const ShopCardGroup = ({itemsPerRow=3,limit=30,action='category'}) => {
+
     var myRef  = React.createRef();
     const {categoryId,pageNumber} = useParams();
     const history = useHistory();
@@ -53,23 +70,29 @@ const ShopCardGroup = ({itemsPerRow=3,limit=30}) => {
 
     const [dataToRender, setDataToRender] = useState(null);
 
-    const {data, loading, error} = useQuery(
-        GET_PRODUCTS_BY_CATEGORY,
+    /* set const to the fetch data query */
+    const fetchDataRequest = action == 'favorites' ? GET_FAVORITES : GET_PRODUCTS_BY_CATEGORY;
+    const fetchDataCategoryVariables = {
+        categoryId,
+        offset,
+        limit
+    };
+
+    const {data, loading, error,refetch} = useQuery(
+        fetchDataRequest,
         {
-            variables:{
-                categoryId,
-                offset,
-                limit
-            },
+            variables : action == 'category' && fetchDataCategoryVariables,
             fetchPolicy : "no-cache"
         }
     );
+
     const {data:pageData,loading:loadingData,error:errorData} = useQuery(
-        GET_CATEGORY_LABEL,
+        GET_CATEGORY_INFOS,
         {
             variables : {
-                categoryId
-            }
+                categoryId : action == 'favorites' ? '-1' : categoryId
+            },
+            // fetchPolicy : "no-cache"
         }
     );
     /* if one query is still loading, globalLoading is true*/
@@ -77,7 +100,19 @@ const ShopCardGroup = ({itemsPerRow=3,limit=30}) => {
 
     useEffect(() => {
         if(!globalLoading) {
-            setDataToRender({data,pageData,pageNumber});
+            let reformatedData = null;
+            if(data.getLikedProducts) {
+                reformatedData = {productsQuery:data.getLikedProducts.map((product) => {
+                        return product;
+                    })};
+            }
+            else reformatedData = data;
+            setDataToRender({
+                data:reformatedData,
+                pageData,
+                pageNumber
+            });
+            scroll.scrollTo(0)
         }
     },[globalLoading,data,pageData,pageNumber]);
 
@@ -106,22 +141,23 @@ const ShopCardGroup = ({itemsPerRow=3,limit=30}) => {
   return (
     <>
 
-        <Header as='h1' style={headerStyle}>{pageData?.category.label}</Header>
+        <Header as='h1' style={headerStyle}>{pageData?.category?.label}</Header>
         <br />
       <br />
     <Card.Group itemsPerRow={itemsPerRow} stackable>
-        {dataToRender?.data &&  dataToRender.data.productsQuery.map((product,index) => {
+        {dataToRender?.data?.productsQuery &&  dataToRender.data.productsQuery.map((product,index) => {
 
-        return (
+            return (
             <ShopCard
             product = {product}
+            refetch = {refetch}
           />
         );
         })}
       </Card.Group>
         <br />
         <Segment textAlign='center' basic>
-            {(pageData && (pageData?.category.productsNb / limit) > 1) &&(
+            {(pageData && pageData.category!=null && (pageData?.category.productsNb / limit) > 1) &&(
                 <Pagination
                     size = 'tiny'
                     activePage={pageNumber || 1}

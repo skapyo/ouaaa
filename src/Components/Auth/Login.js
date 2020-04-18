@@ -4,9 +4,10 @@ import { Link } from 'react-router-dom';
 import {LOGIN} from './../../Queries/authQueries';
 import { useMutation } from '@apollo/react-hooks';
 import config from './../../config.json';
-
-import {useSessionDispatch} from "./../../Session/session";
+import {useSessionDispatch} from "../../Context/Session/session";
 import {validateEmail} from './../../Utils/utils';
+import cogoToast from 'cogo-toast';
+import {useDeviceContext} from './../../Context/Device/device';
 
 const Login = () => {
 
@@ -16,6 +17,9 @@ const Login = () => {
     const [buttonDisabledInd, setButtonDisbledInd] = useState(true);
 
     const stateDispatch = useSessionDispatch();
+
+
+    const device = useDeviceContext();
 
     const [login, {loading, error, data }] = useMutation(
         LOGIN,
@@ -82,9 +86,9 @@ const Login = () => {
                 type:'login',
                 payload:data.login
             });
-            setLoadingState(false);
+            cogoToast.success("Vous êtes maintenant connecté(e).",{position:device.toastPosition});
         }
-    },[data,formValues.persistentConnection,stateDispatch]);
+    },[data,formValues.persistentConnection,stateDispatch,device]);
 
     return (
     

@@ -17,9 +17,10 @@ import {Breadcrumb} from '../../../Components/';
 import isNumber from 'is-number';
 import { BreakingChangeType } from 'graphql';
 import {getImageUrl,buildQuantitySelectOptions} from './../../../../Utils/utils';
-import{useSessionState} from './../../../../Session/session';
+import{useSessionState} from '../../../../Context/Session/session';
 import cogoToast from 'cogo-toast';
-import {isMobileOnly} from 'react-device-detect';
+import {useDeviceContext} from './../../../../Context/Device/device';
+
 
 
 const headerStyle = {
@@ -40,7 +41,7 @@ const formValuesInit = {
     quantity:1
 };
 
-const ProductPage = () => {
+const ProductPage = ({location}) => {
 
     const {productId} = useParams();
 
@@ -53,6 +54,7 @@ const ProductPage = () => {
     const [cartLoading, setCartLoadingInd] = useState(false);
     const [selectOptions,setSelectOptions] = useState();
     const [firstLoading, setFirstLoadingInd] = useState(true);
+    const [imageLoadingError, setImgLoadingError] = useState(false);
 
     const [loadingGlobalState,
         {
@@ -61,6 +63,7 @@ const ProductPage = () => {
             resetListenersList
         }
     ] = useLoaderState();
+    const device = useDeviceContext();
 
     const {data, loading, error,refetch} = useQuery(GET_PRODUCT,{variables:{id:productId}});
 
@@ -147,11 +150,11 @@ const ProductPage = () => {
     useEffect(() => {
 
         if(cartActionData && cartActionData.addProductInCart) {
-            cogoToast.success("L'article a bien été ajouté dans le panier.",{position:'top-right'});
-            // resetListenersList();
+            cogoToast.success("L'article a bien été ajouté dans le panier.",{position:device.toastPosition});
             refetch();
         }
-    },[cartActionData,refetch,resetListenersList]);
+    },[cartActionData,refetch,resetListenersList,device]);
+
 
     useEffect(() => {
         if(cartActionError) {
@@ -210,10 +213,13 @@ const ProductPage = () => {
 
     if (error)
         return 'error';
+
+    const breadcrumbTo = location.state?.from ? location.state.from : `/categorie/${data.product.category.id}`;
+
     return (
         <>
 
-            <Breadcrumb options={[{to:`/categorie/${data.product.category.id}`,label:data.product.category.label}]} lastItem={data.product.label} />
+            <Breadcrumb options={[{to:breadcrumbTo,label:data.product.category.label}]} lastItem={data.product.label} />
             <Header as='h1' style={headerStyle}>{data.product.label}</Header>
             <br />
             <br />
@@ -281,7 +287,7 @@ const ProductPage = () => {
                         </ul>
                     </Grid.Column>
                     <Grid.Column width={5}>
-                        <Sticky offset={100} active={isMobileOnly?false:true}>
+                        <Sticky offset={100} active={device.isMobileOnly?false:true}>
                             <Segment>
 
                                 <Segment floated='right' basic style={{padding:0,margin:0}}>

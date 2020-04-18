@@ -19,7 +19,7 @@ import useWindowSize from '../../../../Hooks/useWindowSize';
 import Loader from '../../../Loader/Loader';
 import useLoaderState from '../../../../Hooks/useLoaderState';
 import {getImageUrl} from '../../../../Utils/utils';
-import {isMobileOnly} from 'react-device-detect';
+import {useDeviceContext} from './../../../../Context/Device/device';
 
 
 const headerStyle = {
@@ -78,6 +78,8 @@ const Order = ({ data,loading,error,refetch }) => {
           changeListenerValue
       }
   ] = useLoaderState();
+    const device = useDeviceContext();
+
 
   useEffect(() => {
     if(data && data.ordersUserQuery)
@@ -152,8 +154,8 @@ const Order = ({ data,loading,error,refetch }) => {
               </Grid>
               </Grid.Column>
               <Grid.Column width={5}>
-                <Sticky offset={100} active={isMobileOnly?false:true}>
-                      <Segment>
+                  <Sticky offset={100} active={device.isMobileOnly?false:true}>
+                  <Segment>
                         <Header as='h1' style={StrickyHeaderStyle}>Résumé de la commande:</Header>
                         {/* <br/> */}
                         <Header as='h5'>Articles:</Header>
