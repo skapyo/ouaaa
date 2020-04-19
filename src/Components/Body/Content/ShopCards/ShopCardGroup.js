@@ -112,14 +112,14 @@ const ShopCardGroup = ({itemsPerRow=3,limit=30,action='category'}) => {
                 pageData,
                 pageNumber
             });
-            scroll.scrollTo(0)
+
         }
     },[globalLoading,data,pageData,pageNumber]);
 
     /* Pagination change callback */
     const onPageChangehandler = useCallback((_, { activePage }) => {
         history.push(`/categorie/${categoryId}/page/${activePage}`);
-        scroll.scrollTo(0)
+        scroll.scrollTo(0);
     },[history,categoryId]);
 
     /* reset offset when page number / limit change */
@@ -127,6 +127,9 @@ const ShopCardGroup = ({itemsPerRow=3,limit=30,action='category'}) => {
         setOffset((!pageNumber || pageNumber == 0) ? 0 : (pageNumber-1) * limit);
     },[pageNumber,limit]);
 
+    useEffect(() => {
+        scroll.scrollTo(0);
+    },[categoryId]);
 
     if (error || errorData)
         return 'error';
@@ -141,7 +144,7 @@ const ShopCardGroup = ({itemsPerRow=3,limit=30,action='category'}) => {
   return (
     <>
 
-        <Header as='h1' style={headerStyle}>{pageData?.category?.label}</Header>
+        <Header as='h1' style={headerStyle}>{dataToRender?.pageData?.category?.label}</Header>
         <br />
       <br />
     <Card.Group itemsPerRow={itemsPerRow} stackable>
@@ -155,13 +158,16 @@ const ShopCardGroup = ({itemsPerRow=3,limit=30,action='category'}) => {
         );
         })}
       </Card.Group>
+        {dataToRender?.data?.productsQuery.length < 1 &&
+        `La catégorie ${dataToRender?.pageData?.page.label} est vide`
+        }
         <br />
         <Segment textAlign='center' basic>
-            {(pageData && pageData.category!=null && (pageData?.category.productsNb / limit) > 1) &&(
+            {(dataToRender?.pageData && dataToRender?.pageData.category!=null && (dataToRender?.pageData.category.productsNb / limit) > 1) &&(
                 <Pagination
                     size = 'tiny'
-                    activePage={pageNumber || 1}
-                    totalPages={Math.ceil(pageData?.category.productsNb / limit)}
+                    activePage={dataToRender?.pageNumber || 1}
+                    totalPages={Math.ceil(dataToRender?.pageData?.category.productsNb / limit)}
                     onPageChange = {onPageChangehandler}
                 />
             )}

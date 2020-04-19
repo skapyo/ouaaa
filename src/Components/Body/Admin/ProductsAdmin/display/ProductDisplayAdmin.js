@@ -35,7 +35,7 @@ const ProductDisplayAdmin = () => {
     /* effects */
     useEffect(() => {
       if(data) {
-        initState(omitTypename(data.productsQuery));
+        initState(omitTypename(data.productsAdminQuery));
       }
     },[data,initState]);
 

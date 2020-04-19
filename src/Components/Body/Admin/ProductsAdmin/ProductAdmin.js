@@ -187,12 +187,12 @@ const CategoryInformations = ({formChangeHandler,selectChangeHandler,formValues,
             />
             </Form.Field>
             <Form.Field>
-            <label>Temperature</label>
+            <label>Température gel</label>
                 <input
                 placeholder="10.0"
-                name="Température gel"
+                name="temperature"
                 onChange={formChangeHandler}
-                value={formValues.Temperature}
+                value={formValues.temperature}
                 />
                 </Form.Field>
                 <Form.Field>
@@ -205,12 +205,12 @@ const CategoryInformations = ({formChangeHandler,selectChangeHandler,formValues,
     />
     </Form.Field>
     <Form.Field>
-    <label>hauteurAdulte</label>
+    <label>largeurAdulte</label>
     <input
     placeholder="largeurAdulte"
     name="largeurAdulte"
     onChange={formChangeHandler}
-    value={formValues.hauteurAdulte}
+    value={formValues.largeurAdulte}
     />
     </Form.Field>
     <Form.Field>
@@ -228,7 +228,7 @@ const CategoryInformations = ({formChangeHandler,selectChangeHandler,formValues,
     placeholder="endFloraison"
     name="endFloraison"
     onChange={formChangeHandler}
-    value={formValues.startFloraison}
+    value={formValues.endFloraison}
     />
     </Form.Field>
     <Form.Field>
@@ -237,7 +237,7 @@ const CategoryInformations = ({formChangeHandler,selectChangeHandler,formValues,
     placeholder="sol"
     name="sol"
     onChange={formChangeHandler}
-    value={formValues.startFloraison}
+    value={formValues.sol}
     />
     </Form.Field>
     <Form.Field>
@@ -458,7 +458,7 @@ const ProductAdmin = ({initFormData, initImgData=[], categoryId=null,productId=n
 
   const formChangeHandler = useCallback(e => {
     const { name, value } = e.target;
-  //  debugger;
+   debugger;
     setFormValue({ ...formValues, [name]: value });
   });
 
@@ -513,6 +513,7 @@ const ProductAdmin = ({initFormData, initImgData=[], categoryId=null,productId=n
             temperature:formValues.temperature,
             hauteurAdulte:formValues.hauteurAdulte,
             largeurAdulte:formValues.largeurAdulte,
+
             startFloraison:formValues.startFloraison,
             endFloraison:formValues.endFloraison,
             sol:formValues.sol,
@@ -569,6 +570,7 @@ const ProductAdmin = ({initFormData, initImgData=[], categoryId=null,productId=n
       }
       if(categoryId)
         variables={...variables, id:productId};
+      debugger
       addNewProduct({variables:variables});
   };
 

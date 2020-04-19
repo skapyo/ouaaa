@@ -230,6 +230,7 @@ const ProductPage = ({location}) => {
                             items={dataToRender}
                             thumbnailPosition = 'left'
                             showFullscreenButton = {false}
+                            showFullscreenButton = {false}
                             showPlayButton = {false}
                             showNav = {false}
                             hidden= {true}
