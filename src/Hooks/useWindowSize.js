@@ -18,7 +18,6 @@ const useWindowSize = ()  => {
       }
       
       function handleResize() {
-      //    debugger;
       //  setWindowSize(getSize());
       }
   

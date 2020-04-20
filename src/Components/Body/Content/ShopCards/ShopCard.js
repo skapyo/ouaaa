@@ -48,7 +48,6 @@ const ShopCard = ({product,refetch}) => {
 
     const location = useLocation();
 
-//debugger;
     const [addLikedPoduct,{data:addData,error:addError}] = useMutation(
         ADD_LIKED_PRODUCT,
         {variables:{productId:id}}

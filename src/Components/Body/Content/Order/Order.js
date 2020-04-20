@@ -87,7 +87,6 @@ const Order = ({ data,loading,error,refetch }) => {
       setFirstLoadingInd(false);
     if(data && data.ordersUserQuery[0].items.length > 0 && firstLoading) {
       data.ordersUserQuery[0].items.map((item,index) => {
-          debugger;
           if (item.product.pictures[0] != null && item.product.pictures[0] && item.product.pictures[0].croppedPicturePath) {
               const img = new Image();
               addListener(index);

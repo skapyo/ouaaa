@@ -458,7 +458,6 @@ const ProductAdmin = ({initFormData, initImgData=[], categoryId=null,productId=n
 
   const formChangeHandler = useCallback(e => {
     const { name, value } = e.target;
-   debugger;
     setFormValue({ ...formValues, [name]: value });
   });
 
@@ -477,7 +476,6 @@ const ProductAdmin = ({initFormData, initImgData=[], categoryId=null,productId=n
 
 
     let files = null;
-   // debugger;
       let variables = null;
       if(!categoryId) { // if it's an product creation mutation
 
@@ -570,7 +568,6 @@ const ProductAdmin = ({initFormData, initImgData=[], categoryId=null,productId=n
       }
       if(categoryId)
         variables={...variables, id:productId};
-      debugger
       addNewProduct({variables:variables});
   };
 

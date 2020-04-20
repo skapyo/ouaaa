@@ -109,7 +109,6 @@ const ProductPage = ({location}) => {
                 setdataToRender(data.product.pictures.map((picture, index) => {
 
                     const img = new Image();
-                    // addListener(index);debugger;
                     changeListenerValue(index, false);
                     img.src = getImageUrl(picture.croppedPicturePath);
                     return {
@@ -120,7 +119,6 @@ const ProductPage = ({location}) => {
             }else{
                 setdataToRender([""].map((picture, index) => {
 
-                    // addListener(index);debugger;
                     changeListenerValue(index, false);
                     return {
                         original: null,
