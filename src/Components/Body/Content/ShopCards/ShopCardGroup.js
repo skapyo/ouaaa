@@ -159,7 +159,7 @@ const ShopCardGroup = ({itemsPerRow=3,limit=30,action='category'}) => {
         })}
       </Card.Group>
         {dataToRender?.data?.productsQuery.length < 1 &&
-        `La catégorie ${dataToRender?.pageData?.page.label} est vide`
+        `Il n'y a encore d'article`
         }
         <br />
         <Segment textAlign='center' basic>
