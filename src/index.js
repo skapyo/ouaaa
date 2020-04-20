@@ -24,11 +24,10 @@ import { createUploadLink } from "apollo-upload-client";
 import whyDidYouRender from "@welldone-software/why-did-you-render";
 
 import config from "./config.json";
-import ReactGA from 'react-ga';
 
 
-const trackingId = "UA-163414127-1"; // Replace with your Google Analytics tracking ID
-ReactGA.initialize(trackingId);
+
+
 
 const URI_GRAPHQL_SERVER = `${config.API_SERVER.HTTP}://${config.API_SERVER.URL}/graphql`;
 

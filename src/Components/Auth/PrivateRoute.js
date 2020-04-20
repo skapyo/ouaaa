@@ -28,18 +28,12 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
 
 const PrivateAdminRoute = ({ component: Component, ...rest }) => {
 
-    const history = createBrowserHistory();
 
-// Initialize google analytics page view tracking
-    history.listen(location => {
-        ReactGA.set({ page: location.pathname }); // Update the user's current page
-    ReactGA.pageview(location.pathname); // Record a pageview for the given page
-});
 
     const auth = useSessionState();
 
     return (
-        <Route {...rest}  history={history} render={props => (
+        <Route {...rest}  render={props => (
             auth && auth.role === 'admin' ? 
             (<Component {...props}/>) 
             : 

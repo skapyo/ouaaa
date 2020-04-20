@@ -18,16 +18,8 @@ import OrderContainer from "../../Components/Body/Content/Order/OrderContainer";
 import OrdersPage from "../../Components/Body/Content/Order/OrdersPage";
 import ReactGA from 'react-ga';
 import { createBrowserHistory } from 'history';
-
+import {withTracker} from "../../analyticsTracker";
 const DesktopBodyLayout = () => {
-
-    const history = createBrowserHistory();
-
-// Initialize google analytics page view tracking
-    history.listen(location => {
-        ReactGA.set({ page: location.pathname }); // Update the user's current page
-    ReactGA.pageview(location.pathname); // Record a pageview for the given page
-});
 
   return (
     <Responsive getWidth={getWidth}  minWidth={Responsive.onlyTablet.minWidth}>
@@ -38,8 +30,7 @@ const DesktopBodyLayout = () => {
             component={() => <DesktopBodyLayoutWithMenu />}
           />
           <Route
-            path="/produit"  history={history}
-    component={() => <ContentLayout />}
+            path="/produit"   component={() => <ContentLayout />}
           />
           <SignedoutRoute
             path="/login"
@@ -140,4 +131,4 @@ const DesktopBodyLayoutWithMenu = () => {
   );
 };
 
-export default DesktopBodyLayout;
+export default withTracker(DesktopBodyLayout);

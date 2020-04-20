@@ -2,6 +2,7 @@ import React, { createContext, useEffect, useState, useReducer } from "react";
 import { Segment } from "semantic-ui-react";
 import ResponsiveContainer from "./Container/ResponsiveContainer";
 import { BrowserRouter as Router } from "react-router-dom";
+import {useRouterHistory, Route} from 'react-router';
 import DesktopBodyLayout from "./Container/BodyLayout/DesktopBodyLayout";
 import MobileBodyLayout from "./Container/BodyLayout/MobileBodyLayout";
 import Footer from "./Components/Footer/Footer";
@@ -17,20 +18,19 @@ const HomepageLayout = ({initSession = null}) => {
     const minHeight = height - 240;
     const minHeightString = `${minHeight}px`;
     const padding = isMobileOnly ? 10 : 90;
-    const history = createBrowserHistory();
 
-// Initialize google analytics page view tracking
-    history.listen(location => {
-        ReactGA.set({ page: location.pathname }); // Update the user's current page
-    ReactGA.pageview(location.pathname); // Record a pageview for the given page
-});
+    const trackingId = "UA-163414127-1"; // Replace with your Google Analytics tracking ID
+    ReactGA.initialize(trackingId);
+
+
+
     return (
         <>
             <link
                 rel="stylesheet prefetch"
                 href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/components/icon.min.css"
             />
-            <Router history={history}>
+            <Router>
                 <SessionProvider init={initSession}>
                     <DeviceContextProvider>
                         <ResponsiveContainer>
@@ -51,4 +51,4 @@ const HomepageLayout = ({initSession = null}) => {
         </>
     );
 };
-export default HomepageLayout;
+export default  HomepageLayout;

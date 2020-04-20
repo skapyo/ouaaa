@@ -13,7 +13,7 @@ import EmailValidation from './../../Components/Auth/EmailValidation';
 import SendResetPasswordEmail from "../../Components/Auth/SendResetPasswordEmail";
 import ResetPassword from "../../Components/Auth/ResetPassword";
 import AccountPage from './../../Components/Auth/AccountPage';
-
+import {withTracker} from "../../analyticsTracker";
 const MobileBodyLayout = () => {
     return (
         <Responsive getWidth={getWidth} maxWidth={Responsive.onlyMobile.maxWidth}>
@@ -67,4 +67,4 @@ const MobileBodyLayout = () => {
 );
 };
 
-export default MobileBodyLayout;
+export default withTracker(MobileBodyLayout);
