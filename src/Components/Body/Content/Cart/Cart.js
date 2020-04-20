@@ -20,6 +20,7 @@ import { useHistory } from 'react-router-dom';
 import cogoToast from 'cogo-toast';
 import gql from "graphql-tag";
 import {useDeviceContext} from './../../../../Context/Device/device';
+import ReactGA from "react-ga";
 
 
 const headerStyle = {
@@ -170,6 +171,10 @@ const Cart = () => {
   useEffect(() => {
     if(orderSubmitData?.submitOrder ) {
       cogoToast.success("La commande a bien été transmise.",{position:device.toastPosition});
+        ReactGA.event({
+            category: "book",
+            action: "User not loggued try to add product to cart",
+        });
       history.push(`/commande/${orderSubmitData.submitOrder}`);
 
     };

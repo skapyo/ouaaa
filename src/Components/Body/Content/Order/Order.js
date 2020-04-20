@@ -20,6 +20,7 @@ import Loader from '../../../Loader/Loader';
 import useLoaderState from '../../../../Hooks/useLoaderState';
 import {getImageUrl} from '../../../../Utils/utils';
 import {useDeviceContext} from './../../../../Context/Device/device';
+import ReactGA from "react-ga";
 
 
 const headerStyle = {
@@ -86,10 +87,12 @@ const Order = ({ data,loading,error,refetch }) => {
       setFirstLoadingInd(false);
     if(data && data.ordersUserQuery[0].items.length > 0 && firstLoading) {
       data.ordersUserQuery[0].items.map((item,index) => {
+          debugger;
           if (item.product.pictures[0] != null && item.product.pictures[0] && item.product.pictures[0].croppedPicturePath) {
               const img = new Image();
               addListener(index);
               img.onload = () => changeListenerValue(index,false);
+              img.onerror = () => changeListenerValue(index,false);
               img.src = getImageUrl(item.product.pictures[0].croppedPicturePath);
           }else{
               changeListenerValue(index, false);
@@ -106,8 +109,13 @@ const Order = ({ data,loading,error,refetch }) => {
   };
 
   useEffect(() => {
-    if(cancelOrdertData && cancelOrdertData.cancelOrder)
-      refetch();
+    if(cancelOrdertData && cancelOrdertData.cancelOrder) {
+        refetch();
+        ReactGA.event({
+            category: "cancel order",
+            action: "User cancel order",
+        });
+    }
   },[cancelOrdertData,refetch]);
 
   const {height} = useWindowSize();

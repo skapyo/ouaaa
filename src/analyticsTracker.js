@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import ReactGA from 'react-ga';
 import { useHistory } from 'react-router-dom';
 
@@ -7,6 +7,7 @@ export const initializeGA = () => {
 };
 
 export const logPageView = (history) => {
+
     history.listen((location) => {
         const page = location.pathname || window.location.pathname;
         ReactGA.set({ page: page });
@@ -16,7 +17,6 @@ export const logPageView = (history) => {
 };
 
 export const withTracker = (WrappedComponent) => {
-
     return (props) => {
         const history = useHistory();
 

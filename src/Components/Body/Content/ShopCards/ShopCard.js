@@ -21,6 +21,7 @@ import {getImageUrl} from './../../../../Utils/utils';
 import {useSessionState} from "../../../../Context/Session/session";
 import isNumber from "is-number";
 import cogoToast from "cogo-toast";
+import ReactGA from 'react-ga';
 
 const CardLabel = ({isLiked,onClickHandler}) => {
   return (
@@ -86,6 +87,10 @@ const ShopCard = ({product,refetch}) => {
             cogoToast.success("L'article a bien été ajouté dans le panier.",{position:'top-right'});
             // resetListenersList();
             setCartLoadingInd(false);
+            ReactGA.event({
+                category: "add product to cart",
+                action: "User add a product to cart",
+            });
         }
     },[cartActionData]);
 
@@ -101,6 +106,10 @@ const ShopCard = ({product,refetch}) => {
     useEffect(() => {
         if(cartActionError) {
             cogoToast.error("Veuillez vous authentifier avant d'ajouter un article au panier.", {position: 'top-right'});
+            ReactGA.event({
+                category: "no logged add to cart",
+                action: "User not loggued try to add product to cart",
+            });
             setCartLoadingInd(false);
         }
 
