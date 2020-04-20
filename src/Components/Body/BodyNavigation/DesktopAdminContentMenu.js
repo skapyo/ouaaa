@@ -62,14 +62,7 @@ const DesktopAdminContentMenu = () => {
               active={activeItem === "commandes"}
               onClick={handleItemClick}
             />
-            <Menu.Item
-              as={Link}
-              to="/admin/likedProducts"
-              content="Visualiser les articles likés"
-              name="liked"
-              active={activeItem === "liked"}
-              onClick={handleItemClick}
-            />
+
         </Menu.Menu>
       </Menu.Item>
       <Menu.Item>
