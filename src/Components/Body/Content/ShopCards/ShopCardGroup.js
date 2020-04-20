@@ -158,8 +158,8 @@ const ShopCardGroup = ({itemsPerRow=3,limit=30,action='category'}) => {
         );
         })}
       </Card.Group>
-        {dataToRender?.data?.productsQuery.length < 1 &&
-        `Il n'y a encore d'article`
+        {dataToRender?.data?.productsQuery.length < 1 &&  (action == 'favorites') &&
+        `Cliquez un coeur d'un article pour le placer dans vos favoris.`
         }
         <br />
         <Segment textAlign='center' basic>
