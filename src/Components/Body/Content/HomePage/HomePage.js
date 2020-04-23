@@ -3,7 +3,7 @@ import { Image} from "semantic-ui-react";
 import { Link } from "react-router-dom";
 const HomePage = () => {
     return <Image
-    src={"homePage.png"}
+    src={"homePageV2.png"}
     />
 }
 
