@@ -208,7 +208,7 @@ const Order = ({ data,loading,error,refetch }) => {
                             Information
                           </Header>
 
-                          Il n'a pas de paiement en ligne sur le site. Une fois la commande passée, un email sera envoyé à Elisabeth qui vous contactera.
+                          Il n'y a pas de paiement en ligne sur le site. Une fois la commande passée, un email sera envoyé à Elisabeth qui vous contactera.
                         </Message>    */}
                             </Segment>
                         </Sticky>
