@@ -7,7 +7,7 @@
         "PERSISTENT_CO" : "persistentConnection"
     },
     "API_SERVER": {
-        "HTTP":"https",
-        "URL":"api.commande.schipper-horticulture.fr"
+        "HTTP":"http",
+        "URL":"localhost:8001"
     }
 }

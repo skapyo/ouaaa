@@ -3,8 +3,8 @@ before_script:
 
 build_image:
   script:
-    - docker build -t  schipper-horticulture-client:dev .
-    - docker stop  schipper-horticulture-client
-    - docker rm  schipper-horticulture-client
-    - cd /home/debian/docker/schipper-horticulture/
+    - docker build -t  acteurs-de-la-transtion-client:dev .
+    - docker stop  acteurs-de-la-transtion-client
+    - docker rm  acteurs-de-la-transtion-client
+    - cd /home/debian/docker/acteurs-de-la-transtion/
     - docker-compose up -d

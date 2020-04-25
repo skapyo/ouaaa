@@ -34,9 +34,8 @@ const DesktopNavbar = React.memo(() => {
         <Menu icon fixed="top" style={divStyle} className="borderless">
           <Container>
             <Menu.Item as={Link} to={`/`} header style={headerStyle}>
-              Schipper Horticulture
+              Acteurs de la transition
             </Menu.Item>
-              <a href="https://static.commande.schipper-horticulture.fr/Bon_de_commande.xlsx" class="downloadLink"  target="_blank" >Télécharger directement la liste des produits à renvoyer à schipper.horti@wanadoo.fr </a>
             <Menu.Menu position="right">
               {session && session.role === 'admin' ?(<Menu.Item name="admin" as={Link} to={`/admin`}>
                 <Icon name="options" size="large" />

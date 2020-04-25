@@ -255,7 +255,7 @@ const Cart = () => {
                         <Header>
                           Information
                         </Header>
-                        Il n'y a pas de paiement en ligne sur le site. Une fois la commande passée, un email sera envoyé à Schipper Horticulture qui vous contactera.
+                        Il n'y a pas de paiement en ligne sur le site. Une fois la commande passée, un email sera envoyé à Acteurs de la transition qui vous contactera.
                       </Message>
                     </Segment>
                   </Sticky>

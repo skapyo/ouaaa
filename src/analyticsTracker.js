@@ -2,9 +2,7 @@ import React, {useEffect, useState} from 'react';
 import ReactGA from 'react-ga';
 import { useHistory } from 'react-router-dom';
 
-export const initializeGA = () => {
-    ReactGA.initialize('"UA-163414127-1');
-};
+
 
 export const logPageView = (history) => {
 

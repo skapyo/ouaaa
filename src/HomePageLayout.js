@@ -19,7 +19,7 @@ const HomepageLayout = ({initSession = null}) => {
     const minHeightString = `${minHeight}px`;
     const padding = isMobileOnly ? 10 : 90;
 
-    const trackingId = "UA-163414127-1"; // Replace with your Google Analytics tracking ID
+    const trackingId = "UA-164586242-1"; // Replace with your Google Analytics tracking ID
     ReactGA.initialize(trackingId);
 
 

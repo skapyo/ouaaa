@@ -141,7 +141,6 @@ const MobileSidebar = ({ onHide, visible,handleSidebarHide }) => {
             <Icon name="add user" />
         Créer un compte
     </Menu.Item>
-    <a href="https://static.commande.schipper-horticulture.fr/Bon_de_commande.xlsx" class="item"  target="_blank" >Télécharger directement la liste des produits à renvoyer à schipper.horti@wanadoo.fr </a>
 
     </>
     )
@@ -190,7 +189,7 @@ const MobileSidebar = ({ onHide, visible,handleSidebarHide }) => {
     <Icon name="sign-out" />
         Se déconnecter
     </Menu.Item>
-    <a href="https://static.commande.schipper-horticulture.fr/Bon_de_commande.xlsx" class="item"  target="_blank" >Télécharger directement la liste des produits à renvoyer à schipper.horti@wanadoo.fr </a>
+    <a href="https://static.commande.acteurs-de-la-transtion.fr/Bon_de_commande.xlsx" class="item"  target="_blank" >Télécharger directement la liste des produits à renvoyer à schipper.horti@wanadoo.fr </a>
 
     </>
     )}

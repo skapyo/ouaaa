@@ -364,7 +364,7 @@ const ProductPage = ({location}) => {
                                     <Header>
                                         Information
                                     </Header>
-                                    Il n'y a pas de paiement en ligne sur le site. Une fois la commande validée dans le panier, un email sera envoyé à Schipper Horticulture qui vous contactera.
+                                    Il n'y a pas de paiement en ligne sur le site. Une fois la commande validée dans le panier, un email sera envoyé à Acteurs de la transition qui vous contactera.
                                 </Message>
                             </Segment>
 

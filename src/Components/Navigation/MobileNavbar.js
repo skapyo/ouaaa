@@ -26,7 +26,7 @@ const MobileNavbar = ({ toggleHandler }) => {
                 <Icon name="sidebar" />
             </Menu.Item>
             <Menu.Item as={Link} to={`/`} header style={headerStyle}>
-                Schipper Horticulture
+                Acteurs de la transition
             </Menu.Item>
         </Menu>
     );
