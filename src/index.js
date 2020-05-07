@@ -20,7 +20,7 @@ import { transitions, positions, Provider as AlertProvider } from "react-alert";
 import AlertTemplate from "react-alert-template-basic";
 
 import { createUploadLink } from "apollo-upload-client";
-
+const fetch = require('node-fetch');
 import whyDidYouRender from "@welldone-software/why-did-you-render";
 
 import config from "./config.json";
@@ -61,7 +61,7 @@ const refreshToken = async (sub, refreshtoken, client2) => {
 // link: createUploadLink({ uri: process.env.API_URI })
 
 const terminatingLink = new createUploadLink({
-  uri: URI_GRAPHQL_SERVER
+  uri: URI_GRAPHQL_SERVER,fetch:fetch
 });
 
 const authLink = setContext((_, { headers }) => {

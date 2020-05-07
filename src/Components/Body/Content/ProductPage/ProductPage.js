@@ -8,7 +8,6 @@ import {
     ADD_PRODUCT_CART
 } from './../../../../Queries/contentQueries';
 import ImageGallery from 'react-image-gallery';
-import "react-image-gallery/styles/css/image-gallery.css";
 import { Grid , Header ,Divider,Sticky, Segment, Form,Input,Select,Button,Icon,Container,Message,List} from 'semantic-ui-react';
 import Loader from './../../../Loader/Loader';
 import useLoaderState from './../../../../Hooks/useLoaderState';

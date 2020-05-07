@@ -11,8 +11,7 @@ import {SessionProvider} from "./Context/Session/session";
 import {DeviceContextProvider} from "./Context/Device/device";
 import {isMobileOnly} from 'react-device-detect';
 import ReactGA from 'react-ga';
-import { createBrowserHistory } from 'history';
-
+const isServer = typeof window === 'undefined';
 const HomepageLayout = ({initSession = null}) => {
     const { height } = useWindowSize();
     const minHeight = height - 240;
@@ -23,7 +22,15 @@ const HomepageLayout = ({initSession = null}) => {
     ReactGA.initialize(trackingId);
 
 
+    if (isServer) {
+        const {StaticRouter} = require('react-router');
+        return (
+            <StaticRouter
+            >
 
+            </StaticRouter>
+        );
+    }
     return (
         <>
             <link

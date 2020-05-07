@@ -30,6 +30,9 @@
     "leaflet": "^1.6.0",
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.28",
+    "next": "^9.3.6",
+    "node-fetch": "^2.6.0",
+    "node-localstorage": "^2.1.6",
     "react": "16.8.6",
     "react-alert": "^6.0.0",
     "react-alert-template-basic": "^1.0.0",
@@ -55,11 +58,9 @@
     "typescript": "3.3.3"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "start:prod": "pushstate-server build",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
   },
   "browserslist": [
     ">0.2%",

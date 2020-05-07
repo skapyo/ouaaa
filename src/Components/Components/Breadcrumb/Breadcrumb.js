@@ -1,7 +1,6 @@
 import React,{useState} from 'react';
 import {Icon} from 'semantic-ui-react';
 import { useHistory, Link } from 'react-router-dom';
-import'./styles.css';
 
 const Breadcrumb = ({options,lastItem}) => {
 

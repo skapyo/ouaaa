@@ -17,7 +17,6 @@ import {PrivateRoute,SignedoutRoute,PrivateAdminRoute} from './../../Components/
 import OrderContainer from "../../Components/Body/Content/Order/OrderContainer";
 import OrdersPage from "../../Components/Body/Content/Order/OrdersPage";
 import ReactGA from 'react-ga';
-import { createBrowserHistory } from 'history';
 import {withTracker} from "../../analyticsTracker";
 const DesktopBodyLayout = () => {
 
