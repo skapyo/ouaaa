@@ -45,9 +45,12 @@ const ShopCard = ({product,refetch}) => {
     const [imageLiked, setLikedIndicator] = useState(isLiked);
 
     const session = useSessionState();
-
-    const location = useLocation();
-
+    const isServer = typeof window === 'undefined';
+    if(isServer) {
+        const location = useLocation();
+    }else{
+        const location = "";
+    }
     const [addLikedPoduct,{data:addData,error:addError}] = useMutation(
         ADD_LIKED_PRODUCT,
         {variables:{productId:id}}

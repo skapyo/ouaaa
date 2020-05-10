@@ -5,7 +5,7 @@ import ReactDOM from "react-dom";
 
 import HomePageLayout from "../src/HomePageLayout";
 
-
+import Head from 'next/head'
 import ApolloClient from "apollo-client";
 import { InMemoryCache } from "apollo-cache-inmemory";
 import { HttpLink } from "apollo-link-http";
@@ -20,14 +20,13 @@ import { transitions, positions, Provider as AlertProvider } from "react-alert";
 import AlertTemplate from "react-alert-template-basic";
 
 import { createUploadLink } from "apollo-upload-client";
-import { localStorage } from "node-localstorage";
+
 import whyDidYouRender from "@welldone-software/why-did-you-render";
 
 import config from "../src/config.json";
 import { createHttpLink } from 'apollo-link-http';
 
 import fetch from 'node-fetch';
-
 
 const URI_GRAPHQL_SERVER = `${config.API_SERVER.HTTP}://${config.API_SERVER.URL}/graphql`;
 
@@ -64,15 +63,15 @@ const terminatingLink = new createUploadLink({
 });
 
 const authLink = setContext((_, { headers }) => {
-    if (process.isClient) {
-    const token = localStorage.getItem(config.SESSION_STORAGE.AUTH_TOKEN);
+    if (typeof window !== 'undefined') {
+    const token = localStorage.getItem('auth_token');
     return {
         headers: {
             ...headers,
             authorization: token ? `Bearer ${token}` : ""
         }
     };
-    }
+}
 });
 
 const errorLink = onError(
@@ -158,14 +157,14 @@ const alertOptions = {
 // checkout previous session
 let initSession = null;
 
-if (localStorage!== undefined && localStorage.getItem(config.SESSION_STORAGE.PERSISTENT_CO) === "true") {
+if (typeof window !== 'undefined' && localStorage!== undefined && localStorage.getItem(config.SESSION_STORAGE.PERSISTENT_CO) === "true") {
     initSession = {
         sub: localStorage.getItem(config.SESSION_STORAGE.SUB),
         token: localStorage.getItem(config.SESSION_STORAGE.AUTH_TOKEN),
         refreshToken: localStorage.getItem(config.SESSION_STORAGE.REFRESH_TOKEN),
         role: localStorage.getItem(config.SESSION_STORAGE.ROLE)
     };
-}  else if(localStorage!== undefined) {
+}  else if(typeof window !== 'undefined' ) {
     // if persistent connection is false or doesnt exist => clear the localstorage
     localStorage.clear();
 }
@@ -174,7 +173,7 @@ if (localStorage!== undefined && localStorage.getItem(config.SESSION_STORAGE.PER
 
 
 function HomePage() {
-    return  <AlertProvider template={AlertTemplate} {...alertOptions}>
+    return <AlertProvider template={AlertTemplate} {...alertOptions}>
         <ApolloProvider client={client}>
             <HomePageLayout initSession={initSession} />
         </ApolloProvider>

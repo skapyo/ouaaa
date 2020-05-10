@@ -11,6 +11,8 @@ import {SessionProvider} from "./Context/Session/session";
 import {DeviceContextProvider} from "./Context/Device/device";
 import {isMobileOnly} from 'react-device-detect';
 import ReactGA from 'react-ga';
+import Link from 'next/link'
+import Head from './Components/head'
 const isServer = typeof window === 'undefined';
 const HomepageLayout = ({initSession = null}) => {
     const { height } = useWindowSize();
@@ -25,14 +27,26 @@ const HomepageLayout = ({initSession = null}) => {
     if (isServer) {
         const {StaticRouter} = require('react-router');
         return (
-            <StaticRouter
-            >
+            <StaticRouter><Head />
+                <ResponsiveContainer>
+                    <Segment
+                        style={{
+                            padding: `${padding}px 0 20px 0`,
+                            "min-height": minHeightString
+                        }}
+                        vertical
+                    >
+                        <DesktopBodyLayout />
+                        <MobileBodyLayout />
+                    </Segment>
+                </ResponsiveContainer>
 
             </StaticRouter>
         );
     }
     return (
         <>
+            <Head title="test"/>
             <link
                 rel="stylesheet prefetch"
                 href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/components/icon.min.css"

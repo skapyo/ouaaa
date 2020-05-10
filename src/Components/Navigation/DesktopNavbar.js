@@ -22,9 +22,10 @@ const headerStyle = {
 const DesktopNavbar = React.memo(() => {
 
     const session = useSessionState();
-    const sessionDispatch = useSessionDispatch();
+
 
     const logoutHandler = () => {
+        const sessionDispatch = useSessionDispatch();
         removeItemsFromLS();
       sessionDispatch({ type: "logout" });
     };

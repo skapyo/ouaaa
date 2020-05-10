@@ -33,7 +33,7 @@ function SessionProvider({ children, init=null }) {
 function useSessionState() {
   const context = React.useContext(SessionStateContext);
   if (context === undefined) {
-    throw new Error("useSessionState must be used within a SessionProvider");
+ //   throw new Error("useSessionState must be used within a SessionProvider");
   }
   return context;
 }

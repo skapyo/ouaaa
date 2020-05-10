@@ -4,11 +4,12 @@ import {useQuery} from '@apollo/react-hooks';
 import {GET_CATEGORIES_LIST} from './../../../Queries/contentQueries';
 import { Link } from "react-router-dom";
 import { useSessionState } from "../../../Context/Session/session";
-
+const isServer = typeof window === 'undefined';
 const DesktopContentMenu = () => {
   const [activeItem, setActiveitem] = useState("home");
   const handleItemClick = (e, { name }) => setActiveitem(name);
-  const session = useSessionState();
+
+    const session = useSessionState();
 
   const {data, loading, error} = useQuery(GET_CATEGORIES_LIST);
 
@@ -20,7 +21,7 @@ const DesktopContentMenu = () => {
 
   return (
     <Menu fluid vertical>
-      {session && (
+      {!isServer && session && (
           <Menu.Item>
             <Menu.Header>Favoris</Menu.Header>
             <Menu.Menu>

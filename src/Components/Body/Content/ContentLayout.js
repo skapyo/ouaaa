@@ -6,17 +6,23 @@ import Cart from './Cart/Cart';
 import {Switch, Route, Link} from "react-router-dom";
 import PrivateRoute from "../../Auth/PrivateRoute";
 import {useSessionState} from '../../../Context/Session/session';
+const isServer = typeof window === 'undefined'
 
 const ContentLayout = () => {
+    if (isServer){
+        return (
+            <HomePage />
+    );
+    }
     const auth = useSessionState();
-
   return (
 
       <Switch>
+
           <Route path="/categorie/:categoryId/page/:pageNumber" component={ShopCardGroup} />
           <Route path="/categorie/:categoryId/" component={ShopCardGroup} />
           <Route path="/produit/:productId" component={ProductPage} />
-          {auth && (<Route path="/favoris" render={(props) => <ShopCardGroup {...props} action='favorites'/>} />)}
+          {!isServer && auth && (<Route path="/favoris" render={(props) => <ShopCardGroup {...props} action='favorites'/>} />)}
           {/* <PrivateRoute path="/favoris" component={(props) => <ShopCardGroup {...props} action='favorites'/>} /> */}
 
           <Route path="/cart" component={Cart} />
