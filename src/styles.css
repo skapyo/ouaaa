@@ -1,4 +1,22 @@
+@import url('https://fonts.googleapis.com/css?family=Pacifico&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Amatic+SC&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Ubuntu+Condensed&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Ubuntu&display=swap');
+
 .App {
   font-family: sans-serif;
   text-align: center;
+}
+
+
+.downloadLink {
+  text-align: center;
+  vertical-align: middle;
+  color: #009C95;
+  padding-top: 14px;
+  padding-left: 100px;
+}
+.leaflet-container {
+  height: 400px;
+  width: 90%;
 }

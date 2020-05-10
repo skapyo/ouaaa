@@ -1,1 +1,10 @@
 node_modules
+.VSCodeCounter
+.eslintrc
+# Intellij
+.idea/
+*.iml
+*.iws
+.next/
+.next/*
+build/

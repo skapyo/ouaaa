@@ -1,0 +1,10 @@
+before_script:
+  - docker info
+
+build_image:
+  script:
+    - docker build -t  acteurs-de-la-transition-client:dev .
+    - docker stop  acteurs-de-la-transition-client
+    - docker rm  acteurs-de-la-transition-client
+    - cd /home/debian/docker/acteurs-de-la-transition/
+    - docker-compose up -d

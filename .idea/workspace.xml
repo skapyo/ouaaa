@@ -1,0 +1,1788 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="29dfeb29-d6d2-4b11-aa9b-9849930833f2" name="Default Changelist" comment="wording">
+      <change afterPath="$PROJECT_DIR$/.next/build-manifest.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/autodll-webpack-plugin/development_instance_0_fa20a12b706eeb75026dcc81b4c22e78/dll.manifest.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/autodll-webpack-plugin/development_instance_0_fa20a12b706eeb75026dcc81b4c22e78/dll_221947639f304f048fea.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/autodll-webpack-plugin/development_instance_0_fa20a12b706eeb75026dcc81b4c22e78/dll_221947639f304f048fea.js.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/autodll-webpack-plugin/development_instance_0_fa20a12b706eeb75026dcc81b4c22e78/stats.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/autodll-webpack-plugin/package.json.hash" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/00daff424e75efa0cac7fa28b1b69221.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/0197dd9cd34f8833d820a90cc9803ed5.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/01c5ccaa975d45015ff0fcf2c4a1819e.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/023812b9b2f86587baef6406b222d492.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/02c23f3174dde8c267099c228fe1ac75.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/0502e3b29c5f64258a089bca8b631cdc.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/06397ba02e790910980eb50243279b28.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/08683747ae672f7b769c2e8e966e369b.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/0942521d9a70001f54e95ffc2eb2507d.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/0945fe59b1f0c4a6c6dbcfe00691465f.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/09553ddcc6a464547cbdbe722d850362.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/0a50ba5caecb53d8e60dcf8c46a5628c.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/0b46e532416fba553be641f51ef1c3ff.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/0e3c5576be5fb071dd8c3e00002f62f9.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/0eab6f5ba47efe798cce5c0ef26de8e3.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/0ed7f965e7bb92e1a65f923b2508a446.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/0fb9230a9a78e518cf1b3a27e375e23e.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/10acb33188823a94ebf2e647095725aa.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/10d92b706b64e10406f4969a89e02ac9.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/1199e593be8ef3fa6c8ef375180a9321.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/1208d74ac2bdcfb4e7680487c51c0a65.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/132e46517ecd9a5ed82d5f04bcad1eec.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/148086ccbf6d18680f9edba35ec70a17.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/14f6be6bed3290dcfbf892ae9de3d8a7.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/16a27f76b60b1b34e21b19c6184f3f6f.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/18dd864a8c5c503797d514b71e9b05ac.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/1bd4c53fd62fe0947975b2359908ae82.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/1c64c812aad61e17f7ee871cd9e310f5.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/1c8b493c36d6de1b87c84cbdf7ae3bd0.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/1ced5faff45a4e646d81ee4ef7c19be2.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/1e1ca68484ae46409e15c47fe9a2e793.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/1e8f8bf0a46b7eb1810e49f940975111.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/1e9727a641b1435314f26b8d54f5b2c7.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/1ec733c236795e5e8be6d6824105789c.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/1f58761d0f5e96c14c076c58aa471c8f.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/1ff3576241f4a1d4e21d4aa834d52472.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/20e4be60829aea9843d7c15ccbb42ca5.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/21f0388e46e8d0d6b9ed3b2b50e45e68.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/23e74daf6986cd84cab9e02f6cd87a75.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/25a218c7d789ce796a28eb65016a394b.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/2888e9ce2c6555fc6004737728eff805.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/2dc599d804f561416c3af948901718ee.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/309b32d8b06e5606e4b407ae12e32348.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/31592070de08f04f74a3b19ea8fe26d7.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/31fb6cdbfe6cd445205a45e4d3401600.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/3274bc155b72881da36f68bf73d2f792.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/330258c1e8ecb6853d73122d20f27f7e.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/33dd8621f505bb536b7b3a7db95123b4.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/37d238ef816922fec11832d5764dfe4e.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/3912c2d2e818737dc371cc9d9ee633b2.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/3a6c14c758a17689212ed320593a42e2.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/3ac652ad61a21dab1cfa625cdf81b48c.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/3b42ee7c46adb2e8a11f06b25efeb3d9.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/3c9cdb908485cf26b2d84dd8cf414363.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/3e31164a1c1106b79a8d7604678db9ca.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/3f79d7f1a4fe56ee587a2c670ccc6331.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/4009de4eaf14251af58230416aef2563.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/403a55abd46f2753de05d3c9f8a61139.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/42ae6bb16196ca26050fd31ffe3f1df6.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/432b3958c7ae1182ffdf32c10233e8ce.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/4444267db0146b82018c1acc49417677.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/449a6324f6963839b85f41ee1732326a.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/45ad761694cb91f9418de0d3239cbc8b.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/464e295d87c2c190292476a7a6220353.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/4863b5de9223f6fc7d58d6a3403712c1.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/491df87c9e4efa3e86d9e2a3fca4db1f.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/4df6ec4dcf3b9bcdd6f6008d9f781679.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/4f619fa3c63bed3392e5ffe458e24015.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/51840f3db6b337c4d5f957ef607f6caf.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/53d5aafe7f6ccfbd48383682546be457.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/54bec534e5b25efae4ed53c4aebf1eea.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/55fecc9729dddb6a42cee412b937bbd3.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/576d7c04bb1b00b46ca6a1f303e82066.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/587a1bb4f68525b09b9dd77aee1b9bf5.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/5a7a5dd6ec74b8d4160761cc96122d5e.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/5ac7da1e587acc0e26d7ff7ce0cf22e1.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/5d5a6b586baa4cb87d26f73986f7dfbf.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/5f08c095b9a6b03ddffcb960f2c54467.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/607d54a2624c444ed143dd181f2459cb.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/624d79a6a4e612e552c367a9254ec4f0.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/646f415bd9ce26662948ff79b426e16a.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/651d0403b543942fc638d3ed57e2e57a.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/6539a4e710526ac4445350263220bd2a.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/65a0767c15ba5e9dc12b65bffe3784ef.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/67ad30a8b20834e318193c45002e90e1.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/68765d3f178d5c64e6e1506e30a3e7a6.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/6954447bbd43c1d1aef57e02b18e6d07.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/69c6556a49ba6df61ec3a0e228ecc00f.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/6b27ec2506d7be88cacc20a9af751c21.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/6b4238fd0fc8e0726c847039bcd90a27.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/6b572178fec92d64534f8eabc49fc538.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/6b7e63d8e541b0f0ce1f3cb8144174ab.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/6b994d0f2eb4b9ec5736309157584d7a.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/6bdbd96e504969a9a53dd30be311a436.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/6d242b9f35e337afda1117e9d4eda294.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/6f51e8e59edf23346e21b66160beeca0.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/7103f9d0ab8d1b030cd7a72bf0be0194.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/716994689fb0cac1cf514ac6a3e332e5.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/71e2ac6777aca7d92c91cfa68bfbdbbb.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/71ee3de251a1d31b5e1ff8651d5cbbd0.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/72d5a4996dc20979ea619f704b0f541c.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/7480e1f4518eb43b931d1fd0845a9550.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/78079cfe3abc661c54096b611200e822.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/799026388186aa6a5a247209feced031.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/7a1b27e7833d276c4ec6c4d214ece046.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/7aeb1c1267b9d220af6f2e66a89fa004.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/7b0ae08980e3aa520af5101aa08539f6.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/7cbd1d0db10c07ff0f2023e1fcd7b81b.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/7d0986646b95c5dec09515fff220ca6c.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/7e47c8f3235cd4e0c10a8135728706ed.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/80b2aa3edfe825194b2f96eb922e0777.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/823635e6ccb06634f85136948b4a2d2f.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/83ee21602c05692c4ee96381288007f6.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/84aaee017d18964f98e5d365686774f1.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/8632cb68e57a67524fb032dd4cc5df58.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/8760eb763052f9bf0dffa9cca11dfc17.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/881b0d51e9d0cf3f6695dcca16e67407.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/8b172142140c547f81c11751efd415c9.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/8deb0470145f61778870c1e866ccc848.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/8e800d1eb2bbbb2165c4f8932f2e94c8.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/8f0ad58a0fb354d1f1ab593790f35717.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/9031a61e800fa186ad3f5f72b5bc80a9.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/9085a3159d6f88e83225b3dea0952031.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/92a2ff51929ebf2244802da7409f0f3f.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/9335ff02b66c8546fa26dde078320673.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/9377a8cfa1aa4ca2a5b45162368289db.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/942fe7ae56d70aa9cbbdccb64bba8ff1.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/95fb67187aa317d3d3f43d25f9923192.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/966786957a743f729460dcae376fae74.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/96849350ef1d84edb771eca2c745d824.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/96961291817f0221d89c8e8e9dced8ba.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/973f80fb76774bb1dd3146e6035b68b9.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/97dfc50e5ab4bf410815ba64ae4b1dbb.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/98d538f270de75e95f0f942a02458fd8.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/9b222ca6e2fd903c88b91c459b7bda0d.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/9b695b260fee2afbf444eed441acde47.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/9ba332f11e325c94f378c688cc604b75.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/9bc53ab4a367151a44e657f60ce9187c.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/9ce394f0fa16b77bc2b156243668abf0.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/9d806b189151e6dbcdc21bf70d62e476.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/9d87767dc498ce9cbbb3b31bfda2a83f.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/9e045ba0cadb8880856aaa3d0a88741f.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/a027e749787b9a10d68c5d17168a1d88.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/a0680511610723e72b68614dab73f973.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/a28ce9a715ec93f861405fc15058be41.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/a2c4596fb052d039c7500ec09a4b680c.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/a35a19fde09ba102aa44bd1a8abb4e73.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/a3c27312ba7c194b550ab968e0e933cd.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/a62d5622fdd33502e3adb65b308d5ba8.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/a74697da4b0b780d14e77a08fec34848.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/aaef00be8224a304c46b63fcf7f00112.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/abdc79efc1862ffa3984c47312056c6f.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/ad9d2c2e2786c22a95841c52a1a8da95.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/ae5f919e97560762e4d660d7800e3c87.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/ae68d5a9a13158db4156a70b5dd58edb.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/ae9af3950ac0af96b99bd1d1540cace6.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/b02a5f7442ced0ecaeeb2dd874bb7578.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/b1e59f3c74e7c6f7c1771f14dd2cc94d.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/b22eed85ce57830f9d4bbcb178c60198.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/b2455d6b507800f6f5026e9dfd57860d.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/b32428f14cd035b6af988a602bd48b48.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/b35a89eaf936e796ae997d6f75701dec.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/b36b3fac6a8acb00945c64ac8a901196.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/b3bbe9f4dfce218e950fee476fdcb208.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/b45213c87e906b2292df8542cf23a31a.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/b587b9c35e9703250f92379660201412.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/b6027edaac76faf23915e90121789c77.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/b639cabf9ff6413a6830789be674f4d0.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/b6587b56a74508a76e260db330c8d8f8.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/b7052e170fc6f8bf65d20a5ad792aee0.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/b8d4471e4a7903aa986ec8c92dbbfb8f.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/b988830920fd4b083ae46cf3537f6004.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/bc131a7b3fc542fdbf380428788e6480.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/bc65754958f512d1ecec2b1547d97ff7.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/bdf55106c4614d5c6e41863958194ff0.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/be03a85d59c4a4d808b5480fae52a019.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/befff49b642334b3e640c377cc277923.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/bfe61f61d8c41347d370521cc02a25cf.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/c03abe5dbed1f597973f8103035f2474.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/c23089056b1cf5acc5518e3b33e66b2f.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/c2d603b67e9cc823ecaaedd06d9b14ef.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/c4d145e92b4cee3e76b95da4f98143d4.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/c79023465a41e4e49077f4e78da0e6a1.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/c7a794a2d557e413259a45d1b59839b0.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/c7b56a43d534fc2837aa93d7118fbf0d.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/c804f60527af96c0131d52d1c2a26148.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/c815f27e18fe5004bb66550d7b95385b.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/c9571af41ed02062de495bb9fa10b9a1.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/ca2f69a0172477bd1ff0eefb7f9c43ba.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/cbe3759abf437bdd96d3e23b44d38c50.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/ccae97099be0814eb8a23f4cd48d7561.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/cd505132bed8b09582ead17fd9910878.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/cd84a08c9d2cef090444edb85d65e6b7.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/cda84abecd167e4d04a281a752b79b5d.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/cf6d20ddcdbaebdbcfe794e1ede62d50.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/cf963ef0d81a9ca73080b4545d68b22b.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/cfe9a7530da7aabcbc8b86fad4815147.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/d0db1fe167bb45fcfa4e7735434760a5.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/d116ea059b7db1310b7ea438002d8886.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/d1bc6d902aad536e9f0e53d68726b7df.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/d1c2701fa9577393ad6534742d41e9ed.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/d29898082530628aa943264187341a92.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/d2f345b1f5e5ab5f1ad95c71e83c2168.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/d30fce7bb78631c85348b0ba68d5c1a1.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/d55ea0e5df2897da392134f17a0a9b40.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/d77ea17676627e9ccae0a0b4c187bf7b.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/d796fcb1530adb6ca743f49c7c694b74.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/d977546834bc60d5c6634e4df7c83960.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/da2bca844e3840cf48a7eaaf31b28c05.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/dc2ec7d2a510c13c1ba030f6fb919ad9.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/dd7f9a037e86dd3c39438aa4896ab657.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/df5f268c370077bf8eee1233f8970a0a.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/dfbb1c205a687289f81359ab74252d70.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/e275b1c55f60fcb0af4af7e4b90e8f5d.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/e282b7f710d60241cac3722e7fc9c5cb.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/e2a937c09b8d372ca44d8b35a7bd0c99.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/e344f2f97040b7a6b26b1e6fc1620102.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/e39e9901555c94d4360184b212767443.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/e3a791a115b477dfb0eec653e2a72507.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/e582db89d680f1a9d8a22d3ffc10aeba.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/e59fdd1cdb3ea885b95786da5d8cd201.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/e8f4feaf631cf11d641eb93772aa314b.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/ea3feee7cd89d402d71540c841ef05e9.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/ea45a7527ea7dc41edd82481a833ad8b.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/ebe8b9501c2f4b78e1f00ef3a8cc09fb.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/ed13c9b77c34c9ec9d671295c1d1de99.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/edd9ac11d2c94bb9f31d653c13284256.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/ee78c2aa95a5c5f68683ea8c84ea65f7.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/eea9a270ef146d8abed44d701292c96f.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/eeb067c84a8ed874f1a61de0fe43e42a.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/effa0ded6ec8472b849457b8241e2727.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/f0143a93140edbe2f53a4205a7748789.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/f242ddcb1deadbaf33e71fce7686d037.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/f28fd920886964a2fd0bc3485c36509e.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/f4afe05cbf5b23415d7349ab601fd8b8.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/f4ecd465c4f1510094a88cf5763b1ca6.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/f566b52d1a7d5976fa1057af0a62e87f.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/f63e18314546059a28783d582d2a9eef.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/f651f322a973d6cc1e60a2ffe87da8cc.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/f6b5fab888f9d59247731927c48e0ab5.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/f71715b920f029a7c27738af2bfc8b74.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/f80d8c40f128e12d18996b5350be3484.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/f80e846c280a92a9f032b7d6682913f3.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/fa496d3f0972b47febabe068d981e916.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/fbf37f639ab3b1254b4aead8798e884c.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/fc32eb78ac65bb5aeef88a8c5168a3b4.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/fcfee2ccbd046fbaf0631353145d40bd.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/cache/next-babel-loader/fdddbc40d89d73a6b09f33d1d9f52315.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/react-loadable-manifest.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/server/init-server.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/server/init-server.js.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/server/on-error-server.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/server/on-error-server.js.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/server/pages-manifest.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/server/ssr-module-cache.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/server/static/development/pages/_app.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/server/static/development/pages/_app.js.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/server/static/development/pages/_document.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/server/static/development/pages/_document.js.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/server/static/development/pages/_error.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/server/static/development/pages/_error.js.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/server/static/development/pages/index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/server/static/development/pages/index.js.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/server/static/development/pages/next/dist/pages/_error.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/server/static/development/pages/next/dist/pages/_error.js.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/chunks/0.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/chunks/0.js.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/development/_buildManifest.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/development/_ssgManifest.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/development/dll/dll_221947639f304f048fea.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/development/dll/dll_221947639f304f048fea.js.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/development/pages/_app.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/development/pages/_app.js.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/development/pages/_error.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/development/pages/_error.js.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/development/pages/index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/development/pages/index.js.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/development/pages/next/dist/pages/_error.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/development/pages/next/dist/pages/_error.js.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/runtime/amp.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/runtime/amp.js.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/runtime/main.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/runtime/main.js.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/runtime/polyfills.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/runtime/polyfills.js.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/runtime/react-refresh.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/runtime/react-refresh.js.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/runtime/webpack.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/runtime/webpack.js.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/00b67f58f609194f32ea.hot-update.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/043729ea2127b4f0a1a9.hot-update.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/18fbc59a035a8e47125b.hot-update.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/35580b1400e9afc3221a.hot-update.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/362e442b873f311faf59.hot-update.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/3c13659324f9f1801b89.hot-update.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/3cd4d5004e5fcee15826.hot-update.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/3dc217b3d7617757a1fc.hot-update.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/3faa33e5065c238e811d.hot-update.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/4209ee8b54b6290b2986.hot-update.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/4274585e07ce475a2ddd.hot-update.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/43f2b8aeae4f3ee763db.hot-update.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/562647705792d2f0c08d.hot-update.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/593faa9a2b7ec5af5928.hot-update.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/63a6c8b95c36d2eb4903.hot-update.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/6edf496851f81c807afd.hot-update.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/7f16776ae2f11c3459e1.hot-update.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/8456d05ecc5035387fa2.hot-update.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/894bb75f463d4c898fba.hot-update.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/8e08cef8449770ab8fde.hot-update.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/8f0ed8ae272968e428c9.hot-update.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/9e30f92aa839565dc4e1.hot-update.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/a3758448b35c5e274334.hot-update.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/afecbf0c6e8ab73d375e.hot-update.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/b0697fddba0f06cc45f5.hot-update.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/b738ad3e8e10668dece8.hot-update.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/b76fdea6a83caab456c0.hot-update.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/b8f16dba1dffab98073a.hot-update.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/b9c820aacf2fac708302.hot-update.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/bf06513b1ef9e572e7d4.hot-update.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/d23fe02048c2bced9482.hot-update.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/d4893eafcade3abdab34.hot-update.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/e31d616889f6dbe8d692.hot-update.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/ebbbb764aeedb7abb388.hot-update.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/ed4549e353474b370e4d.hot-update.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/static/development/pages/index.js.043729ea2127b4f0a1a9.hot-update.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/static/development/pages/index.js.043729ea2127b4f0a1a9.hot-update.js.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/static/development/pages/index.js.35580b1400e9afc3221a.hot-update.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/static/development/pages/index.js.35580b1400e9afc3221a.hot-update.js.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/static/development/pages/index.js.3cd4d5004e5fcee15826.hot-update.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/static/development/pages/index.js.3cd4d5004e5fcee15826.hot-update.js.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/static/development/pages/index.js.562647705792d2f0c08d.hot-update.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/static/development/pages/index.js.562647705792d2f0c08d.hot-update.js.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/static/development/pages/index.js.593faa9a2b7ec5af5928.hot-update.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/static/development/pages/index.js.593faa9a2b7ec5af5928.hot-update.js.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/static/development/pages/index.js.63a6c8b95c36d2eb4903.hot-update.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/static/development/pages/index.js.63a6c8b95c36d2eb4903.hot-update.js.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/static/development/pages/index.js.894bb75f463d4c898fba.hot-update.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/static/development/pages/index.js.894bb75f463d4c898fba.hot-update.js.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/static/development/pages/index.js.8e08cef8449770ab8fde.hot-update.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/static/development/pages/index.js.8e08cef8449770ab8fde.hot-update.js.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/static/development/pages/index.js.b738ad3e8e10668dece8.hot-update.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/static/development/pages/index.js.b738ad3e8e10668dece8.hot-update.js.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/static/development/pages/index.js.b76fdea6a83caab456c0.hot-update.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/static/development/pages/index.js.b76fdea6a83caab456c0.hot-update.js.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/static/development/pages/index.js.b9c820aacf2fac708302.hot-update.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/static/development/pages/index.js.b9c820aacf2fac708302.hot-update.js.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/static/development/pages/index.js.d23fe02048c2bced9482.hot-update.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/static/development/pages/index.js.d23fe02048c2bced9482.hot-update.js.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/static/development/pages/index.js.ed4549e353474b370e4d.hot-update.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.next/static/webpack/static/development/pages/index.js.ed4549e353474b370e4d.hot-update.js.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/next.config.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pages/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Components/Auth/PrivateRoute.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Auth/PrivateRoute.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Components/Body/Admin/BaseComponent/ImageCropper/styles.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Body/Admin/BaseComponent/ImageCropper/styles.module.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Components/Body/Content/HomePage/HomePage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Body/Content/HomePage/HomePage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Components/Body/Content/ProductPage/ProductPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Body/Content/ProductPage/ProductPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Components/Components/Breadcrumb/Breadcrumb.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/Components/Breadcrumb/Breadcrumb.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Container/BodyLayout/DesktopBodyLayout.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Container/BodyLayout/DesktopBodyLayout.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HomePageLayout.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/HomePageLayout.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.js" afterDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DefaultGradleProjectSettings">
+    <option name="isMigrated" value="true" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/HomePageLayout.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="122">
+              <caret line="29" selection-start-line="29" selection-end-line="29" />
+              <folding>
+                <element signature="e#0#78#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="136">
+              <caret line="8" column="7" selection-start-line="8" selection-start-column="7" selection-end-line="8" selection-end-column="7" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Components/Body/Content/ProductPage/ProductPage.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="119">
+              <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Components/Components/Breadcrumb/Breadcrumb.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <caret line="2" column="52" selection-start-line="2" selection-start-column="52" selection-end-line="2" selection-end-column="52" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/package.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="17">
+              <caret line="17" column="37" selection-start-line="17" selection-start-column="37" selection-end-line="17" selection-end-column="37" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/index.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="374">
+              <caret line="22" column="36" selection-start-line="22" selection-start-column="36" selection-end-line="22" selection-end-column="36" />
+              <folding>
+                <element signature="e#0#26#0" expanded="true" />
+                <element signature="e#823#891#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pages/index.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="265">
+              <caret line="162" column="62" selection-start-line="162" selection-start-column="62" selection-end-line="162" selection-end-column="62" />
+              <folding>
+                <element signature="e#0#26#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Container/BodyLayout/DesktopBodyLayout.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="371">
+              <caret line="29" column="12" selection-start-line="29" selection-start-column="12" selection-end-line="29" selection-end-column="12" />
+              <folding>
+                <element signature="e#0#41#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/next.config.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="187">
+              <caret line="11" column="1" selection-start-line="11" selection-start-column="1" selection-end-line="11" selection-end-column="1" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/nginx/nginx.conf">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>withTracker</find>
+      <find>state</find>
+      <find>useState(</find>
+      <find>setCategorySelectInd</find>
+      <find>location</find>
+      <find>efv</find>
+      <find>category: &quot;</find>
+      <find>commande/</find>
+      <find>setst</find>
+      <find>debugger</find>
+      <find>homePage.png</find>
+      <find>Il n'a p</find>
+      <find>Il n'a pas de</find>
+      <find>book</find>
+      <find>ReactGA.</find>
+      <find>Schipper Horticulture</find>
+      <find>UA-163414127-1</find>
+      <find>initializeGA</find>
+      <find>UA-164586242-1</find>
+      <find>schipper-horticulture</find>
+      <find>schipper</find>
+      <find>createUploadLink</find>
+      <find>createUploadLink({</find>
+      <find>ge.getItem(config.SESSION_STORAGE.PERSISTENT_CO) === &quot;true&quot;) {</find>
+      <find>undef</find>
+      <find>localStorage</find>
+      <find>history</find>
+      <find>BrowserRouter</find>
+      <find>createBrowserHistory</find>
+      <find>&lt;link</find>
+    </findStrings>
+    <replaceStrings>
+      <replace>data.product</replace>
+      <replace>Category</replace>
+      <replace>ProductPAge</replace>
+      <replace>ProductPage</replace>
+      <replace>CATEGORYS</replace>
+      <replace>session</replace>
+      <replace>&lt;li&gt;</replace>
+      <replace>&lt;/li&gt;</replace>
+      <replace>categories</replace>
+      <replace>CATEGORIES</replace>
+      <replace>CATEGORY</replace>
+      <replace>category</replace>
+      <replace>productsAdminQuery</replace>
+      <replace>Il n'y a pas de</replace>
+      <replace>Acteurs de la transition</replace>
+      <replace>UA-164586242-1</replace>
+      <replace>acteurs-de-la-transtion</replace>
+    </replaceStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/src/Components/Body/Admin/ProductsAdmin/SelectProductAdmin.js" />
+        <option value="$PROJECT_DIR$/src/Components/Body/Admin/CategoriesAdmin/CategoriesAdmin.js" />
+        <option value="$PROJECT_DIR$/src/Components/Body/Admin/BaseComponent/ProductsSelect.js" />
+        <option value="$PROJECT_DIR$/src/Components/Body/Admin/BaseComponent/ImageCropper/ImageCropper.js" />
+        <option value="$PROJECT_DIR$/src/styles.css" />
+        <option value="$PROJECT_DIR$/src/Components/Components/Breadcrumb/Breadcrumb.js" />
+        <option value="$PROJECT_DIR$/Dockerfile" />
+        <option value="$PROJECT_DIR$/nginx/nginx.conf" />
+        <option value="$PROJECT_DIR$/src/Components/Body/Admin/ProductsAdmin/ModifyProductAdmin.js" />
+        <option value="$PROJECT_DIR$/package.json" />
+        <option value="$PROJECT_DIR$/src/Components/Body/Content/Order/OrderContainer.js" />
+        <option value="$PROJECT_DIR$/src/Components/Navigation/MobileNavbar.js" />
+        <option value="$PROJECT_DIR$/src/Container/MobileContainer.js" />
+        <option value="$PROJECT_DIR$/src/config.json" />
+        <option value="$PROJECT_DIR$/src/Components/Body/Content/ShopCards/ShopCard.jsx" />
+        <option value="$PROJECT_DIR$/src/Components/Body/Admin/OrdersAdmin/OrdersAdmin.js" />
+        <option value="$PROJECT_DIR$/src/Queries/contentQueries.js" />
+        <option value="$PROJECT_DIR$/src/Utils/utils.js" />
+        <option value="$PROJECT_DIR$/src/Components/Auth/Signup.js" />
+        <option value="$PROJECT_DIR$/src/Components/Body/BodyNavigation/DesktopContentMenu.js" />
+        <option value="$PROJECT_DIR$/src/Components/Body/Content/ContentLayout.js" />
+        <option value="$PROJECT_DIR$/src/Components/Body/Content/Device/device.js" />
+        <option value="$PROJECT_DIR$/src/Components/Auth/Login.js" />
+        <option value="$PROJECT_DIR$/src/Components/Body/Content/Session/session.js" />
+        <option value="$PROJECT_DIR$/src/Components/Body/Content/Session/sessionHelpers.js" />
+        <option value="$PROJECT_DIR$/src/Context/Session/sessionHelpers.js" />
+        <option value="$PROJECT_DIR$/src/Components/Body/Admin/ProductsAdmin/display/ProductDisplayAdmin.js" />
+        <option value="$PROJECT_DIR$/src/Components/Body/BodyNavigation/DesktopAdminContentMenu.js" />
+        <option value="$PROJECT_DIR$/src/Components/Body/Content/ShopCards/ShopCardGroup.js" />
+        <option value="$PROJECT_DIR$/node_modules/react-router/esm/react-router.js" />
+        <option value="$PROJECT_DIR$/src/Components/Body/Content/Cart/Cart.js" />
+        <option value="$PROJECT_DIR$/src/Container/BodyLayout/MobileBodyLayout.js" />
+        <option value="$PROJECT_DIR$/src/Components/Body/Content/ShopCards/ShopCard.js" />
+        <option value="$PROJECT_DIR$/src/Components/Body/Content/ProductPage/ProductPage.js" />
+        <option value="$PROJECT_DIR$/src/Hooks/useWindowSize.js" />
+        <option value="$PROJECT_DIR$/src/Components/Body/Admin/ProductsAdmin/ProductAdmin.js" />
+        <option value="$PROJECT_DIR$/src/Components/Body/Content/HomePage/HomePage.js" />
+        <option value="$PROJECT_DIR$/src/Components/Body/Content/Order/Order.js" />
+        <option value="$PROJECT_DIR$/src/analyticsTracker.js" />
+        <option value="$PROJECT_DIR$/.gitlab-ci.yml" />
+        <option value="$PROJECT_DIR$/src/Components/Navigation/DesktopNavbar.js" />
+        <option value="$PROJECT_DIR$/src/Components/Navigation/MobileSidebar.js" />
+        <option value="$PROJECT_DIR$/public/index.html" />
+        <option value="$PROJECT_DIR$/src/index.js" />
+        <option value="$PROJECT_DIR$/src/next.config.js" />
+        <option value="$PROJECT_DIR$/next.config.js" />
+        <option value="$PROJECT_DIR$/pages/index.js" />
+        <option value="$PROJECT_DIR$/src/Container/BodyLayout/DesktopBodyLayout.js" />
+        <option value="$PROJECT_DIR$/src/Components/Auth/PrivateRoute.js" />
+        <option value="$PROJECT_DIR$/src/HomePageLayout.js" />
+        <option value="$PROJECT_DIR$/.gitignore" />
+      </list>
+    </option>
+  </component>
+  <component name="JsFlowSettings">
+    <service-enabled>true</service-enabled>
+    <exe-path />
+    <other-services-enabled>true</other-services-enabled>
+    <auto-save>true</auto-save>
+  </component>
+  <component name="MavenProjectNavigator">
+    <treeState>
+      <expand />
+      <select />
+    </treeState>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="-7" />
+    <option name="width" value="974" />
+    <option name="height" value="1047" />
+  </component>
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <hideEmptyPackages ProjectPane="false" />
+      <abbreviatePackageNames ProjectPane="true" />
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="PackagesPane" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="acteurs-de-la-transistion-client" type="b2602c69:ProjectViewProjectNode" />
+              <item name="client" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="acteurs-de-la-transistion-client" type="b2602c69:ProjectViewProjectNode" />
+              <item name="client" type="462c0819:PsiDirectoryNode" />
+              <item name="pages" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="editor.config.ad.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="ts.external.directory.path" value="C:\Users\skaPy\IdeaProjects\Commande\client\node_modules\typescript\lib" />
+    <property name="two.files.diff.last.used.folder" value="$PROJECT_DIR$/../client_stof" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\skaPy\IdeaProjects\acteurs-de-la-transition\client" />
+      <recent name="C:\Users\skaPy\IdeaProjects\Commande\client\public" />
+      <recent name="C:\Users\skaPy\IdeaProjects\Commande\client\src" />
+      <recent name="C:\Users\skaPy\IdeaProjects\Commande\client\src\Components\Body\Content" />
+      <recent name="C:\Users\skaPy\IdeaProjects\Commande\client\src\Components\Navigation\Items\del" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\skaPy\IdeaProjects\Commande\client\public" />
+      <recent name="C:\Users\skaPy\IdeaProjects\Commande\client\src" />
+      <recent name="C:\Users\skaPy\IdeaProjects\Commande\client" />
+      <recent name="C:\Users\skaPy\IdeaProjects\Commande\client\src\Session" />
+      <recent name="C:\Users\skaPy\IdeaProjects\Commande\client\src\Hoc" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="npm.start">
+    <configuration name="index.js" type="NodeJSConfigurationType" nameIsGenerated="true" path-to-js-file="src/index.js" working-dir="$PROJECT_DIR$">
+      <method v="2" />
+    </configuration>
+    <configuration name="run build" type="js.build_tools.npm" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="build" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="start" type="js.build_tools.npm" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="start" />
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Node.js.index.js" />
+      <item itemvalue="npm.run build" />
+      <item itemvalue="npm.start" />
+    </list>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="29dfeb29-d6d2-4b11-aa9b-9849930833f2" name="Default Changelist" comment="" />
+      <created>1584800385151</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1584800385151</updated>
+      <workItem from="1584800386501" duration="1598000" />
+      <workItem from="1584867916483" duration="1812000" />
+      <workItem from="1584876247677" duration="1867000" />
+      <workItem from="1584878693575" duration="3972000" />
+      <workItem from="1584904891812" duration="742000" />
+      <workItem from="1585074578380" duration="1545000" />
+      <workItem from="1585134192926" duration="3881000" />
+      <workItem from="1585216236868" duration="3855000" />
+      <workItem from="1585236428029" duration="4372000" />
+      <workItem from="1585243839919" duration="427000" />
+      <workItem from="1585244297414" duration="376000" />
+      <workItem from="1585244744182" duration="10016000" />
+      <workItem from="1585311972028" duration="2937000" />
+      <workItem from="1585344320042" duration="614000" />
+      <workItem from="1585345389871" duration="1765000" />
+      <workItem from="1585383260224" duration="14113000" />
+      <workItem from="1585436176896" duration="688000" />
+      <workItem from="1585481855601" duration="4188000" />
+      <workItem from="1585514905843" duration="4005000" />
+      <workItem from="1585551905747" duration="616000" />
+      <workItem from="1585564064082" duration="1220000" />
+      <workItem from="1585593124680" duration="3233000" />
+      <workItem from="1585650582745" duration="2523000" />
+      <workItem from="1585668663850" duration="4286000" />
+      <workItem from="1585724399692" duration="12390000" />
+      <workItem from="1585765735064" duration="604000" />
+      <workItem from="1585834878140" duration="1007000" />
+      <workItem from="1585841220255" duration="1134000" />
+      <workItem from="1585900631599" duration="4579000" />
+      <workItem from="1585990675142" duration="2844000" />
+      <workItem from="1586025208767" duration="595000" />
+      <workItem from="1586096073896" duration="5280000" />
+      <workItem from="1586113235730" duration="256000" />
+      <workItem from="1586183814831" duration="1323000" />
+      <workItem from="1586185175656" duration="6298000" />
+      <workItem from="1586246354578" duration="179000" />
+      <workItem from="1586454999097" duration="1141000" />
+      <workItem from="1586505730569" duration="2809000" />
+      <workItem from="1586590391987" duration="5145000" />
+      <workItem from="1586615333178" duration="10998000" />
+      <workItem from="1586667338193" duration="8791000" />
+      <workItem from="1586694662539" duration="12779000" />
+      <workItem from="1586782313504" duration="5071000" />
+      <workItem from="1586808965878" duration="76000" />
+      <workItem from="1586854195305" duration="13233000" />
+      <workItem from="1586938525223" duration="8022000" />
+      <workItem from="1586976753165" duration="1283000" />
+      <workItem from="1587024360694" duration="976000" />
+      <workItem from="1587032558073" duration="1553000" />
+      <workItem from="1587052531077" duration="5815000" />
+      <workItem from="1587148923242" duration="5747000" />
+      <workItem from="1587289865805" duration="4634000" />
+      <workItem from="1587363094055" duration="8399000" />
+      <workItem from="1587392070473" duration="233000" />
+      <workItem from="1587471120379" duration="1802000" />
+      <workItem from="1587540939003" duration="34000" />
+      <workItem from="1587645344167" duration="2578000" />
+      <workItem from="1587816278350" duration="1731000" />
+      <workItem from="1587833767345" duration="1241000" />
+      <workItem from="1588869359758" duration="3339000" />
+    </task>
+    <task id="LOCAL-00012" summary="Administration produit">
+      <created>1585692494374</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1585692494374</updated>
+    </task>
+    <task id="LOCAL-00013" summary="update data producuts admin">
+      <created>1585735606189</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1585735606189</updated>
+    </task>
+    <task id="LOCAL-00014" summary="label">
+      <created>1585741088399</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1585741088399</updated>
+    </task>
+    <task id="LOCAL-00015" summary="production">
+      <created>1585741256262</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1585741256262</updated>
+    </task>
+    <task id="LOCAL-00016" summary="revert">
+      <created>1585741316351</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1585741316351</updated>
+    </task>
+    <task id="LOCAL-00017" summary="update link bon de commande">
+      <created>1585753265152</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1585753265152</updated>
+    </task>
+    <task id="LOCAL-00018" summary="update commande link">
+      <created>1585756685650</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1585756685650</updated>
+    </task>
+    <task id="LOCAL-00019" summary="remove console log">
+      <created>1585994706208</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1585994706209</updated>
+    </task>
+    <task id="LOCAL-00020" summary="test dockerfile">
+      <created>1586097892951</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1586097892951</updated>
+    </task>
+    <task id="LOCAL-00021" summary="test dockerfile">
+      <created>1586098212967</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1586098212967</updated>
+    </task>
+    <task id="LOCAL-00022" summary="test">
+      <created>1586098413015</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1586098413015</updated>
+    </task>
+    <task id="LOCAL-00023" summary="test">
+      <created>1586098474334</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1586098474334</updated>
+    </task>
+    <task id="LOCAL-00024" summary="update label gitignore">
+      <created>1586113132531</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1586113132531</updated>
+    </task>
+    <task id="LOCAL-00025" summary="refacto Page en category">
+      <created>1586197719820</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1586197719820</updated>
+    </task>
+    <task id="LOCAL-00026" summary="prod docker">
+      <created>1586455745540</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1586455745540</updated>
+    </task>
+    <task id="LOCAL-00027" summary="message authenfication error">
+      <created>1586601411395</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1586601411395</updated>
+    </task>
+    <task id="LOCAL-00028" summary="admin commande">
+      <created>1586624849771</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1586624849771</updated>
+    </task>
+    <task id="LOCAL-00029" summary="Information produit">
+      <created>1586669440633</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1586669440633</updated>
+    </task>
+    <task id="LOCAL-00030" summary="Home page et masquage coeur non connecté">
+      <created>1586680439167</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1586680439167</updated>
+    </task>
+    <task id="LOCAL-00031" summary="modifyLink">
+      <created>1586682683974</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1586682683974</updated>
+    </task>
+    <task id="LOCAL-00032" summary="Mobile">
+      <created>1586696718551</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1586696718551</updated>
+    </task>
+    <task id="LOCAL-00033" summary="google analytics + bullet bug graphique">
+      <created>1586717596785</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1586717596785</updated>
+    </task>
+    <task id="LOCAL-00034" summary="analytics react history">
+      <created>1586719212558</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1586719212559</updated>
+    </task>
+    <task id="LOCAL-00035" summary="admin order">
+      <created>1586722559668</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1586722559668</updated>
+    </task>
+    <task id="LOCAL-00036" summary="fixed menu">
+      <created>1586724384451</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1586724384451</updated>
+    </task>
+    <task id="LOCAL-00037" summary="bon de commande téléchargable">
+      <created>1586725011530</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1586725011530</updated>
+    </task>
+    <task id="LOCAL-00038" summary="libelle">
+      <created>1586782473655</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1586782473655</updated>
+    </task>
+    <task id="LOCAL-00039" summary="quantité defaut 1">
+      <created>1586796952680</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1586796952680</updated>
+    </task>
+    <task id="LOCAL-00040" summary="status commande admin">
+      <created>1586808457564</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1586808457564</updated>
+    </task>
+    <task id="LOCAL-00041" summary="price null">
+      <created>1586809031971</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1586809031971</updated>
+    </task>
+    <task id="LOCAL-00042" summary="remove css orientation">
+      <created>1586869533575</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1586869533576</updated>
+    </task>
+    <task id="LOCAL-00043" summary="Ajout de produit en masse depuis la page catégorie">
+      <created>1586956502927</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1586956502927</updated>
+    </task>
+    <task id="LOCAL-00044" summary="admin order">
+      <created>1586958262575</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1586958262575</updated>
+    </task>
+    <task id="LOCAL-00045" summary="administration category">
+      <created>1586977571941</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1586977571941</updated>
+    </task>
+    <task id="LOCAL-00046" summary="changement categoys en categories">
+      <created>1586977834517</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1586977834517</updated>
+    </task>
+    <task id="LOCAL-00047" summary="pagination">
+      <created>1587062768858</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1587062768858</updated>
+    </task>
+    <task id="LOCAL-00048" summary="Scroll page d'acceuil">
+      <created>1587067238696</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1587067238696</updated>
+    </task>
+    <task id="LOCAL-00049" summary="like product">
+      <created>1587230542329</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1587230542329</updated>
+    </task>
+    <task id="LOCAL-00050" summary="correction caractere en trop">
+      <created>1587230651523</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1587230651523</updated>
+    </task>
+    <task id="LOCAL-00051" summary="correction">
+      <created>1587315399961</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1587315399961</updated>
+    </task>
+    <task id="LOCAL-00052" summary="error">
+      <created>1587363497486</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1587363497487</updated>
+    </task>
+    <task id="LOCAL-00053" summary="supression menu inutile">
+      <created>1587363891477</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1587363891477</updated>
+    </task>
+    <task id="LOCAL-00054" summary="favoris vide">
+      <created>1587364160507</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1587364160507</updated>
+    </task>
+    <task id="LOCAL-00055" summary="google analytics">
+      <created>1587388946531</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1587388946532</updated>
+    </task>
+    <task id="LOCAL-00056" summary="analytics">
+      <created>1587392053796</created>
+      <option name="number" value="00056" />
+      <option name="presentableId" value="LOCAL-00056" />
+      <option name="project" value="LOCAL" />
+      <updated>1587392053796</updated>
+    </task>
+    <task id="LOCAL-00057" summary="remove debugger">
+      <created>1587392154984</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1587392154984</updated>
+    </task>
+    <task id="LOCAL-00058" summary="home page">
+      <created>1587645744819</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1587645744821</updated>
+    </task>
+    <task id="LOCAL-00059" summary="home page">
+      <created>1587646988623</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1587646988623</updated>
+    </task>
+    <task id="LOCAL-00060" summary="wording">
+      <created>1587665161707</created>
+      <option name="number" value="00060" />
+      <option name="presentableId" value="LOCAL-00060" />
+      <option name="project" value="LOCAL" />
+      <updated>1587665161707</updated>
+    </task>
+    <option name="localTasksCounter" value="61" />
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="219548000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
+    <layout>
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.20735608" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="Image Layers" order="2" />
+      <window_info id="Designer" order="3" />
+      <window_info id="UI Designer" order="4" />
+      <window_info id="Capture Tool" order="5" />
+      <window_info id="Favorites" order="6" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.58037823" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.41247264" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.38652483" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="8" visible="true" weight="0.14301191" />
+      <window_info anchor="bottom" id="Database Changes" order="9" />
+      <window_info anchor="bottom" id="Terminal" order="10" />
+      <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
+      <window_info anchor="bottom" id="TypeScript" order="12" />
+      <window_info anchor="bottom" id="GraphQL" order="13" weight="0.32932165" />
+      <window_info anchor="bottom" id="Messages" order="14" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.5131291" />
+      <window_info anchor="right" id="Palette" order="3" />
+      <window_info anchor="right" id="Theme Preview" order="4" />
+      <window_info anchor="right" id="Maven" order="5" weight="0.32995737" />
+      <window_info anchor="right" id="Capture Analysis" order="6" />
+      <window_info anchor="right" id="Palette&#9;" order="7" />
+      <window_info anchor="right" id="Database" order="8" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.History.Properties">
+    <option name="COLUMN_ORDER">
+      <list>
+        <option value="0" />
+        <option value="2" />
+        <option value="3" />
+        <option value="1" />
+      </list>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="CHECK_NEW_TODO" value="false" />
+    <MESSAGE value="analytics react history" />
+    <MESSAGE value="fixed menu" />
+    <MESSAGE value="bon de commande téléchargable" />
+    <MESSAGE value="libelle" />
+    <MESSAGE value="quantité defaut 1" />
+    <MESSAGE value="status commande admin" />
+    <MESSAGE value="price null" />
+    <MESSAGE value="remove css orientation" />
+    <MESSAGE value="Ajout de produit en masse depuis la page catégorie" />
+    <MESSAGE value="admin order" />
+    <MESSAGE value="administration category" />
+    <MESSAGE value="changement categoys en categories" />
+    <MESSAGE value="pagination" />
+    <MESSAGE value="Scroll page d'acceuil" />
+    <MESSAGE value="like product" />
+    <MESSAGE value="correction caractere en trop" />
+    <MESSAGE value="correction" />
+    <MESSAGE value="error" />
+    <MESSAGE value="supression menu inutile" />
+    <MESSAGE value="favoris vide" />
+    <MESSAGE value="google analytics" />
+    <MESSAGE value="analytics" />
+    <MESSAGE value="remove debugger" />
+    <MESSAGE value="home page" />
+    <MESSAGE value="wording" />
+    <option name="LAST_COMMIT_MESSAGE" value="wording" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/Components/Auth/Login.js</url>
+          <line>107</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/Components/Auth/Login.js</url>
+          <line>73</line>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/Components/Body/Admin/ProductsAdmin/ProductAdmin.js</url>
+          <line>464</line>
+          <option name="timeStamp" value="15" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/Components/Body/Content/ProductPage/ProductPage.js</url>
+          <line>157</line>
+          <option name="timeStamp" value="18" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/node_modules/history/esm/history.js</url>
+          <line>249</line>
+          <option name="timeStamp" value="19" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/Components/Body/Content/ShopCards/ShopCard.js</url>
+          <line>74</line>
+          <option name="timeStamp" value="20" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/Components/Body/Admin/ProductsAdmin/ProductAdmin.js</url>
+          <line>516</line>
+          <option name="timeStamp" value="21" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/Components/Body/Admin/ProductsAdmin/ProductAdmin.js</url>
+          <line>570</line>
+          <option name="timeStamp" value="22" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="com.vaadin.designer2.intellij.settings.SizePresetsSettingsComponent">
+    <option name="sizePresets">
+      <list>
+        <SizePreset>
+          <option name="caption" value="Phone" />
+          <option name="height" value="568" />
+          <option name="width" value="320" />
+        </SizePreset>
+        <SizePreset>
+          <option name="caption" value="Tablet" />
+          <option name="height" value="1024" />
+          <option name="width" value="768" />
+        </SizePreset>
+        <SizePreset>
+          <option name="caption" value="Desktop" />
+          <option name="height" value="900" />
+          <option name="width" value="1440" />
+        </SizePreset>
+      </list>
+    </option>
+  </component>
+  <component name="designer2.settings">
+    <option name="autodetectServerAddress" value="true" />
+    <option name="serverIp" value="localhost" />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/Components/Body/Admin/CategoriesAdmin/CategoriesAdmin.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2703">
+          <caret line="169" column="73" selection-start-line="169" selection-start-column="73" selection-end-line="169" selection-end-column="73" />
+          <folding>
+            <element signature="e#0#51#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/semantic-ui-react/dist/commonjs/elements/Image/Image.d.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1326">
+          <caret line="90" column="28" selection-start-line="90" selection-start-column="28" selection-end-line="90" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/@types/react/index.d.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="8262">
+          <caret line="511" column="9" selection-start-line="511" selection-start-column="9" selection-end-line="511" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Components/Components/index.js">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Components/Body/Admin/AdminLayout.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Components/Body/Admin/ProductsAdmin/AddProductAdmin.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="17" column="26" selection-start-line="17" selection-start-column="26" selection-end-line="17" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Components/Auth/Signup.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="13" column="52" lean-forward="true" selection-start-line="13" selection-start-column="52" selection-end-line="13" selection-end-column="52" />
+          <folding>
+            <element signature="e#0#47#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Components/Body/BodyNavigation/DesktopContentMenu.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="23" column="21" selection-start-line="23" selection-start-column="21" selection-end-line="23" selection-end-column="21" />
+          <folding>
+            <element signature="e#0#40#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Components/Body/Content/Device/device.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="16" column="2" selection-start-line="16" selection-start-column="2" selection-end-line="16" selection-end-column="2" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Components/Navigation/MobileSidebar.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="19" column="23" lean-forward="true" selection-start-line="19" selection-start-column="23" selection-end-line="19" selection-end-column="23" />
+          <folding>
+            <element signature="e#0#50#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Components/Body/Content/Session/sessionHelpers.js" />
+    <entry file="file://$PROJECT_DIR$/src/Components/Body/Content/Session/session.js" />
+    <entry file="file://$PROJECT_DIR$/build/static/js/main.27189c91.chunk.js.map">
+      <provider editor-type-id="sourcemapFileViewerProvider" />
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="219">
+          <caret column="177485" selection-start-column="177485" selection-end-column="177485" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/react/cjs/react.development.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="31586">
+          <caret line="1858" column="37" selection-start-line="1858" selection-start-column="37" selection-end-line="1858" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Context/Session/sessionHelpers.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="6" column="57" selection-start-line="6" selection-start-column="57" selection-end-line="6" selection-end-column="57" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Components/Navigation/DesktopNavbar.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="9" column="15" selection-start-line="8" selection-start-column="15" selection-end-line="9" selection-end-column="15" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Context/Device/device.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="17" column="2" selection-start-line="17" selection-start-column="2" selection-end-line="17" selection-end-column="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Queries/contentQueries.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3740">
+          <caret line="220" column="27" selection-start-line="220" selection-start-column="13" selection-end-line="220" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Components/Body/Admin/ProductsAdmin/ModifyProductAdmin.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1411">
+          <caret line="90" column="18" selection-start-line="90" selection-start-column="18" selection-end-line="90" selection-end-column="18" />
+          <folding>
+            <element signature="e#0#49#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Components/Body/Admin/ProductsAdmin/display/ProductDisplayAdmin.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="510">
+          <caret line="40" selection-start-line="40" selection-end-line="40" />
+          <folding>
+            <element signature="e#0#67#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Utils/utils.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="20" column="16" selection-start-line="20" selection-start-column="16" selection-end-line="20" selection-end-column="16" />
+          <folding>
+            <element signature="e#0#45#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Components/Auth/Login.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1428">
+          <caret line="93" column="4" selection-start-line="93" selection-start-column="4" selection-end-line="93" selection-end-column="4" />
+          <folding>
+            <element signature="e#0#47#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Components/Body/Admin/ProductsAdmin/ProductAdmin.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="245">
+          <caret line="201" column="24" selection-start-line="201" selection-start-column="24" selection-end-line="201" selection-end-column="24" />
+          <folding>
+            <element signature="e#0#72#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Components/Body/BodyNavigation/DesktopAdminContentMenu.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="124">
+          <caret line="65" column="20" selection-start-line="65" selection-start-column="20" selection-end-line="65" selection-end-column="20" />
+          <folding>
+            <element signature="e#0#40#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Components/Body/Content/ShopCards/ShopCardGroup.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="218">
+          <caret line="156" column="12" selection-start-line="156" selection-start-column="12" selection-end-line="156" selection-end-column="12" />
+          <folding>
+            <element signature="e#0#62#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Components/Body/Content/ContentLayout.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" column="14" lean-forward="true" selection-start-line="9" selection-start-column="14" selection-end-line="9" selection-end-column="14" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/history/esm/history.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="61">
+          <caret line="244" column="9" selection-start-line="244" selection-start-column="9" selection-end-line="244" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/react-router/esm/react-router.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="700" column="9" selection-start-line="700" selection-start-column="9" selection-end-line="700" selection-end-column="9" />
+          <folding>
+            <element signature="e#0#70#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/react-router-dom/umd/react-router-dom.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="29648">
+          <caret line="1744" column="6" selection-start-line="1744" selection-start-column="6" selection-end-line="1744" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Components/Auth/ResetPassword.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="459">
+          <caret line="33" column="17" selection-start-line="33" selection-start-column="17" selection-end-line="33" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Components/Auth/PrivateRoute.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="5" selection-start-line="5" selection-end-line="5" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Components/Body/Content/ShopCards/ShopCard.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1445">
+          <caret line="108" column="27" selection-start-line="108" selection-start-column="16" selection-end-line="108" selection-end-column="27" />
+          <folding>
+            <element signature="e#0#61#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Components/Body/Content/Cart/Cart.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2669">
+          <caret line="177" column="29" selection-start-line="177" selection-start-column="21" selection-end-line="177" selection-end-column="29" />
+          <folding>
+            <element signature="e#0#63#0" expanded="true" />
+            <element signature="e#257#314#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Components/Body/Content/Order/Order.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1479">
+          <caret line="109" column="8" selection-start-line="109" selection-start-column="8" selection-end-line="109" selection-end-column="8" />
+          <folding>
+            <element signature="e#0#23#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Container/BodyLayout/MobileBodyLayout.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="36" column="26" selection-start-line="36" selection-start-column="26" selection-end-line="36" selection-end-column="26" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Components/Body/Content/Order/OrderContainer.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="20" column="13" selection-start-line="20" selection-start-column="13" selection-end-line="20" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/analyticsTracker.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="4" selection-start-line="4" selection-end-line="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Dockerfile">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitlab-ci.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" column="26" lean-forward="true" selection-start-line="9" selection-start-column="26" selection-end-line="9" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="22" selection-start-line="22" selection-end-line="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Components/Body/Content/HomePage/HomePage.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret line="2" column="40" selection-start-line="2" selection-start-column="40" selection-end-line="2" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Components/Body/Content/ProductPage/ProductPage.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Components/Components/Breadcrumb/Breadcrumb.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret line="2" column="52" selection-start-line="2" selection-start-column="52" selection-end-line="2" selection-end-column="52" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/nginx/nginx.conf">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="17" column="37" selection-start-line="17" selection-start-column="37" selection-end-line="17" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="22" column="36" selection-start-line="22" selection-start-column="36" selection-end-line="22" selection-end-column="36" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+            <element signature="e#823#891#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/next.config.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="11" column="1" selection-start-line="11" selection-start-column="1" selection-end-line="11" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pages/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="265">
+          <caret line="162" column="62" selection-start-line="162" selection-start-column="62" selection-end-line="162" selection-end-column="62" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Container/BodyLayout/DesktopBodyLayout.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="371">
+          <caret line="29" column="12" selection-start-line="29" selection-start-column="12" selection-end-line="29" selection-end-column="12" />
+          <folding>
+            <element signature="e#0#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/HomePageLayout.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="122">
+          <caret line="29" selection-start-line="29" selection-end-line="29" />
+          <folding>
+            <element signature="e#0#78#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" column="7" selection-start-line="8" selection-start-column="7" selection-end-line="8" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ArtifactsStructureConfigurable.UI">
+        <settings>
+          <artifact-editor />
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="FacetStructureConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="GlobalLibrariesConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="JdkListConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ModuleStructureConfigurable.UI">
+        <settings>
+          <last-edited>client</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectJDKs.UI">
+        <settings>
+          <last-edited>1.8</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectLibrariesConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>

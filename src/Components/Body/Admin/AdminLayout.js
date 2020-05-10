@@ -1,31 +1,37 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
+import CategoriesAdmin from "./CategoriesAdmin/CategoriesAdmin";
+import AddProductAdmin from "./ProductsAdmin/AddProductAdmin";
+import ModifyProductAdmin from './ProductsAdmin/ModifyProductAdmin';
+import SelectProductAdmin from './ProductsAdmin/SelectProductAdmin';
+import OrdersAdmin from './OrdersAdmin/OrdersAdmin';
+import ProductDisplayAdmin from './ProductsAdmin/display/ProductDisplayAdmin';
+import UsersAdmin from './UsersAdmin/UsersAdmin';
+import StockAdmin from './Stock/StockAdmin';
 
-import CategoriesAdmin from "./CategoriesAdmin";
-import ArticlesAddAdmin from "./ArticlesAddAdmin";
-import ArticlesModifyAdmin from "./ArticlesModifyAdmin";
-import ArticlesPicturesAdmin from "./ArticlesPicturesAdmin";
+import PrivateAdminRoute from './../../Auth/PrivateRoute';
 
 const AdminLayout = () => {
   return (
     <Switch>
-      <Route path="/admin/categories" component={() => <CategoriesAdmin />} />
-      <Route
+      <PrivateAdminRoute path="/admin/categories" component={() => <CategoriesAdmin />} />
+      <PrivateAdminRoute
         path="/admin/articles/add"
-        component={() => <ArticlesAddAdmin />}
+        component={() => <AddProductAdmin />}
       />
-      <Route
-        path="/admin/articles/modify"
-        component={() => <ArticlesModifyAdmin />}
+      <PrivateAdminRoute
+        path="/admin/articles/select/"
+        component={() => <SelectProductAdmin />}
       />
-      <Route
-        path="/admin/articles/pictures"
-        component={() => <ArticlesPicturesAdmin />}
+      <PrivateAdminRoute
+        path="/admin/articles/modify/:productId"
+        component={() => <ModifyProductAdmin />}
       />
-      <Route path="/admin/articles/display" component={() => null} />
-      {/* <Route path="/admin/commandes" component={() => null} />
-      <Route path="/admin/utilisateurs" component={() => null} /> */}
-      <Route path="/admin" component={() => <CategoriesAdmin />} />
+      <PrivateAdminRoute path="/admin/products/" component={() => <ProductDisplayAdmin/>} />
+      <PrivateAdminRoute path="/admin/orders" component={() =>  <OrdersAdmin/>} />
+      <PrivateAdminRoute path="/admin/users" component={() => <UsersAdmin />} />
+      <PrivateAdminRoute path="/admin/stock/:productId" component={() => <StockAdmin />} />
+      <PrivateAdminRoute path="/admin" component={() => <CategoriesAdmin />} />
     </Switch>
   );
 };

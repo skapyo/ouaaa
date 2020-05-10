@@ -18,31 +18,30 @@ class MobileContainer extends Component {
 
     return (
       <Responsive
-        as={Sidebar.Pushable}
+
         getWidth={getWidth}
         maxWidth={Responsive.onlyMobile.maxWidth}
       >
         <MobileSidebar
           onHide={this.handleSidebarHide}
           visible={sidebarOpened}
+          handleSidebarHide={this.handleSidebarHide}
         />
 
         <Sidebar.Pusher dimmed={sidebarOpened}>
-          <Segment
+        {/* <Segment
             inverted
             textAlign="center"
             style={{ padding: "0em 0em" }}
             color="teal"
             vertical
-          >
-            <Container>
-              <MobileNavbar toggleHandler={this.handleToggle} />
-            </Container>
-          </Segment>
-          {children}
-        </Sidebar.Pusher>
-      </Responsive>
-    );
+          > */}
+        <MobileNavbar   toggleHandler={this.handleToggle} />
+    {/* </Segment> */}
+    {children}
+  </Sidebar.Pusher>
+    </Responsive>
+  );
   }
 }
 
