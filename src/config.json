@@ -7,7 +7,7 @@
         "PERSISTENT_CO" : "persistentConnection"
     },
     "API_SERVER": {
-        "HTTP":"http",
-        "URL":"localhost:8001"
+        "HTTP":"https",
+        "URL":"api.acteursdelatransition.fr"
     }
 }

@@ -46,7 +46,7 @@ const HomepageLayout = ({initSession = null}) => {
     }
     return (
         <>
-            <Head title="test"/>
+            <Head title="Acteurs de la transition"/>
             <link
                 rel="stylesheet prefetch"
                 href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/components/icon.min.css"
