@@ -1,0 +1,121 @@
+import FormController from "./FormController"
+import React, { ChangeEvent, useEffect, useCallback } from "react"
+import { DocumentNode } from "graphql"
+import { useMutation } from "@apollo/react-hooks"
+import { useSnackbar } from "notistack"
+import omitTypename from "utils/omitTypename"
+
+type FormValues = { [key: string]: string }
+
+export type QueryOptions = {
+  query: DocumentNode
+  resultLabel: string
+  clearAfterUpdate?: boolean
+  afterUpdate?: (formValues: FormValues, data: any) => void
+}
+
+export enum ValidationRuleType {
+  password = "password",
+  equalTo = "equalTo",
+  required = "required",
+  email = "email",
+  only = "only",
+}
+
+type Rule =
+  | {
+      rule: ValidationRuleType.password
+    }
+  | {
+      rule: ValidationRuleType.equalTo
+      field: string
+    }
+  | {
+      rule: ValidationRuleType.required
+    }
+  | {
+      rule: ValidationRuleType.email
+    }
+  | {
+      rule: ValidationRuleType.only
+      type: "number" | "string"
+    }
+
+export type ValidationRules = { [key: string]: Rule }
+
+type ValidationResult = {
+  result: { [key: string]: string[] }
+  global: boolean
+}
+
+type WithMutationProps = {
+  formValues: FormValues
+  formChangeHandler: (event: ChangeEvent) => void
+  validationResult?: ValidationResult
+  setFormValue: (formValues: FormValues) => void
+  queryOptions: QueryOptions
+  setInitialFormValues: (formValues: FormValues) => void
+}
+
+type RenderCallbackProps = {
+  formValues: FormValues
+  formChangeHandler: (event: ChangeEvent) => void
+  validationResult?: ValidationResult
+  submitHandler?: () => void
+  loading?: boolean
+}
+
+export type RenderCallback = (props: RenderCallbackProps) => JSX.Element
+
+type MutationFormControllerProps = {
+  initValues?: FormValues
+  render: RenderCallback
+  withQuery: boolean
+  queryOptions: QueryOptions
+  validationRules?: ValidationRules
+}
+
+const MutationFormController = (props: MutationFormControllerProps) => {
+  const { queryOptions } = props
+
+  const scnackbar = useSnackbar()
+
+  const [update, { data, loading, error }] = useMutation(queryOptions.query, {
+    variables: {
+      formValues,
+    },
+  })
+
+  const submitHandler = useCallback(() => {
+    update()
+  }, [update])
+
+  useEffect(() => {
+    if (!error) {
+      if (data && data[queryOptions.resultLabel]) {
+        scnackbar.enqueueSnackbar("La modification a été sauvegardée.")
+        setInitialFormValues(omitTypename(data?.[queryOptions.resultLabel]))
+
+        if (queryOptions.afterUpdate) queryOptions.afterUpdate(formValues, data)
+
+        if (queryOptions.clearAfterUpdate) {
+          const keys = Object.keys(formValues)
+          let formValuesTemp = {}
+          keys.forEach((key) => {
+            formValuesTemp = { ...formValuesTemp, [key]: "" }
+          })
+          setFormValue(formValuesTemp)
+        }
+      } else if (data)
+        throw new Error(
+          `No data for the result label: ${queryOptions.resultLabel}`
+        )
+    }
+  }, [data])
+
+  return (
+    <FormComponent {...props} submitHandler={submitHandler} loading={loading} />
+  )
+}
+
+export default MutationFormController
