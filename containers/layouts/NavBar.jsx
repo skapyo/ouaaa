@@ -89,7 +89,7 @@ const NavBar = () => {
               alignItems='center'
             >
               <Grid item>
-                <Typography>Title</Typography>
+                <Typography>Plateforme des acteurs de la transition</Typography>
               </Grid>
               <Grid item>
                 <Grid 
@@ -114,9 +114,17 @@ const NavBar = () => {
                   )}
                   <Grid item>
                     <ClassicButton className={styles.buttontest}>
-                      Donner une formation
+                      Ajouter un acteur
                     </ClassicButton>
+
                   </Grid>
+                  <Grid item>
+                    <ClassicButton className={styles.buttontest}>
+                      Ajouter un événement
+                    </ClassicButton>
+
+                  </Grid>
+
                   {user && (
                     <>
                       <Avatar 
