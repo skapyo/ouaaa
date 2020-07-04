@@ -1,0 +1,13 @@
+node_modules
+.dist/
+test
+package - save.json
+package-lock - save.json
+.VSCodeCounter
+*.jpeg
+.idea/
+.idea/
+static/
+static/*.jpeg
+node_modules/
+.next/
