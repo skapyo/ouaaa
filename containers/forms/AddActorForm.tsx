@@ -1,5 +1,5 @@
 /* eslint react/prop-types: 0 */
-import { ChangeEvent } from "react"
+import { ChangeEvent,useState } from "react"
 import { Grid, makeStyles, Typography, Theme } from "@material-ui/core"
 import TextField from "components/form/TextField"
 import ClassicButton from "components/buttons/ClassicButton"
@@ -106,7 +106,7 @@ const AddActorForm = () => {
   const sessionDispatch = useSessionDispatch()
 
   const styles = useStyles()
-  const [checked, setChecked] = React.useState([0]);
+  const [checked, setChecked] = useState([0]);
   const classes = useStyles();
 
   const handleToggle = (value: number) => () => {
@@ -195,7 +195,7 @@ const AddActorForm = () => {
       />
 
 
-      <List className={classes.root}>
+      <List>
 
               <ListItem key={0} role={undefined} dense button onClick={handleToggle(0)}>
                 <ListItemIcon>
@@ -204,10 +204,9 @@ const AddActorForm = () => {
                       checked={checked.indexOf(0) !== -1}
                       tabIndex={-1}
                       disableRipple
-                      inputProps={{ 'aria-labelledby': 0 }}
                   />
                 </ListItemIcon>
-                <ListItemText id={0} primary={`Agriculture`} />
+                <ListItemText primary={`Agriculture`} />
               </ListItem>
             <ListItem key={1} role={undefined} dense button onClick={handleToggle(1)}>
               <ListItemIcon>
@@ -216,10 +215,10 @@ const AddActorForm = () => {
                     checked={checked.indexOf(1) !== -1}
                     tabIndex={-1}
                     disableRipple
-                    inputProps={{ 'aria-labelledby': 0 }}
+
                 />
               </ListItemIcon>
-              <ListItemText id={1} primary={`Alimentation`} />
+              <ListItemText primary={`Alimentation`} />
             </ListItem>
       </List>
 
