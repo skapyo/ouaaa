@@ -112,11 +112,11 @@ const NavBar = () => {
                       </Grid>
                     </>
                   )}
+                <Grid item>
+                    <MenuItem button component={Link} href='/map' >  Cartograhie des acteurs</MenuItem>
+                </Grid>
                   <Grid item>
-                    <ClassicButton className={styles.buttontest}>
-                      Ajouter un acteur
-                    </ClassicButton>
-
+                      <MenuItem button component={Link} href='/addactor' >  Ajouter un acteur</MenuItem>
                   </Grid>
                   <Grid item>
                     <ClassicButton className={styles.buttontest}>
