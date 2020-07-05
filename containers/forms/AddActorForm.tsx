@@ -90,9 +90,7 @@ const FormItemTextareaAutosize = (props: FormItemProps) => {
           <TextareaAutosize
               aria-label="minimum height"
               rowsMin={3}
-              placeholder="Minimum 3 rows"
               value={value}
-              label={label}
               name={inputName}
               onChange={formChangeHandler}
               defaultValue=""
