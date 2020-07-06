@@ -7,6 +7,7 @@ import AccountLeftMenu from "containers/menus/AccountLeftMenu"
 import ClassicButton from "components/buttons/ClassicButton"
 import AddActorForm from "containers/forms/AddActorForm"
 import AddActorPageLayout from "containers/layouts/addActorPage/AddActorPageLayout"
+import gql from "../../containers/forms/UserInfosForm";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -20,7 +21,20 @@ const useStyles = makeStyles((theme) => ({
     },
 
 }))
-
+const CREATE_ACTOR = gql`
+    mutation createActor($formValues: ActorInfos) {
+        createActor(actorInfos: $formValues) {
+            id
+            name
+            email
+            role
+            phone
+            address
+            postCode
+            city
+        }
+    }
+`
 const AccountPage = () => {
 
     const styles = useStyles()

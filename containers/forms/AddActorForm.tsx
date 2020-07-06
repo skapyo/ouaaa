@@ -18,18 +18,19 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
 import { withStyles, TextareaAutosize  } from "@material-ui/core"
-const UPDATE_USER_INFOS = gql`
-  mutation updateAddActor($formValues: AddActor) {
-    updateAddActor(userInfos: $formValues) {
-      id
-      surname
-      lastname
-      email
-      role
-      phone
-      address
-      postCode
-      city
+const CREATE_ACTOR = gql`
+  mutation createActor($formValues: ActorInfos) {
+    createActor(actorInfos: $formValues) {
+        id
+        name
+        email
+        phone
+        address
+        postCode
+        city
+        website
+        description
+        
     }
   }
 `
@@ -134,16 +135,10 @@ const AddActorForm = () => {
       className={styles.gridContainer}
     >
       <FormItem
-        label="Prénom"
-        inputName="surname"
-        formChangeHandler={formChangeHandler}
-        value={formValues.surname}
-      />
-      <FormItem
         label="Nom"
-        inputName="lastname"
+        inputName="name"
         formChangeHandler={formChangeHandler}
-        value={formValues.lastname}
+        value={formValues.name}
       />
       <FormItem
         label="Email"
@@ -179,19 +174,13 @@ const AddActorForm = () => {
           label="Site Internet"
           inputName="website"
           formChangeHandler={formChangeHandler}
-          value={formValues.city}
-      />
-      <FormItem
-          label="Site Internet"
-          inputName="website"
-          formChangeHandler={formChangeHandler}
-          value={formValues.city}
+          value={formValues.website}
       />
       <FormItemTextareaAutosize
           label="Description"
           inputName="description"
           formChangeHandler={formChangeHandler}
-          value={formValues.city}
+          value={formValues.description}
       />
 
 
@@ -243,7 +232,7 @@ const AddActorForm = () => {
 
   const queryOptions = useMemo(() => {
     return {
-      query: UPDATE_USER_INFOS,
+      query: CREATE_ACTOR,
       resultLabel: resultLabel,
       afterUpdate: afterUpdate,
     }
