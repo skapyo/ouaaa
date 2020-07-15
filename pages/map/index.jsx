@@ -1,9 +1,17 @@
-import React, {Component, useState,useEffect} from 'react';
+import React, {Component, useState,useEffect,useRef,useCallback} from 'react';
 import AppLayout from "../../containers/layouts/AppLayout";
 import {Box, Container, Grid, RootRef, Typography} from "@material-ui/core";
 import RoomIcon from "@material-ui/core/SvgIcon/SvgIcon";
 import {makeStyles} from "@material-ui/core/styles";
+
 import Course from "../course/[id]";
+import gql from 'graphql-tag'
+import {withApollo} from "../../hoc/withApollo";
+import {useMutation, useQuery} from "@apollo/react-hooks";
+import {useSessionDispatch, useSessionState} from "../../context/session/session";
+import {useRouter} from "next/router";
+import Button from "@material-ui/core/Button";
+import Link from "../../components/Link";
 
 if (typeof window != 'undefined') {
     var L = require("leaflet");
@@ -12,6 +20,8 @@ if (typeof window != 'undefined') {
     var Marker = require('react-leaflet').Marker;
     var Popup = require('react-leaflet').Popup;
 }
+
+
 const useStyles = makeStyles((theme) => ({
     leftTitle: {
         fontWeight: theme.typography.fontWeightBold,
@@ -117,19 +127,73 @@ const useStyles = makeStyles((theme) => ({
         },
     },
 }))
+
+
+
 const carto = () => {
+    const mapRef=useRef();
+
     const [stylesProps, setStylesProps] = useState({
         topImageSize: "250px",
         headerDisplay: "static",
     })
+    const GET_ACTORS = gql`
+        { actors
+        {   id,
+            name,
+            address,
+            lat,
+            lng
+        }
+        }
+    `;
 
 
-        //const headerRef = React.useRef();
+    const {data,loading,error} = useQuery(GET_ACTORS,{fetchPolicy:"network-only"});
+
+    const markers = [[51.505, -0.09]]
 
 
-        const styles = useStyles(stylesProps)
-        const position = [30, 20]
+  /*  useEffect(() => {
+        if(data){
+            const {markers} = this.state
+            data.actors.forEach((actor) => {
+                markers.push([actor.lat,actor.lng])
+            });
+            this.setState({markers})
+        }
+
+    },[data])
+    */
+
+    useEffect(() => {
+        const {current ={}} = mapRef;
+        const  {leafletElement:map}=current;
+
+    },[mapRef])
+
+
+    const styles = useStyles(stylesProps)
+        const position = [46.1667, -1.15]
         if (typeof window != 'undefined') {
+
+            L.Icon.Default.mergeOptions({
+                iconUrl:null
+            })
+            const suitcasePoint = new L.Icon({
+                iconUrl: '/marker.png',
+                iconRetinaUrl: '/suitcaseIcon.svg',
+                iconAnchor: [13, 34], // point of the icon which will correspond to marker's location
+                iconSize: [25],
+                popupAnchor: [1, -25],
+                shadowUrl: '/public/marker-shadow.png',
+                shadowSize: [29, 40],
+                shadowAnchor: [7, 40],
+            })
+
+            if (loading)
+                return 'loading';
+
             return (
                 <AppLayout>
                     <RootRef >
@@ -172,16 +236,22 @@ const carto = () => {
                             </Container>
                         </Box>
                     </RootRef>
-                    <Map center={position} zoom={5}>
+                    <Map ref={mapRef} center={position} zoom={5}>
                         <TileLayer
                             attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                         />
-                        <Marker position={position}>
-                            <Popup>
-                                A pretty CSS3 popup. <br/> Easily customizable.
-                            </Popup>
-                        </Marker>
+                        {data.actors.map((actor, index) => {
+                            if(actor.lat!=null && actor.lng!=null)
+                            return (
+                                <Marker key={`marker-${index}`} position={[actor.lat,actor.lng]} icon={suitcasePoint}>
+                                    <Popup>
+                                        <span>{actor.name}</span>
+                                        <Link href={"/course/"+index} >Voir la page et événements</Link>
+                                    </Popup>
+                                </Marker>)
+                        })
+                        }
                     </Map>
 
                 </AppLayout>
@@ -195,4 +265,4 @@ const carto = () => {
 
     }
 }
-export default carto
+export default withApollo()(carto)
