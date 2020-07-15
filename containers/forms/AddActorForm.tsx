@@ -197,8 +197,8 @@ const AddActorForm = () => {
         <GooglePlacesAutocomplete
             onSelect={({ description }) => (
             geocodeByAddress(description).then(results => getLatLng(results[0]).then((value) => {
-              formValues['lat'] = value.lat
-              formValues['lng'] = value.lng
+              formValues['lat'] = ''+value.lat
+              formValues['lng'] = ''+value.lng
             }))
                 .catch(error => console.error(error))
                // setLatitude(.),
