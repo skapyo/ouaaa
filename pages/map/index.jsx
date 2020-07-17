@@ -241,7 +241,7 @@ const carto = () => {
                             attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                         />
-                        {data.actors.map((actor, index) => {
+                        {typeof data !== "undefined"&& data.actors.map((actor, index) => {
                             if(actor.lat!=null && actor.lng!=null)
                             return (
                                 <Marker key={`marker-${index}`} position={[actor.lat,actor.lng]} icon={suitcasePoint}>
