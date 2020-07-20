@@ -185,10 +185,7 @@ const carto = () => {
                 iconRetinaUrl: '/suitcaseIcon.svg',
                 iconAnchor: [13, 34], // point of the icon which will correspond to marker's location
                 iconSize: [25],
-                popupAnchor: [1, -25],
-                shadowUrl: '/public/marker-shadow.png',
-                shadowSize: [29, 40],
-                shadowAnchor: [7, 40],
+                popupAnchor: [1, -25]
             })
 
             if (loading)
