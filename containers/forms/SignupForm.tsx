@@ -9,6 +9,7 @@ import {
   TextField,
   Grid,
 } from "@material-ui/core"
+import { useSnackbar } from 'notistack';
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined"
 import ClassicButton from "components/buttons/ClassicButton"
 import Link from "components/Link"
@@ -52,10 +53,14 @@ const SIGNUP = gql`
 
 const validationRules: ValidationRules = {
   email: {
-    rule: ValidationRuleType.required,
+    rule: ValidationRuleType.required && ValidationRuleType.email,
   },
   password: {
     rule: ValidationRuleType.required,
+  },
+  password2: {
+    rule: ValidationRuleType.required && ValidationRuleType.equalTo,
+    field: "password",
   },
 }
 
@@ -67,6 +72,7 @@ const SignupForm = () => {
     useGraphQLErrorDisplay(error)
     const styles = useStyles()
     const redirect = useCookieRedirection()
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar()
 
     const submitHandler2 = useCallback(() => {
       signup({
@@ -80,6 +86,9 @@ const SignupForm = () => {
     useEffect(() => {
       if (data?.register) {
         redirect()
+        enqueueSnackbar(`Un email de validation a été envoyé à ${formValues.email}`, { 
+          preventDuplicate: true,
+        })
       }
     }, [data, redirect])
 
@@ -91,7 +100,7 @@ const SignupForm = () => {
           </Avatar>
           <Typography component="h1" variant="h5">
             Inscription
-            </Typography>
+          </Typography>
           <TextField
             variant="outlined"
             margin="normal"
@@ -115,6 +124,18 @@ const SignupForm = () => {
             type="password"
             defaultValue=""
             value={formValues?.password}
+            onChange={formChangeHandler}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="password2"
+            label="Password Confirmation"
+            type="password"
+            defaultValue=""
+            value={formValues?.password2}
             onChange={formChangeHandler}
           />
           <ClassicButton
