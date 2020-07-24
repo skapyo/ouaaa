@@ -1,5 +1,5 @@
 /* eslint react/prop-types: 0 */
-import { ChangeEvent,useState } from "react"
+import React, { ChangeEvent,useState } from "react"
 import { Grid, makeStyles, Typography, Theme } from "@material-ui/core"
 import TextField from "components/form/TextField"
 import ClassicButton from "components/buttons/ClassicButton"
@@ -18,6 +18,9 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
 import { withStyles, TextareaAutosize  } from "@material-ui/core"
+import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
+import { geocodeByAddress,getLatLng} from 'react-google-places-autocomplete';
+
 const CREATE_ACTOR = gql`
   mutation createActor($formValues: ActorInfos) {
     createActor(actorInfos: $formValues) {
@@ -30,6 +33,8 @@ const CREATE_ACTOR = gql`
         city
         website
         description
+        lat
+        lng
         
     }
   }
@@ -105,10 +110,14 @@ const FormItemTextareaAutosize = (props: FormItemProps) => {
 const AddActorForm = () => {
   const user = useSessionState()
   const sessionDispatch = useSessionDispatch()
+  const [latitude, setLatitude] = useState(false)
+  const [longitude, setLongitude] = useState(false)
 
   const styles = useStyles()
   const [checked, setChecked] = useState([0]);
   const classes = useStyles();
+
+
 
   const handleToggle = (value: number) => () => {
     const currentIndex = checked.indexOf(value);
@@ -128,6 +137,8 @@ const AddActorForm = () => {
     isModified,
     formValues,
   }) => (
+
+
     <Grid
       container
       alignItems="center"
@@ -182,6 +193,21 @@ const AddActorForm = () => {
           formChangeHandler={formChangeHandler}
           value={formValues.description}
       />
+      <div>
+        <GooglePlacesAutocomplete
+            onSelect={({ description }) => (
+            geocodeByAddress(description).then(results => getLatLng(results[0]).then((value) => {
+              formValues['lat'] = ''+value.lat
+              formValues['lng'] = ''+value.lng
+            }))
+                .catch(error => console.error(error))
+               // setLatitude(.),
+               // setLongitude(description)
+              )}
+
+
+        />
+      </div>
 
 
       <List>
