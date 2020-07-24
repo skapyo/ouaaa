@@ -66,6 +66,7 @@ const SIGNIN = gql`
       address
       postCode
       city
+      isEmailValidated
     }
   }
 `

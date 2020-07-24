@@ -73,6 +73,8 @@ const SignupForm = () => {
     const styles = useStyles()
     const redirect = useCookieRedirection()
     const { enqueueSnackbar, closeSnackbar } = useSnackbar()
+    const [clicked, setClicked] = useState(false);
+    const [email, setEmail] = useState('* email *');
 
     const submitHandler2 = useCallback(() => {
       signup({
@@ -81,83 +83,89 @@ const SignupForm = () => {
           password: formValues.password,
         },
       })
+      setEmail(formValues.email)
     }, [formValues, signup])
 
     useEffect(() => {
       if (data?.register) {
-        redirect()
+        setClicked(true)
         enqueueSnackbar(`Un email de validation a été envoyé à ${formValues.email}`, { 
           preventDuplicate: true,
         })
       }
     }, [data, redirect])
 
-    return (
-      <Container component="main" maxWidth="xs">
-        <div className={styles.paper}>
-          <Avatar className={styles.avatar}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Inscription
-          </Typography>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            label="Email Address"
-            name="email"
-            autoComplete="current-email"
-            autoFocus
-            defaultValue=""
-            value={formValues?.email}
-            onChange={formChangeHandler}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            defaultValue=""
-            value={formValues?.password}
-            onChange={formChangeHandler}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password2"
-            label="Password Confirmation"
-            type="password"
-            defaultValue=""
-            value={formValues?.password2}
-            onChange={formChangeHandler}
-          />
-          <ClassicButton
-            fullWidth
-            variant="contained"
-            className={styles.submit}
-            onClick={submitHandler2}
-            disabled={!validationResult?.global}
-          >
-            S'inscrire
-          </ClassicButton>
-          <Grid container>
-            <Grid item>
-              {/* @ts-ignore */}
-              <Link href="/signin">Me connecter</Link>
+      return (
+        <Container component="main" maxWidth="xs">
+          <div className={styles.paper}>
+            {clicked &&
+              <p style={{textAlign: "center"}}>
+                Veuillez confirmer votre compte.<br />
+                Un email de validation a été envoyé à : <b>{email}</b>
+              </p>
+            }
+            <Avatar className={styles.avatar}>
+              <LockOutlinedIcon />
+            </Avatar>
+            <Typography component="h1" variant="h5">
+              Inscription
+            </Typography>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              label="Email Address"
+              name="email"
+              autoComplete="current-email"
+              autoFocus
+              defaultValue=""
+              value={formValues?.email}
+              onChange={formChangeHandler}
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              defaultValue=""
+              value={formValues?.password}
+              onChange={formChangeHandler}
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="password2"
+              label="Password Confirmation"
+              type="password"
+              defaultValue=""
+              value={formValues?.password2}
+              onChange={formChangeHandler}
+            />
+            <ClassicButton
+              fullWidth
+              variant="contained"
+              className={styles.submit}
+              onClick={submitHandler2}
+              disabled={!validationResult?.global || clicked}
+            >
+              S'inscrire
+            </ClassicButton>
+            <Grid container>
+              <Grid item>
+                {/* @ts-ignore */}
+                <Link href="/signin">Me connecter</Link>
+              </Grid>
             </Grid>
-          </Grid>
-        </div>
-      </Container>
-    )
+          </div>
+        </Container>
+      )
   }
-
   return <FormController render={Form} validationRules={validationRules} />
 }
 
