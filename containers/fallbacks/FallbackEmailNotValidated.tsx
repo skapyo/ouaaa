@@ -1,8 +1,9 @@
-import AppLayout from "containers/layouts/AppLayout"
+import gql from "graphql-tag"
+import { useMutation } from "@apollo/react-hooks"
 import AppContainer from "containers/layouts/AppContainer"
+import { useState, useEffect } from "react"
 import { Typography, Grid, makeStyles } from "@material-ui/core"
 import ClassicButton from "components/buttons/ClassicButton"
-import Link from "components/Link"
 
 const useStyles = makeStyles((theme) => ({
   submit: {
@@ -10,38 +11,67 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const FallbackEmailValidated = (props: any) => {
+const SEND_VALIDATION_EMAIL = gql`
+  mutation sendValidationEmail ($email:String!) {
+    sendValidationEmail(email:$email)
+  }
+`;
+
+const FallbackEmailNotValidated = (props: any) => {
   const styles = useStyles()
+  const [clicked, setClicked] = useState(false)
+  const [fail, setFail] = useState(false)
+  const [sendValidationEmail, { data, loading, error}] = useMutation(SEND_VALIDATION_EMAIL)
 
   const sendNewEmail = () => {
-    console.log("======================")
-    console.log("Should send a new email")
-    console.log("======================")
+    sendValidationEmail({ variables: {email: props.email} })
   }
 
+  useEffect(() => {
+    if(data) {
+      setClicked(true);
+      setFail(false);
+    }
+  },[data]);
+
+  useEffect(() => {
+      if(error) {
+        setFail(true);
+        setClicked(false);
+      }
+  },[error]);
+
   return (
-    <AppLayout>
-      <AppContainer>
+    <AppContainer>
+      {clicked &&
+        <p style={{textAlign: "center"}}>
+          Un email de validation a été envoyé à : <b>{props.email}</b>
+        </p>
+      }
+      {fail &&
+        <p style={{textAlign: "center"}}>
+          Une erreur s'est produite, merci de réessayer.
+        </p>
+      }
+      <Grid container justify='center'>
+        <Typography variant='h6'>
+          Votre email {props.email} n'est pas validé.
+        </Typography>
         <Grid container justify='center'>
-          <Typography variant='h6'>
-            Votre email {props.email} n'est pas validé.
-          </Typography>
-          <Grid container justify='center'>
-            <Grid item>
-              <ClassicButton
-                fullWidth
-                variant="contained"
-                className={styles.submit}
-                onClick={sendNewEmail}
-              >
-                Recevoir un nouvel email
-              </ClassicButton>
-            </Grid>
+          <Grid item>
+            <ClassicButton
+              fullWidth
+              variant="contained"
+              className={styles.submit}
+              onClick={sendNewEmail}
+            >
+              Recevoir un nouvel email
+            </ClassicButton>
           </Grid>
         </Grid>
-      </AppContainer>
-    </AppLayout>
+      </Grid>
+    </AppContainer>
   )
 }
 
-export default FallbackEmailValidated
+export default FallbackEmailNotValidated

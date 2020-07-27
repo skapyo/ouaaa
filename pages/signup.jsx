@@ -6,15 +6,15 @@ import SignupForm from 'containers/forms/SignupForm';
 
 const SignUp = () => {
 
-    const user = useSessionState()
+  const user = useSessionState()
 
-    if (user) return <FallbackAlreadyConnected />
+  if (user) return <FallbackAlreadyConnected />
 
-    return (
-        <AppLayout>
-            <SignupForm />      
-        </AppLayout>
-    )
+  return (
+    <AppLayout>
+      <SignupForm />      
+    </AppLayout>
+  )
 }
 
 export default withApollo()(SignUp)
