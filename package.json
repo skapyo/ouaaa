@@ -1,5 +1,5 @@
 {
-    "name": "oozie-client",
+    "name": "acteurs-de-la-transition-client",
     "version": "0.1.0",
     "private": true,
     "scripts": {
@@ -37,6 +37,7 @@
         "react": "^16.13.1",
         "react-cookie": "^4.0.3",
         "react-dom": "^16.13.1",
+        "react-google-places-autocomplete": "^2.1.0",
         "react-leaflet": "^2.7.0",
         "react-router-dom": "^5.2.0"
     },

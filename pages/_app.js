@@ -13,6 +13,7 @@ import omitTypename from 'utils/omitTypename'
 import { SnackbarProvider } from 'notistack';
 import './styles.css'
 import 'leaflet/dist/leaflet.css';
+import 'react-google-places-autocomplete/dist/index.min.css';
 const theme = createMuiTheme({
   palette: {
     primary: {
@@ -40,7 +41,6 @@ const theme = createMuiTheme({
     }
   }
 });
-
 const MyApp = (props )  => {
   const { Component, pageProps, user } = props;
 
@@ -57,6 +57,8 @@ const MyApp = (props )  => {
       <Head>
         <title>Plateforme des acteurs de la transition</title>
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDvUKXlWS1470oj8C-vD6s62Bs9Y8XQf00&language=fr&region=FR&libraries=places"></script>
+
       </Head>
       <MuiPickersUtilsProvider utils={MomentUtils}>
         <ThemeProvider theme={theme}>

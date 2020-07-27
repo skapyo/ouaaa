@@ -32,6 +32,8 @@ const CREATE_ACTOR = gql`
             address
             postCode
             city
+            lat
+            lng
         }
     }
 `

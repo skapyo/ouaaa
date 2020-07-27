@@ -58,7 +58,7 @@ export const initOnContext = ctx => {
  */
 const initApolloClient = (initialState, ctx) => {
   // Make sure to create a new client for every server-side request so that data
-  // isn't shared between connections (which would be bad)
+  // isn'typeof window === t shared between connections (which would be bad)
   if (typeof window === 'undefined') {
     return createApolloClient(initialState, ctx)
   }

@@ -3,8 +3,10 @@ before_script:
 
 build_image:
   script:
-    - docker build -t  acteurs-de-la-transition-client:dev .
+    - docker stop gitlab_gitlab_1
+    - docker build --cpu-shares=100 --memory=1024m -t  acteurs-de-la-transition-client:prod .
     - docker stop  acteurs-de-la-transition-client
     - docker rm  acteurs-de-la-transition-client
     - cd /home/debian/docker/acteurs-de-la-transition/
     - docker-compose up -d
+    - docker start gitlab_gitlab_1
