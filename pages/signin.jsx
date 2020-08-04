@@ -8,7 +8,7 @@ const SignIn = () => {
 
   const user = useSessionState()
  
-  if(user) return <FallbackAlreadyConnected />
+  if (user) return <FallbackAlreadyConnected />
 
   return (
     <AppLayout>

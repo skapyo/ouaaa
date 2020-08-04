@@ -109,11 +109,10 @@ const withMutation = (FormComponent: RenderCallback) => (
     let next = false
     if (queryOptions.mutationResultControl == "builtin") {
       if (data?.[queryOptions.resultLabel] && !error) next = true
-    } else if (
+    } else (
       queryOptions.mutationResultControl &&
       queryOptions.mutationResultControl(formValues, data, error)
     )
-      next = true
 
     if (next) {
       setInitialFormValues(omitTypename(data?.[queryOptions.resultLabel]))
@@ -132,10 +131,13 @@ const withMutation = (FormComponent: RenderCallback) => (
         })
         setFormValue(formValuesTemp)
       }
-    } else if (data)
+    }
+    /*else if (data)
       throw new Error(
         `No data for the result label: ${queryOptions.resultLabel}`
       )
+      */
+
     // }
   }, [data, error])
 

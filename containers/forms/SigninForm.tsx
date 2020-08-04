@@ -25,6 +25,7 @@ import {
   ValidationRules,
   RenderCallback,
 } from "components/controllers/FormController"
+import FallbackEmailNotValidated from "containers/fallbacks/FallbackEmailNotValidated"
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -66,6 +67,7 @@ const SIGNIN = gql`
       address
       postCode
       city
+      isEmailValidated
     }
   }
 `
@@ -87,6 +89,7 @@ const SigninForm = () => {
     useGraphQLErrorDisplay(error)
     const styles = useStyles()
     const [checkBoxChecked, setCheckBoxChecked] = useState(false)
+    const [validEmail, setValidEmail] = useState(true)
     const sessionDispatch = useSessionDispatch()
     const redirect = useCookieRedirection()
 
@@ -107,8 +110,17 @@ const SigninForm = () => {
       })
     }, [checkBoxChecked, formValues, signin])
 
+    // const redirectToEmailValidation = () => {
+    //   return <Redirect from="/signin" to="/emailValidation" />
+    // }
+
     useEffect(() => {
-      if (data?.login?.id) {
+      if (data && !data?.login?.isEmailValidated)
+        setValidEmail(false)
+      //   console.log("EMAIL NOT VALIDATED")
+      //   redirectToEmailValidation()
+      // }
+      else if (data?.login?.id) {
         sessionDispatch({
           type: "login",
           payload: omitTypename(data.login),
@@ -117,75 +129,78 @@ const SigninForm = () => {
       }
     }, [data, sessionDispatch, redirect])
 
-    return (
-      <Container component="main" maxWidth="xs">
-        <div className={styles.paper}>
-          <Avatar className={styles.avatar}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Connexion
-          </Typography>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            label="Email Address"
-            name="email"
-            autoComplete="current-email"
-            autoFocus
-            defaultValue=""
-            value={formValues?.email}
-            onChange={formChangeHandler}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            autoComplete="current-password"
-            defaultValue=""
-            value={formValues?.password}
-            onChange={formChangeHandler}
-          />
-          <Box className={styles.box}>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  value="remember"
-                  color="primary"
-                  onChange={checkBoxChangeHandler}
-                />
-              }
-              label="Se souvenir de moi"
+    if (!validEmail)
+      return (<FallbackEmailNotValidated email={formValues?.email} />)
+    else
+      return (
+        <Container component="main" maxWidth="xs">
+          <div className={styles.paper}>
+            <Avatar className={styles.avatar}>
+              <LockOutlinedIcon />
+            </Avatar>
+            <Typography component="h1" variant="h5">
+              Connexion
+            </Typography>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              label="Adresse email"
+              name="email"
+              autoComplete="current-email"
+              autoFocus
+              defaultValue=""
+              value={formValues?.email}
+              onChange={formChangeHandler}
             />
-          </Box>
-          <ClassicButton
-            fullWidth
-            variant="contained"
-            className={styles.submit}
-            onClick={submitHandler2}
-            disabled={!validationResult?.global}
-          >
-            Se connecter
-          </ClassicButton>
-          <Grid container>
-            <Grid item xs>
-              {/* @ts-ignore */}
-              <Link href="/forgotPassword">Mot de passe oublié ?</Link>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Mot de passe"
+              type="password"
+              autoComplete="current-password"
+              defaultValue=""
+              value={formValues?.password}
+              onChange={formChangeHandler}
+            />
+            <Box className={styles.box}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    value="remember"
+                    color="primary"
+                    onChange={checkBoxChangeHandler}
+                  />
+                }
+                label="Se souvenir de moi"
+              />
+            </Box>
+            <ClassicButton
+              fullWidth
+              variant="contained"
+              className={styles.submit}
+              onClick={submitHandler2}
+              disabled={!validationResult?.global}
+            >
+              Se connecter
+            </ClassicButton>
+            <Grid container>
+              <Grid item xs>
+                {/* @ts-ignore */}
+                <Link href="/forgotPassword">Mot de passe oublié ?</Link>
+              </Grid>
+              <Grid item>
+                {/* @ts-ignore */}
+                <Link href="/signup">Créer un compte</Link>
+              </Grid>
             </Grid>
-            <Grid item>
-              {/* @ts-ignore */}
-              <Link href="/signup">Créer un compte</Link>
-            </Grid>
-          </Grid>
-        </div>
-      </Container>
-    )
+          </div>
+        </Container>
+      )
   }
 
   return <FormController render={Form} validationRules={validationRules} />
