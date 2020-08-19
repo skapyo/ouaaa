@@ -10,3 +10,5 @@ build_image:
     - cd /home/debian/docker/acteurs-de-la-transition/
     - docker-compose up -d
     - docker start gitlab_gitlab_1
+  only:
+    - develop
