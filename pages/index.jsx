@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
     },
     titleContainer: {
         marginTop : theme.spacing(2),
-        backgroundImage:`url('./fond.png')`,
+        backgroundImage:`url('./fond.jpeg')`,
         backgroundPosition: 'center',
         backgroundRepeat: 'space',
         height: '24em',
@@ -78,7 +78,12 @@ const useStyles = makeStyles((theme) => ({
     cardTitle:{
         "color":"#2a9076",
         fontWeight: 700,
+    },
+    button:{
+        "color":"#2a9076",
+        fontWeight: 700,
     }
+
 
 
 }))
@@ -135,10 +140,11 @@ const Index = () => {
                             </Grid>
                             <Grid item xs={6}>
                                 <img width={"60%"} className={styles.image}
-                                    src="./image_card.png"
+                                    src="./image_card.jpg"
                                 />
                             </Grid>
                         </Grid>
+                        <button className={styles.button}>Voir la carte</button>
                     </Container>
                 </Box>
             </RootRef>
