@@ -6,6 +6,8 @@ import {makeStyles,fade} from "@material-ui/core/styles";
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 import {white} from "color-name";
+
+import Carousel from 'react-elastic-carousel'
 const useStyles = makeStyles((theme) => ({
 
     leftTitle: {
@@ -266,6 +268,15 @@ const Index = () => {
                             </Grid>
                         </Grid>
 
+
+                    </Container>
+                    <Container>
+                        <Carousel itemPadding={[5, 20]} itemsToShow={3}>
+                            <img src="https://brainhubeu.github.io/react-carousel/static/scream-ee207a05c1e6fed03aafa156cc511abe.jpg" />
+                            <img src="https://brainhubeu.github.io/react-carousel/static/scream-ee207a05c1e6fed03aafa156cc511abe.jpg" />
+                            <img src="https://brainhubeu.github.io/react-carousel/static/scream-ee207a05c1e6fed03aafa156cc511abe.jpg" />
+
+                        </Carousel>
                     </Container>
                     <Container    className={styles.footer}>
                         <Typography variant="h5"  className={styles.footerTitle}  >
