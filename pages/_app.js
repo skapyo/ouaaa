@@ -14,6 +14,7 @@ import { SnackbarProvider } from 'notistack';
 import './styles.css'
 import 'leaflet/dist/leaflet.css';
 import 'react-google-places-autocomplete/dist/index.min.css';
+import '@brainhubeu/react-carousel/lib/style.css';
 const theme = createMuiTheme({
   palette: {
     primary: {
