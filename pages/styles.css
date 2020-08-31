@@ -2,3 +2,7 @@
     height: 400px;
     width: 90%;
 }
+@font-face {
+    font-family: 'rowdies';
+    src: url('/fonts/Rowdies-Bold.ttf');
+}

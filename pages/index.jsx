@@ -7,6 +7,7 @@ import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 import {white} from "color-name";
 const useStyles = makeStyles((theme) => ({
+
     leftTitle: {
         fontWeight: theme.typography.fontWeightBold,
         marginBottom: theme.spacing(2),
@@ -57,7 +58,8 @@ const useStyles = makeStyles((theme) => ({
     },
     titleTypo: {
         fontWeight: theme.typography.fontWeightBold,
-        fontSize:"2em"
+        fontSize:"2em",
+        fontFamily: 'rowdies',
     },
      cardInfo: {
         "padding": "2em",
@@ -78,11 +80,40 @@ const useStyles = makeStyles((theme) => ({
     cardTitle:{
         "color":"#2a9076",
         fontWeight: 700,
+        fontFamily: 'rowdies',
     },
     button:{
-        "color":"#2a9076",
+        "color":"white",
+        "background-color":"#bf083e",
+        border: "none",
+        fontFamily: 'rowdies',
+        borderRadius: "1.5em",
+        width: "14em",
+        height: "1.7em",
+        "&:hover": {
+            cursor: "pointer",
+        },
+
+},
+    footer: {
+        "color": "white",
+        "background-color": "#2a9076",
+        border: "none",
+        height: "30em",
+        textAlign: "center",
+        paddingTop:"3em"
+    },
+    footerTitle: {
+
+        align: "center",
         fontWeight: 700,
-    }
+    },
+    footerSubTitle: {
+        fontWeight: 50,
+        fontSize: "9px",
+    },
+
+
 
 
 
@@ -144,9 +175,19 @@ const Index = () => {
                                 />
                             </Grid>
                         </Grid>
-                        <button className={styles.button}>Voir la carte</button>
+                        <button className={styles.button}>VOIR LA CARTE</button>
+                    </Container>
+
+                    <Container   className={styles.footer}>
+                        <Typography variant="h5"  className={styles.footerTitle}  >
+                            RESTONS CONNECTES!
+                        </Typography>
+                        <Typography variant="h6"  className={styles.footerSubTitle}  >
+                            Suivez nos aventures sur les réseaux sociaux :
+                        </Typography>
                     </Container>
                 </Box>
+
             </RootRef>
         </AppLayout>
     )
