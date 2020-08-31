@@ -4,7 +4,6 @@ test
 package - save.json
 package-lock - save.json
 .VSCodeCounter
-*.jpeg
 .idea/
 .idea/
 static/

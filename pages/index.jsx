@@ -61,6 +61,10 @@ const useStyles = makeStyles((theme) => ({
         fontSize:"2em",
         fontFamily: 'rowdies',
     },
+        threePointGrid:
+            {
+
+            },
      cardInfo: {
         "padding": "2em",
         backgroundColor:"white",
@@ -82,19 +86,45 @@ const useStyles = makeStyles((theme) => ({
         fontWeight: 700,
         fontFamily: 'rowdies',
     },
-    button:{
+
+    buttonGrid:{
+        margin:  "2.5em 0 2.5em 0 ",
         "color":"white",
         "background-color":"#bf083e",
         border: "none",
+        fontWeight: 600,
         fontFamily: 'rowdies',
         borderRadius: "1.5em",
-        width: "14em",
+        padding: "0 3em 0 3em",
         height: "1.7em",
         "&:hover": {
             cursor: "pointer",
         },
+        backgroundImage:`url('./arrow.svg')`,
+        backgroundRepeat: "no-repeat",
+        "background-position-x": "8px",
+        "background-position-y": "-1px",
+    },
 
-},
+    button:{
+        "color":"white",
+        "background-color":"#bf083e",
+        border: "none",
+        fontWeight: 600,
+        fontFamily: 'rowdies',
+        borderRadius: "1.5em",
+        padding: "0 3em 0 3em",
+        height: "1.7em",
+        "&:hover": {
+            cursor: "pointer",
+        },
+        backgroundImage:`url('./arrow.svg')`,
+        backgroundRepeat: "no-repeat",
+        "background-position-x": "8px",
+        "background-position-y": "-1px",
+        marginBottom:"30px"
+
+    },
     footer: {
         "color": "white",
         "background-color": "#2a9076",
@@ -112,6 +142,22 @@ const useStyles = makeStyles((theme) => ({
         fontWeight: 50,
         fontSize: "9px",
     },
+    gridItem:{
+        "background-color": "#f9f9f9",
+        margin:"12px",
+        padding:"10px"
+    },
+    imageGrid:{
+        paddingTop:"30px",
+        paddingBottom:"20px"
+    },
+    titleGrid:{
+        "color":"#2a9076",
+        fontWeight: 700,
+        fontSize:"12px",
+        lineHeight:"inherit"
+    },
+
 
 
 
@@ -159,26 +205,69 @@ const Index = () => {
 
                     <Container   className={styles.cardInfo}
                           >
-                        <Typography variant="h5"   className={styles.cardTitle}  >
-                            #NAME
-                        </Typography>
-                        <Typography variant="h5"   className={styles.cardTitle}  >
-                             EN 3 POINTS
-                        </Typography>
-                        <Grid container spacing={3} className={styles.align}>
-                            <Grid item xs={6}>
+
+                        <Grid container spacing={3} >
+                            <Grid item xs={6}c lassName={styles.threePointGrid}>
+                                <div  className={[styles.align]}>
+                                    <Typography variant="h5"   className={styles.cardTitle}  >
+                                        #NAME
+                                    </Typography>
+                                    <Typography variant="h5"   className={styles.cardTitle}  >
+                                        EN 3 POINTS
+                                    </Typography>
+                                </div>
                                 blablabla
                             </Grid>
-                            <Grid item xs={6}>
+
+                            <Grid item xs={6} className={styles.align}>
                                 <img width={"60%"} className={styles.image}
                                     src="./image_card.jpg"
                                 />
                             </Grid>
                         </Grid>
                         <button className={styles.button}>VOIR LA CARTE</button>
-                    </Container>
 
-                    <Container   className={styles.footer}>
+                        <Typography variant="h5"   className={[styles.cardTitle,styles.align]}  >
+                            #NAME
+                        </Typography>
+                        <Typography variant="h5"   className={[styles.cardTitle,styles.align]}  >
+                           C'EST POUR QUI ?
+                        </Typography>
+                        <Typography  className={[styles.align]} >
+                            qsdqsdqsdqsdsqdsqdqsd
+                        </Typography>
+                        <Grid container justify="center"  className={styles.align}>
+                            <Grid item xs={5} className={[styles.gridItem,styles.align]}>
+                                <img width={"20%"}
+                                     src="./people.svg" className={styles.imageGrid}
+                                />
+                                <Typography className={styles.titleGrid}  >
+                                    Vous êtes un citoyen et souhaitez mieux
+                                </Typography>
+                                <Typography className={styles.titleGrid}  >
+                                    connaire, soutenir, vous engager ?
+                                </Typography>
+
+                                <button className={styles.buttonGrid} >JE DECOUVRE LES ACTEURS</button>
+                            </Grid>
+                            <Grid item xs={5} className={[styles.gridItem,styles.align]}>
+                                <img width={"20%"} className={styles.imageGrid}
+                                     src="./organisation.svg"
+                                />
+                                <Typography className={styles.titleGrid}  >
+                                    Vous êtes une organisation et vous
+                                </Typography>
+                                <Typography className={styles.titleGrid}  >
+                                    souhaitez vous faire connaitre ?
+                                </Typography>
+
+                                <button className={styles.buttonGrid} >JE DEVIENS UN ACTEUR</button>
+
+                            </Grid>
+                        </Grid>
+
+                    </Container>
+                    <Container    className={styles.footer}>
                         <Typography variant="h5"  className={styles.footerTitle}  >
                             RESTONS CONNECTES!
                         </Typography>
