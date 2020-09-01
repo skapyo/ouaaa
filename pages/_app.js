@@ -15,6 +15,8 @@ import './styles.css'
 import 'leaflet/dist/leaflet.css';
 import 'react-google-places-autocomplete/dist/index.min.css';
 import '@brainhubeu/react-carousel/lib/style.css';
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 const theme = createMuiTheme({
   palette: {
     primary: {
@@ -41,7 +43,8 @@ const theme = createMuiTheme({
       lineHeight : 1.7
     }
   }
-});
+})
+
 const MyApp = (props )  => {
   const { Component, pageProps, user } = props;
 

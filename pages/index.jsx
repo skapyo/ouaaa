@@ -6,7 +6,7 @@ import {makeStyles,fade} from "@material-ui/core/styles";
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 import {white} from "color-name";
-
+import Slider from "react-slick";
 import Carousel from 'react-elastic-carousel'
 const useStyles = makeStyles((theme) => ({
 
@@ -98,17 +98,19 @@ const useStyles = makeStyles((theme) => ({
         fontFamily: 'rowdies',
         borderRadius: "1.5em",
         padding: "0 3em 0 3em",
-        height: "1.7em",
+        height: "2.5em",
         "&:hover": {
             cursor: "pointer",
         },
         backgroundImage:`url('./arrow.svg')`,
         backgroundRepeat: "no-repeat",
-        "background-position-x": "8px",
-        "background-position-y": "-1px",
+        "background-position-x": "5px",
+        "background-position-y": "1px",
+        "background-size": "11%",
     },
 
     button:{
+        margin:  "2.5em 0 2.5em 0 ",
         "color":"white",
         "background-color":"#bf083e",
         border: "none",
@@ -116,14 +118,15 @@ const useStyles = makeStyles((theme) => ({
         fontFamily: 'rowdies',
         borderRadius: "1.5em",
         padding: "0 3em 0 3em",
-        height: "1.7em",
+        height: "2.5em",
         "&:hover": {
             cursor: "pointer",
         },
         backgroundImage:`url('./arrow.svg')`,
         backgroundRepeat: "no-repeat",
-        "background-position-x": "8px",
-        "background-position-y": "-1px",
+        "background-position-x": "5px",
+        "background-position-y": "1px",
+        "background-size": "11%",
         marginBottom:"30px"
 
     },
@@ -159,15 +162,67 @@ const useStyles = makeStyles((theme) => ({
         fontSize:"12px",
         lineHeight:"inherit"
     },
-
+    article:{
+       paddingTop :"5em",
+        paddingBottom :"5em",
+        textAlign: "center"
+    },
+    articleCarroussel:{
+        paddingTop :"2em",
+    },
+    buttonArticle:{
+        paddingTop :"1em",
+        paddingBottom :"1em"
+    },
+    event:{
+        paddingTop :"5em",
+        paddingBottom :"5em",
+        textAlign: "center",
+        backgroundColor:"#e8f4f2"
+    },
+    newsletter:{
+        paddingTop :"5em",
+        paddingBottom :"5em",
+        textAlign: "center",
+    },
 
 
 
 
 
 }))
+function SampleNextArrow(props) {
+    const { className, style, onClick } = props;
+    return (
+        <div
+            className={className}
+            style={{ ...style, display: "block", }}
+            onClick={onClick}
+        />
+    );
+}
 
-
+function SamplePrevArrow(props) {
+    const { className, style, onClick } = props;
+    return (
+        <div
+            className={className}
+            style={{ ...style, display: "block"}}
+            onClick={onClick}
+        />
+    );
+}
+const settings = {
+    dots: true,
+    infinite: true,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+   // autoplay: true,
+   // autoplaySpeed: 2000,
+  //  pauseOnHover: true,
+    nextArrow: <SampleNextArrow />,
+    prevArrow: <SamplePrevArrow />
+};
 const Index = () => {
     const [stylesProps, setStylesProps] = useState({
         topImageSize: "250px",
@@ -270,13 +325,63 @@ const Index = () => {
 
 
                     </Container>
-                    <Container>
-                        <Carousel itemPadding={[5, 20]} itemsToShow={3}>
+                    <Container className={[styles.article]}>
+                        <Typography variant="h5"   className={[styles.cardTitle,styles.align]}  >
+                            LES ARTICLES RECENTS
+                        </Typography>
+                        <Typography  className={[styles.align]} >
+                            qsdqsdqsdqsdsqdsqdqsd
+                        </Typography>
+                        <Slider {...settings} className={[styles.articleCarroussel]} >
                             <img src="https://brainhubeu.github.io/react-carousel/static/scream-ee207a05c1e6fed03aafa156cc511abe.jpg" />
                             <img src="https://brainhubeu.github.io/react-carousel/static/scream-ee207a05c1e6fed03aafa156cc511abe.jpg" />
                             <img src="https://brainhubeu.github.io/react-carousel/static/scream-ee207a05c1e6fed03aafa156cc511abe.jpg" />
+                            <img src="https://brainhubeu.github.io/react-carousel/static/scream-ee207a05c1e6fed03aafa156cc511abe.jpg" />
+                            <img src="https://brainhubeu.github.io/react-carousel/static/scream-ee207a05c1e6fed03aafa156cc511abe.jpg" />
+                        </Slider>
+                        <div className={styles.buttonArticle} >
+                            <button className={styles.buttonGrid}  >VOIR TOUT LES ARTICLES</button>
+                        </div>
+                    </Container>
 
-                        </Carousel>
+                    <Container className={[styles.event]}>
+                        <Typography variant="h5"   className={[styles.cardTitle,styles.align]}  >
+                            LES EVENEMENTS RECENTS
+                        </Typography>
+                        <Typography  className={[styles.align]} >
+                            qsdqsdqsdqsdsqdsqdqsd
+                        </Typography>
+                        <Slider {...settings} className={[styles.articleCarroussel]} >
+                            <img src="https://brainhubeu.github.io/react-carousel/static/scream-ee207a05c1e6fed03aafa156cc511abe.jpg" />
+                            <img src="https://brainhubeu.github.io/react-carousel/static/scream-ee207a05c1e6fed03aafa156cc511abe.jpg" />
+                            <img src="https://brainhubeu.github.io/react-carousel/static/scream-ee207a05c1e6fed03aafa156cc511abe.jpg" />
+                            <img src="https://brainhubeu.github.io/react-carousel/static/scream-ee207a05c1e6fed03aafa156cc511abe.jpg" />
+                            <img src="https://brainhubeu.github.io/react-carousel/static/scream-ee207a05c1e6fed03aafa156cc511abe.jpg" />
+                        </Slider>
+                        <div className={styles.buttonArticle} >
+                            <button className={styles.buttonGrid}  >VOIR TOUT LES ARTICLES</button>
+                        </div>
+                    </Container>
+                    <Container className={[styles.newsletter]}>
+                        <Typography variant="h5" className={[styles.cardTitle,styles.align]}   >
+                            POUR NE RIEN RATER DE #NAME
+                        </Typography>
+                        <Typography variant="h5"   className={[styles.cardTitle,styles.align]}  >
+                            INSCRIVEZ-VOUS A NOTRE NEWSLETTER
+                        </Typography>
+                        <div className={styles.search}  >
+                            <div className={styles.searchIcon}>
+                                <SearchIcon />
+                            </div>
+                            <InputBase
+                                placeholder="J'inscris mon email pour recevoir la newletter"
+                                classes={{
+                                    root: styles.inputRoot,
+                                    input: styles.inputInput,
+                                }}
+                                inputProps={{ 'aria-label': 'search' }}
+                            />
+                        </div>
                     </Container>
                     <Container    className={styles.footer}>
                         <Typography variant="h5"  className={styles.footerTitle}  >

@@ -6,3 +6,9 @@
     font-family: 'rowdies';
     src: url('/fonts/Rowdies-Bold.ttf');
 }
+.slick-prev::before{
+    color : #bf083e!important;
+ }
+.slick-next::before{
+    color : #bf083e!important;
+}
