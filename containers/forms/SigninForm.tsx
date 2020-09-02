@@ -110,16 +110,9 @@ const SigninForm = () => {
       })
     }, [checkBoxChecked, formValues, signin])
 
-    // const redirectToEmailValidation = () => {
-    //   return <Redirect from="/signin" to="/emailValidation" />
-    // }
-
     useEffect(() => {
       if (data && !data?.login?.isEmailValidated)
         setValidEmail(false)
-      //   console.log("EMAIL NOT VALIDATED")
-      //   redirectToEmailValidation()
-      // }
       else if (data?.login?.id) {
         sessionDispatch({
           type: "login",

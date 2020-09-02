@@ -223,6 +223,22 @@ const settings = {
     nextArrow: <SampleNextArrow />,
     prevArrow: <SamplePrevArrow />
 };
+const GET_EVENTS = gql`
+    query getEvents(,$limit:Int) {
+        getEvents(limit:$limit) {
+            id,
+            label,
+            short_description,
+            description,
+            price,
+            isLiked,
+            pictures {
+                croppedPicturePath
+            }
+        }
+    }
+`;
+
 const Index = () => {
     const [stylesProps, setStylesProps] = useState({
         topImageSize: "250px",
