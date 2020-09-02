@@ -2,13 +2,13 @@ import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import { Grid, Avatar, MenuItem, Fade , Menu } from '@material-ui/core';
+import {Grid, Avatar, MenuItem, Fade, Menu, Container, Box} from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
 import ClassicButton from '../../components/buttons/ClassicButton';
 import Link from 'components/Link'
 import { useSessionState, useSessionDispatch } from 'context/session/session';
-import { useCallback ,useEffect, useState} from 'react';
+import React, { useCallback ,useEffect, useState} from 'react';
 import { useMutation } from '@apollo/react-hooks';
 import gql from 'graphql-tag'
 import {useCookies} from 'react-cookie'
@@ -37,17 +37,25 @@ const useStyles = makeStyles((theme) => ({
   },
   listItemTypo : {
     fontWeight : '450'
+  },
+  menuItem:{
+    color:"#2a9076"
+  },
+  title:{
+    color:"#bf083e",
+    marginLeft :"4em",
+    fontSize : "3em",
   }
 }));
 
 const SIGNOUT = gql`
-    mutation logout{
-      logout
-    }
+  mutation logout{
+    logout
+  }
 `
 
 const NavBar = () => {
-  
+
   const styles = useStyles();
   const user = useSessionState()
   const sessionDispatch = useSessionDispatch()
@@ -66,8 +74,8 @@ const NavBar = () => {
 
   useEffect(() => {
     if(data?.logout)
-      sessionDispatch({ 
-        type: "logout" 
+      sessionDispatch({
+        type: "logout"
       })
   },[data,sessionDispatch])
 
@@ -83,87 +91,90 @@ const NavBar = () => {
   return (
       <>
         <AppBar position="static" className={styles.navbar} color='inherit'>
-          <Toolbar>
-            <Grid
-              container
-              direction='row'
-              justify='space-between'
-              alignItems='center'
-            >
-              <Grid item>
-                <Typography>Plateforme des acteurs de la transition</Typography>
-              </Grid>
-              <Grid item>
-                <Grid 
+          <Container>
+            <Toolbar>
+              <Grid
                   container
-                  spacing={3}
+                  direction='row'
+                  justify='space-between'
                   alignItems='center'
-                > 
-
+              >
                 <Grid item>
-                    <MenuItem button component={Link} href='/map' > LA CARTE</MenuItem>
+                  <Typography className={styles.title} >Ouaaa</Typography>
                 </Grid>
                 <Grid item>
-                  <MenuItem button component={Link} href='/agenda' > L'AGENDA</MenuItem>
-                </Grid>
-                <Grid item>
-                  <MenuItem button component={Link} href='/agenda' > JE PARTICIPE</MenuItem>
-                </Grid>
-                  <Grid item>
-                    <MenuItem button component={Link} href='/agenda' > LE JOURNAL</MenuItem>
-                  </Grid>
-                  <Grid item>
-                    <MenuItem button component={Link} href='/agenda' > A PROPOS</MenuItem>
-                  </Grid>
-                  <Grid item>
-                     <SearchIcon />
-                  </Grid>
-                  {!user && (
-                      <>
-                        <Grid item> <Link href='/signin' underline='none' color='textPrimary' onClick={signinClickHandler}>
-                          <PersonOutlineIcon />
-                        </Link>
+                  <Grid
+                      container
+                      spacing={3}
+                      alignItems='center'
+                  >
 
-                        </Grid>
-                      </>
-                  )}
+                    <Grid item>
+                      <MenuItem button component={Link} className={styles.menuItem} href='/map' > LA CARTE</MenuItem>
+                    </Grid>
+                    <Grid item>
+                      <MenuItem button component={Link} className={styles.menuItem} href='/agenda' > L'AGENDA</MenuItem>
+                    </Grid>
+                    <Grid item>
+                      <MenuItem button component={Link} className={styles.menuItem} href='/' > JE PARTICIPE</MenuItem>
+                    </Grid>
+                    <Grid item>
+                      <MenuItem button component={Link} className={styles.menuItem}  href='/' > LE JOURNAL</MenuItem>
+                    </Grid>
+                    <Grid item>
+                      <MenuItem button component={Link} className={styles.menuItem} href='/' > A PROPOS</MenuItem>
+                    </Grid>
+                    <Grid item>
+                      <SearchIcon   className={styles.menuItem}/>
+                    </Grid>
+                    {!user && (
+                        <>
+                          <Grid item> <Link href='/signin' underline='none' color='textPrimary' onClick={signinClickHandler}>
+                            <PersonOutlineIcon  className={styles.menuItem} />
+                          </Link>
 
-                  {user && (
-                    <>
-                      <Avatar 
-                        className={styles.avatar} 
-                        onClick={handleClick}
-                        aria-controls="popover-menu"
-                        aria-haspopup="true"
-                      
-                      />
-                      <Menu
-                        id="popover-menu"
-                        open={open}
-                        anchorEl={anchorEl}
-                        onClose={handleClose}
-                        anchorOrigin={{
-                          vertical: 'bottom',
-                          horizontal: 'right',
-                        }}
-                        transformOrigin={{
-                          vertical: 'top',
-                          horizontal: 'right',
-                        }}
-                        getContentAnchorEl={null}
-                        classes ={{paper : styles.popoverPaper}}
-                        TransitionComponent={Fade}
-                      >
-                        {/* <MenuItem onClick={() => router.push('/account')} component={Link} >Mon compte</MenuItem> */}
-                        <MenuItem button component={Link} href='/account' >Mon compte</MenuItem>
-                        <MenuItem onClick={signoutHandler}>Se déconnecter</MenuItem>
-                      </Menu>
-                    </>
-                  )}
+                          </Grid>
+                        </>
+                    )}
+
+                    {user && (
+                        <>
+                          <Avatar
+                              className={styles.avatar}
+                              onClick={handleClick}
+                              aria-controls="popover-menu"
+                              aria-haspopup="true"
+
+                          />
+                          <Menu
+                              id="popover-menu"
+                              open={open}
+                              anchorEl={anchorEl}
+                              onClose={handleClose}
+                              className={styles.menuItem}
+                              anchorOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'right',
+                              }}
+                              transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                              }}
+                              getContentAnchorEl={null}
+                              classes ={{paper : styles.popoverPaper}}
+                              TransitionComponent={Fade}
+                          >
+                            {/* <MenuItem onClick={() => router.push('/account')} component={Link} >Mon compte</MenuItem> */}
+                            <MenuItem button component={Link} className={styles.menuItem} href='/account' >Mon compte</MenuItem>
+                            <MenuItem onClick={signoutHandler} className={styles.menuItem} >Se déconnecter</MenuItem>
+                          </Menu>
+                        </>
+                    )}
+                  </Grid>
                 </Grid>
               </Grid>
-            </Grid>
-          </Toolbar>
+            </Toolbar>
+          </Container>
         </AppBar>
       </>
   )
