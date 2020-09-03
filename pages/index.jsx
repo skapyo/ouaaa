@@ -1,13 +1,17 @@
 import AppLayout from "containers/layouts/AppLayout"
 import {Box, Container, Grid, RootRef, Typography} from "@material-ui/core";
 import RoomIcon from "@material-ui/core/SvgIcon/SvgIcon";
-import React, {useState} from "react";
+import React, {useState,useEffect} from "react";
 import {makeStyles,fade} from "@material-ui/core/styles";
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 import {white} from "color-name";
 import Slider from "react-slick";
 import Carousel from 'react-elastic-carousel'
+import CardSlider from "components/cards/CardSlider"
+import gql from "graphql-tag"
+import { withApollo } from "hoc/withApollo"
+import {useMutation, useQuery} from "@apollo/react-hooks";
 const useStyles = makeStyles((theme) => ({
 
     leftTitle: {
@@ -215,7 +219,7 @@ function SamplePrevArrow(props) {
 const settings = {
     dots: true,
     infinite: true,
-    slidesToShow: 3,
+    slidesToShow: 5,
     slidesToScroll: 1,
    // autoplay: true,
    // autoplaySpeed: 2000,
@@ -224,17 +228,15 @@ const settings = {
     prevArrow: <SamplePrevArrow />
 };
 const GET_EVENTS = gql`
-    query getEvents(,$limit:Int) {
-        getEvents(limit:$limit) {
+    query events($limit:String) {
+        events(limit:$limit) {
             id,
             label,
-            short_description,
+            shortDescription,
             description,
-            price,
-            isLiked,
-            pictures {
-                croppedPicturePath
-            }
+            startedAt,
+            endedAt,
+            published
         }
     }
 `;
@@ -245,6 +247,28 @@ const Index = () => {
         headerDisplay: "static",
     })
     const styles = useStyles(stylesProps)
+    const [articleToRender, setArticleToRender] = useState(null);
+    const [eventToRender, setEventToRender] = useState(null);
+
+    const {data:eventData,loading:loadingEvent,error:errorEvent} = useQuery(
+        GET_EVENTS,
+        {
+            variables : {
+                limit :  '3'
+            },
+            // fetchPolicy : "no-cache"
+        }
+    );
+
+    useEffect(() => {
+
+        setEventToRender({
+            eventData
+        });
+
+
+    },[eventData]);
+
     return (
         <AppLayout>
             <RootRef >
@@ -348,12 +372,18 @@ const Index = () => {
                         <Typography  className={[styles.align]} >
                             qsdqsdqsdqsdsqdsqdqsd
                         </Typography>
+
                         <Slider {...settings} className={[styles.articleCarroussel]} >
-                            <img src="https://brainhubeu.github.io/react-carousel/static/scream-ee207a05c1e6fed03aafa156cc511abe.jpg" />
-                            <img src="https://brainhubeu.github.io/react-carousel/static/scream-ee207a05c1e6fed03aafa156cc511abe.jpg" />
-                            <img src="https://brainhubeu.github.io/react-carousel/static/scream-ee207a05c1e6fed03aafa156cc511abe.jpg" />
-                            <img src="https://brainhubeu.github.io/react-carousel/static/scream-ee207a05c1e6fed03aafa156cc511abe.jpg" />
-                            <img src="https://brainhubeu.github.io/react-carousel/static/scream-ee207a05c1e6fed03aafa156cc511abe.jpg" />
+                            {eventToRender?.eventData &&  eventToRender.eventData.events.map((event) => {
+                                return (
+
+                                    <CardSlider
+                                        key={event.id}
+                                        event={event}
+                                    />
+                                );
+                            })}
+
                         </Slider>
                         <div className={styles.buttonArticle} >
                             <button className={styles.buttonGrid}  >VOIR TOUT LES ARTICLES</button>
@@ -368,11 +398,15 @@ const Index = () => {
                             qsdqsdqsdqsdsqdsqdqsd
                         </Typography>
                         <Slider {...settings} className={[styles.articleCarroussel]} >
-                            <img src="https://brainhubeu.github.io/react-carousel/static/scream-ee207a05c1e6fed03aafa156cc511abe.jpg" />
-                            <img src="https://brainhubeu.github.io/react-carousel/static/scream-ee207a05c1e6fed03aafa156cc511abe.jpg" />
-                            <img src="https://brainhubeu.github.io/react-carousel/static/scream-ee207a05c1e6fed03aafa156cc511abe.jpg" />
-                            <img src="https://brainhubeu.github.io/react-carousel/static/scream-ee207a05c1e6fed03aafa156cc511abe.jpg" />
-                            <img src="https://brainhubeu.github.io/react-carousel/static/scream-ee207a05c1e6fed03aafa156cc511abe.jpg" />
+                            {eventToRender?.eventData &&  eventToRender.eventData.events.map((event) => {
+                                return (
+
+                                    <CardSlider
+                                        key={event.id}
+                                        event={event}
+                                    />
+                                );
+                            })}
                         </Slider>
                         <div className={styles.buttonArticle} >
                             <button className={styles.buttonGrid}  >VOIR TOUT LES ARTICLES</button>
@@ -414,4 +448,4 @@ const Index = () => {
     )
 }
 
-export default Index
+export default  withApollo()(Index)

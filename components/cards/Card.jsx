@@ -29,6 +29,7 @@ export default function SimpleCard() {
 
   return (
     <Card className={classes.root}>
+
       <CardContent>
         <Typography className={classes.title} color="textSecondary" gutterBottom>
           Word of the Day
@@ -45,9 +46,8 @@ export default function SimpleCard() {
           {'"a benevolent smile"'}
         </Typography>
       </CardContent>
-      <CardActions>
+
         <Button size="small">Learn More</Button>
-      </CardActions>
     </Card>
   );
 }
