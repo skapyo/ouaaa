@@ -89,10 +89,10 @@ export default function SimpleCard({event}) {
                 {event && event.label}
             </Typography>
             <Typography className={classes.date} color="textSecondary">
-                <Moment format="DD/MM HH:mm">{new Date(event && event.startedAt)}</Moment>
+                <Moment format="DD/MM HH:mm" unix>{event && event.startedAt/1000}</Moment>
             </Typography>
           </div>
-          <Typography variant="body2" component="p">
+          <Typography variant="body" component="p">
               {event && event.shortDescription}
           </Typography>
         </div>

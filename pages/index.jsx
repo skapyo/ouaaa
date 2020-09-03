@@ -275,13 +275,13 @@ const Index = () => {
                 <Box>
                     <Container className={styles.titleContainer} >
                         <Typography className={styles.titleTypo} >
-                           VOTRE PLATEFORME
+                           OUTIL DES ACTEURS
                         </Typography>
                         <Typography className={styles.titleTypo} >
-                          COLLABORATIVE & SOLIDAIRE
+                          DE LA TRANSITION EN AUNIS
                         </Typography>
                         <Typography className={styles.align} >
-                            Notre mission c'est avant tout de rendre la transtion écologique plus simple et <br />accessible en permetant à chacun de trouveer des acteur  près de chez soi
+                            Notre mission c'est de faire connaître celles et ceux qui œuvrent  <br />pour la transition écologique, sociale et démocratique en Aunis
                         </Typography>
                         <div className={styles.search}  >
                             <div className={styles.searchIcon}>
@@ -307,13 +307,15 @@ const Index = () => {
                             <Grid item xs={6}c lassName={styles.threePointGrid}>
                                 <div  className={[styles.align]}>
                                     <Typography variant="h5"   className={styles.cardTitle}  >
-                                        #NAME
+                                        Ouaaa
                                     </Typography>
                                     <Typography variant="h5"   className={styles.cardTitle}  >
                                         EN 3 POINTS
                                     </Typography>
                                 </div>
-                                blablabla
+                                <p>1 Issu du milieu associatif : Le site est né de la volonté de 3 collectifs (Collectif Transition Citoyenne, Collectif Action Solidaire et Tiers Lieux la Proue) de disposer d’une vitrine pour se faire connaître, et disposer d’un agenda réactif pour publier leurs évènements.</p>
+                                <p>2 Créé pour et par les acteurs de la transition : Le site a été créé sur mesure par une équipe de bénévoles motivés, il permet aux acteurs de la transition eux-mêmes de renseigner leurs informations. Il sera adossé à une rencontre physique régulière, afin que virtuel et réel se complètent.*</p>
+                                    <p> 3 Catalyseur de transition : nous pensons qu’en faisant connaître les acteurs de la transition du grand public et en renforçant les liens entre eux, nous allons accélérer la nécessaire transition de notre territoire vers un fonctionnement plus sobre, plus humain et véritablement « durable »</p>
                             </Grid>
 
                             <Grid item xs={6} className={styles.align}>
@@ -325,14 +327,12 @@ const Index = () => {
                         <button className={styles.button}>VOIR LA CARTE</button>
 
                         <Typography variant="h5"   className={[styles.cardTitle,styles.align]}  >
-                            #NAME
+                            Ouaaa
                         </Typography>
                         <Typography variant="h5"   className={[styles.cardTitle,styles.align]}  >
                            C'EST POUR QUI ?
                         </Typography>
-                        <Typography  className={[styles.align]} >
-                            qsdqsdqsdqsdsqdsqdqsd
-                        </Typography>
+
                         <Grid container justify="center"  className={styles.align}>
                             <Grid item xs={5} className={[styles.gridItem,styles.align]}>
                                 <img width={"20%"}
