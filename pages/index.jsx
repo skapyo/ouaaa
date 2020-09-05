@@ -12,6 +12,7 @@ import CardSlider from "components/cards/CardSlider"
 import gql from "graphql-tag"
 import { withApollo } from "hoc/withApollo"
 import {useMutation, useQuery} from "@apollo/react-hooks";
+import Link from "../components/Link";
 const useStyles = makeStyles((theme) => ({
 
     leftTitle: {
@@ -130,7 +131,7 @@ const useStyles = makeStyles((theme) => ({
         backgroundRepeat: "no-repeat",
         "background-position-x": "5px",
         "background-position-y": "1px",
-        "background-size": "11%",
+        "background-size": "15%",
         marginBottom:"30px"
 
     },
@@ -324,8 +325,9 @@ const Index = () => {
                                 />
                             </Grid>
                         </Grid>
+                        <Link  href="/map">
                         <button className={styles.button}>VOIR LA CARTE</button>
-
+                        </Link>
                         <Typography variant="h5"   className={[styles.cardTitle,styles.align]}  >
                             Ouaaa
                         </Typography>
@@ -344,8 +346,10 @@ const Index = () => {
                                 <Typography className={styles.titleGrid}  >
                                     connaire, soutenir, vous engager ?
                                 </Typography>
-
-                                <button className={styles.buttonGrid} >JE DECOUVRE LES ACTEURS</button>
+                                <Link  href="/map">
+                                  <button className={styles.buttonGrid} >JE DECOUVRE LES ACTEURS
+                                </button>
+                                </Link>
                             </Grid>
                             <Grid item xs={5} className={[styles.gridItem,styles.align]}>
                                 <img width={"20%"} className={styles.imageGrid}
@@ -357,9 +361,9 @@ const Index = () => {
                                 <Typography className={styles.titleGrid}  >
                                     souhaitez vous faire connaitre ?
                                 </Typography>
-
-                                <button className={styles.buttonGrid} >JE DEVIENS UN ACTEUR</button>
-
+                                <Link  href="/addactor">
+                                    <button className={styles.buttonGrid} >JE DEVIENS UN ACTEUR</button>
+                                </Link>
                             </Grid>
                         </Grid>
 

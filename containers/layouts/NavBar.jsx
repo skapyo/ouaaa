@@ -100,7 +100,9 @@ const NavBar = () => {
                   alignItems='center'
               >
                 <Grid item>
-                  <Typography className={styles.title} >Ouaaa</Typography>
+                  <Link href="/">
+                   <Typography className={styles.title} >Ouaaa</Typography>
+                  </Link>
                 </Grid>
                 <Grid item>
                   <Grid
