@@ -24,6 +24,7 @@ import { SvgIconProps } from '@material-ui/core/SvgIcon';
 import {useQuery} from "@apollo/react-hooks";
 import Link from "../../components/Link";
 import React from "react";
+import Icon from '@material-ui/core/Icon';
 
 declare module 'csstype' {
     interface Properties {
@@ -35,11 +36,10 @@ declare module 'csstype' {
 type StyledTreeItemProps = TreeItemProps & {
     bgColor?: string;
 color?: string;
-labelIcon: React.ElementType<SvgIconProps>;
+labelIcon: string;
 labelInfo?: string;
 labelText: string;
 };
-
 const useTreeItemStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
@@ -94,13 +94,13 @@ const useTreeItemStyles = makeStyles((theme: Theme) =>
 
 function StyledTreeItem(props: StyledTreeItemProps) {
     const classes = useTreeItemStyles();
-    const { labelText, labelIcon: LabelIcon, labelInfo, color, bgColor, ...other } = props;
+    const { labelText, labelIcon, labelInfo, color, bgColor, ...other } = props;
 
     return (
         <TreeItem
             label={
                 <div className={classes.labelRoot}>
-                    <LabelIcon color="inherit" className={classes.labelIcon} />
+                    <Icon>{labelIcon}</Icon>
                     <Typography variant="body2" className={classes.labelText}>
                         {labelText}
                     </Typography>
@@ -164,6 +164,19 @@ const GET_CATEGORIES = graphqlTag`
     { categories
     {   id,
         label
+        icon
+        subCategories {
+            label
+            icon
+                subCategories {
+                label
+                icon
+                  subCategories {
+                     label
+                     icon
+              }
+          }
+  }
     }
     }
 `;
@@ -217,48 +230,18 @@ const AccountPage = () => {
             >
                 {typeof data !== "undefined" && data.categories.map((category, index) => {
                     return (
-                        <StyledTreeItem nodeId={category.id} labelText={category.label} labelIcon={"MailIcon"}/>
+                        <StyledTreeItem nodeId={category.id} labelText={category.label}  labelIcon={category.icon}>
+                            {typeof category.subCategories !== "undefined" && category.subCategories !=null && category.subCategories.map((subcategory, index) => {
+                                return (
+                                    <StyledTreeItem nodeId={subcategory.id} labelText={subcategory.label} labelIcon={subcategory.icon} />
+
+                                );
+                            })
+                            }
+                        </StyledTreeItem>
                     );
                 })
                 }
-
-                <StyledTreeItem nodeId="1" labelText="All Mail" labelIcon={MailIcon} />
-                <StyledTreeItem nodeId="2" labelText="Trash" labelIcon={DeleteIcon} />
-                <StyledTreeItem nodeId="3" labelText="Categories" labelIcon={Label}>
-                    <StyledTreeItem
-                        nodeId="5"
-                        labelText="Social"
-                        labelIcon={SupervisorAccountIcon}
-                        labelInfo="90"
-                        color="#1a73e8"
-                        bgColor="#e8f0fe"
-                    />
-                    <StyledTreeItem
-                        nodeId="6"
-                        labelText="Updates"
-                        labelIcon={InfoIcon}
-                        labelInfo="2,294"
-                        color="#e3742f"
-                        bgColor="#fcefe3"
-                    />
-                    <StyledTreeItem
-                        nodeId="7"
-                        labelText="Forums"
-                        labelIcon={ForumIcon}
-                        labelInfo="3,566"
-                        color="#a250f5"
-                        bgColor="#f3e8fd"
-                    />
-                    <StyledTreeItem
-                        nodeId="8"
-                        labelText="Promotions"
-                        labelIcon={LocalOfferIcon}
-                        labelInfo="733"
-                        color="#3c8039"
-                        bgColor="#e6f4ea"
-                    />
-                </StyledTreeItem>
-                <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
             </TreeView>
         </AddActorPageLayout>
     )
