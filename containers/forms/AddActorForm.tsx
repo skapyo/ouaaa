@@ -20,6 +20,12 @@ import IconButton from '@material-ui/core/IconButton';
 import { withStyles, TextareaAutosize  } from "@material-ui/core"
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
 import { geocodeByAddress,getLatLng} from 'react-google-places-autocomplete';
+import {useQuery} from "@apollo/react-hooks";
+import TreeView from "@material-ui/lab/TreeView/TreeView";
+import graphqlTag from 'graphql-tag'
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
+import Collapse from '@material-ui/core/Collapse';
 
 const CREATE_ACTOR = gql`
   mutation createActor($formValues: ActorInfos) {
@@ -39,6 +45,26 @@ const CREATE_ACTOR = gql`
     }
   }
 `
+const GET_CATEGORIES = graphqlTag`
+    { categories
+    {   id,
+        label
+        icon
+        subCategories {
+            label
+            icon
+                subCategories {
+                label
+                icon
+                  subCategories {
+                     label
+                     icon
+              }
+          }
+  }
+    }
+    }
+`;
 
 const resultLabel = "updateAddActor"
 
@@ -117,7 +143,12 @@ const AddActorForm = () => {
   const [checked, setChecked] = useState([0]);
   const classes = useStyles();
 
+    const {data,loading,error} = useQuery(GET_CATEGORIES,{fetchPolicy:"network-only"});
+    const [open, setOpen] = React.useState(true);
 
+    const handleClick = () => {
+        setOpen(!open);
+    };
 
   const handleToggle = (value: number) => () => {
     const currentIndex = checked.indexOf(value);
@@ -130,6 +161,7 @@ const AddActorForm = () => {
     }
 
     setChecked(newChecked);
+      setOpen(!open);
   };
   const Form: RenderCallback = ({
     formChangeHandler,
@@ -193,50 +225,77 @@ const AddActorForm = () => {
           formChangeHandler={formChangeHandler}
           value={formValues.description}
       />
-      <div>
+      <Grid item sm={3} xs={12}>
+        <Typography variant="body1" color="primary" className={styles.label}>
+         Adresse :
+        </Typography>
+      </Grid>
+      <Grid item sm={9} xs={12}>
         <GooglePlacesAutocomplete
+            placeholder="Taper et selectionner l'adresse"
             onSelect={({ description }) => (
-            geocodeByAddress(description).then(results => getLatLng(results[0]).then((value) => {
-              formValues['lat'] = ''+value.lat
-              formValues['lng'] = ''+value.lng
-            }))
-                .catch(error => console.error(error))
-               // setLatitude(.),
-               // setLongitude(description)
-              )}
+                geocodeByAddress(description).then(results => getLatLng(results[0]).then((value) => {
+                  formValues['lat'] = ''+value.lat
+                  formValues['lng'] = ''+value.lng
+                }))
+                    .catch(error => console.error(error))
+                // setLatitude(.),
+                // setLongitude(description)
+            )}
 
 
         />
-      </div>
+      </Grid>
 
 
-      <List>
 
-              <ListItem key={0} role={undefined} dense button onClick={handleToggle(0)}>
-                <ListItemIcon>
-                  <Checkbox
-                      edge="start"
-                      checked={checked.indexOf(0) !== -1}
-                      tabIndex={-1}
-                      disableRipple
-                  />
-                </ListItemIcon>
-                <ListItemText primary={`Agriculture`} />
-              </ListItem>
-            <ListItem key={1} role={undefined} dense button onClick={handleToggle(1)}>
-              <ListItemIcon>
-                <Checkbox
-                    edge="start"
-                    checked={checked.indexOf(1) !== -1}
-                    tabIndex={-1}
-                    disableRipple
+      <Grid item sm={3} xs={12}>
+        <Typography variant="body1" color="primary" className={styles.label}>
+          Categorie(s) :
+        </Typography>
+      </Grid>
+      <Grid item sm={9} xs={12}>
+        <List>
+            {typeof data !== "undefined" && data.categories.map((category, index) => {
+                return (
+                    <div>
+                    <ListItem key={category.id} role={undefined} dense button onClick={handleToggle(0)}>
+                        <ListItemIcon>
 
-                />
-              </ListItemIcon>
-              <ListItemText primary={`Alimentation`} />
-            </ListItem>
-      </List>
+                        </ListItemIcon>
+                        <ListItemText primary={category.label}/>
+                        {open ? <ExpandLess /> : <ExpandMore />}
+                    </ListItem>
+                        {typeof category.subCategories !== "undefined" && category.subCategories !=null && category.subCategories.map((subcategory, index) => {
+                            return (
+                                <Collapse in={open} timeout="auto" unmountOnExit>
+                                    <List component="div" disablePadding>
+                                        <ListItem button className={classes.nested}>
+                                            <ListItemIcon>
+                                                <Checkbox
+                                                    edge="start"
+                                                    tabIndex={-1}
+                                                    disableRipple
+                                                    onChange={formChangeHandler}
+                                                    name="categories"
+                                                    value={subcategory.id}
+                                                />
+                                            </ListItemIcon>
+                                            <ListItemText  primary={subcategory.label} />
+                                        </ListItem>
+                                    </List>
+                                </Collapse>
 
+                            );
+                        })
+                        }
+                    </div>
+                );
+            })
+            }
+
+        </List>
+      </Grid>
       <Grid item xs={12}>
         <ClassicButton onClick={submitHandler} disabled={!isModified}>
           Sauvegarder les modifications

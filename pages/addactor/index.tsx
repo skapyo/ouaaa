@@ -107,6 +107,7 @@ function StyledTreeItem(props: StyledTreeItemProps) {
                     <Typography variant="caption" color="inherit">
                         {labelInfo}
                     </Typography>
+
                 </div>
             }
             style={{
@@ -144,21 +145,6 @@ const useStyles = makeStyles((theme) => ({
     },
 
 }))
-const CREATE_ACTOR = gql`
-    mutation createActor($formValues: ActorInfos) {
-        createActor(actorInfos: $formValues) {
-            id
-            name
-            email
-            role
-            phone
-            address
-            postCode
-            city
-            lat
-            lng
-        }
-    }`;
 
 const GET_CATEGORIES = graphqlTag`
     { categories
@@ -221,7 +207,7 @@ const AccountPage = () => {
                 </Grid>
             </Grid>
 
-            <TreeView
+            {/*  <TreeView
                 className={classes.root}
                 defaultExpanded={['3']}
                 defaultCollapseIcon={<ArrowDropDownIcon />}
@@ -243,6 +229,7 @@ const AccountPage = () => {
                 })
                 }
             </TreeView>
+           */}
         </AddActorPageLayout>
     )
 }

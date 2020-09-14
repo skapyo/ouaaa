@@ -44,13 +44,13 @@ const useStyles = makeStyles((theme) => ({
     },
     inputRoot: {
         color: 'inherit',
+        width:"100%",
     },
     inputInput: {
-        padding: theme.spacing(1, 1, 1, 3),
+        padding: theme.spacing(1, 1, 1, 4),
         // vertical padding + font size from searchIcon
 
-        transition: theme.transitions.create('width'),
-        width: '350px'
+        transition: theme.transitions.create('width')
     },
     titleContainer: {
         marginTop : theme.spacing(2),
@@ -135,6 +135,7 @@ const useStyles = makeStyles((theme) => ({
         marginBottom:"30px"
 
     },
+
     footer: {
         "color": "white",
         "background-color": "#2a9076",
@@ -180,6 +181,12 @@ const useStyles = makeStyles((theme) => ({
         paddingBottom :"1em"
     },
     event:{
+        paddingTop :"5em",
+        paddingBottom :"5em",
+        textAlign: "center",
+        backgroundColor:"#e8f4f2"
+    },
+    geoContainer:{
         paddingTop :"5em",
         paddingBottom :"5em",
         textAlign: "center",
@@ -368,6 +375,12 @@ const Index = () => {
                         </Grid>
 
 
+                    </Container>
+                    <Container className={[styles.geoContainer]}>
+                        <Typography  className={[styles.align]}  >
+                            Le site a vocation à répertorier les acteurs de la transition sur les 3 communautés de communes constituant l'Aunis : la CDA de la Rochelle, la CDC Aunis Atlantique et la CDC Aunis Sud.
+                            Ainsi, l’information sera disponible aussi bien pour les habitants des zones les plus urbaines (La Rochelle et sa première couronne (Aytré, Lagord, Périgny, Angoulins), Chatelaillon, Surgères, Marans, Courçon, Aigrefeuille que pour ceux des zones les plus rurales : Clavette, St Médard, Puyravault, Ballons, le Thou, Chambon, Ballon, , St Saturnin du Bois, St Jean de Liversay, Benon.
+                        </Typography>
                     </Container>
                     <Container className={[styles.article]}>
                         <Typography variant="h5"   className={[styles.cardTitle,styles.align]}  >
