@@ -270,7 +270,7 @@ const AddActorForm = () => {
                             return (
                                 <Collapse in={open} timeout="auto" unmountOnExit>
                                     <List component="div" disablePadding>
-                                        <ListItem button className={classes.nested}>
+                                        <ListItem button >
                                             <ListItemIcon>
                                                 <Checkbox
                                                     edge="start"
