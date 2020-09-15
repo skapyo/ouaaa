@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react"
+import { useCallback } from "react"
 import gql from "graphql-tag"
 import { withApollo } from "hoc/withApollo"
 import {
@@ -11,10 +11,10 @@ import {
 import ClassicButton from "components/buttons/ClassicButton"
 import FormController from "components/controllers/FormController"
 import {
-  ValidationRuleType,
-  ValidationRules,
   RenderCallback,
 } from "components/controllers/FormController"
+import { useMutation } from "@apollo/react-hooks"
+import useGraphQLErrorDisplay from "hooks/useGraphQLErrorDisplay"
 
 const useStyles = makeStyles((theme) => ({
   field: {
@@ -30,26 +30,54 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-// const ADDEVENT = gql`
-//   mutation createEvent(
-//     $eventInfos: EventInfos
-//   ) {
-
-//   }
-// `;
+const ADDEVENT = gql`
+  mutation createEvent(
+    $eventInfos: EventInfos
+  ) {
+    createEvent(
+      eventInfos:$eventInfos
+    ) {
+      label
+      shortDescription
+      facebookUrl
+      description
+      startedAt
+      endedAt
+      published
+    }
+  }
+`;
 
 const AddEventForm = () => {
-  const Form: RenderCallback = ({
-    formChangeHandler,
-    formValues,
-    validationResult,
-  }) => {
+  const Form: RenderCallback = (props) => {
+
+    const { formChangeHandler, formValues, validationResult } = props
+    const [addEvent, {data, error}] = useMutation(ADDEVENT)
+    useGraphQLErrorDisplay(error)
     const styles = useStyles()
 
-    const submitHandler = useCallback(() => {
-      console.log(formValues.startDate)
-      console.log(formValues.endDate)
+    const validateFields = useCallback(() => {
+      if (formValues.shortDescription && formValues.shortDescription.length > 240)
+        return false
+      // detail error cases
+      return true
     }, [formValues])
+
+    const submitHandler = useCallback(() => {
+      addEvent({
+        variables: {
+          eventInfos: {
+            label: formValues.label,
+            shortDescription: formValues.shortDescription,
+            facebookUrl: formValues.facebookUrl,
+            description: formValues.description,
+            startedAt: formValues.startDate,
+            endedAt: formValues.endDate,
+            published: false,
+          },
+        },
+      })
+    }, [formValues, addEvent])
 
     return (
       <Container component="main" maxWidth="sm">
@@ -69,6 +97,7 @@ const AddEventForm = () => {
           onChange={formChangeHandler}
           defaultValue=""
           fullWidth
+          required
         />
         <TextField
           className={styles.field}
@@ -138,7 +167,7 @@ const AddEventForm = () => {
           variant="contained"
           className={styles.submit}
           onClick={submitHandler}
-          //disabled={!validationResult?.global}
+          disabled={!validateFields()}
         >
           Créer cet événement
         </ClassicButton>
