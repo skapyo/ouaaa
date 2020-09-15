@@ -9,6 +9,7 @@ import {white} from "color-name";
 import Slider from "react-slick";
 import Carousel from 'react-elastic-carousel'
 import CardSlider from "components/cards/CardSlider"
+import CardSliderActor from "components/cards/CardSliderActor"
 import gql from "graphql-tag"
 import { withApollo } from "hoc/withApollo"
 import {useMutation, useQuery} from "@apollo/react-hooks";
@@ -249,6 +250,23 @@ const GET_EVENTS = gql`
     }
 `;
 
+const GET_ACTORS = gql`
+    { actors
+    {   id,
+        name,
+        address,
+        lat,
+        lng,
+        Categories{
+            label
+        }
+    }
+    }
+`;
+
+
+
+
 const Index = () => {
     const [stylesProps, setStylesProps] = useState({
         topImageSize: "250px",
@@ -257,6 +275,7 @@ const Index = () => {
     const styles = useStyles(stylesProps)
     const [articleToRender, setArticleToRender] = useState(null);
     const [eventToRender, setEventToRender] = useState(null);
+    const [actorToRender, setActorToRender] = useState(null);
 
     const {data:eventData,loading:loadingEvent,error:errorEvent} = useQuery(
         GET_EVENTS,
@@ -267,6 +286,11 @@ const Index = () => {
             // fetchPolicy : "no-cache"
         }
     );
+    const {data:actorData,loading:loadingActor,error:errorActor} = useQuery(GET_ACTORS, {
+        variables: {
+            limit: '3'
+        }
+    });
 
     useEffect(() => {
 
@@ -276,6 +300,15 @@ const Index = () => {
 
 
     },[eventData]);
+    useEffect(() => {
+
+        setActorToRender({
+            actorData
+            });
+
+
+    },[actorData]);
+
 
     return (
         <AppLayout>
@@ -384,16 +417,17 @@ const Index = () => {
                     </Container>
                     <Container className={[styles.article]}>
                         <Typography variant="h5"   className={[styles.cardTitle,styles.align]}  >
-                            LES ARTICLES RECENTS
+                            LES ACTEURS RECEMMENTS AJOUTES
                         </Typography>
 
                         <Slider {...settings} className={[styles.articleCarroussel]} >
-                            {eventToRender?.eventData &&  eventToRender.eventData.events.map((event) => {
+                            {actorToRender?.actorData &&  actorToRender.actorData.actors.map((actor) => {
                                 return (
 
-                                    <CardSlider
-                                        key={event.id}
-                                        event={event}
+                                    <CardSliderActor
+
+                                        key={actor.id}
+                                        actor={actor}
                                     />
                                 );
                             })}
