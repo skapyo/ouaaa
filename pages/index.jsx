@@ -386,9 +386,6 @@ const Index = () => {
                         <Typography variant="h5"   className={[styles.cardTitle,styles.align]}  >
                             LES ARTICLES RECENTS
                         </Typography>
-                        <Typography  className={[styles.align]} >
-                            qsdqsdqsdqsdsqdsqdqsd
-                        </Typography>
 
                         <Slider {...settings} className={[styles.articleCarroussel]} >
                             {eventToRender?.eventData &&  eventToRender.eventData.events.map((event) => {
@@ -410,9 +407,6 @@ const Index = () => {
                     <Container className={[styles.event]}>
                         <Typography variant="h5"   className={[styles.cardTitle,styles.align]}  >
                             LES EVENEMENTS RECENTS
-                        </Typography>
-                        <Typography  className={[styles.align]} >
-                            qsdqsdqsdqsdsqdsqdqsd
                         </Typography>
                         <Slider {...settings} className={[styles.articleCarroussel]} >
                             {eventToRender?.eventData &&  eventToRender.eventData.events.map((event) => {
