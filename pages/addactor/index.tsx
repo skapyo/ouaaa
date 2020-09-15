@@ -176,8 +176,6 @@ const AccountPage = () => {
 
     return (
         <AddActorPageLayout>
-            <Grid container spacing={2}>
-                <Grid item lg={7}>
 
                     <Typography 
                         color='secondary' 
@@ -189,23 +187,6 @@ const AccountPage = () => {
 
                     <AddActorForm />
 
-                </Grid>
-                <Grid item lg={5}>
-
-                    <Grid container justify='center' alignItems='center' direction='column'>
-                        <Typography 
-                            color='secondary' 
-                            variant='h6'
-                            className={styles.userInfosTitle}
-                        >
-                            Photo
-                        </Typography>
-                        <Avatar className={styles.avatar}/>
-                        <ClassicButton>Photo</ClassicButton>
-                    </Grid>
-
-                </Grid>
-            </Grid>
 
             {/*  <TreeView
                 className={classes.root}

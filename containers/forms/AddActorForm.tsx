@@ -1,6 +1,6 @@
 /* eslint react/prop-types: 0 */
 import React, { ChangeEvent,useState } from "react"
-import { Grid, makeStyles, Typography, Theme } from "@material-ui/core"
+import {Grid, makeStyles, Typography, Theme, Container} from "@material-ui/core"
 import TextField from "components/form/TextField"
 import ClassicButton from "components/buttons/ClassicButton"
 import { withApollo } from "hoc/withApollo"
@@ -26,6 +26,7 @@ import graphqlTag from 'graphql-tag'
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import Collapse from '@material-ui/core/Collapse';
+import { Redirect } from 'react-router-dom'
 
 const CREATE_ACTOR = gql`
   mutation createActor($formValues: ActorInfos) {
@@ -75,6 +76,10 @@ const useStyles = makeStyles((theme) => ({
   label: {
     fontWeight: 600,
   },
+  field: {
+    marginBottom: theme.spacing(3),
+    width:"100%!important"
+  },
 }))
 
 type FormItemProps = {
@@ -85,25 +90,22 @@ type FormItemProps = {
 }
 
 const FormItem = (props: FormItemProps) => {
+
   const styles = useStyles()
   const { label, inputName, formChangeHandler, value } = props
   return (
     <>
-      <Grid item sm={3} xs={12}>
-        <Typography variant="body1" color="primary" className={styles.label}>
-          {label} :
-        </Typography>
-      </Grid>
-      <Grid item sm={9} xs={12}>
         <TextField
+            className={styles.field}
           variant="outlined"
           value={value}
           label={label}
           name={inputName}
           onChange={formChangeHandler}
           defaultValue=""
+            fullWidth
+            required
         />
-      </Grid>
     </>
   )
 }
@@ -113,21 +115,19 @@ const FormItemTextareaAutosize = (props: FormItemProps) => {
   const { label, inputName, formChangeHandler, value } = props
   return (
       <>
-        <Grid item sm={3} xs={12}>
-          <Typography variant="body1" color="primary" className={styles.label}>
-            {label} :
-          </Typography>
-        </Grid>
-        <Grid item sm={9} xs={12}>
-          <TextareaAutosize
-              aria-label="minimum height"
-              rowsMin={3}
-              value={value}
-              name={inputName}
-              onChange={formChangeHandler}
-              defaultValue=""
-          />
-        </Grid>
+      <TextField
+          multiline
+          rows={4}
+          className={styles.field}
+          variant="outlined"
+          value={value}
+          label={label}
+          name={inputName}
+          onChange={formChangeHandler}
+          defaultValue=""
+          fullWidth
+          required
+      />
       </>
   )
 }
@@ -171,12 +171,7 @@ const AddActorForm = () => {
   }) => (
 
 
-    <Grid
-      container
-      alignItems="center"
-      spacing={3}
-      className={styles.gridContainer}
-    >
+      <Container component="main" maxWidth="sm">
       <FormItem
         label="Nom"
         inputName="name"
@@ -225,37 +220,32 @@ const AddActorForm = () => {
           formChangeHandler={formChangeHandler}
           value={formValues.description}
       />
-      <Grid item sm={3} xs={12}>
+    <div  className={styles.field}>
+            <GooglePlacesAutocomplete
+                placeholder="Taper et selectionner l'adresse"
+                onSelect={({ description }) => (
+                    geocodeByAddress(description).then(results => getLatLng(results[0]).then((value) => {
+                      formValues['lat'] = ''+value.lat
+                      formValues['lng'] = ''+value.lng
+                    }))
+                        .catch(error => console.error(error))
+                    // setLatitude(.),
+                    // setLongitude(description)
+                )}
+
+
+            />
+    </div>
+
+
+
+
         <Typography variant="body1" color="primary" className={styles.label}>
-         Adresse :
+          Selectionner une categorie :
         </Typography>
-      </Grid>
-      <Grid item sm={9} xs={12}>
-        <GooglePlacesAutocomplete
-            placeholder="Taper et selectionner l'adresse"
-            onSelect={({ description }) => (
-                geocodeByAddress(description).then(results => getLatLng(results[0]).then((value) => {
-                  formValues['lat'] = ''+value.lat
-                  formValues['lng'] = ''+value.lng
-                }))
-                    .catch(error => console.error(error))
-                // setLatitude(.),
-                // setLongitude(description)
-            )}
 
 
-        />
-      </Grid>
-
-
-
-      <Grid item sm={3} xs={12}>
-        <Typography variant="body1" color="primary" className={styles.label}>
-          Categorie(s) :
-        </Typography>
-      </Grid>
-      <Grid item sm={9} xs={12}>
-        <List>
+        <List  className={styles.field}>
             {typeof data !== "undefined" && data.categories.map((category, index) => {
                 return (
                     <div>
@@ -295,22 +285,20 @@ const AddActorForm = () => {
             }
 
         </List>
-      </Grid>
+
       <Grid item xs={12}>
         <ClassicButton onClick={submitHandler} disabled={!isModified}>
           Sauvegarder les modifications
         </ClassicButton>
       </Grid>
-    </Grid>
+      </Container>
     // )
   )
 
   const afterUpdate = useCallback(
     (formValues) => {
-      sessionDispatch({
-        type: "login",
-        payload: formValues,
-      })
+      debugger;
+      <Redirect to='/' />
     },
     [sessionDispatch]
   )
@@ -320,6 +308,9 @@ const AddActorForm = () => {
       query: CREATE_ACTOR,
       resultLabel: resultLabel,
       afterUpdate: afterUpdate,
+      resultLabel: "createActor",
+      snackbarSucceedMessage: "Acteur ajouté avec succès.",
+      mutationResultControl: "builtin",
     }
   }, [afterUpdate])
 

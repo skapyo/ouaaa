@@ -108,7 +108,7 @@ const withMutation = (FormComponent: RenderCallback) => (
     // if (!error) {
     let next = false
     if (queryOptions.mutationResultControl == "builtin") {
-      if (data?.[queryOptions.resultLabel] && !error) next = true
+      if (data?.[queryOptions.resultLabel] && (typeof error === 'undefined' && !error)) next = true
     } else (
       queryOptions.mutationResultControl &&
       queryOptions.mutationResultControl(formValues, data, error)
