@@ -59,7 +59,7 @@ const MyApp = (props )  => {
   return (
     <React.Fragment>
       <Head>
-        <title>Plateforme des acteurs de la transition</title>
+        <title>OUtils des Acteurs Alternatifs en Aunis</title>
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
         <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDvUKXlWS1470oj8C-vD6s62Bs9Y8XQf00&language=fr&region=FR&libraries=places"></script>
 

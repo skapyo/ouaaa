@@ -316,10 +316,10 @@ const Index = () => {
                 <Box>
                     <Container className={styles.titleContainer} >
                         <Typography className={styles.titleTypo} >
-                           OUTIL DES ACTEURS
+                           OUtils des Acteurs
                         </Typography>
                         <Typography className={styles.titleTypo} >
-                          ALTERNATIFS en AUNIS
+                          Alternatifs en AUNIS
                         </Typography>
                         <Typography className={styles.align} >
                             Notre mission c'est de faire connaître celles et ceux qui œuvrent  <br />pour la transition écologique, sociale et démocratique en Aunis
