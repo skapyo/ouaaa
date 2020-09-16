@@ -4,7 +4,7 @@
 }
 @font-face {
     font-family: 'rowdies';
-    src: url('/fonts/Rowdies-Bold.ttf');
+    src: url('../public/font/Rowdies-Bold.ttf') format('truetype');
 }
 .slick-prev::before{
     color : #bf083e!important;
