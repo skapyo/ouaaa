@@ -27,6 +27,7 @@ import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import Collapse from '@material-ui/core/Collapse';
 import { Redirect } from 'react-router-dom'
+import {QueryOptions} from "../../components/controllers/FormController";
 
 const CREATE_ACTOR = gql`
   mutation createActor($formValues: ActorInfos) {
@@ -303,15 +304,12 @@ const AddActorForm = () => {
     [sessionDispatch]
   )
 
-  const queryOptions = useMemo(() => {
-    return {
+  const queryOptions: QueryOptions = {
       query: CREATE_ACTOR,
       resultLabel: resultLabel,
-      afterUpdate: afterUpdate,
       snackbarSucceedMessage: "Acteur ajouté avec succès.",
-      mutationResultControl: "builtin",
-    }
-  }, [afterUpdate])
+        mutationResultControl: "builtin",
+  }
 
   return (
     <FormController
