@@ -174,7 +174,7 @@ const carto = () => {
 
 
     const styles = useStyles(stylesProps)
-        const position = [46.1667, -1.15]
+        const position = [45.9876806, -0.9344537]
         if (typeof window != 'undefined') {
 
             L.Icon.Default.mergeOptions({
@@ -233,7 +233,7 @@ const carto = () => {
                             </Container>
                         </Box>
                     </RootRef>
-                    <Map ref={mapRef} center={position} zoom={5}>
+                    <Map ref={mapRef} center={position} zoom={9}>
                         <TileLayer
                             attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -244,7 +244,7 @@ const carto = () => {
                                 <Marker key={`marker-${index}`} position={[actor.lat,actor.lng]} icon={suitcasePoint}>
                                     <Popup>
                                         <span>{actor.name}</span>
-                                        <Link href={"/actor/"+index} >Voir la page et événements</Link>
+                                        <Link href={"/actor/"+actor.id} >Voir la page et événements</Link>
                                     </Popup>
                                 </Marker>)
                         })
