@@ -6,6 +6,8 @@ import SocialNetworkButton from 'components/buttons/SocialNetworkButton'
 import AppLayout from 'containers/layouts/AppLayout'
 import Card from 'components/cards/Card'
 import AppContainer from 'containers/layouts/AppContainer'
+import gql from "../map";
+import {useQuery} from "@apollo/react-hooks";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -35,6 +37,8 @@ const User = () => {
   const { id } = router.query
 
   const styles = useStyles()
+
+
 
   if (typeof window !== 'undefined')
     window.addEventListener('scroll', (event) => {

@@ -4,7 +4,7 @@ import {Box, Container, Grid, RootRef, Typography} from "@material-ui/core";
 import RoomIcon from "@material-ui/core/SvgIcon/SvgIcon";
 import {makeStyles} from "@material-ui/core/styles";
 
-import Course from "../course/[id]";
+import Actor from "../actor/[id]";
 import gql from 'graphql-tag'
 import {withApollo} from "../../hoc/withApollo";
 import {useMutation, useQuery} from "@apollo/react-hooks";
@@ -244,7 +244,7 @@ const carto = () => {
                                 <Marker key={`marker-${index}`} position={[actor.lat,actor.lng]} icon={suitcasePoint}>
                                     <Popup>
                                         <span>{actor.name}</span>
-                                        <Link href={"/course/"+index} >Voir la page et événements</Link>
+                                        <Link href={"/actor/"+index} >Voir la page et événements</Link>
                                     </Popup>
                                 </Marker>)
                         })

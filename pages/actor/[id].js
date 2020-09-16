@@ -19,6 +19,9 @@ import { useState, useEffect } from "react"
 import ClassicButton from "components/buttons/ClassicButton"
 import DividerCustom from "components/Divider"
 import { withApollo } from "hoc/withApollo.jsx"
+import {useRouter} from "next/router";
+import gql from "graphql-tag";
+import {useQuery} from "@apollo/react-hooks";
 
 const useStyles = makeStyles((theme) => ({
   leftTitle: {
@@ -126,7 +129,33 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const Course = () => {
+const Actor = () => {
+
+  const router = useRouter()
+  const { id } = router.query
+
+
+    const GET_ACTOR = gql`
+      query actor($id:String) {
+        actor(id:$id) {
+          id,
+          name,
+          address,
+          lat,
+          lng
+        }
+      }
+    `;
+
+  const {data,loading,error} = useQuery(GET_ACTOR,
+      {
+        variables : {
+           id
+        },
+        // fetchPolicy : "no-cache"
+      }
+  );
+
   const [stylesProps, setStylesProps] = useState({
     topImageSize: "250px",
     headerDisplay: "static",
@@ -187,7 +216,7 @@ const Course = () => {
                 >
                   <Grid item>
                     <Typography variant="h4">
-                      Cours de cuisine américaine
+                      {data && data.actor.name}
                     </Typography>
                     <Grid
                       container
@@ -430,9 +459,8 @@ const StickyBox = () => {
   )
 }
 
-// export default withListener(Course)
-export default Course
-
+// export default withListener(Actor)
+export default withApollo()(Actor)
 // export async function getServerSideProps(context) {
 //     console.log(context.req.headers.cookie)
 //     return {
