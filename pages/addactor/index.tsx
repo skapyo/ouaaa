@@ -152,12 +152,15 @@ const GET_CATEGORIES = graphqlTag`
         label
         icon
         subCategories {
+            id
             label
             icon
                 subCategories {
+                id
                 label
                 icon
                   subCategories {
+                     id
                      label
                      icon
               }

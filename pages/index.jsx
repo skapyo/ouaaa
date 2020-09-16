@@ -319,7 +319,7 @@ const Index = () => {
                            OUTIL DES ACTEURS
                         </Typography>
                         <Typography className={styles.titleTypo} >
-                          DE LA TRANSITION EN AUNIS
+                          ALTERNATIFS en AUNIS
                         </Typography>
                         <Typography className={styles.align} >
                             Notre mission c'est de faire connaître celles et ceux qui œuvrent  <br />pour la transition écologique, sociale et démocratique en Aunis

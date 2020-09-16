@@ -67,7 +67,7 @@ const GET_CATEGORIES = graphqlTag`
     }
 `;
 
-const resultLabel = "updateAddActor"
+const resultLabel = "createActor"
 
 const useStyles = makeStyles((theme) => ({
   gridContainer: {
@@ -308,7 +308,6 @@ const AddActorForm = () => {
       query: CREATE_ACTOR,
       resultLabel: resultLabel,
       afterUpdate: afterUpdate,
-      resultLabel: "createActor",
       snackbarSucceedMessage: "Acteur ajouté avec succès.",
       mutationResultControl: "builtin",
     }
