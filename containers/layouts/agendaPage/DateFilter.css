@@ -1,0 +1,13 @@
+.MuiPickersDay-daySelected {
+	background-color: #EBF4F3!important;
+	font-weight: bold;
+	
+}
+
+.MuiPickersDay-daySelected .MuiTypography-body2 {
+	color: #4A8E78;
+}
+
+.MuiTypography-body2 {
+	font-weight: 900!important;
+}

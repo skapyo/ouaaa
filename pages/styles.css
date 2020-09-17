@@ -4,7 +4,7 @@
 }
 @font-face {
     font-family: 'rowdies';
-    src: url('/fonts/Rowdies-Bold.ttf');
+    src: url('../public/font/Rowdies-Bold.ttf') format('truetype');
 }
 .slick-prev::before{
     color : #bf083e!important;
@@ -35,4 +35,8 @@
     direction: ltr;
     -moz-font-feature-settings: 'liga';
     -moz-osx-font-smoothing: grayscale;
+}
+
+.MuiContainer-maxWidthLg {
+    max-width: none!important;
 }
