@@ -12,7 +12,8 @@ const useStyles = makeStyles({
     border: "none",
     height: "29em",
     textAlign: "center",
-    paddingTop:"3em"
+    paddingTop:"3em",
+    marginTop: "9em",
   },
   footerTitle: {
     align: "center",
@@ -56,7 +57,7 @@ const Footer = () => {
         Suivez nos aventures sur les réseaux sociaux :
       </Typography>
       <div className={classes.socialNetworks}>
-        <a href="https://www.facebook.com">
+        <a href="https://www.facebook.com/OUAAA">
           <FacebookIcon className={classes.icons} fontSize="large" />
         </a>
         <a href="https://www.instagram.com">

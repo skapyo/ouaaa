@@ -39,10 +39,15 @@ const theme = createMuiTheme({
       main :'#F7F7F7'
     }
   },
+
   typography : {
     body1 : {
       lineHeight : 1.7
-    }
+    },
+      h5 : {
+          color:"#2a9076",
+          fontFamily: 'rowdies',
+      },
   }
 })
 

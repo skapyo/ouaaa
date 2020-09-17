@@ -91,9 +91,8 @@ const useStyles = makeStyles((theme) => ({
         "box-shadow": "11px 11px 13px -3px rgba(0, 0, 0, 0.46)",
     },
     cardTitle:{
-        "color":"#2a9076",
-        fontWeight: 700,
-        fontFamily: 'rowdies',
+        "color":theme.typography.h5.color,
+        fontFamily: theme.typography.h5.fontFamily,
     },
 
     buttonGrid:{
@@ -101,7 +100,6 @@ const useStyles = makeStyles((theme) => ({
         "color":"white",
         "background-color":"#bf083e",
         border: "none",
-        fontWeight: 600,
         fontFamily: 'rowdies',
         borderRadius: "1.5em",
         padding: "0 3em 0 3em",
@@ -121,7 +119,6 @@ const useStyles = makeStyles((theme) => ({
         "color":"white",
         "background-color":"#bf083e",
         border: "none",
-        fontWeight: 600,
         fontFamily: 'rowdies',
         borderRadius: "1.5em",
         padding: "0 3em 0 3em",
@@ -148,7 +145,6 @@ const useStyles = makeStyles((theme) => ({
     },
     titleGrid:{
         "color":"#2a9076",
-        fontWeight: 700,
         fontSize:"12px",
         lineHeight:"inherit"
     },
