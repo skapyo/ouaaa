@@ -36,3 +36,7 @@
     -moz-font-feature-settings: 'liga';
     -moz-osx-font-smoothing: grayscale;
 }
+
+.MuiContainer-maxWidthLg {
+    max-width: none!important;
+}

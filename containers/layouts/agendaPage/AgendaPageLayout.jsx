@@ -1,6 +1,7 @@
 import { withApollo } from "hoc/withApollo"
 import Events from 'containers/layouts/agendaPage/Events'
 import Filters from 'containers/layouts/agendaPage/Filters'
+import Newsletter from 'containers/layouts/Newsletter'
 import { Container, makeStyles } from "@material-ui/core"
 
 const useStyles = makeStyles({
@@ -19,9 +20,12 @@ const AgendaPageLayout = () => {
   const classes = useStyles()
 
   return (
-    <Container className={classes.layout}>
-      <Filters />
-      <Events />
+    <Container>
+      <Container className={classes.layout}>
+        <Filters />
+        <Events />
+      </Container>
+      <Newsletter />
     </Container>
   )
 }
