@@ -14,6 +14,7 @@ import gql from "graphql-tag"
 import { withApollo } from "hoc/withApollo"
 import {useMutation, useQuery} from "@apollo/react-hooks";
 import Link from "../components/Link";
+import Newsletter from "../containers/layouts/Newsletter";
 const useStyles = makeStyles((theme) => ({
 
     leftTitle: {
@@ -136,24 +137,6 @@ const useStyles = makeStyles((theme) => ({
         marginBottom:"30px"
 
     },
-
-    footer: {
-        "color": "white",
-        "background-color": "#2a9076",
-        border: "none",
-        height: "30em",
-        textAlign: "center",
-        paddingTop:"3em"
-    },
-    footerTitle: {
-
-        align: "center",
-        fontWeight: 700,
-    },
-    footerSubTitle: {
-        fontWeight: 50,
-        fontSize: "9px",
-    },
     gridItem:{
         "background-color": "#f9f9f9",
         margin:"12px",
@@ -193,16 +176,6 @@ const useStyles = makeStyles((theme) => ({
         textAlign: "center",
         backgroundColor:"#e8f4f2"
     },
-    newsletter:{
-        paddingTop :"5em",
-        paddingBottom :"5em",
-        textAlign: "center",
-    },
-
-
-
-
-
 }))
 function SampleNextArrow(props) {
     const { className, style, onClick } = props;
@@ -457,35 +430,7 @@ const Index = () => {
                             <button className={styles.buttonGrid}  >VOIR TOUT LES ARTICLES</button>
                         </div>
                     </Container>
-                    <Container className={[styles.newsletter]}>
-                        <Typography variant="h5" className={[styles.cardTitle,styles.align]}   >
-                            POUR NE RIEN RATER DE #NAME
-                        </Typography>
-                        <Typography variant="h5"   className={[styles.cardTitle,styles.align]}  >
-                            INSCRIVEZ-VOUS A NOTRE NEWSLETTER
-                        </Typography>
-                        <div className={styles.search}  >
-                            <div className={styles.searchIcon}>
-                                <SearchIcon />
-                            </div>
-                            <InputBase
-                                placeholder="J'inscris mon email pour recevoir la newletter"
-                                classes={{
-                                    root: styles.inputRoot,
-                                    input: styles.inputInput,
-                                }}
-                                inputProps={{ 'aria-label': 'search' }}
-                            />
-                        </div>
-                    </Container>
-                    <Container    className={styles.footer}>
-                        <Typography variant="h5"  className={styles.footerTitle}  >
-                            RESTONS CONNECTES!
-                        </Typography>
-                        <Typography variant="h6"  className={styles.footerSubTitle}  >
-                            Suivez nos aventures sur les réseaux sociaux :
-                        </Typography>
-                    </Container>
+                    <Newsletter />
                 </Box>
 
             </RootRef>
