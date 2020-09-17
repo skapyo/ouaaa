@@ -9,7 +9,10 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 
 const useStyles = makeStyles({
-
+  categories: {
+    fontFamily: "Roboto",
+    fontWeight: "100",
+  },
 })
 
 const GET_CATEGORIES = gql`
@@ -26,16 +29,13 @@ const CategoryFilter = () => {
   
   const classes = useStyles()
   const {data: categoryData, loading, error} = useQuery(
-    GET_CATEGORIES,
-    {}
+    GET_CATEGORIES
   )
-/*
-  categoryData.categories.map((category) => {
-    category.activated = true
-  })
-*/
-  const handleChange = (event, category) => {
-    category.activated = event.target.checked
+
+  const [state, setState] = React.useState({})
+
+  const handleChange = (category, event) => {
+    setState({ ...state, [category.id.toString()]: event.target.checked });
   }
 
   return (
@@ -43,12 +43,16 @@ const CategoryFilter = () => {
       <FormControl component="fieldset" className={classes.formControl}>
         <FormGroup>
           {
-            categoryData && categoryData.categories.map((category) => {
+            categoryData && categoryData.categories.map((category) =>
               <FormControlLabel
-                control={<Checkbox checked={category.activated} onChange={handleChange(event, category)} name="alimentation" />}
-                label={category.label}
+                control={<Checkbox defaultChecked checked={state[category.id.toString()]} onChange={(e) => handleChange(category, e)} name={category.label} />}
+                label={
+                  <span className={classes.categories}>
+                    {category.label}
+                  </span>
+                }
               />
-            })
+            )
           }
         </FormGroup>
       </FormControl>
