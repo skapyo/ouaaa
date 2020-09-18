@@ -1,4 +1,4 @@
-import { useCallback } from "react"
+import React, { useCallback, useState } from "react"
 import gql from "graphql-tag"
 import { withApollo } from "hoc/withApollo"
 import {
@@ -13,8 +13,12 @@ import FormController from "components/controllers/FormController"
 import {
   RenderCallback,
 } from "components/controllers/FormController"
-import { useMutation } from "@apollo/react-hooks"
+import { useMutation, useQuery } from "@apollo/react-hooks"
 import useGraphQLErrorDisplay from "hooks/useGraphQLErrorDisplay"
+import FormControl from '@material-ui/core/FormControl';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 
 const useStyles = makeStyles((theme) => ({
   field: {
@@ -48,11 +52,24 @@ const ADDEVENT = gql`
   }
 `;
 
+const GET_CATEGORIES = gql`
+query categories {
+  categories {
+    id,
+    label,
+    activated
+  }
+}
+`;
+
 const AddEventForm = () => {
   const Form: RenderCallback = (props) => {
 
     const { formChangeHandler, formValues, validationResult } = props
     const [addEvent, {data, error}] = useMutation(ADDEVENT)
+    const {data: categoryData, loading: categoryLoading, error: categoryError} = useQuery(
+      GET_CATEGORIES
+    )
     useGraphQLErrorDisplay(error)
     const styles = useStyles()
 
@@ -63,7 +80,21 @@ const AddEventForm = () => {
       return true
     }, [formValues])
 
-    const submitHandler = useCallback(() => {
+    const [state, setState] = React.useState({})
+
+    const handleChange = (category: any, event: React.ChangeEvent<HTMLInputElement>) => {
+      setState({ ...state, [category.id.toString()]: event.target.checked });
+    }
+
+    const submitHandler = () => {
+      const checkboxes = Object.keys(state)
+      let categoriesArray: number[]
+      categoriesArray = []
+      checkboxes.forEach( key => {
+        if (state[key])
+          categoriesArray.push(parseInt(key))
+      })
+
       addEvent({
         variables: {
           eventInfos: {
@@ -74,10 +105,11 @@ const AddEventForm = () => {
             startedAt: formValues.startDate,
             endedAt: formValues.endDate,
             published: false,
+            categories: categoriesArray,
           },
         },
       })
-    }, [formValues, addEvent])
+    }
 
     return (
       <Container component="main" maxWidth="sm">
@@ -161,6 +193,18 @@ const AddEventForm = () => {
               shrink: true,
             }}
           />
+          <FormControl component="fieldset">
+            <FormGroup>
+              {
+                categoryData && categoryData.categories.map((category: any) =>
+                  <FormControlLabel
+                    control={<Checkbox checked={state[category.id.toString()]} onChange={(e) => handleChange(category, e)} name={category.label} />}
+                    label={category.label}
+                  />
+                )
+              }
+            </FormGroup>
+          </FormControl>
         </Grid>
         <ClassicButton
           fullWidth

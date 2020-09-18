@@ -13,9 +13,9 @@ const useStyles = makeStyles({
     height: "29em",
     textAlign: "center",
     paddingTop:"3em",
-    marginTop: "9em",
   },
   footerTitle: {
+    color: "white",
     align: "center",
     fontWeight: 700,
     fontFamily: "rowdies",
@@ -57,13 +57,13 @@ const Footer = () => {
         Suivez nos aventures sur les réseaux sociaux :
       </Typography>
       <div className={classes.socialNetworks}>
-        <a href="https://www.facebook.com/OUAAA">
+        <a href="https://www.facebook.com/OUAAA" target="_blank">
           <FacebookIcon className={classes.icons} fontSize="large" />
         </a>
-        <a href="https://www.instagram.com">
+        <a href="https://www.instagram.com" target="_blank">
           <InstagramIcon className={classes.icons} fontSize="large" />
         </a>
-        <a href="https://www.youtube.com">
+        <a href="https://www.youtube.com" target="_blank">
           <YouTubeIcon className={classes.icons} fontSize="large" />
         </a>
       </div>
