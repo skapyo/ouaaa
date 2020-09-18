@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
         marginTop : theme.spacing(2),
         backgroundImage:`url('/860_potager_de_la_jarne.jpg')`,
         backgroundPosition: 'center',
-        backgroundRepeat: 'space',
+        backgroundRepeat: 'no-repeat',
         height: '24em',
         color: 'white',
         "text-align": "center",
@@ -38,8 +38,11 @@ const useStyles = makeStyles((theme) => ({
     cardInfo: {
         "padding": "2em",
         backgroundColor:"white",
+        backgroundImage:`url('/icons/planet.svg')`,
+        backgroundPosition: 'right',
+        backgroundRepeat: 'no-repeat',
+        backgroundOpacity: ' 0.5',
         //  backgroundImage:`url('./fond.png')`,
-        backgroundPosition: 'center',
         borderRadius: "0.5em",
         width:"80%",
         justify:"center",
@@ -49,9 +52,12 @@ const useStyles = makeStyles((theme) => ({
         "box-shadow": "0px 0px 38px -14px rgba(0, 0, 0, 0.46)",
     },
     cardTitle:{
-        "color":"#2a9076",
-        fontWeight: 700,
-        fontFamily: 'rowdies',
+        "color":theme.typography.h5.color,
+        fontFamily: theme.typography.h5.fontFamily,
+        textTransform: "uppercase",
+    },
+    cardTitleCategories:{
+        "color":theme.typography.h5.color,
     },
 
 }))
@@ -119,7 +125,7 @@ const Actor = () => {
                                   <Typography variant="h5"   className={styles.cardTitle}  >
                                       {data && data.actor.name}
                                   </Typography>
-                                  <Typography variant="h7"   className={styles.cardTitle}  >
+                                  <Typography variant="h7"   className={styles.cardTitleCategories}  >
                                       {data && data.actor.Categories && data.actor.Categories.length>0 && data.actor.Categories[0].parentCategory.label} : {data && data.actor.Categories && data.actor.Categories.length>0 && data.actor.Categories[0].label}
                                   </Typography>
                               </div>
