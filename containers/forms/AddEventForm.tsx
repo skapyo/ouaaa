@@ -19,6 +19,8 @@ import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
+import useCookieRedirection from "hooks/useCookieRedirection"
+import { useSnackbar } from 'notistack';
 
 const useStyles = makeStyles((theme) => ({
   field: {
@@ -31,6 +33,11 @@ const useStyles = makeStyles((theme) => ({
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
+  },
+  categories: {
+    '& span': {
+      fontWeight: "100",
+    },
   },
 }))
 
@@ -72,6 +79,8 @@ const AddEventForm = () => {
     )
     useGraphQLErrorDisplay(error)
     const styles = useStyles()
+    const redirect = useCookieRedirection()
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar()
 
     const validateFields = useCallback(() => {
       if (formValues.shortDescription && formValues.shortDescription.length > 240)
@@ -109,6 +118,14 @@ const AddEventForm = () => {
           },
         },
       })
+
+      // alert
+      if (!error) {
+        enqueueSnackbar("Événement créé avec succès.", { 
+          preventDuplicate: true,
+        })
+        redirect()
+      }
     }
 
     return (
@@ -193,18 +210,22 @@ const AddEventForm = () => {
               shrink: true,
             }}
           />
-          <FormControl component="fieldset">
-            <FormGroup>
-              {
-                categoryData && categoryData.categories.map((category: any) =>
-                  <FormControlLabel
-                    control={<Checkbox checked={state[category.id.toString()]} onChange={(e) => handleChange(category, e)} name={category.label} />}
-                    label={category.label}
-                  />
-                )
-              }
-            </FormGroup>
-          </FormControl>
+          <Grid>
+            <Typography>Catégorie(s) de l'événement</Typography>
+            <FormControl component="fieldset">
+              <FormGroup>
+                {
+                  categoryData && categoryData.categories.map((category: any) =>
+                    <FormControlLabel
+                      control={<Checkbox checked={state[category.id.toString()]} onChange={(e) => handleChange(category, e)} name={category.label} />}
+                      label={category.label}
+                      className={styles.categories}
+                    />
+                  )
+                }
+              </FormGroup>
+            </FormControl>
+          </Grid>
         </Grid>
         <ClassicButton
           fullWidth
