@@ -413,7 +413,6 @@ const Index = () => {
                                     />
                                 );
                             })}
-
                         </Slider>
                         <div className={styles.buttonArticle} >
                             <button className={styles.buttonGrid}  >VOIR TOUT LES ARTICLES</button>
