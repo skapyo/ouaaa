@@ -250,7 +250,7 @@ const carto = () => {
     const [open, setOpen] = React.useState(true);
     const [checked, setChecked] = useState([0]);
 
-    const handleToggle = (value: number) => () => {
+    const handleToggle = (value) => () => {
         const currentIndex = checked.indexOf(value);
         const newChecked = [...checked];
 
@@ -278,7 +278,6 @@ const carto = () => {
 
     useEffect(() => {
         const {current ={}} = mapRef;
-        const  {leafletElement:map}=current;
 
     },[mapRef])
 
@@ -306,7 +305,7 @@ const carto = () => {
                 <AppLayout>
                     <Grid container >
                         <Grid item xs={2}>
-                            <List  className={styles.field}>
+                            <List >
                                 {typeof dataCategorie !== "undefined" && dataCategorie.categories.map((category, index) => {
                                     return (
                                         <div>
@@ -385,11 +384,13 @@ const carto = () => {
                                                         </Grid>
 
 
-                                                        <Typography variant="body" component="p">
+                                                        <Typography component="p">
                                                             {actor && actor.short_description}
                                                         </Typography>
                                                     </div>
-                                                    <Link href={"/actor/"+actor.id} ><button className={styles.buttonGrid}  >EN SAVOIR PLUS</button></Link>
+                                                    <Link  href={"/actor/"+actor.id} >
+                                                        <button className={styles.buttonGrid}  >EN SAVOIR PLUS</button>
+                                                    </Link>
                                                 </Popup>
                                             </Marker>)
                                 })
