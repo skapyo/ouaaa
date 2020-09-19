@@ -66,20 +66,6 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(4),
         maxWidth: "1120px",
     },
-    topBox: {
-        backgroundColor: "rgba(255, 255, 255)",
-        position: (props) => props.headerDisplay,
-        top: "0px",
-        width: "100%",
-        boxShadow: "rgba(0,0,0,0.1) 0px 2px 20px 1px",
-    },
-    placeholder: {
-        display: (props) => {
-            return props.headerDisplay == "fixed" ? "block" : "none"
-        },
-
-        height: (props) => props.placeHolderHeight,
-    },
     leftTitles: {
         marginBottom: theme.spacing(10),
     },
@@ -100,23 +86,9 @@ const useStyles = makeStyles((theme) => ({
         boxShadow: "0 0 1px 1px rgba(20,23,28,.1), 0 3px 1px 0 rgba(20,23,28,.1)",
         padding: theme.spacing(3),
     },
-    contentSubTitles: {
-        marginBottom: theme.spacing(1),
-        fontWeight: "600",
-    },
-    contentDivider: {
-        marginTop: "15px",
-        marginBottom: "15px",
-    },
     hightlightsBox: {
         padding: theme.spacing(2),
         backgroundColor: "#F9F9F9",
-    },
-    topImage: {
-        display: "inline",
-        width: (props) => props.topImageSize,
-        height: (props) => props.topImageSize,
-        borderRadius: "100px",
     },
     avatar: {
         width: theme.spacing(7),
@@ -228,7 +200,6 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 
-
 const carto = () => {
     const mapRef=useRef();
 
@@ -313,7 +284,7 @@ const carto = () => {
 
     const [favorite, setFavorite] = useState(false)
 
-    const styles = useStyles(stylesProps)
+    const styles = useStyles()
         const position = [45.9876806, -0.9344537]
         if (typeof window != 'undefined') {
 
