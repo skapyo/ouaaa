@@ -19,7 +19,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
 import { withStyles, TextareaAutosize  } from "@material-ui/core"
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
-import { geocodeByAddress,getLatLng} from 'react-google-places-autocomplete';
+import { geocodeByAddress, getLatLng } from 'react-google-places-autocomplete';
 import {useQuery} from "@apollo/react-hooks";
 import TreeView from "@material-ui/lab/TreeView/TreeView";
 import graphqlTag from 'graphql-tag'
@@ -43,7 +43,6 @@ const CREATE_ACTOR = gql`
         description
         lat
         lng
-        
     }
   }
 `
@@ -223,7 +222,7 @@ const AddActorForm = () => {
       />
     <div  className={styles.field}>
             <GooglePlacesAutocomplete
-                placeholder="Taper et selectionner l'adresse"
+                placeholder="Taper et sélectionner l'adresse"
                 onSelect={({ description }) => (
                     geocodeByAddress(description).then(results => getLatLng(results[0]).then((value) => {
                       formValues['lat'] = ''+value.lat
