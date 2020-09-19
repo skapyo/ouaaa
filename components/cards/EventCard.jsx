@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded';
 import FavoriteRoundedIcon from '@material-ui/icons/FavoriteRounded';
 import Moment from 'react-moment';
+import Link from "../Link";
 
 const useStyles = makeStyles({
   card: {
@@ -83,36 +84,40 @@ const EventCard = ({event}) => {
   const [favorite, setFavorite] = useState(false)
 
   return (
-    <div className={classes.card}>
-      <div className={classes.content}>
-        <div className={classes.leftContent}>
-          <div className={classes.image}>
-            <img src="image_card.jpg" />
-          </div>
-          <div className={classes.text}>
-            <div className={classes.actor}>Potager de la Jarne</div>
-            <div className={classes.label}>{event.label}</div>
-            <div className={classes.eventDetails}>
-              De
-              <Moment format=" HH" unix>{event.startedAt/1000}</Moment>
-              h
-              <Moment format="mm " unix>{event.startedAt/1000}</Moment>
-              à
-              <Moment format=" HH" unix>{event.endedAt/1000}</Moment>
-              h
-              <Moment format="mm" unix>{event.endedAt/1000}</Moment>
+
+        <div className={classes.card}>
+          <div className={classes.content}>
+            <Link  href={"/event/"+event.id}>
+              <div className={classes.leftContent}>
+                <div className={classes.image}>
+                  <img src="image_card.jpg" />
+                </div>
+                <div className={classes.text}>
+                  <div className={classes.actor}>Potager de la Jarne</div>
+                  <div className={classes.label}>{event.label}</div>
+                  <div className={classes.eventDetails}>
+                    De
+                    <Moment format=" HH" unix>{event.startedAt/1000}</Moment>
+                    h
+                    <Moment format="mm " unix>{event.startedAt/1000}</Moment>
+                    à
+                    <Moment format=" HH" unix>{event.endedAt/1000}</Moment>
+                    h
+                    <Moment format="mm" unix>{event.endedAt/1000}</Moment>
+                  </div>
+                </div>
+              </div>
+            </Link>
+            <div className={classes.category}>
+              <img src="icons/fruit.svg" />
             </div>
           </div>
+          <div className={classes.favorite} onClick={() => setFavorite(!favorite)}>
+            {!favorite && <FavoriteBorderRoundedIcon className={classes.favoriteIcon} />}
+            {favorite && <FavoriteRoundedIcon className={classes.favoriteIcon} />}
+          </div>
         </div>
-        <div className={classes.category}>
-          <img src="icons/fruit.svg" />
-        </div>
-      </div>
-      <div className={classes.favorite} onClick={() => setFavorite(!favorite)}>
-        {!favorite && <FavoriteBorderRoundedIcon className={classes.favoriteIcon} />}
-        {favorite && <FavoriteRoundedIcon className={classes.favoriteIcon} />}
-      </div>
-    </div>
+
   )
 }
 

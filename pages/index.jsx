@@ -15,6 +15,8 @@ import { withApollo } from "hoc/withApollo"
 import {useMutation, useQuery} from "@apollo/react-hooks";
 import Link from "../components/Link";
 import Newsletter from "../containers/layouts/Newsletter";
+
+
 const useStyles = makeStyles((theme) => ({
 
     leftTitle: {
@@ -425,11 +427,10 @@ const Index = () => {
                         <Slider {...settings} className={[styles.articleCarroussel]} >
                             {eventToRender?.eventData &&  eventToRender.eventData.events.map((event) => {
                                 return (
-
-                                    <CardSlider
-                                        key={event.id}
-                                        event={event}
-                                    />
+                                        <CardSlider
+                                            key={event.id}
+                                            event={event}
+                                        />
                                 );
                             })}
                         </Slider>

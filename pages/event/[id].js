@@ -32,11 +32,11 @@ import CardSlider from "../../components/cards/CardSlider";
 import Slider from "react-slick/lib";
 import Newsletter from "../../containers/layouts/Newsletter";
 import Link from "../../components/Link";
-
+import CardSliderActor from "components/cards/CardSliderActor"
 const useStyles = makeStyles((theme) => ({
     titleContainer: {
         marginTop : theme.spacing(2),
-        backgroundImage:`url('/860_potager_de_la_jarne.jpg')`,
+        backgroundImage:`url('/image/alternatiba.jpg')`,
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
         height: '24em',
@@ -110,26 +110,26 @@ const useStyles = makeStyles((theme) => ({
 
 
 }))
-const GET_EVENTS = gql`
-    query events($limit:String) {
-        events(limit:$limit) {
-            id,
-            label,
-            shortDescription,
-            description,
-            startedAt,
-            endedAt,
-            published
+const GET_ACTORS = gql`
+    { actors
+    {   id,
+        name,
+        address,
+        lat,
+        lng,
+        Categories{
+            label
         }
+    }
     }
 `;
 const Actor = () => {
 
     const router = useRouter()
     const { id } = router.query
-    const [eventToRender, setEventToRender] = useState(null);
-    const {data:eventData,loading:loadingEvent,error:errorEvent} = useQuery(
-        GET_EVENTS,
+    const [actorToRender, setActorToRender] = useState(null);
+    const {data:actorData,loading:loadingActor,error:errorActor} = useQuery(
+        GET_ACTORS,
         {
             variables : {
                 limit :  '3'
@@ -137,29 +137,17 @@ const Actor = () => {
             // fetchPolicy : "no-cache"
         }
     );
-    const GET_ACTOR = gql`
-        query actor($id:String) {
-            actor(id:$id) {
+    const GET_EVENT = gql`
+        query event($id:String) {
+            event(id:$id) {
                 id,
-                name,
-                address,
-                lat,
-                lng,
-                description,
-                Categories{
-                    label,
-                    parentCategory{
-                        label
-                    },
-                    subCategories{
-                        label
-                    }
-                }
+                label,
+                description
             }
         }
     `;
 
-    const {data,loading,error} = useQuery(GET_ACTOR,
+    const {data,loading,error} = useQuery(GET_EVENT,
         {
             variables : {
                 id
@@ -169,12 +157,12 @@ const Actor = () => {
     );
     useEffect(() => {
 
-        setEventToRender({
-            eventData
+        setActorToRender({
+            actorData
         });
 
 
-    },[eventData]);
+    },[actorData]);
 
     const [stylesProps, setStylesProps] = useState({
         topImageSize: "250px",
@@ -234,23 +222,21 @@ const Actor = () => {
                     <Container className={styles.titleContainer} >
                     </Container>
 
-                    < Container  className={styles.cardInfo} >
+                    < Container  className={styles.cardInfo}>
 
                         <Grid container spacing={3} >
                             <Grid item xs={8} className={styles.threePointGrid}>
                                 <div  >
                                     <Typography variant="h5"   className={styles.cardTitle}  >
-                                        {data && data.actor.name}
+                                        {data && data.event.label}
                                     </Typography>
                                     <Typography variant="h7"   className={styles.cardTitleCategories}  >
-                                        {data && data.actor.Categories && data.actor.Categories.length>0 && data.actor.Categories[0].parentCategory.label} : {data && data.actor.Categories && data.actor.Categories.length>0 && data.actor.Categories[0].label}
+                                        {data && data.event.Categories && data.actor.Categories.length>0 && data.event.Categories[0].parentCategory.label} : {data && data.event.Categories && data.event.Categories.length>0 && data.event.Categories[0].label}
                                     </Typography>
                                 </div>
-                                <p>{data && data.actor.description}</p>
+                                <p>{data && data.event.description}</p>
                                 <div  >
-                                    <Typography variant="h5"   className={styles.cardTitle}  >
-                                        DOMAINE D'ACTION
-                                    </Typography>
+
 
                                 </div>
                             </Grid>
@@ -270,34 +256,10 @@ const Actor = () => {
                                     </Grid>
                                     <Grid container className={[styles.item]} >
                                         <Grid item xs={3} className={[styles.alignRight]}>
-                                            <Phone className={[styles.icon]}/>
-                                        </Grid>
-                                        <Grid item xs={8} className={[styles.alignLeft]}>
-                                            TELEPHONE
-                                        </Grid>
-                                    </Grid>
-                                    <Grid container className={[styles.item]} >
-                                        <Grid item xs={3} className={[styles.alignRight]}>
-                                            <AlternateEmail className={[styles.icon]}/>
-                                        </Grid>
-                                        <Grid item xs={8} className={[styles.alignLeft]}>
-                                            Email
-                                        </Grid>
-                                    </Grid>
-                                    <Grid container className={[styles.item]} >
-                                        <Grid item xs={3} className={[styles.alignRight]}>
-                                            <Language className={[styles.icon]}/>
-                                        </Grid>
-                                        <Grid item xs={8} className={[styles.alignLeft]}>
-                                            SITE INTERNET
-                                        </Grid>
-                                    </Grid>
-                                    <Grid container className={[styles.item]} >
-                                        <Grid item xs={3} className={[styles.alignRight]}>
                                             <Schedule className={[styles.icon]}/>
                                         </Grid>
                                         <Grid item xs={8} className={[styles.alignLeft]}>
-                                            HORAIRE
+                                            Date
                                         </Grid>
                                     </Grid>
                                 </Grid>
@@ -306,34 +268,20 @@ const Actor = () => {
                             </Grid>
                         </Grid>
 
-                        <div  >
-                            <Typography variant="h5"   className={styles.cardTitle}  >
-                                PHOTO ET VIDEOS
-                            </Typography>
-
-                        </div>
-                        <Slider {...settingsSliderImage} >
-                            <img src="/image/potager_jarne_slider1.jpg" className={[styles.img]}/>
-                            <img src="/image/potager_jarne_slider2.jpg"  className={[styles.img]}/>
-                            <img src="/image/potager_jarne_slider3.jpg"  className={[styles.img]}/>
-                        </Slider>
-
                         <div>
 
                             <Typography variant="h5"   className={[styles.cardTitle,styles.align]}  >
-                                LES EVENEMENTS
-                            </Typography>
-                            <Typography variant="h5"   className={[styles.cardTitle,styles.align]}  >
-                                de {data && data.actor.name}
+                                LES ACTEURS PARTICIPANTS
                             </Typography>
                         </div>
                         <Slider {...settingsSliderevent} className={[styles.articleCarroussel]} >
-                            {eventToRender?.eventData &&  eventToRender.eventData.events.map((event) => {
+                            {actorToRender?.actorData &&  actorToRender.actorData.actors.map((actor) => {
                                 return (
-                                        <CardSlider
-                                            key={event.id}
-                                            event={event}
-                                        />
+
+                                    <CardSliderActor
+                                        key={actor.id}
+                                        actor={actor}
+                                    />
                                 );
                             })}
                         </Slider>

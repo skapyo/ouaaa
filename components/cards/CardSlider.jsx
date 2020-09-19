@@ -7,6 +7,7 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Timestamp from 'react-timestamp';
 import Moment from 'react-moment';
+import Link from "../Link";
 
 const useStyles = makeStyles({
   root: {
@@ -40,7 +41,7 @@ marginRight: "auto"
 
     },
     image:{
-        backgroundImage:`url('./cardPicture.jpg')`,
+        backgroundImage:`url('/cardPicture.jpg')`,
         backgroundPosition: 'center center',
         backgroundRepeat: 'no-repeat',
         backgroundSize:"over",
@@ -74,31 +75,33 @@ export default function SimpleCard({event}) {
   const bull = <span className={classes.bullet}>•</span>;
 
   return (
-    <Card className={classes.root}>
-      <CardContent>
-        <div  className={classes.image}>
-          <div className={classes.categorie}>
-            <Typography className={classes.categorie}  gutterBottom>
-                categorie
-            </Typography>
-          </div>
-        </div>
-        <div className={classes.content}>
-          <div  className={classes.titleDiv}>
-            <Typography variant="h6" component="h2"  className={classes.title}>
-                {event && event.label}
-            </Typography>
-            <Typography className={classes.date} color="textSecondary">
-                <Moment format="DD/MM HH:mm" unix>{event && event.startedAt/1000}</Moment>
-            </Typography>
-          </div>
-          <Typography variant="body" component="p">
-              {event && event.shortDescription}
-          </Typography>
-        </div>
+      <Link  href={"/event/"+event.id}>
+        <Card className={classes.root}>
+          <CardContent>
+            <div  className={classes.image}>
+              <div className={classes.categorie}>
+                <Typography className={classes.categorie}  gutterBottom>
+                    categorie
+                </Typography>
+              </div>
+            </div>
+            <div className={classes.content}>
+              <div  className={classes.titleDiv}>
+                <Typography variant="h6" component="h2"  className={classes.title}>
+                    {event && event.label}
+                </Typography>
+                <Typography className={classes.date} color="textSecondary">
+                    <Moment format="DD/MM HH:mm" unix>{event && event.startedAt/1000}</Moment>
+                </Typography>
+              </div>
+              <Typography variant="body" component="p">
+                  {event && event.shortDescription}
+              </Typography>
+            </div>
 
-      </CardContent>
+          </CardContent>
 
-    </Card>
+        </Card>
+      </Link>
   );
 }
