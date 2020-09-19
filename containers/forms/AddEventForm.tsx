@@ -140,8 +140,8 @@ const AddEventForm = () => {
             endedAt: formValues.endDate,
             published: false,
             categories: categoriesArray,
-            lat: formValues.lat,
-            lng: formValues.lng,
+            lat: parseFloat(formValues.lat),
+            lng: parseFloat(formValues.lng),
           },
         },
       })
