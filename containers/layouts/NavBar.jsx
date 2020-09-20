@@ -168,6 +168,7 @@ const NavBar = () => {
                           >
                             {/* <MenuItem onClick={() => router.push('/account')} component={Link} >Mon compte</MenuItem> */}
                             <MenuItem button component={Link} className={styles.menuItem} href='/account' >Mon compte</MenuItem>
+                            <MenuItem button component={Link} className={styles.menuItem} href='/actorAdmin' >Espace Acteur</MenuItem>
                             <MenuItem onClick={signoutHandler} className={styles.menuItem} >Se déconnecter</MenuItem>
                           </Menu>
                         </>

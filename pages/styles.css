@@ -40,3 +40,7 @@
 .MuiContainer-maxWidthLg {
     max-width: none!important;
 }
+
+.MuiStepIcon-root.MuiStepIcon-active {
+    color: #bf083e!important;
+ }

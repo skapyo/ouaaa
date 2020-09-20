@@ -38,7 +38,7 @@ const AddActorPageLayout = ({children}) => {
             <AppContainer maxWidth='lg'>
                 <Box className={styles.gridContainer}>
                     <Grid container spacing={10}>
-                        <Grid item lg={9}>
+                        <Grid item lg={12}>
                             {children}
                         </Grid>
                     </Grid>
