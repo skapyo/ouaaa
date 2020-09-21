@@ -147,7 +147,9 @@ const Actor = () => {
                 lat,
                 lng,
                 address,
-                city
+                city,
+                startedAt,
+                endedAt,
             }
         }
     `;
