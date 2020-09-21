@@ -21,6 +21,8 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import useCookieRedirection from "hooks/useCookieRedirection"
 import { useSnackbar } from 'notistack';
+import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
+import { geocodeByAddress, getLatLng } from 'react-google-places-autocomplete';
 
 const useStyles = makeStyles((theme) => ({
   field: {
@@ -39,6 +41,27 @@ const useStyles = makeStyles((theme) => ({
       fontWeight: "100",
     },
   },
+  location: {
+    margin: "1em 0",
+    '& input': {
+      height: "3.5em",
+      borderRadius: "4px",
+      boxShadow: "none",
+      border: "solid 1px lightgray",
+      fontFamily: "Roboto",
+      fontSize: "16px",
+      width: "100%",
+      '&:hover': {
+        border: "solid 1px lightgray",
+      },
+      '&:focus': {
+        border: "solid 1px lightgray",
+      },
+      '&:active': {
+        border: "solid 1px lightgray",
+      },
+    },
+  },
 }))
 
 const ADDEVENT = gql`
@@ -46,7 +69,7 @@ const ADDEVENT = gql`
     $eventInfos: EventInfos
   ) {
     createEvent(
-      eventInfos:$eventInfos
+      eventInfos: $eventInfos
     ) {
       label
       shortDescription
@@ -55,6 +78,8 @@ const ADDEVENT = gql`
       startedAt
       endedAt
       published
+      lat
+      lng
     }
   }
 `;
@@ -82,17 +107,39 @@ const AddEventForm = () => {
     const redirect = useCookieRedirection()
     const { enqueueSnackbar, closeSnackbar } = useSnackbar()
 
+    const [state, setState] = React.useState({})
+    const [address, setAddress] = useState("")
+    const [city, setCity] = useState("")
+
     const validateFields = useCallback(() => {
-      if (formValues.shortDescription && formValues.shortDescription.length > 240)
-        return false
+      if (formValues.shortDescription && formValues.shortDescription.length > 240) return false
+      // check if at least one checkbox is checked
+      if (Object.values(state).find(element => element == true) == undefined) return false
+      if (!address || !city) return false
+      if (formValues.startDate >= formValues.endDate) return false
       // detail error cases
       return true
-    }, [formValues])
-
-    const [state, setState] = React.useState({})
+    }, [formValues, state, address, city])
 
     const handleChange = (category: any, event: React.ChangeEvent<HTMLInputElement>) => {
       setState({ ...state, [category.id.toString()]: event.target.checked });
+    }
+
+    const getObjectLongName = (results, name) => {
+      if (!results || !results[0] || !results[0].address_components)
+        return ("")
+      let object = results[0].address_components.find((element) =>
+        element.types.find(type => type == name) != undefined
+      )
+      if (object == undefined)
+        return ("")
+      return object.long_name
+    }
+
+    const getAddressDetails = (results) => {
+      setAddress((getObjectLongName(results, "street_number") + " " + getObjectLongName(results, "route")).trim())
+      setCity(getObjectLongName(results, "locality"))
+      formValues.postCode = getObjectLongName(results, "postal_code")
     }
 
     const submitHandler = () => {
@@ -115,12 +162,16 @@ const AddEventForm = () => {
             endedAt: formValues.endDate,
             published: false,
             categories: categoriesArray,
+            lat: parseFloat(formValues.lat),
+            lng: parseFloat(formValues.lng),
+            address: address,
+            postCode: formValues.postCode,
+            city: city,
           },
         },
       })
 
-      // alert
-      if (!error) {
+      if (data) {
         enqueueSnackbar("Événement créé avec succès.", { 
           preventDuplicate: true,
         })
@@ -210,22 +261,37 @@ const AddEventForm = () => {
               shrink: true,
             }}
           />
-          <Grid>
-            <Typography>Catégorie(s) de l'événement</Typography>
-            <FormControl component="fieldset">
-              <FormGroup>
-                {
-                  categoryData && categoryData.categories.map((category: any) =>
-                    <FormControlLabel
-                      control={<Checkbox checked={state[category.id.toString()]} onChange={(e) => handleChange(category, e)} name={category.label} />}
-                      label={category.label}
-                      className={styles.categories}
-                    />
-                  )
-                }
-              </FormGroup>
-            </FormControl>
-          </Grid>
+        </Grid>
+        <Grid>
+          <Typography>Catégorie(s) de l'événement</Typography>
+          <FormControl component="fieldset">
+            <FormGroup>
+              {
+                categoryData && categoryData.categories.map((category: any) =>
+                  <FormControlLabel
+                    control={<Checkbox checked={state[category.id.toString()]} onChange={(e) => handleChange(category, e)} name={category.label} />}
+                    label={category.label}
+                    className={styles.categories}
+                  />
+                )
+              }
+            </FormGroup>
+          </FormControl>
+        </Grid>
+        <Grid className={styles.location}>
+          <Typography>Lieu</Typography>
+          <GooglePlacesAutocomplete
+            placeholder="Taper et sélectionner l'adresse"
+            onSelect={({ description }) => (
+              geocodeByAddress(description).then(results => {
+                getLatLng(results[0]).then((value) => {
+                  formValues.lat = '' + value.lat
+                  formValues.lng = '' + value.lng
+                }).catch(error => console.error(error))
+                getAddressDetails(results)
+              })
+            )}
+          />
         </Grid>
         <ClassicButton
           fullWidth

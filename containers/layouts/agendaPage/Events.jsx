@@ -1,6 +1,6 @@
 import EventCard from 'components/cards/EventCard'
 import gql from "graphql-tag"
-import {useMutation, useQuery} from "@apollo/react-hooks";
+import { useQuery } from "@apollo/react-hooks";
 import { Container, makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles({
@@ -22,7 +22,11 @@ query events {
         label,
         startedAt,
         endedAt,
-        published
+        published,
+        lat,
+        lng,
+        address,
+        city
     }
 }
 `;
