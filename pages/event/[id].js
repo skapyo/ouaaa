@@ -33,6 +33,7 @@ import Slider from "react-slick/lib";
 import Newsletter from "../../containers/layouts/Newsletter";
 import Link from "../../components/Link";
 import CardSliderActor from "components/cards/CardSliderActor"
+import Moment from "react-moment";
 const useStyles = makeStyles((theme) => ({
     titleContainer: {
         marginTop : theme.spacing(2),
@@ -142,7 +143,11 @@ const Actor = () => {
             event(id:$id) {
                 id,
                 label,
-                description
+                description,
+                lat,
+                lng,
+                address,
+                city
             }
         }
     `;
@@ -251,7 +256,10 @@ const Actor = () => {
                                             <Place className={[styles.icon]}/>
                                         </Grid>
                                         <Grid item xs={8} className={[styles.alignLeft]}>
-                                            LOCALISATION La Jarne
+                                            <div>LOCALISATION</div>
+                                            {data && !data.event.city && <span> Adresse manquante</span>}
+                                            {data && !data.event.address && data.event.city && <span> {data && data.event.city}</span>}
+                                            {data && data.event.address && data.event.city && <span> {data && data.event.address}, {data.event.city}</span>}
                                         </Grid>
                                     </Grid>
                                     <Grid container className={[styles.item]} >
@@ -259,7 +267,17 @@ const Actor = () => {
                                             <Schedule className={[styles.icon]}/>
                                         </Grid>
                                         <Grid item xs={8} className={[styles.alignLeft]}>
-                                            Date
+                                            <div>Date</div>
+
+                                            De
+                                            <Moment format=" HH" unix>{data && data.event.startedAt/1000}</Moment>
+                                            h
+                                            <Moment format="mm " unix>{data && data.event.startedAt/1000}</Moment>
+                                            à
+                                            <Moment format=" HH" unix>{data && data.event.endedAt/1000}</Moment>
+                                            h
+                                            <Moment format="mm " unix>{data && data.event.endedAt/1000}</Moment>
+
                                         </Grid>
                                     </Grid>
                                 </Grid>

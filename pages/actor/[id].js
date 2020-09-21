@@ -145,6 +145,8 @@ const Actor = () => {
                 address,
                 lat,
                 lng,
+                address,
+                city,
                 description,
                 Categories{
                     label,
@@ -265,7 +267,10 @@ const Actor = () => {
                                             <Place className={[styles.icon]}/>
                                         </Grid>
                                         <Grid item xs={8} className={[styles.alignLeft]}>
-                                            LOCALISATION La Jarne
+                                            <div>LOCALISATION </div>
+                                            {data && !data.actor.city && <span> Adresse manquante</span>}
+                                            {data && !data.actor.address && data.actor.city && <span> {data &&data.actor.city}</span>}
+                                            {data && data.actor.address && data.actor.city && <span> {data &&data.actor.address}, {data && data.actor.city}</span>}
                                         </Grid>
                                     </Grid>
                                     <Grid container className={[styles.item]} >
