@@ -315,7 +315,6 @@ const AddActorForm = () => {
   return (
     <FormController
       render={Form}
-      initValues={user}
       withQuery={true}
       queryOptions={queryOptions}
     />
