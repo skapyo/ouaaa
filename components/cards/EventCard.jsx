@@ -100,7 +100,11 @@ const EventCard = ({event}) => {
               à
               <Moment format=" HH" unix>{event.endedAt/1000}</Moment>
               h
-              <Moment format="mm" unix>{event.endedAt/1000}</Moment>
+              <Moment format="mm " unix>{event.endedAt/1000}</Moment>
+              - 
+              {!event.city && <span> Adresse manquante</span>}
+              {!event.address && event.city && <span> {event.city}</span>}
+              {event.address && event.city && <span> {event.address}, {event.city}</span>}
             </div>
           </div>
         </div>

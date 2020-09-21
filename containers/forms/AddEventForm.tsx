@@ -107,17 +107,39 @@ const AddEventForm = () => {
     const redirect = useCookieRedirection()
     const { enqueueSnackbar, closeSnackbar } = useSnackbar()
 
+    const [state, setState] = React.useState({})
+    const [address, setAddress] = useState("")
+    const [city, setCity] = useState("")
+
     const validateFields = useCallback(() => {
-      if (formValues.shortDescription && formValues.shortDescription.length > 240)
-        return false
+      if (formValues.shortDescription && formValues.shortDescription.length > 240) return false
+      // check if at least one checkbox is checked
+      if (Object.values(state).find(element => element == true) == undefined) return false
+      if (!address || !city) return false
+      if (formValues.startDate >= formValues.endDate) return false
       // detail error cases
       return true
-    }, [formValues])
-
-    const [state, setState] = React.useState({})
+    }, [formValues, state, address, city])
 
     const handleChange = (category: any, event: React.ChangeEvent<HTMLInputElement>) => {
       setState({ ...state, [category.id.toString()]: event.target.checked });
+    }
+
+    const getObjectLongName = (results, name) => {
+      if (!results || !results[0] || !results[0].address_components)
+        return ("")
+      let object = results[0].address_components.find((element) =>
+        element.types.find(type => type == name) != undefined
+      )
+      if (object == undefined)
+        return ("")
+      return object.long_name
+    }
+
+    const getAddressDetails = (results) => {
+      setAddress((getObjectLongName(results, "street_number") + " " + getObjectLongName(results, "route")).trim())
+      setCity(getObjectLongName(results, "locality"))
+      formValues.postCode = getObjectLongName(results, "postal_code")
     }
 
     const submitHandler = () => {
@@ -142,6 +164,9 @@ const AddEventForm = () => {
             categories: categoriesArray,
             lat: parseFloat(formValues.lat),
             lng: parseFloat(formValues.lng),
+            address: address,
+            postCode: formValues.postCode,
+            city: city,
           },
         },
       })
@@ -258,10 +283,13 @@ const AddEventForm = () => {
           <GooglePlacesAutocomplete
             placeholder="Taper et sélectionner l'adresse"
             onSelect={({ description }) => (
-              geocodeByAddress(description).then(results => getLatLng(results[0]).then((value) => {
-                formValues.lat = '' + value.lat
-                formValues.lng = '' + value.lng
-              })).catch(error => console.error(error))
+              geocodeByAddress(description).then(results => {
+                getLatLng(results[0]).then((value) => {
+                  formValues.lat = '' + value.lat
+                  formValues.lng = '' + value.lng
+                }).catch(error => console.error(error))
+                getAddressDetails(results)
+              })
             )}
           />
         </Grid>

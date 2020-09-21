@@ -5,6 +5,10 @@ import Newsletter from 'containers/layouts/Newsletter'
 import { Container, makeStyles } from "@material-ui/core"
 
 const useStyles = makeStyles({
+  main: {
+    padding: "0",
+    margin: "0",
+  },
   layout: {
     display: "flex",
     justifyContent: "space-evenly",
@@ -20,7 +24,7 @@ const AgendaPageLayout = () => {
   const classes = useStyles()
 
   return (
-    <Container>
+    <Container className={classes.main}>
       <Container className={classes.layout}>
         <Filters />
         <Events />
