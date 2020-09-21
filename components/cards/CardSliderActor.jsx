@@ -41,7 +41,7 @@ marginRight: "auto"
 
     },
     image:{
-        backgroundImage:`url('./cardPicture.jpg')`,
+        backgroundImage:`url('/cardPicture.jpg')`,
         backgroundPosition: 'center center',
         backgroundRepeat: 'no-repeat',
         backgroundSize:"over",

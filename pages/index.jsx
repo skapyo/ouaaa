@@ -15,6 +15,8 @@ import { withApollo } from "hoc/withApollo"
 import {useMutation, useQuery} from "@apollo/react-hooks";
 import Link from "../components/Link";
 import Newsletter from "../containers/layouts/Newsletter";
+
+
 const useStyles = makeStyles((theme) => ({
 
     leftTitle: {
@@ -76,9 +78,13 @@ const useStyles = makeStyles((theme) => ({
             },
      cardInfo: {
         "padding": "2em",
-        backgroundColor:"white",
-        //  backgroundImage:`url('./fond.png')`,
-        backgroundPosition: 'center',
+         backgroundColor:"white",
+         backgroundImage:`url('/icons/planet.svg')`,
+         backgroundSize:"30%",
+         backgroundPosition: 'right',
+         backgroundRepeat: 'no-repeat',
+         backgroundOpacity: ' 0.5',
+         backgroundPositionY: '226px',
         borderRadius: "0.5em",
         width:"80%",
         justify:"center",
@@ -164,7 +170,14 @@ const useStyles = makeStyles((theme) => ({
         paddingTop :"5em",
         paddingBottom :"5em",
         textAlign: "center",
-        backgroundColor:"#e8f4f2"
+        backgroundColor:"#e8f4f2",
+        backgroundImage:`url('/icons/calendar-home.svg')`,
+        backgroundSize:"30%",
+        backgroundPosition: 'right',
+        backgroundPositionY: 'bottom',
+        backgroundRepeat: 'no-repeat',
+        backgroundOpacity: ' 0.5',
+
     },
     geoContainer:{
         paddingTop :"5em",
@@ -400,7 +413,6 @@ const Index = () => {
                                     />
                                 );
                             })}
-
                         </Slider>
                         <div className={styles.buttonArticle} >
                             <button className={styles.buttonGrid}  >VOIR TOUT LES ARTICLES</button>
@@ -414,11 +426,10 @@ const Index = () => {
                         <Slider {...settings} className={[styles.articleCarroussel]} >
                             {eventToRender?.eventData &&  eventToRender.eventData.events.map((event) => {
                                 return (
-
-                                    <CardSlider
-                                        key={event.id}
-                                        event={event}
-                                    />
+                                        <CardSlider
+                                            key={event.id}
+                                            event={event}
+                                        />
                                 );
                             })}
                         </Slider>

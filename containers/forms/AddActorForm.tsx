@@ -308,6 +308,7 @@ const AddActorForm = () => {
       resultLabel: resultLabel,
       snackbarSucceedMessage: "Acteur ajouté avec succès.",
         mutationResultControl: "builtin",
+      clearFormvaluesAfterControl:true
   }
 
   return (

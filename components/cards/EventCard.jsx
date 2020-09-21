@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded';
 import FavoriteRoundedIcon from '@material-ui/icons/FavoriteRounded';
 import Moment from 'react-moment';
+import Link from "../Link";
 
 const useStyles = makeStyles({
   card: {
@@ -85,29 +86,31 @@ const EventCard = ({event}) => {
   return (
     <div className={classes.card}>
       <div className={classes.content}>
-        <div className={classes.leftContent}>
-          <div className={classes.image}>
-            <img src="image_card.jpg" />
-          </div>
-          <div className={classes.text}>
-            <div className={classes.actor}>Potager de la Jarne</div>
-            <div className={classes.label}>{event.label}</div>
-            <div className={classes.eventDetails}>
-              De
-              <Moment format=" HH" unix>{event.startedAt/1000}</Moment>
-              h
-              <Moment format="mm " unix>{event.startedAt/1000}</Moment>
-              à
-              <Moment format=" HH" unix>{event.endedAt/1000}</Moment>
-              h
-              <Moment format="mm " unix>{event.endedAt/1000}</Moment>
-              - 
-              {!event.city && <span> Adresse manquante</span>}
-              {!event.address && event.city && <span> {event.city}</span>}
-              {event.address && event.city && <span> {event.address}, {event.city}</span>}
+        <Link  href={"/event/" + event.id}>
+          <div className={classes.leftContent}>
+            <div className={classes.image}>
+              <img src="image_card.jpg" />
+            </div>
+            <div className={classes.text}>
+              <div className={classes.actor}>Potager de la Jarne</div>
+              <div className={classes.label}>{event.label}</div>
+              <div className={classes.eventDetails}>
+                De
+                <Moment format=" HH" unix>{event.startedAt/1000}</Moment>
+                h
+                <Moment format="mm " unix>{event.startedAt/1000}</Moment>
+                à
+                <Moment format=" HH" unix>{event.endedAt/1000}</Moment>
+                h
+                <Moment format="mm " unix>{event.endedAt/1000}</Moment>
+                - 
+                {!event.city && <span> Adresse manquante</span>}
+                {!event.address && event.city && <span> {event.city}</span>}
+                {event.address && event.city && <span> {event.address}, {event.city}</span>}
+              </div>
             </div>
           </div>
-        </div>
+        </Link>
         <div className={classes.category}>
           <img src="icons/fruit.svg" />
         </div>

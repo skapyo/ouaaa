@@ -1,6 +1,6 @@
 .leaflet-container {
-    height: 400px;
-    width: 90%;
+    height: 800px;
+    width: 100%;
 }
 @font-face {
     font-family: 'rowdies';
@@ -40,3 +40,7 @@
 .MuiContainer-maxWidthLg {
     max-width: none!important;
 }
+
+.MuiStepIcon-root.MuiStepIcon-active {
+    color: #bf083e!important;
+ }

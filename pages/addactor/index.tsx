@@ -1,6 +1,6 @@
 import AppLayout from "containers/layouts/AppLayout"
 import AppContainer from "containers/layouts/AppContainer"
-import { Grid,Box, makeStyles, Typography, Avatar,Theme, createStyles } from "@material-ui/core"
+import {Grid, Box, makeStyles, Typography, Avatar, Theme, createStyles, Container} from "@material-ui/core"
 import {withApollo} from 'hoc/withApollo'
 import AccountLeftMenu from "containers/menus/AccountLeftMenu"
 
@@ -23,9 +23,14 @@ import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import { SvgIconProps } from '@material-ui/core/SvgIcon';
 import {useQuery} from "@apollo/react-hooks";
 import Link from "../../components/Link";
-import React from "react";
+import React, {useCallback} from "react";
 import Icon from '@material-ui/core/Icon';
-
+import Stepper from '@material-ui/core/Stepper';
+import Step from '@material-ui/core/Step';
+import StepLabel from '@material-ui/core/StepLabel';
+import { useSessionState } from 'context/session/session';
+import {useRouter} from "next/router";
+import {useCookies} from 'react-cookie'
 declare module 'csstype' {
     interface Properties {
         '--tree-view-color'?: string;
@@ -89,6 +94,7 @@ const useTreeItemStyles = makeStyles((theme: Theme) =>
             fontWeight: 'inherit',
             flexGrow: 1,
         },
+
     }),
 );
 
@@ -143,6 +149,9 @@ const useStyles = makeStyles((theme) => ({
         flexGrow: 1,
         maxWidth: 400,
     },
+    buttonAuthentification:{
+        backgroundColor: "#bf083e!important",
+    }
 
 }))
 
@@ -173,8 +182,28 @@ const AccountPage = () => {
 
     const styles = useStyles()
     const classes = useTreeItemStyles();
-
+    const [cookies, setCookie, removeCookie] = useCookies();
+    const router = useRouter()
     const {data,loading,error} = useQuery(GET_CATEGORIES,{fetchPolicy:"network-only"});
+
+    const steps = getSteps();
+    function getSteps() {
+        return ['Authentifiez vous', 'Ajoutez vos informations'];
+    }
+    const user = useSessionState()
+
+    const signinClickHandler = useCallback(() => {
+        setCookie('redirect_url', router.asPath, { path: '/' })
+    },[setCookie,router.asPath])
+
+    var  initalValue;
+    if (!user) {
+        initalValue=0
+    }else{
+        initalValue=1
+
+    }
+    const [activeStep, setActiveStep] = React.useState(initalValue);
 
 
     return (
@@ -185,35 +214,33 @@ const AccountPage = () => {
                         variant='h6'
                         className={styles.userInfosTitle}
                     >
-                        Référencer un acteur de la transition
+                        Se référencer en tant qu'acteur de la transition
                     </Typography>
+            <Container component="main" maxWidth="sm">
+                <Stepper activeStep={activeStep}>
+                    {steps.map((label, index) => {
+                        const stepProps: { completed?: boolean } = {};
+                        const labelProps: { optional?: React.ReactNode } = {};
+                        return (
+                            <Step key={label} {...stepProps}>
+                                <StepLabel {...labelProps}>{label}</StepLabel>
+                            </Step>
+                        );
+                    })}
+                </Stepper>
+            </Container>
+            {user && (
+                <AddActorForm />
+                )}
+            {!user && (
+                /* @ts-ignore */
+                <Link  href="/signin"   className={styles.buttonAuthentification}>
+                    <ClassicButton onClick={signinClickHandler}>
+                        S'authentifier
+                    </ClassicButton>
+                </Link>
+            )}
 
-                    <AddActorForm />
-
-
-            {/*  <TreeView
-                className={classes.root}
-                defaultExpanded={['3']}
-                defaultCollapseIcon={<ArrowDropDownIcon />}
-                defaultExpandIcon={<ArrowRightIcon />}
-                defaultEndIcon={<div style={{ width: 24 }} />}
-            >
-                {typeof data !== "undefined" && data.categories.map((category, index) => {
-                    return (
-                        <StyledTreeItem nodeId={category.id} labelText={category.label}  labelIcon={category.icon}>
-                            {typeof category.subCategories !== "undefined" && category.subCategories !=null && category.subCategories.map((subcategory, index) => {
-                                return (
-                                    <StyledTreeItem nodeId={subcategory.id} labelText={subcategory.label} labelIcon={subcategory.icon} />
-
-                                );
-                            })
-                            }
-                        </StyledTreeItem>
-                    );
-                })
-                }
-            </TreeView>
-           */}
         </AddActorPageLayout>
     )
 }
