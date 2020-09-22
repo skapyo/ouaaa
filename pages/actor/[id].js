@@ -72,6 +72,13 @@ const useStyles = makeStyles((theme) => ({
     cardTitleCategories:{
         "color":theme.typography.h5.color,
     },
+    infoValue:{
+        "color":theme.typography.h5.color,
+        fontWeight:700,
+    },
+    infoLabel:{
+        "color":theme.typography.h5.color,
+    },
     infoPratiqueGrid:{
         textAlign:"center",
 
@@ -120,6 +127,7 @@ const GET_EVENTS = gql`
             startedAt,
             endedAt,
             published
+            
         }
     }
 `;
@@ -147,7 +155,11 @@ const Actor = () => {
                 lng,
                 address,
                 city,
+                email,
+                phone,
+                website,
                 description,
+                
                 Categories{
                     label,
                     parentCategory{
@@ -250,9 +262,6 @@ const Actor = () => {
                                 </div>
                                 <p>{data && data.actor.description}</p>
                                 <div  >
-                                    <Typography variant="h5"   className={styles.cardTitle}  >
-                                        DOMAINE D'ACTION
-                                    </Typography>
 
                                 </div>
                             </Grid>
@@ -267,10 +276,10 @@ const Actor = () => {
                                             <Place className={[styles.icon]}/>
                                         </Grid>
                                         <Grid item xs={8} className={[styles.alignLeft]}>
-                                            <div>LOCALISATION </div>
-                                            {data && !data.actor.city && <span> Adresse manquante</span>}
+                                            <div className={[styles.infoLabel]}>LOCALISATION </div>
+                                            <span className={[styles.infoValue]}>{data && !data.actor.city && <span> Adresse manquante</span>}
                                             {data && !data.actor.address && data.actor.city && <span> {data &&data.actor.city}</span>}
-                                            {data && data.actor.address && data.actor.city && <span> {data &&data.actor.address}, {data && data.actor.city}</span>}
+                                            {data && data.actor.address && data.actor.city && <span> {data &&data.actor.address}, {data && data.actor.city}</span>}</span>
                                         </Grid>
                                     </Grid>
                                     <Grid container className={[styles.item]} >
@@ -278,15 +287,17 @@ const Actor = () => {
                                             <Phone className={[styles.icon]}/>
                                         </Grid>
                                         <Grid item xs={8} className={[styles.alignLeft]}>
-                                            TELEPHONE
-                                        </Grid>
+                                            <div className={[styles.infoLabel]}>TELEPHONE</div>
+                                            <span className={[styles.infoValue]}>{data && data.actor.phone}</span>
+                                            </Grid>
                                     </Grid>
                                     <Grid container className={[styles.item]} >
                                         <Grid item xs={3} className={[styles.alignRight]}>
                                             <AlternateEmail className={[styles.icon]}/>
                                         </Grid>
                                         <Grid item xs={8} className={[styles.alignLeft]}>
-                                            Email
+                                            <div className={[styles.infoLabel]}>Email</div>
+                                            <span className={[styles.infoValue]}>{data && data.actor.email}</span>
                                         </Grid>
                                     </Grid>
                                     <Grid container className={[styles.item]} >
@@ -294,7 +305,8 @@ const Actor = () => {
                                             <Language className={[styles.icon]}/>
                                         </Grid>
                                         <Grid item xs={8} className={[styles.alignLeft]}>
-                                            SITE INTERNET
+                                            <div className={[styles.infoLabel]}>SITE INTERNET</div>
+                                            <span className={[styles.infoValue]}>{data && data.actor.website}</span>
                                         </Grid>
                                     </Grid>
                                     <Grid container className={[styles.item]} >
@@ -302,7 +314,7 @@ const Actor = () => {
                                             <Schedule className={[styles.icon]}/>
                                         </Grid>
                                         <Grid item xs={8} className={[styles.alignLeft]}>
-                                            HORAIRE
+                                            <div className={[styles.infoLabel]}>HORAIRE</div>
                                         </Grid>
                                     </Grid>
                                 </Grid>

@@ -67,8 +67,10 @@ const useStyles = makeStyles((theme) => ({
         padding :'3em',
 
     },
+    title: {
+        padding:"1em",
+    },
     titleTypo: {
-        fontWeight: theme.typography.fontWeightBold,
         fontSize:"2em",
         fontFamily: 'rowdies',
     },
@@ -297,12 +299,11 @@ const Index = () => {
             <RootRef >
                 <Box>
                     <Container className={styles.titleContainer} >
-                        <Typography className={styles.titleTypo} >
-                           OUtils des Acteurs
+                        <div className={styles.title}>
+                            <Typography className={styles.titleTypo} variant="h1" >
+                            OUtils des Acteurs Alternatifs en AUNIS
                         </Typography>
-                        <Typography className={styles.titleTypo} >
-                          Alternatifs en AUNIS
-                        </Typography>
+                        </div>
                         <Typography className={styles.align} >
                             Notre mission c'est de faire connaître celles et ceux qui œuvrent  <br />pour la transition écologique, sociale et démocratique en Aunis
                         </Typography>

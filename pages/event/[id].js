@@ -104,7 +104,13 @@ const useStyles = makeStyles((theme) => ({
     },
     img:{
         padding:"1em"
-    }
+    } ,   infoValue:{
+        "color":theme.typography.h5.color,
+        fontWeight:700,
+    },
+    infoLabel:{
+        "color":theme.typography.h5.color,
+    },
 
 
 
@@ -258,10 +264,10 @@ const Actor = () => {
                                             <Place className={[styles.icon]}/>
                                         </Grid>
                                         <Grid item xs={8} className={[styles.alignLeft]}>
-                                            <div>LOCALISATION</div>
-                                            {data && !data.event.city && <span> Adresse manquante</span>}
+                                            <div className={[styles.infoLabel]}>LOCALISATION</div>
+                                            <span className={[styles.infoValue]}>{data && !data.event.city && <span> Adresse manquante</span>}
                                             {data && !data.event.address && data.event.city && <span> {data && data.event.city}</span>}
-                                            {data && data.event.address && data.event.city && <span> {data && data.event.address}, {data.event.city}</span>}
+                                            {data && data.event.address && data.event.city && <span> {data && data.event.address}, {data.event.city}</span>}</span>
                                         </Grid>
                                     </Grid>
                                     <Grid container className={[styles.item]} >
@@ -269,8 +275,8 @@ const Actor = () => {
                                             <Schedule className={[styles.icon]}/>
                                         </Grid>
                                         <Grid item xs={8} className={[styles.alignLeft]}>
-                                            <div>Date</div>
-
+                                            <div className={[styles.infoLabel]} >Date</div>
+                                            <span className={[styles.infoValue]}>
                                             De
                                             <Moment format=" HH" unix>{data && data.event.startedAt/1000}</Moment>
                                             h
@@ -278,7 +284,7 @@ const Actor = () => {
                                             à
                                             <Moment format=" HH" unix>{data && data.event.endedAt/1000}</Moment>
                                             h
-                                            <Moment format="mm " unix>{data && data.event.endedAt/1000}</Moment>
+                                            <Moment format="mm " unix>{data && data.event.endedAt/1000}</Moment></span>
 
                                         </Grid>
                                     </Grid>
