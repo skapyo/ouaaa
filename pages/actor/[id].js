@@ -75,6 +75,7 @@ const useStyles = makeStyles((theme) => ({
     infoValue:{
         "color":theme.typography.h5.color,
         fontWeight:700,
+        wordBreak: "break-all",
     },
     infoLabel:{
         "color":theme.typography.h5.color,
