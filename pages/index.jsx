@@ -248,7 +248,7 @@ const GET_ACTORS = gql`
         address,
         lat,
         lng,
-        Categories{
+        categories{
             label
         }
     }
@@ -334,7 +334,7 @@ const Index = () => {
                     <Container   className={styles.cardInfo}
                           >
                         <Typography className={styles.inprogress} >
-                            Site en cours de dévellopement.
+                            Site en cours de développement.
                             <p>Abonnez vous à la newsletter pour suivre les avancées.</p>
                         </Typography>
                         <Grid container spacing={3} >
