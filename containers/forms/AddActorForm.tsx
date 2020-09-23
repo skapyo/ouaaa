@@ -253,7 +253,7 @@ const AddActorForm = () => {
         <Grid className={styles.location}>
           <GooglePlacesAutocomplete
             placeholder="Taper et sélectionner l'adresse *"
-            initialValue={formValues.adress && formValues.adress.concat(" ").concat(formValues.postCode).concat(" ").concat(formValues.city)}
+            initialValue={formValues.address && formValues.address.concat(" ").concat(formValues.postCode).concat(" ").concat(formValues.city)}
             onSelect={({ description }) => (
               geocodeByAddress(description).then(results => {
                 getLatLng(results[0]).then((value) => {
