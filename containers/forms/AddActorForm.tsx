@@ -144,13 +144,11 @@ const AddActorForm = () => {
   const classes = useStyles();
 
     const {data,loading,error} = useQuery(GET_CATEGORIES,{fetchPolicy:"network-only"});
-    const [open, setOpen] = React.useState(true);
+    const [open, setOpen] = React.useState([false]);
 
-    const handleClick = () => {
-        setOpen(!open);
-    };
 
-  const handleToggle = (value: number) => () => {
+
+  const handleToggle = (value: number,index:number) => () => {
     const currentIndex = checked.indexOf(value);
     const newChecked = [...checked];
 
@@ -161,7 +159,7 @@ const AddActorForm = () => {
     }
 
     setChecked(newChecked);
-      setOpen(!open);
+      open[index]=!open[index];
   };
   const Form: RenderCallback = ({
     formChangeHandler,
@@ -223,6 +221,7 @@ const AddActorForm = () => {
     <div  className={styles.field}>
             <GooglePlacesAutocomplete
                 placeholder="Taper et sélectionner l'adresse"
+                initialValue={formValues.adress && formValues.adress.concat(" ").concat(formValues.postCode).concat(" ").concat(formValues.city)}
                 onSelect={({ description }) => (
                     geocodeByAddress(description).then(results => getLatLng(results[0]).then((value) => {
                       formValues['lat'] = ''+value.lat
@@ -240,6 +239,7 @@ const AddActorForm = () => {
 
 
 
+
         <Typography variant="body1" color="primary" className={styles.label}>
           Selectionner une categorie :
         </Typography>
@@ -249,16 +249,16 @@ const AddActorForm = () => {
             {typeof data !== "undefined" && data.categories.map((category, index) => {
                 return (
                     <div>
-                    <ListItem key={category.id} role={undefined} dense button onClick={handleToggle(0)}>
+                    <ListItem key={category.id} role={undefined} dense button onClick={handleToggle(0,index)}>
                         <ListItemIcon>
 
                         </ListItemIcon>
                         <ListItemText primary={category.label}/>
-                        {open ? <ExpandLess /> : <ExpandMore />}
+                        {open[index] ? <ExpandLess /> : <ExpandMore />}
                     </ListItem>
-                        {typeof category.subCategories !== "undefined" && category.subCategories !=null && category.subCategories.map((subcategory, index) => {
+                        {typeof category.subCategories !== "undefined" && category.subCategories !=null && category.subCategories.map((subcategory, subIndex) => {
                             return (
-                                <Collapse in={open} timeout="auto" unmountOnExit>
+                                <Collapse in={open[index] } timeout="auto" unmountOnExit>
                                     <List component="div" disablePadding>
                                         <ListItem button >
                                             <ListItemIcon>
@@ -314,7 +314,6 @@ const AddActorForm = () => {
   return (
     <FormController
       render={Form}
-      initValues={user}
       withQuery={true}
       queryOptions={queryOptions}
     />
