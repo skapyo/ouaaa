@@ -27,22 +27,26 @@ import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import Collapse from '@material-ui/core/Collapse';
 import { Redirect } from 'react-router-dom'
-import {QueryOptions} from "../../components/controllers/FormController";
+import {
+  QueryOptions, 
+  ValidationRules, 
+  ValidationRuleType 
+} from "../../components/controllers/FormController";
 
 const CREATE_ACTOR = gql`
   mutation createActor($formValues: ActorInfos) {
     createActor(actorInfos: $formValues) {
-        id
-        name
-        email
-        phone
-        address
-        postCode
-        city
-        website
-        description
-        lat
-        lng
+      id
+      name
+      email
+      phone
+      address
+      postCode
+      city
+      website
+      description
+      lat
+      lng
     }
   }
 `
@@ -80,6 +84,27 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(3),
     width:"100%!important"
   },
+  location: {
+    margin: "1em 0",
+    '& input': {
+      height: "3.5em",
+      borderRadius: "4px",
+      boxShadow: "none",
+      border: "solid 1px lightgray",
+      fontFamily: "Roboto",
+      fontSize: "16px",
+      width: "100%",
+      '&:hover': {
+        border: "solid 1px black",
+      },
+      '&:focus': {
+        border: "solid 2px black",
+      },
+      '&:active': {
+        border: "solid 2px black",
+      },
+    },
+  },
 }))
 
 type FormItemProps = {
@@ -95,17 +120,17 @@ const FormItem = (props: FormItemProps) => {
   const { label, inputName, formChangeHandler, value } = props
   return (
     <>
-        <TextField
-            className={styles.field}
-          variant="outlined"
-          value={value}
-          label={label}
-          name={inputName}
-          onChange={formChangeHandler}
-          defaultValue=""
-            fullWidth
-            required
-        />
+      <TextField
+          className={styles.field}
+        variant="outlined"
+        value={value}
+        label={label}
+        name={inputName}
+        onChange={formChangeHandler}
+        defaultValue=""
+        fullWidth
+        required
+      />
     </>
   )
 }
@@ -132,23 +157,30 @@ const FormItemTextareaAutosize = (props: FormItemProps) => {
   )
 }
 
+const validationRules: ValidationRules = {
+  name: {
+    rule: ValidationRuleType.required,
+  },
+  email: {
+    rule: ValidationRuleType.required && ValidationRuleType.email,
+  },
+  description: {
+    rule: ValidationRuleType.required,
+  },
+}
 
 const AddActorForm = () => {
   const user = useSessionState()
   const sessionDispatch = useSessionDispatch()
-  const [latitude, setLatitude] = useState(false)
-  const [longitude, setLongitude] = useState(false)
 
   const styles = useStyles()
   const [checked, setChecked] = useState([0]);
   const classes = useStyles();
 
-    const {data,loading,error} = useQuery(GET_CATEGORIES,{fetchPolicy:"network-only"});
-    const [open, setOpen] = React.useState([false]);
+  const {data,loading,error} = useQuery(GET_CATEGORIES,{fetchPolicy:"network-only"});
+  const [open, setOpen] = React.useState([false]);
 
-
-
-  const handleToggle = (value: number,index:number) => () => {
+  const handleToggle = (value: number, index: number) => () => {
     const currentIndex = checked.indexOf(value);
     const newChecked = [...checked];
 
@@ -159,141 +191,133 @@ const AddActorForm = () => {
     }
 
     setChecked(newChecked);
-      open[index]=!open[index];
-  };
+    open[index]=!open[index];
+  }
+
   const Form: RenderCallback = ({
     formChangeHandler,
     submitHandler,
-    isModified,
+    validationResult,
     formValues,
-  }) => (
-
-
+  }) => {
+    const getObjectLongName = (results, name) => {
+      if (!results || !results[0] || !results[0].address_components)
+        return ("")
+      let object = results[0].address_components.find((element) =>
+        element.types.find(type => type == name) != undefined
+      )
+      if (object == undefined)
+        return ("")
+      return object.long_name
+    }
+  
+    const getAddressDetails = (results) => {
+      formValues.address = (getObjectLongName(results, "street_number") + " " + getObjectLongName(results, "route")).trim()
+      formValues.city = getObjectLongName(results, "locality")
+      formValues.postCode = getObjectLongName(results, "postal_code")
+    }
+    
+    return (
       <Container component="main" maxWidth="sm">
-      <FormItem
-        label="Nom"
-        inputName="name"
-        formChangeHandler={formChangeHandler}
-        value={formValues.name}
-      />
-      <FormItem
-        label="Email"
-        inputName="email"
-        formChangeHandler={formChangeHandler}
-        value={formValues.email}
-      />
-      <FormItem
-        label="Téléphone"
-        inputName="phone"
-        formChangeHandler={formChangeHandler}
-        value={formValues.phone}
-      />
-      <FormItem
-        label="Adresse"
-        inputName="address"
-        formChangeHandler={formChangeHandler}
-        value={formValues.address}
-      />
-      <FormItem
-        label="Code postal"
-        inputName="postCode"
-        formChangeHandler={formChangeHandler}
-        value={formValues.postCode}
-      />
-      <FormItem
-        label="Ville"
-        inputName="city"
-        formChangeHandler={formChangeHandler}
-        value={formValues.city}
-      />
-      <FormItem
-          label="Site Internet"
-          inputName="website"
+        <FormItem
+          label="Nom"
+          inputName="name"
           formChangeHandler={formChangeHandler}
-          value={formValues.website}
-      />
-      <FormItemTextareaAutosize
-          label="Description"
-          inputName="description"
+          value={formValues.name}
+        />
+        <FormItem
+          label="Email"
+          inputName="email"
           formChangeHandler={formChangeHandler}
-          value={formValues.description}
-      />
-    <div  className={styles.field}>
-            <GooglePlacesAutocomplete
-                placeholder="Taper et sélectionner l'adresse"
-                initialValue={formValues.adress && formValues.adress.concat(" ").concat(formValues.postCode).concat(" ").concat(formValues.city)}
-                onSelect={({ description }) => (
-                    geocodeByAddress(description).then(results => getLatLng(results[0]).then((value) => {
-                      formValues['lat'] = ''+value.lat
-                      formValues['lng'] = ''+value.lng
-                    }))
-                        .catch(error => console.error(error))
-                    // setLatitude(.),
-                    // setLongitude(description)
-                )}
-
-
-            />
-    </div>
-
-
-
-
+          value={formValues.email}
+        />
+        <FormItem
+          label="Téléphone"
+          inputName="phone"
+          formChangeHandler={formChangeHandler}
+          value={formValues.phone}
+        />
+        <FormItem
+            label="Site Internet"
+            inputName="website"
+            formChangeHandler={formChangeHandler}
+            value={formValues.website}
+        />
+        <FormItemTextareaAutosize
+            label="Description"
+            inputName="description"
+            formChangeHandler={formChangeHandler}
+            value={formValues.description}
+        />
+        <div  className={styles.field}>
+        <Grid className={styles.location}>
+          <GooglePlacesAutocomplete
+            placeholder="Taper et sélectionner l'adresse *"
+            initialValue={formValues.address && formValues.address.concat(" ").concat(formValues.postCode).concat(" ").concat(formValues.city)}
+            onSelect={({ description }) => (
+              geocodeByAddress(description).then(results => {
+                getLatLng(results[0]).then((value) => {
+                  formValues.lat = '' + value.lat
+                  formValues.lng = '' + value.lng
+                }).catch(error => console.error(error))
+                getAddressDetails(results)
+              })
+            )}
+          />
+        </Grid>
+        </div>
 
         <Typography variant="body1" color="primary" className={styles.label}>
-          Selectionner une categorie :
+          Sélectionner une catégorie :
         </Typography>
-
-
         <List  className={styles.field}>
-            {typeof data !== "undefined" && data.categories.map((category, index) => {
-                return (
-                    <div>
-                    <ListItem key={category.id} role={undefined} dense button onClick={handleToggle(0,index)}>
-                        <ListItemIcon>
-
-                        </ListItemIcon>
-                        <ListItemText primary={category.label}/>
-                        {open[index] ? <ExpandLess /> : <ExpandMore />}
-                    </ListItem>
-                        {typeof category.subCategories !== "undefined" && category.subCategories !=null && category.subCategories.map((subcategory, subIndex) => {
-                            return (
-                                <Collapse in={open[index] } timeout="auto" unmountOnExit>
-                                    <List component="div" disablePadding>
-                                        <ListItem button >
-                                            <ListItemIcon>
-                                                <Checkbox
-                                                    edge="start"
-                                                    tabIndex={-1}
-                                                    disableRipple
-                                                    onChange={formChangeHandler}
-                                                    name="categories"
-                                                    value={subcategory.id}
-                                                />
-                                            </ListItemIcon>
-                                            <ListItemText  primary={subcategory.label} />
-                                        </ListItem>
-                                    </List>
-                                </Collapse>
-
-                            );
-                        })
-                        }
-                    </div>
-                );
-            })
-            }
-
+          {typeof data !== "undefined" && data.categories.map((category, index) => {
+            return (
+              <div>
+                <ListItem key={category.id} role={undefined} dense button onClick={handleToggle(0, index)}>
+                  <ListItemIcon>
+                  </ListItemIcon>
+                  <ListItemText primary={category.label}/>
+                  {open[index] ? <ExpandLess /> : <ExpandMore />}
+                </ListItem>
+                {typeof category.subCategories !== "undefined" && category.subCategories !=null && category.subCategories.map((subcategory, subIndex) => {
+                  return (
+                    <Collapse in={open[index]} timeout="auto" unmountOnExit>
+                      <List component="div" disablePadding>
+                        <ListItem button >
+                          <ListItemIcon>
+                            <Checkbox
+                              edge="start"
+                              tabIndex={-1}
+                              disableRipple
+                              onChange={formChangeHandler}
+                              name="categories"
+                              value={subcategory.id}
+                            />
+                          </ListItemIcon>
+                          <ListItemText  primary={subcategory.label} />
+                        </ListItem>
+                      </List>
+                    </Collapse>
+                  );
+                })}
+              </div>
+            );
+          })
+          }
         </List>
 
-      <Grid item xs={12}>
-        <ClassicButton onClick={submitHandler} disabled={!isModified}>
-          Sauvegarder les modifications
-        </ClassicButton>
-      </Grid>
+        <Grid item xs={12}>
+          <ClassicButton 
+            onClick={submitHandler} 
+            disabled={!validationResult?.global}
+          >
+            Sauvegarder les modifications
+          </ClassicButton>
+        </Grid>
       </Container>
-    // )
-  )
+    )
+  }
 
   const afterUpdate = useCallback(
     (formValues) => {
@@ -304,11 +328,11 @@ const AddActorForm = () => {
   )
 
   const queryOptions: QueryOptions = {
-      query: CREATE_ACTOR,
-      resultLabel: resultLabel,
-      snackbarSucceedMessage: "Acteur ajouté avec succès.",
-        mutationResultControl: "builtin",
-      clearFormvaluesAfterControl:true
+    query: CREATE_ACTOR,
+    resultLabel: resultLabel,
+    snackbarSucceedMessage: "Acteur ajouté avec succès.",
+    mutationResultControl: "builtin",
+    clearFormvaluesAfterControl:true
   }
 
   return (
@@ -316,6 +340,7 @@ const AddActorForm = () => {
       render={Form}
       withQuery={true}
       queryOptions={queryOptions}
+      validationRules={validationRules}
     />
   )
 }
