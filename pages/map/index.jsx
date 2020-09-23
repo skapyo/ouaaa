@@ -247,10 +247,10 @@ const carto = () => {
 
     const markers = [[51.505, -0.09]]
 
-    const [open, setOpen] = React.useState(true);
+    const [open, setOpen] = React.useState([false]);
     const [checked, setChecked] = useState([0]);
 
-    const handleToggle = (value) => () => {
+    const handleToggle = (value,index) => () => {
         const currentIndex = checked.indexOf(value);
         const newChecked = [...checked];
 
@@ -261,7 +261,7 @@ const carto = () => {
         }
 
         setChecked(newChecked);
-        setOpen(!open);
+        open[index]=!open[index];
     };
 
   /*  useEffect(() => {
@@ -309,16 +309,16 @@ const carto = () => {
                                 {typeof dataCategorie !== "undefined" && dataCategorie.categories.map((category, index) => {
                                     return (
                                         <div>
-                                            <ListItem key={category.id} role={undefined} dense button onClick={handleToggle(0)}>
+                                            <ListItem key={category.id} role={undefined} dense button onClick={handleToggle(0,index)}>
                                                 <ListItemIcon>
 
                                                 </ListItemIcon>
                                                 <ListItemText primary={category.label}/>
-                                                {open ? <ExpandLess /> : <ExpandMore />}
+                                                {open[index] ? <ExpandLess /> : <ExpandMore />}
                                             </ListItem>
-                                            {typeof category.subCategories !== "undefined" && category.subCategories !=null && category.subCategories.map((subcategory, index) => {
+                                            {typeof category.subCategories !== "undefined" && category.subCategories !=null && category.subCategories.map((subcategory, subIndex) => {
                                                 return (
-                                                    <Collapse in={open} timeout="auto" unmountOnExit>
+                                                    <Collapse in={open[index]} timeout="auto" unmountOnExit>
                                                         <List component="div" disablePadding>
                                                             <ListItem button >
                                                                 <ListItemIcon>
