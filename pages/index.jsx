@@ -187,6 +187,13 @@ const useStyles = makeStyles((theme) => ({
         textAlign: "center",
         backgroundColor:"#e8f4f2"
     },
+    inprogress:{
+        color:"#bf083e",
+        textAlign: "center",
+        padding: "2em",
+        fontSize: "2em",
+
+    }
 }))
 function SampleNextArrow(props) {
     const { className, style, onClick } = props;
@@ -326,7 +333,10 @@ const Index = () => {
 
                     <Container   className={styles.cardInfo}
                           >
-
+                        <Typography className={styles.inprogress} >
+                            Site en cours de dévellopement.
+                            <p>Abonnez vous à la newsletter pour suivre les avancées.</p>
+                        </Typography>
                         <Grid container spacing={3} >
                             <Grid item xs={6}c lassName={styles.threePointGrid}>
                                 <div  className={[styles.align]}>

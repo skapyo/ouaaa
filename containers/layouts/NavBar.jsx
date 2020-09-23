@@ -112,19 +112,19 @@ const NavBar = () => {
                   >
 
                     <Grid item>
-                      <MenuItem button component={Link} className={styles.menuItem} href='/map' > LA CARTE</MenuItem>
+                      <MenuItem button component={Link} className={styles.menuItem} href='/map' >LA CARTE</MenuItem>
                     </Grid>
                     <Grid item>
-                      <MenuItem button component={Link} className={styles.menuItem} href='/agenda' > L'AGENDA</MenuItem>
+                      <MenuItem button component={Link} className={styles.menuItem} href='/agenda' >L'AGENDA</MenuItem>
                     </Grid>
                     <Grid item>
-                      <MenuItem button component={Link} className={styles.menuItem} href='/' > JE PARTICIPE</MenuItem>
+                      <MenuItem button component={Link} className={styles.menuItem} href='/participate' >JE PARTICIPE</MenuItem>
                     </Grid>
                     <Grid item>
-                      <MenuItem button component={Link} className={styles.menuItem}  href='/' > LE JOURNAL</MenuItem>
+                      <MenuItem button component={Link} className={styles.menuItem}  href='/news' >LE JOURNAL</MenuItem>
                     </Grid>
                     <Grid item>
-                      <MenuItem button component={Link} className={styles.menuItem} href='/' > A PROPOS</MenuItem>
+                      <MenuItem button component={Link} className={styles.menuItem} href='/about' >A PROPOS</MenuItem>
                     </Grid>
                     <Grid item>
                       <SearchIcon   className={styles.menuItem}/>

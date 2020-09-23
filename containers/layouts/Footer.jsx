@@ -68,15 +68,15 @@ const Footer = () => {
         </a>
       </div>
       <div className={classes.links}>
-        <Link href="/">À propos</Link>
+        <Link href="/about">À propos</Link>
         <span> - </span>
-        <Link href="/">Mentions Légales</Link>
+        <Link href="/legalmention">Mentions Légales</Link>
         <span> - </span>
-        <Link href="/">FAQ</Link>
+        <Link href="/faq">FAQ</Link>
         <span> - </span>
-        <Link href="/">Contact</Link>
+        <Link href="/contact">Contact</Link>
         <span> - </span>
-        <Link href="/">Charte</Link>
+        <Link href="/charter">Charte</Link>
       </div>
       <div className={classes.logo}></div>
     </Container>
