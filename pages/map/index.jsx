@@ -291,7 +291,7 @@ const carto = () => {
                 iconUrl:null
             })
             const suitcasePoint = new L.Icon({
-                iconUrl: '/marker.png',
+                iconUrl: '/icons/place.svg',
                 iconRetinaUrl: '/suitcaseIcon.svg',
                 iconAnchor: [13, 34], // point of the icon which will correspond to marker's location
                 iconSize: [25],
