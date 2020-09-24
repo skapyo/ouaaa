@@ -1,6 +1,6 @@
-import { withApollo } from 'hoc/withApollo.jsx';
+import {withApollo} from 'hoc/withApollo.jsx';
 import AppLayout from 'containers/layouts/AppLayout';
-import { useSessionState } from 'context/session/session';
+import {useSessionState} from 'context/session/session';
 import FallbackAlreadyConnected from 'containers/fallbacks/FallbackAlreadyConnected';
 import SigninForm from 'containers/forms/SigninForm';
 

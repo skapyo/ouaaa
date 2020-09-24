@@ -1,11 +1,10 @@
 import * as React from "react"
-import { useEffect } from "react";
-import { withApollo } from 'hoc/withApollo.jsx';
+import {useEffect} from "react"
+import {withApollo} from 'hoc/withApollo.jsx';
 import gql from "graphql-tag";
-import { useRouter } from 'next/router'
-import { useMutation } from "@apollo/react-hooks"
+import Router, {useRouter} from 'next/router'
+import {useMutation} from "@apollo/react-hooks"
 import FallbackEmailValidated from "containers/fallbacks/FallbackEmailValidated"
-import Router from 'next/router'
 
 const VALIDATE_EMAIL = gql`
   mutation validateEmail (

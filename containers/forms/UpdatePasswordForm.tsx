@@ -1,17 +1,16 @@
 /* eslint react/prop-types: 0 */
-import { ChangeEvent } from "react"
+import {ChangeEvent, useCallback} from "react"
 import PropTypes from "prop-types"
-import { Grid, Box, makeStyles, Typography } from "@material-ui/core"
+import {Box, Grid, makeStyles, Typography} from "@material-ui/core"
 import TextField from "components/form/TextField"
 import ClassicButton from "components/buttons/ClassicButton"
-import { withApollo } from "hoc/withApollo"
+import {withApollo} from "hoc/withApollo"
 import gql from "graphql-tag"
 import FormController, {
   RenderCallback,
-  ValidationRuleType,
   ValidationRules,
+  ValidationRuleType,
 } from "components/controllers/FormController"
-import { useCallback } from "react"
 
 const useStyles = makeStyles((theme) => ({
   gridContainer: {

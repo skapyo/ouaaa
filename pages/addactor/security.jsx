@@ -1,6 +1,5 @@
 import AccountPageLayout from "containers/layouts/accountPage/AccountPageLayout"
-import {withApollo} from 'hoc/withApollo'
-import { makeStyles, Typography } from "@material-ui/core"
+import {makeStyles, Typography} from "@material-ui/core"
 import UpdatePasswordForm from "containers/forms/UpdatePasswordForm"
 
 

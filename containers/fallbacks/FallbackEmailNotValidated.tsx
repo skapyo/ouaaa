@@ -1,8 +1,8 @@
 import gql from "graphql-tag"
-import { useMutation } from "@apollo/react-hooks"
+import {useMutation} from "@apollo/react-hooks"
 import AppContainer from "containers/layouts/AppContainer"
-import { useState, useEffect } from "react"
-import { Typography, Grid, makeStyles } from "@material-ui/core"
+import {useEffect, useState} from "react"
+import {Grid, makeStyles, Typography} from "@material-ui/core"
 import ClassicButton from "components/buttons/ClassicButton"
 
 const useStyles = makeStyles((theme) => ({

@@ -1,18 +1,9 @@
 import AppLayout from "containers/layouts/AppLayout"
-import {Box, Container, Grid, RootRef, Typography} from "@material-ui/core";
-import RoomIcon from "@material-ui/core/SvgIcon/SvgIcon";
-import React, {useState,useEffect} from "react";
-import {makeStyles,fade} from "@material-ui/core/styles";
-import InputBase from '@material-ui/core/InputBase';
-import SearchIcon from '@material-ui/icons/Search';
+import {Box, Container, RootRef, Typography} from "@material-ui/core";
+import React, {useState} from "react";
+import {makeStyles} from "@material-ui/core/styles";
 import {white} from "color-name";
-import Slider from "react-slick";
-import Carousel from 'react-elastic-carousel'
-import CardSliderActor from "components/cards/CardSliderActor"
-import gql from "graphql-tag"
-import { withApollo } from "hoc/withApollo"
-import {useMutation, useQuery} from "@apollo/react-hooks";
-import Link from "../components/Link";
+import {withApollo} from "hoc/withApollo"
 import Newsletter from "../containers/layouts/Newsletter";
 import PresentationSection from "../containers/layouts/homePage/presentationSection";
 import ThreePoint from "../containers/layouts/homePage/threepoint";

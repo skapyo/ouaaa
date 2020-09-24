@@ -1,6 +1,6 @@
 import {useCallback} from "react"
 import {useCookies} from 'react-cookie'
-import { useRouter } from "next/router"
+import {useRouter} from "next/router"
 
 
 const useCookieRedirection = (options) => {

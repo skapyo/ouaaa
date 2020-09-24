@@ -1,15 +1,7 @@
-import React from "react"
+import React, {useState} from "react"
 import AppLayout from "containers/layouts/AppLayout"
-import {
-    Grid,
-    Typography,
-    makeStyles,
-    Box,
-    Container,
-    RootRef,
-} from "@material-ui/core"
-import { useState, useEffect } from "react"
-import { withApollo } from "hoc/withApollo.jsx"
+import {Box, Container, Grid, makeStyles, RootRef, Typography,} from "@material-ui/core"
+import {withApollo} from "hoc/withApollo.jsx"
 import {useRouter} from "next/router";
 import gql from "graphql-tag";
 import {useQuery} from "@apollo/react-hooks";
@@ -19,6 +11,7 @@ import Slider from "react-slick/lib";
 import Newsletter from "../../containers/layouts/Newsletter";
 import CardSliderActor from "components/cards/CardSliderActor"
 import Moment from "react-moment";
+
 const useStyles = makeStyles((theme) => ({
     titleContainer: {
         marginTop : theme.spacing(2),

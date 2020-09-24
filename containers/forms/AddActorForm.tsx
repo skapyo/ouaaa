@@ -1,37 +1,25 @@
 /* eslint react/prop-types: 0 */
-import React, { ChangeEvent,useState } from "react"
-import {Grid, makeStyles, Typography, Theme, Container} from "@material-ui/core"
+import React, {ChangeEvent, useCallback, useState} from "react"
+import {Container, Grid, makeStyles, Typography} from "@material-ui/core"
 import TextField from "components/form/TextField"
 import ClassicButton from "components/buttons/ClassicButton"
-import { withApollo } from "hoc/withApollo"
-import { useSessionState, useSessionDispatch } from "context/session/session"
+import {withApollo} from "hoc/withApollo"
+import {useSessionDispatch, useSessionState} from "context/session/session"
 import gql from "graphql-tag"
-import FormController, {
-  RenderCallback,
-} from "components/controllers/FormController"
-import { useCallback, useMemo } from "react"
+import graphqlTag from "graphql-tag"
+import FormController, {RenderCallback,} from "components/controllers/FormController"
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
-import IconButton from '@material-ui/core/IconButton';
-import { withStyles, TextareaAutosize  } from "@material-ui/core"
-import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
-import { geocodeByAddress, getLatLng } from 'react-google-places-autocomplete';
+import GooglePlacesAutocomplete, {geocodeByAddress, getLatLng} from 'react-google-places-autocomplete';
 import {useQuery} from "@apollo/react-hooks";
-import TreeView from "@material-ui/lab/TreeView/TreeView";
-import graphqlTag from 'graphql-tag'
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import Collapse from '@material-ui/core/Collapse';
-import { Redirect } from 'react-router-dom'
-import {
-  QueryOptions, 
-  ValidationRules, 
-  ValidationRuleType 
-} from "../../components/controllers/FormController";
+import {Redirect} from 'react-router-dom'
+import {QueryOptions, ValidationRules, ValidationRuleType} from "../../components/controllers/FormController";
 
 const CREATE_ACTOR = gql`
   mutation createActor($formValues: ActorInfos) {

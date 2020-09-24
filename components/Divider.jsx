@@ -1,5 +1,5 @@
-import { Divider } from "@material-ui/core"
-import { styled } from '@material-ui/core/styles';
+import {Divider} from "@material-ui/core"
+import {styled} from '@material-ui/core/styles';
 
 
 const DividerCustom = styled(Divider)({

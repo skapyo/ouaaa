@@ -1,24 +1,7 @@
-import React from "react"
+import React, {useState} from "react"
 import AppLayout from "containers/layouts/AppLayout"
-import AppContainer from "containers/layouts/AppContainer"
-import {
-    Grid,
-    Typography,
-    makeStyles,
-    Box,
-    Chip,
-    Container,
-    Button,
-    Divider,
-    Avatar,
-    RootRef,
-} from "@material-ui/core"
-import RoomIcon from "@material-ui/icons/Room"
-import { DatePicker } from "@material-ui/pickers"
-import { useState, useEffect } from "react"
-import ClassicButton from "components/buttons/ClassicButton"
-import DividerCustom from "components/Divider"
-import { withApollo } from "hoc/withApollo.jsx"
+import {Box, Container, Grid, makeStyles, RootRef, Typography,} from "@material-ui/core"
+import {withApollo} from "hoc/withApollo.jsx"
 import {useRouter} from "next/router";
 import gql from "graphql-tag";
 import {useQuery} from "@apollo/react-hooks";
@@ -27,11 +10,9 @@ import Phone from '@material-ui/icons/Phone';
 import AlternateEmail from '@material-ui/icons/AlternateEmail';
 import Language from '@material-ui/icons/Language';
 import Schedule from '@material-ui/icons/Schedule';
-import Paper from "@material-ui/core/Paper";
 import CardSliderEvent from "../../components/cards/CardSliderEvent";
 import Slider from "react-slick/lib";
 import Newsletter from "../../containers/layouts/Newsletter";
-import Link from "../../components/Link";
 
 const useStyles = makeStyles((theme) => ({
     titleContainer: {

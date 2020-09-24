@@ -2,7 +2,7 @@
 import React from "react"
 import PropTypes from "prop-types"
 import clsx from "clsx"
-import { useRouter } from "next/router"
+import {useRouter} from "next/router"
 import NextLink from "next/link"
 import MuiLink from "@material-ui/core/Link"
 

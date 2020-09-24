@@ -1,26 +1,11 @@
-import AppLayout from "containers/layouts/AppLayout"
-import AppContainer from "containers/layouts/AppContainer"
-import {Grid, Box, makeStyles, Typography, Avatar, Theme, createStyles, Container} from "@material-ui/core"
+import {Container, createStyles, makeStyles, Theme, Typography} from "@material-ui/core"
 import {withApollo} from 'hoc/withApollo'
-import AccountLeftMenu from "containers/menus/AccountLeftMenu"
 
 import ClassicButton from "components/buttons/ClassicButton"
 import AddActorForm from "containers/forms/AddActorForm"
 import AddActorPageLayout from "containers/layouts/addActorPage/AddActorPageLayout"
-import gql from "../../containers/forms/UserInfosForm";
 import graphqlTag from 'graphql-tag'
-import TreeView from '@material-ui/lab/TreeView';
-import TreeItem, { TreeItemProps } from '@material-ui/lab/TreeItem';
-import MailIcon from '@material-ui/icons/Mail';
-import DeleteIcon from '@material-ui/icons/Delete';
-import Label from '@material-ui/icons/Label';
-import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
-import InfoIcon from '@material-ui/icons/Info';
-import ForumIcon from '@material-ui/icons/Forum';
-import LocalOfferIcon from '@material-ui/icons/LocalOffer';
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
-import ArrowRightIcon from '@material-ui/icons/ArrowRight';
-import { SvgIconProps } from '@material-ui/core/SvgIcon';
+import TreeItem, {TreeItemProps} from '@material-ui/lab/TreeItem';
 import {useQuery} from "@apollo/react-hooks";
 import Link from "../../components/Link";
 import React, {useCallback} from "react";
@@ -28,9 +13,10 @@ import Icon from '@material-ui/core/Icon';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
-import { useSessionState } from 'context/session/session';
+import {useSessionState} from 'context/session/session';
 import {useRouter} from "next/router";
 import {useCookies} from 'react-cookie'
+
 declare module 'csstype' {
     interface Properties {
         '--tree-view-color'?: string;

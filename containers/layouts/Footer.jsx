@@ -1,5 +1,5 @@
-import { makeStyles } from "@material-ui/core/styles";
-import { Container, Typography } from "@material-ui/core";
+import {makeStyles} from "@material-ui/core/styles";
+import {Container, Typography} from "@material-ui/core";
 import Link from "components/Link";
 import YouTubeIcon from '@material-ui/icons/YouTube';
 import FacebookIcon from '@material-ui/icons/Facebook';

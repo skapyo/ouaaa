@@ -1,20 +1,11 @@
-import React, {Component, useState,useEffect,useRef,useCallback} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import AppLayout from "../../containers/layouts/AppLayout";
-import {Box, Container, Grid, RootRef, Typography} from "@material-ui/core";
-import RoomIcon from "@material-ui/core/SvgIcon/SvgIcon";
+import {Grid, Typography} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
-
-import Actor from "../actor/[id]";
 import gql from 'graphql-tag'
 import {withApollo} from "../../hoc/withApollo";
-import {useMutation, useQuery} from "@apollo/react-hooks";
-import {useSessionDispatch, useSessionState} from "../../context/session/session";
-import {useRouter} from "next/router";
-import Button from "@material-ui/core/Button";
+import {useQuery} from "@apollo/react-hooks";
 import Link from "../../components/Link";
-import CardContent from "@material-ui/core/CardContent";
-import Moment from "react-moment";
-import Card from "@material-ui/core/Card/Card";
 import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded';
 import FavoriteRoundedIcon from '@material-ui/icons/FavoriteRounded';
 import List from "@material-ui/core/List";
@@ -23,7 +14,6 @@ import ListItemIcon from "@material-ui/core/ListItemIcon/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText/ListItemText";
 import Collapse from "@material-ui/core/Collapse/Collapse";
 import Checkbox from "@material-ui/core/Checkbox/Checkbox";
-import graphqlTag from "../../containers/forms/AddActorForm";
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 

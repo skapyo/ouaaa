@@ -1,13 +1,11 @@
-import { useRouter } from 'next/router'
-import { makeStyles } from '@material-ui/core/styles'
+import {useRouter} from 'next/router'
+import {makeStyles} from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
-import { Container, Avatar, Typography, Hidden } from '@material-ui/core'
+import {Avatar, Hidden, Typography} from '@material-ui/core'
 import SocialNetworkButton from 'components/buttons/SocialNetworkButton'
 import AppLayout from 'containers/layouts/AppLayout'
 import Card from 'components/cards/Card'
 import AppContainer from 'containers/layouts/AppContainer'
-import gql from "../map";
-import {useQuery} from "@apollo/react-hooks";
 
 
 const useStyles = makeStyles((theme) => ({

@@ -1,28 +1,18 @@
-import React, { useCallback, useState } from "react"
+import React, {useCallback, useState} from "react"
 import gql from "graphql-tag"
-import { withApollo } from "hoc/withApollo"
-import {
-  makeStyles,
-  Container,
-  Typography,
-  TextField,
-  Grid,
-} from "@material-ui/core"
+import {withApollo} from "hoc/withApollo"
+import {Container, Grid, makeStyles, TextField, Typography,} from "@material-ui/core"
 import ClassicButton from "components/buttons/ClassicButton"
-import FormController from "components/controllers/FormController"
-import {
-  RenderCallback,
-} from "components/controllers/FormController"
-import { useMutation, useQuery } from "@apollo/react-hooks"
+import FormController, {RenderCallback} from "components/controllers/FormController"
+import {useMutation, useQuery} from "@apollo/react-hooks"
 import useGraphQLErrorDisplay from "hooks/useGraphQLErrorDisplay"
 import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import useCookieRedirection from "hooks/useCookieRedirection"
-import { useSnackbar } from 'notistack';
-import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
-import { geocodeByAddress, getLatLng } from 'react-google-places-autocomplete';
+import {useSnackbar} from 'notistack';
+import GooglePlacesAutocomplete, {geocodeByAddress, getLatLng} from 'react-google-places-autocomplete';
 
 const useStyles = makeStyles((theme) => ({
   field: {

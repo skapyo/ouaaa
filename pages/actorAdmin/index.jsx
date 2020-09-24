@@ -1,11 +1,5 @@
-import AppLayout from "containers/layouts/AppLayout"
-import AppContainer from "containers/layouts/AppContainer"
-import { Grid,Box, makeStyles, Typography, Avatar } from "@material-ui/core"
+import {makeStyles, Typography} from "@material-ui/core"
 import {withApollo} from 'hoc/withApollo'
-import AccountLeftMenu from "containers/menus/AccountLeftMenu"
-
-import ClassicButton from "components/buttons/ClassicButton"
-import UserInfosForm from "containers/forms/UserInfosForm"
 import ActorAdminPageLayout from "containers/layouts/actorAdminPage/ActorAdminPageLayout"
 import {useQuery} from "@apollo/react-hooks";
 import React from "react";

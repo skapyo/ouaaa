@@ -1,5 +1,5 @@
-import { useEffect } from "react"
-import { useSnackbar } from "notistack"
+import {useEffect} from "react"
+import {useSnackbar} from "notistack"
 
 const useGraphQLErrorDisplay = (error) => {
 

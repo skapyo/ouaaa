@@ -1,13 +1,6 @@
-import React from "react"
+import React, {useState} from "react"
 import AppLayout from "containers/layouts/AppLayout"
-import {
-    Typography,
-    makeStyles,
-    Box,
-    Container,
-    RootRef,
-} from "@material-ui/core"
-import { useState, useEffect } from "react"
+import {Box, Container, makeStyles, RootRef, Typography,} from "@material-ui/core"
 import Newsletter from "../../containers/layouts/Newsletter";
 
 const useStyles = makeStyles((theme) => ({

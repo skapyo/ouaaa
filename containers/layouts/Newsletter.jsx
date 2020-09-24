@@ -1,18 +1,13 @@
-import { useState, useCallback } from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import {useCallback, useState} from "react";
+import {makeStyles} from "@material-ui/core/styles";
 import gql from "graphql-tag"
-import { useMutation } from "@apollo/react-hooks"
-import { withApollo } from "hoc/withApollo"
-import FormController from "components/controllers/FormController"
-import { Container, Typography, InputBase, TextField } from "@material-ui/core";
+import {useMutation} from "@apollo/react-hooks"
+import {withApollo} from "hoc/withApollo"
+import FormController, {ValidationRuleType} from "components/controllers/FormController"
+import {Container, TextField, Typography} from "@material-ui/core";
 import ClassicButton from "components/buttons/ClassicButton"
 import SearchIcon from '@material-ui/icons/Search';
-import { useSessionState } from 'context/session/session';
-import {
-  ValidationRuleType,
-  ValidationRules,
-  RenderCallback,
-} from "components/controllers/FormController"
+import {useSessionState} from 'context/session/session';
 
 const useStyles = makeStyles({
   newsletter:{

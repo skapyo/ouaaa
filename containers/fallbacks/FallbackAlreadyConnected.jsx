@@ -1,6 +1,6 @@
 import AppLayout from "containers/layouts/AppLayout"
 import AppContainer from "containers/layouts/AppContainer"
-import { Typography, Grid } from "@material-ui/core"
+import {Grid, Typography} from "@material-ui/core"
 
 const FallbackAlreadyConnected = () => {
     return (

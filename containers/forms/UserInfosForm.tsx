@@ -1,15 +1,12 @@
 /* eslint react/prop-types: 0 */
-import { ChangeEvent } from "react"
-import { Grid, makeStyles, Typography, Theme } from "@material-ui/core"
+import {ChangeEvent, useCallback, useMemo} from "react"
+import {Grid, makeStyles, Typography} from "@material-ui/core"
 import TextField from "components/form/TextField"
 import ClassicButton from "components/buttons/ClassicButton"
-import { withApollo } from "hoc/withApollo"
-import { useSessionState, useSessionDispatch } from "context/session/session"
+import {withApollo} from "hoc/withApollo"
+import {useSessionDispatch, useSessionState} from "context/session/session"
 import gql from "graphql-tag"
-import FormController, {
-  RenderCallback,
-} from "components/controllers/FormController"
-import { useCallback, useMemo } from "react"
+import FormController, {RenderCallback,} from "components/controllers/FormController"
 
 const UPDATE_USER_INFOS = gql`
   mutation updateUserInfos($formValues: UserInfos) {

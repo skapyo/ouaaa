@@ -1,16 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Head from 'next/head';
-import { ThemeProvider } from '@material-ui/core/styles';
+import {createMuiTheme, ThemeProvider} from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import { createMuiTheme } from '@material-ui/core/styles';
-import { red } from '@material-ui/core/colors';
-import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import {red} from '@material-ui/core/colors';
+import {MuiPickersUtilsProvider} from '@material-ui/pickers';
 import MomentUtils from '@date-io/moment';
 import gql from 'graphql-tag';
-import { SessionProvider } from 'context/session/session';
+import {SessionProvider} from 'context/session/session';
 import omitTypename from 'utils/omitTypename'
-import { SnackbarProvider } from 'notistack';
+import {SnackbarProvider} from 'notistack';
 import './styles.css'
 import '../containers/layouts/agendaPage/DateFilter.css';
 import 'leaflet/dist/leaflet.css';
@@ -18,6 +17,7 @@ import 'react-google-places-autocomplete/dist/index.min.css';
 import '@brainhubeu/react-carousel/lib/style.css';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+
 const theme = createMuiTheme({
   palette: {
     primary: {

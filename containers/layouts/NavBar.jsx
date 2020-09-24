@@ -1,19 +1,17 @@
-import { makeStyles } from '@material-ui/core/styles';
+import {makeStyles, useTheme} from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import {Grid, Avatar, MenuItem, Fade, Menu, Container, Box} from '@material-ui/core';
+import {Avatar, Container, Fade, Grid, Menu, MenuItem} from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
-import ClassicButton from '../../components/buttons/ClassicButton';
 import Link from 'components/Link'
-import { useSessionState, useSessionDispatch } from 'context/session/session';
-import React, { useCallback ,useEffect, useState} from 'react';
-import { useMutation } from '@apollo/react-hooks';
+import {useSessionDispatch, useSessionState} from 'context/session/session';
+import React, {useCallback, useEffect} from 'react';
+import {useMutation} from '@apollo/react-hooks';
 import gql from 'graphql-tag'
 import {useCookies} from 'react-cookie'
-import { useTheme } from '@material-ui/core/styles';
-import { useRouter } from 'next/router'
+import {useRouter} from 'next/router'
 import {withApollo} from 'hoc/withApollo'
 
 const useStyles = makeStyles((theme) => ({

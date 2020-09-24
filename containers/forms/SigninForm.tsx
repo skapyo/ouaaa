@@ -1,30 +1,30 @@
 import gql from "graphql-tag"
-import { withApollo } from "hoc/withApollo"
-import FormController from "components/controllers/FormController"
-import { makeStyles, Box } from "@material-ui/core"
+import {withApollo} from "hoc/withApollo"
+import FormController, {
+  RenderCallback,
+  ValidationRules,
+  ValidationRuleType
+} from "components/controllers/FormController"
 import {
-  Container,
   Avatar,
-  Typography,
-  TextField,
-  FormControlLabel,
+  Box,
   Checkbox,
+  Container,
+  FormControlLabel,
   Grid,
+  makeStyles,
+  TextField,
+  Typography
 } from "@material-ui/core"
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined"
 import ClassicButton from "components/buttons/ClassicButton"
 import Link from "components/Link"
-import { useMutation } from "@apollo/react-hooks"
-import { useCallback, useState, useEffect } from "react"
-import { useSessionDispatch } from "context/session/session"
+import {useMutation} from "@apollo/react-hooks"
+import {useCallback, useEffect, useState} from "react"
+import {useSessionDispatch} from "context/session/session"
 import omitTypename from "utils/omitTypename"
 import useGraphQLErrorDisplay from "hooks/useGraphQLErrorDisplay"
 import useCookieRedirection from "hooks/useCookieRedirection"
-import {
-  ValidationRuleType,
-  ValidationRules,
-  RenderCallback,
-} from "components/controllers/FormController"
 import FallbackEmailNotValidated from "containers/fallbacks/FallbackEmailNotValidated"
 
 const useStyles = makeStyles((theme) => ({

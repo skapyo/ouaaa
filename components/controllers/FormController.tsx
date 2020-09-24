@@ -1,11 +1,10 @@
-import React, { ChangeEvent } from "react"
-import { useCallback, useState, useEffect, useMemo } from "react"
-import { useMutation } from "@apollo/react-hooks"
-import { useSnackbar } from "notistack"
+import React, {ChangeEvent, useCallback, useEffect, useMemo, useState} from "react"
+import {useMutation} from "@apollo/react-hooks"
+import {useSnackbar} from "notistack"
 import omitTypename from "utils/omitTypename"
 import validateEmailFormat from "utils/validateEmailFormat"
 import validatePasswordFormat from "utils/validatePasswordFormat"
-import { DocumentNode } from "graphql"
+import {DocumentNode} from "graphql"
 
 type FormValues = { [key: string]: string }
 
