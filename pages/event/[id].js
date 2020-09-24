@@ -1,37 +1,22 @@
 import React from "react"
 import AppLayout from "containers/layouts/AppLayout"
-import AppContainer from "containers/layouts/AppContainer"
 import {
     Grid,
     Typography,
     makeStyles,
     Box,
-    Chip,
     Container,
-    Button,
-    Divider,
-    Avatar,
     RootRef,
 } from "@material-ui/core"
-import RoomIcon from "@material-ui/icons/Room"
-import { DatePicker } from "@material-ui/pickers"
 import { useState, useEffect } from "react"
-import ClassicButton from "components/buttons/ClassicButton"
-import DividerCustom from "components/Divider"
 import { withApollo } from "hoc/withApollo.jsx"
 import {useRouter} from "next/router";
 import gql from "graphql-tag";
 import {useQuery} from "@apollo/react-hooks";
 import Place from '@material-ui/icons/Place';
-import Phone from '@material-ui/icons/Phone';
-import AlternateEmail from '@material-ui/icons/AlternateEmail';
-import Language from '@material-ui/icons/Language';
 import Schedule from '@material-ui/icons/Schedule';
-import Paper from "@material-ui/core/Paper";
-import CardSlider from "../../components/cards/CardSlider";
 import Slider from "react-slick/lib";
 import Newsletter from "../../containers/layouts/Newsletter";
-import Link from "../../components/Link";
 import CardSliderActor from "components/cards/CardSliderActor"
 import Moment from "react-moment";
 const useStyles = makeStyles((theme) => ({
@@ -117,33 +102,12 @@ const useStyles = makeStyles((theme) => ({
 
 
 }))
-const GET_ACTORS = gql`
-    { actors
-    {   id,
-        name,
-        address,
-        lat,
-        lng,
-        categories{
-            label
-        }
-    }
-    }
-`;
-const Actor = () => {
+
+const Event = () => {
 
     const router = useRouter()
     const { id } = router.query
-    const [actorToRender, setActorToRender] = useState(null);
-    const {data:actorData,loading:loadingActor,error:errorActor} = useQuery(
-        GET_ACTORS,
-        {
-            variables : {
-                limit :  '3'
-            },
-            // fetchPolicy : "no-cache"
-        }
-    );
+
     const GET_EVENT = gql`
         query event($id:String) {
             event(id:$id) {
@@ -156,49 +120,45 @@ const Actor = () => {
                 city,
                 startedAt,
                 endedAt,
+                categories{
+                    label,
+                    parentCategory{
+                        label
+                    },
+                    subCategories{
+                        label
+                    }
+                },
+                actors {   id,
+                    name,
+                    address,
+                    lat,
+                    lng,
+                    categories{
+                        label
+                    }
+                }
             }
         }
     `;
 
-    const {data,loading,error} = useQuery(GET_EVENT,
+    const {data} = useQuery(GET_EVENT,
         {
             variables : {
                 id
             },
-            // fetchPolicy : "no-cache"
         }
     );
-    useEffect(() => {
-
-        setActorToRender({
-            actorData
-        });
-
-
-    },[actorData]);
-
     const [stylesProps, setStylesProps] = useState({
         topImageSize: "250px",
         headerDisplay: "static",
     })
     const styles = useStyles(stylesProps)
 
-    const headerRef = React.useRef()
-    const settingsSliderImage = {
-
-        infinite: true,
-        slidesToShow: 2,
-        slidesToScroll: 1,
-        // autoplay: true,
-        // autoplaySpeed: 2000,
-        //  pauseOnHover: true,
-        nextArrow: <SampleNextArrow />,
-        prevArrow: <SamplePrevArrow />
-    };
     const settingsSliderevent = {
 
         infinite: true,
-        slidesToShow: 5,
+        slidesToShow: data &&  data.event.actors.length%5,
         slidesToScroll: 1,
         // autoplay: true,
         // autoplaySpeed: 2000,
@@ -244,7 +204,7 @@ const Actor = () => {
                                         {data && data.event.label}
                                     </Typography>
                                     <Typography variant="h7"   className={styles.cardTitleCategories}  >
-                                        {data && data.event.categories && data.actor.categories.length>0 && data.event.categories[0].parentCategory.label} : {data && data.event.categories && data.event.categories.length>0 && data.event.categories[0].label}
+                                        {data && data.event.categories && data.event.categories.length>0 && data.event.categories[0].parentCategory.label} : {data && data.event.categories && data.event.categories.length>0 && data.event.categories[0].label}
                                     </Typography>
                                 </div>
                                 <p>{data && data.event.description}</p>
@@ -301,7 +261,7 @@ const Actor = () => {
                             </Typography>
                         </div>
                         <Slider {...settingsSliderevent} className={[styles.articleCarroussel]} >
-                            {actorToRender?.actorData &&  actorToRender.actorData.actors.map((actor) => {
+                            {data && data.event.actors.map((actor) => {
                                 return (
 
                                     <CardSliderActor
@@ -323,7 +283,7 @@ const Actor = () => {
 }
 
 // export default withListener(Actor)
-export default withApollo()(Actor)
+export default withApollo()(Event)
 // export async function getServerSideProps(context) {
 //     console.log(context.req.headers.cookie)
 //     return {

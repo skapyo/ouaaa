@@ -28,7 +28,7 @@ import AlternateEmail from '@material-ui/icons/AlternateEmail';
 import Language from '@material-ui/icons/Language';
 import Schedule from '@material-ui/icons/Schedule';
 import Paper from "@material-ui/core/Paper";
-import CardSlider from "../../components/cards/CardSlider";
+import CardSliderEvent from "../../components/cards/CardSliderEvent";
 import Slider from "react-slick/lib";
 import Newsletter from "../../containers/layouts/Newsletter";
 import Link from "../../components/Link";
@@ -118,34 +118,13 @@ const useStyles = makeStyles((theme) => ({
 
 
 }))
-const GET_EVENTS = gql`
-    query events($limit:String) {
-        events(limit:$limit) {
-            id,
-            label,
-            shortDescription,
-            description,
-            startedAt,
-            endedAt,
-            published
-            
-        }
-    }
-`;
+
 const Actor = () => {
 
     const router = useRouter()
     const { id } = router.query
     const [eventToRender, setEventToRender] = useState(null);
-    const {data:eventData,loading:loadingEvent,error:errorEvent} = useQuery(
-        GET_EVENTS,
-        {
-            variables : {
-                limit :  '3'
-            },
-            // fetchPolicy : "no-cache"
-        }
-    );
+
     const GET_ACTOR = gql`
         query actor($id:String) {
             actor(id:$id) {
@@ -169,6 +148,15 @@ const Actor = () => {
                     subCategories{
                         label
                     }
+                },
+                events {
+                    id,
+                    label,
+                    shortDescription,
+                    description,
+                    startedAt,
+                    endedAt,
+                    published
                 }
             }
         }
@@ -182,14 +170,6 @@ const Actor = () => {
             // fetchPolicy : "no-cache"
         }
     );
-    useEffect(() => {
-
-        setEventToRender({
-            eventData
-        });
-
-
-    },[eventData]);
 
     const [stylesProps, setStylesProps] = useState({
         topImageSize: "250px",
@@ -201,7 +181,7 @@ const Actor = () => {
     const settingsSliderImage = {
 
         infinite: true,
-        slidesToShow: 2,
+        slidesToShow: 3,
         slidesToScroll: 1,
         // autoplay: true,
         // autoplaySpeed: 2000,
@@ -212,7 +192,7 @@ const Actor = () => {
     const settingsSliderevent = {
 
         infinite: true,
-        slidesToShow: 5,
+        slidesToShow: data &&  data.actor.events.length%5,
         slidesToScroll: 1,
         // autoplay: true,
         // autoplaySpeed: 2000,
@@ -346,9 +326,9 @@ const Actor = () => {
                             </Typography>
                         </div>
                         <Slider {...settingsSliderevent} className={[styles.articleCarroussel]} >
-                            {eventToRender?.eventData &&  eventToRender.eventData.events.map((event) => {
+                            {data && data.actor.events.map((event) => {
                                 return (
-                                        <CardSlider
+                                        <CardSliderEvent
                                             key={event.id}
                                             event={event}
                                         />

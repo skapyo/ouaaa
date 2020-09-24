@@ -8,7 +8,6 @@ import SearchIcon from '@material-ui/icons/Search';
 import {white} from "color-name";
 import Slider from "react-slick";
 import Carousel from 'react-elastic-carousel'
-import CardSlider from "components/cards/CardSlider"
 import CardSliderActor from "components/cards/CardSliderActor"
 import gql from "graphql-tag"
 import { withApollo } from "hoc/withApollo"
