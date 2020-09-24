@@ -83,7 +83,7 @@ export default function SimpleCard({actor}) {
             <div  className={classes.image}>
               <div className={classes.categorie}>
                 <Typography className={classes.categorie}  gutterBottom>
-                    {actor.Categories && actor.Categories.length>0 && actor.Categories[0].label}
+                    {actor.categories && actor.categories.length>0 && actor.categories[0].label}
                 </Typography>
               </div>
             </div>

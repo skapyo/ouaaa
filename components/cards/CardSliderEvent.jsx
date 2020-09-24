@@ -80,9 +80,9 @@ export default function SimpleCard({event}) {
           <CardContent>
             <div  className={classes.image}>
               <div className={classes.categorie}>
-                <Typography className={classes.categorie}  gutterBottom>
-                    categorie
-                </Typography>
+                  <Typography className={classes.categorie}  gutterBottom>
+                      {event.categories && event.categories.length>0 && event.categories[0].label}
+                  </Typography>
               </div>
             </div>
             <div className={classes.content}>
