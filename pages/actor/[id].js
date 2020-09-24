@@ -161,7 +161,7 @@ const Actor = () => {
                 website,
                 description,
                 
-                Categories{
+                categories{
                     label,
                     parentCategory{
                         label
