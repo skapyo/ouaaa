@@ -207,6 +207,7 @@ const carto = () => {
             lng,
             categories{
                 label
+                icon
             }
         }
         }
@@ -254,17 +255,6 @@ const carto = () => {
         open[index]=!open[index];
     };
 
-  /*  useEffect(() => {
-        if(data){
-            const {markers} = this.state
-            data.actors.forEach((actor) => {
-                markers.push([actor.lat,actor.lng])
-            });
-            this.setState({markers})
-        }
-
-    },[data])
-    */
 
     useEffect(() => {
         const {current ={}} = mapRef;
@@ -280,13 +270,7 @@ const carto = () => {
             L.Icon.Default.mergeOptions({
                 iconUrl:null
             })
-            const suitcasePoint = new L.Icon({
-                iconUrl: '/icons/place.svg',
-                iconRetinaUrl: '/suitcaseIcon.svg',
-                iconAnchor: [13, 34], // point of the icon which will correspond to marker's location
-                iconSize: [25],
-                popupAnchor: [1, -25]
-            })
+
 
             if (loading)
                 return 'loading';
@@ -343,32 +327,49 @@ const carto = () => {
                                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                                 />
                                 {typeof data !== "undefined"&& data.actors.map((actor, index) => {
-                                    if(actor.lat!=null && actor.lng!=null)
+                                    var icone
+                                    if(actor.lat!=null && actor.lng!=null) {
+                                        if(actor.categories.length > 0 && actor.categories[0] ) {
+                                            icone = actor.categories[0].icon
+                                        }else {
+                                            icone = '/icons/' + 'place' + '.svg'
+                                        }
+                                        const suitcasePoint = new L.Icon({
+                                            iconUrl: icone,
+                                            iconAnchor: [13, 34], // point of the icon which will correspond to marker's location
+                                            iconSize: [25],
+                                            popupAnchor: [1, -25]
+                                        })
                                         return (
-                                            <Marker key={`marker-${index}`} position={[actor.lat,actor.lng]} icon={suitcasePoint}>
+                                            <Marker key={`marker-${index}`} position={[actor.lat, actor.lng]}
+                                                    icon={suitcasePoint}>
                                                 <Popup>
 
-                                                    <div  className={styles.image}>
+                                                    <div className={styles.image}>
                                                         <div className={styles.categorie}>
-                                                            <Typography className={styles.categorie}  gutterBottom>
-                                                                {actor.Categories && actor.Categories.length>0 && actor.Categories[0].label}
+                                                            <Typography className={styles.categorie} gutterBottom>
+                                                                {actor.Categories && actor.Categories.length > 0 && actor.Categories[0].label}
                                                             </Typography>
                                                         </div>
                                                     </div>
                                                     <div className={styles.content}>
-                                                        <Grid container >
+                                                        <Grid container>
                                                             <Grid item xs={10}>
-                                                                <div  className={styles.titleDiv}>
-                                                                    <Typography variant="h6" component="h2"  className={styles.title}>
+                                                                <div className={styles.titleDiv}>
+                                                                    <Typography variant="h6" component="h2"
+                                                                                className={styles.title}>
                                                                         {actor && actor.name}
                                                                     </Typography>
                                                                 </div>
                                                             </Grid>
 
-                                                            <Grid item xs={2} >
-                                                                <div className={styles.favorite} onClick={() => setFavorite(!favorite)}>
-                                                                    {!favorite && <FavoriteBorderRoundedIcon className={styles.favoriteIcon} />}
-                                                                    {favorite && <FavoriteRoundedIcon className={styles.favoriteIcon} />}
+                                                            <Grid item xs={2}>
+                                                                <div className={styles.favorite}
+                                                                     onClick={() => setFavorite(!favorite)}>
+                                                                    {!favorite && <FavoriteBorderRoundedIcon
+                                                                        className={styles.favoriteIcon}/>}
+                                                                    {favorite && <FavoriteRoundedIcon
+                                                                        className={styles.favoriteIcon}/>}
                                                                 </div>
                                                             </Grid>
                                                         </Grid>
@@ -378,11 +379,12 @@ const carto = () => {
                                                             {actor && actor.short_description}
                                                         </Typography>
                                                     </div>
-                                                    <Link  href={"/actor/"+actor.id} >
-                                                        <button className={styles.buttonGrid}  >EN SAVOIR PLUS</button>
+                                                    <Link href={"/actor/" + actor.id}>
+                                                        <button className={styles.buttonGrid}>EN SAVOIR PLUS</button>
                                                     </Link>
                                                 </Popup>
                                             </Marker>)
+                                    }
                                 })
                                 }
                             </Map>

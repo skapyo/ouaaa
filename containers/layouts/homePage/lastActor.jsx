@@ -1,4 +1,4 @@
-import {Box, Container, makeStyles, Typography} from '@material-ui/core';
+import {Container, makeStyles, Typography} from '@material-ui/core';
 import React, {useEffect, useState} from "react";
 import Slider from "react-slick/lib";
 import CardSliderActor from "../../../components/cards/CardSliderActor";
@@ -107,7 +107,7 @@ const LastActor = () => {
     const settings = {
         dots: true,
         infinite: true,
-        slidesToShow: actorToRender?.actorData &&  actorToRender.actorData.actors.length%5,
+        slidesToShow: actorToRender?.actorData &&  actorToRender.actorData.actors.length>5?5:actorToRender?.actorData &&  actorToRender.actorData.actors.length,
         slidesToScroll: 1,
         // autoplay: true,
         // autoplaySpeed: 2000,

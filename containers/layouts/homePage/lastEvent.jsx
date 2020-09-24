@@ -1,7 +1,6 @@
-import {Box, Container, makeStyles, Typography} from '@material-ui/core';
+import {Container, makeStyles, Typography} from '@material-ui/core';
 import React, {useEffect, useState} from "react";
 import Slider from "react-slick/lib";
-import CardSliderActor from "../../../components/cards/CardSliderActor";
 import {useQuery} from "@apollo/react-hooks";
 import gql from "graphql-tag"
 import {withApollo} from "../../../hoc/withApollo";
@@ -132,7 +131,7 @@ const LastActor = () => {
     const settings = {
         dots: true,
         infinite: true,
-        slidesToShow: 5,
+        slidesToShow: eventToRender?.eventData &&  eventToRender.eventData.events.length>5?5:eventToRender?.eventData &&  eventToRender.eventData.events.length,
         slidesToScroll: 1,
         // autoplay: true,
         // autoplaySpeed: 2000,

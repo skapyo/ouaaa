@@ -173,7 +173,7 @@ const Actor = () => {
     const settingsSliderevent = {
 
         infinite: true,
-        slidesToShow: data &&  data.actor.events.length%5,
+        slidesToShow: data &&  data.actor.events.length>5?5:data &&  data.actor.events.length,
         slidesToScroll: 1,
         // autoplay: true,
         // autoplaySpeed: 2000,
