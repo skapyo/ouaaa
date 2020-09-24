@@ -215,7 +215,7 @@ const carto = () => {
             short_description,
             lat,
             lng,
-            Categories{
+            categories{
                 label
             }
         }

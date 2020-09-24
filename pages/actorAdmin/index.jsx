@@ -37,7 +37,7 @@ const ActorAdminPage = () => {
             short_description,
             lat,
             lng,
-            Categories{
+            categories{
                 label
             }
         }

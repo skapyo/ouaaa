@@ -124,7 +124,7 @@ const GET_ACTORS = gql`
         address,
         lat,
         lng,
-        Categories{
+        categories{
             label
         }
     }
@@ -244,7 +244,7 @@ const Actor = () => {
                                         {data && data.event.label}
                                     </Typography>
                                     <Typography variant="h7"   className={styles.cardTitleCategories}  >
-                                        {data && data.event.Categories && data.actor.Categories.length>0 && data.event.Categories[0].parentCategory.label} : {data && data.event.Categories && data.event.Categories.length>0 && data.event.Categories[0].label}
+                                        {data && data.event.categories && data.actor.categories.length>0 && data.event.categories[0].parentCategory.label} : {data && data.event.categories && data.event.categories.length>0 && data.event.categories[0].label}
                                     </Typography>
                                 </div>
                                 <p>{data && data.event.description}</p>

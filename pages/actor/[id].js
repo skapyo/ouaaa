@@ -258,7 +258,7 @@ const Actor = () => {
                                         {data && data.actor.name}
                                     </Typography>
                                     <Typography variant="h7"   className={styles.cardTitleCategories}  >
-                                        {data && data.actor.Categories && data.actor.Categories.length>0 && data.actor.Categories[0].parentCategory.label} : {data && data.actor.Categories && data.actor.Categories.length>0 && data.actor.Categories[0].label}
+                                        {data && data.actor.categories && data.actor.categories.length>0 && data.actor.categories[0].parentCategory.label} : {data && data.actor.categories && data.actor.categories.length>0 && data.actor.categories[0].label}
                                     </Typography>
                                 </div>
                                 <p>{data && data.actor.description}</p>
