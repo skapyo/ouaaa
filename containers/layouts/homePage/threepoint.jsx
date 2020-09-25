@@ -1,8 +1,9 @@
 import {Container, Grid, makeStyles, Typography} from '@material-ui/core';
-import SearchIcon from '@material-ui/icons/Search';
-import InputBase from "@material-ui/core/InputBase/InputBase";
 import React from "react";
 import Link from "../../../components/Link";
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
 
 const useStyles = makeStyles((theme) => ({
     cardInfo: {
@@ -91,7 +92,10 @@ const useStyles = makeStyles((theme) => ({
         fontSize:"12px",
         lineHeight:"inherit"
     },
-
+    root: {
+        width: '100%',
+        backgroundColor: theme.palette.background.paper,
+    },
 }))
 
 const PresentationSection = () => {
@@ -115,10 +119,19 @@ const PresentationSection = () => {
                           EN 3 POINTS
                       </Typography>
                   </div>
-                  <p>1 Issu du milieu associatif : Le site est né de la volonté de 3 collectifs (Collectif Transition Citoyenne, Collectif Action Solidaire et Tiers Lieux la Proue) de disposer d’une vitrine pour se faire connaître, et disposer d’un agenda réactif pour publier leurs évènements.</p>
-                  <p>2 Créé pour et par les acteurs de la transition : Le site a été créé sur mesure par une équipe de bénévoles motivés, il permet aux acteurs de la transition eux-mêmes de renseigner leurs informations. Il sera adossé à une rencontre physique régulière, afin que virtuel et réel se complètent.*</p>
-                  <p> 3 Catalyseur de transition : nous pensons qu’en faisant connaître les acteurs de la transition du grand public et en renforçant les liens entre eux, nous allons accélérer la nécessaire transition de notre territoire vers un fonctionnement plus sobre, plus humain et véritablement « durable »</p>
-              </Grid>
+                  <List className={styles.root}>
+                      <ListItem>
+                          <ListItemText primary="Issu du milieu associatif : Le site est né de la volonté de 3 collectifs (Collectif Transition Citoyenne, Collectif Action Solidaire et Tiers Lieux la Proue) de disposer d’une vitrine pour se faire connaître, et disposer d’un agenda réactif pour publier leurs évènements."  />
+                      </ListItem>
+                      <ListItem>
+                          <ListItemText primary="Créé pour et par les acteurs de la transition : Le site a été créé sur mesure par une équipe de bénévoles motivés, il permet aux acteurs de la transition de renseigner eux-mêmes leurs informations. Il sera adossé à une rencontre physique régulière, afin que virtuel et réel se complètent."/>
+                      </ListItem>
+                      <ListItem>
+                          <ListItemText primary="Catalyseur de transition : nous pensons qu’en faisant connaître les acteurs de la transition du grand public et en renforçant les liens entre eux, nous allons accélérer la nécessaire transition de notre territoire vers un fonctionnement plus sobre, plus humain et véritablement « durable »"/>
+                      </ListItem>
+                  </List>
+
+                </Grid>
 
               <Grid item xs={6} className={styles.align}>
                   <img width={"60%"} className={styles.image}
