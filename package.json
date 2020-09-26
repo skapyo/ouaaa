@@ -45,6 +45,7 @@
         "react-elastic-carousel": "^0.7.4",
         "react-google-places-autocomplete": "^2.1.0",
         "react-leaflet": "^2.7.0",
+        "react-leaflet-markercluster": "^2.0.0",
         "react-moment": "^0.9.7",
         "react-router-dom": "^5.2.0",
         "react-slick": "^0.27.10",

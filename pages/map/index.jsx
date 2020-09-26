@@ -23,6 +23,8 @@ if (typeof window != 'undefined') {
     var TileLayer = require('react-leaflet').TileLayer;
     var Marker = require('react-leaflet').Marker;
     var Popup = require('react-leaflet').Popup;
+    var MarkerClusterGroup =  "react-leaflet-markercluster";
+
 }
 
 
@@ -190,6 +192,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
+const categoriesChecked = [];
 
 const carto = () => {
     const mapRef=useRef();
@@ -210,6 +213,7 @@ const carto = () => {
             categories{
                 label
                 icon
+                color
             }
         }
         }
@@ -219,14 +223,18 @@ const carto = () => {
         {   id,
             label
             icon
+            color
+            
             subCategories {
                 id,
                 label
                 icon
+                color
                 subCategories {
                     id,
                     label
                     icon
+                    color
                     subCategories {
                         label
                         icon
@@ -236,10 +244,11 @@ const carto = () => {
         }
         }
     `;
+
+
     const [checked, setChecked] = useState([0]);
 
     const newChecked = [...checked];
-    const categoriesChecked = [];
 
     const {data:dataCategorie,loading:loadingCategorie,error:errorCategorie} = useQuery(GET_CATEGORIES,{fetchPolicy:"network-only"});
 
@@ -294,8 +303,6 @@ const carto = () => {
         L.Icon.Default.mergeOptions({
             iconUrl:null
         })
-        if (loading)
-            return 'loading';
 
         return (
             <AppLayout>
@@ -349,19 +356,27 @@ const carto = () => {
                                 attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                             />
+                            <MarkerClusterGroup>
                             {typeof data !== "undefined"&& data.actors.map((actor, index) => {
                                 var icone
+                                var color
                                 if(actor.lat!=null && actor.lng!=null) {
-                                    if(false && actor.categories && actor.categories.length > 0) {
-                                        icone = actor.categories[0].icon
+                                    if( actor.categories && actor.categories.length > 0 && actor.categories[0].icon) {
+                                        icone = '/icons/' +actor.categories[0].icon+ '.svg'
+                                        color=actor.categories[0].color
                                     }else {
                                         icone = '/icons/' + 'place' + '.svg'
+                                        color="black"
                                     }
+                                    const markerHtmlStyles = `background-color: red`
                                     const suitcasePoint = new L.Icon({
                                         iconUrl: icone,
+                                        color:color,
+                                        fillColor:color,
                                         iconAnchor: [13, 34], // point of the icon which will correspond to marker's location
                                         iconSize: [25],
-                                        popupAnchor: [1, -25]
+                                        popupAnchor: [1, -25],
+                                        html: `<span style="${markerHtmlStyles}" />`
                                     })
                                     return (
                                         <Marker key={`marker-${index}`} position={[actor.lat, actor.lng]}
@@ -410,6 +425,7 @@ const carto = () => {
                                 }
                             })
                             }
+                            </MarkerClusterGroup>
                         </Map>
                     </Grid>
                 </Grid>
