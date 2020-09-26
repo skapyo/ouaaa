@@ -1,7 +1,6 @@
 import EventCard from 'components/cards/EventCard'
-import gql from "graphql-tag"
-import { useQuery } from "@apollo/react-hooks";
-import { Container, makeStyles } from '@material-ui/core';
+
+import {Container, makeStyles} from '@material-ui/core';
 import Moment from 'react-moment';
 
 const useStyles = makeStyles({
@@ -21,38 +20,12 @@ const useStyles = makeStyles({
   },
 })
 
-const GET_EVENTS = gql`
-query events {
-    events {
-        id
-        label
-        startedAt
-        endedAt
-        published
-        lat
-        lng
-        address
-        city
-        categories {
-          id
-          label
-          icon
-          color
-        }
-        actors {
-          id
-          name
-        }
-    }
-}
-`;
 
-const Events = () => {
+
+const Events = (data) => {
 
   const classes = useStyles()
-  const {data:eventData, loading, error} = useQuery(
-    GET_EVENTS
-  )
+
   var lastDate = undefined
 
   const compare = (a, b) => {
@@ -81,7 +54,7 @@ const Events = () => {
     <Container className={classes.events}>
       <h4 className={classes.title}>ÉVÉNEMENTS À VENIR</h4>
       {
-        eventData && eventData.events.sort(compare).map((event) =>
+        data.data && data.data.events.sort(compare).map((event) =>
           <div key={event.id}>
             { (!lastDate || !sameDay(lastDate, event.startedAt)) &&
               <Moment locale="fr" format="DD MMMM" className={classes.date} unix>{event.startedAt/1000}</Moment>

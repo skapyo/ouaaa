@@ -1,8 +1,10 @@
-import { withApollo } from "hoc/withApollo"
+import {withApollo} from "hoc/withApollo"
 import Events from 'containers/layouts/agendaPage/Events'
 import Filters from 'containers/layouts/agendaPage/Filters'
 import Newsletter from 'containers/layouts/Newsletter'
-import { Container, makeStyles } from "@material-ui/core"
+import {Container, makeStyles} from "@material-ui/core"
+import gql from 'graphql-tag'
+import {useQuery} from "@apollo/react-hooks";
 
 const useStyles = makeStyles({
   main: {
@@ -20,14 +22,46 @@ const useStyles = makeStyles({
   },
 })
 
-const AgendaPageLayout = () => {
-  const classes = useStyles()
 
+const AgendaPageLayout = () => {
+
+  const GET_EVENTS = gql`
+    query events($startingDate:String) {
+      events (startingDate:$startingDate) {
+        id
+        label
+        startedAt
+        endedAt
+        published
+        lat
+        lng
+        address
+        city
+        categories {
+          id
+          label
+          icon
+          color
+        }
+        actors {
+          id
+          name
+        }
+      }
+    }
+  `;
+
+
+  const classes = useStyles()
+  const {data:eventData, loading, error,refetch} = useQuery(
+      GET_EVENTS,{fetchPolicy:"network-only"});
   return (
     <Container className={classes.main}>
       <Container className={classes.layout}>
-        <Filters />
-        <Events />
+        <Filters refetch={refetch} />
+        {eventData && eventData.events &&
+          <Events data={eventData}/>
+        }
       </Container>
       <Newsletter />
     </Container>

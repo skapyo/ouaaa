@@ -1,4 +1,4 @@
-import { Container, makeStyles } from '@material-ui/core';
+import {Container, makeStyles} from '@material-ui/core';
 import CategoryFilter from './CategoryFilter';
 import DateFilter from './DateFilter';
 
@@ -18,14 +18,14 @@ const useStyles = makeStyles({
   },
 })
 
-const Filters = () => {
+const Filters = (refetch) => {
 
   const classes = useStyles()
 
   return (
     <Container className={classes.filters}>
       <h4 className={classes.title}>DATE</h4>
-      <DateFilter />
+      <DateFilter refetch={refetch}/>
       <h4 className={classes.title}>CATÉGORIES</h4>
       <CategoryFilter />
       <h4 className={classes.title}>LIEU</h4>
