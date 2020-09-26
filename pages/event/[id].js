@@ -197,7 +197,7 @@ const Event = () => {
                                         {data && data.event.label}
                                     </Typography>
                                     <Typography variant="h7"   className={styles.cardTitleCategories}  >
-                                        {data && data.event.categories && data.event.categories.length>0 && data.event.categories[0].parentCategory.label} : {data && data.event.categories && data.event.categories.length>0 && data.event.categories[0].label}
+                                        {data && data.event.categories && data.event.categories.length>0 && data.event.categories[0].parentCategory && data.event.categories[0].parentCategory.label} : {data && data.event.categories && data.event.categories.length>0 && data.event.categories[0] && data.event.categories[0].label}
                                     </Typography>
                                 </div>
                                 <p>{data && data.event.description}</p>

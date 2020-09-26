@@ -27,7 +27,7 @@ const Filters = (refetch) => {
       <h4 className={classes.title}>DATE</h4>
       <DateFilter refetch={refetch}/>
       <h4 className={classes.title}>CATÉGORIES</h4>
-      <CategoryFilter />
+      <CategoryFilter refetch={refetch} />
       <h4 className={classes.title}>LIEU</h4>
     </Container>
   )

@@ -26,8 +26,8 @@ const useStyles = makeStyles({
 const AgendaPageLayout = () => {
 
   const GET_EVENTS = gql`
-    query events($startingDate:String) {
-      events (startingDate:$startingDate) {
+    query events($startingDate:String,$categories:[String]) {
+      events (startingDate:$startingDate,categories:$categories) {
         id
         label
         startedAt
