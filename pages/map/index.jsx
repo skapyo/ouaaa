@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import AppLayout from "../../containers/layouts/AppLayout";
 import {Grid, Typography} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
@@ -126,7 +126,8 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor:"white",
         borderRadius: "0.3em",
         color : "#f0a300",
-        width:"5em",
+        width: "max-content",
+        padding: "0 5px 0 5px",
         display: "block",
         marginLeft: "auto",
         marginRight: "auto",
@@ -198,7 +199,8 @@ const carto = () => {
         headerDisplay: "static",
     })
     const GET_ACTORS = gql`
-        { actors
+        query actors($categories:[String]) {
+            actors(categories:$categories) 
         {   id,
             name,
             address,
@@ -213,48 +215,68 @@ const carto = () => {
         }
     `;
     const GET_CATEGORIES = gql`
-    { categories
-    {   id,
-        label
-        icon
-        subCategories {
+        { categories
+        {   id,
             label
             icon
-                subCategories {
+            subCategories {
+                id,
                 label
                 icon
-                  subCategories {
-                     label
-                     icon
-              }
-          }
-  }
-    }
-    }
-`;
+                subCategories {
+                    id,
+                    label
+                    icon
+                    subCategories {
+                        label
+                        icon
+                    }
+                }
+            }
+        }
+        }
+    `;
+    const [checked, setChecked] = useState([0]);
+
+    const newChecked = [...checked];
+    const categoriesChecked = [];
+
     const {data:dataCategorie,loading:loadingCategorie,error:errorCategorie} = useQuery(GET_CATEGORIES,{fetchPolicy:"network-only"});
 
-    const {data,loading,error} = useQuery(GET_ACTORS,{fetchPolicy:"network-only"});
+    const {data,loading,error,refetch } = useQuery(GET_ACTORS,{
+        variables: {
+            categories:categoriesChecked
+        }});
 
     const markers = [[51.505, -0.09]]
 
     const [open, setOpen] = React.useState([false]);
-    const [checked, setChecked] = useState([0]);
 
     const handleToggle = (value,index) => () => {
         const currentIndex = checked.indexOf(value);
-        const newChecked = [...checked];
 
         if (currentIndex === -1) {
             newChecked.push(value);
         } else {
             newChecked.splice(currentIndex, 1);
         }
-
         setChecked(newChecked);
         open[index]=!open[index];
     };
 
+    const categoryChange = useCallback(
+        (e) => {
+
+        const currentIndex = categoriesChecked.indexOf(e.target.value);
+
+        if (currentIndex === -1) {
+            categoriesChecked.push(e.target.value);
+        } else {
+            categoriesChecked.splice(currentIndex, 1);
+        }
+            refetch({categories:categoriesChecked})
+
+    });
 
     useEffect(() => {
         const {current ={}} = mapRef;
@@ -264,143 +286,144 @@ const carto = () => {
     const [favorite, setFavorite] = useState(false)
 
     const styles = useStyles()
-        const position = [45.9876806, -0.9344537]
-        if (typeof window != 'undefined') {
 
-            L.Icon.Default.mergeOptions({
-                iconUrl:null
-            })
+    const position = [45.9876806, -0.9344537]
 
+    if (typeof window != 'undefined') {
 
-            if (loading)
-                return 'loading';
+        L.Icon.Default.mergeOptions({
+            iconUrl:null
+        })
+        if (loading)
+            return 'loading';
 
-            return (
-                <AppLayout>
-                    <Grid container >
-                        <Grid item xs={2}>
-                            <List >
-                                {typeof dataCategorie !== "undefined" && dataCategorie.categories.map((category, index) => {
-                                    return (
-                                        <div>
-                                            <ListItem key={category.id} role={undefined} dense button onClick={handleToggle(0,index)}>
-                                                <ListItemIcon>
+        return (
+            <AppLayout>
+                <Grid container >
+                    <Grid item xs={2}>
+                        <List >
+                            {typeof dataCategorie !== "undefined" && dataCategorie.categories.map((category, index) => {
+                                return (
+                                    <div>
+                                        <ListItem key={category.id} role={undefined} dense button onClick={handleToggle(0,index)}>
+                                            <ListItemIcon>
 
-                                                </ListItemIcon>
-                                                <ListItemText primary={category.label}/>
-                                                {open[index] ? <ExpandLess /> : <ExpandMore />}
-                                            </ListItem>
-                                            {typeof category.subCategories !== "undefined" && category.subCategories !=null && category.subCategories.map((subcategory, subIndex) => {
-                                                return (
-                                                    <Collapse in={open[index]} timeout="auto" unmountOnExit>
-                                                        <List component="div" disablePadding>
-                                                            <ListItem button >
-                                                                <ListItemIcon>
-                                                                    <Checkbox
-                                                                        edge="start"
-                                                                        tabIndex={-1}
-                                                                        disableRipple
-                                                                        name="categories"
-                                                                        value={subcategory.id}
-                                                                    />
-                                                                </ListItemIcon>
-                                                                <ListItemText  primary={subcategory.label} />
-                                                            </ListItem>
-                                                        </List>
-                                                    </Collapse>
+                                            </ListItemIcon>
+                                            <ListItemText primary={category.label}/>
+                                            {open[index] ? <ExpandLess /> : <ExpandMore />}
+                                        </ListItem>
+                                        {typeof category.subCategories !== "undefined" && category.subCategories !=null && category.subCategories.map((subcategory, subIndex) => {
+                                            return (
+                                                <Collapse in={open[index]} timeout="auto" unmountOnExit>
+                                                    <List component="div" disablePadding>
+                                                        <ListItem button >
+                                                            <ListItemIcon>
+                                                                <Checkbox
+                                                                    edge="start"
+                                                                    tabIndex={-1}
+                                                                    disableRipple
+                                                                    name="categories"
+                                                                    value={subcategory.id}
+                                                                    onChange={categoryChange}
+                                                                />
+                                                            </ListItemIcon>
+                                                            <ListItemText  primary={subcategory.label} />
+                                                        </ListItem>
+                                                    </List>
+                                                </Collapse>
 
-                                                );
-                                            })
-                                            }
-                                        </div>
-                                    );
-                                })
-                                }
-
-                            </List>
-                        </Grid>
-
-                        <Grid item xs={10} >
-                            <Map ref={mapRef} center={position} zoom={9}>
-                                <TileLayer
-                                    attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                                />
-                                {typeof data !== "undefined"&& data.actors.map((actor, index) => {
-                                    var icone
-                                    if(actor.lat!=null && actor.lng!=null) {
-                                        if(actor.categories.length > 0 && actor.categories[0] ) {
-                                            icone = actor.categories[0].icon
-                                        }else {
-                                            icone = '/icons/' + 'place' + '.svg'
-                                        }
-                                        const suitcasePoint = new L.Icon({
-                                            iconUrl: icone,
-                                            iconAnchor: [13, 34], // point of the icon which will correspond to marker's location
-                                            iconSize: [25],
-                                            popupAnchor: [1, -25]
+                                            );
                                         })
-                                        return (
-                                            <Marker key={`marker-${index}`} position={[actor.lat, actor.lng]}
-                                                    icon={suitcasePoint}>
-                                                <Popup>
+                                        }
+                                    </div>
+                                );
+                            })
+                            }
 
-                                                    <div className={styles.image}>
-                                                        <div className={styles.categorie}>
-                                                            <Typography className={styles.categorie} gutterBottom>
-                                                                {actor.Categories && actor.Categories.length > 0 && actor.Categories[0].label}
-                                                            </Typography>
-                                                        </div>
-                                                    </div>
-                                                    <div className={styles.content}>
-                                                        <Grid container>
-                                                            <Grid item xs={10}>
-                                                                <div className={styles.titleDiv}>
-                                                                    <Typography variant="h6" component="h2"
-                                                                                className={styles.title}>
-                                                                        {actor && actor.name}
-                                                                    </Typography>
-                                                                </div>
-                                                            </Grid>
-
-                                                            <Grid item xs={2}>
-                                                                <div className={styles.favorite}
-                                                                     onClick={() => setFavorite(!favorite)}>
-                                                                    {!favorite && <FavoriteBorderRoundedIcon
-                                                                        className={styles.favoriteIcon}/>}
-                                                                    {favorite && <FavoriteRoundedIcon
-                                                                        className={styles.favoriteIcon}/>}
-                                                                </div>
-                                                            </Grid>
-                                                        </Grid>
-
-
-                                                        <Typography component="p">
-                                                            {actor && actor.short_description}
-                                                        </Typography>
-                                                    </div>
-                                                    <Link href={"/actor/" + actor.id}>
-                                                        <button className={styles.buttonGrid}>EN SAVOIR PLUS</button>
-                                                    </Link>
-                                                </Popup>
-                                            </Marker>)
-                                    }
-                                })
-                                }
-                            </Map>
-                        </Grid>
+                        </List>
                     </Grid>
 
+                    <Grid item xs={10} >
+                        <Map ref={mapRef} center={position} zoom={9}>
+                            <TileLayer
+                                attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                            />
+                            {typeof data !== "undefined"&& data.actors.map((actor, index) => {
+                                var icone
+                                if(actor.lat!=null && actor.lng!=null) {
+                                    if(false && actor.categories && actor.categories.length > 0) {
+                                        icone = actor.categories[0].icon
+                                    }else {
+                                        icone = '/icons/' + 'place' + '.svg'
+                                    }
+                                    const suitcasePoint = new L.Icon({
+                                        iconUrl: icone,
+                                        iconAnchor: [13, 34], // point of the icon which will correspond to marker's location
+                                        iconSize: [25],
+                                        popupAnchor: [1, -25]
+                                    })
+                                    return (
+                                        <Marker key={`marker-${index}`} position={[actor.lat, actor.lng]}
+                                                icon={suitcasePoint}>
+                                            <Popup>
+
+                                                <div className={styles.image}>
+                                                    <div className={styles.categorie}>
+                                                        <Typography className={styles.categorie} gutterBottom>
+                                                            {actor.categories && actor.categories.length > 0 && actor.categories[0].label}
+                                                        </Typography>
+                                                    </div>
+                                                </div>
+                                                <div className={styles.content}>
+                                                    <Grid container>
+                                                        <Grid item xs={10}>
+                                                            <div className={styles.titleDiv}>
+                                                                <Typography variant="h6" component="h2"
+                                                                            className={styles.title}>
+                                                                    {actor && actor.name}
+                                                                </Typography>
+                                                            </div>
+                                                        </Grid>
+
+                                                        <Grid item xs={2}>
+                                                            <div className={styles.favorite}
+                                                                 onClick={() => setFavorite(!favorite)}>
+                                                                {!favorite && <FavoriteBorderRoundedIcon
+                                                                    className={styles.favoriteIcon}/>}
+                                                                {favorite && <FavoriteRoundedIcon
+                                                                    className={styles.favoriteIcon}/>}
+                                                            </div>
+                                                        </Grid>
+                                                    </Grid>
 
 
-                </AppLayout>
-            )
-        } else {
-            return (
-                <div>
+                                                    <Typography component="p">
+                                                        {actor && actor.short_description}
+                                                    </Typography>
+                                                </div>
+                                                <Link href={"/actor/" + actor.id}>
+                                                    <button className={styles.buttonGrid}>EN SAVOIR PLUS</button>
+                                                </Link>
+                                            </Popup>
+                                        </Marker>)
+                                }
+                            })
+                            }
+                        </Map>
+                    </Grid>
+                </Grid>
 
-                </div>
-            )
+
+
+            </AppLayout>
+        )
+    } else {
+        return (
+            <div>
+
+            </div>
+        )
 
     }
 }

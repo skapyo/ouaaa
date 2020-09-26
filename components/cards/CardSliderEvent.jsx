@@ -31,7 +31,8 @@ const useStyles = makeStyles({
      backgroundColor:"white",
         borderRadius: "0.3em",
         color : "#f0a300",
-        width:"5em",
+        width: "max-content",
+        padding: "0 5px 0 5px",
         display: "block",
 marginLeft: "auto",
 marginRight: "auto"

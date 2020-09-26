@@ -173,7 +173,7 @@ const Actor = () => {
     const settingsSliderevent = {
 
         infinite: true,
-        slidesToShow: data &&  data.actor.events.length>5?5:data &&  data.actor.events.length,
+        slidesToShow: data &&  data.actor.events && data.actor.events.length>5?5:data && data.actor.events&&  data.actor.events.length,
         slidesToScroll: 1,
         // autoplay: true,
         // autoplaySpeed: 2000,
@@ -219,7 +219,7 @@ const Actor = () => {
                                         {data && data.actor.name}
                                     </Typography>
                                     <Typography variant="h7"   className={styles.cardTitleCategories}  >
-                                        {data && data.actor.categories && data.actor.categories.length>0 && data.actor.categories[0].parentCategory.label} : {data && data.actor.categories && data.actor.categories.length>0 && data.actor.categories[0].label}
+                                        {data && data.actor.categories && data.actor.categories.length>0 && data.actor.categories[0].parentCategory && data.actor.categories[0].parentCategory.label} : {data && data.actor.categories && data.actor.categories.length>0 && data.actor.categories[0]&& data.actor.categories[0].label}
                                     </Typography>
                                 </div>
                                 <p>{data && data.actor.description}</p>
@@ -307,7 +307,7 @@ const Actor = () => {
                             </Typography>
                         </div>
                         <Slider {...settingsSliderevent} className={[styles.articleCarroussel]} >
-                            {data && data.actor.events.map((event) => {
+                            {data && data.actor.events && data.actor.events.map((event) => {
                                 return (
                                         <CardSliderEvent
                                             key={event.id}
