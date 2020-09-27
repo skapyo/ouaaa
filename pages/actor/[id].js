@@ -1,10 +1,10 @@
-import React, {useState} from "react"
+import React, {useEffect, useState} from "react"
 import AppLayout from "containers/layouts/AppLayout"
 import {Box, Container, Grid, makeStyles, RootRef, Typography,} from "@material-ui/core"
 import {withApollo} from "hoc/withApollo.jsx"
 import {useRouter} from "next/router";
 import gql from "graphql-tag";
-import {useQuery} from "@apollo/react-hooks";
+import {useMutation, useQuery} from "@apollo/react-hooks";
 import Place from '@material-ui/icons/Place';
 import Phone from '@material-ui/icons/Phone';
 import AlternateEmail from '@material-ui/icons/AlternateEmail';
@@ -13,6 +13,9 @@ import Schedule from '@material-ui/icons/Schedule';
 import CardSliderEvent from "../../components/cards/CardSliderEvent";
 import Slider from "react-slick/lib";
 import Newsletter from "../../containers/layouts/Newsletter";
+import {useSnackbar} from "notistack";
+import {useSessionState} from "../../context/session/session";
+import {useCookies} from "react-cookie";
 
 const useStyles = makeStyles((theme) => ({
     titleContainer: {
@@ -92,7 +95,54 @@ const useStyles = makeStyles((theme) => ({
     },
     img:{
         padding:"1em"
-    }
+    },
+    button:{
+        margin:  "2.5em 0 2.5em 0 ",
+        "color":"white",
+        "background-color":"#bf083e",
+        border: "none",
+        fontFamily: 'rowdies',
+        borderRadius: "1.5em",
+        padding: "0 3em 0 3em",
+        height: "2.5em",
+        "&:hover": {
+            cursor: "pointer",
+            "color":"#bf083e",
+            "background-color":"white",
+        },
+        backgroundImage:`url('./arrow.svg')`,
+        backgroundRepeat: "no-repeat",
+        "background-position-x": "5px",
+        "background-position-y": "1px",
+        "background-size": "11%",
+    },
+    buttonInverse:{
+        margin:  "2.5em 0 2.5em 0 ",
+        "color":"#bf083e",
+        "background-color":"white",
+        border: "none",
+        fontFamily: 'rowdies',
+        borderRadius: "1.5em",
+        padding: "0 3em 0 3em",
+        height: "2.5em",
+        "&:hover": {
+            cursor: "pointer",
+            textDecoration: "line-through",
+            "color":"white",
+            "background-color":"#bf083e",
+
+        },
+        backgroundImage:`url('./arrow.svg')`,
+        backgroundRepeat: "no-repeat",
+        "background-position-x": "5px",
+        "background-position-y": "1px",
+        "background-size": "11%",
+    },
+    buttonVolunteer:{
+        paddingTop :"1em",
+        paddingBottom :"1em",
+        textAlign: "center",
+    },
 
 
 
@@ -105,7 +155,8 @@ const Actor = () => {
     const router = useRouter()
     const { id } = router.query
     const [eventToRender, setEventToRender] = useState(null);
-
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar()
+    const [cookies, setCookie, removeCookie] = useCookies();
     const GET_ACTOR = gql`
         query actor($id:String) {
             actor(id:$id) {
@@ -138,12 +189,28 @@ const Actor = () => {
                     startedAt,
                     endedAt,
                     published
+                },
+                volunteers {  
+                    id,
+                    surname,
+                    lastname,
+
                 }
             }
         }
     `;
 
-    const {data,loading,error} = useQuery(GET_ACTOR,
+    const ADD_ACTOR_VOLUNTEER = gql`
+        mutation addActorVolunteer ($actorId:Int!,$userId: Int!) {
+            addActorVolunteer(actorId:$actorId,userId:$userId)
+        }
+    `;
+    const REMOVE_ACTOR_VOLUNTEER  = gql`
+        mutation removeActorVolunteer ($actorId:Int!,$userId: Int!) {
+            removeActorVolunteer(actorId:$actorId,userId:$userId)
+        }
+    `;
+    const {data,loading,error,refetch} = useQuery(GET_ACTOR,
         {
             variables : {
                 id
@@ -158,6 +225,65 @@ const Actor = () => {
     })
     const styles = useStyles(stylesProps)
 
+
+    const [addVolunteer,{data:volunteerData,loading:volunteerLoading,error:volunteerError}] = useMutation(
+        ADD_ACTOR_VOLUNTEER
+    );
+    const [removeVolunteer,{data:removevolunteerData,loading:removevolunteerLoading,error:removevolunteerError}] = useMutation(
+        REMOVE_ACTOR_VOLUNTEER
+    );
+
+
+    useEffect(() => {
+        if(volunteerData!==undefined) {
+            enqueueSnackbar("Demande de bénévole prise en compte", {
+                preventDuplicate: true,
+            })
+            refetch();
+        }
+
+    },[volunteerData]);
+
+    useEffect(() => {
+        if(removevolunteerData!==undefined) {
+            enqueueSnackbar("Suppression de la demande de bénévole", {
+                preventDuplicate: true,
+            })
+            refetch();
+        }
+
+    },[removevolunteerData]);
+
+    const user = useSessionState()
+    function containUser(list) {
+        let isContained = false
+        if(user!==null) {
+            list.forEach(element => {
+                if (element.id ==user.id){
+                    isContained= true
+                }
+            });
+        }
+        return isContained
+    }
+
+    const addVolunteerHandler = () => {
+
+        if(user == null) {
+            setCookie('redirect_url', router.asPath, { path: '/actor/'+ data && data.actor.id})
+            enqueueSnackbar("Veuillez vous connecter pour devenir bénévole", {
+                preventDuplicate: true,
+            })
+        }else{
+            addVolunteer({variables:{actorId: parseInt(data && data.actor.id),userId:parseInt(user.id)}})
+        }
+
+
+    };
+
+    const removeVolunteerHandler = () => {
+        removeVolunteer({variables:{actorId: parseInt(data && data.actor.id),userId:parseInt(user.id)}})
+    };
     const headerRef = React.useRef()
     const settingsSliderImage = {
 
@@ -296,7 +422,15 @@ const Actor = () => {
                             <img src="/image/potager_jarne_slider2.jpg"  className={[styles.img]}/>
                             <img src="/image/potager_jarne_slider3.jpg"  className={[styles.img]}/>
                         </Slider>
+                        <div className={styles.buttonVolunteer} >
+                        {data && containUser(data.actor.volunteers)&& (
+                            <button className={styles.buttonInverse} onClick={removeVolunteerHandler}  >Je ne souhaite plus être bénévole</button>
+                        )}
+                        {!(data && containUser(data.actor.volunteers))&& (
+                            <button className={styles.button} onClick={addVolunteerHandler}  >Devenir bénévole</button>
+                        )}
 
+                    </div>
                         <div>
 
                             <Typography variant="h5"   className={[styles.cardTitle,styles.align]}  >

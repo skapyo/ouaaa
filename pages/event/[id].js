@@ -267,19 +267,13 @@ const Event = () => {
             })
         }else{
             addParticipate({variables:{eventId: parseInt(data && data.event.id),userId:parseInt(user.id)}})
-            refetch();
-
         }
 
 
     };
 
     const removeParticipateHandler = () => {
-
             removeParticipate({variables:{eventId: parseInt(data && data.event.id),userId:parseInt(user.id)}})
-
-
-
     };
 
     const styles = useStyles(stylesProps)
