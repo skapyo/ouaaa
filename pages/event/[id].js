@@ -1,16 +1,19 @@
-import React, {useState} from "react"
+import React, {useEffect, useState} from "react"
 import AppLayout from "containers/layouts/AppLayout"
 import {Box, Container, Grid, makeStyles, RootRef, Typography,} from "@material-ui/core"
 import {withApollo} from "hoc/withApollo.jsx"
 import {useRouter} from "next/router";
 import gql from "graphql-tag";
-import {useQuery} from "@apollo/react-hooks";
+import {useMutation, useQuery} from "@apollo/react-hooks";
 import Place from '@material-ui/icons/Place';
 import Schedule from '@material-ui/icons/Schedule';
 import Slider from "react-slick/lib";
 import Newsletter from "../../containers/layouts/Newsletter";
 import CardSliderActor from "components/cards/CardSliderActor"
 import Moment from "react-moment";
+import {useSessionState} from "../../context/session/session";
+import {useCookies} from "react-cookie";
+import {useSnackbar} from "notistack";
 
 const useStyles = makeStyles((theme) => ({
     titleContainer: {
@@ -90,7 +93,53 @@ const useStyles = makeStyles((theme) => ({
         "color":theme.typography.h5.color,
     },
 
+    button:{
+        margin:  "2.5em 0 2.5em 0 ",
+        "color":"white",
+        "background-color":"#bf083e",
+        border: "none",
+        fontFamily: 'rowdies',
+        borderRadius: "1.5em",
+        padding: "0 3em 0 3em",
+        height: "2.5em",
+        "&:hover": {
+            cursor: "pointer",
+            "color":"#bf083e",
+            "background-color":"white",
+        },
+        backgroundImage:`url('./arrow.svg')`,
+        backgroundRepeat: "no-repeat",
+        "background-position-x": "5px",
+        "background-position-y": "1px",
+        "background-size": "11%",
+    },
+    buttonInverse:{
+        margin:  "2.5em 0 2.5em 0 ",
+        "color":"#bf083e",
+        "background-color":"white",
+        border: "none",
+        fontFamily: 'rowdies',
+        borderRadius: "1.5em",
+        padding: "0 3em 0 3em",
+        height: "2.5em",
+        "&:hover": {
+            cursor: "pointer",
+            textDecoration: "line-through",
+            "color":"white",
+            "background-color":"#bf083e",
 
+        },
+        backgroundImage:`url('./arrow.svg')`,
+        backgroundRepeat: "no-repeat",
+        "background-position-x": "5px",
+        "background-position-y": "1px",
+        "background-size": "11%",
+    },
+    buttonParticipate:{
+        paddingTop :"1em",
+        paddingBottom :"1em",
+        textAlign: "center",
+    },
 
 
 
@@ -100,6 +149,8 @@ const Event = () => {
 
     const router = useRouter()
     const { id } = router.query
+
+
 
     const GET_EVENT = gql`
         query event($id:String) {
@@ -130,22 +181,107 @@ const Event = () => {
                     categories{
                         label
                     }
+                },
+                participants {   id,
+                    surname,
+                    lastname,
+
                 }
             }
         }
     `;
-
-    const {data} = useQuery(GET_EVENT,
+    const ADD_EVENT_PARTICIPATE = gql`
+        mutation addEventParticipate ($eventId:Int!,$userId: Int!) {
+            addEventParticipate(eventId:$eventId,userId:$userId)
+        }
+    `;
+    const REMOVE_EVENT_PARTICIPATE = gql`
+        mutation removeEventParticipate ($eventId:Int!,$userId: Int!) {
+            removeEventParticipate(eventId:$eventId,userId:$userId)
+        }
+    `;
+    const {data,loading,error,refetch} = useQuery(GET_EVENT,
         {
             variables : {
                 id
             },
         }
     );
+
     const [stylesProps, setStylesProps] = useState({
         topImageSize: "250px",
         headerDisplay: "static",
     })
+
+
+    const [addParticipate,{data:participateData,loading:participateLoading,error:participateError}] = useMutation(
+        ADD_EVENT_PARTICIPATE
+    );
+    const [removeParticipate,{data:removeparticipateData,loading:removeparticipateLoading,error:removeparticipateError}] = useMutation(
+        REMOVE_EVENT_PARTICIPATE
+    );
+
+
+    useEffect(() => {
+        if(participateData!==undefined) {
+            enqueueSnackbar("Participation prise en compte", {
+                preventDuplicate: true,
+            })
+            refetch();
+        }
+
+    },[participateData]);
+
+    useEffect(() => {
+        if(removeparticipateData!==undefined) {
+            enqueueSnackbar("Participation retiré", {
+                preventDuplicate: true,
+            })
+            refetch();
+        }
+
+    },[removeparticipateData]);
+
+    const user = useSessionState()
+    const [cookies, setCookie, removeCookie] = useCookies();
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar()
+
+    function containUser(list) {
+        let isContained = false
+        if(user!==null) {
+            list.forEach(element => {
+                if (element.id ==user.id){
+                    isContained= true
+                }
+            });
+        }
+        return isContained
+    }
+
+    const addParticipateHandler = () => {
+
+        if(user == null) {
+            setCookie('redirect_url', router.asPath, { path: '/event/'+ data.event.id})
+            enqueueSnackbar("Veuillez vous connecter pour participer à l'événement", {
+                preventDuplicate: true,
+            })
+        }else{
+            addParticipate({variables:{eventId: parseInt(data && data.event.id),userId:parseInt(user.id)}})
+            refetch();
+
+        }
+
+
+    };
+
+    const removeParticipateHandler = () => {
+
+            removeParticipate({variables:{eventId: parseInt(data && data.event.id),userId:parseInt(user.id)}})
+
+
+
+    };
+
     const styles = useStyles(stylesProps)
 
     const settingsSliderevent = {
@@ -219,8 +355,8 @@ const Event = () => {
                                         <Grid item xs={8} className={[styles.alignLeft]}>
                                             <div className={[styles.infoLabel]}>LOCALISATION</div>
                                             <span className={[styles.infoValue]}>{data && !data.event.city && <span> Adresse manquante</span>}
-                                            {data && !data.event.address && data.event.city && <span> {data && data.event.city}</span>}
-                                            {data && data.event.address && data.event.city && <span> {data && data.event.address}, {data.event.city}</span>}</span>
+                                                {data && !data.event.address && data.event.city && <span> {data && data.event.city}</span>}
+                                                {data && data.event.address && data.event.city && <span> {data && data.event.address}, {data.event.city}</span>}</span>
                                         </Grid>
                                     </Grid>
                                     <Grid container className={[styles.item]} >
@@ -242,11 +378,18 @@ const Event = () => {
                                         </Grid>
                                     </Grid>
                                 </Grid>
-
-
                             </Grid>
-                        </Grid>
 
+                        </Grid>
+                        <div className={styles.buttonParticipate} >
+                            {data && containUser(data.event.participants)&& (
+                                <button className={styles.buttonInverse} onClick={removeParticipateHandler}  >Je ne participe plus</button>
+                            )}
+                            {!(data && containUser(data.event.participants))&& (
+                                <button className={styles.button} onClick={addParticipateHandler}  >Je participe</button>
+                            )}
+
+                        </div>
                         <div>
 
                             <Typography variant="h5"   className={[styles.cardTitle,styles.align]}  >
