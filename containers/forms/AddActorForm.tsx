@@ -309,7 +309,6 @@ const AddActorForm = () => {
 
   const afterUpdate = useCallback(
     (formValues) => {
-      debugger;
       <Redirect to='/' />
     },
     [sessionDispatch]
