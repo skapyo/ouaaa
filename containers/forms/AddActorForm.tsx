@@ -22,8 +22,8 @@ import {Redirect} from 'react-router-dom'
 import {QueryOptions, ValidationRules, ValidationRuleType} from "../../components/controllers/FormController";
 
 const CREATE_ACTOR = gql`
-  mutation createActor($formValues: ActorInfos) {
-    createActor(actorInfos: $formValues) {
+  mutation createActor($formValues: ActorInfos,$userId: Int!) {
+    createActor(actorInfos: $formValues,userId: $userId) {
       id
       name
       email

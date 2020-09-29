@@ -71,10 +71,12 @@ const NavBar = () => {
   },[setCookie,router.asPath])
 
   useEffect(() => {
-    if(data?.logout)
-      sessionDispatch({
-        type: "logout"
-      })
+    if(data?.logout) {
+        sessionDispatch({
+            type: "logout"
+        })
+        removeCookie("id",{ path: '/' })
+    }
   },[data,sessionDispatch])
 
   const [anchorEl, setAnchorEl] = React.useState(null);

@@ -5,6 +5,7 @@ import omitTypename from "utils/omitTypename"
 import validateEmailFormat from "utils/validateEmailFormat"
 import validatePasswordFormat from "utils/validatePasswordFormat"
 import {DocumentNode} from "graphql"
+import {useSessionState} from "../../context/session/session";
 
 type FormValues = { [key: string]: string }
 
@@ -92,10 +93,11 @@ const withMutation = (FormComponent: RenderCallback) => (
 ) => {
   const { formValues, setFormValue, queryOptions, setInitialFormValues } = props
   const scnackbar = useSnackbar()
-
+  const user = useSessionState()
   const [update, { data, loading, error }] = useMutation(queryOptions.query, {
     variables: {
       formValues,
+       userId:parseInt(user.id)
     },
   })
 

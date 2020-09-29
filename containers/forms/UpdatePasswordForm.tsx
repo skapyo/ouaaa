@@ -78,8 +78,8 @@ const validationRules: ValidationRules = {
 }
 
 const UPDATE_USER_PASSWORD = gql`
-  mutation updateUserPassword($formValues: UpdatePasswordInfos) {
-    updateUserPassword(updatePasswordInfos: $formValues)
+  mutation updateUserPassword($formValues: UpdatePasswordInfos,$userId: Int!) {
+    updateUserPassword(updatePasswordInfos: $formValues,userId: $userId)
   }
 `
 

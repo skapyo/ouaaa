@@ -9,8 +9,8 @@ import gql from "graphql-tag"
 import FormController, {RenderCallback,} from "components/controllers/FormController"
 
 const UPDATE_USER_INFOS = gql`
-  mutation updateUserInfos($formValues: UserInfos) {
-    updateUserInfos(userInfos: $formValues) {
+  mutation updateUserInfos($formValues: UserInfos,$userId: Int!) {
+    updateUserInfos(userInfos: $formValues,userId: $userId) {
       id
       surname
       lastname

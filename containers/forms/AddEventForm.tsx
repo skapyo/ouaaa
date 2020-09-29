@@ -56,10 +56,10 @@ const useStyles = makeStyles((theme) => ({
 
 const ADDEVENT = gql`
   mutation createEvent(
-    $eventInfos: EventInfos
+    $eventInfos: EventInfos,$userId: Int!
   ) {
     createEvent(
-      eventInfos: $eventInfos
+      eventInfos: $eventInfos,userId: $userId
     ) {
       label
       shortDescription
