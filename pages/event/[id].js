@@ -10,6 +10,7 @@ import Schedule from '@material-ui/icons/Schedule';
 import Slider from "react-slick/lib";
 import Newsletter from "../../containers/layouts/Newsletter";
 import CardSliderActor from "components/cards/CardSliderActor"
+
 import Moment from "react-moment";
 import {useSessionState} from "../../context/session/session";
 import {useCookies} from "react-cookie";
@@ -187,6 +188,7 @@ const Event = () => {
                     lastname,
 
                 }
+                
             }
         }
     `;
@@ -391,6 +393,7 @@ const Event = () => {
                             </Typography>
                         </div>
                         <Slider {...settingsSliderevent} className={[styles.articleCarroussel]} >
+
                             {data && data.event.actors.map((actor) => {
                                 return (
 

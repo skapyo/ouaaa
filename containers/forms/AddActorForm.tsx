@@ -20,6 +20,9 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 import Collapse from '@material-ui/core/Collapse';
 import {Redirect} from 'react-router-dom'
 import {QueryOptions, ValidationRules, ValidationRuleType} from "../../components/controllers/FormController";
+import useCookieRedirection from "../../hooks/useCookieRedirection";
+import {useRouter} from "next/router";
+import {useCookies} from "react-cookie";
 
 const CREATE_ACTOR = gql`
   mutation createActor($formValues: ActorInfos,$userId: Int!) {
@@ -44,9 +47,11 @@ const GET_CATEGORIES = graphqlTag`
         label
         icon
         subCategories {
+            id
             label
             icon
                 subCategories {
+                id
                 label
                 icon
                   subCategories {
@@ -160,13 +165,14 @@ const validationRules: ValidationRules = {
 const AddActorForm = () => {
   const user = useSessionState()
   const sessionDispatch = useSessionDispatch()
-
+  const redirect = useCookieRedirection()
   const styles = useStyles()
   const [checked, setChecked] = useState([0]);
   const classes = useStyles();
-
+  const router = useRouter()
   const {data,loading,error} = useQuery(GET_CATEGORIES,{fetchPolicy:"network-only"});
   const [open, setOpen] = React.useState([false]);
+  const [cookies, setCookie, removeCookie] = useCookies();
 
   const handleToggle = (value: number, index: number) => () => {
     const currentIndex = checked.indexOf(value);
@@ -200,6 +206,7 @@ const AddActorForm = () => {
     }
   
     const getAddressDetails = (results) => {
+
       formValues.address = (getObjectLongName(results, "street_number") + " " + getObjectLongName(results, "route")).trim()
       formValues.city = getObjectLongName(results, "locality")
       formValues.postCode = getObjectLongName(results, "postal_code")
@@ -271,6 +278,7 @@ const AddActorForm = () => {
                 {typeof category.subCategories !== "undefined" && category.subCategories !=null && category.subCategories.map((subcategory, subIndex) => {
                   return (
                     <Collapse in={open[index]} timeout="auto" unmountOnExit>
+
                       <List component="div" disablePadding>
                         <ListItem button >
                           <ListItemIcon>
@@ -319,6 +327,18 @@ const AddActorForm = () => {
     resultLabel: resultLabel,
     snackbarSucceedMessage: "Acteur ajouté avec succès.",
     mutationResultControl: "builtin",
+    afterResultControlCallback: useCallback(
+        (formvalues, data, error) => {
+
+          if (!error) {
+            setCookie('redirect_url', router.asPath, { path: '/actor/'+ data && data.id})
+            debugger;
+            redirect()
+          }
+        },
+        []
+    ),
+
     clearFormvaluesAfterControl:true
   }
 

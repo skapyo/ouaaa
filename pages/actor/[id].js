@@ -16,6 +16,7 @@ import Newsletter from "../../containers/layouts/Newsletter";
 import {useSnackbar} from "notistack";
 import {useSessionState} from "../../context/session/session";
 import {useCookies} from "react-cookie";
+import CardAddEvent from "../../components/cards/CardAddEvent";
 
 const useStyles = makeStyles((theme) => ({
     titleContainer: {
@@ -195,6 +196,11 @@ const Actor = () => {
                     surname,
                     lastname,
 
+                },
+                referents {   id,
+                    surname,
+                    lastname,
+
                 }
             }
         }
@@ -296,10 +302,12 @@ const Actor = () => {
         nextArrow: <SampleNextArrow />,
         prevArrow: <SamplePrevArrow />
     };
+    let nbSlidetoshow = data &&  data.actor.events && data.actor.events.length>5?5:(data && data.actor.events&&  data.actor.events.length +(containUser(data.actor.referents)?1:0))
+
     const settingsSliderevent = {
 
         infinite: true,
-        slidesToShow: data &&  data.actor.events && data.actor.events.length>5?5:data && data.actor.events&&  data.actor.events.length,
+        slidesToShow:nbSlidetoshow ,
         slidesToScroll: 1,
         // autoplay: true,
         // autoplaySpeed: 2000,
@@ -441,6 +449,12 @@ const Actor = () => {
                             </Typography>
                         </div>
                         <Slider {...settingsSliderevent} className={[styles.articleCarroussel]} >
+                            {data && containUser(data.actor.referents)&& (
+                                <CardAddEvent
+                                    actor={data.actor}
+                                />
+                            )}
+
                             {data && data.actor.events && data.actor.events.map((event) => {
                                 return (
                                         <CardSliderEvent

@@ -13,6 +13,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import useCookieRedirection from "hooks/useCookieRedirection"
 import {useSnackbar} from 'notistack';
 import GooglePlacesAutocomplete, {geocodeByAddress, getLatLng} from 'react-google-places-autocomplete';
+import {useSessionState} from "../../context/session/session";
 
 const useStyles = makeStyles((theme) => ({
   field: {
@@ -56,10 +57,10 @@ const useStyles = makeStyles((theme) => ({
 
 const ADDEVENT = gql`
   mutation createEvent(
-    $eventInfos: EventInfos,$userId: Int!
+    $eventInfos: EventInfos,$actorId: Int!$userId: Int!
   ) {
     createEvent(
-      eventInfos: $eventInfos,userId: $userId
+      eventInfos: $eventInfos,actorId: $actorId,userId: $userId
     ) {
       label
       shortDescription
@@ -84,7 +85,7 @@ query categories {
 }
 `;
 
-const AddEventForm = () => {
+const AddEventForm = ({actorId}) => {
   const Form: RenderCallback = (props) => {
 
     const { formChangeHandler, formValues, validationResult } = props
@@ -96,6 +97,7 @@ const AddEventForm = () => {
     const styles = useStyles()
     const redirect = useCookieRedirection()
     const { enqueueSnackbar, closeSnackbar } = useSnackbar()
+    const user = useSessionState()
 
     const [state, setState] = React.useState({})
     const [address, setAddress] = useState("")
@@ -105,7 +107,7 @@ const AddEventForm = () => {
       if (formValues.shortDescription && formValues.shortDescription.length > 240) return false
       // check if at least one checkbox is checked
       if (Object.values(state).find(element => element == true) == undefined) return false
-      if (!address || !city) return false
+      if (!address && !city) return false
       if (formValues.startDate >= formValues.endDate) return false
       // detail error cases
       return true
@@ -140,7 +142,6 @@ const AddEventForm = () => {
         if (state[key])
           categoriesArray.push(parseInt(key))
       })
-
       addEvent({
         variables: {
           eventInfos: {
@@ -157,7 +158,10 @@ const AddEventForm = () => {
             address: address,
             postCode: formValues.postCode,
             city: city,
+
           },
+          actorId:parseInt(actorId),
+          userId:parseInt(user.id)
         },
       })
 
@@ -272,6 +276,7 @@ const AddEventForm = () => {
           <Typography>Lieu</Typography>
           <GooglePlacesAutocomplete
             placeholder="Taper et sélectionner l'adresse"
+            initialValue={formValues.address && formValues.address.concat(" ").concat(formValues.postCode).concat(" ").concat(formValues.city)}
             onSelect={({ description }) => (
               geocodeByAddress(description).then(results => {
                 getLatLng(results[0]).then((value) => {
