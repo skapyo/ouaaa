@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from "react"
+import React, {useCallback, useEffect, useState} from "react"
 import gql from "graphql-tag"
 import {withApollo} from "hoc/withApollo"
 import {Container, Grid, makeStyles, TextField, Typography,} from "@material-ui/core"
@@ -134,6 +134,16 @@ const AddEventForm = ({actorId}) => {
       formValues.postCode = getObjectLongName(results, "postal_code")
     }
 
+    useEffect(() => {
+      if(data) {
+        enqueueSnackbar("Événement créé avec succès.", {
+          preventDuplicate: true,
+        })
+        redirect()
+      }
+    },[data]);
+
+
     const submitHandler = () => {
       const checkboxes = Object.keys(state)
       let categoriesArray: number[]
@@ -165,12 +175,7 @@ const AddEventForm = ({actorId}) => {
         },
       })
 
-      if (data) {
-        enqueueSnackbar("Événement créé avec succès.", { 
-          preventDuplicate: true,
-        })
-        redirect()
-      }
+
     }
 
     return (
