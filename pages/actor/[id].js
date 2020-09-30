@@ -116,6 +116,7 @@ const useStyles = makeStyles((theme) => ({
         "background-position-x": "5px",
         "background-position-y": "1px",
         "background-size": "11%",
+    fontSize:"1.2em"
     },
     buttonInverse:{
         margin:  "2.5em 0 2.5em 0 ",
@@ -133,6 +134,7 @@ const useStyles = makeStyles((theme) => ({
             "background-color":"#bf083e",
 
         },
+        fontSize:"1.2em",
         backgroundImage:`url('./arrow.svg')`,
         backgroundRepeat: "no-repeat",
         "background-position-x": "5px",
