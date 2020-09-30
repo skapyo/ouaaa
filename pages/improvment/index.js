@@ -56,7 +56,7 @@ const Improvment = () => {
                         />
                         <div>
                             <a rel="noopener noreferrer" href="https://privatecloud.acteursdelatransition.fr/s/66XSkfa963CA8Xg" target="_blank">
-                                <button className={styles.button} >Faire un retour d'expérience ou apportez une idée d'amélioration</button>
+                                <button className={styles.button} >Faire un retour d'expérience ou apporter une idée d'amélioration</button>
                             </a>
                         </div>
                     </Container>
