@@ -77,6 +77,8 @@ const useStyles = makeStyles({
     height: "2.5em",
     "&:hover": {
         cursor: "pointer",
+        "color":"#bf083e",
+        "background-color":"white",
     },
     backgroundImage:`url('./arrow.svg')`,
     backgroundRepeat: "no-repeat",

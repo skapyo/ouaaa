@@ -10,7 +10,6 @@ import ThreePoint from "../containers/layouts/homePage/threepoint";
 import LastActor from "../containers/layouts/homePage/lastActor";
 import LastEvent from "../containers/layouts/homePage/lastEvent";
 
-
 const useStyles = makeStyles((theme) => ({
 
     leftTitle: {
@@ -37,6 +36,8 @@ const useStyles = makeStyles((theme) => ({
         height: "2.5em",
         "&:hover": {
             cursor: "pointer",
+            "color":"#bf083e",
+            "background-color":"white",
         },
         backgroundImage:`url('./arrow.svg')`,
         backgroundRepeat: "no-repeat",

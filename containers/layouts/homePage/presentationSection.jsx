@@ -21,6 +21,7 @@ const useStyles = makeStyles((theme) => ({
     titleTypo: {
         fontSize:"2em",
         fontFamily: 'rowdies',
+        color:"white"
     },
     search: {
 
@@ -31,7 +32,8 @@ const useStyles = makeStyles((theme) => ({
         width: '35%',
         margin: "0 auto",
         marginTop :theme.spacing(2),
-        color:'black'
+        color:'black',
+        display:"none"
     },
     searchIcon: {
         padding: theme.spacing(0, 1),

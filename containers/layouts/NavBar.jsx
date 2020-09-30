@@ -75,7 +75,6 @@ const NavBar = () => {
         sessionDispatch({
             type: "logout"
         })
-        removeCookie("id",{ path: '/' })
     }
   },[data,sessionDispatch])
 

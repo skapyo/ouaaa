@@ -4,6 +4,7 @@ import Link from "../../../components/Link";
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import Build from '@material-ui/icons/Build';
 
 const useStyles = makeStyles((theme) => ({
     cardInfo: {
@@ -28,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
     inprogress:{
         color:"#bf083e",
         textAlign: "center",
-        padding: "2em",
+        paddingTop: "2em",
         fontSize: "2em",
 
     },
@@ -52,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
         paddingBottom:"20px"
     },
     buttonGrid:{
-        margin:  "2.5em 0 2.5em 0 ",
+        margin:  "1.5em 0 1.5em 0 ",
         "color":"white",
         "background-color":"#bf083e",
         border: "none",
@@ -62,13 +63,16 @@ const useStyles = makeStyles((theme) => ({
         height: "2.5em",
         "&:hover": {
             cursor: "pointer",
+            "color":"#bf083e",
+            "background-color":"white",
         },
         backgroundImage:`url('./arrow.svg')`,
         backgroundRepeat: "no-repeat",
         "background-position-x": "5px",
         "background-position-y": "1px",
-        "background-size": "11%",
-    },   button:{
+        fontSize:"1.2em"
+    },
+    button:{
         margin:  "2.5em 0 2.5em 0 ",
         "color":"white",
         "background-color":"#bf083e",
@@ -79,14 +83,18 @@ const useStyles = makeStyles((theme) => ({
         height: "2.5em",
         "&:hover": {
             cursor: "pointer",
+            "color":"#bf083e",
+            "background-color":"white",
         },
         backgroundImage:`url('./arrow.svg')`,
         backgroundRepeat: "no-repeat",
         "background-position-x": "5px",
         "background-position-y": "1px",
         "background-size": "15%",
-        marginBottom:"30px"
+        marginBottom:"30px",
 
+    },map:{
+        paddingLeft: "19%"
     },titleGrid:{
         "color":"#2a9076",
         fontSize:"12px",
@@ -96,6 +104,10 @@ const useStyles = makeStyles((theme) => ({
         width: '100%',
         backgroundColor: theme.palette.background.paper,
     },
+    improvement:{
+        textAlign: "center",
+        marginBottom:"4em"
+    }
 }))
 
 const PresentationSection = () => {
@@ -106,9 +118,14 @@ const PresentationSection = () => {
       <Container   className={styles.cardInfo}
           >
           <Typography className={styles.inprogress} >
-              Site en cours de développement.
+              <Build/>     Site en cours de développement.   <Build/>
               <p>Abonnez vous à la newsletter pour suivre les avancées.</p>
           </Typography>
+         <div className={styles.improvement}>
+              <Link  href="/improvment">
+                  <button className={styles.buttonGrid} >Découvrir les prochaines fonctionnalités et faire un retour de la première version</button>
+              </Link>
+         </div>
           <Grid container spacing={3} >
               <Grid item xs={6}>
                   <div  className={[styles.align]}>
@@ -139,7 +156,7 @@ const PresentationSection = () => {
                   />
               </Grid>
           </Grid>
-          <Link  href="/map">
+          <Link  href="/map" className={styles.map}>
               <button className={styles.button}>VOIR LA CARTE</button>
           </Link>
           <Typography variant="h5"   className={[styles.cardTitle,styles.align]}  >
