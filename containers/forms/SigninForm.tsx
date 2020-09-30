@@ -184,8 +184,7 @@ const SigninForm = () => {
             </ClassicButton>
             <Grid container>
               <Grid item xs>
-                {/* @ts-ignore */}
-                <Link href="/forgotPassword">Mot de passe oublié ?</Link>
+
               </Grid>
               <Grid item>
                 {/* @ts-ignore */}

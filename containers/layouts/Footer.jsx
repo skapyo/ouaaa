@@ -57,14 +57,8 @@ const Footer = () => {
         Suivez nos aventures sur les réseaux sociaux :
       </Typography>
       <div className={classes.socialNetworks}>
-        <a href="https://www.facebook.com/OUAAA" target="_blank">
+        <a href="https://www.facebook.com/OUtilsdesActeursAlternatifsenAunis" target="_blank">
           <FacebookIcon className={classes.icons} fontSize="large" />
-        </a>
-        <a href="https://www.instagram.com" target="_blank">
-          <InstagramIcon className={classes.icons} fontSize="large" />
-        </a>
-        <a href="https://www.youtube.com" target="_blank">
-          <YouTubeIcon className={classes.icons} fontSize="large" />
         </a>
       </div>
       <div className={classes.links}>

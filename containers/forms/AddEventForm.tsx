@@ -14,7 +14,7 @@ import useCookieRedirection from "hooks/useCookieRedirection"
 import {useSnackbar} from 'notistack';
 import GooglePlacesAutocomplete, {geocodeByAddress, getLatLng} from 'react-google-places-autocomplete';
 import {useSessionState} from "../../context/session/session";
-
+import {useRouter} from "next/router";
 const useStyles = makeStyles((theme) => ({
   field: {
     marginBottom: theme.spacing(3),
@@ -62,6 +62,7 @@ const ADDEVENT = gql`
     createEvent(
       eventInfos: $eventInfos,actorId: $actorId,userId: $userId
     ) {
+        id,
       label
       shortDescription
       facebookUrl
@@ -98,7 +99,7 @@ const AddEventForm = ({actorId}) => {
     const redirect = useCookieRedirection()
     const { enqueueSnackbar, closeSnackbar } = useSnackbar()
     const user = useSessionState()
-
+      const router = useRouter()
     const [state, setState] = React.useState({})
     const [address, setAddress] = useState("")
     const [city, setCity] = useState("")
@@ -139,7 +140,7 @@ const AddEventForm = ({actorId}) => {
         enqueueSnackbar("Événement créé avec succès.", {
           preventDuplicate: true,
         })
-        redirect()
+          router.push('/event/'+data.createEvent.id)
       }
     },[data]);
 

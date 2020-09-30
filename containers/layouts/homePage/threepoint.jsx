@@ -119,7 +119,7 @@ const PresentationSection = () => {
           >
           <Typography className={styles.inprogress} >
               <Build/>     Site en cours de développement.   <Build/>
-              <p>Abonnez vous à la newsletter pour suivre les avancées.</p>
+              <p>Abonnez-vous à la newsletter pour suivre les avancées.</p>
           </Typography>
          <div className={styles.improvement}>
               <Link  href="/improvment">

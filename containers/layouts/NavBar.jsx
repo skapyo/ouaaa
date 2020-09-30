@@ -125,9 +125,7 @@ const NavBar = () => {
                     <Grid item>
                       <MenuItem button component={Link} className={styles.menuItem} href='/about' >A PROPOS</MenuItem>
                     </Grid>
-                    <Grid item>
-                      <SearchIcon   className={styles.menuItem}/>
-                    </Grid>
+
                     {!user && (
                         <>
                           <Grid item> <Link href='/signin' underline='none' color='textPrimary' onClick={signinClickHandler}>
