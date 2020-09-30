@@ -23,6 +23,7 @@ if (typeof window != 'undefined') {
     var TileLayer = require('react-leaflet').TileLayer;
     var Marker = require('react-leaflet').Marker;
     var Popup = require('react-leaflet').Popup;
+    var Tooltip = require('react-leaflet').Tooltip;
     var MarkerClusterGroup =  "react-leaflet-markercluster";
 
 }
@@ -179,7 +180,7 @@ const useStyles = makeStyles((theme) => ({
         backgroundRepeat: "no-repeat",
         "background-position-x": "5px",
         "background-position-y": "1px",
-        "background-size": "11%",
+        "background-size": "14%",
     },
     favorite: {
         display: "flex",
@@ -298,7 +299,7 @@ const carto = () => {
 
     const styles = useStyles()
 
-    const position = [45.9876806, -0.9344537]
+    const position = [46.1085193, -0.9864794]
 
     if (typeof window != 'undefined') {
 
@@ -353,7 +354,7 @@ const carto = () => {
                     </Grid>
 
                     <Grid item xs={10} >
-                        <Map ref={mapRef} center={position} zoom={9}>
+                        <Map ref={mapRef} center={position} zoom={11}>
                             <TileLayer
                                 attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -383,7 +384,36 @@ const carto = () => {
                                     return (
                                         <Marker key={`marker-${index}`} position={[actor.lat, actor.lng]}
                                                 icon={suitcasePoint}>
+                                            <Tooltip>
+                                                <div className={styles.image}>
+                                                    <div className={styles.categorie}>
+                                                        <Typography className={styles.categorie} gutterBottom>
+                                                            {actor.categories && actor.categories.length > 0 && actor.categories[0].label}
+                                                        </Typography>
+                                                    </div>
+                                                </div>
+                                                <div className={styles.content}>
+                                                    <Grid container>
+                                                        <Grid item xs={10}>
+                                                            <div className={styles.titleDiv}>
+                                                                <Typography variant="h6" component="h2"
+                                                                            className={styles.title}>
+                                                                    {actor && actor.name}
+                                                                </Typography>
+                                                            </div>
+                                                        </Grid>
+
+                                                    </Grid>
+
+
+                                                    <Typography component="p">
+                                                        {actor && actor.short_description}
+                                                    </Typography>
+                                                </div>
+
+                                            </Tooltip>
                                             <Popup>
+
 
                                                 <div className={styles.image}>
                                                     <div className={styles.categorie}>
@@ -422,6 +452,7 @@ const carto = () => {
                                                 <Link href={"/actor/" + actor.id}>
                                                     <button className={styles.buttonGrid}>EN SAVOIR PLUS</button>
                                                 </Link>
+
                                             </Popup>
                                         </Marker>)
                                 }
