@@ -47,6 +47,7 @@
         "react-leaflet": "^2.7.0",
         "react-leaflet-markercluster": "^2.0.0",
         "react-moment": "^0.9.7",
+        "react-ga": "^2.7.0",
         "react-router-dom": "^5.2.0",
         "react-slick": "^0.27.10",
         "react-timestamp": "^5.1.0",
