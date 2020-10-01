@@ -9,7 +9,7 @@ import ClassicButton from "components/buttons/ClassicButton"
 import SearchIcon from '@material-ui/icons/Search';
 import {useSessionState} from 'context/session/session';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles( theme => ({
   newsletter:{
     paddingTop :"5em",
     paddingBottom :"5em",
@@ -24,6 +24,15 @@ const useStyles = makeStyles({
     borderRadius: '9em',
     width: '35%',
     margin: "0 auto",
+    [theme.breakpoints.down('md')]: {
+      width: '50%',
+    },
+    [theme.breakpoints.down('sm')]: {
+      width: '70%',
+    },
+    [theme.breakpoints.down('xs')]: {
+      width: '90%',
+    },
   },
   searchIcon: {
     width: "56px",
@@ -39,7 +48,13 @@ const useStyles = makeStyles({
     justifyContent: "center",
     '&:hover': {
       cursor: "pointer",
-    }
+    },
+    [theme.breakpoints.down('sm')]: {
+      position: 'relative',
+      width: '30%',
+      margin: '1.4rem auto 0.5rem auto',
+      alignItems: 'center',
+    },
   },
   inputRoot: {
     width:"100%",
@@ -49,10 +64,15 @@ const useStyles = makeStyles({
     height: "36px",
     color: "#A3A3A3",
     fontStyle: "italic",
-    //paddingLeft: "20px",
     margin: "0",
     '& div': {
       borderRadius: "30px",
+      [theme.breakpoints.down('sm')]: {
+        fontSize: "0.8rem",
+      },
+    },
+    '& input': {
+      padding: "18.5px 14px",
     },
     '& fieldset': {
       borderRadius: "30px",
@@ -65,6 +85,9 @@ const useStyles = makeStyles({
     color: "#2a9076",
     letterSpacing: "2px",
     marginBottom: "3em",
+    [theme.breakpoints.down('sm')]: {
+      fontSize: "1.5em",
+    },
   },
   buttonGrid:{
     "color":"white",
@@ -74,7 +97,7 @@ const useStyles = makeStyles({
     fontSize: "18px",
     borderRadius: "1.5em",
     padding: "0 3em 0 3em",
-    height: "2.5em",
+    height: "52px",
     "&:hover": {
         cursor: "pointer",
         "color":"#bf083e",
@@ -86,7 +109,7 @@ const useStyles = makeStyles({
     "background-position-y": "1px",
     "background-size": "11%",
   },
-})
+}))
 
 const ADD_NEWSLETTER_EMAIL = gql`
   mutation createNewsletterEmail (
@@ -143,7 +166,7 @@ const Newsletter = () => {
       }
       if (!errorVisitor && !errorUser)
         setSubscribed(true)
-    }, [newsletterEmail, newsletterUser, formValues, subscribed, setSubscribed, dataVisitor, dataUser])
+    }, [newsletterEmail, newsletterUser, formValues, setSubscribed, errorVisitor, errorUser, user])
 
     return (
       <Container className={[styles.newsletter]}>

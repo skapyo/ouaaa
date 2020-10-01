@@ -10,7 +10,8 @@ const useStyles = makeStyles((theme) => ({
     cardTitle:{
         "color":theme.typography.h5.color,
         fontFamily: theme.typography.h5.fontFamily,
-    },align: {
+    },
+    align: {
         "text-align": "center"
     },
     actorContainer:{
@@ -44,7 +45,8 @@ const useStyles = makeStyles((theme) => ({
     buttonArticle:{
         paddingTop :"1em",
         paddingBottom :"1em"
-    },event:{
+    },
+    event:{
         paddingTop :"5em",
         paddingBottom :"5em",
         textAlign: "center",

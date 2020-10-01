@@ -23,15 +23,20 @@ const useStyles = makeStyles((theme) => ({
         "max-width": '755px',
         "margin-top": '-53px',
         "box-shadow": "0px 0px 38px -14px rgba(0, 0, 0, 0.46)",
-    }
-    ,
-
+        [theme.breakpoints.down('sm')]: {
+            marginLeft: '0', 
+            marginRight: '0',
+            width: '100%', 
+        },
+    },
     inprogress:{
         color:"#bf083e",
         textAlign: "center",
         paddingTop: "2em",
         fontSize: "2em",
-
+        [theme.breakpoints.down('sm')]: {
+            fontSize: '1.4em',
+        },
     },
     align: {
         "text-align": "center"
@@ -59,8 +64,8 @@ const useStyles = makeStyles((theme) => ({
         border: "none",
         fontFamily: 'rowdies',
         borderRadius: "1.5em",
-        padding: "0 3em 0 3em",
-        height: "2.5em",
+        padding: "0.2em 3em 0.2em 3em",
+        minHeight: "2.5em",
         "&:hover": {
             cursor: "pointer",
             "color":"#bf083e",
@@ -70,7 +75,10 @@ const useStyles = makeStyles((theme) => ({
         backgroundRepeat: "no-repeat",
         "background-position-x": "5px",
         "background-position-y": "1px",
-        fontSize:"1.2em"
+        fontSize:"1.2em",
+        [theme.breakpoints.down('sm')]: {
+            fontSize: '0.8em',
+        },
     },
     button:{
         margin:  "2.5em 0 2.5em 0 ",
@@ -80,7 +88,7 @@ const useStyles = makeStyles((theme) => ({
         fontFamily: 'rowdies',
         borderRadius: "1.5em",
         padding: "0 3em 0 3em",
-        height: "2.5em",
+        minHeight: "2.5em",
         "&:hover": {
             cursor: "pointer",
             "color":"#bf083e",
@@ -93,9 +101,11 @@ const useStyles = makeStyles((theme) => ({
         "background-size": "15%",
         marginBottom:"30px",
 
-    },map:{
+    },
+    map:{
         paddingLeft: "19%"
-    },titleGrid:{
+    },
+    titleGrid:{
         "color":"#2a9076",
         fontSize:"12px",
         lineHeight:"inherit"
@@ -107,7 +117,13 @@ const useStyles = makeStyles((theme) => ({
     improvement:{
         textAlign: "center",
         marginBottom:"4em"
-    }
+    },
+    flexColumn: {
+        [theme.breakpoints.down('sm')]: {
+            flexDirection: 'column',
+            alignItems: 'center',
+        },
+    },
 }))
 
 const PresentationSection = () => {
@@ -126,8 +142,8 @@ const PresentationSection = () => {
                   <button className={styles.buttonGrid} >Découvrir les prochaines fonctionnalités et faire un retour de la première version</button>
               </Link>
          </div>
-          <Grid container spacing={3} >
-              <Grid item xs={6}>
+          <Grid container spacing={3} className={styles.flexColumn} >
+              <Grid item md={6}>
                   <div  className={[styles.align]}>
                       <Typography variant="h5"   className={styles.cardTitle}  >
                           Ouaaa
@@ -138,7 +154,7 @@ const PresentationSection = () => {
                   </div>
                   <List className={styles.root}>
                       <ListItem>
-                          <ListItemText primary="Issu du milieu associatif : Le site est né de la volonté de 3 collectifs (Collectif Transition Citoyenne, Collectif Action Solidaire et Tiers Lieux la Proue) de disposer d’une vitrine pour se faire connaître, et disposer d’un agenda réactif pour publier leurs évènements."  />
+                          <ListItemText primary="Issu du milieu associatif : Le site est né de la volonté de 3 collectifs (Collectif Transition Citoyenne, Collectif Action Solidaire et Tiers Lieux la Proue) de disposer d’une vitrine pour se faire connaître, et disposer d’un agenda réactif pour publier leurs évènements."/>
                       </ListItem>
                       <ListItem>
                           <ListItemText primary="Créé pour et par les acteurs de la transition : Le site a été créé sur mesure par une équipe de bénévoles motivés, il permet aux acteurs de la transition de renseigner eux-mêmes leurs informations. Il sera adossé à une rencontre physique régulière, afin que virtuel et réel se complètent."/>
@@ -150,7 +166,7 @@ const PresentationSection = () => {
 
                 </Grid>
 
-              <Grid item xs={6} className={styles.align}>
+              <Grid item md={6} className={styles.align}>
                   <img width={"60%"} className={styles.image}
                        src="./image_card.jpg"
                   />
@@ -166,8 +182,8 @@ const PresentationSection = () => {
               C'EST POUR QUI ?
           </Typography>
 
-          <Grid container justify="center"  className={styles.align}>
-              <Grid item xs={5} className={[styles.gridItem,styles.align]}>
+          <Grid container justify="center"  className={styles.align, styles.flexColumn}>
+              <Grid item md={5} sm={10} className={[styles.gridItem,styles.align]}>
                   <img width={"20%"}
                        src="./people.svg" className={styles.imageGrid}
                   />
@@ -182,7 +198,7 @@ const PresentationSection = () => {
                       </button>
                   </Link>
               </Grid>
-              <Grid item xs={5} className={[styles.gridItem,styles.align]}>
+              <Grid item md={5} sm={10} className={[styles.gridItem,styles.align]}>
                   <img width={"20%"} className={styles.imageGrid}
                        src="./organisation.svg"
                   />
