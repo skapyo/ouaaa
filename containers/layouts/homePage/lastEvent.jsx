@@ -5,12 +5,13 @@ import {useQuery} from "@apollo/react-hooks";
 import gql from "graphql-tag"
 import {withApollo} from "../../../hoc/withApollo";
 import CardSliderEvent from "../../../components/cards/CardSliderEvent";
-
+import Link from "../../../components/Link";
 const useStyles = makeStyles((theme) => ({
     cardTitle:{
         "color":theme.typography.h5.color,
         fontFamily: theme.typography.h5.fontFamily,
-    },align: {
+    },
+    align: {
         "text-align": "center"
     },
     actorContainer:{
@@ -29,6 +30,8 @@ const useStyles = makeStyles((theme) => ({
         height: "2.5em",
         "&:hover": {
             cursor: "pointer",
+            "color":"#bf083e",
+            "background-color":"white",
         },
         backgroundImage:`url('./arrow.svg')`,
         backgroundRepeat: "no-repeat",
@@ -42,7 +45,8 @@ const useStyles = makeStyles((theme) => ({
     buttonArticle:{
         paddingTop :"1em",
         paddingBottom :"1em"
-    },event:{
+    },
+    event:{
         paddingTop :"5em",
         paddingBottom :"5em",
         textAlign: "center",
@@ -153,7 +157,9 @@ const LastActor = () => {
                   })}
               </Slider>
               <div className={styles.buttonArticle} >
-                  <button className={styles.buttonGrid}  >VOIR TOUT LES ARTICLES</button>
+                  <Link  href="/agenda">
+                    <button className={styles.buttonGrid}  >VOIR TOUT LES EVENEMENTS</button>
+                  </Link>
               </div>
           </Container>
 

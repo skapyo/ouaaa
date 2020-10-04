@@ -48,6 +48,11 @@ const theme = createMuiTheme({
           color:"#2a9076",
           fontFamily: 'rowdies',
       },
+      h1 : {
+          fontSize: "4rem",
+          color:"#2a9076",
+          fontFamily: 'rowdies',
+      },
   }
 })
 

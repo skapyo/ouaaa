@@ -113,6 +113,7 @@ const useStyles = makeStyles((theme) => ({
         "background-position-x": "5px",
         "background-position-y": "1px",
         "background-size": "11%",
+        fontSize:"1.2em",
     },
     buttonInverse:{
         margin:  "2.5em 0 2.5em 0 ",
@@ -135,6 +136,7 @@ const useStyles = makeStyles((theme) => ({
         "background-position-x": "5px",
         "background-position-y": "1px",
         "background-size": "11%",
+        fontSize:"1.2em",
     },
     buttonParticipate:{
         paddingTop :"1em",

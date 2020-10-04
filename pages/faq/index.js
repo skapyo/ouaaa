@@ -24,7 +24,7 @@ const Faq = () => {
             <RootRef >
                 <Box>
                     <Container className={styles.align} >
-                        <Typography variant="h1" >Foire auw questions</Typography>
+                        <Typography variant="h1" >Foire aux questions</Typography>
                         <Typography variant="h4" >En cours de construction</Typography>
                     </Container>
                     <Newsletter />

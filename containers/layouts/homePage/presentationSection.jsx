@@ -21,6 +21,7 @@ const useStyles = makeStyles((theme) => ({
     titleTypo: {
         fontSize:"2em",
         fontFamily: 'rowdies',
+        color:"white"
     },
     search: {
 
@@ -31,7 +32,8 @@ const useStyles = makeStyles((theme) => ({
         width: '35%',
         margin: "0 auto",
         marginTop :theme.spacing(2),
-        color:'black'
+        color:'black',
+        display:"none"
     },
     searchIcon: {
         padding: theme.spacing(0, 1),
@@ -68,11 +70,11 @@ const PresentationSection = () => {
       <Container className={styles.titleContainer} >
           <div className={styles.title}>
               <Typography className={styles.titleTypo} variant="h1" >
-                  OUtils des Acteurs Alternatifs en AUNIS
+                  OUtils des Acteurs Alternatifs en Aunis
               </Typography>
           </div>
           <Typography className={styles.align} >
-              Notre mission c'est de faire connaître celles et ceux qui œuvrent  <br />pour la transition écologique, sociale et démocratique en Aunis
+              Notre mission : faire connaître celles et ceux qui œuvrent  <br />pour la transition écologique, sociale et démocratique en Aunis
           </Typography>
           <div className={styles.search}  >
               <div className={styles.searchIcon}>

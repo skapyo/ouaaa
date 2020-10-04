@@ -48,7 +48,7 @@ const AccountPage = () => {
                             Ma photo
                         </Typography>
                         <Avatar className={styles.avatar}/>
-                        <ClassicButton>Modifier ma photo</ClassicButton>
+
                     </Grid>
 
                 </Grid>

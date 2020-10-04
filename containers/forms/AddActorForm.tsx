@@ -4,6 +4,7 @@ import {Container, Grid, makeStyles, Typography} from "@material-ui/core"
 import TextField from "components/form/TextField"
 import ClassicButton from "components/buttons/ClassicButton"
 import {withApollo} from "hoc/withApollo"
+import { withRouter } from 'next/router';
 import {useSessionDispatch, useSessionState} from "context/session/session"
 import gql from "graphql-tag"
 import graphqlTag from "graphql-tag"
@@ -23,6 +24,7 @@ import {QueryOptions, ValidationRules, ValidationRuleType} from "../../component
 import useCookieRedirection from "../../hooks/useCookieRedirection";
 import {useRouter} from "next/router";
 import {useCookies} from "react-cookie";
+import Router from "next/router";
 
 const CREATE_ACTOR = gql`
   mutation createActor($formValues: ActorInfos,$userId: Int!) {
@@ -329,14 +331,13 @@ const AddActorForm = () => {
     mutationResultControl: "builtin",
     afterResultControlCallback: useCallback(
         (formvalues, data, error) => {
-
           if (!error) {
-            setCookie('redirect_url', router.asPath, { path: '/actor/'+ data && data.id})
-            debugger;
-            redirect()
+
+
+              router.push('/actor/'+data.createActor.id)
           }
         },
-        []
+        [data,router]
     ),
 
     clearFormvaluesAfterControl:true
@@ -352,4 +353,4 @@ const AddActorForm = () => {
   )
 }
 
-export default withApollo()(AddActorForm);
+export default  withRouter(withApollo()(AddActorForm));

@@ -9,7 +9,7 @@ import PresentationSection from "../containers/layouts/homePage/presentationSect
 import ThreePoint from "../containers/layouts/homePage/threepoint";
 import LastActor from "../containers/layouts/homePage/lastActor";
 import LastEvent from "../containers/layouts/homePage/lastEvent";
-
+import ReactGA from 'react-ga';
 
 const useStyles = makeStyles((theme) => ({
 
@@ -37,6 +37,8 @@ const useStyles = makeStyles((theme) => ({
         height: "2.5em",
         "&:hover": {
             cursor: "pointer",
+            "color":"#bf083e",
+            "background-color":"white",
         },
         backgroundImage:`url('./arrow.svg')`,
         backgroundRepeat: "no-repeat",
@@ -68,6 +70,13 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor:"#e8f4f2"
     },
 }))
+
+
+
+
+
+
+
 function SampleNextArrow(props) {
     const { className, style, onClick } = props;
     return (

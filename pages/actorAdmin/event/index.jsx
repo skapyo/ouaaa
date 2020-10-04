@@ -54,7 +54,7 @@ const ActorAdminPage = () => {
                         variant='h6'
                         className={styles.userInfosTitle}
                     >
-                        Administrer un acteur : A venir
+                        Administrer un événement : A venir
                     </Typography>
             <FormControl component="fieldset">
                 <FormGroup>
