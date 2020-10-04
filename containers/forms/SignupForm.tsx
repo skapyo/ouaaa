@@ -1,9 +1,9 @@
 import gql from "graphql-tag"
 import {withApollo} from "hoc/withApollo"
 import FormController, {
-  RenderCallback,
-  ValidationRules,
-  ValidationRuleType
+    RenderCallback,
+    ValidationRules,
+    ValidationRuleType
 } from "components/controllers/FormController"
 import {Avatar, Box, Grid, IconButton, InputAdornment, makeStyles, TextField, Typography} from "@material-ui/core"
 import {useSnackbar} from 'notistack';
@@ -202,7 +202,7 @@ const SignupForm = () => {
               fullWidth
               name="password2"
               label="Confirmation du mot de passe"
-              ype={showPassword ? "text" : "password"}
+              type={showPassword ? "text" : "password"}
               defaultValue=""
               InputProps={{ // <-- This is where the toggle button is added.
                 endAdornment: (
@@ -249,7 +249,7 @@ const SignupForm = () => {
                     : "primary"
                 }
               >
-                Doit contenir entre 8 et 15 caractères
+                Doit contenir au moins 8 caractères
               </Typography>
               <Typography
                 color={

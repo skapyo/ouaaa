@@ -7,8 +7,7 @@ const validatePasswordFormat = (password : string) : string[] => {
     var schema = new passwordValidator();
 
     schema
-    .is().min(8)                                    
-    .is().max(15)                                  
+    .is().min(8)
     .has().uppercase()                              
     .has().lowercase()                             
     .has().digits()                                
