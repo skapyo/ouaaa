@@ -222,7 +222,6 @@ const AccountPage = () => {
                 <AddActorForm />
                 )}
             {!user && (
-                /* @ts-ignore */
                 <div>
                     <div className={styles.registerInfo}>
                         <div>
@@ -239,6 +238,7 @@ const AccountPage = () => {
                         </div>
                     </div>
                     <div>
+                        /* @ts-ignore */
                         <Link  href="/signin"   className={styles.buttonAuthentification}>
                             <ClassicButton onClick={signinClickHandler}>
                                 S'authentifier
