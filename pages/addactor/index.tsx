@@ -222,30 +222,12 @@ const AccountPage = () => {
                 <AddActorForm />
                 )}
             {!user && (
-                <div>
-                    <div className={styles.registerInfo}>
-                        <div>
-                            <Typography
-                            >
-                                Vous pouvez créer un compte générique pour l'administation de votre acteur
-                            </Typography>
-                        </div>
-                        <div>
-                            <Typography
-                            >
-                                ou un compte personnel qui permettera d'intéragir en votre nom sur l'outil
-                            </Typography>
-                        </div>
-                    </div>
-                    <div>
-                        /* @ts-ignore */
-                        <Link  href="/signin"   className={styles.buttonAuthentification}>
-                            <ClassicButton onClick={signinClickHandler}>
-                                S'authentifier
-                            </ClassicButton>
-                        </Link>
-                    </div>
-                </div>
+                /* @ts-ignore */
+                <Link  href="/signin"   className={styles.buttonAuthentification}>
+                    <ClassicButton onClick={signinClickHandler}>
+                        S'authentifier
+                    </ClassicButton>
+                </Link>
             )}
 
         </AddActorPageLayout>
