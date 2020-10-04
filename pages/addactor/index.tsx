@@ -227,14 +227,12 @@ const AccountPage = () => {
                     <div className={styles.registerInfo}>
                         <div>
                             <Typography
-                                variant="body" component="p"
                             >
                                 Vous pouvez créer un compte générique pour l'administation de votre acteur
                             </Typography>
                         </div>
                         <div>
                             <Typography
-                                variant="body" component="p"
                             >
                                 ou un compte personnel qui permettera d'intéragir en votre nom sur l'outil
                             </Typography>
