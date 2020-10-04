@@ -137,6 +137,9 @@ const useStyles = makeStyles((theme) => ({
     },
     buttonAuthentification:{
         backgroundColor: "#bf083e!important",
+    },
+    registerInfo:{
+        padding:"2em",
     }
 
 }))
@@ -220,11 +223,31 @@ const AccountPage = () => {
                 )}
             {!user && (
                 /* @ts-ignore */
-                <Link  href="/signin"   className={styles.buttonAuthentification}>
-                    <ClassicButton onClick={signinClickHandler}>
-                        S'authentifier
-                    </ClassicButton>
-                </Link>
+                <div>
+                    <div className={styles.registerInfo}>
+                        <div>
+                            <Typography
+                                variant='body'
+                            >
+                                Vous pouvez créer un compte générique pour l'administation de votre acteur
+                            </Typography>
+                        </div>
+                        <div>
+                            <Typography
+                                variant='body'
+                            >
+                                ou un compte personnel qui permettera d'intéragir en votre nom sur l'outil
+                            </Typography>
+                        </div>
+                    </div>
+                    <div>
+                        <Link  href="/signin"   className={styles.buttonAuthentification}>
+                            <ClassicButton onClick={signinClickHandler}>
+                                S'authentifier
+                            </ClassicButton>
+                        </Link>
+                    </div>
+                </div>
             )}
 
         </AddActorPageLayout>

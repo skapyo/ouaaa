@@ -5,7 +5,7 @@ import FormController, {
   ValidationRules,
   ValidationRuleType
 } from "components/controllers/FormController"
-import {Avatar, Box, Grid, makeStyles, TextField, Typography} from "@material-ui/core"
+import {Avatar, Box, Grid, IconButton, InputAdornment, makeStyles, TextField, Typography} from "@material-ui/core"
 import {useSnackbar} from 'notistack';
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined"
 import ClassicButton from "components/buttons/ClassicButton"
@@ -14,6 +14,8 @@ import {useMutation} from "@apollo/react-hooks"
 import {useCallback, useEffect, useState} from "react"
 import useGraphQLErrorDisplay from "hooks/useGraphQLErrorDisplay"
 import useCookieRedirection from "hooks/useCookieRedirection"
+import Visibility from "@material-ui/icons/Visibility";
+import VisibilityOff from "@material-ui/icons/VisibilityOff"
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -89,7 +91,9 @@ const SignupForm = () => {
     const { enqueueSnackbar, closeSnackbar } = useSnackbar()
     const [clicked, setClicked] = useState(false);
     const [email, setEmail] = useState('* email *');
-
+    const [showPassword, setShowPassword] = useState(false);
+    const handleClickShowPassword = () => setShowPassword(!showPassword);
+    const handleMouseDownPassword = () => setShowPassword(!showPassword);
     const submitHandler2 = useCallback(() => {
       signup({
         variables: {
@@ -172,8 +176,21 @@ const SignupForm = () => {
               fullWidth
               name="password"
               label="Mot de passe"
-              type="password"
+              type={showPassword ? "text" : "password"}
               defaultValue=""
+              InputProps={{ // <-- This is where the toggle button is added.
+                endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={handleClickShowPassword}
+                          onMouseDown={handleMouseDownPassword}
+                      >
+                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                      </IconButton>
+                    </InputAdornment>
+                )
+              }}
               value={formValues?.password}
               onChange={formChangeHandler}
               disabled={clicked}
@@ -185,8 +202,21 @@ const SignupForm = () => {
               fullWidth
               name="password2"
               label="Confirmation du mot de passe"
-              type="password"
+              ype={showPassword ? "text" : "password"}
               defaultValue=""
+              InputProps={{ // <-- This is where the toggle button is added.
+                endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={handleClickShowPassword}
+                          onMouseDown={handleMouseDownPassword}
+                      >
+                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                      </IconButton>
+                    </InputAdornment>
+                )
+              }}
               value={formValues?.password2}
               onChange={formChangeHandler}
               disabled={clicked}

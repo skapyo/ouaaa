@@ -1,20 +1,22 @@
 import gql from "graphql-tag"
 import {withApollo} from "hoc/withApollo"
 import FormController, {
-  RenderCallback,
-  ValidationRules,
-  ValidationRuleType
+    RenderCallback,
+    ValidationRules,
+    ValidationRuleType
 } from "components/controllers/FormController"
 import {
-  Avatar,
-  Box,
-  Checkbox,
-  Container,
-  FormControlLabel,
-  Grid,
-  makeStyles,
-  TextField,
-  Typography
+    Avatar,
+    Box,
+    Checkbox,
+    Container,
+    FormControlLabel,
+    Grid,
+    IconButton,
+    InputAdornment,
+    makeStyles,
+    TextField,
+    Typography
 } from "@material-ui/core"
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined"
 import ClassicButton from "components/buttons/ClassicButton"
@@ -26,6 +28,8 @@ import omitTypename from "utils/omitTypename"
 import useGraphQLErrorDisplay from "hooks/useGraphQLErrorDisplay"
 import useCookieRedirection from "hooks/useCookieRedirection"
 import FallbackEmailNotValidated from "containers/fallbacks/FallbackEmailNotValidated"
+import Visibility from "@material-ui/icons/Visibility";
+import VisibilityOff from "@material-ui/icons/VisibilityOff"
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -92,7 +96,9 @@ const SigninForm = () => {
     const [validEmail, setValidEmail] = useState(true)
     const sessionDispatch = useSessionDispatch()
     const redirect = useCookieRedirection()
-
+    const [showPassword, setShowPassword] = useState(false);
+    const handleClickShowPassword = () => setShowPassword(!showPassword);
+    const handleMouseDownPassword = () => setShowPassword(!showPassword);
     const checkBoxChangeHandler = useCallback(
       (e) => {
         setCheckBoxChecked(e.target.checked)
@@ -155,9 +161,22 @@ const SigninForm = () => {
               fullWidth
               name="password"
               label="Mot de passe"
-              type="password"
+              type={showPassword ? "text" : "password"}
               autoComplete="current-password"
               defaultValue=""
+              InputProps={{ // <-- This is where the toggle button is added.
+                endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={handleClickShowPassword}
+                          onMouseDown={handleMouseDownPassword}
+                      >
+                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                      </IconButton>
+                    </InputAdornment>
+                )
+              }}
               value={formValues?.password}
               onChange={formChangeHandler}
             />
