@@ -241,18 +241,21 @@ debugger;
           inputName="phone"
           formChangeHandler={formChangeHandler}
           value={formValues.phone}
+          required={false}
         />
         <FormItem
             label="Site Internet"
             inputName="website"
             formChangeHandler={formChangeHandler}
             value={formValues.website}
+            required={false}
         />
         <FormItemTextareaAutosize
             label="Description"
             inputName="description"
             formChangeHandler={formChangeHandler}
             value={formValues.description}
+            required={false}
         />
         <div  className={styles.field}>
         <Grid className={styles.location}>

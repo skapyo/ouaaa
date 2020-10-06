@@ -135,7 +135,7 @@ const AddEventForm = ({actorId}) => {
       // check if at least one checkbox is checked
       if (!(formValues.categories && formValues.categories.length > 0)) return false
       if (!address && !city) return false
-      if (selectedStartDate >= selectedEndDate) return false
+      if (selectedStartDate&& selectedEndDate &&  (selectedStartDate >= selectedEndDate)) return false
       // detail error cases
       return true
     }, [formValues, state, address, city])
