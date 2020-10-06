@@ -6,15 +6,22 @@ import ClassicButton from "components/buttons/ClassicButton"
 import FormController, {RenderCallback} from "components/controllers/FormController"
 import {useMutation, useQuery} from "@apollo/react-hooks"
 import useGraphQLErrorDisplay from "hooks/useGraphQLErrorDisplay"
-import FormControl from '@material-ui/core/FormControl';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import useCookieRedirection from "hooks/useCookieRedirection"
 import {useSnackbar} from 'notistack';
 import GooglePlacesAutocomplete, {geocodeByAddress, getLatLng} from 'react-google-places-autocomplete';
 import {useSessionState} from "../../context/session/session";
 import {useRouter} from "next/router";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText/ListItemText";
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
+import Collapse from "@material-ui/core/Collapse/Collapse";
+import DateFnsUtils from '@date-io/date-fns';
+import {KeyboardDatePicker, KeyboardTimePicker, MuiPickersUtilsProvider,} from '@material-ui/pickers';
+
 const useStyles = makeStyles((theme) => ({
   field: {
     marginBottom: theme.spacing(3),
@@ -82,6 +89,11 @@ query categories {
     id,
     label,
     activated
+    subCategories {
+      id
+      label
+      icon
+    }
   }
 }
 `;
@@ -104,18 +116,46 @@ const AddEventForm = ({actorId}) => {
     const [address, setAddress] = useState("")
     const [city, setCity] = useState("")
 
+    const [selectedStartDate, setSelectedStartDate] = React.useState<Date | null>(
+        new Date(),
+    );
+    const [selectedEndDate, setSelectedEndDate] = React.useState<Date | null>(
+        new Date(),
+    );
+
+    const handleStartDateChange = (date: Date | null) => {
+      setSelectedStartDate(date);
+    };
+    const handleEndDateChange = (date: Date | null) => {
+      setSelectedEndDate(date);
+    };
+
     const validateFields = useCallback(() => {
       if (formValues.shortDescription && formValues.shortDescription.length > 240) return false
       // check if at least one checkbox is checked
-      if (Object.values(state).find(element => element == true) == undefined) return false
+      if (!(formValues.categories && formValues.categories.length > 0)) return false
       if (!address && !city) return false
-      if (formValues.startDate >= formValues.endDate) return false
+      if (selectedStartDate >= selectedEndDate) return false
       // detail error cases
       return true
     }, [formValues, state, address, city])
 
     const handleChange = (category: any, event: React.ChangeEvent<HTMLInputElement>) => {
       setState({ ...state, [category.id.toString()]: event.target.checked });
+    }
+    const [checked, setChecked] = useState([0]);
+    const handleToggle = (value: number, index: number) => () => {
+      const currentIndex = checked.indexOf(value);
+      const newChecked = [...checked];
+
+      if (currentIndex === -1) {
+        newChecked.push(value);
+      } else {
+        newChecked.splice(currentIndex, 1);
+      }
+
+      setChecked(newChecked);
+      open[index]=!open[index];
     }
 
     const getObjectLongName = (results, name) => {
@@ -160,10 +200,10 @@ const AddEventForm = ({actorId}) => {
             shortDescription: formValues.shortDescription,
             facebookUrl: formValues.facebookUrl,
             description: formValues.description,
-            startedAt: formValues.startDate,
-            endedAt: formValues.endDate,
+            startedAt: selectedStartDate,
+            endedAt: selectedEndDate,
             published: false,
-            categories: categoriesArray,
+            categories: formValues.categories,
             lat: parseFloat(formValues.lat),
             lng: parseFloat(formValues.lng),
             address: address,
@@ -235,48 +275,96 @@ const AddEventForm = ({actorId}) => {
           rows={6}
         />
         <Grid className={styles.datetime}>
-          <TextField
-            className={styles.field}
-            variant="outlined"
-            id="datetime-local"
-            label="Date de début"
-            type="datetime-local"
-            name="startDate"
-            value={formValues.startDate}
-            onChange={formChangeHandler}
-            InputLabelProps={{
-              shrink: true,
-            }}
-          />
-          <TextField
-            className={styles.field}
-            variant="outlined"
-            id="datetime-local"
-            label="Date de fin"
-            type="datetime-local"
-            name="endDate"
-            value={formValues.endDate}
-            onChange={formChangeHandler}
-            InputLabelProps={{
-              shrink: true,
-            }}
-          />
+          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <Grid container justify="space-around">
+            <KeyboardDatePicker
+                disableToolbar
+                variant="inline"
+                format="dd/MM/yyyy"
+                margin="normal"
+                id="date-picker-inline"
+                label="Date de début"
+                value={selectedStartDate}
+                onChange={handleStartDateChange}
+                KeyboardButtonProps={{
+                  'aria-label': 'change date',
+                }}
+            />
+            <KeyboardTimePicker
+                margin="normal"
+                id="time-picker"
+                label="Heure de début"
+                value={selectedStartDate}
+                onChange={handleStartDateChange}
+                KeyboardButtonProps={{
+                  'aria-label': 'change time',
+                }}
+            />
+            <KeyboardDatePicker
+                disableToolbar
+                variant="inline"
+                format="dd/MM/yyyy"
+                margin="normal"
+                id="date-picker-inline"
+                label="Date de fin"
+                value={selectedEndDate}
+                onChange={handleEndDateChange}
+                KeyboardButtonProps={{
+                  'aria-label': 'change date',
+                }}
+            />
+            <KeyboardTimePicker
+                margin="normal"
+                id="time-picker"
+                label="Heure de fin"
+                value={selectedEndDate}
+                onChange={handleEndDateChange}
+                KeyboardButtonProps={{
+                  'aria-label': 'change time',
+                }}
+            />
+            </Grid>
+          </MuiPickersUtilsProvider>
         </Grid>
         <Grid>
           <Typography>Catégorie(s) de l'événement</Typography>
-          <FormControl component="fieldset">
-            <FormGroup>
-              {
-                categoryData && categoryData.categories.map((category: any) =>
-                  <FormControlLabel
-                    control={<Checkbox checked={state[category.id.toString()]} onChange={(e) => handleChange(category, e)} name={category.label} />}
-                    label={category.label}
-                    className={styles.categories}
-                  />
-                )
-              }
-            </FormGroup>
-          </FormControl>
+          <List  className={styles.field}>
+            {typeof categoryData !== "undefined" && categoryData.categories.map((category, index) => {
+              return (
+                  <div>
+                    <ListItem key={category.id} role={undefined} dense button onClick={handleToggle(0, index)}>
+                      <ListItemIcon>
+                      </ListItemIcon>
+                      <ListItemText primary={category.label}/>
+                      {open[index] ? <ExpandLess /> : <ExpandMore />}
+                    </ListItem>
+                    {typeof category.subCategories !== "undefined" && category.subCategories !=null && category.subCategories.map((subcategory, subIndex) => {
+                      return (
+                          <Collapse in={open[index]} timeout="auto" unmountOnExit>
+
+                            <List component="div" disablePadding>
+                              <ListItem button >
+                                <ListItemIcon>
+                                  <Checkbox
+                                      edge="start"
+                                      tabIndex={-1}
+                                      disableRipple
+                                      onChange={formChangeHandler}
+                                      name="categories"
+                                      value={subcategory.id}
+                                  />
+                                </ListItemIcon>
+                                <ListItemText  primary={subcategory.label} />
+                              </ListItem>
+                            </List>
+                          </Collapse>
+                      );
+                    })}
+                  </div>
+              );
+            })
+            }
+          </List>
         </Grid>
         <Grid className={styles.location}>
           <Typography>Lieu</Typography>

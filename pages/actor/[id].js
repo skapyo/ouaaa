@@ -354,9 +354,13 @@ const Actor = () => {
                                     <Typography variant="h5"   className={styles.cardTitle}  >
                                         {data && data.actor.name}
                                     </Typography>
-                                    <Typography variant="h7"   className={styles.cardTitleCategories}  >
-                                        {data && data.actor.categories && data.actor.categories.length>0 && data.actor.categories[0].parentCategory && data.actor.categories[0].parentCategory.label} : {data && data.actor.categories && data.actor.categories.length>0 && data.actor.categories[0]&& data.actor.categories[0].label}
-                                    </Typography>
+                                    {data && data.actor.categories.map((category) => {
+                                        return(<div><Typography variant="h7"
+                                                                className={styles.cardTitleCategories}> {category.parentCategory
+                                            && category.parentCategory.label} : {category &&
+                                            category.label} </Typography></div>
+                                        )
+                                    })}
                                 </div>
                                 <p>{data && data.actor.description}</p>
                                 <div  >

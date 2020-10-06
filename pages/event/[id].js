@@ -330,9 +330,14 @@ const Event = () => {
                                     <Typography variant="h5"   className={styles.cardTitle}  >
                                         {data && data.event.label}
                                     </Typography>
-                                    <Typography variant="h7"   className={styles.cardTitleCategories}  >
-                                        {data && data.event.categories && data.event.categories.length>0 && data.event.categories[0].parentCategory && data.event.categories[0].parentCategory.label} : {data && data.event.categories && data.event.categories.length>0 && data.event.categories[0] && data.event.categories[0].label}
-                                    </Typography>
+                                        {data && data.event.categories.map((category) => {
+                                            return(<div><Typography variant="h7"
+                                                        className={styles.cardTitleCategories}> {category.parentCategory
+                                                && category.parentCategory.label} : {category &&
+                                                category.label} </Typography></div>
+                                            )
+                                        })}
+
                                 </div>
                                 <p>{data && data.event.description}</p>
                                 <div  >
