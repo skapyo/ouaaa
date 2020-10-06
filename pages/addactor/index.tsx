@@ -177,7 +177,7 @@ const AccountPage = () => {
 
     const steps = getSteps();
     function getSteps() {
-        return ['Authentifiez vous', 'Ajoutez vos informations'];
+        return ['Authentifiez vous', "Ajoutez vos informations d'acteur"];
     }
     const user = useSessionState()
 

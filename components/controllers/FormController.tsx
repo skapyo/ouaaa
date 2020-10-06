@@ -159,9 +159,9 @@ const FormController = (props: FormControllerProps, ...otherprops: any[]) => {
   const [formValues, setFormValue] = useState({ ...initValues })
   const [initialFormValues, setInitialFormValues] = useState({ ...initValues })
   const [validationResult, setValidationResult] = useState<ValidationResult>()
-
   const formChangeHandler = useCallback(
     (e) => {
+
       // if there an only rule on the field
       const rule = validationRules?.[e.target.name]
       if (rule?.rule === ValidationRuleType.only) {
@@ -177,7 +177,26 @@ const FormController = (props: FormControllerProps, ...otherprops: any[]) => {
             setFormValue({ ...formValues, [e.target.name]: e.target.value })
         }
       } else {
-        setFormValue({ ...formValues, [e.target.name]: e.target.value })
+
+        if(e.target.type=="checkbox"){
+          var  categoriesArray
+          if(formValues[e.target.name]!=undefined){
+             categoriesArray= formValues[e.target.name]
+          }else{
+            categoriesArray= [];
+          }
+           if(e.target.checked){
+             categoriesArray.push(e.target.value)
+           }else{
+             var index = categoriesArray.indexOf(e.target.value);
+             if (index > -1) {
+               categoriesArray.splice(index, 1);
+             }
+           }
+          setFormValue({ ...formValues, [e.target.name]: categoriesArray })
+        }else {
+          setFormValue({...formValues, [e.target.name]: e.target.value})
+        }
       }
     },
     [setFormValue, formValues, validationRules]

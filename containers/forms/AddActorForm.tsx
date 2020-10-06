@@ -4,7 +4,7 @@ import {Container, Grid, makeStyles, Typography} from "@material-ui/core"
 import TextField from "components/form/TextField"
 import ClassicButton from "components/buttons/ClassicButton"
 import {withApollo} from "hoc/withApollo"
-import { withRouter } from 'next/router';
+import {useRouter, withRouter} from 'next/router';
 import {useSessionDispatch, useSessionState} from "context/session/session"
 import gql from "graphql-tag"
 import graphqlTag from "graphql-tag"
@@ -22,9 +22,7 @@ import Collapse from '@material-ui/core/Collapse';
 import {Redirect} from 'react-router-dom'
 import {QueryOptions, ValidationRules, ValidationRuleType} from "../../components/controllers/FormController";
 import useCookieRedirection from "../../hooks/useCookieRedirection";
-import {useRouter} from "next/router";
 import {useCookies} from "react-cookie";
-import Router from "next/router";
 
 const CREATE_ACTOR = gql`
   mutation createActor($formValues: ActorInfos,$userId: Int!) {
@@ -106,13 +104,14 @@ type FormItemProps = {
   label: string
   inputName: string
   formChangeHandler: (event: ChangeEvent) => void
-  value: string
+  value: string,
+  required:boolean
 }
 
 const FormItem = (props: FormItemProps) => {
 
   const styles = useStyles()
-  const { label, inputName, formChangeHandler, value } = props
+  const { label, inputName, formChangeHandler, value, required } = props
   return (
     <>
       <TextField
@@ -124,7 +123,7 @@ const FormItem = (props: FormItemProps) => {
         onChange={formChangeHandler}
         defaultValue=""
         fullWidth
-        required
+          required={required}
       />
     </>
   )
@@ -132,7 +131,7 @@ const FormItem = (props: FormItemProps) => {
 
 const FormItemTextareaAutosize = (props: FormItemProps) => {
   const styles = useStyles()
-  const { label, inputName, formChangeHandler, value } = props
+  const { label, inputName, formChangeHandler, value, required } = props
   return (
       <>
       <TextField
@@ -146,7 +145,7 @@ const FormItemTextareaAutosize = (props: FormItemProps) => {
           onChange={formChangeHandler}
           defaultValue=""
           fullWidth
-          required
+          required={required}
       />
       </>
   )
@@ -189,7 +188,14 @@ const AddActorForm = () => {
     setChecked(newChecked);
     open[index]=!open[index];
   }
-
+  const validationRules: ValidationRules = {
+    name: {
+      rule: ValidationRuleType.required,
+    },
+    email: {
+      rule: ValidationRuleType.required && ValidationRuleType.email,
+    }
+  }
   const Form: RenderCallback = ({
     formChangeHandler,
     submitHandler,
@@ -208,7 +214,7 @@ const AddActorForm = () => {
     }
   
     const getAddressDetails = (results) => {
-
+debugger;
       formValues.address = (getObjectLongName(results, "street_number") + " " + getObjectLongName(results, "route")).trim()
       formValues.city = getObjectLongName(results, "locality")
       formValues.postCode = getObjectLongName(results, "postal_code")
@@ -221,12 +227,14 @@ const AddActorForm = () => {
           inputName="name"
           formChangeHandler={formChangeHandler}
           value={formValues.name}
+          required={true}
         />
         <FormItem
           label="Email"
           inputName="email"
           formChangeHandler={formChangeHandler}
           value={formValues.email}
+          required={true}
         />
         <FormItem
           label="Téléphone"
@@ -249,8 +257,8 @@ const AddActorForm = () => {
         <div  className={styles.field}>
         <Grid className={styles.location}>
           <GooglePlacesAutocomplete
-            placeholder="Taper et sélectionner l'adresse *"
-            initialValue={formValues.address && formValues.address.concat(" ").concat(formValues.postCode).concat(" ").concat(formValues.city)}
+            placeholder="Taper et sélectionner la localisation *"
+            initialValue={formValues.address?formValues.address.concat(" ").concat(formValues.postCode).concat(" ").concat(formValues.city):formValues.city&&formValues.city}
             onSelect={({ description }) => (
               geocodeByAddress(description).then(results => {
                 getLatLng(results[0]).then((value) => {
