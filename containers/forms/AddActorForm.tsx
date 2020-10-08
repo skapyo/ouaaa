@@ -228,7 +228,7 @@ debugger;
           formChangeHandler={formChangeHandler}
           value={formValues.name}
           required={true}
-        />
+      />
         <FormItem
           label="Email"
           inputName="email"
