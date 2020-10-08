@@ -134,7 +134,11 @@ const useStyles2 = makeStyles({
 const ActorAdminPage = () => {
     const user = useSessionState()
     const GET_ACTORS = gql`
-        { actorsAdmin
+
+        query actorsAdmin (
+            $userId: String!
+        )
+        { actorsAdmin(userId: $userId)
         {   id,
             name,
             address,
@@ -147,11 +151,18 @@ const ActorAdminPage = () => {
             categories{
                 label
             }
+            referents{
+                surname,
+                lastname,
+                email,
+                phone
+            }
         }
         }
+        
     `;
     const {data,loading,error} = useQuery(GET_ACTORS,{ variables: {
-            userId: parseInt(user.id),
+            userId: user.id,
         }});
 
     const classes = useStyles2();
@@ -212,7 +223,9 @@ const ActorAdminPage = () => {
                             <TableCell style={{ width: 160 }} align="left">
                                 Ville
                             </TableCell>
-
+                            <TableCell style={{ width: 160 }} align="left">
+                                Référents
+                            </TableCell>
                             <TableCell style={{ width: 160 }} align="left">
                                Lien Page acteur
                             </TableCell>
@@ -236,7 +249,12 @@ const ActorAdminPage = () => {
                                 <TableCell style={{ width: 160 }} align="left">
                                     {actor.city}
                                 </TableCell>
+                                    <TableCell style={{ width: 160 }} align="left">
+                                    {typeof actor.referents != "undefined"&& actor.referents .map((referent) => {
+                                        {referent.surname}  {referent.lastname}  {referent.email}  {referent.phone}
 
+                                    })}
+                                        </TableCell>
                                 <TableCell style={{ width: 160 }} align="left">
                                     {/* @ts-ignore */}
                                     <Link  href={"/actor/"+actor.id}>
