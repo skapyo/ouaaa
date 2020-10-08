@@ -15,6 +15,7 @@ import Moment from "react-moment";
 import {useSessionState} from "../../context/session/session";
 import {useCookies} from "react-cookie";
 import {useSnackbar} from "notistack";
+import Head from 'next/head'
 
 const useStyles = makeStyles((theme) => ({
     titleContainer: {
@@ -317,6 +318,11 @@ const Event = () => {
 
     return (
         <AppLayout>
+            <Head>
+                <title>  {data && data.event.label}- {data && data.event.city} - {data && data.event.categories.map((category) => {
+                    return(category.parentCategory && category.parentCategory.label +" : "+category.label + "  ")
+                })}</title>
+            </Head>
             <RootRef >
                 <Box>
                     <Container className={styles.titleContainer} >

@@ -17,6 +17,7 @@ import {useSnackbar} from "notistack";
 import {useSessionState} from "../../context/session/session";
 import {useCookies} from "react-cookie";
 import CardAddEvent from "../../components/cards/CardAddEvent";
+import Head from 'next/head'
 
 const useStyles = makeStyles((theme) => ({
     titleContainer: {
@@ -341,6 +342,11 @@ const Actor = () => {
 
     return (
         <AppLayout>
+            <Head>
+                <title>  {data && data.actor.name} - {data && data.actor.city} - {data && data.actor.categories.map((category) => {
+                    return(category.parentCategory && category.parentCategory.label +" : "+category.label + "  ")
+                })}</title>
+            </Head>
             <RootRef >
                 <Box>
                     <Container className={styles.titleContainer} >
