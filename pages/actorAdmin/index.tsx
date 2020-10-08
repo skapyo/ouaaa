@@ -238,7 +238,8 @@ const ActorAdminPage = () => {
                                 </TableCell>
 
                                 <TableCell style={{ width: 160 }} align="left">
-                                    <Link  href={"/event/"+actor.id}>
+                                    {/* @ts-ignore */}
+                                    <Link  href={"/actor/"+actor.id}>
                                        Lien Page
                                     </Link>
                                 </TableCell>
