@@ -21,6 +21,7 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 import Collapse from "@material-ui/core/Collapse/Collapse";
 import DateFnsUtils from '@date-io/date-fns';
 import {KeyboardDatePicker, KeyboardTimePicker, MuiPickersUtilsProvider,} from '@material-ui/pickers';
+import moment from 'moment';
 
 const useStyles = makeStyles((theme) => ({
   field: {
@@ -120,7 +121,7 @@ const AddEventForm = ({actorId}) => {
         new Date(),
     );
     const [selectedEndDate, setSelectedEndDate] = React.useState<Date | null>(
-        new Date(),
+        moment().add(2,'hour').toDate(),
     );
 
     const handleStartDateChange = (date: Date | null) => {
