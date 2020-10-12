@@ -1,9 +1,7 @@
 import {makeStyles, useTheme} from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
 import {Avatar, Container, Fade, Grid, Menu, MenuItem} from '@material-ui/core';
-import SearchIcon from '@material-ui/icons/Search';
 import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
 import Link from 'components/Link'
 import {useSessionDispatch, useSessionState} from 'context/session/session';
@@ -13,6 +11,7 @@ import gql from 'graphql-tag'
 import {useCookies} from 'react-cookie'
 import {useRouter} from 'next/router'
 import {withApollo} from 'hoc/withApollo'
+import ButtonAppBarCollapse from "./ButtonAppBarCollapse";
 
 const useStyles = makeStyles((theme) => ({
   navbar: {
@@ -43,6 +42,26 @@ const useStyles = makeStyles((theme) => ({
     color:"#bf083e",
     marginLeft :"4em",
     fontSize : "3em",
+  },
+  buttonBar: {
+    [theme.breakpoints.down("xs")]: {
+      display: "none"
+    },
+    margin: "10px",
+    paddingLeft: "16px",
+    right: 0,
+    position: "relative",
+    width: "100%",
+    background: "transparent"
+  },
+  navLayout:{
+    [theme.breakpoints.down("xs")]: {
+      display: "none"
+    },
+  },
+  logo:{
+    width: "8em",
+    marginTop:"2em"
   }
 }));
 
@@ -85,95 +104,116 @@ const NavBar = () => {
   const handleClose = () => {
     setAnchorEl(null)
   };
+
+
+  const NavLayout = () => {
+    return (
+
+
+          <Grid item>
+            <Grid
+                container
+                spacing={3}
+                alignItems='center'
+            >
+
+              <Grid item>
+                <MenuItem button component={Link} className={styles.menuItem} href='/map'>LA CARTE</MenuItem>
+              </Grid>
+              <Grid item>
+                <MenuItem button component={Link} className={styles.menuItem} href='/agenda'>L'AGENDA</MenuItem>
+              </Grid>
+              <Grid item>
+                <MenuItem button component={Link} className={styles.menuItem} href='/participate'>JE
+                  PARTICIPE</MenuItem>
+              </Grid>
+              <Grid item>
+                <MenuItem button component={Link} className={styles.menuItem} href='/news'>LE JOURNAL</MenuItem>
+              </Grid>
+              <Grid item>
+                <MenuItem button component={Link} className={styles.menuItem} href='/about'>A PROPOS</MenuItem>
+              </Grid>
+
+              {!user && (
+                  <>
+                    <Grid item> <Link href='/signin' underline='none' color='textPrimary' onClick={signinClickHandler}>
+                      <PersonOutlineIcon className={styles.menuItem}/>
+                    </Link>
+
+                    </Grid>
+                  </>
+              )}
+
+              {user && (
+                  <>
+                    <Avatar
+                        className={styles.avatar}
+                        onClick={handleClick}
+                        aria-controls="popover-menu"
+                        aria-haspopup="true"
+
+                    />
+                    <Menu
+                        id="popover-menu"
+                        open={open}
+                        anchorEl={anchorEl}
+                        onClose={handleClose}
+                        className={styles.menuItem}
+                        anchorOrigin={{
+                          vertical: 'bottom',
+                          horizontal: 'right',
+                        }}
+                        transformOrigin={{
+                          vertical: 'top',
+                          horizontal: 'right',
+                        }}
+                        getContentAnchorEl={null}
+                        classes={{paper: styles.popoverPaper}}
+                        TransitionComponent={Fade}
+                    >
+                      {/* <MenuItem onClick={() => router.push('/account')} component={Link} >Mon compte</MenuItem> */}
+                      <MenuItem button component={Link} className={styles.menuItem} href='/account'>Mon
+                        compte</MenuItem>
+                      <MenuItem button component={Link} className={styles.menuItem} href='/actorAdmin'>Espace
+                        Acteur</MenuItem>
+                      <MenuItem onClick={signoutHandler} className={styles.menuItem}>Se déconnecter</MenuItem>
+                    </Menu>
+                  </>
+              )}
+            </Grid>
+          </Grid>
+    )
+  }
   const open = Boolean(anchorEl)
 
   return (
       <>
         <AppBar position="static" className={styles.navbar} color='inherit'>
           <Container>
-            <Toolbar>
-              <Grid
-                  container
-                  direction='row'
-                  justify='space-between'
-                  alignItems='center'
-              >
-                <Grid item>
-                  <Link href="/">
-                   <Typography className={styles.title} >Ouaaa</Typography>
-                  </Link>
-                </Grid>
-                <Grid item>
-                  <Grid
-                      container
-                      spacing={3}
-                      alignItems='center'
-                  >
 
-                    <Grid item>
-                      <MenuItem button component={Link} className={styles.menuItem} href='/map' >LA CARTE</MenuItem>
-                    </Grid>
-                    <Grid item>
-                      <MenuItem button component={Link} className={styles.menuItem} href='/agenda' >L'AGENDA</MenuItem>
-                    </Grid>
-                    <Grid item>
-                      <MenuItem button component={Link} className={styles.menuItem} href='/participate' >JE PARTICIPE</MenuItem>
-                    </Grid>
-                    <Grid item>
-                      <MenuItem button component={Link} className={styles.menuItem}  href='/news' >LE JOURNAL</MenuItem>
-                    </Grid>
-                    <Grid item>
-                      <MenuItem button component={Link} className={styles.menuItem} href='/about' >A PROPOS</MenuItem>
-                    </Grid>
-
-                    {!user && (
-                        <>
-                          <Grid item> <Link href='/signin' underline='none' color='textPrimary' onClick={signinClickHandler}>
-                            <PersonOutlineIcon  className={styles.menuItem} />
-                          </Link>
-
-                          </Grid>
-                        </>
-                    )}
-
-                    {user && (
-                        <>
-                          <Avatar
-                              className={styles.avatar}
-                              onClick={handleClick}
-                              aria-controls="popover-menu"
-                              aria-haspopup="true"
-
-                          />
-                          <Menu
-                              id="popover-menu"
-                              open={open}
-                              anchorEl={anchorEl}
-                              onClose={handleClose}
-                              className={styles.menuItem}
-                              anchorOrigin={{
-                                vertical: 'bottom',
-                                horizontal: 'right',
-                              }}
-                              transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                              }}
-                              getContentAnchorEl={null}
-                              classes ={{paper : styles.popoverPaper}}
-                              TransitionComponent={Fade}
-                          >
-                            {/* <MenuItem onClick={() => router.push('/account')} component={Link} >Mon compte</MenuItem> */}
-                            <MenuItem button component={Link} className={styles.menuItem} href='/account' >Mon compte</MenuItem>
-                            <MenuItem button component={Link} className={styles.menuItem} href='/actorAdmin' >Espace Acteur</MenuItem>
-                            <MenuItem onClick={signoutHandler} className={styles.menuItem} >Se déconnecter</MenuItem>
-                          </Menu>
-                        </>
-                    )}
+              <Toolbar>
+                <Grid
+                    container
+                    direction='row'
+                    justify='space-between'
+                    alignItems='center'
+                >
+                  <Grid item>
+                    <Link href="/">
+                      <img className={styles.logo}
+                           src="./logo.png"
+                      />
+                    </Link>
                   </Grid>
+                  <div className={styles.navLayout}>
+                    <NavLayout/>
+                  </div>
+                  <ButtonAppBarCollapse>
+                     <NavLayout/>
+                  </ButtonAppBarCollapse>
                 </Grid>
-              </Grid>
-            </Toolbar>
+              </Toolbar>
+
           </Container>
         </AppBar>
       </>
