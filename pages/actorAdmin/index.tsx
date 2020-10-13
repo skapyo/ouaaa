@@ -250,19 +250,20 @@ const ActorAdminPage = () => {
                                     {actor.city}
                                 </TableCell>
                                     <TableCell style={{ width: 160 }} align="left">
-                                    {typeof actor.referents != "undefined"&& actor.referents .map((referent) => {
+                                    {typeof actor.referents != "undefined" && actor.referents.map((referent) => {
                                         {referent.surname}  {referent.lastname}  {referent.email}  {referent.phone}
-
                                     })}
                                         </TableCell>
                                 <TableCell style={{ width: 160 }} align="left">
                                     {/* @ts-ignore */}
-                                    <Link  href={"/actor/"+actor.id}>
+                                    <Link href={"/actor/"+actor.id}>
                                        Lien Page
                                     </Link>
                                 </TableCell>
                                 <TableCell style={{ width: 160 }} align="right">
-                                    < Edit/>
+                                    <Link href={"/actorAdmin/actor/"+actor.id}>
+                                        < Edit/>
+                                    </Link>
                                 </TableCell>
 
 

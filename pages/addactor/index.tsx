@@ -145,26 +145,27 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const GET_CATEGORIES = graphqlTag`
-    { categories
-    {   id,
-        label
-        icon
-        subCategories {
+    { 
+        categories {
             id
             label
             icon
-                subCategories {
+            subCategories {
                 id
                 label
                 icon
-                  subCategories {
-                     id
-                     label
-                     icon
-              }
-          }
-  }
-    }
+                    subCategories {
+                    id
+                    label
+                    icon
+                    subCategories {
+                        id
+                        label
+                        icon
+                    }
+                }
+            }
+        }
     }
 `;
 const AccountPage = () => {
