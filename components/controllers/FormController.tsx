@@ -1,11 +1,13 @@
-import React, {ChangeEvent, useCallback, useEffect, useMemo, useState} from "react"
-import {useMutation} from "@apollo/react-hooks"
-import {useSnackbar} from "notistack"
-import omitTypename from "utils/omitTypename"
-import validateEmailFormat from "utils/validateEmailFormat"
-import validatePasswordFormat from "utils/validatePasswordFormat"
-import {DocumentNode} from "graphql"
-import {useSessionState} from "../../context/session/session";
+import React, {
+  ChangeEvent, useCallback, useEffect, useMemo, useState,
+} from 'react';
+import { useMutation } from '@apollo/react-hooks';
+import { useSnackbar } from 'notistack';
+import omitTypename from 'utils/omitTypename';
+import validateEmailFormat from 'utils/validateEmailFormat';
+import validatePasswordFormat from 'utils/validatePasswordFormat';
+import { DocumentNode } from 'graphql';
+import { useSessionState } from '../../context/session/session';
 
 type FormValues = { [key: string]: string }
 
@@ -14,7 +16,7 @@ export type QueryOptions = {
   resultLabel: string
   mutationResultControl?:
     | ((formValues: FormValues, data: any, error: any) => boolean)
-    | "builtin"
+    | 'builtin'
   clearFormvaluesAfterControl?: boolean
   afterResultControlCallback?: (
     formValues: FormValues,
@@ -25,11 +27,13 @@ export type QueryOptions = {
 }
 
 export enum ValidationRuleType {
-  password = "password",
-  equalTo = "equalTo",
-  required = "required",
-  email = "email",
-  only = "only",
+  password = 'password',
+  equalTo = 'equalTo',
+  required = 'required',
+  email = 'email',
+  only = 'only',
+  minLength = 'minLength',
+  maxLength = 'maxLength',
 }
 
 type Rule =
@@ -48,7 +52,15 @@ type Rule =
     }
   | {
       rule: ValidationRuleType.only
-      type: "number" | "string"
+      type: 'number' | 'string'
+    }
+  | {
+      rule: ValidationRuleType.minLength
+      minLimit: number
+    }
+  | {
+      rule: ValidationRuleType.maxLength
+      maxLimit: number
     }
 
 export type ValidationRules = { [key: string]: Rule }
@@ -89,63 +101,65 @@ type FormControllerProps = {
 }
 
 const withMutation = (FormComponent: RenderCallback) => (
-  props: WithMutationProps
+  props: WithMutationProps,
 ) => {
-  const { formValues, setFormValue, queryOptions, setInitialFormValues } = props
-  const scnackbar = useSnackbar()
-  const user = useSessionState()
+  const {
+    formValues, setFormValue, queryOptions, setInitialFormValues,
+  } = props;
+  const scnackbar = useSnackbar();
+  const user = useSessionState();
   const [update, { data, loading, error }] = useMutation(queryOptions.query, {
     variables: {
       formValues,
-       userId:parseInt(user.id)
+      userId: parseInt(user.id),
     },
-  })
+  });
 
   const submitHandler = useCallback(() => {
-    update()
-  }, [update])
+    update();
+  }, [update]);
 
   useEffect(() => {
     // if (!error) {
-    let next = false
-    if (queryOptions.mutationResultControl == "builtin") {
-      if (data?.[queryOptions.resultLabel] && (typeof error === 'undefined' && !error)) next = true
-    } else (
-      queryOptions.mutationResultControl &&
-      queryOptions.mutationResultControl(formValues, data, error)
-    )
+    let next = false;
+    if (queryOptions.mutationResultControl == 'builtin') {
+      if (data?.[queryOptions.resultLabel] && (typeof error === 'undefined' && !error)) next = true;
+    } else {
+      (
+        queryOptions.mutationResultControl
+      && queryOptions.mutationResultControl(formValues, data, error)
+      );
+    }
 
     if (next) {
-      setInitialFormValues(omitTypename(data?.[queryOptions.resultLabel]))
+      setInitialFormValues(omitTypename(data?.[queryOptions.resultLabel]));
 
-      if (queryOptions.snackbarSucceedMessage)
-        scnackbar.enqueueSnackbar(queryOptions.snackbarSucceedMessage)
+      if (queryOptions.snackbarSucceedMessage) { scnackbar.enqueueSnackbar(queryOptions.snackbarSucceedMessage); }
 
-      if (queryOptions.afterResultControlCallback)
-        queryOptions.afterResultControlCallback(formValues, data, error)
+      if (queryOptions.afterResultControlCallback) { queryOptions.afterResultControlCallback(formValues, data, error); }
 
       if (queryOptions.clearFormvaluesAfterControl) {
-        const keys = Object.keys(formValues)
-        let formValuesTemp = {}
+        const keys = Object.keys(formValues);
+        let formValuesTemp = {};
         keys.forEach((key) => {
-          formValuesTemp = { ...formValuesTemp, [key]: "" }
-        })
-        setFormValue(formValuesTemp)
+          formValuesTemp = { ...formValuesTemp, [key]: '' };
+        });
+        setFormValue(formValuesTemp);
       }
     }
-    /*else if (data)
+    /* else if (data)
       throw new Error(
         `No data for the result label: ${queryOptions.resultLabel}`
       )
       */
 
     // }
-  }, [data, error])
+  }, [data, error]);
 
   return (
     <FormComponent {...props} submitHandler={submitHandler} loading={loading} />
-  )
-}
+  );
+};
 
 const FormController = (props: FormControllerProps, ...otherprops: any[]) => {
   const {
@@ -154,171 +168,200 @@ const FormController = (props: FormControllerProps, ...otherprops: any[]) => {
     withQuery = false,
     queryOptions,
     validationRules = null,
-  } = props
+  } = props;
 
-  const [formValues, setFormValue] = useState({ ...initValues })
-  const [initialFormValues, setInitialFormValues] = useState({ ...initValues })
-  const [validationResult, setValidationResult] = useState<ValidationResult>()
+  const [formValues, setFormValue] = useState({ ...initValues });
+  const [initialFormValues, setInitialFormValues] = useState({ ...initValues });
+  const [validationResult, setValidationResult] = useState<ValidationResult>();
   const formChangeHandler = useCallback(
     (e) => {
-
       // if there an only rule on the field
-      const rule = validationRules?.[e.target.name]
+      const rule = validationRules?.[e.target.name];
       if (rule?.rule === ValidationRuleType.only) {
-        if (rule.type === "number") {
-          const isnum = /^\d+$/.test(e.target.value)
+        if (rule.type === 'number') {
+          const isnum = /^\d+$/.test(e.target.value);
 
-          if (isnum)
-            setFormValue({ ...formValues, [e.target.name]: e.target.value })
+          if (isnum) { setFormValue({ ...formValues, [e.target.name]: e.target.value }); }
         }
-        if (rule.type === "string") {
-          const ischar = /^[a-zA-Z]+$/.test(e.target.value)
-          if (ischar)
-            setFormValue({ ...formValues, [e.target.name]: e.target.value })
+        if (rule.type === 'string') {
+          const ischar = /^[a-zA-Z]+$/.test(e.target.value);
+          if (ischar) { setFormValue({ ...formValues, [e.target.name]: e.target.value }); }
         }
-      } else {
-
-        if(e.target.type=="checkbox"){
-          var  categoriesArray
-          if(formValues[e.target.name]!=undefined){
-             categoriesArray= formValues[e.target.name]
-          }else{
-            categoriesArray= [];
+      } else if (e.target.type == 'checkbox') {
+        let categoriesArray;
+        if (formValues[e.target.name] != undefined) {
+          categoriesArray = formValues[e.target.name];
+        } else {
+          categoriesArray = [];
+        }
+        if (e.target.checked) {
+          categoriesArray.push(e.target.value);
+        } else {
+          const index = categoriesArray.indexOf(e.target.value);
+          if (index > -1) {
+            categoriesArray.splice(index, 1);
           }
-           if(e.target.checked){
-             categoriesArray.push(e.target.value)
-           }else{
-             var index = categoriesArray.indexOf(e.target.value);
-             if (index > -1) {
-               categoriesArray.splice(index, 1);
-             }
-           }
-          setFormValue({ ...formValues, [e.target.name]: categoriesArray })
-        }else {
-          setFormValue({...formValues, [e.target.name]: e.target.value})
         }
+        setFormValue({ ...formValues, [e.target.name]: categoriesArray });
+      } else {
+        setFormValue({ ...formValues, [e.target.name]: e.target.value });
       }
     },
-    [setFormValue, formValues, validationRules]
-  )
+    [setFormValue, formValues, validationRules],
+  );
 
   /* a revoir */
   const isModified = useMemo(() => {
-    if (JSON.stringify(formValues) == JSON.stringify(initialFormValues))
-      return false
-    return true
-  }, [formValues, initialFormValues])
+    if (JSON.stringify(formValues) == JSON.stringify(initialFormValues)) { return false; }
+    return true;
+  }, [formValues, initialFormValues]);
 
   const clearFormvalues = useCallback(() => {
-    setFormValue({})
-    setInitialFormValues({})
-  }, [setFormValue])
+    setFormValue({});
+    setInitialFormValues({});
+  }, [setFormValue]);
 
   /* validation : a revoir / compléter .. */
   useEffect(() => {
     if (validationRules) {
-      let validationResultTemp: ValidationResult = { global: true, result: {} }
+      let validationResultTemp: ValidationResult = { global: true, result: {} };
 
-      const keys = Object.keys(validationRules)
+      const keys = Object.keys(validationRules);
 
       keys.forEach((key) => {
-        const field = validationRules[key]
+        const field = validationRules[key];
 
         /* password rule handler */
         if (field.rule == ValidationRuleType.password) {
-          const result = validatePasswordFormat(formValues?.[key])
+          const result = validatePasswordFormat(formValues?.[key]);
 
           /* if the password format is validated, update the result for the concerned field */
           if (result.length !== 0) {
             const newKeyValue = validationResultTemp.result[key]
               ? validationResultTemp.result[key].concat(result)
-              : result
+              : result;
             validationResultTemp = {
               result: {
                 ...validationResultTemp.result,
                 [key]: newKeyValue,
               },
               global: false,
-            }
+            };
           }
         }
 
         /* equalTo rule handler */
         if (field.rule == ValidationRuleType.equalTo) {
           /* test if the 2 fields are equals */
-          const result = formValues[key] == formValues[field.field]
+          const result = formValues[key] == formValues[field.field];
 
           /* if the test result is false, update the result for the concerned field */
           if (!result) {
             const newKeyValue = validationResultTemp.result[key]
-              ? validationResultTemp.result[key].concat("equalTo")
-              : ["equalTo"]
+              ? validationResultTemp.result[key].concat('equalTo')
+              : ['equalTo'];
             validationResultTemp = {
               result: {
                 ...validationResultTemp.result,
                 [key]: newKeyValue,
               },
               global: false,
-            }
+            };
           }
         }
 
         /* required rule handler */
-        if (field.rule == ValidationRuleType.required) {
+        if (field.rule === ValidationRuleType.required) {
           /* test if there is a value in the formValues array */
-          const result = formValues[key]?.length == 0
+          const result = formValues[key]?.length === 0;
 
           /* if the test result is true, update the result for the concerned field */
           if (result) {
             const newKeyValue = validationResultTemp.result[key]
-              ? validationResultTemp.result[key].concat("required")
-              : ["required"]
+              ? validationResultTemp.result[key].concat('required')
+              : ['required'];
             validationResultTemp = {
               result: {
                 ...validationResultTemp.result,
                 [key]: newKeyValue,
               },
               global: false,
-            }
+            };
           }
         }
 
         /* email rule handler */
-        if (field.rule == ValidationRuleType.email) {
-          const result = validateEmailFormat(formValues?.[key])
+        if (field.rule === ValidationRuleType.email) {
+          const result = validateEmailFormat(formValues?.[key]);
 
           /* if the email format is validated, update the result for the concerned field */
           if (!result) {
             const newKeyValue = validationResultTemp.result[key]
-              ? validationResultTemp.result[key].concat("email")
-              : ["email"]
+              ? validationResultTemp.result[key].concat('email')
+              : ['email'];
             validationResultTemp = {
               result: {
                 ...validationResultTemp.result,
                 [key]: newKeyValue,
               },
               global: false,
-            }
+            };
           }
         }
-      })
 
-      setValidationResult(validationResultTemp)
-    }
-  }, [formValues, validationRules])
+        /* minLength rule handler */
+        if (field.rule === ValidationRuleType.minLength) {
+          const result = formValues[key]?.length < field.minLimit;
 
-  const withMutationProps = useMemo(() => {
-    return {
-      formChangeHandler: formChangeHandler,
-      isModified,
-      formValues,
-      validationResult,
-      queryOptions,
-      setInitialFormValues,
-      setFormValue,
-      clearFormvalues,
+          /* if the length is inferior to minLength, update the result for the concerned field */
+          if (result) {
+            const newKeyValue = validationResultTemp.result[key]
+              ? validationResultTemp.result[key].concat('minLength')
+              : ['minLength'];
+            validationResultTemp = {
+              result: {
+                ...validationResultTemp.result,
+                [key]: newKeyValue,
+              },
+              global: false,
+            };
+          }
+        }
+
+        /* maxLength rule handler */
+        if (field.rule === ValidationRuleType.maxLength) {
+          const result = formValues[key]?.length > field.maxLimit;
+
+          /* if the length is superior to maxLength, update the result for the concerned field */
+          if (result) {
+            const newKeyValue = validationResultTemp.result[key]
+              ? validationResultTemp.result[key].concat('maxLength')
+              : ['maxLength'];
+            validationResultTemp = {
+              result: {
+                ...validationResultTemp.result,
+                [key]: newKeyValue,
+              },
+              global: false,
+            };
+          }
+        }
+      });
+
+      setValidationResult(validationResultTemp);
     }
-  }, [
+  }, [formValues, validationRules]);
+
+  const withMutationProps = useMemo(() => ({
+    formChangeHandler,
+    isModified,
+    formValues,
+    validationResult,
+    queryOptions,
+    setInitialFormValues,
+    setFormValue,
+    clearFormvalues,
+  }), [
     formChangeHandler,
     isModified,
     formValues,
@@ -327,36 +370,35 @@ const FormController = (props: FormControllerProps, ...otherprops: any[]) => {
     withQuery,
     setInitialFormValues,
     setFormValue,
-  ])
+  ]);
 
-  const renderProps = useMemo(() => {
-    return {
-      formChangeHandler: formChangeHandler,
-      isModified,
-      formValues,
-      validationResult,
-      clearFormvalues,
-      ...otherprops,
-      // queryOptions: queryOptions,
-    }
-  }, [
+  const renderProps = useMemo(() => ({
+    formChangeHandler,
+    isModified,
+    formValues,
+    validationResult,
+    clearFormvalues,
+    ...otherprops,
+    // queryOptions: queryOptions,
+  }), [
     formChangeHandler,
     isModified,
     formValues,
     validationResult,
     // queryOptions,
-  ])
+  ]);
 
   if (withQuery) {
-    if (!queryOptions)
+    if (!queryOptions) {
       throw new Error(
-        "queryOption prop must be provided when withQuery prop is true."
-      )
+        'queryOption prop must be provided when withQuery prop is true.',
+      );
+    }
     // @ts-ignore
-    return withMutation(render)(withMutationProps)
+    return withMutation(render)(withMutationProps);
   }
 
-  return render(renderProps)
-}
+  return render(renderProps);
+};
 
-export default FormController
+export default FormController;

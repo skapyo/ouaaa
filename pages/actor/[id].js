@@ -126,7 +126,7 @@ const useStyles = makeStyles((theme) => ({
         border: "none",
         fontFamily: 'rowdies',
         borderRadius: "1.5em",
-        padding: "0 3em 0 3em",
+        padding: '0 3em 0 3em',
         height: "2.5em",
         "&:hover": {
             cursor: "pointer",
