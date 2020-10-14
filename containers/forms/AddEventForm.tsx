@@ -1,67 +1,69 @@
-import React, {useCallback, useEffect, useState} from "react"
-import gql from "graphql-tag"
-import {withApollo} from "hoc/withApollo"
-import {Container, Grid, makeStyles, TextField, Typography,} from "@material-ui/core"
-import ClassicButton from "components/buttons/ClassicButton"
-import FormController, {RenderCallback} from "components/controllers/FormController"
-import {useMutation, useQuery} from "@apollo/react-hooks"
-import useGraphQLErrorDisplay from "hooks/useGraphQLErrorDisplay"
+import React, { useCallback, useEffect, useState } from 'react';
+import gql from 'graphql-tag';
+import { withApollo } from 'hoc/withApollo';
+import {
+  Container, Grid, makeStyles, TextField, Typography,
+} from '@material-ui/core';
+import ClassicButton from 'components/buttons/ClassicButton';
+import FormController, { RenderCallback, ValidationRules, ValidationRuleType } from 'components/controllers/FormController';
+import { useMutation, useQuery } from '@apollo/react-hooks';
+import useGraphQLErrorDisplay from 'hooks/useGraphQLErrorDisplay';
 import Checkbox from '@material-ui/core/Checkbox';
-import useCookieRedirection from "hooks/useCookieRedirection"
-import {useSnackbar} from 'notistack';
-import GooglePlacesAutocomplete, {geocodeByAddress, getLatLng} from 'react-google-places-autocomplete';
-import {useSessionState} from "../../context/session/session";
-import {useRouter} from "next/router";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText/ListItemText";
+import useCookieRedirection from 'hooks/useCookieRedirection';
+import { useSnackbar } from 'notistack';
+import GooglePlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-google-places-autocomplete';
+import { useRouter } from 'next/router';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText/ListItemText';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
-import Collapse from "@material-ui/core/Collapse/Collapse";
+import Collapse from '@material-ui/core/Collapse/Collapse';
 import DateFnsUtils from '@date-io/date-fns';
-import {KeyboardDatePicker, KeyboardTimePicker, MuiPickersUtilsProvider,} from '@material-ui/pickers';
+import { KeyboardDatePicker, KeyboardTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import moment from 'moment';
+import { useSessionState } from '../../context/session/session';
 
 const useStyles = makeStyles((theme) => ({
   field: {
     marginBottom: theme.spacing(3),
   },
   datetime: {
-    display: "flex",
-    flexWrap: "wrap",
-    justifyContent: "space-between",
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
   categories: {
     '& span': {
-      fontWeight: "100",
+      fontWeight: '100',
     },
   },
   location: {
-    margin: "1em 0",
+    margin: '1em 0',
     '& input': {
-      height: "3.5em",
-      borderRadius: "4px",
-      boxShadow: "none",
-      border: "solid 1px lightgray",
-      fontFamily: "Roboto",
-      fontSize: "16px",
-      width: "100%",
+      height: '3.5em',
+      borderRadius: '4px',
+      boxShadow: 'none',
+      border: 'solid 1px lightgray',
+      fontFamily: 'Roboto',
+      fontSize: '16px',
+      width: '100%',
       '&:hover': {
-        border: "solid 1px lightgray",
+        border: 'solid 1px lightgray',
       },
       '&:focus': {
-        border: "solid 1px lightgray",
+        border: 'solid 1px lightgray',
       },
       '&:active': {
-        border: "solid 1px lightgray",
+        border: 'solid 1px lightgray',
       },
     },
   },
-}))
+}));
 
 const ADDEVENT = gql`
   mutation createEvent(
@@ -99,29 +101,103 @@ query categories {
 }
 `;
 
-const AddEventForm = ({actorId}) => {
-  const Form: RenderCallback = (props) => {
+type FormItemProps = {
+  label: string
+  inputName: string
+  formChangeHandler: (event: ChangeEvent) => void
+  value: string
+  required:boolean
+  errorBool: boolean
+  errorText: string
+}
 
-    const { formChangeHandler, formValues, validationResult } = props
-    const [addEvent, {data, error}] = useMutation(ADDEVENT)
-    const {data: categoryData, loading: categoryLoading, error: categoryError} = useQuery(
-      GET_CATEGORIES
-    )
-    useGraphQLErrorDisplay(error)
-    const styles = useStyles()
-    const redirect = useCookieRedirection()
-    const { enqueueSnackbar, closeSnackbar } = useSnackbar()
-    const user = useSessionState()
-      const router = useRouter()
-    const [state, setState] = React.useState({})
-    const [address, setAddress] = useState("")
-    const [city, setCity] = useState("")
+const FormItem = (props: FormItemProps) => {
+  const styles = useStyles();
+  const {
+    label, inputName, formChangeHandler, value, required, errorBool, errorText,
+  } = props;
+  return (
+    <TextField
+      className={styles.field}
+      variant="outlined"
+      value={value}
+      label={label}
+      name={inputName}
+      onChange={formChangeHandler}
+      defaultValue=""
+      fullWidth
+      required={required}
+      error={errorBool}
+      helperText={errorBool ? errorText : ''}
+    />
+  );
+};
+
+const FormItemTextareaAutosize = (props: FormItemProps) => {
+  const styles = useStyles();
+  const {
+    label, inputName, formChangeHandler, value, required, errorBool, errorText,
+  } = props;
+  return (
+    <TextField
+      multiline
+      rows={4}
+      className={styles.field}
+      variant="outlined"
+      value={value}
+      label={label}
+      name={inputName}
+      onChange={formChangeHandler}
+      defaultValue=""
+      fullWidth
+      required={required}
+      error={errorBool}
+      helperText={errorBool ? errorText : ''}
+    />
+  );
+};
+
+const AddEventForm = ({ actorId }) => {
+  const validationRules: ValidationRules = {
+    label: {
+      rule: ValidationRuleType.required,
+    },
+    shortDescription: {
+      rule: ValidationRuleType.required && ValidationRuleType.minLength,
+      minLimit: 120,
+    },
+    description: {
+      rule: ValidationRuleType.required && ValidationRuleType.minLength,
+      minLimit: 120,
+    },
+  };
+
+  const Form: RenderCallback = ({
+    formChangeHandler,
+    validationResult,
+    formValues,
+  }) => {
+    // const { formChangeHandler, formValues, validationResult } = props;
+    const [addEvent, { data, error }] = useMutation(ADDEVENT);
+    const { data: categoryData, loading: categoryLoading, error: categoryError } = useQuery(
+      GET_CATEGORIES,
+    );
+    useGraphQLErrorDisplay(error);
+    const styles = useStyles();
+    const redirect = useCookieRedirection();
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+    const user = useSessionState();
+    const router = useRouter();
+    const [state, setState] = React.useState({});
+    const [address, setAddress] = useState('');
+    const [city, setCity] = useState('');
+    const [validated, setValidated] = useState(false);
 
     const [selectedStartDate, setSelectedStartDate] = React.useState<Date | null>(
-        new Date(),
+      moment().add(1, 'hour').toDate(),
     );
     const [selectedEndDate, setSelectedEndDate] = React.useState<Date | null>(
-        moment().add(2,'hour').toDate(),
+      moment().add(2, 'hour').toDate(),
     );
 
     const handleStartDateChange = (date: Date | null) => {
@@ -131,19 +207,20 @@ const AddEventForm = ({actorId}) => {
       setSelectedEndDate(date);
     };
 
-    const validateFields = useCallback(() => {
-      if (formValues.shortDescription && formValues.shortDescription.length > 240) return false
-      // check if at least one checkbox is checked
-      if (!(formValues.categories && formValues.categories.length > 0)) return false
-      if (!address && !city) return false
-      if (selectedStartDate&& selectedEndDate &&  (selectedStartDate >= selectedEndDate)) return false
-      // detail error cases
-      return true
-    }, [formValues, state, address, city])
+    useEffect(() => {
+      if ((selectedStartDate && selectedEndDate && (selectedStartDate >= selectedEndDate))
+          || (selectedStartDate && selectedStartDate <= Date.now())
+          || !formValues.shortDescription
+          || !formValues.description
+          || !formValues.categories
+          || formValues.categories?.length === 0
+          || (!address && !city)) setValidated(false);
+      else setValidated(true);
+    });
 
     const handleChange = (category: any, event: React.ChangeEvent<HTMLInputElement>) => {
       setState({ ...state, [category.id.toString()]: event.target.checked });
-    }
+    };
     const [checked, setChecked] = useState([0]);
     const handleToggle = (value: number, index: number) => () => {
       const currentIndex = checked.indexOf(value);
@@ -156,44 +233,38 @@ const AddEventForm = ({actorId}) => {
       }
 
       setChecked(newChecked);
-      open[index]=!open[index];
-    }
+      open[index] = !open[index];
+    };
 
     const getObjectLongName = (results, name) => {
-      if (!results || !results[0] || !results[0].address_components)
-        return ("")
-      let object = results[0].address_components.find((element) =>
-        element.types.find(type => type == name) != undefined
-      )
-      if (object == undefined)
-        return ("")
-      return object.long_name
-    }
+      if (!results || !results[0] || !results[0].address_components) { return (''); }
+      const object = results[0].address_components.find((element) => element.types.find((type) => type == name) != undefined);
+      if (object == undefined) { return (''); }
+      return object.long_name;
+    };
 
     const getAddressDetails = (results) => {
-      setAddress((getObjectLongName(results, "street_number") + " " + getObjectLongName(results, "route")).trim())
-      setCity(getObjectLongName(results, "locality"))
-      formValues.postCode = getObjectLongName(results, "postal_code")
-    }
+      setAddress((`${getObjectLongName(results, 'street_number')} ${getObjectLongName(results, 'route')}`).trim());
+      setCity(getObjectLongName(results, 'locality'));
+      formValues.postCode = getObjectLongName(results, 'postal_code');
+    };
 
     useEffect(() => {
-      if(data) {
-        enqueueSnackbar("Événement créé avec succès.", {
+      if (data) {
+        enqueueSnackbar('Événement créé avec succès.', {
           preventDuplicate: true,
-        })
-          router.push('/event/'+data.createEvent.id)
+        });
+        // router.push(`/event/${data.createEvent.id}`);
       }
-    },[data]);
-
+    }, [data]);
 
     const submitHandler = () => {
-      const checkboxes = Object.keys(state)
-      let categoriesArray: number[]
-      categoriesArray = []
-      checkboxes.forEach( key => {
-        if (state[key])
-          categoriesArray.push(parseInt(key))
-      })
+      const checkboxes = Object.keys(state);
+      let categoriesArray: number[];
+      categoriesArray = [];
+      checkboxes.forEach((key) => {
+        if (state[key]) { categoriesArray.push(parseInt(key)); }
+      });
       addEvent({
         variables: {
           eventInfos: {
@@ -207,78 +278,63 @@ const AddEventForm = ({actorId}) => {
             categories: formValues.categories,
             lat: parseFloat(formValues.lat),
             lng: parseFloat(formValues.lng),
-            address: address,
+            address,
             postCode: formValues.postCode,
-            city: city,
+            city,
 
           },
-          actorId:parseInt(actorId),
-          userId:parseInt(user.id)
+          actorId: parseInt(actorId),
+          userId: parseInt(user.id),
         },
-      })
-
-
-    }
+      });
+    };
 
     return (
       <Container component="main" maxWidth="sm">
-        <Typography 
+        <Typography
           className={styles.field}
-          color='secondary' 
-          variant='h6'
+          color="secondary"
+          variant="h6"
         >
           Ajouter un événement
         </Typography>
-        <TextField
-          className={styles.field}
-          variant="outlined"
-          value={formValues.label}
+        <FormItem
           label="Nom de l'événement"
-          name="label"
-          onChange={formChangeHandler}
-          defaultValue=""
-          fullWidth
+          inputName="label"
+          formChangeHandler={formChangeHandler}
+          value={formValues.label}
           required
+          errorBool={!validationResult?.global && validationResult?.result.label}
+          errorText="Nom de l'événement requis."
         />
-        <TextField
-          className={styles.field}
-          variant="outlined"
-          value={formValues.facebookUrl}
+        <FormItem
           label="Lien Facebook de l'événement"
-          name="facebookUrl"
-          onChange={formChangeHandler}
-          defaultValue=""
-          fullWidth
+          inputName="facebookUrl"
+          formChangeHandler={formChangeHandler}
+          value={formValues.facebookUrl}
         />
-        <TextField
-          className={styles.field}
-          variant="outlined"
-          value={formValues.shortDescription}
+        <FormItemTextareaAutosize
           label="Description courte"
-          name="shortDescription"
-          onChange={formChangeHandler}
-          defaultValue=""
-          fullWidth
-          multiline
-          rows={3}
+          inputName="shortDescription"
+          formChangeHandler={formChangeHandler}
+          value={formValues.shortDescription}
+          required
+          errorBool={!validationResult?.global && validationResult?.result.shortDescription}
+          errorText={`Minimum 120 caractères. ${120 - formValues.shortDescription?.length} caractères restants minimum.`}
         />
-        <TextField
-          className={styles.field}
-          variant="outlined"
-          value={formValues.description}
+        <FormItemTextareaAutosize
           label="Description détaillée"
-          placeholder="Parlez-nous de l'événement, les thèmes abordés, le format, les intervenants..."
-          name="description"
-          onChange={formChangeHandler}
-          defaultValue=""
-          fullWidth
-          multiline
-          rows={6}
+          inputName="description"
+          formChangeHandler={formChangeHandler}
+          value={formValues.description}
+          required
+          errorBool={!validationResult?.global && validationResult?.result.description}
+          errorText={`Minimum 120 caractères. ${120 - formValues.description?.length} caractères restants minimum.`}
         />
         <Grid className={styles.datetime}>
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <Grid container justify="space-around">
-            <KeyboardDatePicker
+              <KeyboardDatePicker
                 disableToolbar
                 variant="inline"
                 format="dd/MM/yyyy"
@@ -290,8 +346,10 @@ const AddEventForm = ({actorId}) => {
                 KeyboardButtonProps={{
                   'aria-label': 'change date',
                 }}
-            />
-            <KeyboardTimePicker
+                error={selectedStartDate && selectedStartDate <= Date.now()}
+                helperText={(selectedStartDate && selectedStartDate <= Date.now()) ? 'La date de début ne peut être dans le passé.' : ''}
+              />
+              <KeyboardTimePicker
                 margin="normal"
                 id="time-picker"
                 label="Heure de début"
@@ -300,8 +358,11 @@ const AddEventForm = ({actorId}) => {
                 KeyboardButtonProps={{
                   'aria-label': 'change time',
                 }}
-            />
-            <KeyboardDatePicker
+                ampm={false}
+                minutesStep={5}
+                error={selectedStartDate && selectedStartDate <= Date.now()}
+              />
+              <KeyboardDatePicker
                 disableToolbar
                 variant="inline"
                 format="dd/MM/yyyy"
@@ -313,8 +374,10 @@ const AddEventForm = ({actorId}) => {
                 KeyboardButtonProps={{
                   'aria-label': 'change date',
                 }}
-            />
-            <KeyboardTimePicker
+                error={selectedStartDate && selectedEndDate && (selectedStartDate >= selectedEndDate)}
+                helperText={selectedStartDate && selectedEndDate && (selectedStartDate >= selectedEndDate) ? 'La date de fin doit être après la date de début.' : ''}
+              />
+              <KeyboardTimePicker
                 margin="normal"
                 id="time-picker"
                 label="Heure de fin"
@@ -323,62 +386,59 @@ const AddEventForm = ({actorId}) => {
                 KeyboardButtonProps={{
                   'aria-label': 'change time',
                 }}
-            />
+                ampm={false}
+                minutesStep={5}
+                error={selectedStartDate && selectedEndDate && (selectedStartDate >= selectedEndDate)}
+              />
             </Grid>
           </MuiPickersUtilsProvider>
         </Grid>
         <Grid>
-          <Typography>Catégorie(s) de l'événement</Typography>
-          <List  className={styles.field}>
-            {typeof categoryData !== "undefined" && categoryData.categories.map((category, index) => {
-              return (
-                  <div>
-                    <ListItem key={category.id} role={undefined} dense button onClick={handleToggle(0, index)}>
-                      <ListItemIcon>
-                      </ListItemIcon>
-                      <ListItemText primary={category.label}/>
-                      {open[index] ? <ExpandLess /> : <ExpandMore />}
-                    </ListItem>
-                    {typeof category.subCategories !== "undefined" && category.subCategories !=null && category.subCategories.map((subcategory, subIndex) => {
-                      return (
-                          <Collapse in={open[index]} timeout="auto" unmountOnExit>
+          <Typography>Catégorie(s) de l'événement *</Typography>
+          <List className={styles.field}>
+            {typeof categoryData !== 'undefined' && categoryData.categories.map((category, index) => (
+              <div>
+                <ListItem key={category.id} role={undefined} dense button onClick={handleToggle(0, index)}>
+                  <ListItemIcon />
+                  <ListItemText primary={category.label} />
+                  {open[index] ? <ExpandLess /> : <ExpandMore />}
+                </ListItem>
+                {typeof category.subCategories !== 'undefined' && category.subCategories != null && category.subCategories.map((subcategory, subIndex) => (
+                  <Collapse in={open[index]} timeout="auto" unmountOnExit>
 
-                            <List component="div" disablePadding>
-                              <ListItem button >
-                                <ListItemIcon>
-                                  <Checkbox
-                                      edge="start"
-                                      tabIndex={-1}
-                                      disableRipple
-                                      onChange={formChangeHandler}
-                                      name="categories"
-                                      value={subcategory.id}
-                                  />
-                                </ListItemIcon>
-                                <ListItemText  primary={subcategory.label} />
-                              </ListItem>
-                            </List>
-                          </Collapse>
-                      );
-                    })}
-                  </div>
-              );
-            })
-            }
+                    <List component="div" disablePadding>
+                      <ListItem button>
+                        <ListItemIcon>
+                          <Checkbox
+                            edge="start"
+                            tabIndex={-1}
+                            disableRipple
+                            onChange={formChangeHandler}
+                            name="categories"
+                            value={subcategory.id}
+                          />
+                        </ListItemIcon>
+                        <ListItemText primary={subcategory.label} />
+                      </ListItem>
+                    </List>
+                  </Collapse>
+                ))}
+              </div>
+            ))}
           </List>
         </Grid>
         <Grid className={styles.location}>
           <Typography>Lieu</Typography>
           <GooglePlacesAutocomplete
             placeholder="Taper et sélectionner l'adresse"
-            initialValue={formValues.address && formValues.address.concat(" ").concat(formValues.postCode).concat(" ").concat(formValues.city)}
+            initialValue={formValues.address && formValues.address.concat(' ').concat(formValues.postCode).concat(' ').concat(formValues.city)}
             onSelect={({ description }) => (
-              geocodeByAddress(description).then(results => {
+              geocodeByAddress(description).then((results) => {
                 getLatLng(results[0]).then((value) => {
-                  formValues.lat = '' + value.lat
-                  formValues.lng = '' + value.lng
-                }).catch(error => console.error(error))
-                getAddressDetails(results)
+                  formValues.lat = `${value.lat}`;
+                  formValues.lng = `${value.lng}`;
+                }).catch((error) => console.error(error));
+                getAddressDetails(results);
               })
             )}
           />
@@ -388,21 +448,20 @@ const AddEventForm = ({actorId}) => {
           variant="contained"
           className={styles.submit}
           onClick={submitHandler}
-          disabled={!validateFields()}
+          disabled={!validationResult?.global || !validated}
         >
           Créer cet événement
         </ClassicButton>
       </Container>
-    )
-  }
-  
+    );
+  };
 
   return (
-    <FormController 
-      render={Form} 
-      // validationRules={validationRules} 
+    <FormController
+      render={Form}
+      validationRules={validationRules}
     />
-  )
-}
+  );
+};
 
-export default withApollo()(AddEventForm)
+export default withApollo()(AddEventForm);

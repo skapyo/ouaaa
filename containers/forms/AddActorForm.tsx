@@ -118,23 +118,6 @@ const FormItem = (props: FormItemProps) => {
   const {
     label, inputName, formChangeHandler, value, required, errorBool, errorText,
   } = props;
-  if (errorBool) {
-    return (
-      <TextField
-        error
-        helperText={errorText}
-        className={styles.field}
-        variant="outlined"
-        value={value}
-        label={label}
-        name={inputName}
-        onChange={formChangeHandler}
-        defaultValue=""
-        fullWidth
-        required={required}
-      />
-    );
-  }
   return (
     <TextField
       className={styles.field}
@@ -146,6 +129,8 @@ const FormItem = (props: FormItemProps) => {
       defaultValue=""
       fullWidth
       required={required}
+      error={errorBool}
+      helperText={errorBool ? errorText : ''}
     />
   );
 };
@@ -155,25 +140,6 @@ const FormItemTextareaAutosize = (props: FormItemProps) => {
   const {
     label, inputName, formChangeHandler, value, required, errorBool, errorText,
   } = props;
-  if (errorBool) {
-    return (
-      <TextField
-        error
-        helperText={errorText}
-        multiline
-        rows={4}
-        className={styles.field}
-        variant="outlined"
-        value={value}
-        label={label}
-        name={inputName}
-        onChange={formChangeHandler}
-        defaultValue=""
-        fullWidth
-        required={required}
-      />
-    );
-  }
   return (
     <TextField
       multiline
@@ -187,6 +153,8 @@ const FormItemTextareaAutosize = (props: FormItemProps) => {
       defaultValue=""
       fullWidth
       required={required}
+      error={errorBool}
+      helperText={errorBool ? errorText : ''}
     />
   );
 };
@@ -262,7 +230,7 @@ const AddActorForm = () => {
           formChangeHandler={formChangeHandler}
           value={formValues.name}
           required
-          errorBool={!!((!validationResult?.global && validationResult?.result.name))}
+          errorBool={!validationResult?.global && validationResult?.result.name}
           errorText="Nom de l'acteur requis."
         />
         <FormItem
@@ -295,7 +263,7 @@ const AddActorForm = () => {
           value={formValues.description}
           required
           errorBool={!validationResult?.global && validationResult?.result.description}
-          errorText={`Minimum 120 caractères. ${120 - formValues.description?.length} caractères restants.`}
+          errorText={`Minimum 120 caractères. ${120 - formValues.description?.length} caractères restants minimum.`}
         />
         <div className={styles.field}>
           <Grid className={styles.location}>

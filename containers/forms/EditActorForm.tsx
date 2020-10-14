@@ -136,23 +136,6 @@ const FormItem = (props: FormItemProps) => {
   const {
     label, inputName, formChangeHandler, value, required, errorBool, errorText,
   } = props;
-  if (errorBool) {
-    return (
-      <TextField
-        error
-        helperText={errorText}
-        className={styles.field}
-        variant="outlined"
-        value={value}
-        label={label}
-        name={inputName}
-        onChange={formChangeHandler}
-        defaultValue=""
-        fullWidth
-        required={required}
-      />
-    );
-  }
   return (
     <TextField
       className={styles.field}
@@ -164,6 +147,8 @@ const FormItem = (props: FormItemProps) => {
       defaultValue=""
       fullWidth
       required={required}
+      error={errorBool}
+      helperText={errorBool ? errorText : ''}
     />
   );
 };
@@ -173,25 +158,6 @@ const FormItemTextareaAutosize = (props: FormItemProps) => {
   const {
     label, inputName, formChangeHandler, value, required, errorBool, errorText,
   } = props;
-  if (errorBool) {
-    return (
-      <TextField
-        error
-        helperText={errorText}
-        multiline
-        rows={4}
-        className={styles.field}
-        variant="outlined"
-        value={value}
-        label={label}
-        name={inputName}
-        onChange={formChangeHandler}
-        defaultValue=""
-        fullWidth
-        required={required}
-      />
-    );
-  }
   return (
     <TextField
       multiline
@@ -205,6 +171,8 @@ const FormItemTextareaAutosize = (props: FormItemProps) => {
       defaultValue=""
       fullWidth
       required={required}
+      error={errorBool}
+      helperText={errorBool ? errorText : ''}
     />
   );
 };
