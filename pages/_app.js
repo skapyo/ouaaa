@@ -73,7 +73,7 @@ const MyApp = (props )  => {
         <title>OUtils des Acteurs Alternatifs en Aunis</title>
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
         <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDvUKXlWS1470oj8C-vD6s62Bs9Y8XQf00&language=fr&region=FR&libraries=places"></script>
-        <link rel="shortcut icon" href="/logo.ico" />
+        <link rel="shortcut icon" href="/logo.svg" />
       </Head>
       <MuiPickersUtilsProvider utils={MomentUtils}>
         <ThemeProvider theme={theme}>
