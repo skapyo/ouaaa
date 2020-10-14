@@ -1,30 +1,26 @@
 /* eslint react/prop-types: 0 */
-import React, {
-  ChangeEvent, useCallback, useState, useEffect,
-} from 'react';
-import {
-  Container, Grid, makeStyles, Typography,
-} from '@material-ui/core';
+import React, {ChangeEvent, useCallback, useEffect, useState,} from 'react';
+import {Container, Grid, makeStyles, Typography,} from '@material-ui/core';
 import TextField from 'components/form/TextField';
 import ClassicButton from 'components/buttons/ClassicButton';
-import { withApollo } from 'hoc/withApollo';
-import { useRouter, withRouter } from 'next/router';
+import {withApollo} from 'hoc/withApollo';
+import {withRouter} from 'next/router';
 import gql from 'graphql-tag';
 import graphqlTag from 'graphql-tag';
-import FormController, { RenderCallback } from 'components/controllers/FormController';
+import FormController, {RenderCallback} from 'components/controllers/FormController';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
-import GooglePlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-google-places-autocomplete';
-import { useQuery, useMutation } from '@apollo/react-hooks';
+import GooglePlacesAutocomplete, {geocodeByAddress, getLatLng} from 'react-google-places-autocomplete';
+import {useMutation, useQuery} from '@apollo/react-hooks';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import Collapse from '@material-ui/core/Collapse';
-import { useCookies } from 'react-cookie';
-import { useSnackbar } from 'notistack';
-import { QueryOptions, ValidationRules, ValidationRuleType } from '../../components/controllers/FormController';
+import {useCookies} from 'react-cookie';
+import {useSnackbar} from 'notistack';
+import {ValidationRules, ValidationRuleType} from '../../components/controllers/FormController';
 import useCookieRedirection from '../../hooks/useCookieRedirection';
 
 const EDIT_ACTOR = gql`
@@ -133,6 +129,7 @@ type FormItemProps = {
 
 const FormItem = (props: FormItemProps) => {
   const styles = useStyles();
+
   const {
     label, inputName, formChangeHandler, value, required, errorBool, errorText,
   } = props;
@@ -215,7 +212,7 @@ const EditActorForm = (props) => {
     },
     phone: {
       rule: ValidationRuleType.only && ValidationRuleType.maxLength,
-      type: 'number',
+  //    type: 'number',
       maxLimit: 10,
     },
     description: {
@@ -288,7 +285,7 @@ const EditActorForm = (props) => {
           formChangeHandler={formChangeHandler}
           value={formValues.name}
           required
-          errorBool={!validationResult?.global && validationResult?.result.name}
+          errorBool={!validationResult?.global && !!validationResult?.result.name }
           errorText="Nom de l'acteur requis."
         />
         <FormItem
@@ -297,7 +294,7 @@ const EditActorForm = (props) => {
           formChangeHandler={formChangeHandler}
           value={formValues.email}
           required
-          errorBool={!validationResult?.global && validationResult?.result.email}
+          errorBool={!validationResult?.global && !!validationResult?.result.email}
           errorText="Format de l'email invalide."
         />
         <FormItem
@@ -305,14 +302,18 @@ const EditActorForm = (props) => {
           inputName="phone"
           formChangeHandler={formChangeHandler}
           value={formValues.phone}
-          errorBool={!validationResult?.global && validationResult?.result.phone}
+          errorBool={!validationResult?.global && !!validationResult?.result.phone}
+          required={false}
           errorText="Format du téléphone invalide. Maximum 10 chiffres."
         />
         <FormItem
           label="Site Internet"
           inputName="website"
           formChangeHandler={formChangeHandler}
+          required={false}
+          errorBool={false}
           value={formValues.website}
+          errorText=""
         />
         <FormItemTextareaAutosize
           label="Description"
@@ -320,7 +321,7 @@ const EditActorForm = (props) => {
           formChangeHandler={formChangeHandler}
           value={formValues.description}
           required
-          errorBool={!validationResult?.global && validationResult?.result.description}
+          errorBool={!validationResult?.global && !!validationResult?.result.description}
           errorText={`Minimum 120 caractères. ${120 - formValues.description?.length} caractères restants.`}
         />
         <div className={styles.field}>

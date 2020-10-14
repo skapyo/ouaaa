@@ -1,18 +1,20 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, {ChangeEvent, useEffect, useState} from 'react';
 import gql from 'graphql-tag';
-import { withApollo } from 'hoc/withApollo';
-import {
-  Container, Grid, makeStyles, TextField, Typography,
-} from '@material-ui/core';
+import {withApollo} from 'hoc/withApollo';
+import {Container, Grid, makeStyles, TextField, Typography,} from '@material-ui/core';
 import ClassicButton from 'components/buttons/ClassicButton';
-import FormController, { RenderCallback, ValidationRules, ValidationRuleType } from 'components/controllers/FormController';
-import { useMutation, useQuery } from '@apollo/react-hooks';
+import FormController, {
+  RenderCallback,
+  ValidationRules,
+  ValidationRuleType
+} from 'components/controllers/FormController';
+import {useMutation, useQuery} from '@apollo/react-hooks';
 import useGraphQLErrorDisplay from 'hooks/useGraphQLErrorDisplay';
 import Checkbox from '@material-ui/core/Checkbox';
 import useCookieRedirection from 'hooks/useCookieRedirection';
-import { useSnackbar } from 'notistack';
-import GooglePlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-google-places-autocomplete';
-import { useRouter } from 'next/router';
+import {useSnackbar} from 'notistack';
+import GooglePlacesAutocomplete, {geocodeByAddress, getLatLng} from 'react-google-places-autocomplete';
+import {useRouter} from 'next/router';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon/ListItemIcon';
@@ -21,9 +23,9 @@ import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import Collapse from '@material-ui/core/Collapse/Collapse';
 import DateFnsUtils from '@date-io/date-fns';
-import { KeyboardDatePicker, KeyboardTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import {KeyboardDatePicker, KeyboardTimePicker, MuiPickersUtilsProvider} from '@material-ui/pickers';
 import moment from 'moment';
-import { useSessionState } from '../../context/session/session';
+import {useSessionState} from '../../context/session/session';
 
 const useStyles = makeStyles((theme) => ({
   field: {
@@ -164,7 +166,7 @@ const AddEventForm = ({ actorId }) => {
     },
     shortDescription: {
       rule: ValidationRuleType.required && ValidationRuleType.minLength,
-      minLimit: 120,
+      minLimit: 50,
     },
     description: {
       rule: ValidationRuleType.required && ValidationRuleType.minLength,
@@ -209,7 +211,7 @@ const AddEventForm = ({ actorId }) => {
 
     useEffect(() => {
       if ((selectedStartDate && selectedEndDate && (selectedStartDate >= selectedEndDate))
-          || (selectedStartDate && selectedStartDate <= Date.now())
+          || (selectedStartDate &&  moment(selectedStartDate) <= moment())
           || !formValues.shortDescription
           || !formValues.description
           || !formValues.categories
@@ -254,7 +256,7 @@ const AddEventForm = ({ actorId }) => {
         enqueueSnackbar('Événement créé avec succès.', {
           preventDuplicate: true,
         });
-        // router.push(`/event/${data.createEvent.id}`);
+         router.push(`/event/${data.createEvent.id}`);
       }
     }, [data]);
 
@@ -304,7 +306,7 @@ const AddEventForm = ({ actorId }) => {
           formChangeHandler={formChangeHandler}
           value={formValues.label}
           required
-          errorBool={!validationResult?.global && validationResult?.result.label}
+          errorBool={!validationResult?.global && !!validationResult?.result.label}
           errorText="Nom de l'événement requis."
         />
         <FormItem
@@ -312,6 +314,9 @@ const AddEventForm = ({ actorId }) => {
           inputName="facebookUrl"
           formChangeHandler={formChangeHandler}
           value={formValues.facebookUrl}
+          required={false}
+          errorBool={false}
+          errorText={""}
         />
         <FormItemTextareaAutosize
           label="Description courte"
@@ -319,8 +324,8 @@ const AddEventForm = ({ actorId }) => {
           formChangeHandler={formChangeHandler}
           value={formValues.shortDescription}
           required
-          errorBool={!validationResult?.global && validationResult?.result.shortDescription}
-          errorText={`Minimum 120 caractères. ${120 - formValues.shortDescription?.length} caractères restants minimum.`}
+          errorBool={!validationResult?.global && !!validationResult?.result.shortDescription}
+          errorText={`Minimum 50 caractères. ${50 - formValues.shortDescription?.length} caractères restants minimum.`}
         />
         <FormItemTextareaAutosize
           label="Description détaillée"
@@ -328,7 +333,7 @@ const AddEventForm = ({ actorId }) => {
           formChangeHandler={formChangeHandler}
           value={formValues.description}
           required
-          errorBool={!validationResult?.global && validationResult?.result.description}
+          errorBool={!validationResult?.global && !!validationResult?.result.description}
           errorText={`Minimum 120 caractères. ${120 - formValues.description?.length} caractères restants minimum.`}
         />
         <Grid className={styles.datetime}>
@@ -346,8 +351,8 @@ const AddEventForm = ({ actorId }) => {
                 KeyboardButtonProps={{
                   'aria-label': 'change date',
                 }}
-                error={selectedStartDate && selectedStartDate <= Date.now()}
-                helperText={(selectedStartDate && selectedStartDate <= Date.now()) ? 'La date de début ne peut être dans le passé.' : ''}
+                error={!!selectedStartDate &&  moment(selectedStartDate) <=  moment(Date.now())}
+                helperText={(selectedStartDate &&  moment(selectedStartDate) <=  moment(Date.now())) ? 'La date de début ne peut être dans le passé.' : ''}
               />
               <KeyboardTimePicker
                 margin="normal"
@@ -360,7 +365,7 @@ const AddEventForm = ({ actorId }) => {
                 }}
                 ampm={false}
                 minutesStep={5}
-                error={selectedStartDate && selectedStartDate <= Date.now()}
+                error={!!selectedStartDate &&  (moment(selectedStartDate) <= moment())}
               />
               <KeyboardDatePicker
                 disableToolbar
@@ -374,7 +379,7 @@ const AddEventForm = ({ actorId }) => {
                 KeyboardButtonProps={{
                   'aria-label': 'change date',
                 }}
-                error={selectedStartDate && selectedEndDate && (selectedStartDate >= selectedEndDate)}
+                error={!!selectedStartDate &&!! selectedEndDate && ( moment(selectedStartDate) >=  moment(selectedEndDate))}
                 helperText={selectedStartDate && selectedEndDate && (selectedStartDate >= selectedEndDate) ? 'La date de fin doit être après la date de début.' : ''}
               />
               <KeyboardTimePicker
@@ -388,7 +393,7 @@ const AddEventForm = ({ actorId }) => {
                 }}
                 ampm={false}
                 minutesStep={5}
-                error={selectedStartDate && selectedEndDate && (selectedStartDate >= selectedEndDate)}
+                error={!!selectedStartDate && !!selectedEndDate && ( moment(selectedStartDate) >=  moment(selectedEndDate))}
               />
             </Grid>
           </MuiPickersUtilsProvider>
@@ -430,7 +435,7 @@ const AddEventForm = ({ actorId }) => {
         <Grid className={styles.location}>
           <Typography>Lieu</Typography>
           <GooglePlacesAutocomplete
-            placeholder="Taper et sélectionner l'adresse"
+            placeholder="Taper et sélectionner l'adresse*"
             initialValue={formValues.address && formValues.address.concat(' ').concat(formValues.postCode).concat(' ').concat(formValues.city)}
             onSelect={({ description }) => (
               geocodeByAddress(description).then((results) => {

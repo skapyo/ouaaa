@@ -1,9 +1,7 @@
-import {
-  createStyles, makeStyles, Theme, Typography, useTheme,
-} from '@material-ui/core';
-import { withApollo } from 'hoc/withApollo';
+import {createStyles, makeStyles, Theme, Typography, useTheme,} from '@material-ui/core';
+import {withApollo} from 'hoc/withApollo';
 import ActorAdminPageLayout from 'containers/layouts/actorAdminPage/ActorAdminPageLayout';
-import { useQuery } from '@apollo/react-hooks';
+import {useQuery} from '@apollo/react-hooks';
 import React from 'react';
 import gql from 'graphql-tag';
 import Paper from '@material-ui/core/Paper/Paper';
@@ -24,7 +22,7 @@ import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import FirstPageIcon from '@material-ui/icons/FirstPage';
 import Moment from 'react-moment';
 import Link from '../../components/Link';
-import { useSessionState } from '../../context/session/session';
+import {useSessionState} from '../../context/session/session';
 
 const useStyles = makeStyles((theme) => ({
   avatar: {
@@ -257,10 +255,11 @@ const ActorAdminPage = () => {
                   <TableCell style={{ width: 160 }} align="left">
                     {/* @ts-ignore */}
                     <Link href={`/actor/${actor.id}`}>
-                      Lien Page
+                      Lien vers page acteur
                     </Link>
                   </TableCell>
                   <TableCell style={{ width: 160 }} align="right">
+                      {/* @ts-ignore */}
                     <Link href={`/actorAdmin/actor/${actor.id}`}>
                       <Edit />
                     </Link>
