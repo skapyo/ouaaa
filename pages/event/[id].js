@@ -373,16 +373,13 @@ const Event = () => {
                                             <Schedule className={[styles.icon]}/>
                                         </Grid>
                                         <Grid item xs={8} className={[styles.alignLeft]}>
-                                            <div className={[styles.infoLabel]} >Date</div>
+                                            <div className={[styles.infoLabel]} >Date de début</div>
                                             <span className={[styles.infoValue]}>
-                                            De
-                                            <Moment format=" HH" unix>{data && data.event.startedAt/1000}</Moment>
-                                            h
-                                            <Moment format="mm " unix>{data && data.event.startedAt/1000}</Moment>
-                                            à
-                                            <Moment format=" HH" unix>{data && data.event.endedAt/1000}</Moment>
-                                            h
-                                            <Moment format="mm " unix>{data && data.event.endedAt/1000}</Moment></span>
+                                            <Moment format=" DD/MM HH:mm" unix>{data && data.event.startedAt/1000}</Moment>
+                                            </span>
+                                            <div className={[styles.infoLabel]} >Date de fin</div>
+                                            <span className={[styles.infoValue]}>
+                                            <Moment format=" DD/MM HH:mm" unix>{data && data.event.endedAt/1000}</Moment></span>
 
                                         </Grid>
                                     </Grid>

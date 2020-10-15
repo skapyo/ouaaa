@@ -48,13 +48,18 @@ const AgendaPageLayout = () => {
           name
         }
       }
-    }
+    } 
   `;
 
 
   const classes = useStyles()
   const {data:eventData, loading, error,refetch} = useQuery(
-      GET_EVENTS,{fetchPolicy:"network-only"});
+      GET_EVENTS, {
+        variables: {
+          startingDate: "2020-10-15T21:23:00.000Z",
+        }
+      }
+  )
   return (
     <Container className={classes.main}>
       <Container className={classes.layout}>

@@ -1,6 +1,5 @@
 /* eslint react/prop-types: 0 */
 import React, {ChangeEvent, useCallback, useState} from 'react';
-import {EditorState} from 'draft-js';
 import {Container, Grid, makeStyles, Typography,} from '@material-ui/core';
 import TextField from 'components/form/TextField';
 import ClassicButton from 'components/buttons/ClassicButton';
@@ -204,19 +203,8 @@ const AddActorForm = () => {
   });
   const [open, setOpen] = React.useState([false]);
   const [cookies, setCookie, removeCookie] = useCookies();
-  const [editorState, setEditorState] = React.useState(
-      EditorState.createEmpty()
-  );
-  const editor = React.useRef(null);
 
-  function focusEditor() {
-    /* @ts-ignore */
-    editor.current.focus();
-  }
 
-  React.useEffect(() => {
-    focusEditor()
-  }, []);
 
   const handleToggle = (value: number, index: number) => () => {
     const currentIndex = checked.indexOf(value);
