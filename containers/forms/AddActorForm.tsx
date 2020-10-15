@@ -1,5 +1,6 @@
 /* eslint react/prop-types: 0 */
 import React, {ChangeEvent, useCallback, useState} from 'react';
+import {EditorState} from 'draft-js';
 import {Container, Grid, makeStyles, Typography,} from '@material-ui/core';
 import TextField from 'components/form/TextField';
 import ClassicButton from 'components/buttons/ClassicButton';
@@ -23,6 +24,7 @@ import {Redirect} from 'react-router-dom';
 import {useCookies} from 'react-cookie';
 import {QueryOptions, ValidationRules, ValidationRuleType} from '../../components/controllers/FormController';
 import useCookieRedirection from '../../hooks/useCookieRedirection';
+import Link from "../../components/Link";
 
 const CREATE_ACTOR = gql`
   mutation createActor($formValues: ActorInfos,$userId: Int!) {
@@ -62,6 +64,35 @@ const GET_CATEGORIES = graphqlTag`
   }
     }
     }
+`;
+
+const GET_ACTORS = graphqlTag`
+
+  query actorsAdmin (
+    $userId: String!
+  )
+  { actorsAdmin(userId: $userId)
+  {   id,
+    name,
+    address,
+    short_description,
+    createdAt,
+    updatedAt,
+    city,
+    lat,
+    lng,
+    categories{
+      label
+    }
+    referents{
+      surname,
+      lastname,
+      email,
+      phone
+    }
+  }
+  }
+
 `;
 
 const resultLabel = 'createActor';
@@ -166,8 +197,26 @@ const AddActorForm = () => {
   const classes = useStyles();
   const router = useRouter();
   const { data, loading, error } = useQuery(GET_CATEGORIES, { fetchPolicy: 'network-only' });
+  const {data:dataAdminActors } = useQuery(GET_ACTORS, {
+    variables: {
+      userId: user.id,
+    },
+  });
   const [open, setOpen] = React.useState([false]);
   const [cookies, setCookie, removeCookie] = useCookies();
+  const [editorState, setEditorState] = React.useState(
+      EditorState.createEmpty()
+  );
+  const editor = React.useRef(null);
+
+  function focusEditor() {
+    /* @ts-ignore */
+    editor.current.focus();
+  }
+
+  React.useEffect(() => {
+    focusEditor()
+  }, []);
 
   const handleToggle = (value: number, index: number) => () => {
     const currentIndex = checked.indexOf(value);
@@ -221,8 +270,25 @@ const AddActorForm = () => {
 
     return (
       <Container component="main" maxWidth="sm">
+        { dataAdminActors && (
+
+            <Typography>
+              Bravo. Vous avez déjà créé des pages acteurs. <br></br>Cliquez sur leurs noms pour éditer la page :
+              {dataAdminActors.actorsAdmin.map((actor) => {{/* @ts-ignore */}
+                return <Typography><Link href={`/actorAdmin/actor/${actor.id}`}>
+                  {actor.name}
+                </Link>   </Typography>
+              })}
+
+              <br></br>
+
+            Vous pouvez créer un autre acteur en remplissant le formulaire ci dessous :
+              <br></br>
+              <br></br>
+          </Typography>
+        )}
         <FormItem
-          label="Nom"
+          label="Nom de l'acteur"
           inputName="name"
           formChangeHandler={formChangeHandler}
           value={formValues.name}
@@ -266,6 +332,7 @@ const AddActorForm = () => {
           errorBool={!validationResult?.global && !!validationResult?.result.description}
           errorText={`Minimum 120 caractères. ${120 - formValues.description?.length} caractères restants minimum.`}
         />
+
         <div className={styles.field}>
           <Grid className={styles.location}>
             <GooglePlacesAutocomplete

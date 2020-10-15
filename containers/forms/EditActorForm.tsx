@@ -4,7 +4,7 @@ import {Container, Grid, makeStyles, Typography,} from '@material-ui/core';
 import TextField from 'components/form/TextField';
 import ClassicButton from 'components/buttons/ClassicButton';
 import {withApollo} from 'hoc/withApollo';
-import {withRouter} from 'next/router';
+import {useRouter, withRouter} from 'next/router';
 import gql from 'graphql-tag';
 import graphqlTag from 'graphql-tag';
 import FormController, {RenderCallback} from 'components/controllers/FormController';
@@ -22,6 +22,7 @@ import {useCookies} from 'react-cookie';
 import {useSnackbar} from 'notistack';
 import {ValidationRules, ValidationRuleType} from '../../components/controllers/FormController';
 import useCookieRedirection from '../../hooks/useCookieRedirection';
+
 
 const EDIT_ACTOR = gql`
   mutation editActor($formValues: ActorInfos, $actorId: Int!) {
@@ -181,7 +182,7 @@ const EditActorForm = (props) => {
   const { data, loading, error } = useQuery(GET_CATEGORIES, { fetchPolicy: 'network-only' });
   const [open, setOpen] = React.useState([false]);
   const [cookies, setCookie, removeCookie] = useCookies();
-
+  const router = useRouter();
   const { loading: actorLoading, error: actorError, data: actorData } = useQuery(GET_ACTOR, {
     variables: { id: props.id.toString() },
   });
@@ -236,6 +237,10 @@ const EditActorForm = (props) => {
           actorId: parseInt(actorData.actor.id),
         },
       });
+      if (!editError) {
+        router.push(`/actor/${actorData.actor.id}`);
+      }
+
     }, [formValues, edit]);
 
     useEffect(() => {

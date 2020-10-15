@@ -1,8 +1,8 @@
 import {Avatar, Grid, makeStyles, Typography} from "@material-ui/core"
-
-import ClassicButton from "components/buttons/ClassicButton"
 import UserInfosForm from "containers/forms/UserInfosForm"
 import AccountPageLayout from "containers/layouts/accountPage/AccountPageLayout"
+import Link from "../../components/Link";
+import React from "react";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -33,6 +33,7 @@ const AccountPage = () => {
                     >
                         Mes informations personnelles
                     </Typography>
+                    Si vous êtes acteur, éditer les informations dans  <Link  href="/actorAdmin">Espace Acteur</Link>
 
                     <UserInfosForm />
 

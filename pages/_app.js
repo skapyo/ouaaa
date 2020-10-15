@@ -13,6 +13,7 @@ import {SnackbarProvider} from 'notistack';
 import './styles.css'
 import '../containers/layouts/agendaPage/DateFilter.css';
 import 'leaflet/dist/leaflet.css';
+import 'draft-js/dist/Draft.css';
 import 'react-google-places-autocomplete/dist/index.min.css';
 import '@brainhubeu/react-carousel/lib/style.css';
 import "slick-carousel/slick/slick.css";
@@ -70,6 +71,7 @@ const MyApp = (props )  => {
   return (
     <React.Fragment>
       <Head>
+        <meta charSet="utf-8"/>
         <title>OUtils des Acteurs Alternatifs en Aunis</title>
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
         <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDvUKXlWS1470oj8C-vD6s62Bs9Y8XQf00&language=fr&region=FR&libraries=places"></script>

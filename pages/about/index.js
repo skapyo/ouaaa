@@ -7,7 +7,11 @@ const useStyles = makeStyles((theme) => ({
 
     align:{
         "text-align": "center",
+        width: "80%"
     },
+    space:{
+        margin:"4em 0 4em 0"
+    }
 
 
 
@@ -25,7 +29,21 @@ const About = () => {
                 <Box>
                     <Container className={styles.align} >
                         <Typography variant="h1" >A propos</Typography>
-                        <Typography variant="h4" >En cours de construction</Typography>
+                        <div className={styles.space} > </div>
+
+                        <Typography  >
+                            <div>Depuis plusieurs années, le besoin d'un site Internet présentant au grand public les acteurs de la transition en Aunis est ressenti avec acuité par le monde associatif. Un site collaboratif qui proposerait outre un annuaire et une carte, un agenda des évènements et autres fonctionnalités augmentant les possibilités d'interactions et de coopérations.</div>
+                            <br></br>
+                            <div>Cette envie a également été exprimée lors des précédents Forums participatifs.</div>
+                            <br></br>
+                            <div>Et puis vint le confinement, qui nous a décidé à nous retrousser les manches. "Nous", c'est une vingtaine de bénévoles issus de divers collectifs associatifs (Collectif Transition Citoyenne, Collectif Actions Solidaire, Tiers Lieu La Proue) mais aussi des citoyennes et citoyens engagés.</div>
+                            <br></br>
+                            <div>C'est ainsi que le site va bientôt voir le jour sous le nom de Ouaaa : Outil des Acteurs Alternatifs en Aunis.</div>
+                        </Typography>
+                    <br></br>
+                        <br></br>
+                        <Typography variant="h4" ><a href="mailto:contact@acteursdelatransition.fr">Pour nous contacter</a> </Typography>
+
                     </Container>
                     <Newsletter />
                 </Box>

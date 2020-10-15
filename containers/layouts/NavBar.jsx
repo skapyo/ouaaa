@@ -59,8 +59,8 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   logo: {
-    width: '8em',
-    marginTop: '1em',
+    width: '12em',
+    marginTop: '0.5em',
   },
 }));
 

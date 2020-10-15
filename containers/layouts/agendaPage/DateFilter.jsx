@@ -2,6 +2,7 @@ import "date-fns";
 import React from "react";
 import Grid from "@material-ui/core/Grid";
 import DateFnsUtils from "@date-io/date-fns";
+import {fr} from "date-fns/locale";
 import {KeyboardDatePicker, MuiPickersUtilsProvider} from "@material-ui/pickers";
 
 const DateFilter = (refetch) => {
@@ -17,7 +18,7 @@ const DateFilter = (refetch) => {
   }
 
   return (
-    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+    <MuiPickersUtilsProvider locale={fr} utils={DateFnsUtils}>
       <Grid container justify="space-around">
         <KeyboardDatePicker
           autoOk

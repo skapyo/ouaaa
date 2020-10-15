@@ -236,7 +236,10 @@ const ActorAdminPage = () => {
               {typeof data !== 'undefined' && data.actorsAdmin.map((actor) => (
                 <TableRow key={actor.id} hover>
                   <TableCell component="th" scope="row">
+                      {/* @ts-ignore */}
+                      <Link href={`/actorAdmin/actor/${actor.id}`}>
                     {actor.name}
+                      </Link>
                   </TableCell>
                   <TableCell style={{ width: 160 }} align="left">
                     <Moment format="DD/MM HH:mm" unix>{actor.createdAt / 1000}</Moment>
