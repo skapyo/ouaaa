@@ -69,16 +69,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ADDEVENT = gql`
-  mutation createEvent(
-    $eventInfos: EventInfos,$actorId: Int!$userId: Int!
+const EDIT_EVENT = gql`
+  mutation editEvent(
+    $eventInfos: EventInfos, $eventId: Int!
   ) {
-    createEvent(
-      eventInfos: $eventInfos,actorId: $actorId,userId: $userId
+    editEvent(
+      eventInfos: $eventInfos, eventId: $eventId
     ) {
-        id,
+      id
       label
-      shortDescription
+      short_description
       facebookUrl
       description
       startedAt
@@ -103,6 +103,30 @@ query categories {
     }
   }
 }
+`;
+
+const GET_EVENT = gql`
+  query event($id: String!) {
+    event(id: $id) {
+      id
+      label
+      short_description
+      facebookUrl
+      description
+      startedAt
+      endedAt
+      published
+      categories {
+        id
+        label
+      }
+      lat
+      lng
+      address
+      postCode
+      city
+    }
+  }
 `;
 
 type FormItemProps = {
@@ -161,7 +185,7 @@ const FormItemTextareaAutosize = (props: FormItemProps) => {
   );
 };
 
-const AddEventForm = ({ actorId }) => {
+const EditEventForm = (props) => {
   const validationRules: ValidationRules = {
     label: {
       rule: ValidationRuleType.required,
@@ -176,13 +200,17 @@ const AddEventForm = ({ actorId }) => {
     },
   };
 
+  const { loading: eventLoading, error: eventError, data: eventData } = useQuery(GET_EVENT, {
+    variables: { id: props.id.toString() },
+  });
+
   const Form: RenderCallback = ({
     formChangeHandler,
     validationResult,
     formValues,
   }) => {
     // const { formChangeHandler, formValues, validationResult } = props;
-    const [addEvent, { data, error }] = useMutation(ADDEVENT);
+    const [editEvent, { data, error }] = useMutation(EDIT_EVENT);
     const { data: categoryData, loading: categoryLoading, error: categoryError } = useQuery(
       GET_CATEGORIES,
     );
@@ -216,8 +244,8 @@ const AddEventForm = ({ actorId }) => {
           || (selectedStartDate && moment(selectedStartDate) <= moment())
           || !formValues.shortDescription
           || !formValues.description
-          || !formValues.categories
-          || formValues.categories?.length === 0
+          // || !formValues.categories
+          // || formValues.categories?.length === 0
           || (!address && !city)) setValidated(false);
       else setValidated(true);
     });
@@ -255,12 +283,47 @@ const AddEventForm = ({ actorId }) => {
 
     useEffect(() => {
       if (data) {
-        enqueueSnackbar('Événement créé avec succès.', {
+        enqueueSnackbar('Événement mis à jour avec succès.', {
           preventDuplicate: true,
         });
-        router.push(`/event/${data.createEvent.id}`);
+        router.push(`/event/${eventData.event.id}`);
       }
     }, [data]);
+
+    const [firstRender, setFirstRender] = useState(true);
+    const initFormValues = () => {
+      formValues.label = '';
+      formValues.facebookUrl = '';
+      formValues.shortDescription = '';
+      formValues.description = '';
+      formValues.address = '';
+      formValues.postCode = '';
+      formValues.city = '';
+      formValues.lat = '';
+      formValues.lng = '';
+    };
+    const updateFormValues = () => {
+      formValues.label = eventData.event.label;
+      formValues.facebookUrl = eventData.event.facebookUrl;
+      formValues.shortDescription = eventData.event.short_description;
+      formValues.description = eventData.event.description;
+      formValues.address = eventData.event.address;
+      formValues.postCode = eventData.event.postCode;
+      formValues.city = eventData.event.city;
+      formValues.lat = eventData.event.lat;
+      formValues.lng = eventData.event.lng;
+      setAddress(eventData.event.address);
+      setCity(eventData.event.city);
+      setSelectedStartDate(parseInt(eventData.event.startedAt));
+      setSelectedEndDate(parseInt(eventData.event.endedAt));
+    };
+    if (firstRender) {
+      initFormValues();
+    }
+    if (firstRender && !eventLoading && !eventError) {
+      updateFormValues();
+      setFirstRender(false);
+    }
 
     const submitHandler = () => {
       const checkboxes = Object.keys(state);
@@ -269,7 +332,7 @@ const AddEventForm = ({ actorId }) => {
       checkboxes.forEach((key) => {
         if (state[key]) { categoriesArray.push(parseInt(key)); }
       });
-      addEvent({
+      editEvent({
         variables: {
           eventInfos: {
             label: formValues.label,
@@ -285,10 +348,8 @@ const AddEventForm = ({ actorId }) => {
             address,
             postCode: formValues.postCode,
             city,
-
           },
-          actorId: parseInt(actorId),
-          userId: parseInt(user.id),
+          eventId: parseInt(eventData.event.id),
         },
       });
     };
@@ -300,7 +361,7 @@ const AddEventForm = ({ actorId }) => {
           color="secondary"
           variant="h6"
         >
-          Ajouter un événement
+          Éditer un événement
         </Typography>
         <FormItem
           label="Nom de l'événement"
@@ -457,7 +518,7 @@ const AddEventForm = ({ actorId }) => {
           onClick={submitHandler}
           disabled={!validationResult?.global || !validated}
         >
-          Créer cet événement
+          Mettre à jour cet événement
         </ClassicButton>
       </Container>
     );
@@ -471,4 +532,4 @@ const AddEventForm = ({ actorId }) => {
   );
 };
 
-export default withApollo()(AddEventForm);
+export default withApollo()(EditEventForm);

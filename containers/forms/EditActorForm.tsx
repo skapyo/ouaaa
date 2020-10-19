@@ -1,28 +1,31 @@
 /* eslint react/prop-types: 0 */
-import React, {ChangeEvent, useCallback, useEffect, useState,} from 'react';
-import {Container, Grid, makeStyles, Typography,} from '@material-ui/core';
+import React, {
+  ChangeEvent, useCallback, useEffect, useState,
+} from 'react';
+import {
+  Container, Grid, makeStyles, Typography,
+} from '@material-ui/core';
 import TextField from 'components/form/TextField';
 import ClassicButton from 'components/buttons/ClassicButton';
-import {withApollo} from 'hoc/withApollo';
-import {useRouter, withRouter} from 'next/router';
+import { withApollo } from 'hoc/withApollo';
+import { useRouter, withRouter } from 'next/router';
 import gql from 'graphql-tag';
 import graphqlTag from 'graphql-tag';
-import FormController, {RenderCallback} from 'components/controllers/FormController';
+import FormController, { RenderCallback } from 'components/controllers/FormController';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
-import GooglePlacesAutocomplete, {geocodeByAddress, getLatLng} from 'react-google-places-autocomplete';
-import {useMutation, useQuery} from '@apollo/react-hooks';
+import GooglePlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-google-places-autocomplete';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import Collapse from '@material-ui/core/Collapse';
-import {useCookies} from 'react-cookie';
-import {useSnackbar} from 'notistack';
-import {ValidationRules, ValidationRuleType} from '../../components/controllers/FormController';
+import { useCookies } from 'react-cookie';
+import { useSnackbar } from 'notistack';
+import { ValidationRules, ValidationRuleType } from '../../components/controllers/FormController';
 import useCookieRedirection from '../../hooks/useCookieRedirection';
-
 
 const EDIT_ACTOR = gql`
   mutation editActor($formValues: ActorInfos, $actorId: Int!) {
@@ -213,7 +216,7 @@ const EditActorForm = (props) => {
     },
     phone: {
       rule: ValidationRuleType.only && ValidationRuleType.maxLength,
-  //    type: 'number',
+      //    type: 'number',
       maxLimit: 10,
     },
     description: {
@@ -240,7 +243,6 @@ const EditActorForm = (props) => {
       if (!editError) {
         router.push(`/actor/${actorData.actor.id}`);
       }
-
     }, [formValues, edit]);
 
     useEffect(() => {
@@ -277,7 +279,7 @@ const EditActorForm = (props) => {
       formValues.lat = actorData.actor.lat;
       formValues.lng = actorData.actor.lng;
     };
-    if (firstRender) {
+    if (firstRender && !actorLoading && !actorError) {
       updateFormValues();
       setFirstRender(false);
     }
@@ -290,7 +292,7 @@ const EditActorForm = (props) => {
           formChangeHandler={formChangeHandler}
           value={formValues.name}
           required
-          errorBool={!validationResult?.global && !!validationResult?.result.name }
+          errorBool={!validationResult?.global && !!validationResult?.result.name}
           errorText="Nom de l'acteur requis."
         />
         <FormItem
