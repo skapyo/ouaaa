@@ -27,6 +27,13 @@ import Collapse from '@material-ui/core/Collapse/Collapse';
 import DateFnsUtils from '@date-io/date-fns';
 import { KeyboardDatePicker, KeyboardTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import moment from 'moment';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Button from '@material-ui/core/Button';
+import FallbackPageNotFound from 'containers/fallbacks/FallbackPageNotFound';
 import { useSessionState } from '../../context/session/session';
 
 const useStyles = makeStyles((theme) => ({
@@ -65,6 +72,15 @@ const useStyles = makeStyles((theme) => ({
       '&:active': {
         border: 'solid 1px lightgray',
       },
+    },
+  },
+  delete: {
+    background: 'none',
+    color: theme.palette.warning.main,
+    border: '1px solid',
+    borderColor: theme.palette.warning.main,
+    '&:hover': {
+      background: 'none',
     },
   },
 }));
@@ -126,6 +142,14 @@ const GET_EVENT = gql`
       postCode
       city
     }
+  }
+`;
+
+const DELETE_EVENT = gql`
+  mutation deleteEvent($eventId: Int!) {
+    deleteEvent(
+      eventId: $eventId
+    )
   }
 `;
 
@@ -204,6 +228,41 @@ const EditEventForm = (props) => {
     variables: { id: props.id.toString() },
   });
 
+  const router = useRouter();
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const [deleteEvent, { data: deleteData, error: deleteError, loading: deleteLoading }] = useMutation(DELETE_EVENT);
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const submitDeleteEvent = () => {
+    deleteEvent({
+      variables: {
+        eventId: parseInt(props.id),
+      },
+    });
+    setOpen(false);
+  };
+
+  useEffect(() => {
+    if (!deleteLoading && deleteData?.deleteEvent) {
+      enqueueSnackbar('Événement supprimé.', {
+        preventDuplicate: true,
+      });
+      router.push('/actorAdmin/event');
+    } else if (deleteError) {
+      enqueueSnackbar('La suppression de l\'événement a échoué.', {
+        preventDuplicate: true,
+      });
+    }
+  }, [deleteData, deleteError, deleteLoading]);
+
   const Form: RenderCallback = ({
     formChangeHandler,
     validationResult,
@@ -217,9 +276,7 @@ const EditEventForm = (props) => {
     useGraphQLErrorDisplay(error);
     const styles = useStyles();
     const redirect = useCookieRedirection();
-    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
     const user = useSessionState();
-    const router = useRouter();
     const [state, setState] = React.useState({});
     const [address, setAddress] = useState('');
     const [city, setCity] = useState('');
@@ -339,8 +396,8 @@ const EditEventForm = (props) => {
             shortDescription: formValues.shortDescription,
             facebookUrl: formValues.facebookUrl,
             description: formValues.description,
-            startedAt: selectedStartDate,
-            endedAt: selectedEndDate,
+            startedAt: new Date(selectedStartDate),
+            endedAt: new Date(selectedEndDate),
             published: false,
             categories: formValues.categories,
             lat: parseFloat(formValues.lat),
@@ -520,10 +577,46 @@ const EditEventForm = (props) => {
         >
           Mettre à jour cet événement
         </ClassicButton>
+        <ClassicButton
+          fullWidth
+          variant="contained"
+          className={styles.delete}
+          onClick={handleClickOpen}
+        >
+          Supprimer cet événement
+        </ClassicButton>
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">Êtes-vous sûr(e) de vouloir supprimer cet événement ?</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              Une fois supprimé, cet événement sera définitivement supprimé.
+              Il ne sera plus visible sur notre plateforme, ni pour vous, ni pour les visiteurs.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} color="primary">
+              Annuler
+            </Button>
+            <Button onClick={submitDeleteEvent} color="primary" autoFocus>
+              Supprimer
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Container>
     );
   };
 
+  if (eventLoading) {
+    return (null);
+  }
+  if (eventError) {
+    return (<FallbackPageNotFound />);
+  }
   return (
     <FormController
       render={Form}

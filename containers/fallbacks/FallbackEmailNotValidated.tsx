@@ -1,15 +1,17 @@
-import gql from "graphql-tag"
-import {useMutation} from "@apollo/react-hooks"
-import AppContainer from "containers/layouts/AppContainer"
-import {useEffect, useState} from "react"
-import {Grid, makeStyles, Typography} from "@material-ui/core"
-import ClassicButton from "components/buttons/ClassicButton"
+/* eslint-disable react/jsx-filename-extension */
+import React, { useEffect, useState } from 'react';
+import gql from 'graphql-tag';
+import { useMutation } from '@apollo/react-hooks';
+import AppContainer from 'containers/layouts/AppContainer';
+
+import { Grid, makeStyles, Typography } from '@material-ui/core';
+import ClassicButton from 'components/buttons/ClassicButton';
 
 const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
-}))
+}));
 
 const SEND_VALIDATION_EMAIL = gql`
   mutation sendValidationEmail ($email:String!) {
@@ -18,46 +20,55 @@ const SEND_VALIDATION_EMAIL = gql`
 `;
 
 const FallbackEmailNotValidated = (props: any) => {
-  const styles = useStyles()
-  const [clicked, setClicked] = useState(false)
-  const [fail, setFail] = useState(false)
-  const [sendValidationEmail, { data, loading, error}] = useMutation(SEND_VALIDATION_EMAIL)
+  const { email } = props;
+  const styles = useStyles();
+  const [clicked, setClicked] = useState(false);
+  const [fail, setFail] = useState(false);
+  const [sendValidationEmail, { data, loading, error }] = useMutation(SEND_VALIDATION_EMAIL);
 
   const sendNewEmail = () => {
-    sendValidationEmail({ variables: {email: props.email} })
-  }
+    sendValidationEmail({ variables: { email: props.email } });
+  };
 
   useEffect(() => {
-    if(data) {
+    if (data) {
       setClicked(true);
       setFail(false);
     }
-  },[data]);
+  }, [data]);
 
   useEffect(() => {
-      if(error) {
-        setFail(true);
-        setClicked(false);
-      }
-  },[error]);
+    if (error) {
+      setFail(true);
+      setClicked(false);
+    }
+  }, [error]);
 
   return (
     <AppContainer>
-      {clicked &&
-        <p style={{textAlign: "center"}}>
-          Un email de validation a été envoyé à : <b>{props.email}</b>
+      {clicked
+        && (
+        <p style={{ textAlign: 'center' }}>
+          Un email de validation a été envoyé à :
+          {' '}
+          <b>{email}</b>
         </p>
-      }
-      {fail &&
-        <p style={{textAlign: "center"}}>
-          Une erreur s'est produite, merci de réessayer.
+        )}
+      {fail
+        && (
+        <p style={{ textAlign: 'center' }}>
+          Une erreur s&apos;est produite, merci de réessayer.
         </p>
-      }
-      <Grid container justify='center'>
-        <Typography variant='h6'>
-          Votre email {props.email} n'est pas validé.
+        )}
+      <Grid container justify="center">
+        <Typography variant="h6">
+          Votre email
+          {' '}
+          {email}
+          {' '}
+          n&apos;est pas validé.
         </Typography>
-        <Grid container justify='center'>
+        <Grid container justify="center">
           <Grid item>
             <ClassicButton
               fullWidth
@@ -71,7 +82,7 @@ const FallbackEmailNotValidated = (props: any) => {
         </Grid>
       </Grid>
     </AppContainer>
-  )
-}
+  );
+};
 
-export default FallbackEmailNotValidated
+export default FallbackEmailNotValidated;

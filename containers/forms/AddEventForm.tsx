@@ -76,9 +76,9 @@ const ADDEVENT = gql`
     createEvent(
       eventInfos: $eventInfos,actorId: $actorId,userId: $userId
     ) {
-        id,
+      id
       label
-      shortDescription
+      short_description
       facebookUrl
       description
       startedAt
