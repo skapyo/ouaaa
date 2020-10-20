@@ -371,8 +371,8 @@ const EditEventForm = (props) => {
       formValues.lng = eventData.event.lng;
       setAddress(eventData.event.address);
       setCity(eventData.event.city);
-      setSelectedStartDate(parseInt(eventData.event.startedAt));
-      setSelectedEndDate(parseInt(eventData.event.endedAt));
+      setSelectedStartDate(new Date(parseInt(eventData.event.startedAt)));
+      setSelectedEndDate(new Date(parseInt(eventData.event.endedAt)));
     };
     if (firstRender) {
       initFormValues();
@@ -396,8 +396,8 @@ const EditEventForm = (props) => {
             shortDescription: formValues.shortDescription,
             facebookUrl: formValues.facebookUrl,
             description: formValues.description,
-            startedAt: new Date(selectedStartDate),
-            endedAt: new Date(selectedEndDate),
+            startedAt: selectedStartDate,
+            endedAt: selectedEndDate,
             published: false,
             categories: formValues.categories,
             lat: parseFloat(formValues.lat),
