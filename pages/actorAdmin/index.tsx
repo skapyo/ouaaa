@@ -1,7 +1,7 @@
 import {createStyles, makeStyles, Theme, Typography, useTheme,} from '@material-ui/core';
 import {withApollo} from 'hoc/withApollo';
 import ActorAdminPageLayout from 'containers/layouts/actorAdminPage/ActorAdminPageLayout';
-import {useQuery} from '@apollo/react-hooks';
+import {useQuery} from '@apollo/client';
 import React from 'react';
 import gql from 'graphql-tag';
 import Paper from '@material-ui/core/Paper/Paper';

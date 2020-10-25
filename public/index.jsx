@@ -5,7 +5,7 @@ import {makeStyles} from "@material-ui/core/styles";
 
 import gql from 'graphql-tag'
 import {withApollo} from "../../hoc/withApollo";
-import {useMutation, useQuery} from "@apollo/react-hooks";
+import {useMutation, useQuery}  from '@apollo/client';
 
 
 

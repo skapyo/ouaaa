@@ -7,7 +7,7 @@ import {withApollo} from 'hoc/withApollo';
 import {useRouter, withRouter} from 'next/router';
 import {useDropArea} from 'react-use';
 import withDndProvider from '../../hoc/withDnDProvider';
-import gql from 'graphql-tag';
+import { gql, useApolloClient, useMutation,useQuery } from '@apollo/client';
 import graphqlTag from 'graphql-tag';
 import FormController, {RenderCallback} from 'components/controllers/FormController';
 import List from '@material-ui/core/List';
@@ -17,7 +17,6 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Icon from '@material-ui/core/Icon';
 import Checkbox from '@material-ui/core/Checkbox';
 import GooglePlacesAutocomplete, {geocodeByAddress, getLatLng} from 'react-google-places-autocomplete';
-import {useMutation, useQuery} from '@apollo/react-hooks';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import Collapse from '@material-ui/core/Collapse';
@@ -86,7 +85,20 @@ const GET_ACTOR = gql`
       website
       description
       lat
-      lng
+      lng,
+      pictures{
+        id,
+          label,
+          originalPicturePath,
+          originalPictureFilename,
+          croppedPicturePath,
+          croppedPictureFilename,
+          croppedX,
+          croppedY,
+          croppedZoom,
+          croppedRotation,
+          position
+      }
     }
   }
 `;
@@ -127,6 +139,10 @@ const useStyles = makeStyles((theme) => ({
   image:{
     width:'100%',
     height:'100%'
+  },
+  dropZone:{
+    padding : "1em",
+    margin :"2em"
   }
 }));
 
@@ -203,31 +219,32 @@ const EditActorForm = (props) => {
   if (actorLoading) return null;
   if (actorError) return `Error! ${actorError.message}`;
   var imgInit = [];
+    if(actorData && actorData.actor.pictures && actorData.actor.pictures.length > 0 ) {
 
-  if(actorData && actorData.pictures) {
-    imgInit = actorData.pictures.map((picture, index) => {
-      return {
-        id: index,
-        file: null,
-        img: getImageUrl(picture.originalPicturePath),
-        croppedImg: {
-          crop: {
-            x: picture.croppedX,
-            y: picture.croppedY
-          },
-          rotation: picture.croppedRotation,
-          zoom: picture.croppedZoom,
+      imgInit = actorData.actor.pictures.map((picture, index) => {
+
+        return {
+          id: index,
           file: null,
-          img: getImageUrl(picture.croppedPicturePath),
-          modified: false
-        },
-        activated: true,
-        deleted: false,
-        newpic: false,
-        serverId: picture.id,
-      };
-    });
-  }
+          img: getImageUrl(picture.originalPicturePath),
+          croppedImg: {
+            crop: {
+              x: picture.croppedX,
+              y: picture.croppedY
+            },
+            rotation: picture.croppedRotation,
+            zoom: picture.croppedZoom,
+            file: null,
+            img: getImageUrl(picture.croppedPicturePath),
+            modified: false
+          },
+          activated: true,
+          deleted: false,
+          newpic: false,
+          serverId: picture.id,
+        };
+      });
+    }
 
 
 
@@ -238,10 +255,9 @@ const EditActorForm = (props) => {
     });
 
     return (
-        <Grid>
-          <Grid container>
-            <Grid item ></Grid>
-            <Grid item >
+        <Card className={styles.dropZone}>
+          <Grid container alignItems="center">
+            <Grid item xs={12} >
               <div {...bond}>
                 <div >
                   <InsertPhotoIcon />
@@ -251,9 +267,8 @@ const EditActorForm = (props) => {
                 </div>
               </div>
             </Grid>
-            <Grid item ></Grid>
           </Grid>
-        </Grid>
+        </Card>
     );
   };
   const handleToggle = (value: number, index: number) => () => {
@@ -296,7 +311,9 @@ const EditActorForm = (props) => {
     // console.log(cards);
     // console.log('--cards--');
     return (
-        <Grid>
+        <Grid container alignItems="center"
+            // justify='center'
+              spacing={3}>
               {
                 cards.map((file) => (
                     <ImagePrev
@@ -333,7 +350,7 @@ const EditActorForm = (props) => {
 
 
     return (
-        <Grid item xs={4}>
+        <Grid item xs={3} >
         <div className='card'  style={{ opacity}} >
           <Card>
             <img  src={croppedImg.img} className={styles.image} />
@@ -382,7 +399,7 @@ const EditActorForm = (props) => {
       initState,
       addValues,
       updateKeyIndicator
-    } = useDnDStateManager([]);
+    } = useDnDStateManager(imgInit);
 
 
     // @ts-ignore
@@ -403,14 +420,19 @@ const EditActorForm = (props) => {
       if(objectsList)
         files = objectsList.map((object) =>{
           // return object.file
-          debugger;
           return {
-            originalPicture:object.file,
-            croppedPicture:object.croppedImg.file,
-            croppedX:object.croppedImg.crop.x,
-            croppedY:object.croppedImg.crop.y,
-            croppedZoom:object.croppedImg.zoom,
-            croppedRotation:object.croppedImg.rotation
+            id : object.serverId,
+            newpic : object.newpic,
+            deleted : object.deleted,
+            file : {
+              originalPicture:object.file,
+              croppedPicture:object.croppedImg.file,
+              croppedPictureModified : object.croppedImg.modified,
+              croppedX:object.croppedImg.crop.x,
+              croppedY:object.croppedImg.crop.y,
+              croppedZoom:object.croppedImg.zoom,
+              croppedRotation:object.croppedImg.rotation
+            }
           }
         });
 
@@ -421,9 +443,7 @@ const EditActorForm = (props) => {
           pictures:files
         },
       });
-      if (!editError) {
-        router.push(`/actor/${actorData.actor.id}`);
-      }
+
 
     }, [formValues, edit,objectsList]);
 
@@ -432,6 +452,7 @@ const EditActorForm = (props) => {
         enqueueSnackbar('Acteur mis à jour.', {
           preventDuplicate: true,
         });
+        router.push(`/actor/${actorData.actor.id}`);
       }
     }, [editLoading, editError]);
 

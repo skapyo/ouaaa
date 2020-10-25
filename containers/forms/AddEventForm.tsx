@@ -8,7 +8,7 @@ import FormController, {
   ValidationRules,
   ValidationRuleType
 } from 'components/controllers/FormController';
-import {useMutation, useQuery} from '@apollo/react-hooks';
+import {useMutation, useQuery} from '@apollo/client';
 import useGraphQLErrorDisplay from 'hooks/useGraphQLErrorDisplay';
 import Checkbox from '@material-ui/core/Checkbox';
 import useCookieRedirection from 'hooks/useCookieRedirection';

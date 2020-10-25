@@ -1,5 +1,5 @@
 import gql from "graphql-tag"
-import {useMutation} from "@apollo/react-hooks"
+import {useMutation}  from '@apollo/client'
 import AppContainer from "containers/layouts/AppContainer"
 import {useEffect, useState} from "react"
 import {Grid, makeStyles, Typography} from "@material-ui/core"

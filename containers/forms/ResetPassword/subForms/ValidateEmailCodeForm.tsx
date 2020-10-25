@@ -4,7 +4,7 @@ import { Grid, Typography, CircularProgress, Box } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core"
 import TextField from "components/TextField"
 import gql from "graphql-tag"
-import { useMutation } from "@apollo/react-hooks"
+import { useMutation }  from '@apollo/client'
 import { EmailContext } from "containers/forms/ResetPassword/ResetPasswordForm"
 
 const VALIDATE_RESET_PASSWORD_CODE = gql`

@@ -1,7 +1,7 @@
 import {useCallback, useState} from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import gql from "graphql-tag"
-import {useMutation} from "@apollo/react-hooks"
+import {useMutation}from "@apollo/client"
 import {withApollo} from "hoc/withApollo"
 import FormController, {ValidationRuleType} from "components/controllers/FormController"
 import {Container, TextField, Typography} from "@material-ui/core";

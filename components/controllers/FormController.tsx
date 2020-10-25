@@ -1,7 +1,7 @@
 import React, {
   ChangeEvent, useCallback, useEffect, useMemo, useState,
 } from 'react';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/client';
 import { useSnackbar } from 'notistack';
 import omitTypename from 'utils/omitTypename';
 import validateEmailFormat from 'utils/validateEmailFormat';

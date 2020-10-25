@@ -4,7 +4,7 @@ import Filters from 'containers/layouts/agendaPage/Filters'
 import Newsletter from 'containers/layouts/Newsletter'
 import {Container, makeStyles} from "@material-ui/core"
 import gql from 'graphql-tag'
-import {useQuery} from "@apollo/react-hooks";
+import {useQuery}  from '@apollo/client';
 
 const useStyles = makeStyles({
   main: {

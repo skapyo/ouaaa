@@ -1,7 +1,7 @@
 import FormController from "./FormController"
 import React, { ChangeEvent, useEffect, useCallback } from "react"
 import { DocumentNode } from "graphql"
-import { useMutation } from "@apollo/react-hooks"
+import { useMutation }  from '@apollo/client'
 import { useSnackbar } from "notistack"
 import omitTypename from "utils/omitTypename"
 

@@ -6,7 +6,7 @@ import {
 import { withApollo } from 'hoc/withApollo.jsx';
 import { useRouter } from 'next/router';
 import gql from 'graphql-tag';
-import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/client';
 import Place from '@material-ui/icons/Place';
 import Phone from '@material-ui/icons/Phone';
 import AlternateEmail from '@material-ui/icons/AlternateEmail';

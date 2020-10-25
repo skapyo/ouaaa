@@ -2,5 +2,5 @@
 export const getImageUrl = (url) => {
     if(url==null)
         return null;
-    return `${config.API_SERVER.HTTP}://${config.API_SERVER.URL}${url}`;
+    return `${process.env.NEXT_PUBLIC_URI}${url}`;
 } ;

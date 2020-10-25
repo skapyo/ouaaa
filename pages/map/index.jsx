@@ -4,7 +4,7 @@ import {Grid, Typography} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import gql from 'graphql-tag'
 import {withApollo} from "../../hoc/withApollo";
-import {useQuery} from "@apollo/react-hooks";
+import {useQuery}  from '@apollo/client';
 import Link from "../../components/Link";
 import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded';
 import FavoriteRoundedIcon from '@material-ui/icons/FavoriteRounded';

@@ -10,7 +10,7 @@ import {useSnackbar} from 'notistack';
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined"
 import ClassicButton from "components/buttons/ClassicButton"
 import Link from "components/Link"
-import {useMutation} from "@apollo/react-hooks"
+import {useMutation}  from '@apollo/client'
 import {useCallback, useEffect, useState} from "react"
 import useGraphQLErrorDisplay from "hooks/useGraphQLErrorDisplay"
 import useCookieRedirection from "hooks/useCookieRedirection"

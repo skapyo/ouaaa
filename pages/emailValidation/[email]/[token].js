@@ -3,7 +3,7 @@ import {useEffect} from "react"
 import {withApollo} from 'hoc/withApollo.jsx';
 import gql from "graphql-tag";
 import Router, {useRouter} from 'next/router'
-import {useMutation} from "@apollo/react-hooks"
+import {useMutation}  from '@apollo/client'
 import FallbackEmailValidated from "containers/fallbacks/FallbackEmailValidated"
 
 const VALIDATE_EMAIL = gql`

@@ -1,5 +1,5 @@
 import React from 'react';
-import {useQuery} from "@apollo/react-hooks";
+import {useQuery}  from '@apollo/client';
 import {Container} from "@material-ui/core";
 import gql from "graphql-tag";
 import {makeStyles} from '@material-ui/core/styles';

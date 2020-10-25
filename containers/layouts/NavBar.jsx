@@ -6,7 +6,7 @@ import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
 import Link from 'components/Link';
 import {useSessionDispatch, useSessionState} from 'context/session/session';
 import React, {useCallback, useEffect} from 'react';
-import {useMutation} from '@apollo/react-hooks';
+import {useMutation} from '@apollo/client';
 import gql from 'graphql-tag';
 import {useCookies} from 'react-cookie';
 import {useRouter} from 'next/router';

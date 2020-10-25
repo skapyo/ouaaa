@@ -1,7 +1,7 @@
 import {Container, makeStyles, Typography} from '@material-ui/core';
 import React, {useEffect, useState} from "react";
 import Slider from "react-slick/lib";
-import {useQuery} from "@apollo/react-hooks";
+import {useQuery}  from '@apollo/client';
 import gql from "graphql-tag"
 import {withApollo} from "../../../hoc/withApollo";
 import CardSliderEvent from "../../../components/cards/CardSliderEvent";
