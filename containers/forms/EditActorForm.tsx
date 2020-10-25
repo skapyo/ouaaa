@@ -1,10 +1,12 @@
 /* eslint react/prop-types: 0 */
 import React, {ChangeEvent, useCallback, useEffect, useState,} from 'react';
-import {Container, Grid, makeStyles, Typography,} from '@material-ui/core';
+import {Card, Container, Grid, makeStyles, Typography} from '@material-ui/core';
 import TextField from 'components/form/TextField';
 import ClassicButton from 'components/buttons/ClassicButton';
 import {withApollo} from 'hoc/withApollo';
 import {useRouter, withRouter} from 'next/router';
+import {useDropArea} from 'react-use';
+import withDndProvider from '../../hoc/withDnDProvider';
 import gql from 'graphql-tag';
 import graphqlTag from 'graphql-tag';
 import FormController, {RenderCallback} from 'components/controllers/FormController';
@@ -12,6 +14,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import Icon from '@material-ui/core/Icon';
 import Checkbox from '@material-ui/core/Checkbox';
 import GooglePlacesAutocomplete, {geocodeByAddress, getLatLng} from 'react-google-places-autocomplete';
 import {useMutation, useQuery} from '@apollo/react-hooks';
@@ -22,11 +25,16 @@ import {useCookies} from 'react-cookie';
 import {useSnackbar} from 'notistack';
 import {ValidationRules, ValidationRuleType} from '../../components/controllers/FormController';
 import useCookieRedirection from '../../hooks/useCookieRedirection';
-
+import DeleteIcon from '@material-ui/icons/Delete';
+import ImageCropper from 'components/ImageCropper/ImageCropper'
+import useDnDStateManager from 'Hooks/useDnDStateManager';
+import InsertPhotoIcon from '@material-ui/icons/InsertPhoto';
+import {getImageUrl} from 'utils/utils';
+import useImageReader from 'Hooks/useImageReader';
 
 const EDIT_ACTOR = gql`
-  mutation editActor($formValues: ActorInfos, $actorId: Int!) {
-    editActor(actorInfos: $formValues, actorId: $actorId) {
+  mutation editActor($formValues: ActorInfos, $actorId: Int!,$pictures:[InputPictureType]) {
+    editActor(actorInfos: $formValues, actorId: $actorId,pictures: $pictures) {
       id
       name
       email
@@ -116,6 +124,10 @@ const useStyles = makeStyles((theme) => ({
       },
     },
   },
+  image:{
+    width:'100%',
+    height:'100%'
+  }
 }));
 
 type FormItemProps = {
@@ -178,6 +190,7 @@ const FormItemTextareaAutosize = (props: FormItemProps) => {
 const EditActorForm = (props) => {
   const redirect = useCookieRedirection();
   const styles = useStyles();
+
   const [checked, setChecked] = useState([0]);
   const { data, loading, error } = useQuery(GET_CATEGORIES, { fetchPolicy: 'network-only' });
   const [open, setOpen] = React.useState([false]);
@@ -189,7 +202,60 @@ const EditActorForm = (props) => {
 
   if (actorLoading) return null;
   if (actorError) return `Error! ${actorError.message}`;
+  var imgInit = [];
 
+  if(actorData && actorData.pictures) {
+    imgInit = actorData.pictures.map((picture, index) => {
+      return {
+        id: index,
+        file: null,
+        img: getImageUrl(picture.originalPicturePath),
+        croppedImg: {
+          crop: {
+            x: picture.croppedX,
+            y: picture.croppedY
+          },
+          rotation: picture.croppedRotation,
+          zoom: picture.croppedZoom,
+          file: null,
+          img: getImageUrl(picture.croppedPicturePath),
+          modified: false
+        },
+        activated: true,
+        deleted: false,
+        newpic: false,
+        serverId: picture.id,
+      };
+    });
+  }
+
+
+
+  const ImagesDropZone = ({onDropHandler}) => {
+
+    const [bond, state] = useDropArea({
+      onFiles: files => onDropHandler(files)
+    });
+
+    return (
+        <Grid>
+          <Grid container>
+            <Grid item ></Grid>
+            <Grid item >
+              <div {...bond}>
+                <div >
+                  <InsertPhotoIcon />
+                </div>
+                <div >
+                  Déposer les images ici...
+                </div>
+              </div>
+            </Grid>
+            <Grid item ></Grid>
+          </Grid>
+        </Grid>
+    );
+  };
   const handleToggle = (value: number, index: number) => () => {
     const currentIndex = checked.indexOf(value);
     const newChecked = [...checked];
@@ -221,7 +287,80 @@ const EditActorForm = (props) => {
       minLimit: 120,
     },
   };
+  const ItemTypes = {
+    PIC: "pic"
+  };
 
+  const ImagesDisplay = ({cards,moveCard,findCard,updateActiveIndicator,updateDeletedIndicator,updateKeyIndicator}) => {
+    // console.log('cards');
+    // console.log(cards);
+    // console.log('--cards--');
+    return (
+        <Grid>
+              {
+                cards.map((file) => (
+                    <ImagePrev
+                        id={file.id}
+                        key={`image${file.id}`}
+                        originalImg = {file.img}
+                        croppedImg = {file.croppedImg}
+                        moveCard={moveCard}
+                        findCard={findCard}
+                        deletedIconClickHandler={updateDeletedIndicator}
+                        updateKeyIndicator={updateKeyIndicator}
+                        deleted = {file.deleted}
+                        file={file}
+                    />
+                ))
+              }
+        </Grid>
+    );
+
+  };
+
+  const ImagePrev = ({file,originalImg,croppedImg,moveCard,findCard,id,deletedIconClickHandler,deleted,updateKeyIndicator}) => {
+
+    const originalIndex = findCard(id).index;
+
+
+    const opacity =  1 ;
+
+    //gestion de la modal du cropper
+    const [modalOpened, setOpenedInd] = useState(false);
+    const openModal = () => {
+      setOpenedInd(true);
+    };
+
+
+    return (
+        <Grid item xs={4}>
+        <div className='card'  style={{ opacity}} >
+          <Card>
+            <img  src={croppedImg.img} className={styles.image} />
+          </Card>
+          <Card>
+            <Grid container spacing={3}>
+              {/* <Grid item xs={3}>
+                  <HeightIcon  onClick={() => openModal()}/>
+              </Grid>*/}
+              <Grid item xs={3}>
+                  <DeleteIcon color={deleted? 'primary' : 'action' } onClick={() => deletedIconClickHandler(id)}/>
+              </Grid>
+            </Grid>
+          </Card>
+          <ImageCropper
+              updateKeyIndicator={updateKeyIndicator}
+              id={id}
+              croppedImg = {file.croppedImg}
+              src={originalImg}
+              open={modalOpened}
+              onClose={() => setOpenedInd(false) }
+          />
+        </div>
+        </Grid>
+    );
+
+  };
   const Form: RenderCallback = ({
     formChangeHandler,
     formValues,
@@ -230,18 +369,63 @@ const EditActorForm = (props) => {
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
     const [edit, { data: editData, loading: editLoading, error: editError }] = useMutation(EDIT_ACTOR);
 
+    const [setImagesList, loading, result,imagesListState] = useImageReader();
+
+
+
+    const {
+      objectsList,
+      moveObject,
+      findObject,
+      updateActiveIndicator,
+      updateDeletedIndicator,
+      initState,
+      addValues,
+      updateKeyIndicator
+    } = useDnDStateManager([]);
+
+
+    // @ts-ignore
+    useEffect(() => {
+      if(result)
+        addValues(result);
+    },result)
+
+    const onDropHandler = useCallback((files) => {
+      // @ts-ignore
+      setImagesList(files);
+    },[setImagesList]);
+
+
     const submitHandler = useCallback(() => {
+      var files ;
+
+      if(objectsList)
+        files = objectsList.map((object) =>{
+          // return object.file
+          debugger;
+          return {
+            originalPicture:object.file,
+            croppedPicture:object.croppedImg.file,
+            croppedX:object.croppedImg.crop.x,
+            croppedY:object.croppedImg.crop.y,
+            croppedZoom:object.croppedImg.zoom,
+            croppedRotation:object.croppedImg.rotation
+          }
+        });
+
       edit({
         variables: {
           formValues,
           actorId: parseInt(actorData.actor.id),
+          pictures:files
         },
       });
       if (!editError) {
         router.push(`/actor/${actorData.actor.id}`);
       }
 
-    }, [formValues, edit]);
+    }, [formValues, edit,objectsList]);
 
     useEffect(() => {
       if (!editError && !editLoading && editData) {
@@ -281,7 +465,6 @@ const EditActorForm = (props) => {
       updateFormValues();
       setFirstRender(false);
     }
-
     return (
       <Container component="main" maxWidth="sm">
         <FormItem
@@ -381,6 +564,21 @@ const EditActorForm = (props) => {
             </div>
           ))}
         </List>
+            <Typography variant="body1" color="primary" >
+              <Icon/>
+              Les images de l'article
+            </Typography>
+          <br />
+          { objectsList?
+              < ImagesDisplay
+                  cards = {objectsList}
+                  moveCard = {moveObject}
+                  findCard = {findObject}
+                  updateActiveIndicator = {updateActiveIndicator}
+                  updateDeletedIndicator = {updateDeletedIndicator}
+                  updateKeyIndicator = {updateKeyIndicator}
+              /> : null }
+          < ImagesDropZone onDropHandler={onDropHandler} />
 
         <Grid item xs={12}>
           <ClassicButton
@@ -402,4 +600,4 @@ const EditActorForm = (props) => {
   );
 };
 
-export default withRouter(withApollo()(EditActorForm));
+export default  withDndProvider(withRouter(withApollo()(EditActorForm)));

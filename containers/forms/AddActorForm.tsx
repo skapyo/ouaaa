@@ -250,7 +250,6 @@ const AddActorForm = () => {
     };
 
     const getAddressDetails = (results) => {
-      debugger;
       formValues.address = (`${getObjectLongName(results, 'street_number')} ${getObjectLongName(results, 'route')}`).trim();
       formValues.city = getObjectLongName(results, 'locality');
       formValues.postCode = getObjectLongName(results, 'postal_code');
@@ -258,7 +257,7 @@ const AddActorForm = () => {
 
     return (
       <Container component="main" maxWidth="sm">
-        { dataAdminActors && (
+        { dataAdminActors && dataAdminActors.actorsAdmin.length >0 && (
 
             <Typography>
               Bravo. Vous avez déjà créé des pages acteurs. <br></br>Cliquez sur leurs noms pour éditer la page :
