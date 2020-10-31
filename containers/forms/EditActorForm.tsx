@@ -29,10 +29,10 @@ import HeightIcon from '@material-ui/icons/Height';
 
 
 import ImageCropper from 'components/ImageCropper/ImageCropper'
-import useDnDStateManager from 'Hooks/useDnDStateManager';
+import useDnDStateManager from '../../hooks/useDnDStateManager';
 import InsertPhotoIcon from '@material-ui/icons/InsertPhoto';
 import {getImageUrl} from 'utils/utils';
-import useImageReader from 'Hooks/useImageReader';
+import useImageReader from '../../hooks/useImageReader';
 import {useDrag, useDrop} from "react-dnd";
 
 const EDIT_ACTOR = gql`
