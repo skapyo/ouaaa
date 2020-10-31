@@ -352,9 +352,11 @@ const EditActorForm = (props) => {
           })
       });
 
-      const [, drop] = useDrop({
+    {/* @ts-ignore */}
+    const [, drop] = useDrop({
           accept: ItemTypes.PIC,
           canDrop: () => false,
+    // @ts-ignore
           hover({ id: draggedId }) {
               if (draggedId !== id) {
                   const { index: overIndex } = findCard(id);
@@ -425,10 +427,11 @@ const EditActorForm = (props) => {
     } = useDnDStateManager(imgInit);
 
 
-    // @ts-ignore
+
     useEffect(() => {
       if(result)
         addValues(result);
+      // @ts-ignore
     },result)
 
     const onDropHandler = useCallback((files) => {

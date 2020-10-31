@@ -6,7 +6,7 @@ import AddActorForm from "containers/forms/AddActorForm"
 import AddActorPageLayout from "containers/layouts/addActorPage/AddActorPageLayout"
 import graphqlTag from 'graphql-tag'
 import TreeItem, {TreeItemProps} from '@material-ui/lab/TreeItem';
-import {useQuery}  from '@apollo/client';
+import {useQuery} from '@apollo/client';
 import Link from "../../components/Link";
 import React, {useCallback} from "react";
 import Icon from '@material-ui/core/Icon';
@@ -103,6 +103,7 @@ function StyledTreeItem(props: StyledTreeItemProps) {
                 </div>
             }
             style={{
+                // @ts-ignore
                 '--tree-view-color': color,
                 '--tree-view-bg-color': bgColor,
             }}
