@@ -1,30 +1,29 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import AppLayout from 'containers/layouts/AppLayout';
-import {
-  Box, Container, Grid, makeStyles, RootRef, Typography,
-} from '@material-ui/core';
-import { withApollo } from 'hoc/withApollo.jsx';
-import { useRouter } from 'next/router';
+import {Box, Container, Grid, makeStyles, RootRef, Typography,} from '@material-ui/core';
+import {withApollo} from 'hoc/withApollo.jsx';
+import {useRouter} from 'next/router';
 import gql from 'graphql-tag';
-import { useMutation, useQuery } from '@apollo/client';
+import {useMutation, useQuery} from '@apollo/client';
 import Place from '@material-ui/icons/Place';
 import Phone from '@material-ui/icons/Phone';
 import AlternateEmail from '@material-ui/icons/AlternateEmail';
 import Language from '@material-ui/icons/Language';
 import Schedule from '@material-ui/icons/Schedule';
 import Slider from 'react-slick/lib';
-import { useSnackbar } from 'notistack';
-import { useCookies } from 'react-cookie';
+import {useSnackbar} from 'notistack';
+import {useCookies} from 'react-cookie';
 import Head from 'next/head';
 import CardSliderEvent from '../../components/cards/CardSliderEvent';
 import Newsletter from '../../containers/layouts/Newsletter';
-import { useSessionState } from '../../context/session/session';
+import {useSessionState} from '../../context/session/session';
 import CardAddEvent from '../../components/cards/CardAddEvent';
+import {getImageUrl} from "../../utils/utils";
 
 const useStyles = makeStyles((theme) => ({
   titleContainer: {
     marginTop: theme.spacing(2),
-    backgroundImage: 'url(\'/860_potager_de_la_jarne.jpg\')',
+
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
     height: '24em',
@@ -201,7 +200,20 @@ const Actor = () => {
                     surname,
                     lastname,
 
-                }
+                },
+              pictures{
+                id,
+                label,
+                originalPicturePath,
+                originalPictureFilename,
+                croppedPicturePath,
+                croppedPictureFilename,
+                croppedX,
+                croppedY,
+                croppedZoom,
+                croppedRotation,
+                position
+              }
             }
         }
     `;
@@ -288,7 +300,7 @@ const Actor = () => {
   const settingsSliderImage = {
 
     infinite: true,
-    slidesToShow: 3,
+    slidesToShow: data && data.actor.pictures && data.actor.pictures.length>5?5:data && data.actor.pictures && data.actor.pictures.length,
     slidesToScroll: 1,
     // autoplay: true,
     // autoplaySpeed: 2000,
@@ -350,8 +362,9 @@ const Actor = () => {
       </Head>
       <RootRef>
         <Box>
-          <Container className={styles.titleContainer} />
-
+          {data && data.actor&&(
+          <Container className={styles.titleContainer} style={{backgroundImage: data.actor.pictures.length>1?'url('+getImageUrl(data.actor.pictures.sort((a, b) => a.position > b.position ? 1 : -1)[0].croppedPicturePath)+')':''}}/>
+          )}
           <Container className={styles.cardInfo}>
 
             <Grid container spacing={3}>
@@ -454,18 +467,20 @@ const Actor = () => {
 
               </Grid>
             </Grid>
-
+            {data && data.actor.pictures && (data.actor.pictures.length>0) &&  (
             <div>
               <Typography variant="h5" className={styles.cardTitle}>
                 PHOTO ET VIDEOS
               </Typography>
 
             </div>
+            )}
             <Slider {...settingsSliderImage}>
-              <img src="/image/potager_jarne_slider1.jpg" className={[styles.img]} />
-              <img src="/image/potager_jarne_slider2.jpg" className={[styles.img]} />
-              <img src="/image/potager_jarne_slider3.jpg" className={[styles.img]} />
+              {data && data.actor.pictures && data.actor.pictures.sort((a, b) => a.position > b.position ? 1 : -1).map((picture) => (
+              <img src={getImageUrl(picture.croppedPicturePath)} className={[styles.img]} />
+              ))}
             </Slider>
+
             <div className={styles.buttonVolunteer}>
               {data && containUser(data.actor.volunteers) && (
               <button className={styles.buttonInverse} onClick={removeVolunteerHandler}>Je ne souhaite plus être bénévole</button>
@@ -475,6 +490,7 @@ const Actor = () => {
               )}
 
             </div>
+            {data && data.actor.pictures && (data.actor.events.length>0 || containUser(data.actor.referents)) &&  (
             <div>
 
               <Typography variant="h5" className={[styles.cardTitle, styles.align]}>
@@ -486,6 +502,7 @@ const Actor = () => {
                 {data && data.actor.name}
               </Typography>
             </div>
+            )}
             <Slider {...settingsSliderevent} className={[styles.articleCarroussel]}>
               {data && containUser(data.actor.referents) && (
                 <CardAddEvent

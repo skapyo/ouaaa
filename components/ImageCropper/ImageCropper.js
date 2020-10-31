@@ -8,34 +8,39 @@ import Typography from '@material-ui/core/Typography'
 import Slider from '@material-ui/core/Slider';
 import Button from '@material-ui/core/Button'
 import styles from './styles.module.css'
-import {withStyles} from '@material-ui/core/styles'
+import {makeStyles, withStyles} from '@material-ui/core/styles'
 
 // const dogImg =
 //   'https://img.huffingtonpost.com/asset/5ab4d4ac2000007d06eb2c56.jpeg?cache=sih0jwle4e&ops=1910_1000'
 
-const inlineStyle = {
-    modal : {
-
+const useStyles = makeStyles( theme => ({
+    popup:{
+        padding:"4em",
     },
-    controls:{
-    position: "absolute",
-    bottom: 0,
-    left: "50%",
-    width: "50%",
-    transform: "translateX(-50%)",
-    height: "80px",
-    display: "flex",
-    alignItems: "center",
-},
-    cropContainer : {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: "80px",
-}
-      
-};
+    cropContainer: {
+        position: "relative",
+        width: "100%",
+        height: "200",
+        background: "#333",
+        [theme.breakpoints.up('sm')]: {
+            height: 400,
+        },
+    },
+    cropButton: {
+        flexShrink: 0,
+        marginLeft: 16,
+    },
+    controls: {
+        padding:"2em",
+        background :"white"
+    },
+    cropImage:{
+        align:"center",
+        height:"300px!important",
+        width:"inherit!important",
+    }
+
+}))
 
 const ImageCropper = ({src, open, onClose, classes,croppedImg,updateKeyIndicator,id}) => {
 
@@ -46,11 +51,11 @@ const ImageCropper = ({src, open, onClose, classes,croppedImg,updateKeyIndicator
     const [croppedImage, setCroppedImage] = useState(croppedImg.img)
 
 
-
+    const styles = useStyles()
     const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
       setCroppedAreaPixels(croppedAreaPixels)
     }, [])
-  
+    const CONTAINER_HEIGHT = 300
     const showCroppedImage = useCallback(async () => {
       try {
         const croppedImage = await getCroppedImg(
@@ -77,7 +82,7 @@ const ImageCropper = ({src, open, onClose, classes,croppedImg,updateKeyIndicator
           modified : true
         }
       );
-    
+        onClose();
     }
       
     return(
@@ -85,45 +90,45 @@ const ImageCropper = ({src, open, onClose, classes,croppedImg,updateKeyIndicator
 
             open={open}
             onClose={onClose}
-            style={inlineStyle.modal}
+            className={styles.popup}
             // dimmer='inverted'
             // closeIcon
         >
             {/* <Modal.Content> */}
-            <Grid container>
-              <Grid container  >
-                <Grid item xs={12}>
-                    <div style={inlineStyle.cropContainer}>
-                      <Cropper
-                      image={src}
-                      crop={crop}
-                      rotation={rotation}
-                      zoom={zoom}
-                      aspect={4 / 3}
-                      // cropSize={{width:1024,height:768}}
-                      onCropChange={setCrop}
-                      onRotationChange={setRotation}
-                      onCropComplete={onCropComplete}
-                      onZoomChange={setZoom}
-                      onMediaLoaded={mediaSize => {
-                        // Adapt zoom based on media size to fit max height
-                        // setZoom(CONTAINER_HEIGHT / mediaSize.naturalHeight)
-                          // console.log(mediaSize);
-                      }}
-                      />
-                    </div>
-                </Grid>
-                <Grid item xs={4}>
-                  <Image src={croppedImage?croppedImage.url:null} size='big'></Image>
 
-                </Grid>
-              </Grid>
-              <Grid className={classes.controls}>
-                <Grid item xs={4} >
-                  <div className={classes.sliderContainer}>
+            <div>
+
+                <div className={styles.cropContainer}>
+                    <Grid>
+                        <Grid item  xs={8}>
+                    <Cropper
+                        image={src}
+                        crop={crop}
+                        rotation={rotation}
+                        zoom={zoom}
+                        aspect={4 / 3}
+                        // cropSize={{width:1024,height:768}}
+                        onCropChange={setCrop}
+                        onRotationChange={setRotation}
+                        onCropComplete={onCropComplete}
+                        onZoomChange={setZoom}
+                        onMediaLoaded={mediaSize => {
+                            // Adapt zoom based on media size to fit max height
+                            // setZoom(CONTAINER_HEIGHT / mediaSize.naturalHeight)
+                            // console.log(mediaSize);
+                        }}
+                    />
+                        </Grid>
+
+                    </Grid>
+                </div>
+                <div className={styles.controls}>
+                <Grid container>
+                    <Grid item xs={3} >
+                  <div className={styles.sliderContainer}>
                       <Typography
                           variant="overline"
-                          classes={{ root: classes.sliderLabel }}
+                          classes={{ root: styles.sliderLabel }}
                       >
                           Zoom
                       </Typography>
@@ -133,20 +138,16 @@ const ImageCropper = ({src, open, onClose, classes,croppedImg,updateKeyIndicator
                           max={3}
                           step={0.1}
                           aria-labelledby="Zoom"
-                          classes={{ container: classes.slider }}
+                          classes={{ container: styles.slider }}
                           onChange={(e, zoom) => setZoom(zoom)}
                       />
-                    </div>
-
+                  </div>
                 </Grid>
-              </Grid>
-
-                <Grid item xs={4} >
-
-                <div className={classes.sliderContainer}>
+                    <Grid item xs={3} >
+                <div className={styles.sliderContainer}>
                     <Typography
                         variant="overline"
-                        classes={{ root: classes.sliderLabel }}
+                        classes={{ root: styles.sliderLabel }}
                     >
                         Rotation
                     </Typography>
@@ -156,34 +157,43 @@ const ImageCropper = ({src, open, onClose, classes,croppedImg,updateKeyIndicator
                         max={360}
                         step={1}
                         aria-labelledby="Rotation"
-                        classes={{ container: classes.slider }}
+                        classes={{ container: styles.slider }}
                         onChange={(e, rotation) => setRotation(rotation)}
                     />
                     </div>
-
-                </Grid>
-                <Grid item xs={4}>
+                    </Grid>
+                    <Grid item xs={3} >
                   <Button
                     onClick={showCroppedImage}
                     variant="contained"
                     color="primary"
-                    classes={{ root: classes.cropButton }}
+                    classes={{ root: styles.cropButton }}
                     >
                     Visualiser
                   </Button>
                 </Grid>
-                <Grid  item xs={4}>
+                    <Grid item xs={3} >
                   <Button
                     onClick={saveCroppedImage}
                     variant="contained"
                     color="primary"
-                    classes={{ root: classes.cropButton }}
-                    disabled={croppedImage?false:true}
+                    classes={{ root: styles.cropButton }}
+                    disabled={croppedImage.url?false:true}
                     >
                     Sauvegarder
                   </Button>
                 </Grid>
                 </Grid>
+                    <Grid container>
+                        <Grid item xs={12} >
+                      { croppedImage.url && (
+                          <Image src={croppedImage ? croppedImage.url : null}   className={styles.cropImage }></Image>
+                      )
+                      }
+                        </Grid>
+                    </Grid>
+                          </div>
+            </div>
                 {/* </div> */}
 
 

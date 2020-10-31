@@ -7,7 +7,7 @@ import {withApollo} from 'hoc/withApollo';
 import {useRouter, withRouter} from 'next/router';
 import {useDropArea} from 'react-use';
 import withDndProvider from '../../hoc/withDnDProvider';
-import { gql, useApolloClient, useMutation,useQuery } from '@apollo/client';
+import {gql, useMutation, useQuery} from '@apollo/client';
 import graphqlTag from 'graphql-tag';
 import FormController, {RenderCallback} from 'components/controllers/FormController';
 import List from '@material-ui/core/List';
@@ -25,11 +25,15 @@ import {useSnackbar} from 'notistack';
 import {ValidationRules, ValidationRuleType} from '../../components/controllers/FormController';
 import useCookieRedirection from '../../hooks/useCookieRedirection';
 import DeleteIcon from '@material-ui/icons/Delete';
+import HeightIcon from '@material-ui/icons/Height';
+
+
 import ImageCropper from 'components/ImageCropper/ImageCropper'
 import useDnDStateManager from 'Hooks/useDnDStateManager';
 import InsertPhotoIcon from '@material-ui/icons/InsertPhoto';
 import {getImageUrl} from 'utils/utils';
 import useImageReader from 'Hooks/useImageReader';
+import {useDrag, useDrop} from "react-dnd";
 
 const EDIT_ACTOR = gql`
   mutation editActor($formValues: ActorInfos, $actorId: Int!,$pictures:[InputPictureType]) {
@@ -221,7 +225,7 @@ const EditActorForm = (props) => {
   var imgInit = [];
     if(actorData && actorData.actor.pictures && actorData.actor.pictures.length > 0 ) {
 
-      imgInit = actorData.actor.pictures.map((picture, index) => {
+      imgInit = actorData.actor.pictures.sort((a, b) => a.position > b.position ? 1 : -1).map((picture, index) => {
 
         return {
           id: index,
@@ -242,6 +246,7 @@ const EditActorForm = (props) => {
           deleted: false,
           newpic: false,
           serverId: picture.id,
+          position:picture.position,
         };
       });
     }
@@ -328,6 +333,7 @@ const EditActorForm = (props) => {
                         deleted = {file.deleted}
                         file={file}
                     />
+
                 ))
               }
         </Grid>
@@ -339,6 +345,23 @@ const EditActorForm = (props) => {
 
     const originalIndex = findCard(id).index;
 
+      const [{ isDragging }, drag] = useDrag({
+          item: { type: ItemTypes.PIC, id, originalIndex },
+          collect: monitor => ({
+              isDragging: monitor.isDragging()
+          })
+      });
+
+      const [, drop] = useDrop({
+          accept: ItemTypes.PIC,
+          canDrop: () => false,
+          hover({ id: draggedId }) {
+              if (draggedId !== id) {
+                  const { index: overIndex } = findCard(id);
+                  moveCard(draggedId, overIndex);
+              }
+          }
+      });
 
     const opacity =  1 ;
 
@@ -351,15 +374,15 @@ const EditActorForm = (props) => {
 
     return (
         <Grid item xs={3} >
-        <div className='card'  style={{ opacity}} >
+        <div className='card'  ref={node => drag(drop(node))}  style={{ opacity}} >
           <Card>
             <img  src={croppedImg.img} className={styles.image} />
           </Card>
           <Card>
             <Grid container spacing={3}>
-              {/* <Grid item xs={3}>
+               <Grid item xs={3}>
                   <HeightIcon  onClick={() => openModal()}/>
-              </Grid>*/}
+              </Grid>
               <Grid item xs={3}>
                   <DeleteIcon color={deleted? 'primary' : 'action' } onClick={() => deletedIconClickHandler(id)}/>
               </Grid>
@@ -587,7 +610,7 @@ const EditActorForm = (props) => {
         </List>
             <Typography variant="body1" color="primary" >
               <Icon/>
-              Les images de l'article
+              Vos images
             </Typography>
           <br />
           { objectsList?
