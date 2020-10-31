@@ -299,7 +299,7 @@ const EditActorForm = (props) => {
     },
     phone: {
       rule: ValidationRuleType.only && ValidationRuleType.maxLength,
-  //    type: 'number',
+      //    type: 'number',
       maxLimit: 10,
     },
     description: {
@@ -467,7 +467,6 @@ const EditActorForm = (props) => {
         },
       });
 
-
     }, [formValues, edit,objectsList]);
 
     useEffect(() => {
@@ -505,7 +504,7 @@ const EditActorForm = (props) => {
       formValues.lat = actorData.actor.lat;
       formValues.lng = actorData.actor.lng;
     };
-    if (firstRender) {
+    if (firstRender && !actorLoading && !actorError) {
       updateFormValues();
       setFirstRender(false);
     }
@@ -517,7 +516,7 @@ const EditActorForm = (props) => {
           formChangeHandler={formChangeHandler}
           value={formValues.name}
           required
-          errorBool={!validationResult?.global && !!validationResult?.result.name }
+          errorBool={!validationResult?.global && !!validationResult?.result.name}
           errorText="Nom de l'acteur requis."
         />
         <FormItem

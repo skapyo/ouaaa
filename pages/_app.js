@@ -8,16 +8,16 @@ import {MuiPickersUtilsProvider} from '@material-ui/pickers';
 import MomentUtils from '@date-io/moment';
 import gql from 'graphql-tag';
 import {SessionProvider} from 'context/session/session';
-import omitTypename from 'utils/omitTypename'
+import omitTypename from 'utils/omitTypename';
 import {SnackbarProvider} from 'notistack';
-import './styles.css'
+import './styles.css';
 import '../containers/layouts/agendaPage/DateFilter.css';
 import 'leaflet/dist/leaflet.css';
 import 'react-google-places-autocomplete/dist/index.min.css';
 import '@brainhubeu/react-carousel/lib/style.css';
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import { createUploadLink } from 'apollo-upload-client';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+
 const theme = createMuiTheme({
   palette: {
     primary: {
@@ -26,37 +26,40 @@ const theme = createMuiTheme({
     secondary: {
       main: '#25AAA4',
     },
+    warning: {
+      main: '#BF083E',
+    },
     error: {
       main: red.A400,
     },
     background: {
       default: '#fff',
     },
-    text : {
-      primary : '#3c3b37'
+    text: {
+      primary: '#3c3b37',
     },
-    lightBox : {
-      main :'#F7F7F7'
-    }
+    lightBox: {
+      main: '#F7F7F7',
+    },
   },
 
-  typography : {
-    body1 : {
-      lineHeight : 1.7
+  typography: {
+    body1: {
+      lineHeight: 1.7,
     },
-      h5 : {
-          color:"#2a9076",
-          fontFamily: 'rowdies',
-      },
-      h1 : {
-          fontSize: "4rem",
-          color:"#2a9076",
-          fontFamily: 'rowdies',
-      },
-  }
-})
+    h5: {
+      color: '#2a9076',
+      fontFamily: 'rowdies',
+    },
+    h1: {
+      fontSize: '4rem',
+      color: '#2a9076',
+      fontFamily: 'rowdies',
+    },
+  },
+});
 
-const MyApp = (props )  => {
+const MyApp = (props) => {
   const { Component, pageProps, user } = props;
 
   React.useEffect(() => {
@@ -68,12 +71,12 @@ const MyApp = (props )  => {
   }, []);
 
   return (
-    <React.Fragment>
+    <>
       <Head>
-        <meta charSet="utf-8"/>
+        <meta charSet="utf-8" />
         <title>OUtils des Acteurs Alternatifs en Aunis</title>
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
-        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDvUKXlWS1470oj8C-vD6s62Bs9Y8XQf00&language=fr&region=FR&libraries=places"></script>
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDvUKXlWS1470oj8C-vD6s62Bs9Y8XQf00&language=fr&region=FR&libraries=places" />
         <link rel="shortcut icon" href="/logo.svg" />
       </Head>
       <MuiPickersUtilsProvider utils={MomentUtils}>
@@ -81,7 +84,7 @@ const MyApp = (props )  => {
           <SessionProvider init={user}>
             {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
             <CssBaseline />
-            <SnackbarProvider 
+            <SnackbarProvider
               maxSnack={3}
               anchorOrigin={{
                 vertical: 'bottom',
@@ -93,9 +96,9 @@ const MyApp = (props )  => {
           </SessionProvider>
         </ThemeProvider>
       </MuiPickersUtilsProvider>
-    </React.Fragment>
+    </>
   );
-}
+};
 
 const ISLOGGED = gql`
   query isLogged {
@@ -111,34 +114,30 @@ const ISLOGGED = gql`
       city
       }
   }
-`
+`;
 
-MyApp.getInitialProps = async(ctx) => {
+MyApp.getInitialProps = async (ctx) => {
+  let user = null;
 
-  let user = null
-
-  if(typeof window === 'undefined') {
-    const {initOnContext} = await import('hoc/withApollo')
-    const apolloClientCtx = initOnContext(ctx)
-    const result = await apolloClientCtx.ctx.apolloClient.query({query:ISLOGGED})
-    if(result.data?.isLogged?.id) {
+  if (typeof window === 'undefined') {
+    const { initOnContext } = await import('hoc/withApollo');
+    const apolloClientCtx = initOnContext(ctx);
+    const result = await apolloClientCtx.ctx.apolloClient.query({ query: ISLOGGED });
+    if (result.data?.isLogged?.id) {
       // user = {
       //   id : result.data.isLogged.id
       // }
-      user = omitTypename(result.data.isLogged)
+      user = omitTypename(result.data.isLogged);
     }
-
-
   }
 
-  if (user)
-    return ({user})
-  return ({})
-}
+  if (user) { return ({ user }); }
+  return ({});
+};
 
 MyApp.propTypes = {
   Component: PropTypes.elementType.isRequired,
-  pageProps: PropTypes.object
+  pageProps: PropTypes.object,
 };
 
-export default MyApp
+export default MyApp;

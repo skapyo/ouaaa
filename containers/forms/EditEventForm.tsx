@@ -4,11 +4,11 @@ import {withApollo} from 'hoc/withApollo';
 import {Container, Grid, makeStyles, TextField, Typography,} from '@material-ui/core';
 import ClassicButton from 'components/buttons/ClassicButton';
 import FormController, {
-  RenderCallback,
-  ValidationRules,
-  ValidationRuleType,
+    RenderCallback,
+    ValidationRules,
+    ValidationRuleType,
 } from 'components/controllers/FormController';
-import {useMutation, useQuery} from '@apollo/client';
+import {useMutation, useQuery} from '@apollo/react-hooks';
 import useGraphQLErrorDisplay from 'hooks/useGraphQLErrorDisplay';
 import Checkbox from '@material-ui/core/Checkbox';
 import useCookieRedirection from 'hooks/useCookieRedirection';
@@ -25,6 +25,13 @@ import Collapse from '@material-ui/core/Collapse/Collapse';
 import DateFnsUtils from '@date-io/date-fns';
 import {KeyboardDatePicker, KeyboardTimePicker, MuiPickersUtilsProvider} from '@material-ui/pickers';
 import moment from 'moment';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Button from '@material-ui/core/Button';
+import FallbackPageNotFound from 'containers/fallbacks/FallbackPageNotFound';
 import {useSessionState} from '../../context/session/session';
 
 const useStyles = makeStyles((theme) => ({
@@ -65,14 +72,23 @@ const useStyles = makeStyles((theme) => ({
       },
     },
   },
+  delete: {
+    background: 'none',
+    color: theme.palette.warning.main,
+    border: '1px solid',
+    borderColor: theme.palette.warning.main,
+    '&:hover': {
+      background: 'none',
+    },
+  },
 }));
 
-const ADDEVENT = gql`
-  mutation createEvent(
-    $eventInfos: EventInfos,$actorId: Int!$userId: Int!
+const EDIT_EVENT = gql`
+  mutation editEvent(
+    $eventInfos: EventInfos, $eventId: Int!
   ) {
-    createEvent(
-      eventInfos: $eventInfos,actorId: $actorId,userId: $userId
+    editEvent(
+      eventInfos: $eventInfos, eventId: $eventId
     ) {
       id
       label
@@ -101,6 +117,38 @@ query categories {
     }
   }
 }
+`;
+
+const GET_EVENT = gql`
+  query event($id: String!) {
+    event(id: $id) {
+      id
+      label
+      short_description
+      facebookUrl
+      description
+      startedAt
+      endedAt
+      published
+      categories {
+        id
+        label
+      }
+      lat
+      lng
+      address
+      postCode
+      city
+    }
+  }
+`;
+
+const DELETE_EVENT = gql`
+  mutation deleteEvent($eventId: Int!) {
+    deleteEvent(
+      eventId: $eventId
+    )
+  }
 `;
 
 type FormItemProps = {
@@ -159,7 +207,7 @@ const FormItemTextareaAutosize = (props: FormItemProps) => {
   );
 };
 
-const AddEventForm = ({ actorId }) => {
+const EditEventForm = (props) => {
   const validationRules: ValidationRules = {
     label: {
       rule: ValidationRuleType.required,
@@ -174,22 +222,59 @@ const AddEventForm = ({ actorId }) => {
     },
   };
 
+  const { loading: eventLoading, error: eventError, data: eventData } = useQuery(GET_EVENT, {
+    variables: { id: props.id.toString() },
+  });
+
+  const router = useRouter();
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const [deleteEvent, { data: deleteData, error: deleteError, loading: deleteLoading }] = useMutation(DELETE_EVENT);
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const submitDeleteEvent = () => {
+    deleteEvent({
+      variables: {
+        eventId: parseInt(props.id),
+      },
+    });
+    setOpen(false);
+  };
+
+  useEffect(() => {
+    if (!deleteLoading && deleteData?.deleteEvent) {
+      enqueueSnackbar('Événement supprimé.', {
+        preventDuplicate: true,
+      });
+      router.push('/actorAdmin/event');
+    } else if (deleteError) {
+      enqueueSnackbar('La suppression de l\'événement a échoué.', {
+        preventDuplicate: true,
+      });
+    }
+  }, [deleteData, deleteError, deleteLoading]);
+
   const Form: RenderCallback = ({
     formChangeHandler,
     validationResult,
     formValues,
   }) => {
     // const { formChangeHandler, formValues, validationResult } = props;
-    const [addEvent, { data, error }] = useMutation(ADDEVENT);
+    const [editEvent, { data, error }] = useMutation(EDIT_EVENT);
     const { data: categoryData, loading: categoryLoading, error: categoryError } = useQuery(
       GET_CATEGORIES,
     );
     useGraphQLErrorDisplay(error);
     const styles = useStyles();
     const redirect = useCookieRedirection();
-    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
     const user = useSessionState();
-    const router = useRouter();
     const [state, setState] = React.useState({});
     const [address, setAddress] = useState('');
     const [city, setCity] = useState('');
@@ -214,8 +299,8 @@ const AddEventForm = ({ actorId }) => {
           || (selectedStartDate && moment(selectedStartDate) <= moment())
           || !formValues.shortDescription
           || !formValues.description
-          || !formValues.categories
-          || formValues.categories?.length === 0
+          // || !formValues.categories
+          // || formValues.categories?.length === 0
           || (!address && !city)) setValidated(false);
       else setValidated(true);
     });
@@ -253,12 +338,47 @@ const AddEventForm = ({ actorId }) => {
 
     useEffect(() => {
       if (data) {
-        enqueueSnackbar('Événement créé avec succès.', {
+        enqueueSnackbar('Événement mis à jour avec succès.', {
           preventDuplicate: true,
         });
-        router.push(`/event/${data.createEvent.id}`);
+        router.push(`/event/${eventData.event.id}`);
       }
     }, [data]);
+
+    const [firstRender, setFirstRender] = useState(true);
+    const initFormValues = () => {
+      formValues.label = '';
+      formValues.facebookUrl = '';
+      formValues.shortDescription = '';
+      formValues.description = '';
+      formValues.address = '';
+      formValues.postCode = '';
+      formValues.city = '';
+      formValues.lat = '';
+      formValues.lng = '';
+    };
+    const updateFormValues = () => {
+      formValues.label = eventData.event.label;
+      formValues.facebookUrl = eventData.event.facebookUrl;
+      formValues.shortDescription = eventData.event.short_description;
+      formValues.description = eventData.event.description;
+      formValues.address = eventData.event.address;
+      formValues.postCode = eventData.event.postCode;
+      formValues.city = eventData.event.city;
+      formValues.lat = eventData.event.lat;
+      formValues.lng = eventData.event.lng;
+      setAddress(eventData.event.address);
+      setCity(eventData.event.city);
+      setSelectedStartDate(new Date(parseInt(eventData.event.startedAt)));
+      setSelectedEndDate(new Date(parseInt(eventData.event.endedAt)));
+    };
+    if (firstRender) {
+      initFormValues();
+    }
+    if (firstRender && !eventLoading && !eventError) {
+      updateFormValues();
+      setFirstRender(false);
+    }
 
     const submitHandler = () => {
       const checkboxes = Object.keys(state);
@@ -267,7 +387,7 @@ const AddEventForm = ({ actorId }) => {
       checkboxes.forEach((key) => {
         if (state[key]) { categoriesArray.push(parseInt(key)); }
       });
-      addEvent({
+      editEvent({
         variables: {
           eventInfos: {
             label: formValues.label,
@@ -283,10 +403,8 @@ const AddEventForm = ({ actorId }) => {
             address,
             postCode: formValues.postCode,
             city,
-
           },
-          actorId: parseInt(actorId),
-          userId: parseInt(user.id),
+          eventId: parseInt(eventData.event.id),
         },
       });
     };
@@ -298,7 +416,7 @@ const AddEventForm = ({ actorId }) => {
           color="secondary"
           variant="h6"
         >
-          Ajouter un événement
+          Éditer un événement
         </Typography>
         <FormItem
           label="Nom de l'événement"
@@ -455,12 +573,48 @@ const AddEventForm = ({ actorId }) => {
           onClick={submitHandler}
           disabled={!validationResult?.global || !validated}
         >
-          Créer cet événement
+          Mettre à jour cet événement
         </ClassicButton>
+        <ClassicButton
+          fullWidth
+          variant="contained"
+          className={styles.delete}
+          onClick={handleClickOpen}
+        >
+          Supprimer cet événement
+        </ClassicButton>
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">Êtes-vous sûr(e) de vouloir supprimer cet événement ?</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              Une fois supprimé, cet événement sera définitivement supprimé.
+              Il ne sera plus visible sur notre plateforme, ni pour vous, ni pour les visiteurs.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} color="primary">
+              Annuler
+            </Button>
+            <Button onClick={submitDeleteEvent} color="primary" autoFocus>
+              Supprimer
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Container>
     );
   };
 
+  if (eventLoading) {
+    return (null);
+  }
+  if (eventError) {
+    return (<FallbackPageNotFound />);
+  }
   return (
     <FormController
       render={Form}
@@ -469,4 +623,4 @@ const AddEventForm = ({ actorId }) => {
   );
 };
 
-export default withApollo()(AddEventForm);
+export default withApollo()(EditEventForm);
