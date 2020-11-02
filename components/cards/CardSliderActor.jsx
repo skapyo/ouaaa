@@ -4,6 +4,7 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import Link from "../Link";
+import {getImageUrl} from "../../utils/utils";
 
 const useStyles = makeStyles({
   root: {
@@ -38,10 +39,9 @@ marginRight: "auto"
 
     },
     image:{
-        backgroundImage:`url('/cardPicture.jpg')`,
         backgroundPosition: 'center center',
+        backgroundSize: 'contain',
         backgroundRepeat: 'no-repeat',
-        backgroundSize:"over",
         textAlign:"inherit",
         height:"10em"
     },
@@ -78,7 +78,7 @@ export default function SimpleCard({actor}) {
 
         <Card className={classes.root}>
           <CardContent>
-            <div  className={classes.image}>
+            <div  className={classes.image} style={{backgroundImage: actor.pictures.length>1?'url('+getImageUrl(actor.pictures.sort((a, b) => a.position > b.position ? 1 : -1)[0].croppedPicturePath)+')':''}}>
               <div className={classes.categorie}>
                 <Typography className={classes.categorie}  gutterBottom>
                     {actor.categories && actor.categories.length>0 && actor.categories[0].label}

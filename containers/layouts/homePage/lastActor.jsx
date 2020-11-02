@@ -62,6 +62,19 @@ const LastActor = () => {
             lng,
             categories{
                 label
+            },
+            pictures{
+                id,
+                label,
+                originalPicturePath,
+                originalPictureFilename,
+                croppedPicturePath,
+                croppedPictureFilename,
+                croppedX,
+                croppedY,
+                croppedZoom,
+                croppedRotation,
+                position
             }
         }
         }

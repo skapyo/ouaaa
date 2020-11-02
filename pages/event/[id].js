@@ -4,7 +4,7 @@ import {Box, Container, Grid, makeStyles, RootRef, Typography,} from "@material-
 import {withApollo} from "hoc/withApollo.jsx"
 import {useRouter} from "next/router";
 import gql from "graphql-tag";
-import {useMutation, useQuery}  from '@apollo/client';
+import {useMutation, useQuery} from '@apollo/client';
 import Place from '@material-ui/icons/Place';
 import Schedule from '@material-ui/icons/Schedule';
 import Slider from "react-slick/lib";
@@ -184,7 +184,22 @@ const Event = () => {
                     lng,
                     categories{
                         label
+                    },
+                    ,
+                    pictures{
+                        id,
+                        label,
+                        originalPicturePath,
+                        originalPictureFilename,
+                        croppedPicturePath,
+                        croppedPictureFilename,
+                        croppedX,
+                        croppedY,
+                        croppedZoom,
+                        croppedRotation,
+                        position
                     }
+                    
                 },
                 participants {   id,
                     surname,

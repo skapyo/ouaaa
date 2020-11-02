@@ -4,7 +4,7 @@ import {Grid, Typography} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import gql from 'graphql-tag'
 import {withApollo} from "../../hoc/withApollo";
-import {useQuery}  from '@apollo/client';
+import {useQuery} from '@apollo/client';
 import Link from "../../components/Link";
 import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded';
 import FavoriteRoundedIcon from '@material-ui/icons/FavoriteRounded';
@@ -16,6 +16,7 @@ import Collapse from "@material-ui/core/Collapse/Collapse";
 import Checkbox from "@material-ui/core/Checkbox/Checkbox";
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
+import {getImageUrl} from "../../utils/utils";
 
 if (typeof window != 'undefined') {
     var L = require("leaflet");
@@ -138,10 +139,9 @@ const useStyles = makeStyles((theme) => ({
 
     },
     image:{
-        backgroundImage:`url('/cardPicture.jpg')`,
         backgroundPosition: 'center center',
         backgroundRepeat: 'no-repeat',
-        backgroundSize:"over",
+        backgroundSize: 'contain',
         textAlign:"inherit",
         height:"10em"
     },
@@ -217,6 +217,19 @@ const carto = () => {
                 label
                 icon
                 color
+            },
+            pictures{
+                id,
+                label,
+                originalPicturePath,
+                originalPictureFilename,
+                croppedPicturePath,
+                croppedPictureFilename,
+                croppedX,
+                croppedY,
+                croppedZoom,
+                croppedRotation,
+                position
             }
         }
         }
@@ -385,7 +398,7 @@ const carto = () => {
                                         <Marker key={`marker-${index}`} position={[actor.lat, actor.lng]}
                                                 icon={suitcasePoint}>
                                             <Tooltip>
-                                                <div className={styles.image}>
+                                                <div className={styles.image}  style={{backgroundImage: actor.pictures.length>1?'url('+getImageUrl(actor.pictures.sort((a, b) => a.position > b.position ? 1 : -1)[0].croppedPicturePath)+')':''}}>
                                                     <div className={styles.categorie}>
                                                         <Typography className={styles.categorie} gutterBottom>
                                                             {actor.categories && actor.categories.length > 0 && actor.categories[0].label}
@@ -415,7 +428,7 @@ const carto = () => {
                                             <Popup>
 
 
-                                                <div className={styles.image}>
+                                                <div className={styles.image}  style={{backgroundImage: actor.pictures.length>1?'url('+getImageUrl(actor.pictures.sort((a, b) => a.position > b.position ? 1 : -1)[0].croppedPicturePath)+')':''}}>
                                                     <div className={styles.categorie}>
                                                         <Typography className={styles.categorie} gutterBottom>
                                                             {actor.categories && actor.categories.length > 0 && actor.categories[0].label}
