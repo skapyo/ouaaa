@@ -24,11 +24,11 @@ const Filters = (refetch) => {
 
   return (
     <Container className={classes.filters}>
-      <h4 className={classes.title}>DATE</h4>
+      <div className={classes.title}>DATE</div>
       <DateFilter refetch={refetch}/>
-      <h4 className={classes.title}>CATÉGORIES</h4>
+      <div className={classes.title}>CATÉGORIES</div>
       <CategoryFilter refetch={refetch} />
-      <h4 className={classes.title}>LIEU</h4>
+      <div className={classes.title}>LIEU</div>
     </Container>
   )
 }

@@ -49,7 +49,8 @@ marginRight: "auto"
     title:{
     textAlign:"left",
         "color": "#2a9076",
-        width:"100%"
+        width:"100%",
+        fontSize: '1.5rem',
     },
     content:{
      padding:"10px"
@@ -85,7 +86,7 @@ export default function SimpleCard({event}) {
             </div>
             <div className={classes.content}>
               <div  className={classes.titleDiv}>
-                <Typography variant="h6" component="h2"  className={classes.title}>
+                <Typography  className={classes.title}>
                     {event && event.label}
                 </Typography>
                 <Typography className={classes.date} color="textSecondary">

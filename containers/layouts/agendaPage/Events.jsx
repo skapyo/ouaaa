@@ -52,7 +52,7 @@ const Events = (data) => {
 
   return (
     <Container className={classes.events}>
-      <h4 className={classes.title}>ÉVÉNEMENTS À VENIR</h4>
+      <h1 className={classes.title}>ÉVÉNEMENTS À VENIR</h1>
       {
         data.data && data.data.events.sort(compare).map((event) =>
           <div key={event.id}>

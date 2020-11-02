@@ -1,4 +1,4 @@
-import React, {useState} from "react"
+import React from "react"
 import AppLayout from "containers/layouts/AppLayout"
 import {Box, Container, makeStyles, RootRef, Typography,} from "@material-ui/core"
 import Newsletter from "../../containers/layouts/Newsletter";
@@ -18,11 +18,7 @@ const useStyles = makeStyles((theme) => ({
 
 }))
 const About = () => {
-    const styles = useStyles(stylesProps)
-    const [stylesProps, setStylesProps] = useState({
-        topImageSize: "250px",
-        headerDisplay: "static",
-    })
+    const styles = useStyles()
     return (
         <AppLayout>
             <RootRef >

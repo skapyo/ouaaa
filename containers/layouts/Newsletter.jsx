@@ -167,7 +167,7 @@ const Newsletter = () => {
 
     return (
       <Container className={[styles.newsletter]}>
-        <Typography variant="h5" className={[styles.cardTitle, styles.align]}>
+        <Typography variant="h2" className={[styles.cardTitle, styles.align]}>
           POUR NE RIEN RATER DE #OUAAA
           <br />
           INSCRIVEZ-VOUS À NOTRE NEWSLETTER

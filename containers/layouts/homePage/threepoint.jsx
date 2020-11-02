@@ -145,10 +145,10 @@ const PresentationSection = () => {
           <Grid container spacing={3} className={styles.flexColumn} >
               <Grid item md={6}>
                   <div  className={[styles.align]}>
-                      <Typography variant="h5"   className={styles.cardTitle}  >
+                      <Typography variant="h2"   className={styles.cardTitle}  >
                           Ouaaa
                       </Typography>
-                      <Typography variant="h5"   className={styles.cardTitle}  >
+                      <Typography variant="h3"   className={styles.cardTitle}  >
                           EN 3 POINTS
                       </Typography>
                   </div>
@@ -175,10 +175,10 @@ const PresentationSection = () => {
           <Link  href="/map" className={styles.map}>
               <button className={styles.button}>VOIR LA CARTE</button>
           </Link>
-          <Typography variant="h5"   className={[styles.cardTitle,styles.align]}  >
-              Ouaaa
+          <Typography variant="h2"   className={[styles.cardTitle,styles.align]}  >
+              Outils des Acteurs Alternatifs en Aunis
           </Typography>
-          <Typography variant="h5"   className={[styles.cardTitle,styles.align]}  >
+          <Typography variant="h3"   className={[styles.cardTitle,styles.align]}  >
               C'EST POUR QUI ?
           </Typography>
 

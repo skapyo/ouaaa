@@ -122,7 +122,7 @@ const NavBar = () => {
                   <img
                       className={styles.logo}
                       src="/logo.png"
-                      alt="logo"
+                      alt="Outils des Acteurs Alternatifs en Aunis – La Rochelle et ses communes"
                   />
                 </Link>
               </Grid>

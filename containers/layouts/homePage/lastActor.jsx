@@ -2,7 +2,7 @@ import {Container, makeStyles, Typography} from '@material-ui/core';
 import React, {useEffect, useState} from "react";
 import Slider from "react-slick/lib";
 import CardSliderActor from "../../../components/cards/CardSliderActor";
-import {useQuery}  from '@apollo/client';
+import {useQuery} from '@apollo/client';
 import gql from "graphql-tag"
 import {withApollo} from "../../../hoc/withApollo";
 import Link from "../../../components/Link";
@@ -120,7 +120,7 @@ const LastActor = () => {
     };
   return (
       <Container className={[styles.actorContainer]}>
-          <Typography variant="h5"   className={[styles.cardTitle,styles.align]}  >
+          <Typography variant="h2"   className={[styles.cardTitle,styles.align]}  >
               LES ACTEURS RECEMMENTS AJOUTES
           </Typography>
 
