@@ -300,7 +300,7 @@ const Actor = () => {
   const settingsSliderImage = {
 
     infinite: true,
-    slidesToShow: data && data.actor.pictures && data.actor.pictures.length>5?5:data && data.actor.pictures && data.actor.pictures.length,
+    slidesToShow: data && data.actor.pictures && data.actor.pictures.length>3?3:data && data.actor.pictures && data.actor.pictures.length,
     slidesToScroll: 1,
     // autoplay: true,
     // autoplaySpeed: 2000,
