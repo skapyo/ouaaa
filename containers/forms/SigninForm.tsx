@@ -29,10 +29,12 @@ import useCookieRedirection from "hooks/useCookieRedirection"
 import FallbackEmailNotValidated from "containers/fallbacks/FallbackEmailNotValidated"
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff"
+import Link from "../../components/Link";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
+    marginBottom: theme.spacing(8),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -195,6 +197,7 @@ const SigninForm = () => {
                 )}
               label="Se souvenir de moi"
             />
+
           </Box>
           <ClassicButton
             fullWidth
@@ -213,6 +216,8 @@ const SigninForm = () => {
           >
             Créer un compte
           </ClassicButton>
+          {/* @ts-ignore */}
+          <Link href="/forgotPassword">Mot de passe oublié ?</Link>
         </div>
       </Container>
     );

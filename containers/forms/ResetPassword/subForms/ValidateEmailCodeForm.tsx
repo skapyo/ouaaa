@@ -1,17 +1,33 @@
-import React, { useEffect, useState, useContext } from "react"
-import { RenderCallback } from "components/controllers/FormController"
-import { Grid, Typography, CircularProgress, Box } from "@material-ui/core"
-import { makeStyles } from "@material-ui/core"
+import React, {ChangeEvent, useContext, useEffect, useState} from "react"
+import {RenderCallback} from "components/controllers/FormController"
+import {Box, CircularProgress, Grid, makeStyles, Typography} from "@material-ui/core"
 import TextField from "components/TextField"
 import gql from "graphql-tag"
-import { useMutation }  from '@apollo/client'
-import { EmailContext } from "containers/forms/ResetPassword/ResetPasswordForm"
+import {useMutation} from '@apollo/client'
+import {EmailContext} from "containers/forms/ResetPassword/ResetPasswordForm"
+import {useRouter} from "next/router"
+import {Redirect} from 'react-router-dom';
+import PropTypes from "prop-types";
+import omitTypename from "../../../../utils/omitTypename";
+import {useSessionDispatch} from 'context/session/session';
 
 const VALIDATE_RESET_PASSWORD_CODE = gql`
   mutation validateActionCode(
     $validateActionCodeInfos: ValidateActionCodeInfos
   ) {
     validateActionCode(validateActionCodeInfos: $validateActionCodeInfos)
+    {
+      id
+      surname
+      lastname
+      email
+      role
+      phone
+      address
+      postCode
+      city
+      isEmailValidated
+    }
   }
 `
 
@@ -19,13 +35,58 @@ const useStyles = makeStyles((theme) => ({
   subTitle: {
     marginBottom: theme.spacing(3),
   },
+  main :{
+    paddingBottom: theme.spacing(5),
+  }
 }))
 
+type FormItemProps = {
+  label: string
+  inputName: string
+  formChangeHandler: (event: ChangeEvent) => void
+  value: string
+  autoComplete?: string
+}
+const FormItem = (props: FormItemProps) => {
+  const { label, inputName, formChangeHandler, value, autoComplete } = props
+  const styles = useStyles()
+
+  return (
+      <>
+        <Grid item sm={3} xs={12}>
+          <Typography variant="body1" color="primary" >
+            {label} :
+          </Typography>
+        </Grid>
+        <Grid item sm={9} xs={12}>
+          <TextField
+              variant="outlined"
+              type="password"
+              defaultValue=""
+              value={value}
+              label={label}
+              name={inputName}
+              onChange={formChangeHandler}
+              autoComplete={autoComplete}
+          />
+        </Grid>
+      </>
+  )
+}
+FormItem.propTypes = {
+  formChangeHandler: PropTypes.func.isRequired,
+  inputName: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  value: PropTypes.string,
+  autoComplete: PropTypes.string,
+}
+
+// @ts-ignore
 const ValidateEmailCodeForm: RenderCallback = (props) => {
   const { formChangeHandler, formValues, clearFormvalues } = props
-
+  const router = useRouter()
   const context = useContext(EmailContext)
-
+  const sessionDispatch = useSessionDispatch()
   const [validateCode, { data, loading, error }] = useMutation(
     VALIDATE_RESET_PASSWORD_CODE
   )
@@ -81,14 +142,24 @@ const ValidateEmailCodeForm: RenderCallback = (props) => {
   }, [focusState])
 
   useEffect(() => {
-    if (data && !data.validateActionCode) {
+    debugger;
+   if (data && ( data.validateActionCode && data.validateActionCode.id)){
+      sessionDispatch({
+        type: 'login',
+        payload: omitTypename(data.validateActionCode),
+      });
+      <Redirect to="/account/security" />;
+      router.push(`/account/security`);
+
+    } else if (data) {
       clearFormvalues()
       setFocusState("input1")
     }
-  }, [data])
-
+        }, [data])
   return (
-    <>
+
+    <div className={styles.main}>
+
       <Typography variant="h6" className={styles.subTitle}>
         Entrez le code présent dans l'email:
       </Typography>
@@ -153,13 +224,15 @@ const ValidateEmailCodeForm: RenderCallback = (props) => {
           <CircularProgress />
         </Box>
       )}
-      {data && !data.validateActionCode && (
+      {data && !data.login && (
         <Box mt={3}>
           Le code renseigné n'est pas correct, veuillez réessayer.
         </Box>
       )}
-    </>
+
+    </div>
   )
+
 }
 
 export default ValidateEmailCodeForm

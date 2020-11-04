@@ -1,13 +1,11 @@
-import React, {
-  ChangeEvent, useCallback, useEffect, useMemo, useState,
-} from 'react';
-import { useMutation } from '@apollo/client';
-import { useSnackbar } from 'notistack';
+import React, {ChangeEvent, useCallback, useEffect, useMemo, useState,} from 'react';
+import {useMutation} from '@apollo/client';
+import {useSnackbar} from 'notistack';
 import omitTypename from 'utils/omitTypename';
 import validateEmailFormat from 'utils/validateEmailFormat';
 import validatePasswordFormat from 'utils/validatePasswordFormat';
-import { DocumentNode } from 'graphql';
-import { useSessionState } from '../../context/session/session';
+import {DocumentNode} from 'graphql';
+import {useSessionState} from '../../context/session/session';
 
 type FormValues = { [key: string]: string }
 
@@ -111,11 +109,12 @@ const withMutation = (FormComponent: RenderCallback) => (
   const [update, { data, loading, error }] = useMutation(queryOptions.query, {
     variables: {
       formValues,
-      userId: parseInt(user.id),
+      userId: parseInt(user && user.id),
     },
   });
 
   const submitHandler = useCallback(() => {
+    debugger;
     update();
   }, [update]);
 
@@ -130,9 +129,10 @@ const withMutation = (FormComponent: RenderCallback) => (
       && queryOptions.mutationResultControl(formValues, data, error)
       );
     }
-
+    debugger;
     if (next) {
       setInitialFormValues(omitTypename(data?.[queryOptions.resultLabel]));
+
 
       if (queryOptions.snackbarSucceedMessage) { scnackbar.enqueueSnackbar(queryOptions.snackbarSucceedMessage); }
 
@@ -217,6 +217,7 @@ const FormController = (props: FormControllerProps, ...otherprops: any[]) => {
   }, [formValues, initialFormValues]);
 
   const clearFormvalues = useCallback(() => {
+    debugger;
     setFormValue({});
     setInitialFormValues({});
   }, [setFormValue]);

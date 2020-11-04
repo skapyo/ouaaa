@@ -1,17 +1,11 @@
-import React, { useContext } from "react"
+import React, {useCallback, useState} from "react"
 import gql from "graphql-tag"
-import FormController, {
-  ValidationRules,
-  ValidationRuleType,
-  QueryOptions,
-} from "components/controllers/FormController"
-import { withApollo } from "hoc/withApollo"
-import { useState, useCallback } from "react"
+import FormController, {QueryOptions, ValidationRules, ValidationRuleType,} from "components/controllers/FormController"
+import {withApollo} from "hoc/withApollo"
 import ResetPasswordEmailForm from "containers/forms/ResetPassword/subForms/SendResetPsswdEmailForm"
 import ValidateEmailCodeForm from "./subForms/ValidateEmailCodeForm"
-import { Container, Box, Avatar, Typography } from "@material-ui/core"
+import {Avatar, Box, Container, makeStyles, Typography} from "@material-ui/core"
 import VpnKeyOutlinedIcon from "@material-ui/icons/VpnKeyOutlined"
-import { makeStyles } from "@material-ui/core"
 
 const useStyles = makeStyles((theme) => ({
   avatar: {
@@ -27,7 +21,7 @@ const ResetPasswordFormLayout = ({ children }: { children: JSX.Element }) => {
   const styles = useStyles()
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="main" maxWidth="sm">
       <Box
         marginTop={8}
         display="flex"

@@ -65,9 +65,6 @@ FormItem.propTypes = {
 }
 
 const validationRules: ValidationRules = {
-  actualPassword: {
-    rule: ValidationRuleType.required,
-  },
   newPassword1: {
     rule: ValidationRuleType.password,
   },
@@ -85,7 +82,9 @@ const UPDATE_USER_PASSWORD = gql`
 
 const queryOptions = {
   query: UPDATE_USER_PASSWORD,
+  mutationResultControl: 'builtin',
   resultLabel: "updateUserPassword",
+  snackbarSucceedMessage: 'Mot de passe modifié avec succès.',
   clearAfterUpdate: true,
 }
 
@@ -118,13 +117,6 @@ const UserInfosForm = () => {
             spacing={3}
             className={styles.gridContainer}
           >
-            <FormItem
-              label="Mot de passe actuel"
-              inputName="actualPassword"
-              formChangeHandler={formChangeHandler}
-              value={formValues.actualPassword}
-              autoComplete="current-password"
-            />
             <FormItem
               label="Nouveau mot de passe"
               inputName="newPassword1"
@@ -228,10 +220,12 @@ const UserInfosForm = () => {
     )
   }
 
+
   return (
     <FormController
       render={Form}
       withQuery={true}
+        // @ts-ignore
       queryOptions={queryOptions}
       validationRules={validationRules}
     />
