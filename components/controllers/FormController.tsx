@@ -114,7 +114,6 @@ const withMutation = (FormComponent: RenderCallback) => (
   });
 
   const submitHandler = useCallback(() => {
-    debugger;
     update();
   }, [update]);
 

@@ -1,8 +1,8 @@
 import {createStyles, makeStyles, Theme, Typography, useTheme,} from '@material-ui/core';
 import {withApollo} from 'hoc/withApollo';
 import ActorAdminPageLayout from 'containers/layouts/actorAdminPage/ActorAdminPageLayout';
-import {useQuery} from '@apollo/client';
-import React from 'react';
+import {useMutation, useQuery} from '@apollo/client';
+import React, {useCallback, useEffect} from 'react';
 import gql from 'graphql-tag';
 import Paper from '@material-ui/core/Paper/Paper';
 import Table from '@material-ui/core/Table';
@@ -23,6 +23,7 @@ import FirstPageIcon from '@material-ui/icons/FirstPage';
 import Moment from 'react-moment';
 import Link from '../../components/Link';
 import {useSessionState} from '../../context/session/session';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 
 const useStyles = makeStyles((theme) => ({
   avatar: {
@@ -156,20 +157,38 @@ const ActorAdminPage = () => {
                 email,
                 phone
             }
+            ,
+            isValidated,
+            dateValidation,
+            userValidated {
+                surname,
+                lastname,
+                email,
+                phone
+            }
         }
         }
         
     `;
-  const { data, loading, error } = useQuery(GET_ACTORS, {
+
+    const VALIDATE_ACTOR = gql`
+        mutation validateActor( $actorId: Int!, $userId: Int!) {
+            validateActor( actorId: $actorId,userId: $userId) {
+                name
+
+            }
+        }
+    `;
+  const { data, loading, error, refetch } = useQuery(GET_ACTORS, {
     variables: {
       userId: user.id,
     },
-  });
 
+  });
   const classes = useStyles2();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-
+    const [actorIdValidated, setActorIdValidated] = React.useState(0);
   let row = 0;
   if (typeof data !== 'undefined') {
     row = data.actorsAdmin.length;
@@ -193,6 +212,25 @@ const ActorAdminPage = () => {
   const handleChange = (actor, event) => {
     setState({ ...state, [actor.id.toString()]: event.target.checked });
   };
+
+    const [validateActor,{ data:dataValidateActor, }] = useMutation(VALIDATE_ACTOR, {
+        variables: {
+            actorId:actorIdValidated,
+            userId: parseInt(user && user.id),
+        },
+    });
+
+    const validate = useCallback((actor) => {
+       if(!actor.isValidated){
+           setActorIdValidated( parseInt(actor.id))
+           validateActor()
+       }
+    }, [validateActor]);
+    useEffect(() => {
+        if (dataValidateActor) {
+            refetch();
+        }
+    }, [dataValidateActor]);
   const styles = useStyles();
 
   return (
@@ -230,6 +268,20 @@ const ActorAdminPage = () => {
                 <TableCell style={{ width: 160 }} align="left">
                   Editer la page
                 </TableCell>
+                  {user && user.role == "admin" && (
+                      <>
+                      <TableCell style={{width: 160}} align="left">
+                          Validation
+                      </TableCell>
+                      <TableCell style={{width: 160}} align="left">
+                             Date de validation
+                      </TableCell>
+                      <TableCell style={{width: 160}} align="left">
+                             Personne ayant validé
+                      </TableCell>
+                      </>
+                  )
+                  }
               </TableRow>
             </TableHead>
             <TableBody>
@@ -261,13 +313,27 @@ const ActorAdminPage = () => {
                       Lien vers page acteur
                     </Link>
                   </TableCell>
+
                   <TableCell style={{ width: 160 }} align="right">
                       {/* @ts-ignore */}
                     <Link href={`/actorAdmin/actor/${actor.id}`}>
                       <Edit />
                     </Link>
                   </TableCell>
-
+                    {user && user.role == "admin" && (
+                        <>
+                        <TableCell style={{width: 160}} align="left">
+                            <CheckCircleIcon style={{ color:actor.isValidated?"green":"orange"}}   onClick={() => validate(actor)}/>
+                        </TableCell>
+                        <TableCell style={{width: 160}} align="left">
+                            { actor.dateValidation && (  <Moment format="DD/MM HH:mm" unix>{actor.dateValidation / 1000}</Moment> )}
+                        </TableCell>
+                            <TableCell style={{width: 160}} align="left">
+                             { actor.userValidated && actor.userValidated.surname} {actor.userValidated && actor.userValidated.lastname }
+                            </TableCell>
+                        </>
+                    )
+                    }
                 </TableRow>
               ))}
 
