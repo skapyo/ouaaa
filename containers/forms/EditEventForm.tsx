@@ -1,7 +1,7 @@
-import React, {ChangeEvent, useEffect, useState} from 'react';
+import React, {ChangeEvent, useCallback, useEffect, useState} from 'react';
 import {gql, useMutation, useQuery} from '@apollo/client';
 import {withApollo} from 'hoc/withApollo';
-import {Container, Grid, makeStyles, TextField, Typography,} from '@material-ui/core';
+import {Card, Container, Grid, makeStyles, TextField, Typography,} from '@material-ui/core';
 import ClassicButton from 'components/buttons/ClassicButton';
 import FormController, {
     RenderCallback,
@@ -13,7 +13,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import useCookieRedirection from 'hooks/useCookieRedirection';
 import {useSnackbar} from 'notistack';
 import GooglePlacesAutocomplete, {geocodeByAddress, getLatLng} from 'react-google-places-autocomplete';
-import {useRouter} from 'next/router';
+import {useRouter, withRouter} from 'next/router';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon/ListItemIcon';
@@ -32,6 +32,17 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 import FallbackPageNotFound from 'containers/fallbacks/FallbackPageNotFound';
 import {useSessionState} from '../../context/session/session';
+import Icon from "@material-ui/core/Icon";
+import ImageCropper from 'components/ImageCropper/ImageCropper'
+import useDnDStateManager from '../../hooks/useDnDStateManager';
+import InsertPhotoIcon from '@material-ui/icons/InsertPhoto';
+import {getImageUrl} from 'utils/utils';
+import useImageReader from '../../hooks/useImageReader';
+import {useDrag, useDrop} from "react-dnd";
+import HeightIcon from "@material-ui/core/SvgIcon/SvgIcon";
+import DeleteIcon from '@material-ui/icons/Delete';
+import {useDropArea} from "react-use";
+import withDndProvider from "../../hoc/withDnDProvider";
 
 const useStyles = makeStyles((theme) => ({
   field: {
@@ -79,15 +90,23 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       background: 'none',
     },
+
+  },dropZone:{
+    padding : "1em",
+    margin :"2em"
+  },
+  image:{
+    width:'100%',
+    height:'100%'
   },
 }));
 
 const EDIT_EVENT = gql`
   mutation editEvent(
-    $eventInfos: EventInfos, $eventId: Int!
+    $eventInfos: EventInfos, $eventId: Int!,$pictures:[InputPictureType]
   ) {
     editEvent(
-      eventInfos: $eventInfos, eventId: $eventId
+      eventInfos: $eventInfos, eventId: $eventId,,pictures: $pictures
     ) {
       id
       label
@@ -138,6 +157,19 @@ const GET_EVENT = gql`
       address
       postCode
       city
+      pictures{
+        id,
+        label,
+        originalPicturePath,
+        originalPictureFilename,
+        croppedPicturePath,
+        croppedPictureFilename,
+        croppedX,
+        croppedY,
+        croppedZoom,
+        croppedRotation,
+        position
+      }
     }
   }
 `;
@@ -379,13 +411,99 @@ const EditEventForm = (props) => {
       setFirstRender(false);
     }
 
+    const [setImagesList, loading, result,imagesListState] = useImageReader();
+
+    var imgInit = [];
+    if(eventData && eventData.event.pictures && eventData.event.pictures.length > 0 ) {
+
+      imgInit = eventData.event.pictures.sort((a, b) => a.position > b.position ? 1 : -1).map((picture, index) => {
+
+        return {
+          id: index,
+          file: null,
+          img: getImageUrl(picture.originalPicturePath),
+          croppedImg: {
+            crop: {
+              x: picture.croppedX,
+              y: picture.croppedY
+            },
+            rotation: picture.croppedRotation,
+            zoom: picture.croppedZoom,
+            file: null,
+            img: getImageUrl(picture.croppedPicturePath),
+            modified: false
+          },
+          activated: true,
+          deleted: false,
+          newpic: false,
+          serverId: picture.id,
+          position:picture.position,
+        };
+      });
+    }
+    const ImagesDropZone = ({onDropHandler}) => {
+
+      const [bond, state] = useDropArea({
+        onFiles: files => onDropHandler(files)
+      });
+
+      return (
+          <Card className={styles.dropZone}>
+            <Grid container alignItems="center">
+              <Grid item xs={12} >
+                <div {...bond}>
+                  <div >
+                    <InsertPhotoIcon />
+                  </div>
+                  <div >
+                    Déposer les images ici...
+                  </div>
+                </div>
+              </Grid>
+            </Grid>
+          </Card>
+      );
+    };
+
+    const {
+      objectsList,
+      moveObject,
+      findObject,
+      updateActiveIndicator,
+      updateDeletedIndicator,
+      initState,
+      addValues,
+      updateKeyIndicator
+    } = useDnDStateManager(imgInit);
+
+
     const submitHandler = () => {
+      var files ;
+
       const checkboxes = Object.keys(state);
       let categoriesArray: number[];
       categoriesArray = [];
       checkboxes.forEach((key) => {
         if (state[key]) { categoriesArray.push(parseInt(key)); }
       });
+      if(objectsList)
+        files = objectsList.map((object) =>{
+          // return object.file
+          return {
+            id : object.serverId,
+            newpic : object.newpic,
+            deleted : object.deleted,
+            file : {
+              originalPicture:object.file,
+              croppedPicture:object.croppedImg.file,
+              croppedPictureModified : object.croppedImg.modified,
+              croppedX:object.croppedImg.crop.x,
+              croppedY:object.croppedImg.crop.y,
+              croppedZoom:object.croppedImg.zoom,
+              croppedRotation:object.croppedImg.rotation
+            }
+          }
+        });
       editEvent({
         variables: {
           eventInfos: {
@@ -402,11 +520,126 @@ const EditEventForm = (props) => {
             address,
             postCode: formValues.postCode,
             city,
+
           },
           eventId: parseInt(eventData.event.id),
+          pictures:files
         },
       });
     };
+    const ImagesDisplay = ({cards,moveCard,findCard,updateActiveIndicator,updateDeletedIndicator,updateKeyIndicator}) => {
+      // console.log('cards');
+      // console.log(cards);
+      // console.log('--cards--');
+      return (
+          <Grid container alignItems="center"
+              // justify='center'
+                spacing={3}>
+            {
+              cards.map((file) => (
+                  <ImagePrev
+                      id={file.id}
+                      key={`image${file.id}`}
+                      originalImg = {file.img}
+                      croppedImg = {file.croppedImg}
+                      moveCard={moveCard}
+                      findCard={findCard}
+                      deletedIconClickHandler={updateDeletedIndicator}
+                      updateKeyIndicator={updateKeyIndicator}
+                      deleted = {file.deleted}
+                      file={file}
+                  />
+
+              ))
+            }
+          </Grid>
+      );
+
+    };
+    const ItemTypes = {
+      PIC: "pic"
+    };
+    const ImagePrev = ({file,originalImg,croppedImg,moveCard,findCard,id,deletedIconClickHandler,deleted,updateKeyIndicator}) => {
+
+      const originalIndex = findCard(id).index;
+
+      const [{ isDragging }, drag] = useDrag({
+        item: { type: ItemTypes.PIC, id, originalIndex },
+        collect: monitor => ({
+          isDragging: monitor.isDragging()
+        })
+      });
+
+      {/* @ts-ignore */}
+      const [, drop] = useDrop({
+        accept: ItemTypes.PIC,
+        canDrop: () => false,
+        // @ts-ignore
+        hover({ id: draggedId }) {
+          if (draggedId !== id) {
+            const { index: overIndex } = findCard(id);
+            moveCard(draggedId, overIndex);
+          }
+        }
+      });
+
+      const opacity =  1 ;
+
+      //gestion de la modal du cropper
+      const [modalOpened, setOpenedInd] = useState(false);
+      const openModal = () => {
+        setOpenedInd(true);
+      };
+
+
+      return (
+          <Grid item xs={3} >
+            <div className='card'  ref={node => drag(drop(node))}  style={{ opacity}} >
+              <Card>
+                <img  src={croppedImg.img} className={styles.image} />
+              </Card>
+              <Card>
+                <Grid container spacing={3}>
+                  <Grid item xs={3}>
+                    <HeightIcon  onClick={() => openModal()}/>
+                  </Grid>
+                  <Grid item xs={3}>
+                    <DeleteIcon color={deleted? 'primary' : 'action' } onClick={() => deletedIconClickHandler(id)}/>
+                  </Grid>
+                </Grid>
+              </Card>
+              <ImageCropper
+                  updateKeyIndicator={updateKeyIndicator}
+                  id={id}
+                  croppedImg = {file.croppedImg}
+                  src={originalImg}
+                  open={modalOpened}
+                  onClose={() => setOpenedInd(false) }
+              />
+            </div>
+          </Grid>
+      );
+
+    };
+
+      //gestion de la modal du cropper
+      const [modalOpened, setOpenedInd] = useState(false);
+      const openModal = () => {
+        setOpenedInd(true);
+      };
+
+
+
+      useEffect(() => {
+        if(result)
+          addValues(result);
+        // @ts-ignore
+      },result)
+
+      const onDropHandler = useCallback((files) => {
+        // @ts-ignore
+        setImagesList(files);
+      },[setImagesList]);
 
     return (
         <Container component="main" maxWidth="sm">
@@ -565,7 +798,23 @@ const EditEventForm = (props) => {
                 )}
             />
           </Grid>
-          <ClassicButton
+            <Typography variant="body1" color="primary" >
+                <Icon/>
+                Images de l'événement
+            </Typography>
+            <br />
+            { objectsList?
+                < ImagesDisplay
+                    cards = {objectsList}
+                    moveCard = {moveObject}
+                    findCard = {findObject}
+                    updateActiveIndicator = {updateActiveIndicator}
+                    updateDeletedIndicator = {updateDeletedIndicator}
+                    updateKeyIndicator = {updateKeyIndicator}
+                /> : null }
+            < ImagesDropZone onDropHandler={onDropHandler} />
+
+            <ClassicButton
               fullWidth
               variant="contained"
               className={styles.submit}
@@ -622,4 +871,4 @@ const EditEventForm = (props) => {
   );
 };
 
-export default withApollo()(EditEventForm);
+export default withDndProvider(withRouter(withApollo()(EditEventForm)));

@@ -467,19 +467,7 @@ const Actor = () => {
 
               </Grid>
             </Grid>
-            {data && data.actor.pictures && (data.actor.pictures.length>0) &&  (
-            <div>
-              <Typography variant="h5" className={styles.cardTitle}>
-                PHOTO ET VIDEOS
-              </Typography>
 
-            </div>
-            )}
-            <Slider {...settingsSliderImage}>
-              {data && data.actor.pictures && data.actor.pictures.sort((a, b) => a.position > b.position ? 1 : -1).map((picture) => (
-              <img src={getImageUrl(picture.croppedPicturePath)} className={[styles.img]} />
-              ))}
-            </Slider>
 
             <div className={styles.buttonVolunteer}>
               {data && containUser(data.actor.volunteers) && (
@@ -490,6 +478,21 @@ const Actor = () => {
               )}
 
             </div>
+
+            {data && data.actor.pictures && (data.actor.pictures.length>0) &&  (
+                <div>
+                  <Typography variant="h5" className={styles.cardTitle}>
+                    PHOTOS ET VIDEOS
+                  </Typography>
+
+                </div>
+            )}
+            <Slider {...settingsSliderImage}>
+              {data && data.actor.pictures && data.actor.pictures.sort((a, b) => a.position > b.position ? 1 : -1).map((picture) => (
+                  <img src={getImageUrl(picture.croppedPicturePath)} className={[styles.img]} />
+              ))}
+            </Slider>
+
             {data && data.actor.pictures && (data.actor.events.length>0 || containUser(data.actor.referents)) &&  (
             <div>
 

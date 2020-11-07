@@ -16,11 +16,12 @@ import {useSessionState} from "../../context/session/session";
 import {useCookies} from "react-cookie";
 import {useSnackbar} from "notistack";
 import Head from 'next/head'
+import {getImageUrl} from "../../utils/utils";
 
 const useStyles = makeStyles((theme) => ({
     titleContainer: {
-        marginTop : theme.spacing(2),
-        backgroundImage:`url('/image/alternatiba.jpg')`,
+        marginTop: theme.spacing(2),
+        backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
         height: '24em',
@@ -52,6 +53,9 @@ const useStyles = makeStyles((theme) => ({
         "color":theme.typography.h5.color,
         fontFamily: theme.typography.h5.fontFamily,
         textTransform: "uppercase",
+    },
+    description:{
+        wordBreak: "break-all"
     },
     cardTitleCategories:{
         "color":theme.typography.h5.color,
@@ -205,6 +209,19 @@ const Event = () => {
                     surname,
                     lastname,
 
+                },
+                pictures{
+                    id,
+                    label,
+                    originalPicturePath,
+                    originalPictureFilename,
+                    croppedPicturePath,
+                    croppedPictureFilename,
+                    croppedX,
+                    croppedY,
+                    croppedZoom,
+                    croppedRotation,
+                    position
                 }
                 
             }
@@ -309,6 +326,18 @@ const Event = () => {
         nextArrow: <SampleNextArrow />,
         prevArrow: <SamplePrevArrow />
     };
+    const settingsSliderImage = {
+
+        infinite: true,
+        slidesToShow: data && data.event.pictures && data.event.pictures.length>3?3:data && data.event.pictures && data.event.pictures.length,
+        slidesToScroll: 1,
+        // autoplay: true,
+        // autoplaySpeed: 2000,
+        //  pauseOnHover: true,
+        nextArrow: <SampleNextArrow />,
+        prevArrow: <SamplePrevArrow />,
+    };
+
     function SampleNextArrow(props) {
         const { className, style, onClick } = props;
         return (
@@ -340,9 +369,9 @@ const Event = () => {
             </Head>
             <RootRef >
                 <Box>
-                    <Container className={styles.titleContainer} >
-                    </Container>
-
+                   {data && data.event&&(
+                       <Container className={styles.titleContainer} style={{backgroundImage: data && data.event && data.event.pictures.length>1?'url('+getImageUrl(data.event.pictures.sort((a, b) => a.position > b.position ? 1 : -1)[0].croppedPicturePath)+')':''}}/>
+                   )}
                     < Container  className={styles.cardInfo}>
 
                         <Grid container spacing={3} >
@@ -360,7 +389,7 @@ const Event = () => {
                                         })}
 
                                 </div>
-                                <p>{data && data.event.description}</p>
+                                <p className={styles.description} >{data && data.event.description}</p>
                                 <div  >
 
 
@@ -402,6 +431,8 @@ const Event = () => {
                             </Grid>
 
                         </Grid>
+
+
                         <div className={styles.buttonParticipate} >
                             {data && containUser(data.event.participants)&& (
                                 <button className={styles.buttonInverse} onClick={removeParticipateHandler}  >Je ne participe plus</button>
@@ -411,6 +442,19 @@ const Event = () => {
                             )}
 
                         </div>
+                        {data && data.event.pictures && (data.event.pictures.length>0) &&  (
+                            <div>
+                                <Typography variant="h5" className={styles.cardTitle}>
+                                    PHOTOS ET VIDEOS
+                                </Typography>
+
+                            </div>
+                        )}
+                        <Slider {...settingsSliderImage}>
+                            {data && data.event.pictures && data.event.pictures.sort((a, b) => a.position > b.position ? 1 : -1).map((picture) => (
+                                <img src={getImageUrl(picture.croppedPicturePath)} className={[styles.img]} />
+                            ))}
+                        </Slider>
                         <div>
 
                             <Typography variant="h5"   className={[styles.cardTitle,styles.align]}  >
