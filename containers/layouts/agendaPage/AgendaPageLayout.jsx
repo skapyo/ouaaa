@@ -4,7 +4,7 @@ import Filters from 'containers/layouts/agendaPage/Filters'
 import Newsletter from 'containers/layouts/Newsletter'
 import {Container, makeStyles} from "@material-ui/core"
 import gql from 'graphql-tag'
-import {useQuery}  from '@apollo/client';
+import {useQuery} from '@apollo/client';
 
 const useStyles = makeStyles({
   main: {
@@ -47,6 +47,20 @@ const AgendaPageLayout = () => {
           id
           name
         }
+        pictures{
+          id,
+          label,
+          originalPicturePath,
+          originalPictureFilename,
+          croppedPicturePath,
+          croppedPictureFilename,
+          croppedX,
+          croppedY,
+          croppedZoom,
+          croppedRotation,
+          position
+        }
+
       }
     } 
   `;

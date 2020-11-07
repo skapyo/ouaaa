@@ -4,6 +4,7 @@ import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded'
 import FavoriteRoundedIcon from '@material-ui/icons/FavoriteRounded';
 import Moment from 'react-moment';
 import Link from "../Link";
+import {getImageUrl} from "../../utils/utils";
 
 const useStyles = makeStyles((theme, props) => ({
   card: props => ({
@@ -104,7 +105,9 @@ const EventCard = ({event}) => {
         <Link  href={"/event/" + event.id}>
           <div className={classes.leftContent}>
             <div className={classes.image}>
-              <img src="image_card.jpg" />
+              {event.pictures.length>1 && (
+              <img src={event.pictures.length>1?getImageUrl(event.pictures.sort((a, b) => a.position > b.position ? 1 : -1)[0].croppedPicturePath):''} />
+              )}
             </div>
             <div className={classes.text}>
               <div className={classes.actor}>{actorName}</div>
