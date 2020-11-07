@@ -181,7 +181,7 @@ const ActorAdminPage = () => {
     `;
   const { data, loading, error, refetch } = useQuery(GET_ACTORS, {
     variables: {
-      userId: user.id,
+      userId: user && user.id,
     },
 
   });

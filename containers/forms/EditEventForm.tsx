@@ -1,5 +1,5 @@
 import React, {ChangeEvent, useEffect, useState} from 'react';
-import gql from 'graphql-tag';
+import {gql, useMutation, useQuery} from '@apollo/client';
 import {withApollo} from 'hoc/withApollo';
 import {Container, Grid, makeStyles, TextField, Typography,} from '@material-ui/core';
 import ClassicButton from 'components/buttons/ClassicButton';
@@ -8,7 +8,6 @@ import FormController, {
     ValidationRules,
     ValidationRuleType,
 } from 'components/controllers/FormController';
-import {useMutation, useQuery} from '@apollo/react-hooks';
 import useGraphQLErrorDisplay from 'hooks/useGraphQLErrorDisplay';
 import Checkbox from '@material-ui/core/Checkbox';
 import useCookieRedirection from 'hooks/useCookieRedirection';
@@ -105,18 +104,18 @@ const EDIT_EVENT = gql`
 `;
 
 const GET_CATEGORIES = gql`
-query categories {
-  categories {
-    id,
-    label,
-    activated
-    subCategories {
-      id
-      label
-      icon
+  query categories {
+    categories {
+      id,
+      label,
+      activated
+      subCategories {
+        id
+        label
+        icon
+      }
     }
   }
-}
 `;
 
 const GET_EVENT = gql`
@@ -167,19 +166,19 @@ const FormItem = (props: FormItemProps) => {
     label, inputName, formChangeHandler, value, required, errorBool, errorText,
   } = props;
   return (
-    <TextField
-      className={styles.field}
-      variant="outlined"
-      value={value}
-      label={label}
-      name={inputName}
-      onChange={formChangeHandler}
-      defaultValue=""
-      fullWidth
-      required={required}
-      error={errorBool}
-      helperText={errorBool ? errorText : ''}
-    />
+      <TextField
+          className={styles.field}
+          variant="outlined"
+          value={value}
+          label={label}
+          name={inputName}
+          onChange={formChangeHandler}
+          defaultValue=""
+          fullWidth
+          required={required}
+          error={errorBool}
+          helperText={errorBool ? errorText : ''}
+      />
   );
 };
 
@@ -189,21 +188,21 @@ const FormItemTextareaAutosize = (props: FormItemProps) => {
     label, inputName, formChangeHandler, value, required, errorBool, errorText,
   } = props;
   return (
-    <TextField
-      multiline
-      rows={4}
-      className={styles.field}
-      variant="outlined"
-      value={value}
-      label={label}
-      name={inputName}
-      onChange={formChangeHandler}
-      defaultValue=""
-      fullWidth
-      required={required}
-      error={errorBool}
-      helperText={errorBool ? errorText : ''}
-    />
+      <TextField
+          multiline
+          rows={4}
+          className={styles.field}
+          variant="outlined"
+          value={value}
+          label={label}
+          name={inputName}
+          onChange={formChangeHandler}
+          defaultValue=""
+          fullWidth
+          required={required}
+          error={errorBool}
+          helperText={errorBool ? errorText : ''}
+      />
   );
 };
 
@@ -262,14 +261,14 @@ const EditEventForm = (props) => {
   }, [deleteData, deleteError, deleteLoading]);
 
   const Form: RenderCallback = ({
-    formChangeHandler,
-    validationResult,
-    formValues,
-  }) => {
+                                  formChangeHandler,
+                                  validationResult,
+                                  formValues,
+                                }) => {
     // const { formChangeHandler, formValues, validationResult } = props;
     const [editEvent, { data, error }] = useMutation(EDIT_EVENT);
     const { data: categoryData, loading: categoryLoading, error: categoryError } = useQuery(
-      GET_CATEGORIES,
+        GET_CATEGORIES,
     );
     useGraphQLErrorDisplay(error);
     const styles = useStyles();
@@ -281,10 +280,10 @@ const EditEventForm = (props) => {
     const [validated, setValidated] = useState(false);
 
     const [selectedStartDate, setSelectedStartDate] = React.useState<Date | null>(
-      moment().add(1, 'hour').toDate(),
+        moment().add(1, 'hour').toDate(),
     );
     const [selectedEndDate, setSelectedEndDate] = React.useState<Date | null>(
-      moment().add(2, 'hour').toDate(),
+        moment().add(2, 'hour').toDate(),
     );
 
     const handleStartDateChange = (date: Date | null) => {
@@ -410,202 +409,202 @@ const EditEventForm = (props) => {
     };
 
     return (
-      <Container component="main" maxWidth="sm">
-        <Typography
-          className={styles.field}
-          color="secondary"
-          variant="h6"
-        >
-          Éditer un événement
-        </Typography>
-        <FormItem
-          label="Nom de l'événement"
-          inputName="label"
-          formChangeHandler={formChangeHandler}
-          value={formValues.label}
-          required
-          errorBool={!validationResult?.global && !!validationResult?.result.label}
-          errorText="Nom de l'événement requis."
-        />
-        <FormItem
-          label="Lien Facebook de l'événement"
-          inputName="facebookUrl"
-          formChangeHandler={formChangeHandler}
-          value={formValues.facebookUrl}
-          required={false}
-          errorBool={false}
-          errorText=""
-        />
-        <FormItemTextareaAutosize
-          label="Description courte"
-          inputName="shortDescription"
-          formChangeHandler={formChangeHandler}
-          value={formValues.shortDescription}
-          required
-          errorBool={!validationResult?.global && !!validationResult?.result.shortDescription}
-          errorText={`Minimum 50 caractères. ${50 - formValues.shortDescription?.length} caractères restants minimum.`}
-        />
-        <FormItemTextareaAutosize
-          label="Description détaillée"
-          inputName="description"
-          formChangeHandler={formChangeHandler}
-          value={formValues.description}
-          required
-          errorBool={!validationResult?.global && !!validationResult?.result.description}
-          errorText={`Minimum 120 caractères. ${120 - formValues.description?.length} caractères restants minimum.`}
-        />
-        <Grid className={styles.datetime}>
-          <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <Grid container justify="space-around">
-              <KeyboardDatePicker
-                disableToolbar
-                variant="inline"
-                format="dd/MM/yyyy"
-                margin="normal"
-                id="date-picker-inline"
-                label="Date de début"
-                value={selectedStartDate}
-                onChange={handleStartDateChange}
-                KeyboardButtonProps={{
-                  'aria-label': 'change date',
-                }}
-                error={!!selectedStartDate && moment(selectedStartDate) <= moment(Date.now())}
-                helperText={(selectedStartDate && moment(selectedStartDate) <= moment(Date.now())) ? 'La date de début ne peut être dans le passé.' : ''}
-              />
-              <KeyboardTimePicker
-                margin="normal"
-                id="time-picker"
-                label="Heure de début"
-                value={selectedStartDate}
-                onChange={handleStartDateChange}
-                KeyboardButtonProps={{
-                  'aria-label': 'change time',
-                }}
-                ampm={false}
-                minutesStep={5}
-                error={!!selectedStartDate && (moment(selectedStartDate) <= moment())}
-              />
-              <KeyboardDatePicker
-                disableToolbar
-                variant="inline"
-                format="dd/MM/yyyy"
-                margin="normal"
-                id="date-picker-inline"
-                label="Date de fin"
-                value={selectedEndDate}
-                onChange={handleEndDateChange}
-                KeyboardButtonProps={{
-                  'aria-label': 'change date',
-                }}
-                error={!!selectedStartDate && !!selectedEndDate && (moment(selectedStartDate) >= moment(selectedEndDate))}
-                helperText={selectedStartDate && selectedEndDate && (selectedStartDate >= selectedEndDate) ? 'La date de fin doit être après la date de début.' : ''}
-              />
-              <KeyboardTimePicker
-                margin="normal"
-                id="time-picker"
-                label="Heure de fin"
-                value={selectedEndDate}
-                onChange={handleEndDateChange}
-                KeyboardButtonProps={{
-                  'aria-label': 'change time',
-                }}
-                ampm={false}
-                minutesStep={5}
-                error={!!selectedStartDate && !!selectedEndDate && (moment(selectedStartDate) >= moment(selectedEndDate))}
-              />
-            </Grid>
-          </MuiPickersUtilsProvider>
-        </Grid>
-        <Grid>
-          <Typography>Catégorie(s) de l'événement *</Typography>
-          <List className={styles.field}>
-            {typeof categoryData !== 'undefined' && categoryData.categories.map((category, index) => (
-              <div>
-                <ListItem key={category.id} role={undefined} dense button onClick={handleToggle(0, index)}>
-                  <ListItemIcon />
-                  <ListItemText primary={category.label} />
-                  {open[index] ? <ExpandLess /> : <ExpandMore />}
-                </ListItem>
-                {typeof category.subCategories !== 'undefined' && category.subCategories != null && category.subCategories.map((subcategory, subIndex) => (
-                  <Collapse in={open[index]} timeout="auto" unmountOnExit>
-
-                    <List component="div" disablePadding>
-                      <ListItem button>
-                        <ListItemIcon>
-                          <Checkbox
-                            edge="start"
-                            tabIndex={-1}
-                            disableRipple
-                            onChange={formChangeHandler}
-                            name="categories"
-                            value={subcategory.id}
-                          />
-                        </ListItemIcon>
-                        <ListItemText primary={subcategory.label} />
-                      </ListItem>
-                    </List>
-                  </Collapse>
-                ))}
-              </div>
-            ))}
-          </List>
-        </Grid>
-        <Grid className={styles.location}>
-          <Typography>Lieu</Typography>
-          <GooglePlacesAutocomplete
-            placeholder="Taper et sélectionner l'adresse*"
-            initialValue={formValues.address && formValues.address.concat(' ').concat(formValues.postCode).concat(' ').concat(formValues.city)}
-            onSelect={({ description }) => (
-              geocodeByAddress(description).then((results) => {
-                getLatLng(results[0]).then((value) => {
-                  formValues.lat = `${value.lat}`;
-                  formValues.lng = `${value.lng}`;
-                }).catch((error) => console.error(error));
-                getAddressDetails(results);
-              })
-            )}
+        <Container component="main" maxWidth="sm">
+          <Typography
+              className={styles.field}
+              color="secondary"
+              variant="h6"
+          >
+            Éditer un événement
+          </Typography>
+          <FormItem
+              label="Nom de l'événement"
+              inputName="label"
+              formChangeHandler={formChangeHandler}
+              value={formValues.label}
+              required
+              errorBool={!validationResult?.global && !!validationResult?.result.label}
+              errorText="Nom de l'événement requis."
           />
-        </Grid>
-        <ClassicButton
-          fullWidth
-          variant="contained"
-          className={styles.submit}
-          onClick={submitHandler}
-          disabled={!validationResult?.global || !validated}
-        >
-          Mettre à jour cet événement
-        </ClassicButton>
-        <ClassicButton
-          fullWidth
-          variant="contained"
-          className={styles.delete}
-          onClick={handleClickOpen}
-        >
-          Supprimer cet événement
-        </ClassicButton>
-        <Dialog
-          open={open}
-          onClose={handleClose}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <DialogTitle id="alert-dialog-title">Êtes-vous sûr(e) de vouloir supprimer cet événement ?</DialogTitle>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              Une fois supprimé, cet événement sera définitivement supprimé.
-              Il ne sera plus visible sur notre plateforme, ni pour vous, ni pour les visiteurs.
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose} color="primary">
-              Annuler
-            </Button>
-            <Button onClick={submitDeleteEvent} color="primary" autoFocus>
-              Supprimer
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </Container>
+          <FormItem
+              label="Lien Facebook de l'événement"
+              inputName="facebookUrl"
+              formChangeHandler={formChangeHandler}
+              value={formValues.facebookUrl}
+              required={false}
+              errorBool={false}
+              errorText=""
+          />
+          <FormItemTextareaAutosize
+              label="Description courte"
+              inputName="shortDescription"
+              formChangeHandler={formChangeHandler}
+              value={formValues.shortDescription}
+              required
+              errorBool={!validationResult?.global && !!validationResult?.result.shortDescription}
+              errorText={`Minimum 50 caractères. ${50 - formValues.shortDescription?.length} caractères restants minimum.`}
+          />
+          <FormItemTextareaAutosize
+              label="Description détaillée"
+              inputName="description"
+              formChangeHandler={formChangeHandler}
+              value={formValues.description}
+              required
+              errorBool={!validationResult?.global && !!validationResult?.result.description}
+              errorText={`Minimum 120 caractères. ${120 - formValues.description?.length} caractères restants minimum.`}
+          />
+          <Grid className={styles.datetime}>
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <Grid container justify="space-around">
+                <KeyboardDatePicker
+                    disableToolbar
+                    variant="inline"
+                    format="dd/MM/yyyy"
+                    margin="normal"
+                    id="date-picker-inline"
+                    label="Date de début"
+                    value={selectedStartDate}
+                    onChange={handleStartDateChange}
+                    KeyboardButtonProps={{
+                      'aria-label': 'change date',
+                    }}
+                    error={!!selectedStartDate && moment(selectedStartDate) <= moment(Date.now())}
+                    helperText={(selectedStartDate && moment(selectedStartDate) <= moment(Date.now())) ? 'La date de début ne peut être dans le passé.' : ''}
+                />
+                <KeyboardTimePicker
+                    margin="normal"
+                    id="time-picker"
+                    label="Heure de début"
+                    value={selectedStartDate}
+                    onChange={handleStartDateChange}
+                    KeyboardButtonProps={{
+                      'aria-label': 'change time',
+                    }}
+                    ampm={false}
+                    minutesStep={5}
+                    error={!!selectedStartDate && (moment(selectedStartDate) <= moment())}
+                />
+                <KeyboardDatePicker
+                    disableToolbar
+                    variant="inline"
+                    format="dd/MM/yyyy"
+                    margin="normal"
+                    id="date-picker-inline"
+                    label="Date de fin"
+                    value={selectedEndDate}
+                    onChange={handleEndDateChange}
+                    KeyboardButtonProps={{
+                      'aria-label': 'change date',
+                    }}
+                    error={!!selectedStartDate && !!selectedEndDate && (moment(selectedStartDate) >= moment(selectedEndDate))}
+                    helperText={selectedStartDate && selectedEndDate && (selectedStartDate >= selectedEndDate) ? 'La date de fin doit être après la date de début.' : ''}
+                />
+                <KeyboardTimePicker
+                    margin="normal"
+                    id="time-picker"
+                    label="Heure de fin"
+                    value={selectedEndDate}
+                    onChange={handleEndDateChange}
+                    KeyboardButtonProps={{
+                      'aria-label': 'change time',
+                    }}
+                    ampm={false}
+                    minutesStep={5}
+                    error={!!selectedStartDate && !!selectedEndDate && (moment(selectedStartDate) >= moment(selectedEndDate))}
+                />
+              </Grid>
+            </MuiPickersUtilsProvider>
+          </Grid>
+          <Grid>
+            <Typography>Catégorie(s) de l'événement *</Typography>
+            <List className={styles.field}>
+              {typeof categoryData !== 'undefined' && categoryData.categories.map((category, index) => (
+                  <div>
+                    <ListItem key={category.id} role={undefined} dense button onClick={handleToggle(0, index)}>
+                      <ListItemIcon />
+                      <ListItemText primary={category.label} />
+                      {open[index] ? <ExpandLess /> : <ExpandMore />}
+                    </ListItem>
+                    {typeof category.subCategories !== 'undefined' && category.subCategories != null && category.subCategories.map((subcategory, subIndex) => (
+                        <Collapse in={open[index]} timeout="auto" unmountOnExit>
+
+                          <List component="div" disablePadding>
+                            <ListItem button>
+                              <ListItemIcon>
+                                <Checkbox
+                                    edge="start"
+                                    tabIndex={-1}
+                                    disableRipple
+                                    onChange={formChangeHandler}
+                                    name="categories"
+                                    value={subcategory.id}
+                                />
+                              </ListItemIcon>
+                              <ListItemText primary={subcategory.label} />
+                            </ListItem>
+                          </List>
+                        </Collapse>
+                    ))}
+                  </div>
+              ))}
+            </List>
+          </Grid>
+          <Grid className={styles.location}>
+            <Typography>Lieu</Typography>
+            <GooglePlacesAutocomplete
+                placeholder="Taper et sélectionner l'adresse*"
+                initialValue={formValues.address && formValues.address.concat(' ').concat(formValues.postCode).concat(' ').concat(formValues.city)}
+                onSelect={({ description }) => (
+                    geocodeByAddress(description).then((results) => {
+                      getLatLng(results[0]).then((value) => {
+                        formValues.lat = `${value.lat}`;
+                        formValues.lng = `${value.lng}`;
+                      }).catch((error) => console.error(error));
+                      getAddressDetails(results);
+                    })
+                )}
+            />
+          </Grid>
+          <ClassicButton
+              fullWidth
+              variant="contained"
+              className={styles.submit}
+              onClick={submitHandler}
+              disabled={!validationResult?.global || !validated}
+          >
+            Mettre à jour cet événement
+          </ClassicButton>
+          <ClassicButton
+              fullWidth
+              variant="contained"
+              className={styles.delete}
+              onClick={handleClickOpen}
+          >
+            Supprimer cet événement
+          </ClassicButton>
+          <Dialog
+              open={open}
+              onClose={handleClose}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title">Êtes-vous sûr(e) de vouloir supprimer cet événement ?</DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                Une fois supprimé, cet événement sera définitivement supprimé.
+                Il ne sera plus visible sur notre plateforme, ni pour vous, ni pour les visiteurs.
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleClose} color="primary">
+                Annuler
+              </Button>
+              <Button onClick={submitDeleteEvent} color="primary" autoFocus>
+                Supprimer
+              </Button>
+            </DialogActions>
+          </Dialog>
+        </Container>
     );
   };
 
@@ -616,10 +615,10 @@ const EditEventForm = (props) => {
     return (<FallbackPageNotFound />);
   }
   return (
-    <FormController
-      render={Form}
-      validationRules={validationRules}
-    />
+      <FormController
+          render={Form}
+          validationRules={validationRules}
+      />
   );
 };
 

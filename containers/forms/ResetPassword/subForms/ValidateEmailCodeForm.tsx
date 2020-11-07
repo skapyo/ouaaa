@@ -142,7 +142,7 @@ const ValidateEmailCodeForm: RenderCallback = (props) => {
   }, [focusState])
 
   useEffect(() => {
-    debugger;
+
    if (data && ( data.validateActionCode && data.validateActionCode.id)){
       sessionDispatch({
         type: 'login',

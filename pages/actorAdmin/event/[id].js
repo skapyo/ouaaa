@@ -9,9 +9,9 @@ const EditEvent = () => {
   const { id } = router.query;
 
   return (
-    <AppLayout>
-      <EditEventForm id={id} />
-    </AppLayout>
+      <AppLayout>
+        <EditEventForm id={id} />
+      </AppLayout>
   );
 };
 

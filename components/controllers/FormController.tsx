@@ -128,7 +128,7 @@ const withMutation = (FormComponent: RenderCallback) => (
       && queryOptions.mutationResultControl(formValues, data, error)
       );
     }
-    debugger;
+
     if (next) {
       setInitialFormValues(omitTypename(data?.[queryOptions.resultLabel]));
 
@@ -216,7 +216,7 @@ const FormController = (props: FormControllerProps, ...otherprops: any[]) => {
   }, [formValues, initialFormValues]);
 
   const clearFormvalues = useCallback(() => {
-    debugger;
+
     setFormValue({});
     setInitialFormValues({});
   }, [setFormValue]);
