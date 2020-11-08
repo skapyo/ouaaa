@@ -398,7 +398,7 @@ const carto = () => {
                                         <Marker key={`marker-${index}`} position={[actor.lat, actor.lng]}
                                                 icon={suitcasePoint}>
                                             <Tooltip>
-                                                <div className={styles.image}  style={{backgroundImage: actor.pictures.length>1?'url('+getImageUrl(actor.pictures.sort((a, b) => a.position > b.position ? 1 : -1)[0].croppedPicturePath)+')':''}}>
+                                                <div className={styles.image}  style={{backgroundImage: actor.pictures.length>=1?'url('+getImageUrl(actor.pictures.sort((a, b) => a.position > b.position ? 1 : -1)[0].croppedPicturePath)+')':''}}>
                                                     <div className={styles.categorie}>
                                                         <Typography className={styles.categorie} gutterBottom>
                                                             {actor.categories && actor.categories.length > 0 && actor.categories[0].label}
@@ -428,7 +428,7 @@ const carto = () => {
                                             <Popup>
 
 
-                                                <div className={styles.image}  style={{backgroundImage: actor.pictures.length>1?'url('+getImageUrl(actor.pictures.sort((a, b) => a.position > b.position ? 1 : -1)[0].croppedPicturePath)+')':''}}>
+                                                <div className={styles.image}  style={{backgroundImage: actor.pictures.length>=1?'url('+getImageUrl(actor.pictures.sort((a, b) => a.position > b.position ? 1 : -1)[0].croppedPicturePath)+')':''}}>
                                                     <div className={styles.categorie}>
                                                         <Typography className={styles.categorie} gutterBottom>
                                                             {actor.categories && actor.categories.length > 0 && actor.categories[0].label}

@@ -370,7 +370,7 @@ const Event = () => {
             <RootRef >
                 <Box>
                    {data && data.event&&(
-                       <Container className={styles.titleContainer} style={{backgroundImage: data && data.event && data.event.pictures.length>1?'url('+getImageUrl(data.event.pictures.sort((a, b) => a.position > b.position ? 1 : -1)[0].croppedPicturePath)+')':''}}/>
+                       <Container className={styles.titleContainer} style={{backgroundImage: data && data.event && data.event.pictures.length>=1?'url('+getImageUrl(data.event.pictures.sort((a, b) => a.position > b.position ? 1 : -1)[0].croppedPicturePath)+')':''}}/>
                    )}
                     < Container  className={styles.cardInfo}>
 

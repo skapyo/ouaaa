@@ -105,8 +105,8 @@ const EventCard = ({event}) => {
         <Link  href={"/event/" + event.id}>
           <div className={classes.leftContent}>
             <div className={classes.image}>
-              {event.pictures.length>1 && (
-              <img src={event.pictures.length>1?getImageUrl(event.pictures.sort((a, b) => a.position > b.position ? 1 : -1)[0].croppedPicturePath):''} />
+              {event.pictures.length>=1 && (
+              <img src={event.pictures.length>=1?getImageUrl(event.pictures.sort((a, b) => a.position > b.position ? 1 : -1)[0].croppedPicturePath):''} />
               )}
             </div>
             <div className={classes.text}>

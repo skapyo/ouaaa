@@ -78,7 +78,7 @@ export default function SimpleCard({actor}) {
 
         <Card className={classes.root}>
           <CardContent>
-            <div  className={classes.image} style={{backgroundImage: actor.pictures.length>1?'url('+getImageUrl(actor.pictures.sort((a, b) => a.position > b.position ? 1 : -1)[0].croppedPicturePath)+')':''}}>
+            <div  className={classes.image} style={{backgroundImage: actor.pictures.length>=1?'url('+getImageUrl(actor.pictures.sort((a, b) => a.position > b.position ? 1 : -1)[0].croppedPicturePath)+')':''}}>
               <div className={classes.categorie}>
                 <Typography className={classes.categorie}  gutterBottom>
                     {actor.categories && actor.categories.length>0 && actor.categories[0].label}

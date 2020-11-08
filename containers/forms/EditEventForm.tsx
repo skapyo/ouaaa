@@ -4,9 +4,9 @@ import {withApollo} from 'hoc/withApollo';
 import {Card, Container, Grid, makeStyles, TextField, Typography,} from '@material-ui/core';
 import ClassicButton from 'components/buttons/ClassicButton';
 import FormController, {
-    RenderCallback,
-    ValidationRules,
-    ValidationRuleType,
+  RenderCallback,
+  ValidationRules,
+  ValidationRuleType,
 } from 'components/controllers/FormController';
 import useGraphQLErrorDisplay from 'hooks/useGraphQLErrorDisplay';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -99,6 +99,9 @@ const useStyles = makeStyles((theme) => ({
     width:'100%',
     height:'100%'
   },
+  main :{
+    textAlign:"center"
+  }
 }));
 
 const EDIT_EVENT = gql`
@@ -642,7 +645,7 @@ const EditEventForm = (props) => {
       },[setImagesList]);
 
     return (
-        <Container component="main" maxWidth="sm">
+        <Container component="main" maxWidth="sm"   className={styles.main}>
           <Typography
               className={styles.field}
               color="secondary"
@@ -748,6 +751,7 @@ const EditEventForm = (props) => {
               </Grid>
             </MuiPickersUtilsProvider>
           </Grid>
+          <p/>
           <Grid>
             <Typography>Catégorie(s) de l'événement *</Typography>
             <List className={styles.field}>

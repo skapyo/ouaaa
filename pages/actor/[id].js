@@ -363,7 +363,7 @@ const Actor = () => {
       <RootRef>
         <Box>
           {data && data.actor&&(
-          <Container className={styles.titleContainer} style={{backgroundImage: data.actor.pictures.length>1?'url('+getImageUrl(data.actor.pictures.sort((a, b) => a.position > b.position ? 1 : -1)[0].croppedPicturePath)+')':''}}/>
+          <Container className={styles.titleContainer} style={{backgroundImage: data.actor.pictures.length>=1?'url('+getImageUrl(data.actor.pictures.sort((a, b) => a.position > b.position ? 1 : -1)[0].croppedPicturePath)+')':''}}/>
           )}
           <Container className={styles.cardInfo}>
 
