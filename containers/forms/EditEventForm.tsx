@@ -459,7 +459,7 @@ const EditEventForm = (props) => {
                     <InsertPhotoIcon />
                   </div>
                   <div >
-                    Déposer les images ici...
+                    Déposer les images ici au format jpg. La première image sera aussi l'image de couverture ...
                   </div>
                 </div>
               </Grid>

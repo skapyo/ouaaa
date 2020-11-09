@@ -5,6 +5,7 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import Moment from 'react-moment';
 import Link from "../Link";
+import {getImageUrl} from "../../utils/utils";
 
 const useStyles = makeStyles({
   root: {
@@ -39,10 +40,9 @@ marginRight: "auto"
 
     },
     image:{
-        backgroundImage:`url('/cardPicture.jpg')`,
         backgroundPosition: 'center center',
+        backgroundSize: 'contain',
         backgroundRepeat: 'no-repeat',
-        backgroundSize:"over",
         textAlign:"inherit",
         height:"10em"
     },
@@ -77,7 +77,7 @@ export default function SimpleCard({event}) {
       <Link  href={"/event/"+event.id}>
         <Card className={classes.root}>
           <CardContent>
-            <div  className={classes.image}>
+              <div  className={classes.image} style={{backgroundImage: event.pictures.length>=1?'url('+getImageUrl(event.pictures.sort((a, b) => a.position > b.position ? 1 : -1)[0].croppedPicturePath)+')':''}}>
               <div className={classes.categorie}>
                   <Typography className={classes.categorie}  gutterBottom>
                       {event.categories && event.categories.length>0 && event.categories[0].label}

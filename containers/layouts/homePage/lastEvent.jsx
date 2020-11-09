@@ -1,11 +1,12 @@
 import {Container, makeStyles, Typography} from '@material-ui/core';
 import React, {useEffect, useState} from "react";
 import Slider from "react-slick/lib";
-import {useQuery}  from '@apollo/client';
+import {useQuery} from '@apollo/client';
 import gql from "graphql-tag"
 import {withApollo} from "../../../hoc/withApollo";
 import CardSliderEvent from "../../../components/cards/CardSliderEvent";
 import Link from "../../../components/Link";
+
 const useStyles = makeStyles((theme) => ({
     cardTitle:{
         "color":theme.typography.h5.color,
@@ -71,7 +72,7 @@ const LastActor = () => {
             events {
                 id,
                 label,
-                shortDescription,
+                short_description,
                 description,
                 startedAt,
                 endedAt,
@@ -81,6 +82,19 @@ const LastActor = () => {
                     label
                     icon
                     color
+                },
+                pictures{
+                    id,
+                    label,
+                    originalPicturePath,
+                    originalPictureFilename,
+                    croppedPicturePath,
+                    croppedPictureFilename,
+                    croppedX,
+                    croppedY,
+                    croppedZoom,
+                    croppedRotation,
+                    position
                 }
             }
         }

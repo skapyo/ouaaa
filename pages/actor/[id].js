@@ -188,7 +188,21 @@ const Actor = () => {
                     description,
                     startedAt,
                     endedAt,
-                    published
+                    published,
+                  ,
+                  pictures{
+                    id,
+                    label,
+                    originalPicturePath,
+                    originalPictureFilename,
+                    croppedPicturePath,
+                    croppedPictureFilename,
+                    croppedX,
+                    croppedY,
+                    croppedZoom,
+                    croppedRotation,
+                    position
+                  }
                 },
                 volunteers {  
                     id,
