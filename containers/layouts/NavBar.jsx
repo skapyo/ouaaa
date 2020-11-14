@@ -130,7 +130,6 @@ const NavBar = () => {
                 <Grid item>
                   <Grid
                       container
-                      spacing={3}
                       alignItems="center"
                   >
                     <Grid item>

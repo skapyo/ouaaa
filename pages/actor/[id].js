@@ -383,7 +383,7 @@ const Actor = () => {
           <Container className={styles.cardInfo}>
 
             <Grid container spacing={3}>
-              <Grid item xs={8} className={styles.threePointGrid}>
+              <Grid item xs={9} className={styles.threePointGrid}>
                 <div>
                   <Typography variant="h5" className={styles.cardTitle}>
                     {data && data.actor.name}
