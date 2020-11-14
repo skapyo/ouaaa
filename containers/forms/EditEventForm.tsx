@@ -4,9 +4,9 @@ import {withApollo} from 'hoc/withApollo';
 import {Card, Container, Grid, makeStyles, TextField, Typography,} from '@material-ui/core';
 import ClassicButton from 'components/buttons/ClassicButton';
 import FormController, {
-  RenderCallback,
-  ValidationRules,
-  ValidationRuleType,
+    RenderCallback,
+    ValidationRules,
+    ValidationRuleType,
 } from 'components/controllers/FormController';
 import useGraphQLErrorDisplay from 'hooks/useGraphQLErrorDisplay';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -313,7 +313,7 @@ const EditEventForm = (props) => {
     const [address, setAddress] = useState('');
     const [city, setCity] = useState('');
     const [validated, setValidated] = useState(false);
-
+    const [dateChange, setDateChange] = useState(false);
     const [selectedStartDate, setSelectedStartDate] = React.useState<Date | null>(
         moment().add(1, 'hour').toDate(),
     );
@@ -323,9 +323,11 @@ const EditEventForm = (props) => {
 
     const handleStartDateChange = (date: Date | null) => {
       setSelectedStartDate(date);
+      setDateChange(true);
     };
     const handleEndDateChange = (date: Date | null) => {
       setSelectedEndDate(date);
+      setDateChange(true);
     };
 
     useEffect(() => {
@@ -704,8 +706,8 @@ const EditEventForm = (props) => {
                     KeyboardButtonProps={{
                       'aria-label': 'change date',
                     }}
-                    error={!!selectedStartDate && moment(selectedStartDate) <= moment(Date.now())}
-                    helperText={(selectedStartDate && moment(selectedStartDate) <= moment(Date.now())) ? 'La date de début ne peut être dans le passé.' : ''}
+                    error={dateChange&& !!selectedStartDate && moment(selectedStartDate) <= moment(Date.now())}
+                    helperText={(dateChange && selectedStartDate && moment(selectedStartDate) <= moment(Date.now())) ? 'La date de début ne peut être dans le passé.' : ''}
                 />
                 <KeyboardTimePicker
                     margin="normal"
@@ -718,7 +720,7 @@ const EditEventForm = (props) => {
                     }}
                     ampm={false}
                     minutesStep={5}
-                    error={!!selectedStartDate && (moment(selectedStartDate) <= moment())}
+                    error={dateChange && !!selectedStartDate && (moment(selectedStartDate) <= moment())}
                 />
                 <KeyboardDatePicker
                     disableToolbar
@@ -732,8 +734,8 @@ const EditEventForm = (props) => {
                     KeyboardButtonProps={{
                       'aria-label': 'change date',
                     }}
-                    error={!!selectedStartDate && !!selectedEndDate && (moment(selectedStartDate) >= moment(selectedEndDate))}
-                    helperText={selectedStartDate && selectedEndDate && (selectedStartDate >= selectedEndDate) ? 'La date de fin doit être après la date de début.' : ''}
+                    error={dateChange && !!selectedStartDate && !!selectedEndDate && (moment(selectedStartDate) >= moment(selectedEndDate))}
+                    helperText={dateChange&& selectedStartDate && selectedEndDate && (selectedStartDate >= selectedEndDate) ? 'La date de fin doit être après la date de début.' : ''}
                 />
                 <KeyboardTimePicker
                     margin="normal"
@@ -746,7 +748,7 @@ const EditEventForm = (props) => {
                     }}
                     ampm={false}
                     minutesStep={5}
-                    error={!!selectedStartDate && !!selectedEndDate && (moment(selectedStartDate) >= moment(selectedEndDate))}
+                    error={dateChange && !!selectedStartDate && !!selectedEndDate && (moment(selectedStartDate) >= moment(selectedEndDate))}
                 />
               </Grid>
             </MuiPickersUtilsProvider>

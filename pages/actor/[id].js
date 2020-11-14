@@ -19,6 +19,7 @@ import Newsletter from '../../containers/layouts/Newsletter';
 import {useSessionState} from '../../context/session/session';
 import CardAddEvent from '../../components/cards/CardAddEvent';
 import {getImageUrl} from "../../utils/utils";
+import Parser from 'html-react-parser';
 
 const useStyles = makeStyles((theme) => ({
   titleContainer: {
@@ -407,7 +408,7 @@ const Actor = () => {
                     </div>
                   ))}
                 </div>
-                <p>{data && data.actor.description}</p>
+                <p>{data && Parser(data.actor.description)}</p>
                 <div />
               </Grid>
 

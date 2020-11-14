@@ -1,5 +1,5 @@
 /* eslint react/prop-types: 0 */
-import React, {ChangeEvent, useCallback, useState} from 'react';
+import React, {ChangeEvent, useCallback, useEffect, useRef, useState} from 'react';
 import {Container, Grid, makeStyles, Typography,} from '@material-ui/core';
 import TextField from 'components/form/TextField';
 import ClassicButton from 'components/buttons/ClassicButton';
@@ -15,7 +15,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
 import GooglePlacesAutocomplete, {geocodeByAddress, getLatLng} from 'react-google-places-autocomplete';
-import {useQuery} from '@apollo/client';
+import {useMutation, useQuery} from '@apollo/client';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import Collapse from '@material-ui/core/Collapse';
@@ -24,10 +24,11 @@ import {useCookies} from 'react-cookie';
 import {QueryOptions, ValidationRules, ValidationRuleType} from '../../components/controllers/FormController';
 import useCookieRedirection from '../../hooks/useCookieRedirection';
 import Link from "../../components/Link";
+import {useSnackbar} from "notistack";
 
 const CREATE_ACTOR = gql`
-  mutation createActor($formValues: ActorInfos,$userId: Int!) {
-    createActor(actorInfos: $formValues,userId: $userId) {
+  mutation createActor($formValues: ActorInfos,$userId: Int!,$description:String!) {
+    createActor(actorInfos: $formValues,userId: $userId,description:$description) {
       id
       name
       email
@@ -238,10 +239,48 @@ const AddActorForm = () => {
 
   const Form: RenderCallback = ({
     formChangeHandler,
-    submitHandler,
     validationResult,
     formValues,
   }) => {
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+    const editorRef = useRef()
+    const [ editorLoaded, setEditorLoaded ] = useState( false )
+    // @ts-ignore
+    const { CKEditor, ClassicEditor } = editorRef.current || {}
+    const [descriptionEditor, setDescriptionEditor] = useState();
+    const [create, { data:createData, loading: createLoading, error:createError }] = useMutation(CREATE_ACTOR);
+
+    useEffect( () => {
+      // @ts-ignore
+      editorRef.current = {
+        CKEditor: require( '@ckeditor/ckeditor5-react' ).CKEditor,
+        ClassicEditor: require( '@ckeditor/ckeditor5-build-classic' )
+
+      }
+      setEditorLoaded( true )
+    }, [] )
+
+    const submitHandler = useCallback(() => {
+      create({
+        variables: {
+          formValues,
+          // @ts-ignore
+          description:descriptionEditor.getData(),
+          userId: parseInt(user.id),
+        },
+      });
+
+    }, [formValues, create,descriptionEditor]);
+    useEffect(() => {
+      if (!createError && !createLoading && createData) {
+        enqueueSnackbar('Acteur ajouté avec succès.', {
+          preventDuplicate: true,
+        });
+        router.push(`/actor/${createData.createActor.id}`);
+      }
+    }, [createLoading, createError,createData]);
+
+
     const getObjectLongName = (results, name) => {
       if (!results || !results[0] || !results[0].address_components) { return (''); }
       const object = results[0].address_components.find((element) => element.types.find((type) => type == name) != undefined);
@@ -310,15 +349,21 @@ const AddActorForm = () => {
           errorBool={false}
           errorText=""
         />
-        <FormItemTextareaAutosize
-          label="Description"
-          inputName="description"
-          formChangeHandler={formChangeHandler}
-          value={formValues.description}
-          required
-          errorBool={!validationResult?.global && !!validationResult?.result.description}
-          errorText={`Minimum 120 caractères. ${120 - formValues.description?.length} caractères restants minimum.`}
-        />
+        <Typography variant="body1" color="primary" className={styles.label}>
+         Description :
+        </Typography>
+        <p></p>
+        { editorLoaded ? (  <CKEditor
+            editor={ ClassicEditor }
+            data={formValues.description}
+            onReady={ editor => {
+              setDescriptionEditor(editor)
+            } }
+
+        />) : (
+            <div>Editor loading</div>
+        )
+        }
 
         <div className={styles.field}>
           <Grid className={styles.location}>
@@ -373,12 +418,14 @@ const AddActorForm = () => {
           ))}
         </List>
 
+        <div>Une fois créé, vous pourrez modifier les informations et ajouter des photos dans votre espace acteur</div>
+        <p></p>
         <Grid item xs={12}>
           <ClassicButton
             onClick={submitHandler}
             disabled={!validationResult?.global}
           >
-            Sauvegarder les modifications
+           Créer le nouvel acteur
           </ClassicButton>
         </Grid>
       </Container>
@@ -412,8 +459,6 @@ const AddActorForm = () => {
   return (
     <FormController
       render={Form}
-      withQuery
-      queryOptions={queryOptions}
       validationRules={validationRules}
     />
   );

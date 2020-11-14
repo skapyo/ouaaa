@@ -1,6 +1,6 @@
 /* eslint react/prop-types: 0 */
-import React, {ChangeEvent, useCallback, useEffect, useState,} from 'react';
-import {Card, Container, Grid, makeStyles, Typography} from '@material-ui/core';
+import React, {ChangeEvent, useCallback, useEffect, useRef, useState} from 'react';
+import {Button, Card, Container, Grid, makeStyles, Typography} from '@material-ui/core';
 import TextField from 'components/form/TextField';
 import ClassicButton from 'components/buttons/ClassicButton';
 import {withApollo} from 'hoc/withApollo';
@@ -35,9 +35,10 @@ import {getImageUrl} from 'utils/utils';
 import useImageReader from '../../hooks/useImageReader';
 import {useDrag, useDrop} from "react-dnd";
 
+
 const EDIT_ACTOR = gql`
-  mutation editActor($formValues: ActorInfos, $actorId: Int!,$pictures:[InputPictureType]) {
-    editActor(actorInfos: $formValues, actorId: $actorId,pictures: $pictures) {
+  mutation editActor($formValues: ActorInfos, $actorId: Int!,$pictures:[InputPictureType],$description:String!) {
+    editActor(actorInfos: $formValues, actorId: $actorId,pictures: $pictures,description:$description) {
       id
       name
       email
@@ -163,6 +164,7 @@ type FormItemProps = {
 const FormItem = (props: FormItemProps) => {
   const styles = useStyles();
 
+
   const {
     label, inputName, formChangeHandler, value, required, errorBool, errorText,
   } = props;
@@ -259,6 +261,11 @@ const EditActorForm = (props) => {
       onFiles: files => onDropHandler(files)
     });
 
+    const uploadInputRef = useRef(null);
+
+    // @ts-ignore
+
+
     return (
         <Card className={styles.dropZone}>
           <Grid container alignItems="center">
@@ -268,8 +275,30 @@ const EditActorForm = (props) => {
                   <InsertPhotoIcon />
                 </div>
                 <div >
-                  Déposer les images ici au format jpg. La première image sera aussi l'image de couverture ...
+                  Déposer les images ici au format jpg.
                 </div>
+              </div>
+              <p/>
+              <input
+                  ref={uploadInputRef}
+                  type="file"
+                  accept="image/*"
+                  style={{ display: "none" }}
+                  // @ts-ignore
+                  onChange={(e) => onDropHandler([e.target.files[0]])}
+              />
+              <p/>
+              <Button
+                  // @ts-ignore
+                  onClick={() => uploadInputRef.current && uploadInputRef.current.click()}
+                  variant="contained"
+              >
+                <p/>
+                Ou cliquer ici pour téléverser une image
+              </Button>
+              <p/>
+              <div>
+                La première image sera aussi l'image de couverture .
               </div>
             </Grid>
           </Grid>
@@ -412,9 +441,22 @@ const EditActorForm = (props) => {
     const [edit, { data: editData, loading: editLoading, error: editError }] = useMutation(EDIT_ACTOR);
 
     const [setImagesList, loading, result,imagesListState] = useImageReader();
+    const editorRef = useRef()
+    const [ editorLoaded, setEditorLoaded ] = useState( false )
+    // @ts-ignore
+    const { CKEditor, ClassicEditor } = editorRef.current || {}
 
+    useEffect( () => {
+      // @ts-ignore
+      editorRef.current = {
+        CKEditor: require( '@ckeditor/ckeditor5-react' ).CKEditor,
+        ClassicEditor: require( '@ckeditor/ckeditor5-build-classic' )
 
+      }
+      setEditorLoaded( true )
+    }, [] )
 
+    const [descriptionEditor, setDescriptionEditor] = useState();
     const {
       objectsList,
       moveObject,
@@ -442,7 +484,7 @@ const EditActorForm = (props) => {
 
     const submitHandler = useCallback(() => {
       var files ;
-
+// @ts-ignore
       if(objectsList)
         files = objectsList.map((object) =>{
           // return object.file
@@ -462,15 +504,18 @@ const EditActorForm = (props) => {
           }
         });
 
+
       edit({
         variables: {
           formValues,
           actorId: parseInt(actorData.actor.id),
-          pictures:files
+          pictures:files,
+          // @ts-ignore
+          description:descriptionEditor.getData()
         },
       });
 
-    }, [formValues, edit,objectsList]);
+    }, [formValues, edit,objectsList,descriptionEditor]);
 
     useEffect(() => {
       if (!editError && !editLoading && editData) {
@@ -495,6 +540,7 @@ const EditActorForm = (props) => {
     };
 
     const [firstRender, setFirstRender] = useState(true);
+
     const updateFormValues = () => {
       formValues.name = actorData.actor.name;
       formValues.email = actorData.actor.email;
@@ -549,15 +595,17 @@ const EditActorForm = (props) => {
           value={formValues.website}
           errorText=""
         />
-        <FormItemTextareaAutosize
-          label="Description"
-          inputName="description"
-          formChangeHandler={formChangeHandler}
-          value={formValues.description}
-          required
-          errorBool={!validationResult?.global && !!validationResult?.result.description}
-          errorText={`Minimum 120 caractères. ${120 - formValues.description?.length} caractères restants.`}
-        />
+        { editorLoaded ? (  <CKEditor
+            editor={ ClassicEditor }
+            data={formValues.description}
+            onReady={ editor => {
+              setDescriptionEditor(editor)
+            } }
+
+        />) : (
+            <div>Editor loading</div>
+        )
+        }
         <div className={styles.field}>
           <Grid className={styles.location}>
             <GooglePlacesAutocomplete
@@ -639,10 +687,13 @@ const EditActorForm = (props) => {
   };
 
   return (
+      <div>
     <FormController
       render={Form}
       validationRules={validationRules}
     />
+
+      </div>
   );
 };
 
