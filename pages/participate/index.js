@@ -21,15 +21,17 @@ const useStyles = makeStyles((theme) => ({
         padding: "0.2em 3em 0.2em 3em",
         minHeight: "2.5em",
         "&:hover": {
-            cursor: "pointer",
-            "color": "#bf083e",
-            "background-color": "white",
+            cursor: 'pointer',
+            color: '#bf083e',
+            "background-color":"white",
+            border: "2px solid #bf083e",
+            backgroundImage:`url('./arrow-hover.svg')`,
         },
         backgroundImage: `url('./arrow.svg')`,
         backgroundRepeat: "no-repeat",
         "background-position-x": "5px",
         "background-position-y": "1px",
-        fontSize: "1.2em",
+        fontSize: "1em",
         [theme.breakpoints.down('sm')]: {
             fontSize: '0.8em',
         }

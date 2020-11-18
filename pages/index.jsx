@@ -2,14 +2,12 @@ import AppLayout from "containers/layouts/AppLayout"
 import {Box, Container, RootRef, Typography} from "@material-ui/core";
 import React, {useState} from "react";
 import {makeStyles} from "@material-ui/core/styles";
-import {white} from "color-name";
 import {withApollo} from "hoc/withApollo"
 import Newsletter from "../containers/layouts/Newsletter";
 import PresentationSection from "../containers/layouts/homePage/presentationSection";
 import ThreePoint from "../containers/layouts/homePage/threepoint";
 import LastActor from "../containers/layouts/homePage/lastActor";
 import LastEvent from "../containers/layouts/homePage/lastEvent";
-import ReactGA from 'react-ga';
 
 const useStyles = makeStyles((theme) => ({
 
@@ -36,9 +34,11 @@ const useStyles = makeStyles((theme) => ({
         padding: "0 3em 0 3em",
         height: "2.5em",
         "&:hover": {
-            cursor: "pointer",
-            "color":"#bf083e",
+            cursor: 'pointer',
+            color: '#bf083e',
             "background-color":"white",
+            border: "2px solid #bf083e",
+            backgroundImage:`url('./arrow-hover.svg')`,
         },
         backgroundImage:`url('./arrow.svg')`,
         backgroundRepeat: "no-repeat",

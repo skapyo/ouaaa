@@ -101,7 +101,10 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       cursor: 'pointer',
       color: '#bf083e',
-      'background-color': 'white',
+      border: "2px solid #bf083e",
+      "background-color": "red",
+"-webkit-mask-image": "url('./arrow.svg')",
+"mask-image":" url('./arrow.svg')",
     },
     backgroundImage: 'url(\'./arrow.svg\')',
     backgroundRepeat: 'no-repeat',

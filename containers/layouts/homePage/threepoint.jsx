@@ -67,15 +67,18 @@ const useStyles = makeStyles((theme) => ({
         padding: "0.2em 3em 0.2em 3em",
         minHeight: "2.5em",
         "&:hover": {
-            cursor: "pointer",
-            "color":"#bf083e",
+            cursor: 'pointer',
+            color: '#bf083e',
             "background-color":"white",
+            border: "2px solid #bf083e",
+            backgroundImage:`url('./arrow-hover.svg')`,
+
         },
         backgroundImage:`url('./arrow.svg')`,
         backgroundRepeat: "no-repeat",
         "background-position-x": "5px",
         "background-position-y": "1px",
-        fontSize:"1.2em",
+        fontSize:"1em",
         [theme.breakpoints.down('sm')]: {
             fontSize: '0.8em',
         },
@@ -90,9 +93,11 @@ const useStyles = makeStyles((theme) => ({
         padding: "0 3em 0 3em",
         minHeight: "2.5em",
         "&:hover": {
-            cursor: "pointer",
-            "color":"#bf083e",
+            cursor: 'pointer',
+            color: '#bf083e',
             "background-color":"white",
+            border: "2px solid #bf083e",
+            backgroundImage:`url('./arrow-hover.svg')`,
         },
         backgroundImage:`url('./arrow.svg')`,
         backgroundRepeat: "no-repeat",
@@ -139,7 +144,7 @@ const PresentationSection = () => {
           </Typography>
          <div className={styles.improvement}>
               <Link  href="/improvment">
-                  <button className={styles.buttonGrid} >Découvrir les prochaines fonctionnalités et faire un retour de la première version</button>
+                  <button className={styles.buttonGrid} >DECOUVRIR LES PROCHAINES FONCTIONNALITES ET FAIRE UN RETOUR DE LA PREMIERE VERSION</button>
               </Link>
          </div>
           <Grid container spacing={3} className={styles.flexColumn} >
@@ -182,7 +187,7 @@ const PresentationSection = () => {
               C'EST POUR QUI ?
           </Typography>
 
-          <Grid container justify="center"  className={styles.align, styles.flexColumn}>
+          <Grid container justify="center"  className={[styles.align, styles.flexColumn]}>
               <Grid item md={5} sm={10} className={[styles.gridItem,styles.align]}>
                   <img width={"20%"}
                        src="./people.svg" className={styles.imageGrid}

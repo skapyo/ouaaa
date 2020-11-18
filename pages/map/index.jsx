@@ -172,9 +172,11 @@ const useStyles = makeStyles((theme) => ({
         padding: "0 3em 0 3em",
         height: "2.5em",
         "&:hover": {
-            cursor: "pointer",
-            "color":"#bf083e",
+            cursor: 'pointer',
+            color: '#bf083e',
             "background-color":"white",
+            border: "2px solid #bf083e",
+            backgroundImage:`url('./arrow-hover.svg')`,
         },
         backgroundImage:`url('./arrow.svg')`,
         backgroundRepeat: "no-repeat",
