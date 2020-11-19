@@ -330,11 +330,7 @@ const EditActorForm = (props) => {
       rule: ValidationRuleType.only && ValidationRuleType.maxLength,
       //    type: 'number',
       maxLimit: 10,
-    },
-    description: {
-      rule: ValidationRuleType.required && ValidationRuleType.minLength,
-      minLimit: 120,
-    },
+    }
   };
   const ItemTypes = {
     PIC: "pic"

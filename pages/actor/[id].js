@@ -99,6 +99,8 @@ const useStyles = makeStyles((theme) => ({
   },
   img: {
     padding: '1em',
+    maxHeight: "200px",
+    width:"inherit!important"
   },
   button: {
     margin: '2.5em 0 2.5em 0 ',
@@ -113,6 +115,7 @@ const useStyles = makeStyles((theme) => ({
       cursor: 'pointer',
       color: '#bf083e',
       'background-color': 'white',
+      border: "2px solid #bf083e",
     },
     backgroundImage: 'url(\'./arrow.svg\')',
     backgroundRepeat: 'no-repeat',
@@ -125,7 +128,7 @@ const useStyles = makeStyles((theme) => ({
     margin: '2.5em 0 2.5em 0 ',
     color: '#bf083e',
     'background-color': 'white',
-    border: 'none',
+    border: "2px solid #bf083e",
     fontFamily: 'rowdies',
     borderRadius: '1.5em',
     padding: '0 3em 0 3em',
@@ -382,8 +385,8 @@ const Actor = () => {
           )}
           <Container className={styles.cardInfo}>
 
-            <Grid container spacing={3}>
-              <Grid item xs={9} className={styles.threePointGrid}>
+            <Grid container>
+              <Grid item  md={8} sm={10} className={styles.threePointGrid}>
                 <div>
                   <Typography variant="h5" className={styles.cardTitle}>
                     {data && data.actor.name}
@@ -412,7 +415,7 @@ const Actor = () => {
                 <div />
               </Grid>
 
-              <Grid xs={3} className={[styles.align]}>
+              <Grid item md={4} sm={10} className={[styles.align]}>
                 <Grid container className={[styles.infoPratiqueGrid]}>
                   <Typography variant="h7" className={[styles.infoPratiqueTitle, styles.infoPratiqueItem]}>
                     INFOS PRATIQUES
