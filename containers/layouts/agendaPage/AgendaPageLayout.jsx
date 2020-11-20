@@ -65,12 +65,16 @@ const AgendaPageLayout = () => {
     } 
   `;
 
+const date = new Date();
 
+  date.setHours(0,0,0,0);
+
+  ;
   const classes = useStyles()
   const {data:eventData, loading, error,refetch} = useQuery(
       GET_EVENTS, {
         variables: {
-          startingDate: "2020-10-15T21:23:00.000Z",
+          startingDate: date.toISOString()
         }
       }
   )

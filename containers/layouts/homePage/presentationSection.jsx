@@ -7,8 +7,7 @@ const useStyles = makeStyles((theme) => ({
     titleContainer: {
         marginTop : theme.spacing(2),
         backgroundImage:`url('./fond.jpeg')`,
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
+        backgroundSize: "100%",
         height: '24em',
         color: 'white',
         "text-align": "center",

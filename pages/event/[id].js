@@ -386,7 +386,7 @@ const Event = () => {
                                         {data && data.event.label}
                                     </Typography>
                                         {data && data.event.categories.map((category) => {
-                                            return(<div><Typography variant="h7"
+                                            return(<div><Typography variant="h5"
                                                         className={styles.cardTitleCategories}> {category.parentCategory
                                                 && category.parentCategory.label} : {category &&
                                                 category.label} </Typography></div>
