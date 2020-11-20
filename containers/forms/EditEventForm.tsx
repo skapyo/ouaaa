@@ -565,7 +565,7 @@ const EditEventForm = (props) => {
         },
       });
     };
-    const ImagesDisplay = ({cards,moveCard,findCard,updateActiveIndicator,updateDeletedIndicator,updateKeyIndicator,descriptionEditor}) => {
+    const ImagesDisplay = ({cards,moveCard,findCard,updateActiveIndicator,updateDeletedIndicator,updateKeyIndicator}) => {
       // console.log('cards');
       // console.log(cards);
       // console.log('--cards--');
