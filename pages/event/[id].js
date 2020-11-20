@@ -17,6 +17,7 @@ import {useCookies} from "react-cookie";
 import {useSnackbar} from "notistack";
 import Head from 'next/head'
 import {getImageUrl} from "../../utils/utils";
+import Parser from "html-react-parser";
 
 const useStyles = makeStyles((theme) => ({
     titleContainer: {
@@ -385,16 +386,27 @@ const Event = () => {
                                     <Typography variant="h5"   className={styles.cardTitle}  >
                                         {data && data.event.label}
                                     </Typography>
-                                        {data && data.event.categories.map((category) => {
-                                            return(<div><Typography variant="h5"
-                                                        className={styles.cardTitleCategories}> {category.parentCategory
-                                                && category.parentCategory.label} : {category &&
-                                                category.label} </Typography></div>
-                                            )
-                                        })}
+                                    {data && data.event.categories.map((category) => (
+                                        <div>
+                                            <Typography
+                                                variant="h7"
+                                                className={styles.cardTitleCategories}
+                                            >
+                                                {' '}
+                                                {category.parentCategory
+                                                && category.parentCategory.label}
+                                                {' '}
+                                                :
+                                                {' '}
+                                                {category
+                                                && category.label}
+                                                {' '}
 
+                                            </Typography>
+                                        </div>
+                                    ))}
                                 </div>
-                                <p className={styles.description} >{data && data.event.description}</p>
+                                <p>{data && Parser(data.event.description)}</p>
                                 <div  >
 
 

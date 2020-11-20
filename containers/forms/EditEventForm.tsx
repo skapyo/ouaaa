@@ -1,12 +1,12 @@
-import React, {ChangeEvent, useCallback, useEffect, useState} from 'react';
+import React, {ChangeEvent, useCallback, useEffect, useRef, useState} from 'react';
 import {gql, useMutation, useQuery} from '@apollo/client';
 import {withApollo} from 'hoc/withApollo';
 import {Card, Container, Grid, makeStyles, TextField, Typography,} from '@material-ui/core';
 import ClassicButton from 'components/buttons/ClassicButton';
 import FormController, {
-    RenderCallback,
-    ValidationRules,
-    ValidationRuleType,
+  RenderCallback,
+  ValidationRules,
+  ValidationRuleType,
 } from 'components/controllers/FormController';
 import useGraphQLErrorDisplay from 'hooks/useGraphQLErrorDisplay';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -106,10 +106,10 @@ const useStyles = makeStyles((theme) => ({
 
 const EDIT_EVENT = gql`
   mutation editEvent(
-    $eventInfos: EventInfos, $eventId: Int!,$pictures:[InputPictureType]
+    $eventInfos: EventInfos, $eventId: Int!,$pictures:[InputPictureType],$description:String!
   ) {
     editEvent(
-      eventInfos: $eventInfos, eventId: $eventId,,pictures: $pictures
+      eventInfos: $eventInfos, eventId: $eventId,,pictures: $pictures,description:$description
     ) {
       id
       label
@@ -172,6 +172,16 @@ const GET_EVENT = gql`
         croppedZoom,
         croppedRotation,
         position
+      },
+      categories{
+        id,
+        label,
+        parentCategory{
+          label
+        },
+        subCategories{
+          label
+        }
       }
     }
   }
@@ -249,11 +259,7 @@ const EditEventForm = (props) => {
     shortDescription: {
       rule: ValidationRuleType.required && ValidationRuleType.minLength,
       minLimit: 50,
-    },
-    description: {
-      rule: ValidationRuleType.required && ValidationRuleType.minLength,
-      minLimit: 120,
-    },
+    }
   };
 
   const { loading: eventLoading, error: eventError, data: eventData } = useQuery(GET_EVENT, {
@@ -345,6 +351,7 @@ const EditEventForm = (props) => {
       setState({ ...state, [category.id.toString()]: event.target.checked });
     };
     const [checked, setChecked] = useState([0]);
+    const [openCategory, setOpenCategory] = React.useState([false]);
     const handleToggle = (value: number, index: number) => () => {
       const currentIndex = checked.indexOf(value);
       const newChecked = [...checked];
@@ -354,10 +361,26 @@ const EditEventForm = (props) => {
       } else {
         newChecked.splice(currentIndex, 1);
       }
-
       setChecked(newChecked);
-      open[index] = !open[index];
+      openCategory[index] = !openCategory[index];
     };
+
+    const editorRef = useRef()
+    const [ editorLoaded, setEditorLoaded ] = useState( false )
+    // @ts-ignore
+    const { CKEditor, ClassicEditor } = editorRef.current || {}
+
+    useEffect( () => {
+      // @ts-ignore
+      editorRef.current = {
+        CKEditor: require( '@ckeditor/ckeditor5-react' ).CKEditor,
+        ClassicEditor: require( '@ckeditor/ckeditor5-build-classic' )
+
+      }
+      setEditorLoaded( true )
+    }, [] )
+
+    const [descriptionEditor, setDescriptionEditor] = useState()
 
     const getObjectLongName = (results, name) => {
       if (!results || !results[0] || !results[0].address_components) { return (''); }
@@ -407,6 +430,14 @@ const EditEventForm = (props) => {
       setCity(eventData.event.city);
       setSelectedStartDate(new Date(parseInt(eventData.event.startedAt)));
       setSelectedEndDate(new Date(parseInt(eventData.event.endedAt)));
+      var categories = [];
+      eventData.event.categories.forEach((actorcategory) => {
+        // @ts-ignore
+        categories.push(actorcategory.id)
+      });
+
+      // @ts-ignore
+      formValues.categories =categories;
     };
     if (firstRender) {
       initFormValues();
@@ -528,11 +559,13 @@ const EditEventForm = (props) => {
 
           },
           eventId: parseInt(eventData.event.id),
-          pictures:files
+          pictures:files,
+          // @ts-ignore
+          description:descriptionEditor.getData()
         },
       });
     };
-    const ImagesDisplay = ({cards,moveCard,findCard,updateActiveIndicator,updateDeletedIndicator,updateKeyIndicator}) => {
+    const ImagesDisplay = ({cards,moveCard,findCard,updateActiveIndicator,updateDeletedIndicator,updateKeyIndicator,descriptionEditor}) => {
       // console.log('cards');
       // console.log(cards);
       // console.log('--cards--');
@@ -682,15 +715,17 @@ const EditEventForm = (props) => {
               errorBool={!validationResult?.global && !!validationResult?.result.shortDescription}
               errorText={`Minimum 50 caractères. ${50 - formValues.shortDescription?.length} caractères restants minimum.`}
           />
-          <FormItemTextareaAutosize
-              label="Description détaillée"
-              inputName="description"
-              formChangeHandler={formChangeHandler}
-              value={formValues.description}
-              required
-              errorBool={!validationResult?.global && !!validationResult?.result.description}
-              errorText={`Minimum 120 caractères. ${120 - formValues.description?.length} caractères restants minimum.`}
-          />
+          { editorLoaded ? (  <CKEditor
+              editor={ ClassicEditor }
+              data={formValues.description}
+              onReady={ editor => {
+                setDescriptionEditor(editor)
+              } }
+
+          />) : (
+              <div>Editor loading</div>
+          )
+          }
           <Grid className={styles.datetime}>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <Grid container justify="space-around">
@@ -762,10 +797,10 @@ const EditEventForm = (props) => {
                     <ListItem key={category.id} role={undefined} dense button onClick={handleToggle(0, index)}>
                       <ListItemIcon />
                       <ListItemText primary={category.label} />
-                      {open[index] ? <ExpandLess /> : <ExpandMore />}
+                      {openCategory[index] ? <ExpandLess /> : <ExpandMore />}
                     </ListItem>
                     {typeof category.subCategories !== 'undefined' && category.subCategories != null && category.subCategories.map((subcategory, subIndex) => (
-                        <Collapse in={open[index]} timeout="auto" unmountOnExit>
+                        <Collapse in={openCategory[index]} timeout="auto" unmountOnExit>
 
                           <List component="div" disablePadding>
                             <ListItem button>
@@ -777,6 +812,8 @@ const EditEventForm = (props) => {
                                     onChange={formChangeHandler}
                                     name="categories"
                                     value={subcategory.id}
+                                    // @ts-ignore
+                                    checked={ formValues && formValues.categories && formValues.categories.includes(subcategory.id)}
                                 />
                               </ListItemIcon>
                               <ListItemText primary={subcategory.label} />

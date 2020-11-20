@@ -402,7 +402,7 @@ const Actor = () => {
                                             && category.parentCategory.label}
                           {' '}
                           : 
-{' '}
+                          {' '}
                           {category
                                             && category.label}
                           {' '}

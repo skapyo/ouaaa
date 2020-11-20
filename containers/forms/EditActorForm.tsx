@@ -103,7 +103,17 @@ const GET_ACTOR = gql`
           croppedZoom,
           croppedRotation,
           position
-      }
+      },
+        categories{
+          id,
+            label,
+            parentCategory{
+                label
+            },
+            subCategories{
+                label
+            }
+        },
     }
   }
 `;
@@ -535,6 +545,9 @@ const EditActorForm = (props) => {
       formValues.postCode = getObjectLongName(results, 'postal_code');
     };
 
+
+
+
     const [firstRender, setFirstRender] = useState(true);
 
     const updateFormValues = () => {
@@ -548,11 +561,22 @@ const EditActorForm = (props) => {
       formValues.city = actorData.actor.city;
       formValues.lat = actorData.actor.lat;
       formValues.lng = actorData.actor.lng;
+      var categories = [];
+      actorData.actor.categories.forEach((actorcategory) => {
+        // @ts-ignore
+        categories.push(actorcategory.id)
+      });
+
+      // @ts-ignore
+      formValues.categories =categories;
     };
     if (firstRender && !actorLoading && !actorError) {
       updateFormValues();
       setFirstRender(false);
     }
+    // @ts-ignore
+    // @ts-ignore
+
     return (
       <Container component="main" maxWidth="sm">
         <FormItem
@@ -644,6 +668,8 @@ const EditActorForm = (props) => {
                           onChange={formChangeHandler}
                           name="categories"
                           value={subcategory.id}
+                            // @ts-ignore
+                          checked={ formValues && formValues.categories && formValues.categories.includes(subcategory.id)}
                         />
                       </ListItemIcon>
                       <ListItemText primary={subcategory.label} />
