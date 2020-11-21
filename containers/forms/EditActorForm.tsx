@@ -615,6 +615,10 @@ const EditActorForm = (props) => {
           value={formValues.website}
           errorText=""
         />
+        <Typography variant="body1" color="primary" className={styles.label}>
+          Description :
+        </Typography>
+        <p></p>
         { editorLoaded ? (  <CKEditor
             editor={ ClassicEditor }
             data={formValues.description}

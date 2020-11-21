@@ -223,6 +223,7 @@ const FormController = (props: FormControllerProps, ...otherprops: any[]) => {
 
   /* validation : a revoir / compléter .. */
   useEffect(() => {
+
     if (validationRules) {
       let validationResultTemp: ValidationResult = { global: true, result: {} };
 

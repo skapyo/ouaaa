@@ -101,7 +101,9 @@ const useStyles = makeStyles((theme) => ({
   },
   main :{
     textAlign:"center"
-  }
+  },label: {
+    fontWeight: 600,
+  },
 }));
 
 const EDIT_EVENT = gql`
@@ -715,6 +717,10 @@ const EditEventForm = (props) => {
               errorBool={!validationResult?.global && !!validationResult?.result.shortDescription}
               errorText={`Minimum 50 caractères. ${50 - formValues.shortDescription?.length} caractères restants minimum.`}
           />
+          <Typography variant="body1" color="primary" className={styles.label}>
+            Description :
+          </Typography>
+          <p></p>
           { editorLoaded ? (  <CKEditor
               editor={ ClassicEditor }
               data={formValues.description}

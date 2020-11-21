@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useEffect, useState} from 'react';
+import React, {ChangeEvent, useEffect, useRef, useState} from 'react';
 import gql from 'graphql-tag';
 import {withApollo} from 'hoc/withApollo';
 import {Container, Grid, makeStyles, TextField, Typography,} from '@material-ui/core';
@@ -64,15 +64,17 @@ const useStyles = makeStyles((theme) => ({
         border: 'solid 1px lightgray',
       },
     },
+  },label: {
+    fontWeight: 600,
   },
 }));
 
 const ADDEVENT = gql`
   mutation createEvent(
-    $eventInfos: EventInfos,$actorId: Int!$userId: Int!
+    $eventInfos: EventInfos,$actorId: Int!$userId: Int!,$description:String!
   ) {
     createEvent(
-      eventInfos: $eventInfos,actorId: $actorId,userId: $userId
+      eventInfos: $eventInfos,actorId: $actorId,userId: $userId,description:$description
     ) {
       id
       label
@@ -167,11 +169,7 @@ const AddEventForm = ({ actorId }) => {
     shortDescription: {
       rule: ValidationRuleType.required && ValidationRuleType.minLength,
       minLimit: 50,
-    },
-    description: {
-      rule: ValidationRuleType.required && ValidationRuleType.minLength,
-      minLimit: 120,
-    },
+    }
   };
 
   const Form: RenderCallback = ({
@@ -213,12 +211,28 @@ const AddEventForm = ({ actorId }) => {
       if ((selectedStartDate && selectedEndDate && (selectedStartDate >= selectedEndDate))
           || (selectedStartDate && moment(selectedStartDate) <= moment())
           || !formValues.shortDescription
-          || !formValues.description
           || !formValues.categories
           || formValues.categories?.length === 0
           || (!address && !city)) setValidated(false);
       else setValidated(true);
     });
+
+    const editorRef = useRef()
+    const [ editorLoaded, setEditorLoaded ] = useState( false )
+    // @ts-ignore
+    const { CKEditor, ClassicEditor } = editorRef.current || {}
+
+    useEffect( () => {
+      // @ts-ignore
+      editorRef.current = {
+        CKEditor: require( '@ckeditor/ckeditor5-react' ).CKEditor,
+        ClassicEditor: require( '@ckeditor/ckeditor5-build-classic' )
+
+      }
+      setEditorLoaded( true )
+    }, [] )
+
+    const [descriptionEditor, setDescriptionEditor] = useState()
 
     const handleChange = (category: any, event: React.ChangeEvent<HTMLInputElement>) => {
       setState({ ...state, [category.id.toString()]: event.target.checked });
@@ -287,6 +301,8 @@ const AddEventForm = ({ actorId }) => {
           },
           actorId: parseInt(actorId),
           userId: parseInt(user.id),
+          // @ts-ignore
+          description:descriptionEditor.getData()
         },
       });
     };
@@ -327,15 +343,21 @@ const AddEventForm = ({ actorId }) => {
           errorBool={!validationResult?.global && !!validationResult?.result.shortDescription}
           errorText={`Minimum 50 caractères. ${50 - formValues.shortDescription?.length} caractères restants minimum.`}
         />
-        <FormItemTextareaAutosize
-          label="Description détaillée"
-          inputName="description"
-          formChangeHandler={formChangeHandler}
-          value={formValues.description}
-          required
-          errorBool={!validationResult?.global && !!validationResult?.result.description}
-          errorText={`Minimum 120 caractères. ${120 - formValues.description?.length} caractères restants minimum.`}
-        />
+        <Typography variant="body1" color="primary" className={styles.label}>
+          Description :
+        </Typography>
+        <p></p>
+        { editorLoaded ? (  <CKEditor
+            editor={ ClassicEditor }
+            data={formValues.description}
+            onReady={ editor => {
+              setDescriptionEditor(editor)
+            } }
+
+        />) : (
+            <div>Editor loading</div>
+        )
+        }
         <Grid className={styles.datetime}>
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <Grid container justify="space-around">
