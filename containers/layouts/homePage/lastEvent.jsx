@@ -174,7 +174,7 @@ const LastActor = () => {
               </Slider>
               <div className={styles.buttonArticle} >
                   <Link  href="/agenda">
-                    <button className={styles.buttonGrid}  >VOIR TOUT LES EVENEMENTS</button>
+                    <button className={styles.buttonGrid}  >VOIR TOUS LES EVENEMENTS</button>
                   </Link>
               </div>
           </Container>

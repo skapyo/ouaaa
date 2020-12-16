@@ -153,7 +153,7 @@ const LastActor = () => {
           </Slider>
           <div className={styles.buttonArticle} >
               <Link  href="/map">
-                <button className={styles.buttonGrid}  >VOIR TOUT LES ACTEURS</button>
+                <button className={styles.buttonGrid}  >VOIR TOUS LES ACTEURS</button>
               </Link>
           </div>
       </Container>

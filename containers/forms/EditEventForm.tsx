@@ -342,7 +342,6 @@ const EditEventForm = (props) => {
       if ((selectedStartDate && selectedEndDate && (selectedStartDate >= selectedEndDate))
           || (selectedStartDate && moment(selectedStartDate) <= moment())
           || !formValues.shortDescription
-          || !formValues.description
           // || !formValues.categories
           // || formValues.categories?.length === 0
           || (!address && !city)) setValidated(false);

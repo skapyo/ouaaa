@@ -57,7 +57,7 @@ const Events = (data) => {
         data.data && data.data.events.sort(compare).map((event) =>
           <div key={event.id}>
             { (!lastDate || !sameDay(lastDate, event.startedAt)) &&
-              <Moment locale="fr" format="DD MMMM" className={classes.date} unix>{event.startedAt/1000}</Moment>
+              <Moment locale="fr" format="DD MMMM YYYY" className={classes.date} unix>{event.startedAt/1000}</Moment>
             }
             {setOldDate(event.startedAt)}
             <EventCard key={event.id} event={event} />

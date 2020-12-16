@@ -470,7 +470,9 @@ const Actor = () => {
                     </Grid>
                     <Grid item xs={8} className={[styles.alignLeft]}>
                       <div className={[styles.infoLabel]}>SITE INTERNET</div>
-                      <span className={[styles.infoValue]}>{data && data.actor.website}</span>
+                      <span className={[styles.infoValue]}><a href={data && data.actor.website} target="_blank">
+         {data && data.actor.website}
+        </a> </span>
                     </Grid>
                   </Grid>
                   <Grid container className={[styles.item]}>

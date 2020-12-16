@@ -27,6 +27,12 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
   },
+      account :{
+        "&:hover": {
+          cursor: "pointer",
+        },
+
+      },
   popoverPaper: {
     marginTop: theme.spacing(2),
     width: '250px',
@@ -162,13 +168,21 @@ const NavBar = () => {
                     )}
 
                     {user && (
-                        <>
-                          <Avatar
-                              className={styles.avatar}
-                              onClick={handleClick}
-                              aria-controls="popover-menu"
-                              aria-haspopup="true"
-                          />
+                        <Grid item>
+                          <Grid  container onClick={handleClick } className={styles.account}>
+                            <Grid item>
+                            <Avatar
+                                className={styles.avatar}
+
+                                aria-controls="popover-menu"
+                                aria-haspopup="true"
+                            />
+                            </Grid>
+                            <Grid item>
+                              <div> {user.surname}</div>
+                              <div>{user.lastname}</div>
+                            </Grid>
+                          </Grid>
                           <Menu
                               id="popover-menu"
                               open={open}
@@ -199,7 +213,7 @@ const NavBar = () => {
                             <MenuItem onClick={signoutHandler} className={styles.menuItem}>Se déconnecter</MenuItem>
                           </Menu>
 
-                        </>
+                        </Grid>
                     )}
                   </Grid>
                 </Grid>
@@ -241,13 +255,21 @@ const NavBar = () => {
                     )}
 
                     {user && (
-                        <>
-                          <Avatar
-                              className={styles.avatar}
-                              onClick={handleClick}
-                              aria-controls="popover-menu"
-                              aria-haspopup="true"
-                          />
+                        <Grid item>
+                          <Grid  container onClick={handleClick} className={styles.account}>
+                            <Grid item>
+                              <Avatar
+                                  className={styles.avatar}
+
+                                  aria-controls="popover-menu"
+                                  aria-haspopup="true"
+                              />
+                            </Grid>
+                            <Grid item>
+                              <div> {user.surname}</div>
+                              <div>{user.lastname}</div>
+                            </Grid>
+                          </Grid>
                           <Menu
                               id="popover-menu"
                               open={open}
@@ -278,7 +300,7 @@ const NavBar = () => {
                             <MenuItem onClick={signoutHandler} className={styles.menuItem}>Se déconnecter</MenuItem>
                           </Menu>
 
-                        </>
+                        </Grid>
                     )}
                   </Grid>
                 </Grid>
