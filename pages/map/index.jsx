@@ -25,8 +25,7 @@ if (typeof window != 'undefined') {
     var Marker = require('react-leaflet').Marker;
     var Popup = require('react-leaflet').Popup;
     var Tooltip = require('react-leaflet').Tooltip;
-    var MarkerClusterGroup =  "react-leaflet-markercluster";
-
+    var MarkerClusterGroup =require('react-leaflet-markercluster').default;
 }
 
 
