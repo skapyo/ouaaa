@@ -118,7 +118,14 @@ const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
         backgroundColor: theme.palette.background.paper,
+        textAlign: "justify"
     },
+    listItemText: {
+
+        textAlign: "justify"
+    },
+
+
     improvement:{
         textAlign: "center",
         marginBottom:"4em"
@@ -151,21 +158,21 @@ const PresentationSection = () => {
               <Grid item md={6}>
                   <div  className={[styles.align]}>
                       <Typography variant="h2"   className={styles.cardTitle}  >
-                          Ouaaa
+                          OUAAA
                       </Typography>
                       <Typography variant="h3"   className={styles.cardTitle}  >
                           EN 3 POINTS
                       </Typography>
                   </div>
-                  <List className={styles.root}>
+                  <List className={styles.root} >
                       <ListItem>
-                          <ListItemText primary="Issu du milieu associatif : Le site est né de la volonté de 3 collectifs (Collectif Transition Citoyenne, Collectif Action Solidaire et Tiers Lieux la Proue) de disposer d’une vitrine pour se faire connaître, et disposer d’un agenda réactif pour publier leurs évènements."/>
+                          <ListItemText className={styles.listItemText}  primary="Issu du milieu associatif : Le site est né de la volonté de 3 collectifs (Collectif Transition Citoyenne, Collectif Action Solidaire et Tiers Lieux la Proue) de disposer d’une vitrine pour se faire connaître, et disposer d’un agenda réactif pour publier leurs évènements."/>
                       </ListItem>
                       <ListItem>
-                          <ListItemText primary="Créé pour et par les acteurs de la transition : Le site a été créé sur mesure par une équipe de bénévoles motivés, il permet aux acteurs de la transition de renseigner eux-mêmes leurs informations. Il sera adossé à une rencontre physique régulière, afin que virtuel et réel se complètent."/>
+                          <ListItemText className={styles.listItemText}  primary="Créé pour et par les acteurs de la transition : Le site a été créé sur mesure par une équipe de bénévoles motivés, il permet aux acteurs de la transition de renseigner eux-mêmes leurs informations. Il sera adossé à une rencontre physique régulière, afin que virtuel et réel se complètent."/>
                       </ListItem>
                       <ListItem>
-                          <ListItemText primary="Catalyseur de transition : nous pensons qu’en faisant connaître les acteurs de la transition du grand public et en renforçant les liens entre eux, nous allons accélérer la nécessaire transition de notre territoire vers un fonctionnement plus sobre, plus humain et véritablement « durable »"/>
+                          <ListItemText className={styles.listItemText}  primary="Catalyseur de transition : nous pensons qu’en faisant connaître les acteurs de la transition du grand public et en renforçant les liens entre eux, nous allons accélérer la nécessaire transition de notre territoire vers un fonctionnement plus sobre, plus humain et véritablement « durable »"/>
                       </ListItem>
                   </List>
 
