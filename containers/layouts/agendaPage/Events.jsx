@@ -2,6 +2,7 @@ import EventCard from 'components/cards/EventCard'
 
 import {Container, makeStyles} from '@material-ui/core';
 import Moment from 'react-moment';
+import moment from 'moment';
 
 const useStyles = makeStyles({
   events: {
@@ -24,9 +25,33 @@ const useStyles = makeStyles({
 
 const Events = (data) => {
 
+
   const classes = useStyles()
 
   var lastDate = undefined
+  const sameDay = (date1, date2) => {
+    const d1 = new Date(parseInt(date1))
+    const d2 = new Date(parseInt(date2))
+    return (d1.getFullYear() === d2.getFullYear() &&
+        d1.getMonth() === d2.getMonth() &&
+        d1.getDate() === d2.getDate())
+  }
+
+
+
+  let events =  data.data && data.data.events.slice();
+  data.data && data.data.events.forEach((event) => {
+    if(!sameDay(event.startedAt,event.endedAt)){
+
+      let nbDayEvent= moment(new Date(parseInt(event.endedAt))).diff(moment(new Date(parseInt(event.startedAt))), 'days')
+      for (let i = 1; i <= nbDayEvent; i++) {
+        let newEventForOtherDay = Object.assign({}, event);
+        newEventForOtherDay.startedAt = moment(new Date(parseInt(event.startedAt))).add(i, 'days').toDate();
+        events.push(newEventForOtherDay)
+      }
+    }
+  });
+
 
   const compare = (a, b) => {
     let comparison = 0;
@@ -38,23 +63,18 @@ const Events = (data) => {
     return comparison;
   }
 
-  const sameDay = (date1, date2) => {
-    const d1 = new Date(parseInt(date1))
-    const d2 = new Date(parseInt(date2))
-    return (d1.getFullYear() === d2.getFullYear() &&
-            d1.getMonth() === d2.getMonth() &&
-            d1.getDate() === d2.getDate())
-  }
+
 
   const setOldDate = (date) => {
     lastDate = date
   }
-
+  debugger;
   return (
     <Container className={classes.events}>
       <h1 className={classes.title}>ÉVÉNEMENTS À VENIR</h1>
       {
-        data.data && data.data.events.sort(compare).map((event) =>
+      events && events.sort(compare).map((event) =>
+
           <div key={event.id}>
             { (!lastDate || !sameDay(lastDate, event.startedAt)) &&
               <Moment locale="fr" format="DD MMMM YYYY" className={classes.date} unix>{event.startedAt/1000}</Moment>
