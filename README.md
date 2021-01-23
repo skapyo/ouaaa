@@ -1,7 +1,11 @@
-Install mysql localy
-Execute db/acteurs-de-la-transition.sql to create table and data
+Tutorial : https://privatecloud.acteursdelatransition.fr/s/Lc9pbAkdEgkDYif
+
+For launching in local (Start the Server in local if you want to connect to your local database ):
+
+
 
 npm install    -- to fetch dependancies
-npm run dev    -- lauch server on localhost:8080
+npm run dev    -- launch server on localhost:3000
 
-Graphql api in browser  : https://localhost:8080/api/graphql
+
+
