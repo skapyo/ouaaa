@@ -1,12 +1,12 @@
 /* eslint react/prop-types: 0 */
-import {ChangeEvent, useCallback, useMemo} from "react"
-import {Grid, makeStyles, Typography} from "@material-ui/core"
-import TextField from "components/form/TextField"
-import ClassicButton from "components/buttons/ClassicButton"
-import {withApollo} from "hoc/withApollo"
-import {useSessionDispatch, useSessionState} from "context/session/session"
-import gql from "graphql-tag"
-import FormController, {RenderCallback,} from "components/controllers/FormController"
+import { ChangeEvent, useCallback, useMemo } from 'react';
+import { Grid, makeStyles, Typography } from '@material-ui/core';
+import TextField from 'components/form/TextField';
+import ClassicButton from 'components/buttons/ClassicButton';
+import { withApollo } from 'hoc/withApollo';
+import { useSessionDispatch, useSessionState } from 'context/session/session';
+import gql from 'graphql-tag';
+import FormController, { RenderCallback } from 'components/controllers/FormController';
 
 const UPDATE_USER_INFOS = gql`
   mutation updateUserInfos($formValues: UserInfos,$userId: Int!) {
@@ -22,9 +22,9 @@ const UPDATE_USER_INFOS = gql`
       city
     }
   }
-`
+`;
 
-const resultLabel = "updateUserInfos"
+const resultLabel = 'updateUserInfos';
 
 const useStyles = makeStyles((theme) => ({
   gridContainer: {
@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   label: {
     fontWeight: 600,
   },
-}))
+}));
 
 type FormItemProps = {
   label: string
@@ -43,13 +43,17 @@ type FormItemProps = {
 }
 
 const FormItem = (props: FormItemProps) => {
-  const styles = useStyles()
-  const { label, inputName, formChangeHandler, value } = props
+  const styles = useStyles();
+  const {
+    label, inputName, formChangeHandler, value,
+  } = props;
   return (
     <>
       <Grid item sm={3} xs={12}>
         <Typography variant="body1" color="primary" className={styles.label}>
-          {label} :
+          {label}
+          {' '}
+          :
         </Typography>
       </Grid>
       <Grid item sm={9} xs={12}>
@@ -63,14 +67,14 @@ const FormItem = (props: FormItemProps) => {
         />
       </Grid>
     </>
-  )
-}
+  );
+};
 
 const UserInfosForm = () => {
-  const user = useSessionState()
-  const sessionDispatch = useSessionDispatch()
+  const user = useSessionState();
+  const sessionDispatch = useSessionDispatch();
 
-  const styles = useStyles()
+  const styles = useStyles();
 
   const Form: RenderCallback = ({
     formChangeHandler,
@@ -134,34 +138,34 @@ const UserInfosForm = () => {
       </Grid>
     </Grid>
     // )
-  )
+  );
 
   const afterUpdate = useCallback(
     (formValues) => {
       sessionDispatch({
-        type: "login",
+        type: 'login',
         payload: formValues,
-      })
+      });
     },
-    [sessionDispatch]
-  )
+    [sessionDispatch],
+  );
 
   const queryOptions = useMemo(() => {
     return {
       query: UPDATE_USER_INFOS,
-      resultLabel: resultLabel,
-      afterUpdate: afterUpdate,
-    }
-  }, [afterUpdate])
+      resultLabel,
+      afterUpdate,
+    };
+  }, [afterUpdate]);
 
   return (
     <FormController
       render={Form}
       initValues={user}
-      withQuery={true}
+      withQuery
       queryOptions={queryOptions}
     />
-  )
-}
+  );
+};
 
-export default withApollo()(UserInfosForm)
+export default withApollo()(UserInfosForm);

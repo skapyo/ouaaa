@@ -1,16 +1,18 @@
 /* eslint react/prop-types: 0 */
-import {ChangeEvent, useCallback} from "react"
-import PropTypes from "prop-types"
-import {Box, Grid, makeStyles, Typography} from "@material-ui/core"
-import TextField from "components/form/TextField"
-import ClassicButton from "components/buttons/ClassicButton"
-import {withApollo} from "hoc/withApollo"
-import gql from "graphql-tag"
+import { ChangeEvent, useCallback } from 'react';
+import PropTypes from 'prop-types';
+import {
+  Box, Grid, makeStyles, Typography,
+} from '@material-ui/core';
+import TextField from 'components/form/TextField';
+import ClassicButton from 'components/buttons/ClassicButton';
+import { withApollo } from 'hoc/withApollo';
+import gql from 'graphql-tag';
 import FormController, {
   RenderCallback,
   ValidationRules,
   ValidationRuleType,
-} from "components/controllers/FormController"
+} from 'components/controllers/FormController';
 
 const useStyles = makeStyles((theme) => ({
   gridContainer: {
@@ -19,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
   label: {
     fontWeight: 600,
   },
-}))
+}));
 
 type FormItemProps = {
   label: string
@@ -30,14 +32,18 @@ type FormItemProps = {
 }
 
 const FormItem = (props: FormItemProps) => {
-  const { label, inputName, formChangeHandler, value, autoComplete } = props
-  const styles = useStyles()
+  const {
+    label, inputName, formChangeHandler, value, autoComplete,
+  } = props;
+  const styles = useStyles();
 
   return (
     <>
       <Grid item sm={3} xs={12}>
         <Typography variant="body1" color="primary" className={styles.label}>
-          {label} :
+          {label}
+          {' '}
+          :
         </Typography>
       </Grid>
       <Grid item sm={9} xs={12}>
@@ -53,8 +59,8 @@ const FormItem = (props: FormItemProps) => {
         />
       </Grid>
     </>
-  )
-}
+  );
+};
 
 FormItem.propTypes = {
   formChangeHandler: PropTypes.func.isRequired,
@@ -62,7 +68,7 @@ FormItem.propTypes = {
   label: PropTypes.string.isRequired,
   value: PropTypes.string,
   autoComplete: PropTypes.string,
-}
+};
 
 const validationRules: ValidationRules = {
   newPassword1: {
@@ -70,26 +76,26 @@ const validationRules: ValidationRules = {
   },
   newPassword2: {
     rule: ValidationRuleType.equalTo,
-    field: "newPassword1",
+    field: 'newPassword1',
   },
-}
+};
 
 const UPDATE_USER_PASSWORD = gql`
   mutation updateUserPassword($formValues: UpdatePasswordInfos,$userId: Int!) {
     updateUserPassword(updatePasswordInfos: $formValues,userId: $userId)
   }
-`
+`;
 
 const queryOptions = {
   query: UPDATE_USER_PASSWORD,
   mutationResultControl: 'builtin',
-  resultLabel: "updateUserPassword",
+  resultLabel: 'updateUserPassword',
   snackbarSucceedMessage: 'Mot de passe modifié avec succès.',
   clearAfterUpdate: true,
-}
+};
 
 const UserInfosForm = () => {
-  const styles = useStyles()
+  const styles = useStyles();
 
   const Form: RenderCallback = ({
     formChangeHandler,
@@ -100,12 +106,12 @@ const UserInfosForm = () => {
   }) => {
     const checkPssdValidation = useCallback(
       (field: string, validationRule: string) => {
-        const fieldResult = validationResult?.result[field]
-        if (fieldResult?.includes(validationRule)) return false
-        return true
+        const fieldResult = validationResult?.result[field];
+        if (fieldResult?.includes(validationRule)) return false;
+        return true;
       },
-      [validationResult]
-    )
+      [validationResult],
+    );
 
     return (
       <Grid container>
@@ -147,55 +153,55 @@ const UserInfosForm = () => {
             <br />
             <Typography
               color={
-                checkPssdValidation("newPassword1", "min") &&
-                checkPssdValidation("newPassword1", "max")
-                  ? "secondary"
-                  : "primary"
+                checkPssdValidation('newPassword1', 'min')
+                && checkPssdValidation('newPassword1', 'max')
+                  ? 'secondary'
+                  : 'primary'
               }
             >
               Doit contenir entre 8 et 15 caractères
             </Typography>
             <Typography
               color={
-                checkPssdValidation("newPassword1", "uppercase")
-                  ? "secondary"
-                  : "primary"
+                checkPssdValidation('newPassword1', 'uppercase')
+                  ? 'secondary'
+                  : 'primary'
               }
             >
               Doit posséder au moins une majuscule
             </Typography>
             <Typography
               color={
-                checkPssdValidation("newPassword1", "lowercase")
-                  ? "secondary"
-                  : "primary"
+                checkPssdValidation('newPassword1', 'lowercase')
+                  ? 'secondary'
+                  : 'primary'
               }
             >
               Doit posséder au moins une minuscule
             </Typography>
             <Typography
               color={
-                checkPssdValidation("newPassword1", "digits")
-                  ? "secondary"
-                  : "primary"
+                checkPssdValidation('newPassword1', 'digits')
+                  ? 'secondary'
+                  : 'primary'
               }
             >
               Doit posséder au moins un chiffre
             </Typography>
             <Typography
               color={
-                checkPssdValidation("newPassword1", "symbols")
-                  ? "secondary"
-                  : "primary"
+                checkPssdValidation('newPassword1', 'symbols')
+                  ? 'secondary'
+                  : 'primary'
               }
             >
               Doit posséder au moins caractère spécial
             </Typography>
             <Typography
               color={
-                checkPssdValidation("newPassword1", "spaces")
-                  ? "secondary"
-                  : "primary"
+                checkPssdValidation('newPassword1', 'spaces')
+                  ? 'secondary'
+                  : 'primary'
               }
             >
               Ne doit contenir aucun espace
@@ -205,10 +211,10 @@ const UserInfosForm = () => {
             <br />
             <Typography
               color={
-                checkPssdValidation("newPassword2", "equalTo") &&
-                formValues?.newPassword1?.length > 0
-                  ? "secondary"
-                  : "primary"
+                checkPssdValidation('newPassword2', 'equalTo')
+                && formValues?.newPassword1?.length > 0
+                  ? 'secondary'
+                  : 'primary'
               }
             >
               Les deux mots de passe renseignés doivent être identiques
@@ -217,19 +223,18 @@ const UserInfosForm = () => {
           </Box>
         </Grid>
       </Grid>
-    )
-  }
-
+    );
+  };
 
   return (
     <FormController
       render={Form}
-      withQuery={true}
+      withQuery
         // @ts-ignore
       queryOptions={queryOptions}
       validationRules={validationRules}
     />
-  )
-}
+  );
+};
 
-export default withApollo()(UserInfosForm)
+export default withApollo()(UserInfosForm);

@@ -28,7 +28,7 @@ import {useSnackbar} from "notistack";
 
 const CREATE_ACTOR = gql`
   mutation createActor($formValues: ActorInfos,$userId: Int!,$description:String!) {
-    createActor(actorInfos: $formValues,userId: $userId,description:$description) {
+    createActor(actorInfos: $formValues,userId: $userId,description:$description) { 
       id
       name
       email
@@ -36,7 +36,7 @@ const CREATE_ACTOR = gql`
       address
       postCode
       city
-      website
+      website 
       description
       lat
       lng

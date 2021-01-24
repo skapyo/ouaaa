@@ -1,10 +1,10 @@
-import * as React from "react"
-import {useEffect} from "react"
-import {withApollo} from 'hoc/withApollo.jsx';
-import gql from "graphql-tag";
-import Router, {useRouter} from 'next/router'
-import {useMutation}  from '@apollo/client'
-import FallbackEmailValidated from "containers/fallbacks/FallbackEmailValidated"
+import * as React from 'react';
+import { useEffect } from 'react';
+import { withApollo } from 'hoc/withApollo.jsx';
+import gql from 'graphql-tag';
+import Router, { useRouter } from 'next/router';
+import { useMutation } from '@apollo/client';
+import FallbackEmailValidated from 'containers/fallbacks/FallbackEmailValidated';
 
 const VALIDATE_EMAIL = gql`
   mutation validateEmail (
@@ -19,14 +19,13 @@ const VALIDATE_EMAIL = gql`
 `;
 
 const EmailValidation = () => {
+  const [validateEmail, { data, error }] = useMutation(VALIDATE_EMAIL);
 
-  const [validateEmail, { data, error}] = useMutation(VALIDATE_EMAIL);
-
-  const router = useRouter()
-  const { email, token } = router.query
+  const router = useRouter();
+  const { email, token } = router.query;
 
   useEffect(() => {
-    if (email && token) validateEmail({variables: { email: email, token: token }});
+    if (email && token) validateEmail({ variables: { email, token } });
   }, [email, token, validateEmail]);
 
   if (data) {
@@ -34,11 +33,11 @@ const EmailValidation = () => {
       <FallbackEmailValidated email={email} />
     );
   }
-  else if (error) {
-    Router.push('/')
-    return null
+  if (error) {
+    Router.push('/');
+    return null;
   }
-  else return null
-}
+  return null;
+};
 
-export default withApollo()(EmailValidation)
+export default withApollo()(EmailValidation);

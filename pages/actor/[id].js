@@ -1,30 +1,32 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import AppLayout from 'containers/layouts/AppLayout';
-import {Box, Container, Grid, makeStyles, RootRef, Typography,} from '@material-ui/core';
-import {withApollo} from 'hoc/withApollo.jsx';
-import {useRouter} from 'next/router';
+import {
+  Box, Container, Grid, makeStyles, RootRef, Typography,
+} from '@material-ui/core';
+import { withApollo } from 'hoc/withApollo.jsx';
+import { useRouter } from 'next/router';
 import gql from 'graphql-tag';
-import {useMutation, useQuery} from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import Place from '@material-ui/icons/Place';
 import Phone from '@material-ui/icons/Phone';
 import AlternateEmail from '@material-ui/icons/AlternateEmail';
 import Language from '@material-ui/icons/Language';
 import Schedule from '@material-ui/icons/Schedule';
 import Slider from 'react-slick/lib';
-import {useSnackbar} from 'notistack';
-import {useCookies} from 'react-cookie';
+import { useSnackbar } from 'notistack';
+import { useCookies } from 'react-cookie';
 import Head from 'next/head';
+import Parser from 'html-react-parser';
 import CardSliderEvent from '../../components/cards/CardSliderEvent';
 import Newsletter from '../../containers/layouts/Newsletter';
-import {useSessionState} from '../../context/session/session';
+import { useSessionState } from '../../context/session/session';
 import CardAddEvent from '../../components/cards/CardAddEvent';
-import {getImageUrl} from "../../utils/utils";
-import Parser from 'html-react-parser';
+import { getImageUrl } from '../../utils/utils';
 
 const useStyles = makeStyles((theme) => ({
   titleContainer: {
-    marginTop: theme.spacing(2), 
-     backgroundSize: 'cover',
+    marginTop: theme.spacing(2),
+    backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
     height: '24em',
@@ -99,8 +101,8 @@ const useStyles = makeStyles((theme) => ({
   },
   img: {
     padding: '1em',
-    maxHeight: "200px",
-    width:"inherit!important"
+    maxHeight: '200px',
+    width: 'inherit!important',
   },
   button: {
     margin: '2.5em 0 2.5em 0 ',
@@ -115,7 +117,7 @@ const useStyles = makeStyles((theme) => ({
       cursor: 'pointer',
       color: '#bf083e',
       'background-color': 'white',
-      border: "2px solid #bf083e",
+      border: '2px solid #bf083e',
     },
     backgroundImage: 'url(\'./arrow.svg\')',
     backgroundRepeat: 'no-repeat',
@@ -128,7 +130,7 @@ const useStyles = makeStyles((theme) => ({
     margin: '2.5em 0 2.5em 0 ',
     color: '#bf083e',
     'background-color': 'white',
-    border: "2px solid #bf083e",
+    border: '2px solid #bf083e',
     fontFamily: 'rowdies',
     borderRadius: '1.5em',
     padding: '0 3em 0 3em',
@@ -318,7 +320,7 @@ const Actor = () => {
   const settingsSliderImage = {
 
     infinite: true,
-    slidesToShow: data && data.actor.pictures && data.actor.pictures.length>3?3:data && data.actor.pictures && data.actor.pictures.length,
+    slidesToShow: data && data.actor.pictures && data.actor.pictures.length > 3 ? 3 : data && data.actor.pictures && data.actor.pictures.length,
     slidesToScroll: 1,
     // autoplay: true,
     // autoplaySpeed: 2000,
@@ -380,13 +382,13 @@ const Actor = () => {
       </Head>
       <RootRef>
         <Box>
-          {data && data.actor&&(
-          <Container className={styles.titleContainer} style={{backgroundImage: data.actor.pictures.length>=1?'url('+getImageUrl(data.actor.pictures.sort((a, b) => a.position > b.position ? 1 : -1)[0].croppedPicturePath)+')':''}}/>
+          {data && data.actor && (
+          <Container className={styles.titleContainer} style={{ backgroundImage: data.actor.pictures.length >= 1 ? `url(${getImageUrl(data.actor.pictures.sort((a, b) => (a.position > b.position ? 1 : -1))[0].croppedPicturePath)})` : '' }} />
           )}
           <Container className={styles.cardInfo}>
 
             <Grid container>
-              <Grid item  md={8} sm={10} className={styles.threePointGrid}>
+              <Grid item md={8} sm={10} className={styles.threePointGrid}>
                 <div>
                   <Typography variant="h5" className={styles.cardTitle}>
                     {data && data.actor.name}
@@ -394,20 +396,20 @@ const Actor = () => {
                   {data && data.actor.categories.map((category) => (
                     <div>
                       <Typography
-                          variant="h7"
-                          className={styles.cardTitleCategories}
-                        > 
-                          {' '}
-                          {category.parentCategory
+                        variant="h7"
+                        className={styles.cardTitleCategories}
+                      >
+                        {' '}
+                        {category.parentCategory
                                             && category.parentCategory.label}
-                          {' '}
-                          : 
-                          {' '}
-                          {category
+                        {' '}
+                        :
+                        {' '}
+                        {category
                                             && category.label}
-                          {' '}
+                        {' '}
 
-                        </Typography>
+                      </Typography>
                     </div>
                   ))}
                 </div>
@@ -427,23 +429,23 @@ const Actor = () => {
                     <Grid item xs={8} className={[styles.alignLeft]}>
                       <div className={[styles.infoLabel]}>LOCALISATION </div>
                       <span className={[styles.infoValue]}>
-                          {data && !data.actor.city && <span> Adresse manquante</span>}
-                          {data && !data.actor.address && data.actor.city && (
-                            <span>
-                                  {' '}
-                                  {data && data.actor.city}
-                                </span>
-                            )}
-                          {data && data.actor.address && data.actor.city && (
-                            <span>
-                                  {' '}
-                                  {data && data.actor.address}
-                                  ,
-                                  {' '}
-                                  {data && data.actor.city}
-                                </span>
-                            )}
+                        {data && !data.actor.city && <span> Adresse manquante</span>}
+                        {data && !data.actor.address && data.actor.city && (
+                        <span>
+                          {' '}
+                          {data && data.actor.city}
                         </span>
+                        )}
+                        {data && data.actor.address && data.actor.city && (
+                        <span>
+                          {' '}
+                          {data && data.actor.address}
+                          ,
+                          {' '}
+                          {data && data.actor.city}
+                        </span>
+                        )}
+                      </span>
                     </Grid>
                   </Grid>
                   <Grid container className={[styles.item]}>
@@ -470,9 +472,13 @@ const Actor = () => {
                     </Grid>
                     <Grid item xs={8} className={[styles.alignLeft]}>
                       <div className={[styles.infoLabel]}>SITE INTERNET</div>
-                      <span className={[styles.infoValue]}><a href={data && data.actor.website} target="_blank">
-         {data && data.actor.website}
-        </a> </span>
+                      <span className={[styles.infoValue]}>
+                        <a href={data && data.actor.website} target="_blank">
+                          {data && data.actor.website}
+                        </a>
+                        {' '}
+
+                      </span>
                     </Grid>
                   </Grid>
                   <Grid container className={[styles.item]}>
@@ -488,7 +494,6 @@ const Actor = () => {
               </Grid>
             </Grid>
 
-
             <div className={styles.buttonVolunteer}>
               {data && containUser(data.actor.volunteers) && (
               <button className={styles.buttonInverse} onClick={removeVolunteerHandler}>Je ne souhaite plus être bénévole</button>
@@ -499,21 +504,21 @@ const Actor = () => {
 
             </div>
 
-            {data && data.actor.pictures && (data.actor.pictures.length>0) &&  (
-                <div>
-                  <Typography variant="h5" className={styles.cardTitle}>
-                    PHOTOS ET VIDEOS
-                  </Typography>
+            {data && data.actor.pictures && (data.actor.pictures.length > 0) && (
+            <div>
+              <Typography variant="h5" className={styles.cardTitle}>
+                PHOTOS ET VIDEOS
+              </Typography>
 
-                </div>
+            </div>
             )}
             <Slider {...settingsSliderImage}>
-              {data && data.actor.pictures && data.actor.pictures.sort((a, b) => a.position > b.position ? 1 : -1).map((picture) => (
-                  <img src={getImageUrl(picture.croppedPicturePath)} className={[styles.img]} />
+              {data && data.actor.pictures && data.actor.pictures.sort((a, b) => (a.position > b.position ? 1 : -1)).map((picture) => (
+                <img src={getImageUrl(picture.croppedPicturePath)} className={[styles.img]} />
               ))}
             </Slider>
 
-            {data && data.actor.pictures && (data.actor.events.length>0 || containUser(data.actor.referents)) &&  (
+            {data && data.actor.pictures && (data.actor.events.length > 0 || containUser(data.actor.referents)) && (
             <div>
 
               <Typography variant="h5" className={[styles.cardTitle, styles.align]}>

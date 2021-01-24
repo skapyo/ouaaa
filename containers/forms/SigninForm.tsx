@@ -1,5 +1,5 @@
-import gql from "graphql-tag"
-import {withApollo} from 'hoc/withApollo';
+import gql from 'graphql-tag';
+import { withApollo } from 'hoc/withApollo';
 import FormController, {
   RenderCallback,
   ValidationRules,
@@ -15,21 +15,21 @@ import {
   InputAdornment,
   makeStyles,
   TextField,
-  Typography
-} from "@material-ui/core"
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined"
-import ClassicButton from "components/buttons/ClassicButton"
-import {useRouter, withRouter} from 'next/router';
-import {useMutation} from '@apollo/client'
-import {useCallback, useEffect, useState} from "react"
-import {useSessionDispatch} from "context/session/session"
-import omitTypename from "utils/omitTypename"
-import useGraphQLErrorDisplay from "hooks/useGraphQLErrorDisplay"
-import useCookieRedirection from "hooks/useCookieRedirection"
-import FallbackEmailNotValidated from "containers/fallbacks/FallbackEmailNotValidated"
-import Visibility from "@material-ui/icons/Visibility";
-import VisibilityOff from "@material-ui/icons/VisibilityOff"
-import Link from "../../components/Link";
+  Typography,
+} from '@material-ui/core';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import ClassicButton from 'components/buttons/ClassicButton';
+import { useRouter, withRouter } from 'next/router';
+import { useMutation } from '@apollo/client';
+import { useCallback, useEffect, useState } from 'react';
+import { useSessionDispatch } from 'context/session/session';
+import omitTypename from 'utils/omitTypename';
+import useGraphQLErrorDisplay from 'hooks/useGraphQLErrorDisplay';
+import useCookieRedirection from 'hooks/useCookieRedirection';
+import FallbackEmailNotValidated from 'containers/fallbacks/FallbackEmailNotValidated';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import Link from '../../components/Link';
 
 const useStyles = makeStyles((theme) => ({
   paper: {

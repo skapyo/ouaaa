@@ -1,11 +1,13 @@
-import React, {useCallback, useState} from "react"
-import gql from "graphql-tag"
-import FormController, {QueryOptions, ValidationRules, ValidationRuleType,} from "components/controllers/FormController"
-import {withApollo} from "hoc/withApollo"
-import ResetPasswordEmailForm from "containers/forms/ResetPassword/subForms/SendResetPsswdEmailForm"
-import ValidateEmailCodeForm from "./subForms/ValidateEmailCodeForm"
-import {Avatar, Box, Container, makeStyles, Typography} from "@material-ui/core"
-import VpnKeyOutlinedIcon from "@material-ui/icons/VpnKeyOutlined"
+import React, { useCallback, useState } from 'react';
+import gql from 'graphql-tag';
+import FormController, { QueryOptions, ValidationRules, ValidationRuleType } from 'components/controllers/FormController';
+import { withApollo } from 'hoc/withApollo';
+import ResetPasswordEmailForm from 'containers/forms/ResetPassword/subForms/SendResetPsswdEmailForm';
+import {
+  Avatar, Box, Container, makeStyles, Typography,
+} from '@material-ui/core';
+import VpnKeyOutlinedIcon from '@material-ui/icons/VpnKeyOutlined';
+import ValidateEmailCodeForm from './subForms/ValidateEmailCodeForm';
 
 const useStyles = makeStyles((theme) => ({
   avatar: {
@@ -15,10 +17,10 @@ const useStyles = makeStyles((theme) => ({
   title: {
     marginBottom: theme.spacing(3),
   },
-}))
+}));
 
 const ResetPasswordFormLayout = ({ children }: { children: JSX.Element }) => {
-  const styles = useStyles()
+  const styles = useStyles();
 
   return (
     <Container component="main" maxWidth="sm">
@@ -37,24 +39,24 @@ const ResetPasswordFormLayout = ({ children }: { children: JSX.Element }) => {
         {children}
       </Box>
     </Container>
-  )
-}
+  );
+};
 
-/* Reset password email form : step 0*/
+/* Reset password email form : step 0 */
 const SEND_PASSWORD_RESET_EMAIL = gql`
   mutation sendResetPasswordEmail($formValues: ResetPasswordInfos) {
     sendResetPasswordEmail(resetPasswordInfos: $formValues)
   }
-`
+`;
 const validationRules0: ValidationRules = {
   email: {
     rule: ValidationRuleType.email,
   },
-}
+};
 
 /* -- */
 
-/* reset code validation form : step 1*/
+/* reset code validation form : step 1 */
 // const SEND_PASSWORD_RESET_EMAIL = gql`
 //   mutation sendResetPasswordEmail($formValues: ResetPasswordInfos) {
 //     sendResetPasswordEmail(resetPasswordInfos: $formValues)
@@ -63,21 +65,21 @@ const validationRules0: ValidationRules = {
 const validationRules1: ValidationRules = {
   input1: {
     rule: ValidationRuleType.only,
-    type: "number",
+    type: 'number',
   },
   input2: {
     rule: ValidationRuleType.only,
-    type: "number",
+    type: 'number',
   },
   input3: {
     rule: ValidationRuleType.only,
-    type: "number",
+    type: 'number',
   },
   input4: {
     rule: ValidationRuleType.only,
-    type: "number",
+    type: 'number',
   },
-}
+};
 
 /* -- */
 
@@ -89,7 +91,7 @@ type EmailContext = {
 export const EmailContext = React.createContext({
   email: null,
   codeId: null,
-} as EmailContext)
+} as EmailContext);
 
 const ResetPasswordForm = () => {
   /* state of the form
@@ -97,31 +99,31 @@ const ResetPasswordForm = () => {
    * 1: form to validate the code received in the reset password email
    * 2: form to reset the password
    */
-  const [formState, setFormState] = useState<number>(0)
+  const [formState, setFormState] = useState<number>(0);
 
   const [context, setContext] = useState<EmailContext>({
     email: null,
     codeId: null,
-  })
+  });
 
   const queryOptions0: QueryOptions = {
     query: SEND_PASSWORD_RESET_EMAIL,
-    resultLabel: "sendResetPasswordEmail",
-    snackbarSucceedMessage: "Un email vous a été envoyé.",
+    resultLabel: 'sendResetPasswordEmail',
+    snackbarSucceedMessage: 'Un email vous a été envoyé.',
     afterResultControlCallback: useCallback(
       (formvalues, data, error) => {
         if (!error) {
-          setFormState(1)
+          setFormState(1);
           setContext({
             email: formvalues.email,
             codeId: data.sendResetPasswordEmail,
-          })
+          });
         }
       },
-      [setFormState]
+      [setFormState],
     ),
-    mutationResultControl: "builtin",
-  }
+    mutationResultControl: 'builtin',
+  };
 
   // const setEmailContext = useCallback((formValues, data, error) => {
   //   const setEmail = useContext(SetEmailContext)
@@ -137,7 +139,7 @@ const ResetPasswordForm = () => {
           <FormController
             render={ResetPasswordEmailForm}
             validationRules={validationRules0}
-            withQuery={true}
+            withQuery
             queryOptions={queryOptions0}
             key="formController-0"
           />
@@ -157,7 +159,7 @@ const ResetPasswordForm = () => {
       )}
       {/* </SetEmailContext.Provider> */}
     </EmailContext.Provider>
-  )
+  );
 
   // if (formState == 0)
   //   return (
@@ -184,6 +186,6 @@ const ResetPasswordForm = () => {
   //       />
   //     </ResetPasswordFormLayout>
   //   )
-}
+};
 
-export default withApollo()(ResetPasswordForm)
+export default withApollo()(ResetPasswordForm);

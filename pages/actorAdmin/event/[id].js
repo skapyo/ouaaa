@@ -1,6 +1,6 @@
 import React from 'react';
-import {withApollo} from 'hoc/withApollo';
-import {useRouter} from 'next/router';
+import { withApollo } from 'hoc/withApollo';
+import { useRouter } from 'next/router';
 import AppLayout from 'containers/layouts/AppLayout';
 import EditEventForm from 'containers/forms/EditEventForm';
 
@@ -9,9 +9,9 @@ const EditEvent = () => {
   const { id } = router.query;
 
   return (
-      <AppLayout>
-        <EditEventForm id={id} />
-      </AppLayout>
+    <AppLayout>
+      <EditEventForm id={id} />
+    </AppLayout>
   );
 };
 

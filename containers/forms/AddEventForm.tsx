@@ -1,20 +1,24 @@
-import React, {ChangeEvent, useEffect, useRef, useState} from 'react';
+import React, {
+  ChangeEvent, useEffect, useRef, useState,
+} from 'react';
 import gql from 'graphql-tag';
-import {withApollo} from 'hoc/withApollo';
-import {Container, Grid, makeStyles, TextField, Typography,} from '@material-ui/core';
+import { withApollo } from 'hoc/withApollo';
+import {
+  Container, Grid, makeStyles, TextField, Typography,
+} from '@material-ui/core';
 import ClassicButton from 'components/buttons/ClassicButton';
 import FormController, {
   RenderCallback,
   ValidationRules,
   ValidationRuleType,
 } from 'components/controllers/FormController';
-import {useMutation, useQuery} from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import useGraphQLErrorDisplay from 'hooks/useGraphQLErrorDisplay';
 import Checkbox from '@material-ui/core/Checkbox';
 import useCookieRedirection from 'hooks/useCookieRedirection';
-import {useSnackbar} from 'notistack';
-import GooglePlacesAutocomplete, {geocodeByAddress, getLatLng} from 'react-google-places-autocomplete';
-import {useRouter} from 'next/router';
+import { useSnackbar } from 'notistack';
+import GooglePlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-google-places-autocomplete';
+import { useRouter } from 'next/router';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon/ListItemIcon';
@@ -23,9 +27,9 @@ import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import Collapse from '@material-ui/core/Collapse/Collapse';
 import DateFnsUtils from '@date-io/date-fns';
-import {KeyboardDatePicker, KeyboardTimePicker, MuiPickersUtilsProvider} from '@material-ui/pickers';
+import { KeyboardDatePicker, KeyboardTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import moment from 'moment';
-import {useSessionState} from '../../context/session/session';
+import { useSessionState } from '../../context/session/session';
 
 const useStyles = makeStyles((theme) => ({
   field: {
@@ -64,7 +68,8 @@ const useStyles = makeStyles((theme) => ({
         border: 'solid 1px lightgray',
       },
     },
-  },label: {
+  },
+  label: {
     fontWeight: 600,
   },
 }));
@@ -169,7 +174,7 @@ const AddEventForm = ({ actorId }) => {
     shortDescription: {
       rule: ValidationRuleType.required && ValidationRuleType.minLength,
       minLimit: 50,
-    }
+    },
   };
 
   const Form: RenderCallback = ({
@@ -217,22 +222,22 @@ const AddEventForm = ({ actorId }) => {
       else setValidated(true);
     });
 
-    const editorRef = useRef()
-    const [ editorLoaded, setEditorLoaded ] = useState( false )
+    const editorRef = useRef();
+    const [editorLoaded, setEditorLoaded] = useState(false);
     // @ts-ignore
-    const { CKEditor, ClassicEditor } = editorRef.current || {}
+    const { CKEditor, ClassicEditor } = editorRef.current || {};
 
-    useEffect( () => {
+    useEffect(() => {
       // @ts-ignore
       editorRef.current = {
-        CKEditor: require( '@ckeditor/ckeditor5-react' ).CKEditor,
-        ClassicEditor: require( '@ckeditor/ckeditor5-build-classic' )
+        CKEditor: require('@ckeditor/ckeditor5-react').CKEditor,
+        ClassicEditor: require('@ckeditor/ckeditor5-build-classic'),
 
-      }
-      setEditorLoaded( true )
-    }, [] )
+      };
+      setEditorLoaded(true);
+    }, []);
 
-    const [descriptionEditor, setDescriptionEditor] = useState()
+    const [descriptionEditor, setDescriptionEditor] = useState();
 
     const handleChange = (category: any, event: React.ChangeEvent<HTMLInputElement>) => {
       setState({ ...state, [category.id.toString()]: event.target.checked });
@@ -302,7 +307,7 @@ const AddEventForm = ({ actorId }) => {
           actorId: parseInt(actorId),
           userId: parseInt(user.id),
           // @ts-ignore
-          description:descriptionEditor.getData()
+          description: descriptionEditor.getData(),
         },
       });
     };
@@ -346,18 +351,18 @@ const AddEventForm = ({ actorId }) => {
         <Typography variant="body1" color="primary" className={styles.label}>
           Description :
         </Typography>
-        <p></p>
-        { editorLoaded ? (  <CKEditor
-            editor={ ClassicEditor }
+        <p />
+        { editorLoaded ? (
+          <CKEditor
+            editor={ClassicEditor}
             data={formValues.description}
-            onReady={ editor => {
-              setDescriptionEditor(editor)
-            } }
-
-        />) : (
-            <div>Editor loading</div>
-        )
-        }
+            onReady={(editor) => {
+              setDescriptionEditor(editor);
+            }}
+          />
+        ) : (
+          <div>Editor loading</div>
+        )}
         <Grid className={styles.datetime}>
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <Grid container justify="space-around">

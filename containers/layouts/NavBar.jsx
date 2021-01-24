@@ -1,16 +1,18 @@
-import {makeStyles, useTheme} from '@material-ui/core/styles';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import {Avatar, Container, Fade, Grid, Menu, MenuItem,} from '@material-ui/core';
+import {
+  Avatar, Container, Fade, Grid, Menu, MenuItem,
+} from '@material-ui/core';
 import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
 import Link from 'components/Link';
-import {useSessionDispatch, useSessionState} from 'context/session/session';
-import React, {useCallback, useEffect} from 'react';
-import {useMutation} from '@apollo/client';
+import { useSessionDispatch, useSessionState } from 'context/session/session';
+import React, { useCallback, useEffect } from 'react';
+import { useMutation } from '@apollo/client';
 import gql from 'graphql-tag';
-import {useCookies} from 'react-cookie';
-import {useRouter} from 'next/router';
-import {withApollo} from 'hoc/withApollo';
+import { useCookies } from 'react-cookie';
+import { useRouter } from 'next/router';
+import { withApollo } from 'hoc/withApollo';
 import ButtonAppBarCollapse from './ButtonAppBarCollapse';
 
 const useStyles = makeStyles((theme) => ({
@@ -27,12 +29,12 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
   },
-      account :{
-        "&:hover": {
-          cursor: "pointer",
-        },
+  account: {
+    '&:hover': {
+      cursor: 'pointer',
+    },
 
-      },
+  },
   popoverPaper: {
     marginTop: theme.spacing(2),
     width: '250px',
@@ -109,207 +111,212 @@ const NavBar = () => {
     setAnchorEl(null);
   };
 
-
   const open = Boolean(anchorEl);
 
   return (
-      <AppBar position="static" className={styles.navbar} color="inherit">
-        <Container>
+    <AppBar position="static" className={styles.navbar} color="inherit">
+      <Container>
 
-          <Toolbar>
-            <Grid
-                container
-                direction="row"
-                justify="space-between"
-                alignItems="center"
-            >
-              <Grid item>
-                <Link href="/">
-                  <img
-                      className={styles.logo}
-                      src="/logo.png"
-                      alt="Outils des Acteurs Alternatifs en Aunis – La Rochelle et ses communes"
-                  />
-                </Link>
-              </Grid>
-              <div className={styles.navLayout}>
-                <Grid item>
-                  <Grid
-                      container
-                      alignItems="center"
-                  >
-                    <Grid item>
-                      <MenuItem button component={Link} className={styles.menuItem} href="/map">LA CARTE</MenuItem>
-                    </Grid>
-                    <Grid item>
-                      <MenuItem button component={Link} className={styles.menuItem} href="/agenda">L'AGENDA</MenuItem>
-                    </Grid>
-                    <Grid item>
-                      <MenuItem button component={Link} className={styles.menuItem} href="/participate">
-                        JE
-                        PARTICIPE
-                      </MenuItem>
-                    </Grid>
-                    <Grid item>
-                      <MenuItem button component={Link} className={styles.menuItem} href="/news">LE JOURNAL</MenuItem>
-                    </Grid>
-                    <Grid item>
-                      <MenuItem button component={Link} className={styles.menuItem} href="/about">A PROPOS</MenuItem>
-                    </Grid>
-
-                    {!user && (
-                        <Grid item>
-                          {' '}
-                          <Link href="/signin" underline="none" color="textPrimary" onClick={signinClickHandler}>
-                            <PersonOutlineIcon className={styles.menuItem} />
-                          </Link>
-
-                        </Grid>
-                    )}
-
-                    {user && (
-                        <Grid item>
-                          <Grid  container onClick={handleClick } className={styles.account}>
-                            <Grid item>
-                            <Avatar
-                                className={styles.avatar}
-
-                                aria-controls="popover-menu"
-                                aria-haspopup="true"
-                            />
-                            </Grid>
-                            <Grid item>
-                              <div> {user.surname}</div>
-                              <div>{user.lastname}</div>
-                            </Grid>
-                          </Grid>
-                          <Menu
-                              id="popover-menu"
-                              open={open}
-                              anchorEl={anchorEl}
-                              onClose={handleClose}
-                              className={styles.menuItem}
-                              anchorOrigin={{
-                                vertical: 'bottom',
-                                horizontal: 'right',
-                              }}
-                              transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                              }}
-                              getContentAnchorEl={null}
-                              classes={{ paper: styles.popoverPaper }}
-                              TransitionComponent={Fade}
-                          >
-                            {/* <MenuItem onClick={() => router.push('/account')} component={Link} >Mon compte</MenuItem> */}
-                            <MenuItem button component={Link} className={styles.menuItem} href="/account">
-                              Mon
-                              compte
-                            </MenuItem>
-                            <MenuItem button component={Link} className={styles.menuItem} href="/actorAdmin">
-                              Espace
-                              Acteur
-                            </MenuItem>
-                            <MenuItem onClick={signoutHandler} className={styles.menuItem}>Se déconnecter</MenuItem>
-                          </Menu>
-
-                        </Grid>
-                    )}
-                  </Grid>
-                </Grid>
-              </div>
-              <ButtonAppBarCollapse>
-                <Grid item>
-                  <Grid
-                      container
-                      spacing={3}
-                      alignItems="center"
-                  >
-                    <Grid item>
-                      <MenuItem button component={Link} className={styles.menuItem} href="/map">LA CARTE</MenuItem>
-                    </Grid>
-                    <Grid item>
-                      <MenuItem button component={Link} className={styles.menuItem} href="/agenda">L'AGENDA</MenuItem>
-                    </Grid>
-                    <Grid item>
-                      <MenuItem button component={Link} className={styles.menuItem} href="/participate">
-                        JE
-                        PARTICIPE
-                      </MenuItem>
-                    </Grid>
-                    <Grid item>
-                      <MenuItem button component={Link} className={styles.menuItem} href="/news">LE JOURNAL</MenuItem>
-                    </Grid>
-                    <Grid item>
-                      <MenuItem button component={Link} className={styles.menuItem} href="/about">A PROPOS</MenuItem>
-                    </Grid>
-
-                    {!user && (
-                        <Grid item>
-                          {' '}
-                          <Link href="/signin" underline="none" color="textPrimary" onClick={signinClickHandler}>
-                            <PersonOutlineIcon className={styles.menuItem} />
-                          </Link>
-
-                        </Grid>
-                    )}
-
-                    {user && (
-                        <Grid item>
-                          <Grid  container onClick={handleClick} className={styles.account}>
-                            <Grid item>
-                              <Avatar
-                                  className={styles.avatar}
-
-                                  aria-controls="popover-menu"
-                                  aria-haspopup="true"
-                              />
-                            </Grid>
-                            <Grid item>
-                              <div> {user.surname}</div>
-                              <div>{user.lastname}</div>
-                            </Grid>
-                          </Grid>
-                          <Menu
-                              id="popover-menu"
-                              open={open}
-                              anchorEl={anchorEl}
-                              onClose={handleClose}
-                              className={styles.menuItem}
-                              anchorOrigin={{
-                                vertical: 'bottom',
-                                horizontal: 'right',
-                              }}
-                              transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                              }}
-                              getContentAnchorEl={null}
-                              classes={{ paper: styles.popoverPaper }}
-                              TransitionComponent={Fade}
-                          >
-                            {/* <MenuItem onClick={() => router.push('/account')} component={Link} >Mon compte</MenuItem> */}
-                            <MenuItem button component={Link} className={styles.menuItem} href="/account">
-                              Mon
-                              compte
-                            </MenuItem>
-                            <MenuItem button component={Link} className={styles.menuItem} href="/actorAdmin">
-                              Espace
-                              Acteur
-                            </MenuItem>
-                            <MenuItem onClick={signoutHandler} className={styles.menuItem}>Se déconnecter</MenuItem>
-                          </Menu>
-
-                        </Grid>
-                    )}
-                  </Grid>
-                </Grid>
-              </ButtonAppBarCollapse>
+        <Toolbar>
+          <Grid
+            container
+            direction="row"
+            justify="space-between"
+            alignItems="center"
+          >
+            <Grid item>
+              <Link href="/">
+                <img
+                  className={styles.logo}
+                  src="/logo.png"
+                  alt="Outils des Acteurs Alternatifs en Aunis – La Rochelle et ses communes"
+                />
+              </Link>
             </Grid>
-          </Toolbar>
+            <div className={styles.navLayout}>
+              <Grid item>
+                <Grid
+                  container
+                  alignItems="center"
+                >
+                  <Grid item>
+                    <MenuItem button component={Link} className={styles.menuItem} href="/map">LA CARTE</MenuItem>
+                  </Grid>
+                  <Grid item>
+                    <MenuItem button component={Link} className={styles.menuItem} href="/agenda">L'AGENDA</MenuItem>
+                  </Grid>
+                  <Grid item>
+                    <MenuItem button component={Link} className={styles.menuItem} href="/participate">
+                      JE
+                      PARTICIPE
+                    </MenuItem>
+                  </Grid>
+                  <Grid item>
+                    <MenuItem button component={Link} className={styles.menuItem} href="/news">LE JOURNAL</MenuItem>
+                  </Grid>
+                  <Grid item>
+                    <MenuItem button component={Link} className={styles.menuItem} href="/about">A PROPOS</MenuItem>
+                  </Grid>
 
-        </Container>
-      </AppBar>
+                  {!user && (
+                    <Grid item>
+                      {' '}
+                      <Link href="/signin" underline="none" color="textPrimary" onClick={signinClickHandler}>
+                        <PersonOutlineIcon className={styles.menuItem} />
+                      </Link>
+
+                    </Grid>
+                  )}
+
+                  {user && (
+                    <Grid item>
+                      <Grid container onClick={handleClick} className={styles.account}>
+                        <Grid item>
+                          <Avatar
+                            className={styles.avatar}
+
+                            aria-controls="popover-menu"
+                            aria-haspopup="true"
+                          />
+                        </Grid>
+                        <Grid item>
+                          <div>
+                            {' '}
+                            {user.surname}
+                          </div>
+                          <div>{user.lastname}</div>
+                        </Grid>
+                      </Grid>
+                      <Menu
+                        id="popover-menu"
+                        open={open}
+                        anchorEl={anchorEl}
+                        onClose={handleClose}
+                        className={styles.menuItem}
+                        anchorOrigin={{
+                          vertical: 'bottom',
+                          horizontal: 'right',
+                        }}
+                        transformOrigin={{
+                          vertical: 'top',
+                          horizontal: 'right',
+                        }}
+                        getContentAnchorEl={null}
+                        classes={{ paper: styles.popoverPaper }}
+                        TransitionComponent={Fade}
+                      >
+                        {/* <MenuItem onClick={() => router.push('/account')} component={Link} >Mon compte</MenuItem> */}
+                        <MenuItem button component={Link} className={styles.menuItem} href="/account">
+                          Mon
+                          compte
+                        </MenuItem>
+                        <MenuItem button component={Link} className={styles.menuItem} href="/actorAdmin">
+                          Espace
+                          Acteur
+                        </MenuItem>
+                        <MenuItem onClick={signoutHandler} className={styles.menuItem}>Se déconnecter</MenuItem>
+                      </Menu>
+
+                    </Grid>
+                  )}
+                </Grid>
+              </Grid>
+            </div>
+            <ButtonAppBarCollapse>
+              <Grid item>
+                <Grid
+                  container
+                  spacing={3}
+                  alignItems="center"
+                >
+                  <Grid item>
+                    <MenuItem button component={Link} className={styles.menuItem} href="/map">LA CARTE</MenuItem>
+                  </Grid>
+                  <Grid item>
+                    <MenuItem button component={Link} className={styles.menuItem} href="/agenda">L'AGENDA</MenuItem>
+                  </Grid>
+                  <Grid item>
+                    <MenuItem button component={Link} className={styles.menuItem} href="/participate">
+                      JE
+                      PARTICIPE
+                    </MenuItem>
+                  </Grid>
+                  <Grid item>
+                    <MenuItem button component={Link} className={styles.menuItem} href="/news">LE JOURNAL</MenuItem>
+                  </Grid>
+                  <Grid item>
+                    <MenuItem button component={Link} className={styles.menuItem} href="/about">A PROPOS</MenuItem>
+                  </Grid>
+
+                  {!user && (
+                    <Grid item>
+                      {' '}
+                      <Link href="/signin" underline="none" color="textPrimary" onClick={signinClickHandler}>
+                        <PersonOutlineIcon className={styles.menuItem} />
+                      </Link>
+
+                    </Grid>
+                  )}
+
+                  {user && (
+                    <Grid item>
+                      <Grid container onClick={handleClick} className={styles.account}>
+                        <Grid item>
+                          <Avatar
+                            className={styles.avatar}
+
+                            aria-controls="popover-menu"
+                            aria-haspopup="true"
+                          />
+                        </Grid>
+                        <Grid item>
+                          <div>
+                            {' '}
+                            {user.surname}
+                          </div>
+                          <div>{user.lastname}</div>
+                        </Grid>
+                      </Grid>
+                      <Menu
+                        id="popover-menu"
+                        open={open}
+                        anchorEl={anchorEl}
+                        onClose={handleClose}
+                        className={styles.menuItem}
+                        anchorOrigin={{
+                          vertical: 'bottom',
+                          horizontal: 'right',
+                        }}
+                        transformOrigin={{
+                          vertical: 'top',
+                          horizontal: 'right',
+                        }}
+                        getContentAnchorEl={null}
+                        classes={{ paper: styles.popoverPaper }}
+                        TransitionComponent={Fade}
+                      >
+                        {/* <MenuItem onClick={() => router.push('/account')} component={Link} >Mon compte</MenuItem> */}
+                        <MenuItem button component={Link} className={styles.menuItem} href="/account">
+                          Mon
+                          compte
+                        </MenuItem>
+                        <MenuItem button component={Link} className={styles.menuItem} href="/actorAdmin">
+                          Espace
+                          Acteur
+                        </MenuItem>
+                        <MenuItem onClick={signoutHandler} className={styles.menuItem}>Se déconnecter</MenuItem>
+                      </Menu>
+
+                    </Grid>
+                  )}
+                </Grid>
+              </Grid>
+            </ButtonAppBarCollapse>
+          </Grid>
+        </Toolbar>
+
+      </Container>
+    </AppBar>
   );
 };
 

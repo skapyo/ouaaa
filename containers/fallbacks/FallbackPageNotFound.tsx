@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-filename-extension */
 import React from 'react';
 import AppContainer from 'containers/layouts/AppContainer';
-import {Grid, Typography} from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
 
 const FallbackPageNotFound = (props: any) => (
   <AppContainer>

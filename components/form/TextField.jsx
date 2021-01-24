@@ -1,9 +1,9 @@
-import {TextField, withStyles} from "@material-ui/core"
+import { TextField, withStyles } from '@material-ui/core';
 
 const StyledTextField = withStyles({
-    root : {
-        width:'300px'
-    }
-})(TextField)
+  root: {
+    width: '300px',
+  },
+})(TextField);
 
-export default StyledTextField
+export default StyledTextField;

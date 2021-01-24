@@ -1,11 +1,13 @@
-import React, {ChangeEvent, useCallback, useEffect, useMemo, useState,} from 'react';
-import {useMutation} from '@apollo/client';
-import {useSnackbar} from 'notistack';
+import React, {
+  ChangeEvent, useCallback, useEffect, useMemo, useState,
+} from 'react';
+import { useMutation } from '@apollo/client';
+import { useSnackbar } from 'notistack';
 import omitTypename from 'utils/omitTypename';
 import validateEmailFormat from 'utils/validateEmailFormat';
 import validatePasswordFormat from 'utils/validatePasswordFormat';
-import {DocumentNode} from 'graphql';
-import {useSessionState} from '../../context/session/session';
+import { DocumentNode } from 'graphql';
+import { useSessionState } from '../../context/session/session';
 
 type FormValues = { [key: string]: string }
 
@@ -132,7 +134,6 @@ const withMutation = (FormComponent: RenderCallback) => (
     if (next) {
       setInitialFormValues(omitTypename(data?.[queryOptions.resultLabel]));
 
-
       if (queryOptions.snackbarSucceedMessage) { scnackbar.enqueueSnackbar(queryOptions.snackbarSucceedMessage); }
 
       if (queryOptions.afterResultControlCallback) { queryOptions.afterResultControlCallback(formValues, data, error); }
@@ -216,14 +217,12 @@ const FormController = (props: FormControllerProps, ...otherprops: any[]) => {
   }, [formValues, initialFormValues]);
 
   const clearFormvalues = useCallback(() => {
-
     setFormValue({});
     setInitialFormValues({});
   }, [setFormValue]);
 
   /* validation : a revoir / compléter .. */
   useEffect(() => {
-
     if (validationRules) {
       let validationResultTemp: ValidationResult = { global: true, result: {} };
 

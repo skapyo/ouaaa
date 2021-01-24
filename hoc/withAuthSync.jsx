@@ -1,7 +1,6 @@
-import React, {useEffect} from 'react'
-import {useSessionDispatch} from 'context/session/session';
-import gql from 'graphql-tag'
-
+import React, { useEffect } from 'react';
+import { useSessionDispatch } from 'context/session/session';
+import gql from 'graphql-tag';
 
 const ISLOGGED = gql`
   query isLogged {
@@ -10,50 +9,46 @@ const ISLOGGED = gql`
           role
       }
   }
-`
+`;
 
 const withAuthSync = (WrappedComponent) => {
-
-  const FuncComponent = ({children, user, ...props}) => {
-    
-    const stateDispatch = useSessionDispatch()
+  const FuncComponent = ({ children, user, ...props }) => {
+    const stateDispatch = useSessionDispatch();
 
     useEffect(() => {
-      if(user) 
+      if (user) {
         stateDispatch({
-          type:'login',
-          payload:user
+          type: 'login',
+          payload: user,
         });
-    },[])
+      }
+    }, []);
 
     return (<WrappedComponent {...props}>{children}</WrappedComponent>);
-  }
+  };
 
   FuncComponent.getInitialProps = async (ctx) => {
-
     const props = WrappedComponent.getInitialProps && await WrappedComponent.getInitialProps(ctx);
 
-    if(typeof window === 'undefined') {
-      const {initOnContext} = await import('hoc/withApollo')
-      initOnContext(ctx)
-      const result = await ctx.apolloClient.query({query:ISLOGGED})
-      if(result.data?.isLogged?.id) 
-        return ({user : result.data.isLogged, ...props})
+    if (typeof window === 'undefined') {
+      const { initOnContext } = await import('hoc/withApollo');
+      initOnContext(ctx);
+      const result = await ctx.apolloClient.query({ query: ISLOGGED });
+      if (result.data?.isLogged?.id) { return ({ user: result.data.isLogged, ...props }); }
     }
 
-    return ({...props})
-
-  }
+    return ({ ...props });
+  };
   return FuncComponent;
-}
+};
 
 // const _withAuth = (WrappedComponent) => {
-  
+
 //   const FuncComponent = ({ children, ...props }) => {
-//     const { user, setUser } = useGlobalState(); 
+//     const { user, setUser } = useGlobalState();
 
 //     useEffect(() => {
-//       if (!user && props.user && props.account) 
+//       if (!user && props.user && props.account)
 //         setUser(props.user, props.account);
 //     });
 

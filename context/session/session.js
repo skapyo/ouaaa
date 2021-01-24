@@ -1,14 +1,14 @@
-import React from "react";
+import React from 'react';
 
 const SessionStateContext = React.createContext();
 const SessionDispatchContext = React.createContext();
 
 function authReducer(state, action) {
   switch (action.type) {
-    case "login": {
-      return {...action.payload};
+    case 'login': {
+      return { ...action.payload };
     }
-    case "logout": {
+    case 'logout': {
       return null;
     }
     default: {
@@ -17,10 +17,9 @@ function authReducer(state, action) {
   }
 }
 
-function SessionProvider({ children, init=null }) {
-
+function SessionProvider({ children, init = null }) {
   const [state, dispatch] = React.useReducer(authReducer, init);
-  
+
   return (
     <SessionStateContext.Provider value={state}>
       <SessionDispatchContext.Provider value={dispatch}>
@@ -33,7 +32,7 @@ function SessionProvider({ children, init=null }) {
 function useSessionState() {
   const context = React.useContext(SessionStateContext);
   if (context === undefined) {
-    throw new Error("useSessionState must be used within a SessionProvider");
+    throw new Error('useSessionState must be used within a SessionProvider');
   }
   return context;
 }
@@ -41,10 +40,9 @@ function useSessionState() {
 function useSessionDispatch() {
   const context = React.useContext(SessionDispatchContext);
   if (context === undefined) {
-    throw new Error("useSessionDispatch must be used within a SessionProvider");
+    throw new Error('useSessionDispatch must be used within a SessionProvider');
   }
   return context;
 }
-
 
 export { SessionProvider, useSessionState, useSessionDispatch };

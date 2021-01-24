@@ -1,13 +1,13 @@
-import {useCallback, useState} from "react";
-import {makeStyles} from "@material-ui/core/styles";
-import gql from "graphql-tag"
-import {useMutation} from "@apollo/client"
-import {withApollo} from "hoc/withApollo"
-import FormController, {ValidationRuleType} from "components/controllers/FormController"
-import {Container, TextField, Typography} from "@material-ui/core";
-import ClassicButton from "components/buttons/ClassicButton"
+import { useCallback, useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import gql from 'graphql-tag';
+import { useMutation } from '@apollo/client';
+import { withApollo } from 'hoc/withApollo';
+import FormController, { ValidationRuleType } from 'components/controllers/FormController';
+import { Container, TextField, Typography } from '@material-ui/core';
+import ClassicButton from 'components/buttons/ClassicButton';
 import SearchIcon from '@material-ui/icons/Search';
-import {useSessionState} from 'context/session/session';
+import { useSessionState } from 'context/session/session';
 
 const useStyles = makeStyles((theme) => ({
   newsletter: {
@@ -101,9 +101,9 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       cursor: 'pointer',
       color: '#bf083e',
-      "background-color":"white",
-      border: "2px solid #bf083e",
-      backgroundImage:`url('./arrow-hover.svg')`,
+      'background-color': 'white',
+      border: '2px solid #bf083e',
+      backgroundImage: 'url(\'./arrow-hover.svg\')',
     },
     backgroundImage: 'url(\'./arrow.svg\')',
     backgroundRepeat: 'no-repeat',

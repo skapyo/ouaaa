@@ -1,20 +1,19 @@
-import {withApollo} from 'hoc/withApollo.jsx';
+import { withApollo } from 'hoc/withApollo.jsx';
 import AppLayout from 'containers/layouts/AppLayout';
-import {useSessionState} from 'context/session/session';
+import { useSessionState } from 'context/session/session';
 import FallbackAlreadyConnected from 'containers/fallbacks/FallbackAlreadyConnected';
 import SignupForm from 'containers/forms/SignupForm';
 
 const SignUp = () => {
+  const user = useSessionState();
 
-  const user = useSessionState()
-
-  if (user) return <FallbackAlreadyConnected />
+  if (user) return <FallbackAlreadyConnected />;
 
   return (
     <AppLayout>
-      <SignupForm />      
+      <SignupForm />
     </AppLayout>
-  )
-}
+  );
+};
 
-export default withApollo()(SignUp)
+export default withApollo()(SignUp);

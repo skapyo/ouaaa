@@ -2,7 +2,7 @@
 import React from 'react';
 import AppLayout from 'containers/layouts/AppLayout';
 import AppContainer from 'containers/layouts/AppContainer';
-import {Grid, makeStyles, Typography} from '@material-ui/core';
+import { Grid, makeStyles, Typography } from '@material-ui/core';
 import ClassicButton from 'components/buttons/ClassicButton';
 import Link from 'components/Link';
 

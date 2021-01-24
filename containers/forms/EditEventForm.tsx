@@ -91,7 +91,7 @@ const useStyles = makeStyles((theme) => ({
       background: 'none',
     },
 
-  },dropZone:{
+  },dropZone:{    
     padding : "1em",
     margin :"2em"
   },

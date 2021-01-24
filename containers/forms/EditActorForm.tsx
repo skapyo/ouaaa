@@ -19,7 +19,6 @@ import ClassicButton from 'components/buttons/ClassicButton';
 import { withApollo } from 'hoc/withApollo';
 import { useRouter, withRouter } from 'next/router';
 import { useDropArea } from 'react-use';
-import withDndProvider from '../../hoc/withDnDProvider';
 import { gql, useMutation, useQuery } from '@apollo/client';
 import graphqlTag from 'graphql-tag';
 import FormController, {
@@ -40,20 +39,21 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 import Collapse from '@material-ui/core/Collapse';
 import { useCookies } from 'react-cookie';
 import { useSnackbar } from 'notistack';
-import {
-  ValidationRules,
-  ValidationRuleType,
-} from '../../components/controllers/FormController';
-import useCookieRedirection from '../../hooks/useCookieRedirection';
 import DeleteIcon from '@material-ui/icons/Delete';
 import HeightIcon from '@material-ui/icons/Height';
 
 import ImageCropper from 'components/ImageCropper/ImageCropper';
-import useDnDStateManager from '../../hooks/useDnDStateManager';
 import InsertPhotoIcon from '@material-ui/icons/InsertPhoto';
 import { getImageUrl } from 'utils/utils';
-import useImageReader from '../../hooks/useImageReader';
 import { useDrag, useDrop } from 'react-dnd';
+import useImageReader from '../../hooks/useImageReader';
+import useDnDStateManager from '../../hooks/useDnDStateManager';
+import useCookieRedirection from '../../hooks/useCookieRedirection';
+import {
+  ValidationRules,
+  ValidationRuleType,
+} from '../../components/controllers/FormController';
+import withDndProvider from '../../hoc/withDnDProvider';
 
 const EDIT_ACTOR = gql`
   mutation editActor(
@@ -230,46 +230,14 @@ const FormItem = (props: FormItemProps) => {
   );
 };
 
-const FormItemTextareaAutosize = (props: FormItemProps) => {
-  const styles = useStyles();
-  const {
-    label,
-    inputName,
-    formChangeHandler,
-    value,
-    required,
-    errorBool,
-    errorText,
-  } = props;
-  return (
-    <TextField
-      multiline
-      rows={4}
-      className={styles.field}
-      variant="outlined"
-      value={value}
-      label={label}
-      name={inputName}
-      onChange={formChangeHandler}
-      defaultValue=""
-      fullWidth
-      required={required}
-      error={errorBool}
-      helperText={errorBool ? errorText : ''}
-    />
-  );
-};
-
 const EditActorForm = (props) => {
-  const redirect = useCookieRedirection();
   const styles = useStyles();
 
   const [checked, setChecked] = useState([0]);
-  const { data, loading, error } = useQuery(GET_CATEGORIES, {
+  const { data } = useQuery(GET_CATEGORIES, {
     fetchPolicy: 'network-only',
   });
-  const [open, setOpen] = React.useState([false]);
-  const [cookies, setCookie, removeCookie] = useCookies();
+  const [open] = React.useState([false]);
   const router = useRouter();
   const {
     loading: actorLoading,
@@ -281,11 +249,11 @@ const EditActorForm = (props) => {
 
   if (actorLoading) return null;
   if (actorError) return `Error! ${actorError.message}`;
-  var imgInit = [];
+  let imgInit = [];
   if (
-    actorData &&
-    actorData.actor.pictures &&
-    actorData.actor.pictures.length > 0
+    actorData
+    && actorData.actor.pictures
+    && actorData.actor.pictures.length > 0
   ) {
     imgInit = actorData.actor.pictures
       .sort((a, b) => (a.position > b.position ? 1 : -1))
@@ -345,9 +313,7 @@ const EditActorForm = (props) => {
             <p />
             <Button
               // @ts-ignore
-              onClick={() =>
-                uploadInputRef.current && uploadInputRef.current.click()
-              }
+              onClick={() => uploadInputRef.current && uploadInputRef.current.click()}
               variant="contained"
             >
               <p />
@@ -395,7 +361,6 @@ const EditActorForm = (props) => {
     cards,
     moveCard,
     findCard,
-    updateActiveIndicator,
     updateDeletedIndicator,
     updateKeyIndicator,
   }) => {
@@ -437,7 +402,7 @@ const EditActorForm = (props) => {
   }) => {
     const originalIndex = findCard(id).index;
 
-    const [{ isDragging }, drag] = useDrag({
+    const [, drag] = useDrag({
       item: { type: ItemTypes.PIC, id, originalIndex },
       collect: (monitor) => ({
         isDragging: monitor.isDragging(),
@@ -461,7 +426,7 @@ const EditActorForm = (props) => {
 
     const opacity = 1;
 
-    //gestion de la modal du cropper
+    // gestion de la modal du cropper
     const [modalOpened, setOpenedInd] = useState(false);
     const openModal = () => {
       setOpenedInd(true);
@@ -554,9 +519,9 @@ const EditActorForm = (props) => {
     );
 
     const submitHandler = useCallback(() => {
-      var files;
+      let files;
       // @ts-ignore
-      if (objectsList)
+      if (objectsList) {
         files = objectsList.map((object) => {
           // return object.file
           return {
@@ -574,10 +539,12 @@ const EditActorForm = (props) => {
             },
           };
         });
+      }
 
       edit({
         variables: {
           formValues,
+          // eslint-disable-next-line radix
           actorId: parseInt(actorData.actor.id),
           pictures: files,
           // @ts-ignore
@@ -630,7 +597,7 @@ const EditActorForm = (props) => {
       formValues.city = actorData.actor.city;
       formValues.lat = actorData.actor.lat;
       formValues.lng = actorData.actor.lng;
-      var categories = [];
+      const categories = [];
       actorData.actor.categories.forEach((actorcategory) => {
         // @ts-ignore
         categories.push(actorcategory.id);
@@ -693,7 +660,7 @@ const EditActorForm = (props) => {
         <Typography variant="body1" color="primary" className={styles.label}>
           Description :
         </Typography>
-        <p></p>
+        <p />
         {editorLoaded ? (
           <CKEditor
             editor={ClassicEditor}
@@ -712,23 +679,21 @@ const EditActorForm = (props) => {
               initialValue={
                 formValues.address
                   ? formValues.address
-                      .concat(' ')
-                      .concat(formValues.postCode)
-                      .concat(' ')
-                      .concat(formValues.city)
+                    .concat(' ')
+                    .concat(formValues.postCode)
+                    .concat(' ')
+                    .concat(formValues.city)
                   : formValues.city && formValues.city
               }
-              onSelect={({ description }) =>
-                geocodeByAddress(description).then((results) => {
-                  getLatLng(results[0])
-                    .then((value) => {
-                      formValues.lat = `${value.lat}`;
-                      formValues.lng = `${value.lng}`;
-                    })
-                    .catch((error) => console.error(error));
-                  getAddressDetails(results);
-                })
-              }
+              onSelect={({ description }) => geocodeByAddress(description).then((results) => {
+                getLatLng(results[0])
+                  .then((value) => {
+                    formValues.lat = `${value.lat}`;
+                    formValues.lng = `${value.lng}`;
+                  })
+                  .catch((error) => console.error(error));
+                getAddressDetails(results);
+              })}
             />
           </Grid>
         </div>
@@ -737,9 +702,9 @@ const EditActorForm = (props) => {
           Sélectionner une catégorie :
         </Typography>
         <List className={styles.field}>
-          {typeof data !== 'undefined' &&
-            data.categories &&
-            data.categories.map((category, index) => (
+          {typeof data !== 'undefined'
+            && data.categories
+            && data.categories.map((category, index) => (
               <div>
                 <ListItem
                   key={category.id}
@@ -752,9 +717,9 @@ const EditActorForm = (props) => {
                   <ListItemText primary={category.label} />
                   {open[index] ? <ExpandLess /> : <ExpandMore />}
                 </ListItem>
-                {typeof category.subCategories !== 'undefined' &&
-                  category.subCategories != null &&
-                  category.subCategories.map((subcategory, subIndex) => (
+                {typeof category.subCategories !== 'undefined'
+                  && category.subCategories != null
+                  && category.subCategories.map((subcategory, subIndex) => (
                     <Collapse in={open[index]} timeout="auto" unmountOnExit>
                       <List component="div" disablePadding>
                         <ListItem button>
@@ -768,9 +733,9 @@ const EditActorForm = (props) => {
                               value={subcategory.id}
                               // @ts-ignore
                               checked={
-                                formValues &&
-                                formValues.categories &&
-                                formValues.categories.includes(subcategory.id)
+                                formValues
+                                && formValues.categories
+                                && formValues.categories.includes(subcategory.id)
                               }
                             />
                           </ListItemIcon>

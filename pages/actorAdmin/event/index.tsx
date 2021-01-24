@@ -1,7 +1,9 @@
-import {createStyles, makeStyles, Theme, Typography, useTheme,} from '@material-ui/core';
-import {withApollo} from 'hoc/withApollo';
+import {
+  createStyles, makeStyles, Theme, Typography, useTheme,
+} from '@material-ui/core';
+import { withApollo } from 'hoc/withApollo';
 import ActorAdminPageLayout from 'containers/layouts/actorAdminPage/ActorAdminPageLayout';
-import {useQuery} from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import React from 'react';
 import gql from 'graphql-tag';
 import TableContainer from '@material-ui/core/TableContainer';
@@ -20,7 +22,7 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import FirstPageIcon from '@material-ui/icons/FirstPage';
 import IconButton from '@material-ui/core/IconButton';
-import {useSessionState} from '../../../context/session/session';
+import { useSessionState } from '../../../context/session/session';
 import Link from '../../../components/Link';
 
 const useStyles = makeStyles((theme) => ({

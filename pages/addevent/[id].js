@@ -1,7 +1,7 @@
-import {withApollo} from 'hoc/withApollo.jsx';
+import { withApollo } from 'hoc/withApollo.jsx';
 import AppLayout from 'containers/layouts/AppLayout';
 import AddEventForm from 'containers/forms/AddEventForm';
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 
 const AddEvent = () => {
   const router = useRouter();

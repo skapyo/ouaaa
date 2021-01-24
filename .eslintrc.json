@@ -21,6 +21,7 @@
   "plugins": ["react"],
   "rules": {
     "arrow-body-style": "off",
-    "react/destructuring-assignment": "off"
+    "react/destructuring-assignment": "off",
+    "linebreak-style": [2, "windows"]
   }
 }
