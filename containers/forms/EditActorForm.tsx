@@ -1,44 +1,73 @@
 /* eslint react/prop-types: 0 */
-import React, {ChangeEvent, useCallback, useEffect, useRef, useState} from 'react';
-import {Button, Card, Container, Grid, makeStyles, Typography} from '@material-ui/core';
+import React, {
+  ChangeEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
+import {
+  Button,
+  Card,
+  Container,
+  Grid,
+  makeStyles,
+  Typography,
+} from '@material-ui/core';
 import TextField from 'components/form/TextField';
 import ClassicButton from 'components/buttons/ClassicButton';
-import {withApollo} from 'hoc/withApollo';
-import {useRouter, withRouter} from 'next/router';
-import {useDropArea} from 'react-use';
+import { withApollo } from 'hoc/withApollo';
+import { useRouter, withRouter } from 'next/router';
+import { useDropArea } from 'react-use';
 import withDndProvider from '../../hoc/withDnDProvider';
-import {gql, useMutation, useQuery} from '@apollo/client';
+import { gql, useMutation, useQuery } from '@apollo/client';
 import graphqlTag from 'graphql-tag';
-import FormController, {RenderCallback} from 'components/controllers/FormController';
+import FormController, {
+  RenderCallback,
+} from 'components/controllers/FormController';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Icon from '@material-ui/core/Icon';
 import Checkbox from '@material-ui/core/Checkbox';
-import GooglePlacesAutocomplete, {geocodeByAddress, getLatLng} from 'react-google-places-autocomplete';
+import GooglePlacesAutocomplete, {
+  geocodeByAddress,
+  getLatLng,
+} from 'react-google-places-autocomplete';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import Collapse from '@material-ui/core/Collapse';
-import {useCookies} from 'react-cookie';
-import {useSnackbar} from 'notistack';
-import {ValidationRules, ValidationRuleType} from '../../components/controllers/FormController';
+import { useCookies } from 'react-cookie';
+import { useSnackbar } from 'notistack';
+import {
+  ValidationRules,
+  ValidationRuleType,
+} from '../../components/controllers/FormController';
 import useCookieRedirection from '../../hooks/useCookieRedirection';
 import DeleteIcon from '@material-ui/icons/Delete';
 import HeightIcon from '@material-ui/icons/Height';
 
-
-import ImageCropper from 'components/ImageCropper/ImageCropper'
+import ImageCropper from 'components/ImageCropper/ImageCropper';
 import useDnDStateManager from '../../hooks/useDnDStateManager';
 import InsertPhotoIcon from '@material-ui/icons/InsertPhoto';
-import {getImageUrl} from 'utils/utils';
+import { getImageUrl } from 'utils/utils';
 import useImageReader from '../../hooks/useImageReader';
-import {useDrag, useDrop} from "react-dnd";
-
+import { useDrag, useDrop } from 'react-dnd';
 
 const EDIT_ACTOR = gql`
-  mutation editActor($formValues: ActorInfos, $actorId: Int!,$pictures:[InputPictureType],$description:String!) {
-    editActor(actorInfos: $formValues, actorId: $actorId,pictures: $pictures,description:$description) {
+  mutation editActor(
+    $formValues: ActorInfos
+    $actorId: Int!
+    $pictures: [InputPictureType]
+    $description: String!
+  ) {
+    editActor(
+      actorInfos: $formValues
+      actorId: $actorId
+      pictures: $pictures
+      description: $description
+    ) {
       id
       name
       email
@@ -90,30 +119,30 @@ const GET_ACTOR = gql`
       website
       description
       lat
-      lng,
-      pictures{
-        id,
-          label,
-          originalPicturePath,
-          originalPictureFilename,
-          croppedPicturePath,
-          croppedPictureFilename,
-          croppedX,
-          croppedY,
-          croppedZoom,
-          croppedRotation,
-          position
-      },
-        categories{
-          id,
-            label,
-            parentCategory{
-                label
-            },
-            subCategories{
-                label
-            }
-        },
+      lng
+      pictures {
+        id
+        label
+        originalPicturePath
+        originalPictureFilename
+        croppedPicturePath
+        croppedPictureFilename
+        croppedX
+        croppedY
+        croppedZoom
+        croppedRotation
+        position
+      }
+      categories {
+        id
+        label
+        parentCategory {
+          label
+        }
+        subCategories {
+          label
+        }
+      }
     }
   }
 `;
@@ -151,32 +180,38 @@ const useStyles = makeStyles((theme) => ({
       },
     },
   },
-  image:{
-    width:'100%',
-    height:'100%'
+  image: {
+    width: '100%',
+    height: '100%',
   },
-  dropZone:{
-    padding : "1em",
-    margin :"2em"
-  }
+  dropZone: {
+    padding: '1em',
+    margin: '2em',
+  },
 }));
 
 type FormItemProps = {
-  label: string
-  inputName: string
-  formChangeHandler: (event: ChangeEvent) => void
-  value: string
-  required: boolean
-  errorBool: boolean
-  errorText: string
-}
+  label: string;
+  inputName: string;
+  formChangeHandler: (event: ChangeEvent) => void;
+  value: string;
+  required: boolean;
+  errorBool: boolean;
+  errorText: string;
+};
 
 const FormItem = (props: FormItemProps) => {
   const styles = useStyles();
 
-
   const {
-    label, inputName, formChangeHandler, value, required, errorBool, errorText,
+    label,
+    inputName,
+
+    formChangeHandler,
+    value,
+    required,
+    errorBool,
+    errorText,
   } = props;
   return (
     <TextField
@@ -198,7 +233,13 @@ const FormItem = (props: FormItemProps) => {
 const FormItemTextareaAutosize = (props: FormItemProps) => {
   const styles = useStyles();
   const {
-    label, inputName, formChangeHandler, value, required, errorBool, errorText,
+    label,
+    inputName,
+    formChangeHandler,
+    value,
+    required,
+    errorBool,
+    errorText,
   } = props;
   return (
     <TextField
@@ -224,21 +265,31 @@ const EditActorForm = (props) => {
   const styles = useStyles();
 
   const [checked, setChecked] = useState([0]);
-  const { data, loading, error } = useQuery(GET_CATEGORIES, { fetchPolicy: 'network-only' });
+  const { data, loading, error } = useQuery(GET_CATEGORIES, {
+    fetchPolicy: 'network-only',
+  });
   const [open, setOpen] = React.useState([false]);
   const [cookies, setCookie, removeCookie] = useCookies();
   const router = useRouter();
-  const { loading: actorLoading, error: actorError, data: actorData } = useQuery(GET_ACTOR, {
+  const {
+    loading: actorLoading,
+    error: actorError,
+    data: actorData,
+  } = useQuery(GET_ACTOR, {
     variables: { id: props.id.toString() },
   });
 
   if (actorLoading) return null;
   if (actorError) return `Error! ${actorError.message}`;
   var imgInit = [];
-    if(actorData && actorData.actor.pictures && actorData.actor.pictures.length > 0 ) {
-
-      imgInit = actorData.actor.pictures.sort((a, b) => a.position > b.position ? 1 : -1).map((picture, index) => {
-
+  if (
+    actorData &&
+    actorData.actor.pictures &&
+    actorData.actor.pictures.length > 0
+  ) {
+    imgInit = actorData.actor.pictures
+      .sort((a, b) => (a.position > b.position ? 1 : -1))
+      .map((picture, index) => {
         return {
           id: index,
           file: null,
@@ -246,73 +297,67 @@ const EditActorForm = (props) => {
           croppedImg: {
             crop: {
               x: picture.croppedX,
-              y: picture.croppedY
+              y: picture.croppedY,
             },
             rotation: picture.croppedRotation,
             zoom: picture.croppedZoom,
             file: null,
             img: getImageUrl(picture.croppedPicturePath),
-            modified: false
+            modified: false,
           },
           activated: true,
           deleted: false,
           newpic: false,
           serverId: picture.id,
-          position:picture.position,
+          position: picture.position,
         };
       });
-    }
+  }
 
-
-
-  const ImagesDropZone = ({onDropHandler}) => {
-
+  const ImagesDropZone = ({ onDropHandler }) => {
     const [bond, state] = useDropArea({
-      onFiles: files => onDropHandler(files)
+      onFiles: (files) => onDropHandler(files),
     });
 
     const uploadInputRef = useRef(null);
 
     // @ts-ignore
 
-
     return (
-        <Card className={styles.dropZone}>
-          <Grid container alignItems="center">
-            <Grid item xs={12} >
-              <div {...bond}>
-                <div >
-                  <InsertPhotoIcon />
-                </div>
-                <div >
-                  Déposer les images ici au format jpg.
-                </div>
-              </div>
-              <p/>
-              <input
-                  ref={uploadInputRef}
-                  type="file"
-                  accept="image/*"
-                  style={{ display: "none" }}
-                  // @ts-ignore
-                  onChange={(e) => onDropHandler([e.target.files[0]])}
-              />
-              <p/>
-              <Button
-                  // @ts-ignore
-                  onClick={() => uploadInputRef.current && uploadInputRef.current.click()}
-                  variant="contained"
-              >
-                <p/>
-                Ou cliquer ici pour téléverser une image
-              </Button>
-              <p/>
+      <Card className={styles.dropZone}>
+        <Grid container alignItems="center">
+          <Grid item xs={12}>
+            <div {...bond}>
               <div>
-                La première image sera aussi l'image de couverture .
+                <InsertPhotoIcon />
               </div>
-            </Grid>
+              <div>Déposer les images ici au format jpg.</div>
+            </div>
+            <p />
+            <input
+              ref={uploadInputRef}
+              type="file"
+              accept="image/*"
+              style={{ display: 'none' }}
+              // @ts-ignore
+              onChange={(e) => onDropHandler([e.target.files[0]])}
+            />
+            <p />
+            <Button
+              // @ts-ignore
+              onClick={() =>
+                uploadInputRef.current && uploadInputRef.current.click()
+              }
+              variant="contained"
+            >
+              <p />
+              Ou cliquer ici pour téléverser une image
+            </Button>
+            <p />
+            <div>La première image sera aussi l'image de couverture .</div>
           </Grid>
-        </Card>
+        </Grid>
+      </Card>
     );
   };
   const handleToggle = (value: number, index: number) => () => {
@@ -340,67 +385,81 @@ const EditActorForm = (props) => {
       rule: ValidationRuleType.only && ValidationRuleType.maxLength,
       //    type: 'number',
       maxLimit: 10,
-    }
+    },
   };
   const ItemTypes = {
-    PIC: "pic"
+    PIC: 'pic',
   };
 
-  const ImagesDisplay = ({cards,moveCard,findCard,updateActiveIndicator,updateDeletedIndicator,updateKeyIndicator}) => {
-    // console.log('cards');
-    // console.log(cards);
-    // console.log('--cards--');
+  const ImagesDisplay = ({
+    cards,
+    moveCard,
+    findCard,
+    updateActiveIndicator,
+    updateDeletedIndicator,
+    updateKeyIndicator,
+  }) => {
     return (
-        <Grid container alignItems="center"
-            // justify='center'
-              spacing={3}>
-              {
-                cards.map((file) => (
-                    <ImagePrev
-                        id={file.id}
-                        key={`image${file.id}`}
-                        originalImg = {file.img}
-                        croppedImg = {file.croppedImg}
-                        moveCard={moveCard}
-                        findCard={findCard}
-                        deletedIconClickHandler={updateDeletedIndicator}
-                        updateKeyIndicator={updateKeyIndicator}
-                        deleted = {file.deleted}
-                        file={file}
-                    />
-
-                ))
-              }
-        </Grid>
+      <Grid
+        container
+        alignItems="center"
+        // justify='center'
+        spacing={3}
+      >
+        {cards.map((file) => (
+          <ImagePrev
+            id={file.id}
+            key={`image${file.id}`}
+            originalImg={file.img}
+            croppedImg={file.croppedImg}
+            moveCard={moveCard}
+            findCard={findCard}
+            deletedIconClickHandler={updateDeletedIndicator}
+            updateKeyIndicator={updateKeyIndicator}
+            deleted={file.deleted}
+            file={file}
+          />
+        ))}
+      </Grid>
     );
-
   };
 
-  const ImagePrev = ({file,originalImg,croppedImg,moveCard,findCard,id,deletedIconClickHandler,deleted,updateKeyIndicator}) => {
-
+  const ImagePrev = ({
+    file,
+    originalImg,
+    croppedImg,
+    moveCard,
+    findCard,
+    id,
+    deletedIconClickHandler,
+    deleted,
+    updateKeyIndicator,
+  }) => {
     const originalIndex = findCard(id).index;
 
-      const [{ isDragging }, drag] = useDrag({
-          item: { type: ItemTypes.PIC, id, originalIndex },
-          collect: monitor => ({
-              isDragging: monitor.isDragging()
-          })
-      });
+    const [{ isDragging }, drag] = useDrag({
+      item: { type: ItemTypes.PIC, id, originalIndex },
+      collect: (monitor) => ({
+        isDragging: monitor.isDragging(),
+      }),
+    });
 
-    {/* @ts-ignore */}
+    {
+      /* @ts-ignore */
+    }
     const [, drop] = useDrop({
-          accept: ItemTypes.PIC,
-          canDrop: () => false,
-    // @ts-ignore
-          hover({ id: draggedId }) {
-              if (draggedId !== id) {
-                  const { index: overIndex } = findCard(id);
-                  moveCard(draggedId, overIndex);
-              }
-          }
-      });
+      accept: ItemTypes.PIC,
+      canDrop: () => false,
+      // @ts-ignore
+      hover({ id: draggedId }) {
+        if (draggedId !== id) {
+          const { index: overIndex } = findCard(id);
+          moveCard(draggedId, overIndex);
+        }
+      },
+    });
 
-    const opacity =  1 ;
+    const opacity = 1;
 
     //gestion de la modal du cropper
     const [modalOpened, setOpenedInd] = useState(false);
@@ -408,35 +467,40 @@ const EditActorForm = (props) => {
       setOpenedInd(true);
     };
 
-
     return (
-        <Grid item xs={3} >
-        <div className='card'  ref={node => drag(drop(node))}  style={{ opacity}} >
+      <Grid item xs={3}>
+        <div
+          className="card"
+          ref={(node) => drag(drop(node))}
+          style={{ opacity }}
+        >
           <Card>
-            <img  src={croppedImg.img} className={styles.image} />
+            <img src={croppedImg.img} className={styles.image} />
           </Card>
           <Card>
             <Grid container spacing={3}>
-               <Grid item xs={3}>
-                  <HeightIcon  onClick={() => openModal()}/>
+              <Grid item xs={3}>
+                <HeightIcon onClick={() => openModal()} />
               </Grid>
               <Grid item xs={3}>
-                  <DeleteIcon color={deleted? 'primary' : 'action' } onClick={() => deletedIconClickHandler(id)}/>
+                <DeleteIcon
+                  color={deleted ? 'primary' : 'action'}
+                  onClick={() => deletedIconClickHandler(id)}
+                />
               </Grid>
             </Grid>
           </Card>
           <ImageCropper
-              updateKeyIndicator={updateKeyIndicator}
-              id={id}
-              croppedImg = {file.croppedImg}
-              src={originalImg}
-              open={modalOpened}
-              onClose={() => setOpenedInd(false) }
+            updateKeyIndicator={updateKeyIndicator}
+            id={id}
+            croppedImg={file.croppedImg}
+            src={originalImg}
+            open={modalOpened}
+            onClose={() => setOpenedInd(false)}
           />
         </div>
-        </Grid>
+      </Grid>
     );
-
   };
   const Form: RenderCallback = ({
     formChangeHandler,
@@ -444,23 +508,25 @@ const EditActorForm = (props) => {
     validationResult,
   }) => {
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-    const [edit, { data: editData, loading: editLoading, error: editError }] = useMutation(EDIT_ACTOR);
+    const [
+      edit,
+      { data: editData, loading: editLoading, error: editError },
+    ] = useMutation(EDIT_ACTOR);
 
-    const [setImagesList, loading, result,imagesListState] = useImageReader();
-    const editorRef = useRef()
-    const [ editorLoaded, setEditorLoaded ] = useState( false )
+    const [setImagesList, loading, result, imagesListState] = useImageReader();
+    const editorRef = useRef();
+    const [editorLoaded, setEditorLoaded] = useState(false);
     // @ts-ignore
-    const { CKEditor, ClassicEditor } = editorRef.current || {}
+    const { CKEditor, ClassicEditor } = editorRef.current || {};
 
-    useEffect( () => {
+    useEffect(() => {
       // @ts-ignore
       editorRef.current = {
-        CKEditor: require( '@ckeditor/ckeditor5-react' ).CKEditor,
-        ClassicEditor: require( '@ckeditor/ckeditor5-build-classic' )
-
-      }
-      setEditorLoaded( true )
-    }, [] )
+        CKEditor: require('@ckeditor/ckeditor5-react').CKEditor,
+        ClassicEditor: require('@ckeditor/ckeditor5-build-classic'),
+      };
+      setEditorLoaded(true);
+    }, []);
 
     const [descriptionEditor, setDescriptionEditor] = useState();
     const {
@@ -471,57 +537,54 @@ const EditActorForm = (props) => {
       updateDeletedIndicator,
       initState,
       addValues,
-      updateKeyIndicator
+      updateKeyIndicator,
     } = useDnDStateManager(imgInit);
 
-
-
     useEffect(() => {
-      if(result)
-        addValues(result);
+      if (result) addValues(result);
       // @ts-ignore
-    },result)
+    }, result);
 
-    const onDropHandler = useCallback((files) => {
-      // @ts-ignore
-      setImagesList(files);
-    },[setImagesList]);
-
+    const onDropHandler = useCallback(
+      (files) => {
+        // @ts-ignore
+        setImagesList(files);
+      },
+      [setImagesList],
+    );
 
     const submitHandler = useCallback(() => {
-      var files ;
-// @ts-ignore
-      if(objectsList)
-        files = objectsList.map((object) =>{
+      var files;
+      // @ts-ignore
+      if (objectsList)
+        files = objectsList.map((object) => {
           // return object.file
           return {
-            id : object.serverId,
-            newpic : object.newpic,
-            deleted : object.deleted,
-            file : {
-              originalPicture:object.file,
-              croppedPicture:object.croppedImg.file,
-              croppedPictureModified : object.croppedImg.modified,
-              croppedX:object.croppedImg.crop.x,
-              croppedY:object.croppedImg.crop.y,
-              croppedZoom:object.croppedImg.zoom,
-              croppedRotation:object.croppedImg.rotation
-            }
-          }
+            id: object.serverId,
+            newpic: object.newpic,
+            deleted: object.deleted,
+            file: {
+              originalPicture: object.file,
+              croppedPicture: object.croppedImg.file,
+              croppedPictureModified: object.croppedImg.modified,
+              croppedX: object.croppedImg.crop.x,
+              croppedY: object.croppedImg.crop.y,
+              croppedZoom: object.croppedImg.zoom,
+              croppedRotation: object.croppedImg.rotation,
+            },
+          };
         });
-
 
       edit({
         variables: {
           formValues,
           actorId: parseInt(actorData.actor.id),
-          pictures:files,
+          pictures: files,
           // @ts-ignore
-          description:descriptionEditor.getData()
+          description: descriptionEditor.getData(),
         },
       });
-
-    }, [formValues, edit,objectsList,descriptionEditor]);
+    }, [formValues, edit, objectsList, descriptionEditor]);
 
     useEffect(() => {
       if (!editError && !editLoading && editData) {
@@ -533,20 +596,26 @@ const EditActorForm = (props) => {
     }, [editLoading, editError]);
 
     const getObjectLongName = (results, name) => {
-      if (!results || !results[0] || !results[0].address_components) { return (''); }
-      const object = results[0].address_components.find((element) => element.types.find((type) => type == name) != undefined);
-      if (object == undefined) { return (''); }
+      if (!results || !results[0] || !results[0].address_components) {
+        return '';
+      }
+      const object = results[0].address_components.find(
+        (element) => element.types.find((type) => type == name) != undefined,
+      );
+      if (object == undefined) {
+        return '';
+      }
       return object.long_name;
     };
 
     const getAddressDetails = (results) => {
-      formValues.address = (`${getObjectLongName(results, 'street_number')} ${getObjectLongName(results, 'route')}`).trim();
+      formValues.address = `${getObjectLongName(
+        results,
+        'street_number',
+      )} ${getObjectLongName(results, 'route')}`.trim();
       formValues.city = getObjectLongName(results, 'locality');
       formValues.postCode = getObjectLongName(results, 'postal_code');
     };
-
-
-
 
     const [firstRender, setFirstRender] = useState(true);
 
@@ -564,11 +633,11 @@ const EditActorForm = (props) => {
       var categories = [];
       actorData.actor.categories.forEach((actorcategory) => {
         // @ts-ignore
-        categories.push(actorcategory.id)
+        categories.push(actorcategory.id);
       });
 
       // @ts-ignore
-      formValues.categories =categories;
+      formValues.categories = categories;
     };
     if (firstRender && !actorLoading && !actorError) {
       updateFormValues();
@@ -585,7 +654,9 @@ const EditActorForm = (props) => {
           formChangeHandler={formChangeHandler}
           value={formValues.name}
           required
-          errorBool={!validationResult?.global && !!validationResult?.result.name}
+          errorBool={
+            !validationResult?.global && !!validationResult?.result.name
+          }
           errorText="Nom de l'acteur requis."
         />
         <FormItem
@@ -594,7 +665,9 @@ const EditActorForm = (props) => {
           formChangeHandler={formChangeHandler}
           value={formValues.email}
           required
-          errorBool={!validationResult?.global && !!validationResult?.result.email}
+          errorBool={
+            !validationResult?.global && !!validationResult?.result.email
+          }
           errorText="Format de l'email invalide."
         />
         <FormItem
@@ -602,7 +675,9 @@ const EditActorForm = (props) => {
           inputName="phone"
           formChangeHandler={formChangeHandler}
           value={formValues.phone}
-          errorBool={!validationResult?.global && !!validationResult?.result.phone}
+          errorBool={
+            !validationResult?.global && !!validationResult?.result.phone
+          }
           required={false}
           errorText="Format du téléphone invalide. Maximum 10 chiffres."
         />
@@ -619,31 +694,41 @@ const EditActorForm = (props) => {
           Description :
         </Typography>
         <p></p>
-        { editorLoaded ? (  <CKEditor
-            editor={ ClassicEditor }
+        {editorLoaded ? (
+          <CKEditor
+            editor={ClassicEditor}
             data={formValues.description}
-            onReady={ editor => {
-              setDescriptionEditor(editor)
-            } }
-
-        />) : (
-            <div>Editor loading</div>
-        )
-        }
+            onReady={(editor) => {
+              setDescriptionEditor(editor);
+            }}
+          />
+        ) : (
+          <div>Editor loading</div>
+        )}
         <div className={styles.field}>
           <Grid className={styles.location}>
             <GooglePlacesAutocomplete
               placeholder="Taper et sélectionner la localisation *"
-              initialValue={formValues.address ? formValues.address.concat(' ').concat(formValues.postCode).concat(' ').concat(formValues.city) : formValues.city && formValues.city}
-              onSelect={({ description }) => (
+              initialValue={
+                formValues.address
+                  ? formValues.address
+                      .concat(' ')
+                      .concat(formValues.postCode)
+                      .concat(' ')
+                      .concat(formValues.city)
+                  : formValues.city && formValues.city
+              }
+              onSelect={({ description }) =>
                 geocodeByAddress(description).then((results) => {
-                  getLatLng(results[0]).then((value) => {
-                    formValues.lat = `${value.lat}`;
-                    formValues.lng = `${value.lng}`;
-                  }).catch((error) => console.error(error));
+                  getLatLng(results[0])
+                    .then((value) => {
+                      formValues.lat = `${value.lat}`;
+                      formValues.lng = `${value.lng}`;
+                    })
+                    .catch((error) => console.error(error));
                   getAddressDetails(results);
                 })
-              )}
+              }
             />
           </Grid>
         </div>
@@ -652,53 +737,67 @@ const EditActorForm = (props) => {
           Sélectionner une catégorie :
         </Typography>
         <List className={styles.field}>
-          {typeof data !== 'undefined' && data.categories && data.categories.map((category, index) => (
-            <div>
-              <ListItem key={category.id} role={undefined} dense button onClick={handleToggle(0, index)}>
-                <ListItemIcon />
-                <ListItemText primary={category.label} />
-                {open[index] ? <ExpandLess /> : <ExpandMore />}
-              </ListItem>
-              {typeof category.subCategories !== 'undefined' && category.subCategories != null && category.subCategories.map((subcategory, subIndex) => (
-                <Collapse in={open[index]} timeout="auto" unmountOnExit>
-
-                  <List component="div" disablePadding>
-                    <ListItem button>
-                      <ListItemIcon>
-                        <Checkbox
-                          edge="start"
-                          tabIndex={-1}
-                          disableRipple
-                          onChange={formChangeHandler}
-                          name="categories"
-                          value={subcategory.id}
-                            // @ts-ignore
-                          checked={ formValues && formValues.categories && formValues.categories.includes(subcategory.id)}
-                        />
-                      </ListItemIcon>
-                      <ListItemText primary={subcategory.label} />
-                    </ListItem>
-                  </List>
-                </Collapse>
-              ))}
-            </div>
-          ))}
+          {typeof data !== 'undefined' &&
+            data.categories &&
+            data.categories.map((category, index) => (
+              <div>
+                <ListItem
+                  key={category.id}
+                  role={undefined}
+                  dense
+                  button
+                  onClick={handleToggle(0, index)}
+                >
+                  <ListItemIcon />
+                  <ListItemText primary={category.label} />
+                  {open[index] ? <ExpandLess /> : <ExpandMore />}
+                </ListItem>
+                {typeof category.subCategories !== 'undefined' &&
+                  category.subCategories != null &&
+                  category.subCategories.map((subcategory, subIndex) => (
+                    <Collapse in={open[index]} timeout="auto" unmountOnExit>
+                      <List component="div" disablePadding>
+                        <ListItem button>
+                          <ListItemIcon>
+                            <Checkbox
+                              edge="start"
+                              tabIndex={-1}
+                              disableRipple
+                              onChange={formChangeHandler}
+                              name="categories"
+                              value={subcategory.id}
+                              // @ts-ignore
+                              checked={
+                                formValues &&
+                                formValues.categories &&
+                                formValues.categories.includes(subcategory.id)
+                              }
+                            />
+                          </ListItemIcon>
+                          <ListItemText primary={subcategory.label} />
+                        </ListItem>
+                      </List>
+                    </Collapse>
+                  ))}
+              </div>
+            ))}
         </List>
-            <Typography variant="body1" color="primary" >
-              <Icon/>
-              Vos images
-            </Typography>
-          <br />
-          { objectsList?
-              < ImagesDisplay
-                  cards = {objectsList}
-                  moveCard = {moveObject}
-                  findCard = {findObject}
-                  updateActiveIndicator = {updateActiveIndicator}
-                  updateDeletedIndicator = {updateDeletedIndicator}
-                  updateKeyIndicator = {updateKeyIndicator}
-              /> : null }
-          < ImagesDropZone onDropHandler={onDropHandler} />
+        <Typography variant="body1" color="primary">
+          <Icon />
+          Vos images
+        </Typography>
+        <br />
+        {objectsList ? (
+          <ImagesDisplay
+            cards={objectsList}
+            moveCard={moveObject}
+            findCard={findObject}
+            updateActiveIndicator={updateActiveIndicator}
+            updateDeletedIndicator={updateDeletedIndicator}
+            updateKeyIndicator={updateKeyIndicator}
+          />
+        ) : null}
+        <ImagesDropZone onDropHandler={onDropHandler} />
 
         <Grid item xs={12}>
           <ClassicButton
@@ -713,14 +812,10 @@ const EditActorForm = (props) => {
   };
 
   return (
-      <div>
-    <FormController
-      render={Form}
-      validationRules={validationRules}
-    />
-
-      </div>
+    <div>
+      <FormController render={Form} validationRules={validationRules} />
+    </div>
   );
 };
 
-export default  withDndProvider(withRouter(withApollo()(EditActorForm)));
+export default withDndProvider(withRouter(withApollo()(EditActorForm)));
