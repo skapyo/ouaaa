@@ -124,16 +124,16 @@ const EventCard = ({ event }) => {
                 {!event.city && <span> Adresse manquante</span>}
                 {!event.address && event.city && (
                 <span>
-                  {' '}
+                  {/* @ts-ignore */}
                   {event.city}
                 </span>
                 )}
                 {event.address && event.city && (
                 <span>
-                  {' '}
+                  {/* @ts-ignore */}
                   {event.address}
                   ,
-                  {' '}
+                  {/* @ts-ignore */}
                   {event.city}
                 </span>
                 )}

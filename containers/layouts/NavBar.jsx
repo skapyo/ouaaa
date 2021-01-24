@@ -160,7 +160,7 @@ const NavBar = () => {
 
                   {!user && (
                     <Grid item>
-                      {' '}
+                      {/* @ts-ignore */}
                       <Link href="/signin" underline="none" color="textPrimary" onClick={signinClickHandler}>
                         <PersonOutlineIcon className={styles.menuItem} />
                       </Link>
@@ -181,7 +181,7 @@ const NavBar = () => {
                         </Grid>
                         <Grid item>
                           <div>
-                            {' '}
+                            {/* @ts-ignore */}
                             {user.surname}
                           </div>
                           <div>{user.lastname}</div>
@@ -250,7 +250,7 @@ const NavBar = () => {
 
                   {!user && (
                     <Grid item>
-                      {' '}
+                      {/* @ts-ignore */}
                       <Link href="/signin" underline="none" color="textPrimary" onClick={signinClickHandler}>
                         <PersonOutlineIcon className={styles.menuItem} />
                       </Link>
@@ -271,7 +271,7 @@ const NavBar = () => {
                         </Grid>
                         <Grid item>
                           <div>
-                            {' '}
+                            {/* @ts-ignore */}
                             {user.surname}
                           </div>
                           <div>{user.lastname}</div>

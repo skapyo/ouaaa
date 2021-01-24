@@ -22,9 +22,9 @@ const FallbackEmailValidated = (props: any) => {
         <Grid container justify="center">
           <Typography variant="h6">
             Votre email
-            {' '}
+            {/* @ts-ignore */}
             {email}
-            {' '}
+            {/* @ts-ignore */}
             a bien été validé.
           </Typography>
           <Grid container justify="center">

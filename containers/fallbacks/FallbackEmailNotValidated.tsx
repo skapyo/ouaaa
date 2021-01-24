@@ -48,7 +48,7 @@ const FallbackEmailNotValidated = (props: any) => {
         && (
         <p style={{ textAlign: 'center' }}>
           Un email de validation a été envoyé à :
-          {' '}
+          {/* @ts-ignore */}
           <b>{email}</b>
         </p>
         )}
@@ -61,9 +61,9 @@ const FallbackEmailNotValidated = (props: any) => {
       <Grid container justify="center">
         <Typography variant="h6">
           Votre email
-          {' '}
+          {/* @ts-ignore */}
           {email}
-          {' '}
+          {/* @ts-ignore */}
           n&apos;est pas validé.
         </Typography>
         <Grid container justify="center">

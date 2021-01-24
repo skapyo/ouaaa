@@ -146,7 +146,7 @@ const PresentationSection = () => {
     <Container className={styles.cardInfo}>
       <Typography className={styles.inprogress}>
         <Build />
-        {' '}
+        {/* @ts-ignore */}
         Site en cours de développement.
         <Build />
         <p>Abonnez-vous à la newsletter pour suivre les avancées.</p>

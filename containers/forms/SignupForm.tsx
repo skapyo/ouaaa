@@ -127,7 +127,7 @@ const SignupForm = () => {
                 Veuillez confirmer votre compte.
                 <br />
                 Un email de validation a été envoyé à :
-                {' '}
+                {/* @ts-ignore */}
                 <b>{email}</b>
               </p>
               )}
@@ -240,7 +240,7 @@ const SignupForm = () => {
             <Grid item>
               {/* @ts-ignore */}
               Déjà inscrit ?
-              {' '}
+              {/* @ts-ignore */}
               <Link href="/signin">Me connecter</Link>
             </Grid>
           </Grid>

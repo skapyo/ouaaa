@@ -367,15 +367,15 @@ const Actor = () => {
     <AppLayout>
       <Head>
         <title>
-          {' '}
+          {/* @ts-ignore */}
           {data && data.actor.name}
-          {' '}
+          {/* @ts-ignore */}
           -
-          {' '}
+          {/* @ts-ignore */}
           {data && data.actor.city}
-          {' '}
+          {/* @ts-ignore */}
           -
-          {' '}
+          {/* @ts-ignore */}
           {data && data.actor.categories.map((category) => (category.parentCategory && `${category.parentCategory.label} : ${category.label}  `))}
 
         </title>
@@ -399,15 +399,15 @@ const Actor = () => {
                         variant="h7"
                         className={styles.cardTitleCategories}
                       >
-                        {' '}
+                        {/* @ts-ignore */}
                         {category.parentCategory
                                             && category.parentCategory.label}
-                        {' '}
+                        {/* @ts-ignore */}
                         :
-                        {' '}
+                        {/* @ts-ignore */}
                         {category
                                             && category.label}
-                        {' '}
+                        {/* @ts-ignore */}
 
                       </Typography>
                     </div>
@@ -432,16 +432,16 @@ const Actor = () => {
                         {data && !data.actor.city && <span> Adresse manquante</span>}
                         {data && !data.actor.address && data.actor.city && (
                         <span>
-                          {' '}
+                          {/* @ts-ignore */}
                           {data && data.actor.city}
                         </span>
                         )}
                         {data && data.actor.address && data.actor.city && (
                         <span>
-                          {' '}
+                          {/* @ts-ignore */}
                           {data && data.actor.address}
                           ,
-                          {' '}
+                          {/* @ts-ignore */}
                           {data && data.actor.city}
                         </span>
                         )}
@@ -476,7 +476,7 @@ const Actor = () => {
                         <a href={data && data.actor.website} target="_blank">
                           {data && data.actor.website}
                         </a>
-                        {' '}
+                        {/* @ts-ignore */}
 
                       </span>
                     </Grid>
@@ -526,7 +526,7 @@ const Actor = () => {
               </Typography>
               <Typography variant="h5" className={[styles.cardTitle, styles.align]}>
                 de
-                {' '}
+                {/* @ts-ignore */}
                 {data && data.actor.name}
               </Typography>
             </div>

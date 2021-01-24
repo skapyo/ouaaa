@@ -39,7 +39,7 @@ const PresentationSection = () => {
       </div>
       <Typography className={styles.align}>
         Notre mission : faire connaître celles et ceux qui œuvrent
-        {' '}
+        {/* @ts-ignore */}
         <br />
         pour la transition écologique, sociale et démocratique en Aunis
       </Typography>

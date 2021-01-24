@@ -42,7 +42,7 @@ const FormItem = (props: FormItemProps) => {
       <Grid item sm={3} xs={12}>
         <Typography variant="body1" color="primary" className={styles.label}>
           {label}
-          {' '}
+          {/* @ts-ignore */}
           :
         </Typography>
       </Grid>

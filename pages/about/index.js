@@ -39,7 +39,7 @@ const About = () => {
             <br />
             <Typography variant="h4">
               <a href="mailto:contact@acteursdelatransition.fr">Pour nous contacter</a>
-              {' '}
+              {/* @ts-ignore */}
             </Typography>
 
           </Container>

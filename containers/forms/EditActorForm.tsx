@@ -757,7 +757,6 @@ const EditActorForm = (props) => {
             cards={objectsList}
             moveCard={moveObject}
             findCard={findObject}
-            updateActiveIndicator={updateActiveIndicator}
             updateDeletedIndicator={updateDeletedIndicator}
             updateKeyIndicator={updateKeyIndicator}
           />

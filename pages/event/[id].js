@@ -361,14 +361,14 @@ const Event = () => {
     <AppLayout>
       <Head>
         <title>
-          {' '}
+          {/* @ts-ignore */}
           {data && data.event.label}
           -
-          {' '}
+          {/* @ts-ignore */}
           {data && data.event.city}
-          {' '}
+          {/* @ts-ignore */}
           -
-          {' '}
+          {/* @ts-ignore */}
           {data && data.event.categories.map((category) => {
             return (category.parentCategory && `${category.parentCategory.label} : ${category.label}  `);
           })}
@@ -393,15 +393,15 @@ const Event = () => {
                             variant="h7"
                             className={styles.cardTitleCategories}
                           >
-                            {' '}
+                            {/* @ts-ignore */}
                             {category.parentCategory
                                                 && category.parentCategory.label}
-                            {' '}
+                            {/* @ts-ignore */}
                             :
-                                                {' '}
+                                                {/* @ts-ignore */}
                             {category
                                                 && category.label}
-                            {' '}
+                            {/* @ts-ignore */}
 
                           </Typography>
                       </div>
@@ -426,16 +426,16 @@ const Event = () => {
                             {data && !data.event.city && <span> Adresse manquante</span>}
                             {data && !data.event.address && data.event.city && (
                               <span>
-                                    {' '}
+                                    {/* @ts-ignore */}
                                     {data && data.event.city}
                                   </span>
                               )}
                             {data && data.event.address && data.event.city && (
                               <span>
-                                    {' '}
+                                    {/* @ts-ignore */}
                                     {data && data.event.address}
                                     ,
-                                    {' '}
+                                    {/* @ts-ignore */}
                                     {data.event.city}
                                   </span>
                               )}

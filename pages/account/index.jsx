@@ -34,7 +34,7 @@ const AccountPage = () => {
             Mes informations personnelles
           </Typography>
           Si vous êtes acteur, éditer les informations dans
-          {' '}
+          {/* @ts-ignore */}
           <Link href="/actorAdmin">Espace Acteur</Link>
 
           <UserInfosForm />
