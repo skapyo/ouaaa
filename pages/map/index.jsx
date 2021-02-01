@@ -1,10 +1,8 @@
-import React, {
-  useCallback, useEffect, useRef, useState,
-} from 'react';
-import { Grid, Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import React, {useCallback, useEffect, useRef, useState,} from 'react';
+import {Grid, Typography} from '@material-ui/core';
+import {makeStyles} from '@material-ui/core/styles';
 import gql from 'graphql-tag';
-import { useQuery } from '@apollo/client';
+import {useQuery} from '@apollo/client';
 import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded';
 import FavoriteRoundedIcon from '@material-ui/icons/FavoriteRounded';
 import List from '@material-ui/core/List';
@@ -16,9 +14,9 @@ import Checkbox from '@material-ui/core/Checkbox/Checkbox';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import Link from '../../components/Link';
-import { withApollo } from '../../hoc/withApollo';
+import {withApollo} from '../../hoc/withApollo';
 import AppLayout from '../../containers/layouts/AppLayout';
-import { getImageUrl } from '../../utils/utils';
+import {getImageUrl} from '../../utils/utils';
 
 if (typeof window !== 'undefined') {
     var L = require("leaflet");
@@ -218,6 +216,9 @@ const carto = () => {
                 label
                 icon
                 color
+            },
+            entries{
+                label
             },
             pictures{
                 id,
