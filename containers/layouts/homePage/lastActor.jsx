@@ -1,10 +1,10 @@
-import { Container, makeStyles, Typography } from '@material-ui/core';
-import React, { useEffect, useState } from 'react';
+import {Container, makeStyles, Typography} from '@material-ui/core';
+import React, {useEffect, useState} from 'react';
 import Slider from 'react-slick/lib';
-import { useQuery } from '@apollo/client';
+import {useQuery} from '@apollo/client';
 import gql from 'graphql-tag';
 import CardSliderActor from '../../../components/cards/CardSliderActor';
-import { withApollo } from '../../../hoc/withApollo';
+import {withApollo} from '../../../hoc/withApollo';
 import Link from '../../../components/Link';
 
 const useStyles = makeStyles((theme) => ({
@@ -62,6 +62,7 @@ const LastActor = () => {
             categories{
                 label
             },
+
             pictures{
                 id,
                 label,

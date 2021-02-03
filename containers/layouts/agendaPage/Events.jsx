@@ -1,6 +1,6 @@
 import EventCard from 'components/cards/EventCard';
 
-import { Container, makeStyles } from '@material-ui/core';
+import {Container, makeStyles} from '@material-ui/core';
 import Moment from 'react-moment';
 import moment from 'moment';
 
@@ -58,7 +58,7 @@ const Events = (data) => {
   const setOldDate = (date) => {
     lastDate = date;
   };
-  debugger;
+
   return (
     <Container className={classes.events}>
       <h1 className={classes.title}>ÉVÉNEMENTS À VENIR</h1>

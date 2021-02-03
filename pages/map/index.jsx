@@ -17,6 +17,8 @@ import Link from '../../components/Link';
 import {withApollo} from '../../hoc/withApollo';
 import AppLayout from '../../containers/layouts/AppLayout';
 import {getImageUrl} from '../../utils/utils';
+import Fab from '@material-ui/core/Fab';
+import Actors from 'containers/layouts/mapPage/Actors';
 
 if (typeof window !== 'undefined') {
     var L = require("leaflet");
@@ -29,6 +31,9 @@ if (typeof window !== 'undefined') {
 }
 
 const useStyles = makeStyles((theme) => ({
+  layout: {
+    backgroundColor: '#F6F6F6',
+  },
   leftTitle: {
     fontWeight: theme.typography.fontWeightBold,
     marginBottom: theme.spacing(2),
@@ -192,6 +197,16 @@ const useStyles = makeStyles((theme) => ({
   favoriteIcon: {
     color: '#AD2740',
   },
+  listButton: {
+    marginTop: '-5em',
+    zIndex: '10000',
+    color: '#fff',
+    backgroundColor: '#bf083e',
+    '&:hover': {
+      color: '#bf083e',
+      backgroundColor: '#fff',
+    },
+  },
 }));
 
 const categoriesChecked = [];
@@ -312,9 +327,16 @@ const carto = () => {
 
   const [favorite, setFavorite] = useState(false);
 
+  const [listMode, setListMode] = useState(true);
+
   const styles = useStyles();
 
   const position = [46.1085193, -0.9864794];
+
+  const switchMode = useCallback(() => {
+    setListMode(!listMode);
+  }, [listMode]);
+
 
   if (typeof window !== 'undefined') {
     L.Icon.Default.mergeOptions({
@@ -323,7 +345,7 @@ const carto = () => {
 
     return (
       <AppLayout>
-        <Grid container>
+        <Grid container className={styles.layout}>
           <Grid item xs={2}>
             <List>
               {typeof dataCategorie !== 'undefined' && dataCategorie.categories.map((category, index) => {
@@ -363,7 +385,7 @@ const carto = () => {
             </List>
           </Grid>
 
-          <Grid item xs={10}>
+          { listMode && <Grid item xs={10}>
             <Map ref={mapRef} center={position} zoom={11}>
               <TileLayer
                 attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -479,9 +501,23 @@ const carto = () => {
                   }
                 })}
               </MarkerClusterGroup>
+                
             </Map>
           </Grid>
+          }
+             { !listMode && <Grid item xs={10} justify = "center">
+           {typeof data !== 'undefined' && 
+              <Actors data={data} />
+           }
+                </Grid>
+               }
+          <Grid container justify = "center">
+          <Fab variant="extended"size="medium"  aria-label="add" className={styles.listButton} onClick={switchMode} >
+          { listMode && ( <span>Liste</span> ) }  { !listMode && ( <span>Carte</span> ) }
+                </Fab>
+          </Grid>
         </Grid>
+        
 
       </AppLayout>
     );
