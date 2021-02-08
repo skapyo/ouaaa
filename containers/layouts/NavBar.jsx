@@ -214,6 +214,11 @@ const NavBar = () => {
                           Espace
                           Acteur
                         </MenuItem>
+                        {user && user.role == "admin" && (
+                          <MenuItem button component={Link} className={styles.menuItem} href="/administration">
+                          Administration
+                          </MenuItem>
+                        )}
                         <MenuItem onClick={signoutHandler} className={styles.menuItem}>Se déconnecter</MenuItem>
                       </Menu>
 
