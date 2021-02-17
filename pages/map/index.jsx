@@ -220,8 +220,8 @@ const carto = () => {
     headerDisplay: 'static',
   });
   const GET_ACTORS = gql`
-        query actors($categories:[String]) {
-            actors(categories:$categories) 
+        query actors($entries:[String]) {
+            actors(entries:$entries) 
         {   id,
             name,
             address,
@@ -261,7 +261,7 @@ const carto = () => {
     data, loading, error, refetch,
   } = useQuery(GET_ACTORS, {
     variables: {
-      categories: categoriesChecked,
+      entries: categoriesChecked,
     },
   });
 
@@ -277,7 +277,7 @@ const carto = () => {
         categoriesChecked.splice(currentIndex, 1);
       }
       console.log('categoryChange' + categoriesChecked);
-      refetch({ categories: categoriesChecked });
+      refetch({ entries: categoriesChecked });
     },
   );
 
