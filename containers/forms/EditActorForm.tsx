@@ -46,6 +46,9 @@ import ImageCropper from 'components/ImageCropper/ImageCropper';
 import InsertPhotoIcon from '@material-ui/icons/InsertPhoto';
 import { getImageUrl } from 'utils/utils';
 import { useDrag, useDrop } from 'react-dnd';
+import TreeView from '@material-ui/lab/TreeView';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import useImageReader from '../../hooks/useImageReader';
 import useDnDStateManager from '../../hooks/useDnDStateManager';
 import useCookieRedirection from '../../hooks/useCookieRedirection';
@@ -54,6 +57,7 @@ import {
   ValidationRuleType,
 } from '../../components/controllers/FormController';
 import withDndProvider from '../../hoc/withDnDProvider';
+import StyledTreeItem from '../../components/filters/StyledTreeItem';
 
 const EDIT_ACTOR = gql`
   mutation editActor(
@@ -142,11 +146,46 @@ const GET_ACTOR = gql`
         subCategories {
           label
         }
-      }
+      },
+      entries{
+        id,
+        label,
+        parentEntry{
+            id,
+            code,
+            label
+        },
+        subEntries{
+            id,
+            code,
+            label
+        },
+        collection{
+          id,
+          code,
+          label
+        }
+    },
     }
   }
 `;
 
+const GET_COLLECTIONS = gql`
+{ collections
+  {   id,
+      label,
+      multipleSelection,
+      position
+      entries {
+          id,
+          label
+          subEntries {
+              id,
+              label
+          }
+      }
+  }
+}`;
 const useStyles = makeStyles((theme) => ({
   gridContainer: {
     marginTop: theme.spacing(5),
@@ -187,6 +226,10 @@ const useStyles = makeStyles((theme) => ({
   dropZone: {
     padding: '1em',
     margin: '2em',
+  },
+  collectionLabel: {
+    textAlign: 'center',
+    color: '#bf083e',
   },
 }));
 
@@ -245,6 +288,31 @@ const EditActorForm = (props) => {
     data: actorData,
   } = useQuery(GET_ACTOR, {
     variables: { id: props.id.toString() },
+  });
+
+  function IsTree(collection) {
+    let isTree = false;
+    if (collection.entries) {
+      collection.entries.map((entry) => {
+        if (entry.subEntries) {
+          entry.subEntries.map((subentry) => {
+            isTree = true;
+            return isTree;
+          });
+        }
+      });
+    }
+    return isTree;
+  }
+  const [dataCollections, setDataCollections] = useState({});
+  const {
+    loading: loadingCollections,
+    error: errorCollections,
+  } = useQuery(GET_COLLECTIONS, {
+    fetchPolicy: 'network-only',
+    onCompleted: (data) => {
+      setDataCollections(data);
+    },
   });
 
   if (actorLoading) return null;
@@ -605,6 +673,15 @@ const EditActorForm = (props) => {
 
       // @ts-ignore
       formValues.categories = categories;
+
+      const entries = [];
+      actorData.actor.entries.forEach((actorentry) => {
+        // @ts-ignore
+        entries.push(actorentry.id);
+      });
+
+      // @ts-ignore
+      formValues.entries = entries;
     };
     if (firstRender && !actorLoading && !actorError) {
       updateFormValues();
@@ -697,6 +774,88 @@ const EditActorForm = (props) => {
             />
           </Grid>
         </div>
+        {dataCollections.collections && dataCollections.collections.map((collection) => {
+          //    const [display, setDisplay] = useState(false);
+          return (
+            <div>
+              <Typography
+                className={styles.collectionLabel}
+              >
+                {collection.label}
+              </Typography>
+              { // display &&
+            IsTree(collection) && (
+            <TreeView
+              className={styles.root}
+              defaultCollapseIcon={<ArrowDropDownIcon />}
+              defaultExpandIcon={<ArrowRightIcon />}
+              defaultEndIcon={<div style={{ width: 24 }} />}
+            >
+
+              {collection.entries && collection.entries.map((entry) => {
+                return (
+                  <StyledTreeItem
+                    key={entry.id}
+                    nodeId={entry.id}
+                    labelText={entry.label}
+                  >
+                    {entry.subEntries && entry.subEntries.map((subEntry) => {
+                      return (
+                        <StyledTreeItem
+                          key={subEntry.id}
+                          nodeId={subEntry.id}
+                          labelText={subEntry.label}
+                          formValues={updateFormValues}
+                          categoryChange={formChangeHandler}
+                          checked={
+                            formValues
+                            && formValues.entries
+                            && formValues.entries.includes(subEntry.id)
+                          }
+                        />
+                      );
+                    })}
+                  </StyledTreeItem>
+                );
+              })}
+            </TreeView>
+            )
+}
+              { // display &&
+             !IsTree(collection) && (
+             <List>
+               {collection.entries && collection.entries.map((entry) => {
+                 return (
+                   <ListItem
+                     key={entry.id}
+                     role={undefined}
+                     dense
+                   >
+                     <ListItemText primary={entry.label} />
+                     <Checkbox
+                       edge="start"
+                       tabIndex={-1}
+                       disableRipple
+                       onChange={formChangeHandler}
+                       name="entries"
+                       value={entry.id}
+                         // @ts-ignore
+                       checked={
+                          formValues
+                          && formValues.entries
+                          && formValues.entries.includes(entry.id)
+                        }
+                       onClick={(e) => (e.stopPropagation())}
+                     />
+                   </ListItem>
+                 );
+               })}
+             </List>
+             )
+}
+            </div>
+          );
+        })}
 
         <Typography variant="body1" color="primary" className={styles.label}>
           Sélectionner une catégorie :

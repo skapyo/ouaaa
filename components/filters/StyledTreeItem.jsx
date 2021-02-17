@@ -54,24 +54,30 @@ const useTreeItemStyles = makeStyles((theme) => ({
 
 function StyledTreeItem(props) {
   const classes = useTreeItemStyles();
-  const { labelText, color, bgColor, categoryChange, ...other } = props;
+  const {
+    labelText, color, bgColor, categoryChange, checked, ...other
+  } = props;
 
   // console.log("item : " + labelText);
   return (
     <TreeItem
-      label={<div className={classes.labelRoot}>
-        <Typography variant="body2" className={classes.labelText}>
-          {labelText}
-        </Typography>
-        <Checkbox
-          edge="start"
-          tabIndex={-1}
-          disableRipple
-          name="categories"
-          value={other.nodeId}
-          onChange={categoryChange}
-          onClick={e => (e.stopPropagation())} />
-      </div>}
+      label={(
+        <div className={classes.labelRoot}>
+          <Typography variant="body2" className={classes.labelText}>
+            {labelText}
+          </Typography>
+          <Checkbox
+            edge="start"
+            tabIndex={-1}
+            disableRipple
+            name="entries"
+            value={other.nodeId}
+            onChange={categoryChange}
+            checked={checked}
+            onClick={(e) => (e.stopPropagation())}
+          />
+        </div>
+)}
       style={{
         '--tree-view-color': color,
         '--tree-view-bg-color': bgColor,
@@ -84,7 +90,8 @@ function StyledTreeItem(props) {
         group: classes.group,
         label: classes.label,
       }}
-      {...other} />
+      {...other}
+    />
   );
 }
 
@@ -93,6 +100,7 @@ StyledTreeItem.propTypes = {
   color: PropTypes.string,
   labelText: PropTypes.string.isRequired,
   categoryChange: PropTypes.func,
+  checked: PropTypes.boolean,
 };
 
 export default StyledTreeItem;

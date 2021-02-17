@@ -187,6 +187,21 @@ const Actor = () => {
                         label
                     }
                 },
+                entries{
+                    label,
+                    parentEntry{
+                        code,
+                        label
+                    },
+                    subEntries{
+                       code,
+                        label
+                    },
+                    collection{
+                      code,
+                      label
+                    }
+                },
                 events {
                     id,
                     label,
@@ -376,7 +391,7 @@ const Actor = () => {
           {/* @ts-ignore */}
           -
           {/* @ts-ignore */}
-          {data && data.actor.categories.map((category) => (category.parentCategory && `${category.parentCategory.label} : ${category.label}  `))}
+          {data && data.actor.entries.map((entry) => (entry.parentEntry && entry.parentEntry.collection && entry.parentEntry.collection.code === 'category' && `${entry.parentEntry.label} : ${entry.label}  `))}
 
         </title>
       </Head>
