@@ -9,6 +9,8 @@ import gql from 'graphql-tag';
 import { useMutation, useQuery } from '@apollo/client';
 import Place from '@material-ui/icons/Place';
 import Phone from '@material-ui/icons/Phone';
+import Gavel from '@material-ui/icons/Gavel';
+import SupervisedUserCircle from '@material-ui/icons/SupervisedUserCircle';
 import AlternateEmail from '@material-ui/icons/AlternateEmail';
 import Language from '@material-ui/icons/Language';
 import Schedule from '@material-ui/icons/Schedule';
@@ -189,18 +191,19 @@ const Actor = () => {
                 },
                 entries{
                     label,
+                    collection{
+                          code,
+                          label
+                        }
                     parentEntry{
                         code,
-                        label
+                        label,
+                        collection{
+                          code,
+                          label
+                        }
                     },
-                    subEntries{
-                       code,
-                        label
-                    },
-                    collection{
-                      code,
-                      label
-                    }
+                    
                 },
                 events {
                     id,
@@ -377,7 +380,15 @@ const Actor = () => {
       />
     );
   }
-
+  function showCategory(entries) {
+    let text = '';
+    entries.forEach((entry) => {
+      if (entry.parentEntry && entry.parentEntry.collection && entry.parentEntry.collection.code === 'category') {
+        text += `${entry.parentEntry.label} : ${entry.label}  `;
+      }
+    });
+    return text;
+  }
   return (
     <AppLayout>
       <Head>
@@ -391,7 +402,7 @@ const Actor = () => {
           {/* @ts-ignore */}
           -
           {/* @ts-ignore */}
-          {data && data.actor.entries.map((entry) => (entry.parentEntry && entry.parentEntry.collection && entry.parentEntry.collection.code === 'category' && `${entry.parentEntry.label} : ${entry.label}  `))}
+          {data && showCategory(data.actor.entries)}
 
         </title>
       </Head>
@@ -408,24 +419,24 @@ const Actor = () => {
                   <Typography variant="h5" className={styles.cardTitle}>
                     {data && data.actor.name}
                   </Typography>
-                  {data && data.actor.categories.map((category) => (
+                  {data && data.actor.entries.map((entry) => (
+                    entry.parentEntry && entry.parentEntry.collection.code === 'category' && (
                     <div>
                       <Typography
                         variant="h7"
                         className={styles.cardTitleCategories}
                       >
                         {/* @ts-ignore */}
-                        {category.parentCategory
-                                            && category.parentCategory.label}
+                        {` ${entry.parentEntry && entry.parentEntry.label} `}
                         {/* @ts-ignore */}
                         :
                         {/* @ts-ignore */}
-                        {category
-                                            && category.label}
+                        {` ${entry && entry.label}` }
                         {/* @ts-ignore */}
 
                       </Typography>
                     </div>
+                    )
                   ))}
                 </div>
                 <p>{data && Parser(data.actor.description)}</p>
@@ -460,6 +471,66 @@ const Actor = () => {
                           {data && data.actor.city}
                         </span>
                         )}
+                      </span>
+                      <div className={[styles.infoLabel]}>TERRITOIRE D'ACTION</div>
+                      <span className={[styles.infoValue]}>
+                        {data && data.actor.entries.map((entry) => (
+                          entry && entry.collection && entry.collection.code === 'actor_location_action' && (
+                          <div>
+                            <Typography
+                              variant="h7"
+                              className={styles.cardTitleCategories}
+                            >
+                              {` ${entry && entry.label}` }
+                            </Typography>
+                          </div>
+                          )
+                        ))}
+                      </span>
+                    </Grid>
+                  </Grid>
+                  <Grid container className={[styles.item]}>
+                    <Grid item xs={3} className={[styles.alignRight]}>
+                      <SupervisedUserCircle className={[styles.icon]} />
+                    </Grid>
+                    <Grid item xs={8} className={[styles.alignLeft]}>
+                      <div className={[styles.infoLabel]}>Public principal visé</div>
+                      <span className={[styles.infoValue]}>
+                        {data && data.actor.entries.map((entry) => (
+                          entry && entry.collection && entry.collection.code === 'public_target' && (
+                          <div>
+                            <Typography
+                              variant="h7"
+                              className={styles.cardTitleCategories}
+                            >
+                              {` ${entry && entry.label}` }
+                            </Typography>
+                          </div>
+                          )
+                        ))}
+                      </span>
+                    </Grid>
+                  </Grid>
+                  
+                  <Grid container className={[styles.item]}>
+                    <Grid item xs={3} className={[styles.alignRight]}>
+                      <Gavel className={[styles.icon]} />
+                    </Grid>
+                    <Grid item xs={8} className={[styles.alignLeft]}>
+                      <div className={[styles.infoLabel]}>Statut</div>
+                      <span className={[styles.infoValue]}>
+                        {data && data.actor.entries.map((entry) => (
+                          entry && entry.collection && entry.collection.code === 'actor_status' && (
+                          <div>
+                            <Typography
+                              variant="h7"
+                              className={styles.cardTitleCategories}
+                            >
+                              {` ${entry && entry.label}` }
+                            </Typography>
+                          </div>
+                          )
+                        ))}
                       </span>
                     </Grid>
                   </Grid>

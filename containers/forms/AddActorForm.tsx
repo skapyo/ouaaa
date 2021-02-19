@@ -1,38 +1,33 @@
 /* eslint react/prop-types: 0 */
-import React, {
-  ChangeEvent, useCallback, useEffect, useRef, useState,
-} from 'react';
+import { useMutation, useQuery } from '@apollo/client';
 import {
   Container, Grid, makeStyles, Typography,
 } from '@material-ui/core';
-import TextField from 'components/form/TextField';
-import ClassicButton from 'components/buttons/ClassicButton';
-import { withApollo } from 'hoc/withApollo';
-import { useRouter, withRouter } from 'next/router';
-import { useSessionDispatch, useSessionState } from 'context/session/session';
-import gql from 'graphql-tag';
-import graphqlTag from 'graphql-tag';
-import FormController, { RenderCallback } from 'components/controllers/FormController';
+import Checkbox from '@material-ui/core/Checkbox';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import Checkbox from '@material-ui/core/Checkbox';
-import GooglePlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-google-places-autocomplete';
-import { useMutation, useQuery } from '@apollo/client';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
-import Collapse from '@material-ui/core/Collapse';
-import { Redirect } from 'react-router-dom';
-import { useCookies } from 'react-cookie';
-import { useSnackbar } from 'notistack';
-import TreeView from '@material-ui/lab/TreeView';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
+import TreeView from '@material-ui/lab/TreeView';
+import ClassicButton from 'components/buttons/ClassicButton';
+import FormController, { RenderCallback } from 'components/controllers/FormController';
+import TextField from 'components/form/TextField';
+import { useSessionDispatch, useSessionState } from 'context/session/session';
+import { default as gql, default as graphqlTag } from 'graphql-tag';
+import { withApollo } from 'hoc/withApollo';
+import { useRouter, withRouter } from 'next/router';
+import { useSnackbar } from 'notistack';
+import React, {
+  ChangeEvent, useCallback, useEffect, useRef, useState,
+} from 'react';
+import { useCookies } from 'react-cookie';
+import GooglePlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-google-places-autocomplete';
+import { Redirect } from 'react-router-dom';
 import { QueryOptions, ValidationRules, ValidationRuleType } from '../../components/controllers/FormController';
-import useCookieRedirection from '../../hooks/useCookieRedirection';
-import Link from '../../components/Link';
 import StyledTreeItem from '../../components/filters/StyledTreeItem';
+import Link from '../../components/Link';
+import useCookieRedirection from '../../hooks/useCookieRedirection';
 
 const CREATE_ACTOR = gql`
   mutation createActor($formValues: ActorInfos,$userId: Int!,$description:String!) {
@@ -51,28 +46,7 @@ const CREATE_ACTOR = gql`
     }
   }
 `;
-const GET_CATEGORIES = graphqlTag`
-    { categories
-    {   id,
-        label
-        icon
-        subCategories {
-            id
-            label
-            icon
-                subCategories {
-                id
-                label
-                icon
-                  subCategories {
-                     label
-                     icon
-              }
-          }
-  }
-    }
-    }
-`;
+
 const GET_COLLECTIONS = gql`
 { collections
   {   id,
@@ -224,7 +198,6 @@ const AddActorForm = () => {
   const [checked, setChecked] = useState([0]);
   const classes = useStyles();
   const router = useRouter();
-  const { data, loading, error } = useQuery(GET_CATEGORIES, { fetchPolicy: 'network-only' });
   const { data: dataAdminActors } = useQuery(GET_ACTORS, {
     variables: {
       userId: user.id,
@@ -441,45 +414,11 @@ const AddActorForm = () => {
           </Grid>
         </div>
 
-        <Typography variant="body1" color="primary" className={styles.label}>
-          Sélectionner une catégorie :
-        </Typography>
-        <List className={styles.field}>
-          {typeof data !== 'undefined' && data.categories.map((category, index) => (
-            <div>
-              <ListItem key={category.id} role={undefined} dense button onClick={handleToggle(0, index)}>
-                <ListItemIcon />
-                <ListItemText primary={category.label} />
-                {open[index] ? <ExpandLess /> : <ExpandMore />}
-              </ListItem>
-              {typeof category.subCategories !== 'undefined' && category.subCategories != null && category.subCategories.map((subcategory, subIndex) => (
-                <Collapse in={open[index]} timeout="auto" unmountOnExit>
-
-                  <List component="div" disablePadding>
-                    <ListItem button>
-                      <ListItemIcon>
-                        <Checkbox
-                          edge="start"
-                          tabIndex={-1}
-                          disableRipple
-                          onChange={formChangeHandler}
-                          name="categories"
-                          value={subcategory.id}
-                        />
-                      </ListItemIcon>
-                      <ListItemText primary={subcategory.label} />
-                    </ListItem>
-                  </List>
-                </Collapse>
-              ))}
-            </div>
-          ))}
-        </List>
-
         {dataCollections.collections && dataCollections.collections.map((collection) => {
           //    const [display, setDisplay] = useState(false);
           return (
             <div>
+              <br />
               <Typography
                 className={classes.collectionLabel}
               >
@@ -546,7 +485,7 @@ const AddActorForm = () => {
             </div>
           );
         })}
-
+        <br />
         <div>Une fois créé, vous pourrez modifier les informations et ajouter des photos dans votre espace acteur</div>
         <p />
         <Grid item xs={12}>
@@ -574,12 +513,12 @@ const AddActorForm = () => {
     snackbarSucceedMessage: 'Acteur ajouté avec succès.',
     mutationResultControl: 'builtin',
     afterResultControlCallback: useCallback(
-      (formvalues, data, error) => {
+      (data, error) => {
         if (!error) {
           router.push(`/actor/${data.createActor.id}`);
         }
       },
-      [data, router],
+      [router],
     ),
 
     clearFormvaluesAfterControl: true,
