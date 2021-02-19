@@ -66,8 +66,8 @@ const useStyles = makeStyles((theme) => ({
 
 const LastActor = () => {
   const GET_EVENTS = gql`
-        query events {
-            events {
+        query events($limit:Int,$sort:String,$way:String) {
+            events(limit:$limit,sort:$sort,way:$way) {
                 id,
                 label,
                 short_description,
@@ -102,8 +102,11 @@ const LastActor = () => {
   const { data: eventData, loading: loadingEvent, error: errorEvent } = useQuery(
     GET_EVENTS,
     {
-
-      // fetchPolicy : "no-cache"
+      variables: {
+        limit: 4,
+        sort: 'createdAt',
+        way: 'DESC',
+      },
     },
   );
 
