@@ -55,7 +55,7 @@ const useTreeItemStyles = makeStyles((theme) => ({
 function StyledTreeItem(props) {
   const classes = useTreeItemStyles();
   const {
-    labelText, color, bgColor, categoryChange, checked, ...other
+    labelText, color, bgColor, categoryChange, checked,hideCheckBox, ...other
   } = props;
 
   // console.log("item : " + labelText);
@@ -66,6 +66,7 @@ function StyledTreeItem(props) {
           <Typography variant="body2" className={classes.labelText}>
             {labelText}
           </Typography>
+          {!hideCheckBox && (
           <Checkbox
             edge="start"
             tabIndex={-1}
@@ -76,6 +77,7 @@ function StyledTreeItem(props) {
             checked={checked}
             onClick={(e) => (e.stopPropagation())}
           />
+          )}
         </div>
 )}
       style={{
@@ -101,6 +103,7 @@ StyledTreeItem.propTypes = {
   labelText: PropTypes.string.isRequired,
   categoryChange: PropTypes.func,
   checked: PropTypes.boolean,
+  hideCheckBox : PropTypes.boolean,
 };
 
 export default StyledTreeItem;

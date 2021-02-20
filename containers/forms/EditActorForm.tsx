@@ -231,6 +231,19 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
     color: '#bf083e',
   },
+  rootTree: {
+    color: theme.palette.text.secondary,
+    '&:hover > $content': {
+      backgroundColor: theme.palette.action.hover,
+    },
+    '&:focus > $content, &$selected > $content': {
+      backgroundColor: `var(--tree-view-bg-color, ${theme.palette.grey[400]})`,
+      color: 'var(--tree-view-color)',
+    },
+    '&:focus > $content $label, &:hover > $content $label, &$selected > $content $label': {
+      backgroundColor: 'transparent',
+    },
+  },
 }));
 
 type FormItemProps = {
@@ -774,6 +787,7 @@ const EditActorForm = (props) => {
             />
           </Grid>
         </div>
+        { /* @ts-ignore */ }
         {dataCollections.collections && dataCollections.collections.map((collection) => {
           //    const [display, setDisplay] = useState(false);
           return (
@@ -786,7 +800,7 @@ const EditActorForm = (props) => {
               { // display &&
             IsTree(collection) && (
             <TreeView
-              className={styles.root}
+              className={styles.rootTree}
               defaultCollapseIcon={<ArrowDropDownIcon />}
               defaultExpandIcon={<ArrowRightIcon />}
               defaultEndIcon={<div style={{ width: 24 }} />}
@@ -794,15 +808,18 @@ const EditActorForm = (props) => {
 
               {collection.entries && collection.entries.map((entry) => {
                 return (
+                    // @ts-ignore
                   <StyledTreeItem
                     key={entry.id}
                     nodeId={entry.id}
                     labelText={entry.label}
+                    hideCheckBox
                   >
                     {entry.subEntries && entry.subEntries.map((subEntry) => {
                       return (
                         <StyledTreeItem
                           key={subEntry.id}
+                            // @ts-ignore
                           nodeId={subEntry.id}
                           labelText={subEntry.label}
                           formValues={updateFormValues}

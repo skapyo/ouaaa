@@ -4,14 +4,10 @@ import {
   Grid,
   List,
   ListItem,
-  ListItemIcon,
   ListItemText,
-  Collapse,
   Typography,
   Checkbox,
 } from '@material-ui/core';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
 
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/client';
@@ -59,7 +55,7 @@ function Filters(props) {
     if (collection.entries) {
       collection.entries.map((entry) => {
         if (entry.subEntries) {
-          entry.subEntries.map((subentry) => {
+          entry.subEntries.map(() => {
             isTree = true;
             return isTree;
           });
@@ -84,7 +80,7 @@ function Filters(props) {
   return (
     <Grid item xs={2}>
       {dataCollections.collections && dataCollections.collections.map((collection) => {
-    //    const [display, setDisplay] = useState(false);
+        //    const [display, setDisplay] = useState(false);
         return (
           <div>
             <Typography
@@ -93,7 +89,7 @@ function Filters(props) {
             >
               {collection.label}
             </Typography>
-            { // display && 
+            { // display &&
             IsTree(collection) && (
             <TreeView
               className={classes.root}
@@ -108,6 +104,7 @@ function Filters(props) {
                     key={entry.id}
                     nodeId={entry.id}
                     labelText={entry.label}
+   
                   >
                     {entry.subEntries && entry.subEntries.map((subEntry) => {
                       return (
@@ -123,32 +120,34 @@ function Filters(props) {
                 );
               })}
             </TreeView>
-            )}
-            { //display &&
+            )
+}
+            { // display &&
              !IsTree(collection) && (
-              <List>
-                {collection.entries && collection.entries.map((entry) => {
-                  return (
-                    <ListItem
-                      key={entry.id}
-                      role={undefined}
-                      dense
-                    >
-                      <ListItemText primary={entry.label} />
-                      <Checkbox
-                        edge="start"
-                        tabIndex={-1}
-                        disableRipple
-                        onChange={categoryChange}
-                        name="{categoryChange.id}"
-                        value={entry.id}
-                        onClick={(e) => (e.stopPropagation())}
-                      />
-                    </ListItem>
-                  );
-                })}
-              </List>
-            )}
+             <List>
+               {collection.entries && collection.entries.map((entry) => {
+                 return (
+                   <ListItem
+                     key={entry.id}
+                     role={undefined}
+                     dense
+                   >
+                     <ListItemText primary={entry.label} />
+                     <Checkbox
+                       edge="start"
+                       tabIndex={-1}
+                       disableRipple
+                       onChange={categoryChange}
+                       name="{categoryChange.id}"
+                       value={entry.id}
+                       onClick={(e) => (e.stopPropagation())}
+                     />
+                   </ListItem>
+                 );
+               })}
+             </List>
+             )
+}
           </div>
         );
       })}
