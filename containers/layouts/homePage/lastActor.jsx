@@ -1,10 +1,10 @@
-import {Container, makeStyles, Typography} from '@material-ui/core';
-import React, {useEffect, useState} from 'react';
+import { Container, makeStyles, Typography } from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
 import Slider from 'react-slick/lib';
-import {useQuery} from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import gql from 'graphql-tag';
 import CardSliderActor from '../../../components/cards/CardSliderActor';
-import {withApollo} from '../../../hoc/withApollo';
+import { withApollo } from '../../../hoc/withApollo';
 import Link from '../../../components/Link';
 
 const useStyles = makeStyles((theme) => ({
@@ -50,11 +50,11 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: '1em',
   },
 }));
-
 const LastActor = () => {
   const GET_ACTORS = gql`
-        { actors
-        {   id,
+  query actors($limit:Int,$sort:String,$way:String) {
+         actors(limit:$limit,sort:$sort,way:$way) {   
+            id,
             name,
             address,
             lat,
@@ -83,7 +83,9 @@ const LastActor = () => {
 
   const { data: actorData, loading: loadingActor, error: errorActor } = useQuery(GET_ACTORS, {
     variables: {
-      limit: '3',
+      limit: 4,
+      sort: 'createdAt',
+      way: 'DESC',
     },
   });
 

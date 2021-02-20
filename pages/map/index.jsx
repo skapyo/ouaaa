@@ -1,8 +1,8 @@
-import React, {useCallback, useEffect, useRef, useState,} from 'react';
-import {Grid, Typography} from '@material-ui/core';
-import {makeStyles} from '@material-ui/core/styles';
+import React, { useCallback, useEffect, useRef, useState, } from 'react';
+import { Grid, Typography } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import gql from 'graphql-tag';
-import {useQuery} from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded';
 import FavoriteRoundedIcon from '@material-ui/icons/FavoriteRounded';
 import List from '@material-ui/core/List';
@@ -14,20 +14,21 @@ import Checkbox from '@material-ui/core/Checkbox/Checkbox';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import Link from '../../components/Link';
-import {withApollo} from '../../hoc/withApollo';
+import { withApollo } from '../../hoc/withApollo';
 import AppLayout from '../../containers/layouts/AppLayout';
-import {getImageUrl} from '../../utils/utils';
+import { getImageUrl } from '../../utils/utils';
 import Fab from '@material-ui/core/Fab';
 import Actors from 'containers/layouts/mapPage/actors';
+import Filters from '../../components/filters'
 
 if (typeof window !== 'undefined') {
-    var L = require("leaflet");
-    var Map = require('react-leaflet').Map;
-    var TileLayer = require('react-leaflet').TileLayer;
-    var Marker = require('react-leaflet').Marker;
-    var Popup = require('react-leaflet').Popup;
-    var Tooltip = require('react-leaflet').Tooltip;
-    var MarkerClusterGroup =require('react-leaflet-markercluster').default;
+  var L = require("leaflet");
+  var Map = require('react-leaflet').Map;
+  var TileLayer = require('react-leaflet').TileLayer;
+  var Marker = require('react-leaflet').Marker;
+  var Popup = require('react-leaflet').Popup;
+  var Tooltip = require('react-leaflet').Tooltip;
+  var MarkerClusterGroup = require('react-leaflet-markercluster').default;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -219,8 +220,8 @@ const carto = () => {
     headerDisplay: 'static',
   });
   const GET_ACTORS = gql`
-        query actors($categories:[String]) {
-            actors(categories:$categories) 
+        query actors($entries:[String]) {
+            actors(entries:$entries) 
         {   id,
             name,
             address,
@@ -251,61 +252,19 @@ const carto = () => {
         }
         }
     `;
-  const GET_CATEGORIES = gql`
-        { categories
-        {   id,
-            label
-            icon
-            color
-            
-            subCategories {
-                id,
-                label
-                icon
-                color
-                subCategories {
-                    id,
-                    label
-                    icon
-                    color
-                    subCategories {
-                        label
-                        icon
-                    }
-                }
-            }
-        }
-        }
-    `;
 
-  const [checked, setChecked] = useState([0]);
 
-  const newChecked = [...checked];
 
-  const { data: dataCategorie, loading: loadingCategorie, error: errorCategorie } = useQuery(GET_CATEGORIES, { fetchPolicy: 'network-only' });
+
 
   const {
     data, loading, error, refetch,
   } = useQuery(GET_ACTORS, {
     variables: {
-      categories: categoriesChecked,
+      entries: categoriesChecked,
     },
   });
 
-
-  const [open, setOpen] = React.useState([false]);
-
-  const handleToggle = (value, index) => () => {
-    const currentIndex = checked.indexOf(value);
-
-    if (currentIndex === -1) {
-      newChecked.push(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
-    setChecked(newChecked);
-    open[index] = !open[index];
-  };
 
   const categoryChange = useCallback(
     (e) => {
@@ -316,7 +275,8 @@ const carto = () => {
       } else {
         categoriesChecked.splice(currentIndex, 1);
       }
-      refetch({ categories: categoriesChecked });
+      console.log('categoryChange' + categoriesChecked);
+      refetch({ entries: categoriesChecked });
     },
   );
 
@@ -345,46 +305,9 @@ const carto = () => {
     return (
       <AppLayout>
         <Grid container className={styles.layout}>
-          <Grid item xs={2}>
-            <List>
-              {typeof dataCategorie !== 'undefined' && dataCategorie.categories.map((category, index) => {
-                return (
-                  <div>
-                    <ListItem key={category.id} role={undefined} dense button onClick={handleToggle(0, index)}>
-                          <ListItemIcon />
-                          <ListItemText primary={category.label} />
-                          {open[index] ? <ExpandLess /> : <ExpandMore />}
-                        </ListItem>
-                    {typeof category.subCategories !== 'undefined' && category.subCategories != null && category.subCategories.map((subcategory, subIndex) => {
-                          return (
-                              <Collapse in={open[index]} timeout="auto" unmountOnExit>
-                                  <List component="div" disablePadding>
-                                      <ListItem button>
-                                          <ListItemIcon>
-                                              <Checkbox
-                                                  edge="start"
-                                                  tabIndex={-1}
-                                                  disableRipple
-                                                  name="categories"
-                                                  value={subcategory.id}
-                                                  onChange={categoryChange}
-                                                  />
-                                            </ListItemIcon>
-                                          <ListItemText primary={subcategory.label} />
-                                        </ListItem>
-                                    </List>
-                                </Collapse>
+          <Filters categoryChange={categoryChange} />
 
-                          );
-                        })}
-                  </div>
-                );
-              })}
-
-            </List>
-          </Grid>
-
-          { listMode && <Grid item xs={10}>
+          {listMode && <Grid item xs={10}>
             <Map ref={mapRef} center={position} zoom={11}>
               <TileLayer
                 attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -414,109 +337,109 @@ const carto = () => {
                     });
                     return (
                       <Marker
-                            key={`marker-${index}`} position={[actor.lat, actor.lng]}
-                            icon={suitcasePoint}
-                            >
-                            <Tooltip>
-                                <div className={styles.image} style={{ backgroundImage: actor.pictures.length >= 1 ? `url(${getImageUrl(actor.pictures.sort((a, b) => (a.position > b.position ? 1 : -1))[0].croppedPicturePath)})` : '' }}>
-                                    <div className={styles.categorie}>
-                                        <Typography className={styles.categorie} gutterBottom>
-                                            {actor.categories && actor.categories.length > 0 && actor.categories[0].label}
-                                          </Typography>
-                                      </div>
-                                  </div>
-                                <div className={styles.content}>
-                                    <Grid container>
-                                        <Grid item xs={10}>
-                                            <div className={styles.titleDiv}>
-                                                <Typography
-                                                variant="h6" component="h2"
-                                                className={styles.title}
-                                              >
-                                                {actor && actor.name}
-                                              </Typography>
-                                              </div>
-                                          </Grid>
+                        key={`marker-${index}`} position={[actor.lat, actor.lng]}
+                        icon={suitcasePoint}
+                      >
+                        <Tooltip>
+                          <div className={styles.image} style={{ backgroundImage: actor.pictures.length >= 1 ? `url(${getImageUrl(actor.pictures.sort((a, b) => (a.position > b.position ? 1 : -1))[0].croppedPicturePath)})` : '' }}>
+                            <div className={styles.categorie}>
+                              <Typography className={styles.categorie} gutterBottom>
+                                {actor.categories && actor.categories.length > 0 && actor.categories[0].label}
+                              </Typography>
+                            </div>
+                          </div>
+                          <div className={styles.content}>
+                            <Grid container>
+                              <Grid item xs={10}>
+                                <div className={styles.titleDiv}>
+                                  <Typography
+                                    variant="h6" component="h2"
+                                    className={styles.title}
+                                  >
+                                    {actor && actor.name}
+                                  </Typography>
+                                </div>
+                              </Grid>
 
-                                      </Grid>
+                            </Grid>
 
-                                    <Typography component="p">
-                                        {actor && actor.short_description}
-                                      </Typography>
-                                  </div>
+                            <Typography component="p">
+                              {actor && actor.short_description}
+                            </Typography>
+                          </div>
 
-                              </Tooltip>
-                            <Popup>
+                        </Tooltip>
+                        <Popup>
 
-                                <div className={styles.image} style={{ backgroundImage: actor.pictures.length >= 1 ? `url(${getImageUrl(actor.pictures.sort((a, b) => (a.position > b.position ? 1 : -1))[0].croppedPicturePath)})` : '' }}>
-                                    <div className={styles.categorie}>
-                                        <Typography className={styles.categorie} gutterBottom>
-                                            {actor.categories && actor.categories.length > 0 && actor.categories[0].label}
-                                          </Typography>
-                                      </div>
-                                  </div>
-                                <div className={styles.content}>
-                                    <Grid container>
-                                        <Grid item xs={10}>
-                                            <div className={styles.titleDiv}>
-                                                <Typography
-                                                variant="h6" component="h2"
-                                                className={styles.title}
-                                              >
-                                                {actor && actor.name}
-                                              </Typography>
-                                              </div>
-                                          </Grid>
+                          <div className={styles.image} style={{ backgroundImage: actor.pictures.length >= 1 ? `url(${getImageUrl(actor.pictures.sort((a, b) => (a.position > b.position ? 1 : -1))[0].croppedPicturePath)})` : '' }}>
+                            <div className={styles.categorie}>
+                              <Typography className={styles.categorie} gutterBottom>
+                                {actor.categories && actor.categories.length > 0 && actor.categories[0].label}
+                              </Typography>
+                            </div>
+                          </div>
+                          <div className={styles.content}>
+                            <Grid container>
+                              <Grid item xs={10}>
+                                <div className={styles.titleDiv}>
+                                  <Typography
+                                    variant="h6" component="h2"
+                                    className={styles.title}
+                                  >
+                                    {actor && actor.name}
+                                  </Typography>
+                                </div>
+                              </Grid>
 
-                                        <Grid item xs={2}>
-                                            <div
-                                                className={styles.favorite}
-                                                onClick={() => setFavorite(!favorite)}
-                                              >
-                                                {!favorite && (
-                                              <FavoriteBorderRoundedIcon
-                                                      className={styles.favoriteIcon}
-                                                    />
-                                              )}
-                                                {favorite && (
-                                              <FavoriteRoundedIcon
-                                                      className={styles.favoriteIcon}
-                                                    />
-                                              )}
-                                              </div>
-                                          </Grid>
-                                      </Grid>
+                              <Grid item xs={2}>
+                                <div
+                                  className={styles.favorite}
+                                  onClick={() => setFavorite(!favorite)}
+                                >
+                                  {!favorite && (
+                                    <FavoriteBorderRoundedIcon
+                                      className={styles.favoriteIcon}
+                                    />
+                                  )}
+                                  {favorite && (
+                                    <FavoriteRoundedIcon
+                                      className={styles.favoriteIcon}
+                                    />
+                                  )}
+                                </div>
+                              </Grid>
+                            </Grid>
 
-                                    <Typography component="p">
-                                        {actor && actor.short_description}
-                                      </Typography>
-                                  </div>
-                                <Link href={`/actor/${actor.id}`}>
-                                    <button className={styles.buttonGrid}>EN SAVOIR PLUS</button>
-                                  </Link>
+                            <Typography component="p">
+                              {actor && actor.short_description}
+                            </Typography>
+                          </div>
+                          <Link href={`/actor/${actor.id}`}>
+                            <button className={styles.buttonGrid}>EN SAVOIR PLUS</button>
+                          </Link>
 
-                              </Popup>
-                          </Marker>);
+                        </Popup>
+                      </Marker>);
                   }
                 })}
               </MarkerClusterGroup>
-                
+
             </Map>
           </Grid>
           }
-             { !listMode && <Grid item xs={10} justify = "center">
-           {typeof data !== 'undefined' && 
+          {!listMode && <Grid item xs={10} justify="center">
+            {typeof data !== 'undefined' &&
               <Actors data={data} />
-           }
-                </Grid>
-               }
-          <Grid container justify = "center">
-          <Fab variant="extended"size="medium"  aria-label="add" className={styles.listButton} onClick={switchMode} >
-          { listMode && ( <span>Liste</span> ) }  { !listMode && ( <span>Carte</span> ) }
-                </Fab>
+            }
+          </Grid>
+          }
+          <Grid container justify="center">
+            <Fab variant="extended" size="medium" aria-label="add" className={styles.listButton} onClick={switchMode} >
+              {listMode && (<span>Liste</span>)}  {!listMode && (<span>Carte</span>)}
+            </Fab>
           </Grid>
         </Grid>
-        
+
 
       </AppLayout>
     );
