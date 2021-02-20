@@ -15,8 +15,8 @@ build_image:
 
   script:
     - docker build --cpu-shares=100 --memory=1024m -t  acteurs-de-la-transition-client:recette .
-    - docker stop  acteurs-de-la-transition-recette
-    - docker rm  acteurs-de-la-transition-recette
+    - docker stop  acteurs-de-la-transition-client-recette
+    - docker rm  acteurs-de-la-transition-client-recette
     - cd /home/debian/docker/acteurs-de-la-transition-recette/
     - docker-compose up -d
    # - docker exec -it acteurs-de-la-transition-server npx sequelize --env production db:migrate
