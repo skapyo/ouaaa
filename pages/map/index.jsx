@@ -199,7 +199,7 @@ const useStyles = makeStyles((theme) => ({
     color: '#AD2740',
   },
   listButton: {
-    marginTop: '-5em',
+    marginBottom: '-4em',
     zIndex: '10000',
     color: '#fff',
     backgroundColor: '#bf083e',
@@ -305,6 +305,11 @@ const carto = () => {
     return (
       <AppLayout>
         <Grid container className={styles.layout}>
+          <Grid container justify="center">
+            <Fab variant="extended" size="medium" aria-label="add" className={styles.listButton} onClick={switchMode} >
+              {listMode && (<span>Liste</span>)}  {!listMode && (<span>Carte</span>)}
+            </Fab>
+          </Grid>
           <Filters categoryChange={categoryChange} />
 
           {listMode && <Grid item xs={10}>
@@ -433,11 +438,7 @@ const carto = () => {
             }
           </Grid>
           }
-          <Grid container justify="center">
-            <Fab variant="extended" size="medium" aria-label="add" className={styles.listButton} onClick={switchMode} >
-              {listMode && (<span>Liste</span>)}  {!listMode && (<span>Carte</span>)}
-            </Fab>
-          </Grid>
+
         </Grid>
 
 

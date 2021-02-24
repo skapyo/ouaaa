@@ -79,7 +79,7 @@ function StyledTreeItem(props) {
           />
           )}
         </div>
-)}
+      )}
       style={{
         '--tree-view-color': color,
         '--tree-view-bg-color': bgColor,
