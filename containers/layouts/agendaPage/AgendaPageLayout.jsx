@@ -1,5 +1,5 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {Grid, Typography} from '@material-ui/core';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { Grid, Typography } from '@material-ui/core';
 import { withApollo } from 'hoc/withApollo';
 import Events from 'containers/layouts/agendaPage/Events';
 import Filters from 'containers/layouts/agendaPage/Filters';
@@ -19,7 +19,7 @@ if (typeof window !== 'undefined') {
   var Marker = require('react-leaflet').Marker;
   var Popup = require('react-leaflet').Popup;
   var Tooltip = require('react-leaflet').Tooltip;
-  var MarkerClusterGroup =require('react-leaflet-markercluster').default;
+  var MarkerClusterGroup = require('react-leaflet-markercluster').default;
 }
 const useStyles = makeStyles({
   main: {
@@ -36,7 +36,7 @@ const useStyles = makeStyles({
     maxWidth: 'none',
   },
   listButton: {
-    marginTop: '-5em',
+    marginBottom: '-4em',
     zIndex: '10000',
     color: '#fff',
     backgroundColor: '#bf083e',
@@ -162,17 +162,17 @@ const AgendaPageLayout = () => {
 
   date.setHours(0, 0, 0, 0);
 
- 
+
 
   const classes = useStyles();
   const {
     data: eventData, loading, error, refetch,
   } = useQuery(
     GET_EVENTS, {
-      variables: {
-        startingDate: date.toISOString(),
-      },
+    variables: {
+      startingDate: date.toISOString(),
     },
+  },
   );
   if (typeof window !== 'undefined') {
     L.Icon.Default.mergeOptions({
@@ -181,144 +181,144 @@ const AgendaPageLayout = () => {
   }
   return (
     <Container className={classes.main}>
+      <Grid container justify="center">
+        <Fab variant="extended" size="medium" aria-label="add" className={classes.listButton} onClick={switchMode} >
+          {!listMode && (<span>Liste</span>)}  {listMode && (<span>Carte</span>)}
+        </Fab>
+      </Grid>
       <Container className={classes.layout}>
         <Filters refetch={refetch} />
 
         {listMode && eventData && eventData.events
           && <Events data={eventData} />}
-          
-          { !listMode && <Grid item xs={10}>
-            <Map ref={mapRef} center={position} zoom={11}>
-              <TileLayer
-                attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              />
-              <MarkerClusterGroup>
-                {typeof eventData !== 'undefined' && eventData.events.map((event, index) => {
-                  let icone;
-                  let color;
-                  if (event.lat != null && event.lng != null) {
-                    if (event.categories && event.categories.length > 0 && event.categories[0].icon) {
-                      icone = `/icons/${event.categories[0].icon}.svg`;
-                      color = event.categories[0].color;
-                    } else {
-                      icone = '/icons/' + 'place' + '.svg';
-                      color = 'black';
-                    }
-                    const markerHtmlStyles = 'background-color: red';
-                    const suitcasePoint = new L.Icon({
-                      iconUrl: icone,
-                      color,
-                      fillColor: color,
-                      iconAnchor: [13, 34], // point of the icon which will correspond to marker's location
-                      iconSize: [25],
-                      popupAnchor: [1, -25],
-                      html: `<span style="${markerHtmlStyles}" />`,
-                    });
-                    return (
-                      <Marker
-                            key={`marker-${index}`} position={[event.lat, event.lng]}
-                            icon={suitcasePoint}
-                            >
-                            <Tooltip>
-                                <div className={classes.image} style={{ backgroundImage: event.pictures.length >= 1 ? `url(${getImageUrl(event.pictures.sort((a, b) => (a.position > b.position ? 1 : -1))[0].croppedPicturePath)})` : '' }}>
-                                    <div className={classes.categorie}>
-                                        <Typography className={classes.categorie} gutterBottom>
-                                            {event.categories && event.categories.length > 0 && event.categories[0].label}
-                                          </Typography>
-                                      </div>
-                                  </div>
-                                <div className={classes.content}>
-                                    <Grid container>
-                                        <Grid item xs={10}>
-                                            <div className={classes.titleDiv}>
-                                                <Typography
-                                                variant="h6" component="h2"
-                                                className={classes.title}
-                                              >
-                                                {event && event.label}
-                                              </Typography>
-                                              </div>
-                                          </Grid>
 
-                                      </Grid>
-
-                                    <Typography component="p">
-                                        {event && event.short_description}
-                                      </Typography>
-                                  </div>
-
-                              </Tooltip>
-                            <Popup>
-
-                                <div className={classes.image} style={{ backgroundImage: event.pictures.length >= 1 ? `url(${getImageUrl(event.pictures.sort((a, b) => (a.position > b.position ? 1 : -1))[0].croppedPicturePath)})` : '' }}>
-                                    <div className={classes.categorie}>
-                                        <Typography className={classes.categorie} gutterBottom>
-                                            {event.categories && event.categories.length > 0 && event.categories[0].label}
-                                          </Typography>
-                                      </div>
-                                  </div>
-                                <div className={classes.content}>
-                                    <Grid container>
-                                        <Grid item xs={10}>
-                                            <div className={classes.titleDiv}>
-                                                <Typography
-                                                variant="h6" component="h2"
-                                                className={classes.title}
-                                              >
-                                                {event && event.label}
-                                              </Typography>
-                                              </div>
-                                          </Grid>
-
-                                        <Grid item xs={2}>
-                                            <div
-                                                className={classes.favorite}
-                                                onClick={() => setFavorite(!favorite)}
-                                              >
-                                                {!favorite && (
-                                              <FavoriteBorderRoundedIcon
-                                                      className={classes.favoriteIcon}
-                                                    />
-                                              )}
-                                                {favorite && (
-                                              <FavoriteRoundedIcon
-                                                      className={classes.favoriteIcon}
-                                                    />
-                                              )}
-                                              </div>
-                                          </Grid>
-                                      </Grid>
-
-                                    <Typography component="p">
-                                        {event && event.short_description}
-                                      </Typography>
-                                  </div>
-                                <Link href={`/event/${event.id}`}>
-                                    <button className={classes.buttonGrid}>EN SAVOIR PLUS</button>
-                                  </Link>
-
-                              </Popup>
-                          </Marker>);
+        {!listMode && <Grid item xs={10}>
+          <Map ref={mapRef} center={position} zoom={11}>
+            <TileLayer
+              attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+            <MarkerClusterGroup>
+              {typeof eventData !== 'undefined' && eventData.events.map((event, index) => {
+                let icone;
+                let color;
+                if (event.lat != null && event.lng != null) {
+                  if (event.categories && event.categories.length > 0 && event.categories[0].icon) {
+                    icone = `/icons/${event.categories[0].icon}.svg`;
+                    color = event.categories[0].color;
+                  } else {
+                    icone = '/icons/' + 'place' + '.svg';
+                    color = 'black';
                   }
-                })}
-              </MarkerClusterGroup>
-                
-            </Map>
-          </Grid>
-          }
-           
+                  const markerHtmlStyles = 'background-color: red';
+                  const suitcasePoint = new L.Icon({
+                    iconUrl: icone,
+                    color,
+                    fillColor: color,
+                    iconAnchor: [13, 34], // point of the icon which will correspond to marker's location
+                    iconSize: [25],
+                    popupAnchor: [1, -25],
+                    html: `<span style="${markerHtmlStyles}" />`,
+                  });
+                  return (
+                    <Marker
+                      key={`marker-${index}`} position={[event.lat, event.lng]}
+                      icon={suitcasePoint}
+                    >
+                      <Tooltip>
+                        <div className={classes.image} style={{ backgroundImage: event.pictures.length >= 1 ? `url(${getImageUrl(event.pictures.sort((a, b) => (a.position > b.position ? 1 : -1))[0].croppedPicturePath)})` : '' }}>
+                          <div className={classes.categorie}>
+                            <Typography className={classes.categorie} gutterBottom>
+                              {event.categories && event.categories.length > 0 && event.categories[0].label}
+                            </Typography>
+                          </div>
+                        </div>
+                        <div className={classes.content}>
+                          <Grid container>
+                            <Grid item xs={10}>
+                              <div className={classes.titleDiv}>
+                                <Typography
+                                  variant="h6" component="h2"
+                                  className={classes.title}
+                                >
+                                  {event && event.label}
+                                </Typography>
+                              </div>
+                            </Grid>
+
+                          </Grid>
+
+                          <Typography component="p">
+                            {event && event.short_description}
+                          </Typography>
+                        </div>
+
+                      </Tooltip>
+                      <Popup>
+
+                        <div className={classes.image} style={{ backgroundImage: event.pictures.length >= 1 ? `url(${getImageUrl(event.pictures.sort((a, b) => (a.position > b.position ? 1 : -1))[0].croppedPicturePath)})` : '' }}>
+                          <div className={classes.categorie}>
+                            <Typography className={classes.categorie} gutterBottom>
+                              {event.categories && event.categories.length > 0 && event.categories[0].label}
+                            </Typography>
+                          </div>
+                        </div>
+                        <div className={classes.content}>
+                          <Grid container>
+                            <Grid item xs={10}>
+                              <div className={classes.titleDiv}>
+                                <Typography
+                                  variant="h6" component="h2"
+                                  className={classes.title}
+                                >
+                                  {event && event.label}
+                                </Typography>
+                              </div>
+                            </Grid>
+
+                            <Grid item xs={2}>
+                              <div
+                                className={classes.favorite}
+                                onClick={() => setFavorite(!favorite)}
+                              >
+                                {!favorite && (
+                                  <FavoriteBorderRoundedIcon
+                                    className={classes.favoriteIcon}
+                                  />
+                                )}
+                                {favorite && (
+                                  <FavoriteRoundedIcon
+                                    className={classes.favoriteIcon}
+                                  />
+                                )}
+                              </div>
+                            </Grid>
+                          </Grid>
+
+                          <Typography component="p">
+                            {event && event.short_description}
+                          </Typography>
+                        </div>
+                        <Link href={`/event/${event.id}`}>
+                          <button className={classes.buttonGrid}>EN SAVOIR PLUS</button>
+                        </Link>
+
+                      </Popup>
+                    </Marker>);
+                }
+              })}
+            </MarkerClusterGroup>
+
+          </Map>
+        </Grid>
+        }
+
       </Container>
-      <Grid container justify = "center">
-            <Fab variant="extended"size="medium"  aria-label="add" className={classes.listButton} onClick={switchMode} >
-              { !listMode && ( <span>Liste</span> ) }  { listMode && ( <span>Carte</span> ) }
-            </Fab>
-          </Grid>
       <Newsletter />
     </Container>
   );
-  
-         
+
+
 };
 
 export default withApollo()(AgendaPageLayout);

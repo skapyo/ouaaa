@@ -97,53 +97,54 @@ function Filters(props) {
                   defaultEndIcon={<div style={{ width: 24 }} />}
                 >
 
-              {collection.entries && collection.entries.map((entry) => {
-                return (
-                  <StyledTreeItem
-                    key={entry.id}
-                    nodeId={entry.id}
-                    labelText={entry.label}
+                  {collection.entries && collection.entries.map((entry) => {
+                    return (
+                      <StyledTreeItem
+                        key={entry.id}
+                        nodeId={entry.id}
+                        labelText={entry.label}
+                        hideCheckBox
 
-                  >  {entry.subEntries && entry.subEntries.map((subEntry) => {
-                      return (
-                        <StyledTreeItem
-                          key={subEntry.id}
-                          nodeId={subEntry.id}
-                          labelText={subEntry.label}
-                          categoryChange={categoryChange}
+                      >  {entry.subEntries && entry.subEntries.map((subEntry) => {
+                        return (
+                          <StyledTreeItem
+                            key={subEntry.id}
+                            nodeId={subEntry.id}
+                            labelText={subEntry.label}
+                            categoryChange={categoryChange}
+                          />
+                        );
+                      })}
+                      </StyledTreeItem>
+                    );
+                  })}
+                </TreeView>
+              )
+            }            { //display &&
+              !IsTree(collection) && (
+                <List>
+                  {collection.entries && collection.entries.map((entry) => {
+                    return (
+                      <ListItem
+                        key={entry.id}
+                        role={undefined}
+                        dense
+                      >
+                        <ListItemText primary={entry.label} />
+                        <Checkbox
+                          edge="start"
+                          tabIndex={-1}
+                          disableRipple
+                          onChange={categoryChange}
+                          name="{categoryChange.id}"
+                          value={entry.id}
+                          onClick={(e) => (e.stopPropagation())}
                         />
-                      );
-                    })}
-                  </StyledTreeItem>
-                );
-              })}
-            </TreeView>
-            )
-}            { //display &&
-             !IsTree(collection) && (
-              <List>
-                {collection.entries && collection.entries.map((entry) => {
-                  return (
-                    <ListItem
-                      key={entry.id}
-                      role={undefined}
-                      dense
-                    >
-                      <ListItemText primary={entry.label} />
-                      <Checkbox
-                        edge="start"
-                        tabIndex={-1}
-                        disableRipple
-                        onChange={categoryChange}
-                        name="{categoryChange.id}"
-                        value={entry.id}
-                        onClick={(e) => (e.stopPropagation())}
-                      />
-                    </ListItem>
-                  );
-                })}
-              </List>
-            )}
+                      </ListItem>
+                    );
+                  })}
+                </List>
+              )}
           </div>
         );
       })}
