@@ -77,7 +77,7 @@ function StyledTreeItem(props) {
             onClick={(e) => (e.stopPropagation())}
           />
         </div>
-)}
+      )}
       style={{
         '--tree-view-color': color,
         '--tree-view-bg-color': bgColor,

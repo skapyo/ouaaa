@@ -23,7 +23,6 @@ import StyledTreeItem from './StyledTreeItem';
 
 const useStyles = makeStyles({
   root: {
-    height: 264,
     flexGrow: 1,
     maxWidth: 400,
   },
@@ -84,71 +83,71 @@ function Filters(props) {
   return (
     <Grid item xs={2}>
       {dataCollections.collections && dataCollections.collections.map((collection) => {
-    //    const [display, setDisplay] = useState(false);
+        //    const [display, setDisplay] = useState(false);
         return (
           <div>
             <Typography
               className={classes.collectionLabel}
-       //       onClick={setDisplay(!display)}
+            //       onClick={setDisplay(!display)}
             >
               {collection.label}
             </Typography>
             { // display && 
-            IsTree(collection) && (
-            <TreeView
-              className={classes.root}
-              defaultCollapseIcon={<ArrowDropDownIcon />}
-              defaultExpandIcon={<ArrowRightIcon />}
-              defaultEndIcon={<div style={{ width: 24 }} />}
-            >
+              IsTree(collection) && (
+                <TreeView
+                  className={classes.root}
+                  defaultCollapseIcon={<ArrowDropDownIcon />}
+                  defaultExpandIcon={<ArrowRightIcon />}
+                  defaultEndIcon={<div style={{ width: 24 }} />}
+                >
 
-              {collection.entries && collection.entries.map((entry) => {
-                return (
-                  <StyledTreeItem
-                    key={entry.id}
-                    nodeId={entry.id}
-                    labelText={entry.label}
-                  >
-                    {entry.subEntries && entry.subEntries.map((subEntry) => {
-                      return (
-                        <StyledTreeItem
-                          key={subEntry.id}
-                          nodeId={subEntry.id}
-                          labelText={subEntry.label}
-                          categoryChange={categoryChange}
-                        />
-                      );
-                    })}
-                  </StyledTreeItem>
-                );
-              })}
-            </TreeView>
-            )}
+                  {collection.entries && collection.entries.map((entry) => {
+                    return (
+                      <StyledTreeItem
+                        key={entry.id}
+                        nodeId={entry.id}
+                        labelText={entry.label}
+                      >
+                        {entry.subEntries && entry.subEntries.map((subEntry) => {
+                          return (
+                            <StyledTreeItem
+                              key={subEntry.id}
+                              nodeId={subEntry.id}
+                              labelText={subEntry.label}
+                              categoryChange={categoryChange}
+                            />
+                          );
+                        })}
+                      </StyledTreeItem>
+                    );
+                  })}
+                </TreeView>
+              )}
             { //display &&
-             !IsTree(collection) && (
-              <List>
-                {collection.entries && collection.entries.map((entry) => {
-                  return (
-                    <ListItem
-                      key={entry.id}
-                      role={undefined}
-                      dense
-                    >
-                      <ListItemText primary={entry.label} />
-                      <Checkbox
-                        edge="start"
-                        tabIndex={-1}
-                        disableRipple
-                        onChange={categoryChange}
-                        name="{categoryChange.id}"
-                        value={entry.id}
-                        onClick={(e) => (e.stopPropagation())}
-                      />
-                    </ListItem>
-                  );
-                })}
-              </List>
-            )}
+              !IsTree(collection) && (
+                <List>
+                  {collection.entries && collection.entries.map((entry) => {
+                    return (
+                      <ListItem
+                        key={entry.id}
+                        role={undefined}
+                        dense
+                      >
+                        <ListItemText primary={entry.label} />
+                        <Checkbox
+                          edge="start"
+                          tabIndex={-1}
+                          disableRipple
+                          onChange={categoryChange}
+                          name="{categoryChange.id}"
+                          value={entry.id}
+                          onClick={(e) => (e.stopPropagation())}
+                        />
+                      </ListItem>
+                    );
+                  })}
+                </List>
+              )}
           </div>
         );
       })}
