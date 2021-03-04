@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
+
 import PropTypes from 'prop-types';
 import { Checkbox } from '@material-ui/core';
 import TreeItem from '@material-ui/lab/TreeItem';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import ParentFilterContext from './ParentFilterContext';
 
 const useTreeItemStyles = makeStyles((theme) => ({
   root: {
@@ -55,8 +57,23 @@ const useTreeItemStyles = makeStyles((theme) => ({
 function StyledTreeItem(props) {
   const classes = useTreeItemStyles();
   const {
-    labelText, color, bgColor, categoryChange, checked, ...other
+    labelText, color, bgColor, categoryChange, handleChildCheckboxChange, checked, id, isParent, ...other
   } = props;
+
+  const context = useContext(ParentFilterContext);
+
+  const handleCheckboxChange = (event) => {
+    categoryChange(event);
+
+    const checkStatus = event.target.checked;
+    const index = parseInt(id, 10);
+
+    if (!isParent) {
+      context.handleChildCheckboxChange(checkStatus, index);
+    } else {
+      context.handleParentCheckboxChange(checkStatus);
+    }
+  };
 
   // console.log("item : " + labelText);
   return (
@@ -72,12 +89,12 @@ function StyledTreeItem(props) {
             disableRipple
             name="entries"
             value={other.nodeId}
-            onChange={categoryChange}
             checked={checked}
+            onChange={handleCheckboxChange}
             onClick={(e) => (e.stopPropagation())}
           />
         </div>
-      )}
+)}
       style={{
         '--tree-view-color': color,
         '--tree-view-bg-color': bgColor,
@@ -98,9 +115,10 @@ function StyledTreeItem(props) {
 StyledTreeItem.propTypes = {
   bgColor: PropTypes.string,
   color: PropTypes.string,
+  checked: PropTypes.boolean,
   labelText: PropTypes.string.isRequired,
   categoryChange: PropTypes.func,
-  checked: PropTypes.boolean,
+  handleChildCheckboxChange: PropTypes.func,
 };
 
 export default StyledTreeItem;
