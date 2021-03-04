@@ -24,7 +24,6 @@ import StyledTreeItem from './StyledTreeItem';
 
 const useStyles = makeStyles({
   root: {
-    height: 264,
     flexGrow: 1,
     maxWidth: 400,
   },
@@ -109,43 +108,43 @@ function ParentContainer(props) {
 
   return (
     <ParentFilterContext.Provider value={
-    {
-      checked: false,
-      handleParentCheckboxChange,
-      handleChildCheckboxChange,
+      {
+        checked: false,
+        handleParentCheckboxChange,
+        handleChildCheckboxChange,
+      }
     }
-  }
     >
       {parentCheckbox && (
-      <TreeView
-        className={classes.root}
-        defaultCollapseIcon={<ArrowDropDownIcon />}
-        defaultExpandIcon={<ArrowRightIcon />}
-        defaultEndIcon={<div style={{ width: 24 }} />}
-      >
-        <StyledTreeItem
-          key={parentCheckbox.id}
-          nodeId={parentCheckbox.id}
-          labelText={parentCheckbox.label}
-          categoryChange={categoryChange}
-          isParent
-          checked={parentCheckboxChecked}
+        <TreeView
+          className={classes.root}
+          defaultCollapseIcon={<ArrowDropDownIcon />}
+          defaultExpandIcon={<ArrowRightIcon />}
+          defaultEndIcon={<div style={{ width: 24 }} />}
         >
-          {checkboxes.map((subEntry) => {
-            return (
-              <StyledTreeItem
-                key={subEntry.id}
-                nodeId={subEntry.id}
-                id={subEntry.id}
-                labelText={subEntry.label}
-                categoryChange={categoryChange}
-                checked={subEntry.checked}
-              />
-            );
-          })}
-        </StyledTreeItem>
+          <StyledTreeItem
+            key={parentCheckbox.id}
+            nodeId={parentCheckbox.id}
+            labelText={parentCheckbox.label}
+            categoryChange={categoryChange}
+            isParent
+            checked={parentCheckboxChecked}
+          >
+            {checkboxes.map((subEntry) => {
+              return (
+                <StyledTreeItem
+                  key={subEntry.id}
+                  nodeId={subEntry.id}
+                  id={subEntry.id}
+                  labelText={subEntry.label}
+                  categoryChange={categoryChange}
+                  checked={subEntry.checked}
+                />
+              );
+            })}
+          </StyledTreeItem>
 
-      </TreeView>
+        </TreeView>
       )}
     </ParentFilterContext.Provider>
   );

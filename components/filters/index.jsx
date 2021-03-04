@@ -51,7 +51,7 @@ function Filters(props) {
     if (collection.entries) {
       collection.entries.map((entry) => {
         if (entry.subEntries) {
-          entry.subEntries.map((subentry) => {
+          entry.subEntries.map(() => {
             isTree = true;
             return isTree;
           });

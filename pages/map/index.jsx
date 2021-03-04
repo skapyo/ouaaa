@@ -265,7 +265,6 @@ const carto = () => {
     },
   });
 
-  const markers = [[51.505, -0.09]];
 
   const categoryChange = useCallback(
     (e) => {

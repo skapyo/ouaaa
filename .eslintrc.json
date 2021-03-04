@@ -22,6 +22,6 @@
   "rules": {
     "arrow-body-style": "off",
     "react/destructuring-assignment": "off",
-    "linebreak-style": [2, "windows"]
+    "linebreak-style": [0, "windows"]
   }
 }

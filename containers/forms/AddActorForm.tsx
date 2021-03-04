@@ -132,6 +132,19 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
     color: '#bf083e',
   },
+  rootTree: {
+    color: theme.palette.text.secondary,
+    '&:hover > $content': {
+      backgroundColor: theme.palette.action.hover,
+    },
+    '&:focus > $content, &$selected > $content': {
+      backgroundColor: `var(--tree-view-bg-color, ${theme.palette.grey[400]})`,
+      color: 'var(--tree-view-color)',
+    },
+    '&:focus > $content $label, &:hover > $content $label, &$selected > $content $label': {
+      backgroundColor: 'transparent',
+    },
+  },
 }));
 
 type FormItemProps = {
@@ -328,6 +341,7 @@ const AddActorForm = () => {
             { /* @ts-ignore */ }
             return (
               <Typography>
+                {/* @ts-ignore */}
                 <Link href={`/actorAdmin/actor/${actor.id}`}>
                   {actor.name}
                 </Link>
@@ -413,7 +427,7 @@ const AddActorForm = () => {
             />
           </Grid>
         </div>
-
+        { /* @ts-ignore */ }
         {dataCollections.collections && dataCollections.collections.map((collection) => {
           //    const [display, setDisplay] = useState(false);
           return (
@@ -427,7 +441,7 @@ const AddActorForm = () => {
               { // display &&
             IsTree(collection) && (
             <TreeView
-              className={classes.root}
+              className={classes.rootTree}
               defaultCollapseIcon={<ArrowDropDownIcon />}
               defaultExpandIcon={<ArrowRightIcon />}
               defaultEndIcon={<div style={{ width: 24 }} />}
@@ -435,15 +449,18 @@ const AddActorForm = () => {
 
               {collection.entries && collection.entries.map((entry) => {
                 return (
+                // @ts-ignore
                   <StyledTreeItem
                     key={entry.id}
                     nodeId={entry.id}
                     labelText={entry.label}
+                    hideCheckBox
                   >
                     {entry.subEntries && entry.subEntries.map((subEntry) => {
                       return (
                         <StyledTreeItem
                           key={subEntry.id}
+                           // @ts-ignore
                           nodeId={subEntry.id}
                           labelText={subEntry.label}
                           categoryChange={formChangeHandler}
