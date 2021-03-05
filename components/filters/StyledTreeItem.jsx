@@ -132,6 +132,8 @@ StyledTreeItem.propTypes = {
   categoryChange: PropTypes.func,
   handleChildCheckboxChange: PropTypes.func,
   hideCheckBox: PropTypes.boolean,
+  isParent: PropTypes.boolean,
+  id: PropTypes.string,
 };
 
 export default StyledTreeItem;
