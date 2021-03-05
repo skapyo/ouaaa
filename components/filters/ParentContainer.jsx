@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
+import Badge from '@material-ui/core/Badge';
 
 import TreeView from '@material-ui/lab/TreeView';
 import { makeStyles } from '@material-ui/core/styles';
@@ -36,6 +37,7 @@ function ParentContainer(props) {
   const [parentCheckbox, setParentCheckbox] = useState(null);
   const [expanded, setExpanded] = useState([]);
   const [nodesArray, setNodesArray] = useState([]);
+  const [numberChecked, setNumberChecked] = useState(0);
 
   /* update the checkboxes children */
   useEffect(() => {
@@ -77,8 +79,19 @@ function ParentContainer(props) {
     setParentCheckboxChecked(allChecked);
   };
 
+  const updateNumberChecked = () => {
+    let newNumberChecked = 0;
+    checkboxes.map((checkboxe) => {
+      if (checkboxe.checked === true) {
+        newNumberChecked += 1;
+      }
+    });
+    return newNumberChecked;
+  };
+
   useEffect(() => {
     updateParentWithChildren();
+    setNumberChecked(updateNumberChecked());
   }, [checkboxes]);
 
   const handleToggle = () => {
@@ -120,38 +133,44 @@ function ParentContainer(props) {
     }
     >
       {parentCheckbox && (
-        <TreeView
-          aria-label="controlled"
-          className={classes.root}
-          expanded={expanded}
-          onNodeToggle={handleToggle}
-          defaultCollapseIcon={<ArrowDropDownIcon />}
-          defaultExpandIcon={<ArrowRightIcon />}
-          defaultEndIcon={<div style={{ width: 24 }} />}
+        <Badge
+          badgeContent={numberChecked}
+          color="secondary"
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
         >
-          <StyledTreeItem
-            key={parentCheckbox.id}
-            nodeId={parentCheckbox.id}
-            labelText={parentCheckbox.label}
-            categoryChange={categoryChange}
-            isParent
-            checked={parentCheckboxChecked}
+          <TreeView
+            className={classes.root}
+            aria-label="controlled"
+            expanded={expanded}
+            onNodeToggle={handleToggle}
+            defaultCollapseIcon={<ArrowDropDownIcon />}
+            defaultExpandIcon={<ArrowRightIcon />}
+            defaultEndIcon={<div style={{ width: 24 }} />}
           >
-            {checkboxes.map((subEntry) => {
-              return (
-                <StyledTreeItem
-                  key={subEntry.id}
-                  nodeId={subEntry.id}
-                  id={subEntry.id}
-                  labelText={subEntry.label}
-                  categoryChange={categoryChange}
-                  checked={subEntry.checked}
-                />
-              );
-            })}
-          </StyledTreeItem>
+            <StyledTreeItem
+              key={parentCheckbox.id}
+              nodeId={parentCheckbox.id}
+              labelText={parentCheckbox.label}
+              categoryChange={categoryChange}
+              isParent
+              checked={parentCheckboxChecked}
+            >
+              {checkboxes.map((subEntry) => {
+                return (
+                  <StyledTreeItem
+                    key={subEntry.id}
+                    nodeId={subEntry.id}
+                    id={subEntry.id}
+                    labelText={subEntry.label}
+                    categoryChange={categoryChange}
+                    checked={subEntry.checked}
+                  />
+                );
+              })}
+            </StyledTreeItem>
 
-        </TreeView>
+          </TreeView>
+        </Badge>
       )}
     </ParentFilterContext.Provider>
   );
