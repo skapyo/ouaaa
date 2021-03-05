@@ -1,24 +1,10 @@
 import React, { useState, useEffect } from 'react';
 
-import {
-  Grid,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Collapse,
-  Typography,
-  Checkbox,
-} from '@material-ui/core';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
-
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 
 import TreeView from '@material-ui/lab/TreeView';
 import { makeStyles } from '@material-ui/core/styles';
-import TreeItem from '@material-ui/lab/TreeItem';
 import ParentFilterContext from './ParentFilterContext';
 import StyledTreeItem from './StyledTreeItem';
 
@@ -36,12 +22,20 @@ const useStyles = makeStyles({
 function ParentContainer(props) {
   const classes = useStyles();
   const {
-    labelText, color, bgColor, categoryChange, checked, entry, parentCategoryChange, ...other
+    labelText,
+    color,
+    bgColor,
+    categoryChange,
+    checked,
+    entry,
+    ...other
   } = props;
 
   const [parentCheckboxChecked, setParentCheckboxChecked] = useState(false);
   const [checkboxes, setCheckboxes] = useState([]);
   const [parentCheckbox, setParentCheckbox] = useState(null);
+  const [expanded, setExpanded] = useState([]);
+  const [nodesArray, setNodesArray] = useState([]);
 
   /* update the checkboxes children */
   useEffect(() => {
@@ -52,14 +46,19 @@ function ParentContainer(props) {
       checked: false,
     };
 
-    // setup children checkboxes
+    // setup children checkboxes and NodeIds
     const newCheckboxesState = [];
+    const newNodesArray = [parentCheckboxState.id];
+
     entry.subEntries.map(({ id, label }) => {
       newCheckboxesState.push({
         id, label, checked: false,
       });
+
+      newNodesArray.push(id);
     });
 
+    setNodesArray(newNodesArray);
     setParentCheckbox(parentCheckboxState);
     setCheckboxes(newCheckboxesState);
   }, []);
@@ -81,6 +80,10 @@ function ParentContainer(props) {
   useEffect(() => {
     updateParentWithChildren();
   }, [checkboxes]);
+
+  const handleToggle = () => {
+    setExpanded((oldExpanded) => (oldExpanded.length === 0 ? nodesArray : []));
+  };
 
   const handleCheckboxgroupChange = (updatedUsecaseCBState) => {
     setCheckboxes(updatedUsecaseCBState);
@@ -112,12 +115,16 @@ function ParentContainer(props) {
         checked: false,
         handleParentCheckboxChange,
         handleChildCheckboxChange,
+        handleToggle,
       }
     }
     >
       {parentCheckbox && (
         <TreeView
+          aria-label="controlled"
           className={classes.root}
+          expanded={expanded}
+          onNodeToggle={handleToggle}
           defaultCollapseIcon={<ArrowDropDownIcon />}
           defaultExpandIcon={<ArrowRightIcon />}
           defaultEndIcon={<div style={{ width: 24 }} />}

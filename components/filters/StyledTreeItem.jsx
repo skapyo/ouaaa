@@ -57,7 +57,16 @@ const useTreeItemStyles = makeStyles((theme) => ({
 function StyledTreeItem(props) {
   const classes = useTreeItemStyles();
   const {
-    labelText, color, bgColor, categoryChange, handleChildCheckboxChange, hideCheckBox, checked, id, isParent, ...other
+    labelText,
+    color,
+    bgColor,
+    categoryChange,
+    handleChildCheckboxChange,
+    hideCheckBox,
+    checked,
+    id,
+    isParent,
+    ...other
   } = props;
 
   const context = useContext(ParentFilterContext);
@@ -72,6 +81,7 @@ function StyledTreeItem(props) {
       context.handleChildCheckboxChange(checkStatus, index);
     } else {
       context.handleParentCheckboxChange(checkStatus);
+      context.handleToggle(event);
     }
   };
 
