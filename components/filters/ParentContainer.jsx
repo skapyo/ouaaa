@@ -133,10 +133,13 @@ function ParentContainer(props) {
     }
     >
       {parentCheckbox && (
+
         <Badge
           badgeContent={numberChecked}
           color="secondary"
-          anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+          showZero={false}
+          // anchorOrigin={{ vertical: 'middle', horizontal: 'left' }}
+          anchorOrigin={numberChecked ? { vertical: 'bottom', horizontal: 'left' } : undefined}
         >
           <TreeView
             className={classes.root}
@@ -155,6 +158,7 @@ function ParentContainer(props) {
               isParent
               checked={parentCheckboxChecked}
             >
+
               {checkboxes.map((subEntry) => {
                 return (
                   <StyledTreeItem
@@ -168,7 +172,6 @@ function ParentContainer(props) {
                 );
               })}
             </StyledTreeItem>
-
           </TreeView>
         </Badge>
       )}
