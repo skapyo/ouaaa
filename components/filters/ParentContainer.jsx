@@ -98,6 +98,17 @@ function ParentContainer(props) {
     setExpanded((oldExpanded) => (oldExpanded.length === 0 ? nodesArray : []));
   };
 
+  /*
+  tree will not collapse if already expanded
+  when you check the parent checkbox
+  */
+  const checkHandleToggle = () => {
+    if (expanded.length > 0) {
+      return;
+    }
+    handleToggle();
+  };
+
   const handleCheckboxgroupChange = (updatedUsecaseCBState) => {
     setCheckboxes(updatedUsecaseCBState);
   };
@@ -128,7 +139,7 @@ function ParentContainer(props) {
         checked: false,
         handleParentCheckboxChange,
         handleChildCheckboxChange,
-        handleToggle,
+        checkHandleToggle,
       }
     }
     >

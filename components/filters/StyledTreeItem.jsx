@@ -78,7 +78,7 @@ function StyledTreeItem(props) {
       context.handleChildCheckboxChange(checkStatus, index);
     } else {
       context.handleParentCheckboxChange(checkStatus);
-      context.handleToggle(event);
+      context.checkHandleToggle(event);
     }
   };
 
