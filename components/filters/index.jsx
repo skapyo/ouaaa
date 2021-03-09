@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import {
   Grid,
@@ -7,6 +7,11 @@ import {
   ListItemText,
   Typography,
   Checkbox,
+  TextField,
+  Input,
+  FormControl,
+  InputLabel,
+  FormHelperText,
 } from '@material-ui/core';
 
 import gql from 'graphql-tag';
@@ -22,6 +27,11 @@ const useStyles = makeStyles({
   collectionLabel: {
     textAlign: 'center',
     color: '#bf083e',
+  },
+  postCode: {
+    '& input': {
+      boxShadow: 'initial!important',
+    },
   },
 });
 
@@ -61,6 +71,19 @@ function Filters(props) {
     return isTree;
   }
   const [dataCollections, setDataCollections] = useState({});
+  const [errorPostCode, setErrorPostCode] = useState(false);
+  const postCodeChangeHandler = useCallback(
+    (e) => {
+      const regex = /[0-9]{5}/g;
+      if ((e.target.value).match(regex)) {
+        setErrorPostCode(false);
+      } else {
+        setErrorPostCode(true);
+      }
+    },
+    [setErrorPostCode],
+  );
+
   const {
     loading: loadingCollections,
     error: errorCollections,
@@ -74,11 +97,22 @@ function Filters(props) {
   if (errorCollections) return `Error! ${errorCollections.message}`;
 
   return (
-    <Grid item xs={2}>
+    <Grid item xs={2} alignItems="center">
+
+      <TextField
+        variant="outlined"
+        label="Code Postal"
+        name="postCode"
+        onChange={postCodeChangeHandler}
+        error={errorPostCode}
+        helperText={errorPostCode ? 'Le code postal doit être oomposé de 5 chiffres' : ''}
+      />
+
       {dataCollections.collections && dataCollections.collections.map((collection) => {
         //    const [display, setDisplay] = useState(false);
         return (
           <div>
+
             <Typography
               className={classes.collectionLabel}
        //       onClick={setDisplay(!display)}
