@@ -12,14 +12,10 @@ import {
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/client';
 import { makeStyles } from '@material-ui/core/styles';
-import TreeView from '@material-ui/lab/TreeView';
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
-import ArrowRightIcon from '@material-ui/icons/ArrowRight';
-import StyledTreeItem from './StyledTreeItem';
+import ParentContainer from './ParentContainer';
 
 const useStyles = makeStyles({
   root: {
-    height: 264,
     flexGrow: 1,
     maxWidth: 400,
   },
@@ -91,63 +87,44 @@ function Filters(props) {
             </Typography>
             { // display &&
             IsTree(collection) && (
-            <TreeView
-              className={classes.root}
-              defaultCollapseIcon={<ArrowDropDownIcon />}
-              defaultExpandIcon={<ArrowRightIcon />}
-              defaultEndIcon={<div style={{ width: 24 }} />}
-            >
 
+              collection.entries && collection.entries.map((entry) => {
+                return (
+                  <ParentContainer
+                    key={entry.id}
+                    entry={entry}
+                    subEntries={entry.subEntries}
+                    categoryChange={categoryChange}
+                  />
+                );
+              })
+            )
+            }
+
+            {!IsTree(collection) && (
+            <List>
               {collection.entries && collection.entries.map((entry) => {
                 return (
-                  <StyledTreeItem
+                  <ListItem
                     key={entry.id}
-                    nodeId={entry.id}
-                    labelText={entry.label}
-   
+                    role={undefined}
+                    dense
                   >
-                    {entry.subEntries && entry.subEntries.map((subEntry) => {
-                      return (
-                        <StyledTreeItem
-                          key={subEntry.id}
-                          nodeId={subEntry.id}
-                          labelText={subEntry.label}
-                          categoryChange={categoryChange}
-                        />
-                      );
-                    })}
-                  </StyledTreeItem>
+                    <ListItemText primary={entry.label} />
+                    <Checkbox
+                      edge="start"
+                      tabIndex={-1}
+                      disableRipple
+                      onChange={categoryChange}
+                      name="{categoryChange.id}"
+                      value={entry.id}
+                      onClick={(e) => (e.stopPropagation())}
+                    />
+                  </ListItem>
                 );
               })}
-            </TreeView>
-            )
-}
-            { // display &&
-             !IsTree(collection) && (
-             <List>
-               {collection.entries && collection.entries.map((entry) => {
-                 return (
-                   <ListItem
-                     key={entry.id}
-                     role={undefined}
-                     dense
-                   >
-                     <ListItemText primary={entry.label} />
-                     <Checkbox
-                       edge="start"
-                       tabIndex={-1}
-                       disableRipple
-                       onChange={categoryChange}
-                       name="{categoryChange.id}"
-                       value={entry.id}
-                       onClick={(e) => (e.stopPropagation())}
-                     />
-                   </ListItem>
-                 );
-               })}
-             </List>
-             )
-}
+            </List>
+            )}
           </div>
         );
       })}
