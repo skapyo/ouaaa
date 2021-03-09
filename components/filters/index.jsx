@@ -75,7 +75,7 @@ function Filters(props) {
   const postCodeChangeHandler = useCallback(
     (e) => {
       const regex = /[0-9]{5}/g;
-      if ((e.target.value).match(regex)) {
+      if (e.target.value.length === 5 && (e.target.value).match(regex)) {
         setErrorPostCode(false);
       } else {
         setErrorPostCode(true);
