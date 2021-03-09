@@ -49,6 +49,7 @@ const useTreeItemStyles = makeStyles((theme) => ({
     fontWeight: 'inherit',
     flexGrow: 1,
   },
+
 }));
 
 function StyledTreeItem(props) {
@@ -97,6 +98,7 @@ function StyledTreeItem(props) {
             disableRipple
             name="entries"
             value={other.nodeId}
+            style={{ color: '#019077' }}
             checked={checked}
             onChange={handleCheckboxChange}
             onClick={(e) => (e.stopPropagation())}
