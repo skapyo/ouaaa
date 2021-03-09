@@ -151,7 +151,6 @@ function ParentContainer(props) {
 
         <Badge
           badgeContent={numberChecked}
-          color={classes.colorBadge}
           showZero={false}
           className={classes.root}
           classes={{ badge: classes.customBadge }}
