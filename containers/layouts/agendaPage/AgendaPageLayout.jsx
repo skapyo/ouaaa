@@ -12,6 +12,7 @@ import { getImageUrl } from '../../../utils/utils';
 import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded';
 import FavoriteRoundedIcon from '@material-ui/icons/FavoriteRounded';
 import Link from '../../../components/Link';
+import Moment from "react-moment";
 if (typeof window !== 'undefined') {
   var L = require("leaflet");
   var Map = require('react-leaflet').Map;
@@ -232,11 +233,24 @@ const AgendaPageLayout = () => {
                                     <Grid container>
                                         <Grid item xs={10}>
                                             <div className={classes.titleDiv}>
+                                              <Typography
+                                                  variant="h6" component="h2"
+                                                  className={classes.title}
+                                              >
+                                                {event && event.label}
+                                              </Typography>
                                                 <Typography
                                                 variant="h6" component="h2"
                                                 className={classes.title}
                                               >
-                                                {event && event.label}
+                                                  De
+                                                  <Moment format=" HH" unix>{event.startedAt / 1000}</Moment>
+                                                  h
+                                                  <Moment format="mm " unix>{event.startedAt / 1000}</Moment>
+                                                  à
+                                                  <Moment format=" HH" unix>{event.endedAt / 1000}</Moment>
+                                                  h
+                                                  <Moment format="mm " unix>{event.endedAt / 1000}</Moment>
                                               </Typography>
                                               </div>
                                           </Grid>
