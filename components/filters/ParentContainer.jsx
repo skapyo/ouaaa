@@ -18,6 +18,10 @@ const useStyles = makeStyles({
     textAlign: 'center',
     color: '#bf083e',
   },
+  customBadge: {
+    backgroundColor: '#019077',
+    color: 'white',
+  },
 });
 
 function ParentContainer(props) {
@@ -147,9 +151,10 @@ function ParentContainer(props) {
 
         <Badge
           badgeContent={numberChecked}
-          color="secondary"
+          color={classes.colorBadge}
           showZero={false}
           className={classes.root}
+          classes={{ badge: classes.customBadge }}
           anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         >
           <TreeView
