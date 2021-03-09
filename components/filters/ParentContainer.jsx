@@ -138,8 +138,8 @@ function ParentContainer(props) {
           badgeContent={numberChecked}
           color="secondary"
           showZero={false}
-          // anchorOrigin={{ vertical: 'middle', horizontal: 'left' }}
-          anchorOrigin={numberChecked ? { vertical: 'bottom', horizontal: 'left' } : undefined}
+          className={classes.root}
+          anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         >
           <TreeView
             className={classes.root}
