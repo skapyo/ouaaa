@@ -13,6 +13,7 @@ const useStyles = makeStyles({
   root: {
     flexGrow: 1,
     maxWidth: 400,
+    width: '100%',
   },
   collectionLabel: {
     textAlign: 'center',
@@ -21,6 +22,10 @@ const useStyles = makeStyles({
   customBadge: {
     backgroundColor: '#019077',
     color: 'white',
+    right: '12px',
+  },
+  MuiBadgeRoot: {
+    width: '100%',
   },
 });
 
