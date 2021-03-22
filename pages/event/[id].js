@@ -1,12 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import AppLayout from 'containers/layouts/AppLayout';
-import {
-  Box, Container, Grid, makeStyles, RootRef, Typography,
-} from '@material-ui/core';
-import { withApollo } from 'hoc/withApollo.jsx';
-import { useRouter } from 'next/router';
+import {Box, Container, Grid, makeStyles, RootRef, Typography,} from '@material-ui/core';
+import {withApollo} from 'hoc/withApollo.jsx';
+import {useRouter} from 'next/router';
 import gql from 'graphql-tag';
-import { useMutation, useQuery } from '@apollo/client';
+import {useMutation, useQuery} from '@apollo/client';
 import Place from '@material-ui/icons/Place';
 import Schedule from '@material-ui/icons/Schedule';
 import Slider from 'react-slick/lib';
@@ -14,12 +12,12 @@ import CardSliderActor from 'components/cards/CardSliderActor';
 import FacebookIcon from '@material-ui/icons/Facebook';
 
 import Moment from 'react-moment';
-import { useCookies } from 'react-cookie';
-import { useSnackbar } from 'notistack';
+import {useCookies} from 'react-cookie';
+import {useSnackbar} from 'notistack';
 import Head from 'next/head';
 import Parser from 'html-react-parser';
-import { getImageUrl } from '../../utils/utils';
-import { useSessionState } from '../../context/session/session';
+import {getImageUrl} from '../../utils/utils';
+import {useSessionState} from '../../context/session/session';
 import Newsletter from '../../containers/layouts/Newsletter';
 
 const useStyles = makeStyles((theme) => ({
@@ -451,7 +449,7 @@ const Event = () => {
                     <Grid item xs={8} className={[styles.alignLeft]}>
                           <div className={[styles.infoLabel]}>Lien facebook</div>
                           <span className={[styles.infoValue]}>
-                              <a href={data && data.facebookUrl} targer="_blank" />
+                              <a href={data && data.event.facebookUrl} target="_blank" />
                             </span>
                     </Grid>
                     </Grid>
