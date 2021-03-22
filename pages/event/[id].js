@@ -447,9 +447,8 @@ const Event = () => {
                         <FacebookIcon className={styles.icons} fontSize="large" />
                       </Grid>
                     <Grid item xs={8} className={[styles.alignLeft]}>
-                          <div className={[styles.infoLabel]}>Lien facebook</div>
                           <span className={[styles.infoValue]}>
-                              <a href={data && data.event.facebookUrl} target="_blank" />
+                              <a href={data && data.event.facebookUrl} target="_blank" className={[styles.infoLabel]}>Lien facebook</a>
                             </span>
                     </Grid>
                     </Grid>
