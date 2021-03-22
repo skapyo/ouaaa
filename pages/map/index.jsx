@@ -18,7 +18,7 @@ import {withApollo} from '../../hoc/withApollo';
 import AppLayout from '../../containers/layouts/AppLayout';
 import {getImageUrl} from '../../utils/utils';
 import Fab from '@material-ui/core/Fab';
-import Actors from 'containers/layouts/mapPage/Actors';
+import Actors from 'containers/layouts/mapPage/actors';
 
 if (typeof window !== 'undefined') {
     var L = require("leaflet");
