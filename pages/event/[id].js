@@ -11,6 +11,7 @@ import Place from '@material-ui/icons/Place';
 import Schedule from '@material-ui/icons/Schedule';
 import Slider from 'react-slick/lib';
 import CardSliderActor from 'components/cards/CardSliderActor';
+import FacebookIcon from '@material-ui/icons/Facebook';
 
 import Moment from 'react-moment';
 import { useCookies } from 'react-cookie';
@@ -175,6 +176,7 @@ const Event = () => {
                 city,
                 startedAt,
                 endedAt,
+                facebookUrl,
                 categories{
                     label,
                     parentCategory{
@@ -442,6 +444,17 @@ const Event = () => {
                           </span>
                       </Grid>
                   </Grid>
+                  <Grid container className={[styles.item]}>
+                    <Grid item xs={3} className={[styles.alignRight]}>
+                        <FacebookIcon className={styles.icons} fontSize="large" />
+                      </Grid>
+                    <Grid item xs={8} className={[styles.alignLeft]}>
+                          <div className={[styles.infoLabel]}>Lien facebook</div>
+                          <span className={[styles.infoValue]}>
+                              <a href={data && data.facebookUrl} targer="_blank" />
+                            </span>
+                    </Grid>
+                    </Grid>
                   <Grid container className={[styles.item]}>
                     <Grid item xs={3} className={[styles.alignRight]}>
                         <Schedule className={[styles.icon]} />
