@@ -49,7 +49,6 @@ const useTreeItemStyles = makeStyles((theme) => ({
     fontWeight: 'inherit',
     flexGrow: 1,
   },
-
 }));
 
 function StyledTreeItem(props) {
@@ -83,29 +82,29 @@ function StyledTreeItem(props) {
     }
   };
 
-  // console.log("item : " + labelText);
+  //
   return (
     <TreeItem
-      label={(
+      label={
         <div className={classes.labelRoot}>
           <Typography variant="body2" className={classes.labelText}>
             {labelText}
           </Typography>
           {!hideCheckBox && (
-          <Checkbox
-            edge="start"
-            tabIndex={-1}
-            disableRipple
-            name="entries"
-            value={other.nodeId}
-            style={{ color: '#019077' }}
-            checked={checked}
-            onChange={handleCheckboxChange}
-            onClick={(e) => (e.stopPropagation())}
-          />
+            <Checkbox
+              edge="start"
+              tabIndex={-1}
+              disableRipple
+              name="entries"
+              value={other.nodeId}
+              style={{ color: '#019077' }}
+              checked={checked}
+              onChange={handleCheckboxChange}
+              onClick={(e) => e.stopPropagation()}
+            />
           )}
         </div>
-)}
+      }
       style={{
         '--tree-view-color': color,
         '--tree-view-bg-color': bgColor,

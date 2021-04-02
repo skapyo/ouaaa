@@ -36,26 +36,27 @@ const useStyles = makeStyles({
 });
 
 function Filters(props) {
-  const { categoryChange } = props;
+  const { categoryChange, parentCategoryChange, postalCodeChange } = props;
   const classes = useStyles();
 
   const GET_COLLECTIONS = gql`
-{ collections
-  {   id,
-      label,
-      multipleSelection,
-      position
-      entries {
-          id,
+    {
+      collections {
+        id
+        label
+        multipleSelection
+        position
+        entries {
+          id
           label
           subEntries {
-              id,
-              label
+            id
+            label
           }
+        }
       }
-  }
-}
-`;
+    }
+  `;
   function IsTree(collection) {
     let isTree = false;
     if (collection.entries) {
@@ -75,7 +76,8 @@ function Filters(props) {
   const postCodeChangeHandler = useCallback(
     (e) => {
       const regex = /[0-9]{5}/g;
-      if (e.target.value.length === 5 && (e.target.value).match(regex)) {
+      if (e.target.value.length === 5 && e.target.value.match(regex)) {
+        postalCodeChange(e);
         setErrorPostCode(false);
       } else {
         setErrorPostCode(true);
@@ -84,84 +86,83 @@ function Filters(props) {
     [setErrorPostCode],
   );
 
-  const {
-    loading: loadingCollections,
-    error: errorCollections,
-  } = useQuery(GET_COLLECTIONS, {
-    fetchPolicy: 'network-only',
-    onCompleted: (data) => {
-      setDataCollections(data);
+  const { loading: loadingCollections, error: errorCollections } = useQuery(
+    GET_COLLECTIONS,
+    {
+      fetchPolicy: 'network-only',
+      onCompleted: (data) => {
+        setDataCollections(data);
+      },
     },
-  });
+  );
   if (loadingCollections) return 'Loading...';
   if (errorCollections) return `Error! ${errorCollections.message}`;
 
   return (
     <Grid item xs={2} alignItems="center">
-
       <TextField
         variant="outlined"
         label="Code Postal"
         name="postCode"
         onChange={postCodeChangeHandler}
         error={errorPostCode}
-        helperText={errorPostCode ? 'Le code postal doit être oomposé de 5 chiffres' : ''}
+        helperText={
+          errorPostCode ? 'Le code postal doit être oomposé de 5 chiffres' : ''
+        }
       />
 
-      {dataCollections.collections && dataCollections.collections.map((collection) => {
-        //    const [display, setDisplay] = useState(false);
-        return (
-          <div>
+      {dataCollections.collections &&
+        dataCollections.collections.map((collection) => {
+          //    const [display, setDisplay] = useState(false);
+          return (
+            <div>
+              <Typography
+                className={classes.collectionLabel}
+                //       onClick={setDisplay(!display)}
+              >
+                {collection.label}
+              </Typography>
+              {
+                // display &&
+                IsTree(collection) &&
+                  collection.entries &&
+                  collection.entries.map((entry) => {
+                    return (
+                      <ParentContainer
+                        key={entry.id}
+                        entry={entry}
+                        subEntries={entry.subEntries}
+                        categoryChange={categoryChange}
+                        parentCategoryChange={parentCategoryChange}
+                      />
+                    );
+                  })
+              }
 
-            <Typography
-              className={classes.collectionLabel}
-       //       onClick={setDisplay(!display)}
-            >
-              {collection.label}
-            </Typography>
-            { // display &&
-            IsTree(collection) && (
-
-              collection.entries && collection.entries.map((entry) => {
-                return (
-                  <ParentContainer
-                    key={entry.id}
-                    entry={entry}
-                    subEntries={entry.subEntries}
-                    categoryChange={categoryChange}
-                  />
-                );
-              })
-            )
-            }
-
-            {!IsTree(collection) && (
-            <List>
-              {collection.entries && collection.entries.map((entry) => {
-                return (
-                  <ListItem
-                    key={entry.id}
-                    role={undefined}
-                    dense
-                  >
-                    <ListItemText primary={entry.label} />
-                    <Checkbox
-                      edge="start"
-                      tabIndex={-1}
-                      disableRipple
-                      onChange={categoryChange}
-                      name="{categoryChange.id}"
-                      value={entry.id}
-                      onClick={(e) => (e.stopPropagation())}
-                    />
-                  </ListItem>
-                );
-              })}
-            </List>
-            )}
-          </div>
-        );
-      })}
+              {!IsTree(collection) && (
+                <List>
+                  {collection.entries &&
+                    collection.entries.map((entry) => {
+                      return (
+                        <ListItem key={entry.id} role={undefined} dense>
+                          <ListItemText primary={entry.label} />
+                          <Checkbox
+                            edge="start"
+                            tabIndex={-1}
+                            disableRipple
+                            onChange={categoryChange}
+                            name="{categoryChange.id}"
+                            value={entry.id}
+                            onClick={(e) => e.stopPropagation()}
+                          />
+                        </ListItem>
+                      );
+                    })}
+                </List>
+              )}
+            </div>
+          );
+        })}
     </Grid>
   );
 }
