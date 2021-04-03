@@ -33,6 +33,15 @@ const useStyles = makeStyles({
       boxShadow: 'initial!important',
     },
   },
+  listItem: {
+    paddingTop: '0px',
+    paddingBottom: '0px',
+  },
+  postCodeLayout:{
+    textAlign: 'center',
+    paddingTop: '5px',
+    paddingBottom: '5px',
+  },
 });
 
 function Filters(props) {
@@ -83,7 +92,7 @@ function Filters(props) {
     },
     [setErrorPostCode],
   );
-
+  const [expanded, setExpanded] = useState([]);
   const {
     loading: loadingCollections,
     error: errorCollections,
@@ -95,27 +104,32 @@ function Filters(props) {
   });
   if (loadingCollections) return 'Loading...';
   if (errorCollections) return `Error! ${errorCollections.message}`;
+ 
+  // TODO: not working
+  const displayEntries = (id) => {
+    expanded[id] = true;
+    };
 
   return (
     <Grid item xs={2} alignItems="center">
-
-      <TextField
-        variant="outlined"
-        label="Code Postal"
-        name="postCode"
-        onChange={postCodeChangeHandler}
-        error={errorPostCode}
-        helperText={errorPostCode ? 'Le code postal doit être oomposé de 5 chiffres' : ''}
-      />
-
+      <div  className={classes.postCodeLayout}  >
+        <TextField
+          variant="outlined"
+          label="Code Postal"
+          name="postCode"
+          onChange={postCodeChangeHandler}
+          error={errorPostCode}
+          helperText={errorPostCode ? 'Le code postal doit être oomposé de 5 chiffres' : ''}
+        />
+      </div>
       {dataCollections.collections && dataCollections.collections.map((collection) => {
         //    const [display, setDisplay] = useState(false);
         return (
-          <div>
+          <div >
 
             <Typography
-              className={classes.collectionLabel}
-       //       onClick={setDisplay(!display)}
+              className={classes.collectionLabel} 
+              onClick={displayEntries}
             >
               {collection.label}
             </Typography>
@@ -143,6 +157,7 @@ function Filters(props) {
                     key={entry.id}
                     role={undefined}
                     dense
+                    className={classes.listItem}
                   >
                     <ListItemText primary={entry.label} />
                     <Checkbox

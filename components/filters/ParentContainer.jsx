@@ -27,6 +27,9 @@ const useStyles = makeStyles({
   MuiBadgeRoot: {
     width: '100%',
   },
+  MuiTreeItemLabel: {
+    height: '50px',
+  },
 });
 
 function ParentContainer(props) {

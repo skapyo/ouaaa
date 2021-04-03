@@ -20,7 +20,7 @@ import { getImageUrl } from '../../utils/utils';
 import Fab from '@material-ui/core/Fab';
 import Actors from 'containers/layouts/mapPage/actors';
 import Filters from '../../components/filters'
-
+import Hidden from '@material-ui/core/Hidden';
 if (typeof window !== 'undefined') {
   var L = require("leaflet");
   var Map = require('react-leaflet').Map;
@@ -141,6 +141,9 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
 
   },
+  categorieDiv: {
+    display: 'flex',
+  },
   image: {
     backgroundPosition: 'center center',
     backgroundRepeat: 'no-repeat',
@@ -220,7 +223,7 @@ const carto = () => {
     headerDisplay: 'static',
   });
   const GET_ACTORS = gql`
-        query actors($entries:[String]) {
+        query actors($entries:[[String]]) {
             actors(entries:$entries) 
         {   id,
             name,
@@ -309,10 +312,16 @@ const carto = () => {
             <Fab variant="extended" size="medium" aria-label="add" className={styles.listButton} onClick={switchMode} >
               {listMode && (<span>Liste</span>)}  {!listMode && (<span>Carte</span>)}
             </Fab>
+            <Hidden mdUp>
+              <Fab variant="extended" size="medium" aria-label="add" className={styles.listButton} onClick={switchMode} >
+                <span>Filtre</span>
+              </Fab>
+            </Hidden>
           </Grid>
-          <Filters categoryChange={categoryChange} />
-
-          {listMode && <Grid item xs={10}>
+          <Hidden smDown>
+             <Filters categoryChange={categoryChange} />
+          </Hidden>
+          {listMode && <Grid item xs={9} >
             <Map ref={mapRef} center={position} zoom={11}>
               <TileLayer
                 attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -348,7 +357,7 @@ const carto = () => {
                         <Tooltip>
                           <div className={styles.image} style={{ backgroundImage: actor.pictures.length >= 1 ? `url(${getImageUrl(actor.pictures.sort((a, b) => (a.position > b.position ? 1 : -1))[0].croppedPicturePath)})` : '' }}>
                             <div className={styles.categorie}>
-                              <Typography className={styles.categorie} gutterBottom>
+                              <Typography nowrap className={styles.categorie} gutterBottom>
                                 {actor.categories && actor.categories.length > 0 && actor.categories[0].label}
                               </Typography>
                             </div>
@@ -377,8 +386,8 @@ const carto = () => {
                         <Popup>
 
                           <div className={styles.image} style={{ backgroundImage: actor.pictures.length >= 1 ? `url(${getImageUrl(actor.pictures.sort((a, b) => (a.position > b.position ? 1 : -1))[0].croppedPicturePath)})` : '' }}>
-                            <div className={styles.categorie}>
-                              <Typography className={styles.categorie} gutterBottom>
+                            <div className={styles.categorieDiv}>
+                              <Typography nowrap className={styles.categorie} >
                                 {actor.categories && actor.categories.length > 0 && actor.categories[0].label}
                               </Typography>
                             </div>
