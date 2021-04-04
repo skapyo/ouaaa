@@ -28,6 +28,11 @@ import { QueryOptions, ValidationRules, ValidationRuleType } from '../../compone
 import StyledTreeItem from '../../components/filters/StyledTreeItem';
 import Link from '../../components/Link';
 import useCookieRedirection from '../../hooks/useCookieRedirection';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
 
 const CREATE_ACTOR = gql`
   mutation createActor($formValues: ActorInfos,$userId: Int!,$description:String!) {
@@ -39,7 +44,8 @@ const CREATE_ACTOR = gql`
       address
       postCode
       city
-      website 
+      website,
+      socialNetwork 
       description
       lat
       lng
@@ -76,6 +82,7 @@ const GET_ACTORS = graphqlTag`
     short_description,
     createdAt,
     updatedAt,
+    socialNetwork,
     city,
     lat,
     lng,
@@ -358,6 +365,7 @@ const AddActorForm = () => {
           <br />
         </Typography>
         )}
+        <Typography variant="h2" color="primary" className={styles.label}> Coordonnées </Typography>
         <FormItem
           label="Nom de l'acteur"
           inputName="name"
@@ -386,6 +394,15 @@ const AddActorForm = () => {
           errorText="Format du téléphone invalide. Maximum 10 chiffres."
         />
         <FormItem
+          label="Réseau social"
+          inputName="socialNetwork"
+          formChangeHandler={formChangeHandler}
+          value={formValues.socialNetwork}
+          required={false}
+          errorBool={false}
+          errorText=""
+        />
+        <FormItem
           label="Site Internet"
           inputName="website"
           formChangeHandler={formChangeHandler}
@@ -394,22 +411,6 @@ const AddActorForm = () => {
           errorBool={false}
           errorText=""
         />
-        <Typography variant="body1" color="primary" className={styles.label}>
-          Description :
-        </Typography>
-        <p />
-        { editorLoaded ? (
-          <CKEditor
-            editor={ClassicEditor}
-            data={formValues.description}
-            onReady={(editor) => {
-              setDescriptionEditor(editor);
-            }}
-          />
-        ) : (
-          <div>Editor loading</div>
-        )}
-
         <div className={styles.field}>
           <Grid className={styles.location}>
             <GooglePlacesAutocomplete
@@ -427,6 +428,35 @@ const AddActorForm = () => {
             />
           </Grid>
         </div>
+        <Typography variant="body1" color="primary" className={styles.label}>
+          Jour et heure d'ouverture
+        </Typography>
+        <Typography variant="body1" color="primary" className={styles.label}>
+          Quartier de la rochelle pour 17000
+        </Typography>
+        <FormControl component="fieldset">
+          <FormLabel component="legend">CONTACT PRIVE pour les échanges avec Ouaaa</FormLabel>
+          <RadioGroup aria-label="gender" name="gender1" >
+            <FormControlLabel value="me" control={<Radio />} label="C'est moi " />
+            <FormControlLabel value="other" control={<Radio />} label="c’est un autre (avec un compte Ouaaa existant)" />
+          </RadioGroup>
+        </FormControl>
+        <Typography variant="body1" color="primary" className={styles.label}>
+          Description :
+        </Typography>
+        <p />
+        { editorLoaded ? (
+          <CKEditor
+            editor={ClassicEditor}
+            data={formValues.description}
+            onReady={(editor) => {
+              setDescriptionEditor(editor);
+            }}
+          />
+        ) : (
+          <div>Editor loading</div>
+        )}
+
         { /* @ts-ignore */ }
         {dataCollections.collections && dataCollections.collections.map((collection) => {
           //    const [display, setDisplay] = useState(false);
