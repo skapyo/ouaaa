@@ -56,9 +56,11 @@ const CREATE_ACTOR = gql`
 const GET_COLLECTIONS = gql`
 { collections
   {   id,
+      code,
       label,
       multipleSelection,
-      position
+      position,
+      actor
       entries {
           id,
           label
@@ -435,8 +437,7 @@ const AddActorForm = () => {
           Quartier de la rochelle pour 17000
         </Typography>
         <FormControl component="fieldset">
-          <FormLabel component="legend">CONTACT PRIVE pour les échanges avec Ouaaa</FormLabel>
-          <RadioGroup aria-label="gender" name="gender1" >
+           <RadioGroup aria-label="gender" name="gender1" >
             <FormControlLabel value="me" control={<Radio />} label="C'est moi " />
             <FormControlLabel value="other" control={<Radio />} label="c’est un autre (avec un compte Ouaaa existant)" />
           </RadioGroup>
@@ -460,6 +461,9 @@ const AddActorForm = () => {
         { /* @ts-ignore */ }
         {dataCollections.collections && dataCollections.collections.map((collection) => {
           //    const [display, setDisplay] = useState(false);
+           if(collection.code !="larochelle_quarter"&& formValues.city!="17000")
+          return ;
+          
           return (
             <div>
               <br />
@@ -503,8 +507,9 @@ const AddActorForm = () => {
             </TreeView>
             )
 }
+
               { // display &&
-             !IsTree(collection) && (
+             !IsTree(collection) &&  collection.multipleSelection && (
              <List>
                {collection.entries && collection.entries.map((entry) => {
                  return (
@@ -528,7 +533,26 @@ const AddActorForm = () => {
                })}
              </List>
              )
-}
+          }
+               { // display &&
+             !IsTree(collection) && !collection.multipleSelection  && (
+
+      
+              <FormControl component="fieldset">
+                  <RadioGroup aria-label="gender" name="gender1" >
+                  {collection.entries && collection.entries.map((entry) => {
+                        return (
+                            <FormControlLabel value={entry.id} control={<Radio />} label={entry.label} />
+                        );
+                      })}
+
+                  </RadioGroup>
+                </FormControl>
+
+         
+             )
+          }
+               
             </div>
           );
         })}
