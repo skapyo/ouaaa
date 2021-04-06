@@ -37,7 +37,7 @@ const useStyles = makeStyles({
     paddingTop: '0px',
     paddingBottom: '0px',
   },
-  postCodeLayout:{
+  postCodeLayout: {
     textAlign: 'center',
     paddingTop: '5px',
     paddingBottom: '5px',
@@ -45,26 +45,32 @@ const useStyles = makeStyles({
 });
 
 function Filters(props) {
-  const { categoryChange } = props;
+  const {
+    categoryChange,
+    parentCategoryChange,
+    postCodeChange,
+    otherCategoryChange,
+  } = props;
   const classes = useStyles();
 
   const GET_COLLECTIONS = gql`
-{ collections
-  {   id,
-      label,
-      multipleSelection,
-      position
-      entries {
-          id,
+    {
+      collections {
+        id
+        label
+        multipleSelection
+        position
+        entries {
+          id
           label
           subEntries {
-              id,
-              label
+            id
+            label
           }
+        }
       }
-  }
-}
-`;
+    }
+  `;
   function IsTree(collection) {
     let isTree = false;
     if (collection.entries) {
@@ -84,7 +90,8 @@ function Filters(props) {
   const postCodeChangeHandler = useCallback(
     (e) => {
       const regex = /[0-9]{5}/g;
-      if (e.target.value.length === 5 && (e.target.value).match(regex)) {
+      if (e.target.value.length === 5 && e.target.value.match(regex)) {
+        postCodeChange(e);
         setErrorPostCode(false);
       } else {
         setErrorPostCode(true);
@@ -92,97 +99,100 @@ function Filters(props) {
     },
     [setErrorPostCode],
   );
-  const [expanded, setExpanded] = useState([]);
-  const {
-    loading: loadingCollections,
-    error: errorCollections,
-  } = useQuery(GET_COLLECTIONS, {
-    fetchPolicy: 'network-only',
-    onCompleted: (data) => {
-      setDataCollections(data);
+
+  const { loading: loadingCollections, error: errorCollections } = useQuery(
+    GET_COLLECTIONS,
+    {
+      fetchPolicy: 'network-only',
+      onCompleted: (data) => {
+        setDataCollections(data);
+      },
     },
-  });
+  );
   if (loadingCollections) return 'Loading...';
   if (errorCollections) return `Error! ${errorCollections.message}`;
- 
+
   // TODO: not working
   const displayEntries = (id) => {
     expanded[id] = true;
-    };
+  };
 
   return (
     <Grid item xs={2} alignItems="center">
-      <div  className={classes.postCodeLayout}  >
-        <TextField
-          variant="outlined"
-          label="Code Postal"
-          name="postCode"
-          onChange={postCodeChangeHandler}
-          error={errorPostCode}
-          helperText={errorPostCode ? 'Le code postal doit être oomposé de 5 chiffres' : ''}
-        />
-      </div>
-      {dataCollections.collections && dataCollections.collections.map((collection) => {
-        //    const [display, setDisplay] = useState(false);
-        return (
-          <div >
+      <TextField
+        variant="outlined"
+        label="Code Postal"
+        name="postCode"
+        onChange={postCodeChangeHandler}
+        error={errorPostCode}
+        helperText={
+          errorPostCode ? 'Le code postal doit être oomposé de 5 chiffres' : ''
+        }
+      />
 
-            <Typography
-              className={classes.collectionLabel} 
-              onClick={displayEntries}
-            >
-              {collection.label}
-            </Typography>
-            { // display &&
-            IsTree(collection) && (
+      {dataCollections.collections &&
+        dataCollections.collections.map((collection) => {
+          //    const [display, setDisplay] = useState(false);
+          return (
+            <div>
+              <Typography
+                className={classes.collectionLabel}
+                //       onClick={setDisplay(!display)}
+              >
+                {collection.label}
+              </Typography>
+              {
+                // display &&
+                IsTree(collection) &&
+                  collection.entries &&
+                  collection.entries.map((entry) => {
+                    return (
+                      <ParentContainer
+                        key={entry.id}
+                        entry={entry}
+                        subEntries={entry.subEntries}
+                        categoryChange={categoryChange}
+                        parentCategoryChange={parentCategoryChange}
+                      />
+                    );
+                  })
+              }
 
-              collection.entries && collection.entries.map((entry) => {
-                return (
-                  <ParentContainer
-                    key={entry.id}
-                    entry={entry}
-                    subEntries={entry.subEntries}
-                    categoryChange={categoryChange}
-                  />
-                );
-              })
-            )
-            }
-
-            {!IsTree(collection) && (
-            <List>
-              {collection.entries && collection.entries.map((entry) => {
-                return (
-                  <ListItem
-                    key={entry.id}
-                    role={undefined}
-                    dense
-                    className={classes.listItem}
-                  >
-                    <ListItemText primary={entry.label} />
-                    <Checkbox
-                      edge="start"
-                      tabIndex={-1}
-                      disableRipple
-                      onChange={categoryChange}
-                      name="{categoryChange.id}"
-                      value={entry.id}
-                      onClick={(e) => (e.stopPropagation())}
-                    />
-                  </ListItem>
-                );
-              })}
-            </List>
-            )}
-          </div>
-        );
-      })}
+              {!IsTree(collection) && (
+                <List>
+                  {collection.entries &&
+                    collection.entries.map((entry) => {
+                      return (
+                        <ListItem key={entry.id} role={undefined} dense>
+                          <ListItemText primary={entry.label} />
+                          <Checkbox
+                            edge="start"
+                            tabIndex={-1}
+                            disableRipple
+                            onChange={(e) =>
+                              otherCategoryChange(e, collection.label)
+                            }
+                            name="{categoryChange.id}"
+                            value={entry.id}
+                            onClick={(e) => e.stopPropagation()}
+                          />
+                        </ListItem>
+                      );
+                    })}
+                </List>
+              )}
+            </div>
+          );
+        })}
     </Grid>
   );
 }
 
 Filters.propTypes = {
   categoryChange: PropTypes.func.isRequired,
+  parentCategoryChange: PropTypes.func.isRequired,
+  otherCategoryChange: PropTypes.func.isRequired,
+  postCodeChange: PropTypes.func.isRequired,
 };
 
 export default Filters;

@@ -38,9 +38,10 @@ function ParentContainer(props) {
     labelText,
     color,
     bgColor,
-    categoryChange,
     checked,
     entry,
+    categoryChange,
+    parentCategoryChange,
     ...other
   } = props;
 
@@ -66,7 +67,9 @@ function ParentContainer(props) {
 
     entry.subEntries.map(({ id, label }) => {
       newCheckboxesState.push({
-        id, label, checked: false,
+        id,
+        label,
+        checked: false,
       });
 
       newNodesArray.push(id);
@@ -103,8 +106,19 @@ function ParentContainer(props) {
 
   useEffect(() => {
     updateParentWithChildren();
+
+    if (parentCheckboxChecked) {
+      // update the categories changed
+      parentCategoryChange(checkboxes);
+    }
+
+    if (!parentCheckboxChecked && numberChecked > 0) {
+      parentCategoryChange(checkboxes);
+    }
+
+    // // update the badge
     setNumberChecked(updateNumberChecked());
-  }, [checkboxes]);
+  }, [checkboxes, parentCheckboxChecked]);
 
   const handleToggle = () => {
     setExpanded((oldExpanded) => (oldExpanded.length === 0 ? nodesArray : []));
@@ -136,27 +150,25 @@ function ParentContainer(props) {
   };
 
   const handleChildCheckboxChange = (isChecked, index) => {
-    const newCheckState = checkboxes.map(
-      (aCheckbox) => {
-        return (index == aCheckbox.id ? { ...aCheckbox, checked: isChecked } : aCheckbox);
-      },
-    );
+    const newCheckState = checkboxes.map((aCheckbox) => {
+      return index == aCheckbox.id
+        ? { ...aCheckbox, checked: isChecked }
+        : aCheckbox;
+    });
 
     handleCheckboxgroupChange(newCheckState);
   };
 
   return (
-    <ParentFilterContext.Provider value={
-      {
+    <ParentFilterContext.Provider
+      value={{
         checked: false,
         handleParentCheckboxChange,
         handleChildCheckboxChange,
         checkHandleToggle,
-      }
-    }
+      }}
     >
       {parentCheckbox && (
-
         <Badge
           badgeContent={numberChecked}
           showZero={false}
@@ -178,10 +190,10 @@ function ParentContainer(props) {
               nodeId={parentCheckbox.id}
               labelText={parentCheckbox.label}
               categoryChange={categoryChange}
+              parentCategoryChange={parentCategoryChange}
               isParent
               checked={parentCheckboxChecked}
             >
-
               {checkboxes.map((subEntry) => {
                 return (
                   <StyledTreeItem
