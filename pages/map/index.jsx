@@ -217,157 +217,19 @@ const otherCategories = {
   'Public principale visé': [],
 };
 
-// const categoriesChecked = [];
-let postalCode = null;
-
 const carto = () => {
   const mapRef = useRef();
-  //TODO: change la structure du categoriesChecked
-  // {} pour avoir { collectionName : [], collectionName : []}
-  // puis reformater la data au filterChange en [[], [],  []. postalCode ]
-  const [categoriesChecked, setCategoriesChecked] = useState([]);
+  const [categoriesChecked, setCategoriesChecked] = useState(categories.Sujets);
   const [otherCategoriesChecked, setOtherCategoriesChecked] = useState(
     otherCategories,
   );
-
-  const [stylesProps, setStylesProps] = useState({
-    topImageSize: '250px',
-    headerDisplay: 'static',
-  });
-  const GET_ACTORS = gql`
-    query actors($entries: [String]) {
-      actors(entries: $entries) {
-        id
-        name
-        address
-        short_description
-        lat
-        lng
-        categories {
-          label
-          icon
-          color
-        }
-        entries {
-          label
-        }
-        pictures {
-          id
-          label
-          originalPicturePath
-          originalPictureFilename
-          croppedPicturePath
-          croppedPictureFilename
-          croppedX
-          croppedY
-          croppedZoom
-          croppedRotation
-          position
-        }
-      }
-    }
-  `;
-
-  const { data, loading, error, refetch } = useQuery(GET_ACTORS, {
-    variables: {
-      entries: categoriesChecked,
-      postalCode,
-    },
-  });
-
-  const filterChange = () => {
-    console.log('entries', categoriesChecked, 'postalCode', postalCode);
-    refetch({ entries: categoriesChecked, postalCode });
-  };
-
-  const parentCategoryChange = useCallback((arr) => {
-    const tempCategories = [...categoriesChecked];
-    const tempCategoriesChecked = [];
-    const tempCategoriesUnchecked = [];
-
-    arr.forEach((checkbox) => {
-      const { checked, id } = checkbox;
-      if (checked) {
-        tempCategoriesChecked.push(id);
-      }
-      if (!checked) {
-        tempCategoriesUnchecked.push(id);
-      }
-    });
-
-    // delete the unchecked boxes
-    tempCategoriesUnchecked.forEach((value) => {
-      const currentIndex = tempCategories.indexOf(value);
-      if (currentIndex !== -1) {
-        tempCategories.splice(currentIndex, 1);
-      }
-    });
-
-    // add the recent checkedboxes
-    const newCategoriesChecked = [
-      ...new Set([...tempCategories, ...tempCategoriesChecked]),
-    ];
-
-    setCategoriesChecked(newCategoriesChecked);
-
-    filterChange();
-  });
-
-  const categoryChange = useCallback((e) => {
-    const tempCategories = [...categoriesChecked];
-
-    const categoryId = e.target.value;
-
-    const currentIndex = tempCategories.indexOf(categoryId);
-
-    if (currentIndex === -1) {
-      tempCategories.push(categoryId);
-    } else {
-      tempCategories.splice(currentIndex, 1);
-    }
-
-    setCategoriesChecked(tempCategories);
-    refetch({ entries: categoriesChecked });
-    filterChange();
-  });
-
-  const postalCodeChange = useCallback((e) => {
-    postalCode = e.target.value;
-    filterChange();
-  });
-
-  const otherCategoryChange = (e, collectionLabel) => {
-    const newOtherCategories = { ...otherCategoriesChecked };
-
-    const otherCategoryId = e.target.value;
-    const tempCollection = newOtherCategories[collectionLabel];
-
-    const currentIndex = tempCollection.indexOf(otherCategoryId);
-
-    if (currentIndex === -1) {
-      tempCollection.push(otherCategoryId);
-    } else {
-      tempCollection.splice(currentIndex, 1);
-    }
-
-    setOtherCategoriesChecked(newOtherCategories);
-
-    const newCategoriesChecked = [...categoriesChecked];
-    for (const [otherCategory, value] of Object.entries(otherCategories)) {
-      newCategoriesChecked[otherCategory] = value;
-    }
-
-    setCategoriesChecked(newCategoriesChecked);
-    filterChange();
-  };
+  const [favorite, setFavorite] = useState(false);
+  const [listMode, setListMode] = useState(true);
+  const [postalCode, setPostalCode] = useState(null);
 
   useEffect(() => {
     const { current = {} } = mapRef;
   }, [mapRef]);
-
-  const [favorite, setFavorite] = useState(false);
-
-  const [listMode, setListMode] = useState(true);
 
   const styles = useStyles();
 
@@ -380,6 +242,133 @@ const carto = () => {
   if (typeof window !== 'undefined') {
     L.Icon.Default.mergeOptions({
       iconUrl: null,
+    });
+
+    const [stylesProps, setStylesProps] = useState({
+      topImageSize: '250px',
+      headerDisplay: 'static',
+    });
+    const GET_ACTORS = gql`
+      query actors($entries: [String]) {
+        actors(entries: $entries) {
+          id
+          name
+          address
+          short_description
+          lat
+          lng
+          categories {
+            label
+            icon
+            color
+          }
+          entries {
+            label
+          }
+          pictures {
+            id
+            label
+            originalPicturePath
+            originalPictureFilename
+            croppedPicturePath
+            croppedPictureFilename
+            croppedX
+            croppedY
+            croppedZoom
+            croppedRotation
+            position
+          }
+        }
+      }
+    `;
+
+    const { data, loading, error, refetch } = useQuery(GET_ACTORS, {
+      variables: {
+        entries: categoriesChecked,
+        postalCode,
+      },
+    });
+
+    const filterChange = () => {
+      const newOtherCategories = Object.values(otherCategoriesChecked);
+      // console.log('categoriesChecked: ', categoriesChecked);
+      // console.log('newOtherCategories: ', newOtherCategories);
+      const newEntries = [categoriesChecked, ...newOtherCategories];
+      // console.log('entries', newEntries, 'postalCode', postalCode);
+      refetch({ entries: categoriesChecked, postalCode });
+    };
+
+    const parentCategoryChange = useCallback((arr) => {
+      const tempCategories = [...categoriesChecked];
+      const tempCategoriesChecked = [];
+      const tempCategoriesUnchecked = [];
+
+      arr.forEach((checkbox) => {
+        const { checked, id } = checkbox;
+        if (checked) {
+          tempCategoriesChecked.push(id);
+        }
+        if (!checked) {
+          tempCategoriesUnchecked.push(id);
+        }
+      });
+
+      // delete the unchecked boxes
+      tempCategoriesUnchecked.forEach((value) => {
+        const currentIndex = tempCategories.indexOf(value);
+        if (currentIndex !== -1) {
+          tempCategories.splice(currentIndex, 1);
+        }
+      });
+
+      // add the recent checkedboxes
+      const newCategoriesChecked = [
+        ...new Set([...tempCategories, ...tempCategoriesChecked]),
+      ];
+
+      setCategoriesChecked(newCategoriesChecked);
+
+      filterChange();
+    });
+
+    const categoryChange = useCallback((e) => {
+      const tempCategories = [...categoriesChecked];
+
+      const categoryId = e.target.value;
+
+      const currentIndex = tempCategories.indexOf(categoryId);
+
+      if (currentIndex === -1) {
+        tempCategories.push(categoryId);
+      } else {
+        tempCategories.splice(currentIndex, 1);
+      }
+
+      setCategoriesChecked(tempCategories);
+      filterChange();
+    });
+
+    const postalCodeChange = (e) => {
+      setPostalCode(e.target.value);
+      filterChange();
+    };
+
+    const otherCategoryChange = useCallback((e, collectionLabel) => {
+      const newOtherCategories = { ...otherCategoriesChecked };
+
+      const otherCategoryId = e.target.value;
+      const tempCollection = newOtherCategories[collectionLabel];
+
+      const currentIndex = tempCollection.indexOf(otherCategoryId);
+
+      if (currentIndex === -1) {
+        tempCollection.push(otherCategoryId);
+      } else {
+        tempCollection.splice(currentIndex, 1);
+      }
+
+      setOtherCategoriesChecked(newOtherCategories);
+      filterChange();
     });
 
     return (
