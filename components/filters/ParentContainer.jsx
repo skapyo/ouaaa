@@ -104,11 +104,17 @@ function ParentContainer(props) {
   useEffect(() => {
     updateParentWithChildren();
 
-    // update the badge
-    setNumberChecked(updateNumberChecked());
+    if (parentCheckboxChecked) {
+      // update the categories changed
+      parentCategoryChange(checkboxes);
+    }
 
-    // update the categories changed
-    parentCategoryChange(checkboxes);
+    if (!parentCheckboxChecked && numberChecked > 0) {
+      parentCategoryChange(checkboxes);
+    }
+
+    // // update the badge
+    setNumberChecked(updateNumberChecked());
   }, [checkboxes, parentCheckboxChecked]);
 
   const handleToggle = () => {
