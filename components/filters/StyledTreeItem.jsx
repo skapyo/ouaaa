@@ -43,7 +43,6 @@ const useTreeItemStyles = makeStyles((theme) => ({
   labelRoot: {
     display: 'flex',
     alignItems: 'center',
-    padding: theme.spacing(0.5, 0),
   },
   labelText: {
     fontWeight: 'inherit',

@@ -295,7 +295,7 @@ const carto = () => {
       // console.log('entries', newEntries, 'postCode', postCode);
       postCode
         ? refetch({ entries: newEntries, postCode })
-        : refetch({ entries: newEntries });
+        : refetch({ entries: newEntries, postCode });
     };
 
     const parentCategoryChange = useCallback((arr) => {

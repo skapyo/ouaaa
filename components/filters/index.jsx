@@ -33,6 +33,15 @@ const useStyles = makeStyles({
       boxShadow: 'initial!important',
     },
   },
+  listItem: {
+    paddingTop: '0px',
+    paddingBottom: '0px',
+  },
+  postCodeLayout: {
+    textAlign: 'center',
+    paddingTop: '5px',
+    paddingBottom: '5px',
+  },
 });
 
 function Filters(props) {
@@ -102,6 +111,11 @@ function Filters(props) {
   );
   if (loadingCollections) return 'Loading...';
   if (errorCollections) return `Error! ${errorCollections.message}`;
+
+  // TODO: not working
+  const displayEntries = (id) => {
+    expanded[id] = true;
+  };
 
   return (
     <Grid item xs={2} alignItems="center">
