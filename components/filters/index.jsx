@@ -39,7 +39,7 @@ function Filters(props) {
   const {
     categoryChange,
     parentCategoryChange,
-    postalCodeChange,
+    postCodeChange,
     otherCategoryChange,
   } = props;
   const classes = useStyles();
@@ -82,7 +82,7 @@ function Filters(props) {
     (e) => {
       const regex = /[0-9]{5}/g;
       if (e.target.value.length === 5 && e.target.value.match(regex)) {
-        postalCodeChange(e);
+        postCodeChange(e);
         setErrorPostCode(false);
       } else {
         setErrorPostCode(true);
@@ -178,7 +178,7 @@ Filters.propTypes = {
   categoryChange: PropTypes.func.isRequired,
   parentCategoryChange: PropTypes.func.isRequired,
   otherCategoryChange: PropTypes.func.isRequired,
-  postalCodeChange: PropTypes.func.isRequired,
+  postCodeChange: PropTypes.func.isRequired,
 };
 
 export default Filters;

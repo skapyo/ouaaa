@@ -225,7 +225,7 @@ const carto = () => {
   );
   const [favorite, setFavorite] = useState(false);
   const [listMode, setListMode] = useState(true);
-  const [postalCode, setPostalCode] = useState(null);
+  const [postCode, setPostCode] = useState(null);
 
   useEffect(() => {
     const { current = {} } = mapRef;
@@ -249,7 +249,7 @@ const carto = () => {
       headerDisplay: 'static',
     });
     const GET_ACTORS = gql`
-      query actors($entries: [String]) {
+      query actors($entries: [[String]]) {
         actors(entries: $entries) {
           id
           name
@@ -284,18 +284,18 @@ const carto = () => {
 
     const { data, loading, error, refetch } = useQuery(GET_ACTORS, {
       variables: {
-        entries: categoriesChecked,
-        postalCode,
+        entries: [],
+        postCode,
       },
     });
 
     const filterChange = () => {
       const newOtherCategories = Object.values(otherCategoriesChecked);
-      // console.log('categoriesChecked: ', categoriesChecked);
-      // console.log('newOtherCategories: ', newOtherCategories);
       const newEntries = [categoriesChecked, ...newOtherCategories];
-      // console.log('entries', newEntries, 'postalCode', postalCode);
-      refetch({ entries: categoriesChecked, postalCode });
+      // console.log('entries', newEntries, 'postCode', postCode);
+      postCode
+        ? refetch({ entries: newEntries, postCode })
+        : refetch({ entries: newEntries });
     };
 
     const parentCategoryChange = useCallback((arr) => {
@@ -348,8 +348,8 @@ const carto = () => {
       filterChange();
     });
 
-    const postalCodeChange = (e) => {
-      setPostalCode(e.target.value);
+    const postCodeChange = (e) => {
+      setPostCode(e.target.value);
       filterChange();
     };
 
@@ -389,7 +389,7 @@ const carto = () => {
             parentCategoryChange={parentCategoryChange}
             categoryChange={categoryChange}
             otherCategoryChange={otherCategoryChange}
-            postalCodeChange={postalCodeChange}
+            postCodeChange={postCodeChange}
           />
 
           {listMode && (
