@@ -36,7 +36,12 @@ const useStyles = makeStyles({
 });
 
 function Filters(props) {
-  const { categoryChange, parentCategoryChange, postalCodeChange } = props;
+  const {
+    categoryChange,
+    parentCategoryChange,
+    postalCodeChange,
+    otherCategoryChange,
+  } = props;
   const classes = useStyles();
 
   const GET_COLLECTIONS = gql`
@@ -150,7 +155,9 @@ function Filters(props) {
                             edge="start"
                             tabIndex={-1}
                             disableRipple
-                            onChange={categoryChange}
+                            onChange={(e) =>
+                              otherCategoryChange(e, collection.label)
+                            }
                             name="{categoryChange.id}"
                             value={entry.id}
                             onClick={(e) => e.stopPropagation()}
@@ -169,6 +176,9 @@ function Filters(props) {
 
 Filters.propTypes = {
   categoryChange: PropTypes.func.isRequired,
+  parentCategoryChange: PropTypes.func.isRequired,
+  otherCategoryChange: PropTypes.func.isRequired,
+  postalCodeChange: PropTypes.func.isRequired,
 };
 
 export default Filters;

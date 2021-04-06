@@ -207,12 +207,28 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const categories = {
+  Sujets: [],
+};
+
+const otherCategories = {
+  "Territoire d'actions": [],
+  "Statut d'acteur": [],
+  'Public principale visé': [],
+};
+
 // const categoriesChecked = [];
 let postalCode = null;
 
 const carto = () => {
   const mapRef = useRef();
+  //TODO: change la structure du categoriesChecked
+  // {} pour avoir { collectionName : [], collectionName : []}
+  // puis reformater la data au filterChange en [[], [],  []. postalCode ]
   const [categoriesChecked, setCategoriesChecked] = useState([]);
+  const [otherCategoriesChecked, setOtherCategoriesChecked] = useState(
+    otherCategories,
+  );
 
   const [stylesProps, setStylesProps] = useState({
     topImageSize: '250px',
@@ -260,15 +276,11 @@ const carto = () => {
   });
 
   const filterChange = () => {
-    //
+    console.log('entries', categoriesChecked, 'postalCode', postalCode);
     refetch({ entries: categoriesChecked, postalCode });
   };
 
   const parentCategoryChange = useCallback((arr) => {
-    // do the intersection between 2 arrays
-    // const filteredArray = (array1, array2) =>
-    //   array1.filter((value) => array2.includes(value));
-
     const tempCategories = [...categoriesChecked];
     const tempCategoriesChecked = [];
     const tempCategoriesUnchecked = [];
@@ -282,20 +294,6 @@ const carto = () => {
         tempCategoriesUnchecked.push(id);
       }
     });
-
-    // get the remaining checked boxes
-    // const remainingCheckedBoxes = filteredArray(
-    //   categoriesChecked,
-    //   tempCategoryChecked,
-    // );
-
-    // const currentIndex = tempCategoriesChecked.indexOf(categoryId);
-
-    // if (currentIndex === -1) {
-    //   tempCategoriesChecked.push(categoryId);
-    // } else {
-    //   tempCategoriesChecked.splice(currentIndex, 1);
-    // }
 
     // delete the unchecked boxes
     tempCategoriesUnchecked.forEach((value) => {
@@ -329,13 +327,39 @@ const carto = () => {
     }
 
     setCategoriesChecked(tempCategories);
-    //   refetch({ entries: categoriesChecked });
+    refetch({ entries: categoriesChecked });
+    filterChange();
   });
 
   const postalCodeChange = useCallback((e) => {
     postalCode = e.target.value;
     filterChange();
   });
+
+  const otherCategoryChange = (e, collectionLabel) => {
+    const newOtherCategories = { ...otherCategoriesChecked };
+
+    const otherCategoryId = e.target.value;
+    const tempCollection = newOtherCategories[collectionLabel];
+
+    const currentIndex = tempCollection.indexOf(otherCategoryId);
+
+    if (currentIndex === -1) {
+      tempCollection.push(otherCategoryId);
+    } else {
+      tempCollection.splice(currentIndex, 1);
+    }
+
+    setOtherCategoriesChecked(newOtherCategories);
+
+    const newCategoriesChecked = [...categoriesChecked];
+    for (const [otherCategory, value] of Object.entries(otherCategories)) {
+      newCategoriesChecked[otherCategory] = value;
+    }
+
+    setCategoriesChecked(newCategoriesChecked);
+    filterChange();
+  };
 
   useEffect(() => {
     const { current = {} } = mapRef;
@@ -373,9 +397,10 @@ const carto = () => {
             </Fab>
           </Grid>
           <Filters
-            categoryChange={categoryChange}
-            postalCodeChange={postalCodeChange}
             parentCategoryChange={parentCategoryChange}
+            categoryChange={categoryChange}
+            otherCategoryChange={otherCategoryChange}
+            postalCodeChange={postalCodeChange}
           />
 
           {listMode && (
