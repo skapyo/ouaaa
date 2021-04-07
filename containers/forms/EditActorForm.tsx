@@ -80,6 +80,7 @@ const EDIT_ACTOR = gql`
       postCode
       city
       website
+      socialNetwork
       description
       lat
       lng
@@ -673,6 +674,7 @@ const EditActorForm = (props) => {
       formValues.phone = actorData.actor.phone;
       formValues.website = actorData.actor.website;
       formValues.description = actorData.actor.description;
+      formValues.socialNetwork = actorData.actor.socialNetwork;
       formValues.address = actorData.actor.address;
       formValues.postCode = actorData.actor.postCode;
       formValues.city = actorData.actor.city;
@@ -745,6 +747,15 @@ const EditActorForm = (props) => {
           required={false}
           errorBool={false}
           value={formValues.website}
+          errorText=""
+        />
+        <FormItem
+          label="Réseau social"
+          inputName="socialNetwork"
+          formChangeHandler={formChangeHandler}
+          value={formValues.socialNetwork}
+          required={false}
+          errorBool={false}
           errorText=""
         />
         <Typography variant="body1" color="primary" className={styles.label}>
