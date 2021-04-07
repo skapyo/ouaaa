@@ -311,7 +311,7 @@ const AddActorForm = () => {
     const { CKEditor, ClassicEditor } = editorRef.current || {};
     const [descriptionEditor, setDescriptionEditor] = useState();
     const [volunteerEditor, setVolunteerEditor] = useState();
-   
+
     const [estlarochelle, setEstlarochelle] = useState(false);
     const [create, { data: createData, loading: createLoading, error: createError }] = useMutation(CREATE_ACTOR);
 
@@ -331,7 +331,8 @@ const AddActorForm = () => {
           formValues,
           // @ts-ignore
           description: descriptionEditor.getData(),
-          volunteer : volunteerEditor.getData(),
+          // @ts-ignore
+          volunteer: volunteerEditor.getData(),
           userId: parseInt(user.id),
         },
       });
