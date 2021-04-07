@@ -284,18 +284,23 @@ const carto = () => {
 
     const { data, loading, error, refetch } = useQuery(GET_ACTORS, {
       variables: {
-        entries: [],
+        entries: categoriesChecked,
         postCode,
       },
     });
 
     const filterChange = () => {
-      const newOtherCategories = Object.values(otherCategoriesChecked);
-      const newEntries = [categoriesChecked, ...newOtherCategories];
-      // console.log('entries', newEntries, 'postCode', postCode);
-      postCode
+      const newOtherCategoriesLists = Object.values(otherCategoriesChecked);
+      const newEntries = [...categoriesChecked];
+
+      newOtherCategoriesLists.forEach((otherCategoryList) => {
+        if (otherCategoryList.length > 0) newEntries.push(otherCategoryList);
+      });
+
+      console.log('entries', newEntries, 'postCode', postCode);
+      postCode !== null
         ? refetch({ entries: newEntries, postCode })
-        : refetch({ entries: newEntries, postCode });
+        : refetch({ entries: newEntries });
     };
 
     const parentCategoryChange = useCallback((arr) => {
