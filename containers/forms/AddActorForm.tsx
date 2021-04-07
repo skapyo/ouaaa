@@ -24,15 +24,16 @@ import React, {
 import { useCookies } from 'react-cookie';
 import GooglePlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-google-places-autocomplete';
 import { Redirect } from 'react-router-dom';
-import { QueryOptions, ValidationRules, ValidationRuleType } from '../../components/controllers/FormController';
-import StyledTreeItem from '../../components/filters/StyledTreeItem';
-import Link from '../../components/Link';
-import useCookieRedirection from '../../hooks/useCookieRedirection';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
+import { Autocomplete } from '@material-ui/lab';
+import useCookieRedirection from '../../hooks/useCookieRedirection';
+import Link from '../../components/Link';
+import StyledTreeItem from '../../components/filters/StyledTreeItem';
+import { QueryOptions, ValidationRules, ValidationRuleType } from '../../components/controllers/FormController';
 
 const CREATE_ACTOR = gql`
   mutation createActor($formValues: ActorInfos,$userId: Int!,$description:String!) {
@@ -102,6 +103,18 @@ const GET_ACTORS = graphqlTag`
 
 `;
 
+const GET_USERS = graphqlTag`
+
+  query users 
+  { users
+  {   id,
+    surname,
+    lastname,
+    
+  }
+}
+
+`;
 const resultLabel = 'createActor';
 
 const useStyles = makeStyles((theme) => ({
@@ -225,6 +238,8 @@ const AddActorForm = () => {
       userId: user.id,
     },
   });
+  const { data: dataUsers } = useQuery(GET_USERS, {
+  });
   const [open, setOpen] = React.useState([false]);
   const [cookies, setCookie, removeCookie] = useCookies();
 
@@ -290,9 +305,14 @@ const AddActorForm = () => {
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
     const editorRef = useRef();
     const [editorLoaded, setEditorLoaded] = useState(false);
+    const [showOtherContact, setShowOtherContact] = useState(false);
+
     // @ts-ignore
     const { CKEditor, ClassicEditor } = editorRef.current || {};
     const [descriptionEditor, setDescriptionEditor] = useState();
+    const [volunteerEditor, setVolunteerEditor] = useState();
+   
+    const [estlarochelle, setEstlarochelle] = useState(false);
     const [create, { data: createData, loading: createLoading, error: createError }] = useMutation(CREATE_ACTOR);
 
     useEffect(() => {
@@ -311,6 +331,7 @@ const AddActorForm = () => {
           formValues,
           // @ts-ignore
           description: descriptionEditor.getData(),
+          volunteer : volunteerEditor.getData(),
           userId: parseInt(user.id),
         },
       });
@@ -330,11 +351,23 @@ const AddActorForm = () => {
       if (object == undefined) { return (''); }
       return object.long_name;
     };
+    const radioChangeHandler = (results, name) => {
+      if (name === 'other') {
+        setShowOtherContact(true);
+      } else {
+        setShowOtherContact(false);
+      }
+    };
 
     const getAddressDetails = (results) => {
       formValues.address = (`${getObjectLongName(results, 'street_number')} ${getObjectLongName(results, 'route')}`).trim();
       formValues.city = getObjectLongName(results, 'locality');
       formValues.postCode = getObjectLongName(results, 'postal_code');
+      if (formValues.postCode === '17000') {
+        setEstlarochelle(true);
+      } else {
+        setEstlarochelle(false);
+      }
     };
 
     return (
@@ -430,18 +463,61 @@ const AddActorForm = () => {
             />
           </Grid>
         </div>
+        { /* @ts-ignore */ }
+        {dataCollections.collections && dataCollections.collections.map((collection) => {
+          if (collection.code !== 'larochelle_quarter' || !estlarochelle) return '';
+
+          //    const [display, setDisplay] = useState(false);
+          return (
+            <div>
+              <br />
+              <Typography
+                className={classes.collectionLabel}
+              >
+                {collection.label}
+              </Typography>
+              { // display &&
+             !IsTree(collection) && !collection.multipleSelection && (
+
+             <FormControl component="fieldset">
+               <RadioGroup row aria-label="gender" name="gender1">
+                 {collection.entries && collection.entries.map((entry) => {
+                   return (
+                     <FormControlLabel value={entry.id} control={<Radio />} label={entry.label} />
+                   );
+                 })}
+
+               </RadioGroup>
+             </FormControl>
+
+             )
+          }
+
+            </div>
+          );
+        })}
         <Typography variant="body1" color="primary" className={styles.label}>
           Jour et heure d'ouverture
         </Typography>
         <Typography variant="body1" color="primary" className={styles.label}>
-          Quartier de la rochelle pour 17000
+          CONTACT PRIVE pour les échanges avec Ouaaa
         </Typography>
         <FormControl component="fieldset">
-           <RadioGroup aria-label="gender" name="gender1" >
+          <RadioGroup row aria-label="gender" name="contact" onChange={radioChangeHandler}>
             <FormControlLabel value="me" control={<Radio />} label="C'est moi " />
             <FormControlLabel value="other" control={<Radio />} label="c’est un autre (avec un compte Ouaaa existant)" />
+            { showOtherContact ? (
+              <Autocomplete
+                id="combo-box-demo"
+                options={dataUsers.users}
+                getOptionLabel={(option) => `${option.surname} ${option.lastname}`}
+                style={{ width: 300 }}
+                renderInput={(params) => <TextField {...params} label="Contact Ouaaa" variant="outlined" />}
+              />
+            ) : ('')}
           </RadioGroup>
         </FormControl>
+
         <Typography variant="body1" color="primary" className={styles.label}>
           Description :
         </Typography>
@@ -457,13 +533,26 @@ const AddActorForm = () => {
         ) : (
           <div>Editor loading</div>
         )}
+        <Typography variant="body1" color="primary" className={styles.label}>
+          Nos recherches en bénévolat : :
+        </Typography>
+        <p />
+        { editorLoaded ? (
+          <CKEditor
+            editor={ClassicEditor}
+            data={formValues.volunteer}
+            onReady={(editor) => {
+              setVolunteerEditor(editor);
+            }}
+          />
+        ) : (
+          <div>Editor loading</div>
+        )}
 
         { /* @ts-ignore */ }
         {dataCollections.collections && dataCollections.collections.map((collection) => {
+          if (collection.code === 'larochelle_quarter') return '';
           //    const [display, setDisplay] = useState(false);
-           if(collection.code !="larochelle_quarter"&& formValues.city!="17000")
-          return ;
-          
           return (
             <div>
               <br />
@@ -509,7 +598,7 @@ const AddActorForm = () => {
 }
 
               { // display &&
-             !IsTree(collection) &&  collection.multipleSelection && (
+             !IsTree(collection) && collection.multipleSelection && (
              <List>
                {collection.entries && collection.entries.map((entry) => {
                  return (
@@ -534,25 +623,23 @@ const AddActorForm = () => {
              </List>
              )
           }
-               { // display &&
-             !IsTree(collection) && !collection.multipleSelection  && (
+              { // display &&
+             !IsTree(collection) && !collection.multipleSelection && (
 
-      
-              <FormControl component="fieldset">
-                  <RadioGroup aria-label="gender" name="gender1" >
-                  {collection.entries && collection.entries.map((entry) => {
-                        return (
-                            <FormControlLabel value={entry.id} control={<Radio />} label={entry.label} />
-                        );
-                      })}
+             <FormControl component="fieldset">
+               <RadioGroup row aria-label="gender" name="gender1">
+                 {collection.entries && collection.entries.map((entry) => {
+                   return (
+                     <FormControlLabel value={entry.id} control={<Radio />} label={entry.label} />
+                   );
+                 })}
 
-                  </RadioGroup>
-                </FormControl>
+               </RadioGroup>
+             </FormControl>
 
-         
              )
           }
-               
+
             </div>
           );
         })}

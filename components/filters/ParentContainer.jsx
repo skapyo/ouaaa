@@ -65,7 +65,12 @@ function ParentContainer(props) {
     const newCheckboxesState = [];
     const newNodesArray = [parentCheckboxState.id];
 
-    entry.subEntries.map(({ id, label }) => {
+    const compare = (a, b) => {
+      debugger;
+      return a.position > b.position;
+    };
+
+    entry.subEntries.sort(compare).map(({ id, label }) => {
       newCheckboxesState.push({
         id,
         label,
