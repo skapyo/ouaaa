@@ -511,8 +511,10 @@ const AddActorForm = () => {
               <Autocomplete
                 id="combo-box-demo"
                 options={dataUsers.users}
+                   // @ts-ignore
                 getOptionLabel={(option) => `${option.surname} ${option.lastname}`}
                 style={{ width: 300 }}
+                // eslint-disable-next-line react/jsx-props-no-spreading
                 renderInput={(params) => <TextField {...params} label="Contact Ouaaa" variant="outlined" />}
               />
             ) : ('')}
