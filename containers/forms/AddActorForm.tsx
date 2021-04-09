@@ -181,7 +181,7 @@ type FormItemProps = {
   required:boolean
   errorBool: boolean
   errorText: string
-  helperText: string
+  helperText?: string
 }
 
 const FormItem = (props: FormItemProps) => {
