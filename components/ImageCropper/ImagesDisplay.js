@@ -14,7 +14,7 @@ const ImagesDisplay = ({
   findCard,
   updateDeletedIndicator,
   updateKeyIndicator,
-  nBPictureByRow
+
 }) => {
   return (
     <Grid
@@ -35,7 +35,6 @@ const ImagesDisplay = ({
           updateKeyIndicator={updateKeyIndicator}
           deleted={file.deleted}
           file={file}
-          nBPictureByRow={nBPictureByRow}
         />
       ))}
     </Grid>
@@ -53,8 +52,7 @@ const ImagePrev = ({
   id,
   deletedIconClickHandler,
   deleted,
-  updateKeyIndicator,
-  nBPictureByRow
+  updateKeyIndicator
 }) => {
   const originalIndex = findCard(id).index;
 
@@ -89,7 +87,7 @@ const ImagePrev = ({
   };
 
   return (
-    <Grid item xs={nBPictureByRow}>
+    <Grid dangerouslySetInnerHTML>
       <div
         className="card"
         ref={(node) => drag(drop(node))}
@@ -100,10 +98,10 @@ const ImagePrev = ({
         </Card>
         <Card>
           <Grid container spacing={3}>
-            <Grid item xs={nBPictureByRow}>
+            <Grid item >
               <HeightIcon onClick={() => openModal()} />
             </Grid>
-            <Grid item xs={nBPictureByRow}>
+            <Grid item >
               <DeleteIcon
                 color={deleted ? 'primary' : 'action'}
                 onClick={() => deletedIconClickHandler(id)}
