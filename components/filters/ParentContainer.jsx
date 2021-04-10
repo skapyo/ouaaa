@@ -66,7 +66,6 @@ function ParentContainer(props) {
     const newNodesArray = [parentCheckboxState.id];
 
     const compare = (a, b) => {
-      debugger;
       return a.position > b.position;
     };
 

@@ -45,8 +45,8 @@ import useDnDStateManager from '../../hooks/useDnDStateManager';
 import withDndProvider from '../../hoc/withDnDProvider';
 
 const CREATE_ACTOR = gql`
-  mutation createActor($formValues: ActorInfos,$userId: Int!,$description:String!) {
-    createActor(actorInfos: $formValues,userId: $userId,description:$description) { 
+  mutation createActor($formValues: ActorInfos,$userId: Int!,$description:String!, $logoPictures: [InputPictureType], $mainPictures: [InputPictureType], $pictures: [InputPictureType]) {
+    createActor(actorInfos: $formValues,userId: $userId,description:$description, pictures: $pictures, mainPictures: $mainPictures,logoPictures: $logoPictures) { 
       id
       name
       email
@@ -346,7 +346,6 @@ const AddActorForm = () => {
     } = useDnDStateManager([]);
 
     useEffect(() => {
-      debugger;
       if (resultLogo) addValuesLogo(resultLogo);
       // @ts-ignore
     }, resultLogo);
@@ -369,10 +368,10 @@ const AddActorForm = () => {
       initState: initStateMain,
       addValues: addValuesMain,
       updateKeyIndicator: updateKeyIndicatorMain,
-    } =
-  useDnDStateManager([]);
+    } = useDnDStateManager([]);
 
     useEffect(() => {
+      debugger;
       if (resultMain) addValuesMain(resultMain);
       // @ts-ignore
     }, resultMain);
@@ -414,6 +413,71 @@ const AddActorForm = () => {
     }, []);
 
     const submitHandler = useCallback(() => {
+      debugger;
+      let logoPictures;
+      // @ts-ignore
+      if (objectsListLogo) {
+        logoPictures = objectsListLogo.map((object) => {
+          // return object.file
+          return {
+            id: object.serverId,
+            newpic: object.newpic,
+            deleted: object.deleted,
+            file: {
+              originalPicture: object.file,
+              croppedPicture: object.croppedImg.file,
+              croppedPictureModified: object.croppedImg.modified,
+              croppedX: object.croppedImg.crop.x,
+              croppedY: object.croppedImg.crop.y,
+              croppedZoom: object.croppedImg.zoom,
+              croppedRotation: object.croppedImg.rotation,
+            },
+          };
+        });
+      }
+      let mainPictures;
+      // @ts-ignore
+      if (objectsListMain) {
+        mainPictures = objectsListMain.map((object) => {
+          // return object.file
+          return {
+            id: object.serverId,
+            newpic: object.newpic,
+            deleted: object.deleted,
+            file: {
+              originalPicture: object.file,
+              croppedPicture: object.croppedImg.file,
+              croppedPictureModified: object.croppedImg.modified,
+              croppedX: object.croppedImg.crop.x,
+              croppedY: object.croppedImg.crop.y,
+              croppedZoom: object.croppedImg.zoom,
+              croppedRotation: object.croppedImg.rotation,
+            },
+          };
+        });
+      }
+      let pictures;
+      // @ts-ignore
+      if (objectsList) {
+        pictures = objectsList.map((object) => {
+          // return object.file
+          return {
+            id: object.serverId,
+            newpic: object.newpic,
+            deleted: object.deleted,
+            file: {
+              originalPicture: object.file,
+              croppedPicture: object.croppedImg.file,
+              croppedPictureModified: object.croppedImg.modified,
+              croppedX: object.croppedImg.crop.x,
+              croppedY: object.croppedImg.crop.y,
+              croppedZoom: object.croppedImg.zoom,
+              croppedRotation: object.croppedImg.rotation,
+            },
+          };
+        });
+      }
+
       create({
         variables: {
           formValues,
@@ -422,6 +486,9 @@ const AddActorForm = () => {
           // @ts-ignore
           volunteer: volunteerEditor.getData(),
           userId: parseInt(user.id),
+          logoPictures,
+          mainPictures,
+          pictures,
         },
       });
     }, [formValues, create, descriptionEditor]);
