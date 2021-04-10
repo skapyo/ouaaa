@@ -860,7 +860,7 @@ const EditEventForm = (props) => {
                     updateDeletedIndicator = {updateDeletedIndicator}
                     updateKeyIndicator = {updateKeyIndicator}
                 /> : null }
-            < ImagesDropZone onDropHandler={onDropHandler} />
+            < ImagesDropZone onDropHandler={onDropHandler}  />
 
             <ClassicButton
               fullWidth

@@ -34,10 +34,15 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import { Autocomplete } from '@material-ui/lab';
+import ImagesDropZone from 'components/ImageCropper/ImagesDropZone';
+import ImagesDisplay from 'components/ImageCropper/ImagesDisplay';
 import useCookieRedirection from '../../hooks/useCookieRedirection';
 import Link from '../../components/Link';
 import StyledTreeItem from '../../components/filters/StyledTreeItem';
 import { QueryOptions, ValidationRules, ValidationRuleType } from '../../components/controllers/FormController';
+import useImageReader from '../../hooks/useImageReader';
+import useDnDStateManager from '../../hooks/useDnDStateManager';
+import withDndProvider from '../../hoc/withDnDProvider';
 
 const CREATE_ACTOR = gql`
   mutation createActor($formValues: ActorInfos,$userId: Int!,$description:String!) {
@@ -319,6 +324,84 @@ const AddActorForm = () => {
 
     const [estlarochelle, setEstlarochelle] = useState(false);
     const [create, { data: createData, loading: createLoading, error: createError }] = useMutation(CREATE_ACTOR);
+    const [setImagesLogoList, loadingLogo, resultLogo, imagesLogoListState] = useImageReader();
+
+    const onDropLogoHandler = useCallback(
+      (files) => {
+        // @ts-ignore
+        setImagesLogoList(files);
+      },
+      [setImagesLogoList],
+    );
+
+    const {
+      objectsList: objectsListLogo,
+      moveObject: moveObjectLogo,
+      findObject: findObjectLogo,
+      updateActiveIndicator: updateActiveIndicatorLogo,
+      updateDeletedIndicator: updateDeletedIndicatorLogo,
+      initState: initStateLogo,
+      addValues: addValuesLogo,
+      updateKeyIndicator: updateKeyIndicatorLogo,
+    } = useDnDStateManager([]);
+
+    useEffect(() => {
+      debugger;
+      if (resultLogo) addValuesLogo(resultLogo);
+      // @ts-ignore
+    }, resultLogo);
+
+    const [setImagesMainList, loadingMain, resultMain, imagesMainListState] = useImageReader();
+
+    const onDropMainHandler = useCallback(
+      (files) => {
+        // @ts-ignore
+        setImagesMainList(files);
+      },
+      [setImagesMainList],
+    );
+    const {
+      objectsList: objectsListMain,
+      moveObject: moveObjectMain,
+      findObject: findObjectMain,
+      updateActiveIndicator: updateActiveIndicatorMain,
+      updateDeletedIndicator: updateDeletedIndicatorMain,
+      initState: initStateMain,
+      addValues: addValuesMain,
+      updateKeyIndicator: updateKeyIndicatorMain,
+    } =
+  useDnDStateManager([]);
+
+    useEffect(() => {
+      if (resultMain) addValuesMain(resultMain);
+      // @ts-ignore
+    }, resultMain);
+
+    const [setImagesList, loading, result, imagesListState] = useImageReader();
+
+    const onDropHandler = useCallback(
+      (files) => {
+        // @ts-ignore
+        setImagesList(files);
+      },
+      [setImagesList],
+    );
+
+    const {
+      objectsList,
+      moveObject,
+      findObject,
+      updateActiveIndicator,
+      updateDeletedIndicator,
+      initState,
+      addValues,
+      updateKeyIndicator,
+    } = useDnDStateManager([]);
+
+    useEffect(() => {
+      if (result) addValues(result);
+      // @ts-ignore
+    }, result);
 
     useEffect(() => {
       // @ts-ignore
@@ -539,12 +622,45 @@ const AddActorForm = () => {
         <Typography variant="body1" color="primary" className={styles.label}>
           Votre logo
         </Typography>
+        {objectsListLogo ? (
+          <ImagesDisplay
+            cards={objectsListLogo}
+            moveCard={moveObjectLogo}
+            findCard={findObjectLogo}
+            updateDeletedIndicator={updateDeletedIndicatorLogo}
+            updateKeyIndicator={updateKeyIndicatorLogo}
+          />
+        ) : null}
+        <ImagesDropZone onDropHandler={onDropLogoHandler} text="Déposez ici votre logo au format jpg" />
+
         <Typography variant="body1" color="primary" className={styles.label}>
           Photo principale
         </Typography>
+        {objectsListMain ? (
+          <ImagesDisplay
+            cards={objectsListMain}
+            moveCard={moveObjectMain}
+            findCard={findObjectMain}
+            updateDeletedIndicator={updateDeletedIndicatorMain}
+            updateKeyIndicator={updateKeyIndicatorMain}
+          />
+        ) : null}
+        <ImagesDropZone onDropHandler={onDropMainHandler} text="Déposez ici votre photo principale au format jpg" />
+
         <Typography variant="body1" color="primary" className={styles.label}>
           Autres photos
         </Typography>
+        {objectsList ? (
+          <ImagesDisplay
+            cards={objectsList}
+            moveCard={moveObject}
+            findCard={findObject}
+            updateDeletedIndicator={updateDeletedIndicator}
+            updateKeyIndicator={updateKeyIndicator}
+          />
+        ) : null}
+        <ImagesDropZone onDropHandler={onDropHandler} text="Déposez ici votre autres photos au format jpg" />
+
         <p />
         <Tooltip title="Cette description courte s’affiche lors de la vue en liste ou dans les blocs de survol/clic de la carte. Pour qu’elle soit utile, nous vous invitons à synthéser en quelques mots le coeur de vos actions/organisation/missions">
           <FormItem
@@ -602,23 +718,23 @@ const AddActorForm = () => {
           if (collection.code === 'larochelle_quarter') return '';
           //    const [display, setDisplay] = useState(false);
           let { label } = collection;
-          let  helperText = '';
+          let helperText = '';
           if (collection.code === 'category') {
             label = 'Choisissez les sous-sujets dans lesquels vous souhaitez apparaître (en priorité)';
-            helperText ='Vous avez la possibilité d’ajouter un texte libre pour expliquer votre lien au sujet choisi. Vous pouvez sélectionner autant de sujet que nécessaire, les 3 premiers serviront à référencer votre page dans les moteurs de recherches info bulle : expliquant les ensemble et les sujets qu’ils contiennent aisni que les liens avec les sous-sujets et pourquoi pas ODD / transiscope. Ces infos bulles sont aussi visible dans le filtre sur la carte pour aider les usagers de Ouaaa à filtrer leur recherche'
+            helperText = 'Vous avez la possibilité d’ajouter un texte libre pour expliquer votre lien au sujet choisi. Vous pouvez sélectionner autant de sujet que nécessaire, les 3 premiers serviront à référencer votre page dans les moteurs de recherches info bulle : expliquant les ensemble et les sujets qu’ils contiennent aisni que les liens avec les sous-sujets et pourquoi pas ODD / transiscope. Ces infos bulles sont aussi visible dans le filtre sur la carte pour aider les usagers de Ouaaa à filtrer leur recherche';
           } else if (collection.code === 'actor_status') {
             label = 'Quel est votre statut ?';
-            helperText ='service public : toutes les collectivités, mairies, cda, cdc participant directement ou via des projets à la transition / ex : la rochelle territoire zéro carbone entreprise : tous les acteurs économiques de la transition, de l’economie sociale et solidaire... association & ONG  : toutes les structures à but non lucratif'
+            helperText = 'service public : toutes les collectivités, mairies, cda, cdc participant directement ou via des projets à la transition / ex : la rochelle territoire zéro carbone entreprise : tous les acteurs économiques de la transition, de l’economie sociale et solidaire... association & ONG  : toutes les structures à but non lucratif';
           } else if (collection.code === 'public_target') {
             label = 'Quel public visez vous principalement dans vos actions ?';
-            helperText ='Ici nous vous proposons de choisir votre public principal. Bien sur à chaque action (evenement, campagne…) que vous créerez vous pourrez indiquer des publics différents de votre public principal.'
+            helperText = 'Ici nous vous proposons de choisir votre public principal. Bien sur à chaque action (evenement, campagne…) que vous créerez vous pourrez indiquer des publics différents de votre public principal.';
           } else if (collection.code === 'collectif') {
             label = 'En tant qu’acteur, je fais partie des collectifs & réseaux suivants :';
-            helperText ='Sont référencés ici des collectifs et réseaux locaux. Les groupes locaux de réseaux nationaux (ex Greenpeace) ne sont pas incluent dans cette liste'
+            helperText = 'Sont référencés ici des collectifs et réseaux locaux. Les groupes locaux de réseaux nationaux (ex Greenpeace) ne sont pas incluent dans cette liste';
           } else if (collection.code === 'actor_location_action') {
             label = "Territoire d'action (1 seul choix) *";
-            helperText ='un acteur n’est pas à côté de chez vous mais peut être se déplace-t-il dans votre zone pour le savoir cocher cette case pour faire apparaître les zones d’actions'
-          } 
+            helperText = 'un acteur n’est pas à côté de chez vous mais peut être se déplace-t-il dans votre zone pour le savoir cocher cette case pour faire apparaître les zones d’actions';
+          }
 
           return (
             <div>
@@ -761,4 +877,4 @@ const AddActorForm = () => {
   );
 };
 
-export default withRouter(withApollo()(AddActorForm));
+export default withDndProvider(withRouter(withApollo()(AddActorForm)));

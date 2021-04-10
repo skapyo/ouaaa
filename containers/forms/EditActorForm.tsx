@@ -18,7 +18,6 @@ import TextField from 'components/form/TextField';
 import ClassicButton from 'components/buttons/ClassicButton';
 import { withApollo } from 'hoc/withApollo';
 import { useRouter, withRouter } from 'next/router';
-import { useDropArea } from 'react-use';
 import { gql, useMutation, useQuery } from '@apollo/client';
 import graphqlTag from 'graphql-tag';
 import FormController, {
@@ -39,18 +38,19 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 import Collapse from '@material-ui/core/Collapse';
 import { useCookies } from 'react-cookie';
 import { useSnackbar } from 'notistack';
-import DeleteIcon from '@material-ui/icons/Delete';
-import HeightIcon from '@material-ui/icons/Height';
 
-import ImageCropper from 'components/ImageCropper/ImageCropper';
-import InsertPhotoIcon from '@material-ui/icons/InsertPhoto';
 import { getImageUrl } from 'utils/utils';
-import { useDrag, useDrop } from 'react-dnd';
+
 import TreeView from '@material-ui/lab/TreeView';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
+import ImagesDropZone from 'components/ImageCropper/ImagesDropZone';
+import ImagesDisplay from 'components/ImageCropper/ImagesDisplay';
+
+
 import useImageReader from '../../hooks/useImageReader';
 import useDnDStateManager from '../../hooks/useDnDStateManager';
+
 import useCookieRedirection from '../../hooks/useCookieRedirection';
 import {
   ValidationRules,
@@ -364,50 +364,6 @@ const EditActorForm = (props) => {
       });
   }
 
-  const ImagesDropZone = ({ onDropHandler }) => {
-    const [bond, state] = useDropArea({
-      onFiles: (files) => onDropHandler(files),
-    });
-
-    const uploadInputRef = useRef(null);
-
-    // @ts-ignore
-
-    return (
-      <Card className={styles.dropZone}>
-        <Grid container alignItems="center">
-          <Grid item xs={12}>
-            <div {...bond}>
-              <div>
-                <InsertPhotoIcon />
-              </div>
-              <div>Déposer les images ici au format jpg.</div>
-            </div>
-            <p />
-            <input
-              ref={uploadInputRef}
-              type="file"
-              accept="image/*"
-              style={{ display: 'none' }}
-              // @ts-ignore
-              onChange={(e) => onDropHandler([e.target.files[0]])}
-            />
-            <p />
-            <Button
-              // @ts-ignore
-              onClick={() => uploadInputRef.current && uploadInputRef.current.click()}
-              variant="contained"
-            >
-              <p />
-              Ou cliquer ici pour téléverser une image
-            </Button>
-            <p />
-            <div>La première image sera aussi l'image de couverture .</div>
-          </Grid>
-        </Grid>
-      </Card>
-    );
-  };
   const handleToggle = (value: number, index: number) => () => {
     const currentIndex = checked.indexOf(value);
     const newChecked = [...checked];
@@ -435,120 +391,8 @@ const EditActorForm = (props) => {
       maxLimit: 10,
     },
   };
-  const ItemTypes = {
-    PIC: 'pic',
-  };
+ 
 
-  const ImagesDisplay = ({
-    cards,
-    moveCard,
-    findCard,
-    updateDeletedIndicator,
-    updateKeyIndicator,
-  }) => {
-    return (
-      <Grid
-        container
-        alignItems="center"
-        // justify='center'
-        spacing={3}
-      >
-        {cards.map((file) => (
-          <ImagePrev
-            id={file.id}
-            key={`image${file.id}`}
-            originalImg={file.img}
-            croppedImg={file.croppedImg}
-            moveCard={moveCard}
-            findCard={findCard}
-            deletedIconClickHandler={updateDeletedIndicator}
-            updateKeyIndicator={updateKeyIndicator}
-            deleted={file.deleted}
-            file={file}
-          />
-        ))}
-      </Grid>
-    );
-  };
-
-  const ImagePrev = ({
-    file,
-    originalImg,
-    croppedImg,
-    moveCard,
-    findCard,
-    id,
-    deletedIconClickHandler,
-    deleted,
-    updateKeyIndicator,
-  }) => {
-    const originalIndex = findCard(id).index;
-
-    const [, drag] = useDrag({
-      item: { type: ItemTypes.PIC, id, originalIndex },
-      collect: (monitor) => ({
-        isDragging: monitor.isDragging(),
-      }),
-    });
-
-    {
-      /* @ts-ignore */
-    }
-    const [, drop] = useDrop({
-      accept: ItemTypes.PIC,
-      canDrop: () => false,
-      // @ts-ignore
-      hover({ id: draggedId }) {
-        if (draggedId !== id) {
-          const { index: overIndex } = findCard(id);
-          moveCard(draggedId, overIndex);
-        }
-      },
-    });
-
-    const opacity = 1;
-
-    // gestion de la modal du cropper
-    const [modalOpened, setOpenedInd] = useState(false);
-    const openModal = () => {
-      setOpenedInd(true);
-    };
-
-    return (
-      <Grid item xs={3}>
-        <div
-          className="card"
-          ref={(node) => drag(drop(node))}
-          style={{ opacity }}
-        >
-          <Card>
-            <img src={croppedImg.img} className={styles.image} />
-          </Card>
-          <Card>
-            <Grid container spacing={3}>
-              <Grid item xs={3}>
-                <HeightIcon onClick={() => openModal()} />
-              </Grid>
-              <Grid item xs={3}>
-                <DeleteIcon
-                  color={deleted ? 'primary' : 'action'}
-                  onClick={() => deletedIconClickHandler(id)}
-                />
-              </Grid>
-            </Grid>
-          </Card>
-          <ImageCropper
-            updateKeyIndicator={updateKeyIndicator}
-            id={id}
-            croppedImg={file.croppedImg}
-            src={originalImg}
-            open={modalOpened}
-            onClose={() => setOpenedInd(false)}
-          />
-        </div>
-      </Grid>
-    );
-  };
   const Form: RenderCallback = ({
     formChangeHandler,
     formValues,
@@ -562,6 +406,7 @@ const EditActorForm = (props) => {
 
     const [setImagesList, loading, result, imagesListState] = useImageReader();
     const editorRef = useRef();
+    
     const [editorLoaded, setEditorLoaded] = useState(false);
     // @ts-ignore
     const { CKEditor, ClassicEditor } = editorRef.current || {};
@@ -819,7 +664,7 @@ const EditActorForm = (props) => {
 
               {collection.entries && collection.entries.map((entry) => {
                 return (
-                    // @ts-ignore
+                // @ts-ignore
                   <StyledTreeItem
                     key={entry.id}
                     nodeId={entry.id}
@@ -948,7 +793,7 @@ const EditActorForm = (props) => {
             updateKeyIndicator={updateKeyIndicator}
           />
         ) : null}
-        <ImagesDropZone onDropHandler={onDropHandler} />
+        <ImagesDropZone onDropHandler={onDropHandler} text="Déposer ici les images ici au format jpg." />
 
         <Grid item xs={12}>
           <ClassicButton
