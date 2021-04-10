@@ -371,7 +371,6 @@ const AddActorForm = () => {
     } = useDnDStateManager([]);
 
     useEffect(() => {
-      debugger;
       if (resultMain) addValuesMain(resultMain);
       // @ts-ignore
     }, resultMain);
@@ -413,7 +412,6 @@ const AddActorForm = () => {
     }, []);
 
     const submitHandler = useCallback(() => {
-      debugger;
       let logoPictures;
       // @ts-ignore
       if (objectsListLogo) {

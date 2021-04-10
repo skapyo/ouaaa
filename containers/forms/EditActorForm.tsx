@@ -446,7 +446,6 @@ const EditActorForm = (props) => {
     );
 
     const submitHandler = useCallback(() => {
-      debugger;
       let files;
       // @ts-ignore
       if (objectsList) {

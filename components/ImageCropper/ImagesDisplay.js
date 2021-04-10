@@ -87,7 +87,7 @@ const ImagePrev = ({
   };
 
   return (
-    <Grid dangerouslySetInnerHTML>
+    <Grid>
       <div
         className="card"
         ref={(node) => drag(drop(node))}
