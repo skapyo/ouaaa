@@ -215,6 +215,7 @@ const otherCategories = {
   "Territoire d'actions": [],
   "Statut d'acteur": [],
   'Public principale visé': [],
+  'Collectif & réseaux': [],
 };
 
 const carto = () => {
