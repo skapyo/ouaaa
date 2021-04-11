@@ -215,6 +215,7 @@ const otherCategories = {
   "Territoire d'actions": [],
   "Statut d'acteur": [],
   'Public principale visé': [],
+  'Collectif & réseaux': [],
 };
 
 const carto = () => {
@@ -226,6 +227,7 @@ const carto = () => {
   const [favorite, setFavorite] = useState(false);
   const [listMode, setListMode] = useState(true);
   const [postCode, setPostCode] = useState(null);
+  const isFirstRef = useRef(true);
 
   useEffect(() => {
     const { current = {} } = mapRef;
@@ -289,25 +291,32 @@ const carto = () => {
       },
     });
 
-    const filterChange = () => {
-      const newOtherCategoriesLists = Object.values(otherCategoriesChecked);
-      const newEntries = [...categoriesChecked];
+    useEffect(() => {
+      // avoid first rendering
+      if (isFirstRef.current) {
+        isFirstRef.current = false;
+        return;
+      }
+      const filterChange = () => {
+        const newOtherCategoriesLists = Object.values(otherCategoriesChecked);
+        const newEntries = [...categoriesChecked];
 
-      newOtherCategoriesLists.forEach((otherCategoryList) => {
-        if (otherCategoryList.length > 0) newEntries.push(otherCategoryList);
-      });
+        newOtherCategoriesLists.forEach((otherCategoryList) => {
+          if (otherCategoryList.length > 0) newEntries.push(otherCategoryList);
+        });
 
-      console.log('entries', newEntries, 'postCode', postCode);
-      postCode !== null
-        ? refetch({ entries: newEntries, postCode })
-        : refetch({ entries: newEntries });
-    };
+        console.log('entries', newEntries, 'postCode', postCode);
+        postCode !== null
+          ? refetch({ entries: newEntries, postCode })
+          : refetch({ entries: newEntries });
+      };
+      filterChange();
+    }, [categoriesChecked, otherCategoriesChecked, postCode]);
 
     const parentCategoryChange = useCallback((arr) => {
       const tempCategories = [...categoriesChecked];
       const tempCategoriesChecked = [];
       const tempCategoriesUnchecked = [];
-
       arr.forEach((checkbox) => {
         const { checked, id } = checkbox;
         if (checked) {
@@ -332,8 +341,6 @@ const carto = () => {
       ];
 
       setCategoriesChecked(newCategoriesChecked);
-
-      filterChange();
     });
 
     const categoryChange = useCallback((e) => {
@@ -350,12 +357,10 @@ const carto = () => {
       }
 
       setCategoriesChecked(tempCategories);
-      filterChange();
     });
 
     const postCodeChange = (e) => {
       setPostCode(e.target.value);
-      filterChange();
     };
 
     const otherCategoryChange = useCallback((e, collectionLabel) => {
@@ -373,7 +378,6 @@ const carto = () => {
       }
 
       setOtherCategoriesChecked(newOtherCategories);
-      filterChange();
     });
 
     return (

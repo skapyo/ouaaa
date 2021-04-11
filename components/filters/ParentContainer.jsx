@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
@@ -51,6 +51,7 @@ function ParentContainer(props) {
   const [expanded, setExpanded] = useState([]);
   const [nodesArray, setNodesArray] = useState([]);
   const [numberChecked, setNumberChecked] = useState(0);
+  const isFirstRef = useRef(true);
 
   /* update the checkboxes children */
   useEffect(() => {
@@ -85,6 +86,7 @@ function ParentContainer(props) {
   }, []);
 
   const updateParentWithChildren = () => {
+    //
     let allChecked = false;
     for (let i = 0; i < checkboxes.length; i += 1) {
       if (checkboxes[i].checked) {
@@ -94,6 +96,7 @@ function ParentContainer(props) {
         break;
       }
     }
+    //
 
     setParentCheckboxChecked(allChecked);
   };
@@ -109,20 +112,17 @@ function ParentContainer(props) {
   };
 
   useEffect(() => {
+    // avoid first rendering
+    if (isFirstRef.current) {
+      isFirstRef.current = false;
+      return;
+    }
+
     updateParentWithChildren();
-
-    if (parentCheckboxChecked) {
-      // update the categories changed
-      parentCategoryChange(checkboxes);
-    }
-
-    if (!parentCheckboxChecked && numberChecked > 0) {
-      parentCategoryChange(checkboxes);
-    }
-
+    parentCategoryChange(checkboxes);
     // // update the badge
     setNumberChecked(updateNumberChecked());
-  }, [checkboxes, parentCheckboxChecked]);
+  }, [parentCheckboxChecked, checkboxes]);
 
   const handleToggle = () => {
     setExpanded((oldExpanded) => (oldExpanded.length === 0 ? nodesArray : []));

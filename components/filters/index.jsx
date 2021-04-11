@@ -12,7 +12,12 @@ import {
   FormControl,
   InputLabel,
   FormHelperText,
+  ExpansionPanel,
+  ExpansionPanelSummary,
+  ExpansionPanelDetails,
 } from '@material-ui/core';
+
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/client';
@@ -63,14 +68,14 @@ function Filters(props) {
         entries {
           id
           label
-          position,
+          position
           subEntries {
             id
-            label,
-            position,
+            label
+            position
           }
-        },
-        filter,
+        }
+        filter
         actor
       }
     }
@@ -134,25 +139,28 @@ function Filters(props) {
         }
       />
 
-      {dataCollections.collections
-        && dataCollections.collections.map((collection) => {
+      {dataCollections.collections &&
+        dataCollections.collections.map((collection) => {
           if (!(collection.filter && collection.actor)) return '';
           const compare = (a, b) => {
             return a.position > b.position;
           };
           return (
-            <div>
-              <Typography
-                className={classes.collectionLabel}
-                //       onClick={setDisplay(!display)}
-              >
-                {collection.label}
-              </Typography>
+            <ExpansionPanel>
+              <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                <Typography
+                  className={classes.collectionLabel}
+                  //       onClick={setDisplay(!display)}
+                >
+                  {collection.label}
+                </Typography>
+              </ExpansionPanelSummary>
+
               {
                 // display &&
-                IsTree(collection)
-                  && collection.entries
-                  && collection.entries.sort(compare).map((entry) => {
+                IsTree(collection) &&
+                  collection.entries &&
+                  collection.entries.sort(compare).map((entry) => {
                     return (
                       <ParentContainer
                         key={entry.id}
@@ -164,29 +172,32 @@ function Filters(props) {
                     );
                   })
               }
-
-              {!IsTree(collection) && (
-                <List>
-                  {collection.entries
-                    && collection.entries.map((entry) => {
-                      return (
-                        <ListItem key={entry.id} role={undefined} dense>
-                          <ListItemText primary={entry.label} />
-                          <Checkbox
-                            edge="start"
-                            tabIndex={-1}
-                            disableRipple
-                            onChange={(e) => otherCategoryChange(e, collection.label)}
-                            name="{categoryChange.id}"
-                            value={entry.id}
-                            onClick={(e) => e.stopPropagation()}
-                          />
-                        </ListItem>
-                      );
-                    })}
-                </List>
-              )}
-            </div>
+              <ExpansionPanelDetails>
+                {!IsTree(collection) && (
+                  <List>
+                    {collection.entries &&
+                      collection.entries.map((entry) => {
+                        return (
+                          <ListItem key={entry.id} role={undefined} dense>
+                            <ListItemText primary={entry.label} />
+                            <Checkbox
+                              edge="start"
+                              tabIndex={-1}
+                              disableRipple
+                              onChange={(e) =>
+                                otherCategoryChange(e, collection.label)
+                              }
+                              name="{categoryChange.id}"
+                              value={entry.id}
+                              onClick={(e) => e.stopPropagation()}
+                            />
+                          </ListItem>
+                        );
+                      })}
+                  </List>
+                )}
+              </ExpansionPanelDetails>
+            </ExpansionPanel>
           );
         })}
     </Grid>
