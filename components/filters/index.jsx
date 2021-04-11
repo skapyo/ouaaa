@@ -63,11 +63,15 @@ function Filters(props) {
         entries {
           id
           label
+          position,
           subEntries {
             id
-            label
+            label,
+            position,
           }
-        }
+        },
+        filter,
+        actor
       }
     }
   `;
@@ -130,9 +134,12 @@ function Filters(props) {
         }
       />
 
-      {dataCollections.collections &&
-        dataCollections.collections.map((collection) => {
-          //    const [display, setDisplay] = useState(false);
+      {dataCollections.collections
+        && dataCollections.collections.map((collection) => {
+          if (!(collection.filter && collection.actor)) return '';
+          const compare = (a, b) => {
+            return a.position > b.position;
+          };
           return (
             <div>
               <Typography
@@ -143,9 +150,9 @@ function Filters(props) {
               </Typography>
               {
                 // display &&
-                IsTree(collection) &&
-                  collection.entries &&
-                  collection.entries.map((entry) => {
+                IsTree(collection)
+                  && collection.entries
+                  && collection.entries.sort(compare).map((entry) => {
                     return (
                       <ParentContainer
                         key={entry.id}
@@ -160,8 +167,8 @@ function Filters(props) {
 
               {!IsTree(collection) && (
                 <List>
-                  {collection.entries &&
-                    collection.entries.map((entry) => {
+                  {collection.entries
+                    && collection.entries.map((entry) => {
                       return (
                         <ListItem key={entry.id} role={undefined} dense>
                           <ListItemText primary={entry.label} />
@@ -169,9 +176,7 @@ function Filters(props) {
                             edge="start"
                             tabIndex={-1}
                             disableRipple
-                            onChange={(e) =>
-                              otherCategoryChange(e, collection.label)
-                            }
+                            onChange={(e) => otherCategoryChange(e, collection.label)}
                             name="{categoryChange.id}"
                             value={entry.id}
                             onClick={(e) => e.stopPropagation()}

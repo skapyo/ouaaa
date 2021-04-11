@@ -23,16 +23,6 @@ const useDnDStateManager = (initialState = []) => {
     );
   };
 
-  // move an object in the list from an index to another
-  const moveObject = useCallback((id, atIndex) => {
-    // console.log(`move card from ${id} to ${atIndex}`)
-    const { object, index } = findObject(id);
-    setObjectsList(
-      update(objectsList, {
-        $splice: [[index, 1], [atIndex, 0, object]],
-      }),
-    );
-  }, [setObjectsList, objectsList, findObject]);
 
   // function to find the card in the state
   const findObject = useCallback((id) => {
@@ -53,6 +43,17 @@ const useDnDStateManager = (initialState = []) => {
       }),
     );
   };
+  // move an object in the list from an index to another
+  const moveObject = useCallback((id, atIndex) => {
+    // console.log(`move card from ${id} to ${atIndex}`)
+    // eslint-disable-next-line no-use-before-define
+    const { object, index } = findObject(id);
+    setObjectsList(
+      update(objectsList, {
+        $splice: [[index, 1], [atIndex, 0, object]],
+      }),
+    );
+  }, [setObjectsList, objectsList, findObject]);
 
   // function to activate / desactivate the deleted indicator
   // depreciated : use updateKeyIndicator
