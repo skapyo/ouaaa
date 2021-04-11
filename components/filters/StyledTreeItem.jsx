@@ -68,16 +68,15 @@ function StyledTreeItem(props) {
   const context = useContext(ParentFilterContext);
 
   const handleCheckboxChange = (event) => {
-    categoryChange(event);
-
     const checkStatus = event.target.checked;
     const index = parseInt(id, 10);
 
-    if (!isParent) {
-      context.handleChildCheckboxChange(checkStatus, index);
-    } else {
+    if (isParent) {
       context.handleParentCheckboxChange(checkStatus);
       context.checkHandleToggle(event);
+    } else {
+      categoryChange(event);
+      context.handleChildCheckboxChange(checkStatus, index);
     }
   };
 
