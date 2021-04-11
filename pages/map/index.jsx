@@ -291,6 +291,7 @@ const carto = () => {
     });
 
     useEffect(() => {
+      // avoid first rendering
       if (isFirstRef.current) {
         isFirstRef.current = false;
         return;
@@ -315,7 +316,6 @@ const carto = () => {
       const tempCategories = [...categoriesChecked];
       const tempCategoriesChecked = [];
       const tempCategoriesUnchecked = [];
-      debugger;
       arr.forEach((checkbox) => {
         const { checked, id } = checkbox;
         if (checked) {
