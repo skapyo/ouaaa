@@ -334,6 +334,10 @@ const AddActorForm = () => {
       [setImagesLogoList],
     );
 
+    const autocompleteHandler = (event, value) => {
+      formValues.contactId = value.id;
+    };
+
     const {
       objectsList: objectsListLogo,
       moveObject: moveObjectLogo,
@@ -412,6 +416,7 @@ const AddActorForm = () => {
     }, []);
 
     const submitHandler = useCallback(() => {
+      debugger;
       let logoPictures;
       // @ts-ignore
       if (objectsListLogo) {
@@ -421,6 +426,7 @@ const AddActorForm = () => {
             id: object.serverId,
             newpic: object.newpic,
             deleted: object.deleted,
+            logo: true,
             file: {
               originalPicture: object.file,
               croppedPicture: object.croppedImg.file,
@@ -442,6 +448,7 @@ const AddActorForm = () => {
             id: object.serverId,
             newpic: object.newpic,
             deleted: object.deleted,
+            main: true,
             file: {
               originalPicture: object.file,
               croppedPicture: object.croppedImg.file,
@@ -482,14 +489,14 @@ const AddActorForm = () => {
           // @ts-ignore
           description: descriptionEditor.getData(),
           // @ts-ignore
-          volunteer: volunteerEditor.getData(),
+          volunteersDescription: volunteerEditor.getData(),
           userId: parseInt(user.id),
           logoPictures,
           mainPictures,
           pictures,
         },
       });
-    }, [formValues, create, descriptionEditor]);
+    }, [formValues, create, descriptionEditor, objectsListLogo, objectsList, objectsListMain]);
     useEffect(() => {
       if (!createError && !createLoading && createData) {
         enqueueSnackbar('Acteur ajouté avec succès.', {
@@ -666,6 +673,7 @@ const AddActorForm = () => {
                 options={dataUsers.users}
                    // @ts-ignore
                 getOptionLabel={(option) => `${option.surname} ${option.lastname}`}
+                onChange={autocompleteHandler}
                 style={{ width: 300 }}
                 // eslint-disable-next-line react/jsx-props-no-spreading
                 renderInput={(params) => <TextField {...params} label="Contact Ouaaa" variant="outlined" />}
