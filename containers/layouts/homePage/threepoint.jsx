@@ -192,7 +192,7 @@ const PresentationSection = () => {
         <button className={styles.button}>VOIR LA CARTE</button>
       </Link>
       <Typography variant="h2" className={[styles.cardTitle, styles.align]}>
-        Outils des Acteurs Alternatifs en Aunis
+        Ouaaa : Agir pour la transition en Aunis
       </Typography>
       <Typography variant="h3" className={[styles.cardTitle, styles.align]}>
         C'EST POUR QUI ?
