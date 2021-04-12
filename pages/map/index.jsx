@@ -302,7 +302,6 @@ const carto = () => {
           if (otherCategoryList.length > 0) newEntries.push(otherCategoryList);
         });
 
-
         if (isFirstRef.current) {
           //If filter still empty no refetch
           if (newEntries.length != 0 || typeof postcode !== 'undefined') {
@@ -313,9 +312,7 @@ const carto = () => {
 
 
         }
-        postCode !== null
-          ? refetch({ entries: newEntries, postCode })
-          : refetch({ entries: newEntries });
+        refetch({ entries: newEntries, postCode })
       };
       filterChange();
     }, [categoriesChecked, otherCategoriesChecked, postCode]);
@@ -367,7 +364,6 @@ const carto = () => {
     });
 
     const postCodeChange = (e) => {
-      debugger;
       if (e.target.value == "") {
         setPostCode(null);
       } else {
