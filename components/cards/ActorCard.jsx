@@ -113,7 +113,7 @@ const ActorCard = ({ actor }) => {
               <div className={classes.actorDetails}>
                 <span>
                   {/* @ts-ignore */}
-                  {actor.short_description}
+                  {actor.shortDescription}
                 </span>
           
               </div>

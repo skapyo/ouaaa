@@ -70,7 +70,7 @@ const LastActor = () => {
             events(limit:$limit,sort:$sort,way:$way) {
                 id,
                 label,
-                short_description,
+                shortDescription,
                 description,
                 startedAt,
                 endedAt,

@@ -45,8 +45,8 @@ import useDnDStateManager from '../../hooks/useDnDStateManager';
 import withDndProvider from '../../hoc/withDnDProvider';
 
 const CREATE_ACTOR = gql`
-  mutation createActor($formValues: ActorInfos,$userId: Int!,$description:String!, $logoPictures: [InputPictureType], $mainPictures: [InputPictureType], $pictures: [InputPictureType]) {
-    createActor(actorInfos: $formValues,userId: $userId,description:$description, pictures: $pictures, mainPictures: $mainPictures,logoPictures: $logoPictures) { 
+  mutation createActor($formValues: ActorInfos,$userId: Int!,$description:String!,$volunteerDescription:String $logoPictures: [InputPictureType], $mainPictures: [InputPictureType], $pictures: [InputPictureType]) {
+    createActor(actorInfos: $formValues,userId: $userId,description:$description,volunteerDescription:$volunteerDescription pictures: $pictures, mainPictures: $mainPictures,logoPictures: $logoPictures) { 
       id
       name
       email
@@ -91,7 +91,7 @@ const GET_ACTORS = graphqlTag`
   {   id,
     name,
     address,
-    short_description,
+    shortDescription,
     createdAt,
     updatedAt,
     socialNetwork,
@@ -489,9 +489,9 @@ const AddActorForm = () => {
           // @ts-ignore
           description: descriptionEditor.getData(),
           // @ts-ignore
-          volunteersDescription: volunteerEditor.getData(),
+          volunteerDescription: volunteerEditor.getData(),
           userId: parseInt(user.id),
-          logoPictures,
+          logoPictures, 
           mainPictures,
           pictures,
         },
@@ -641,7 +641,7 @@ const AddActorForm = () => {
              !IsTree(collection) && !collection.multipleSelection && (
 
              <FormControl component="fieldset">
-               <RadioGroup row aria-label="gender" name="gender1">
+               <RadioGroup row aria-label="entries" name="entries" onChange={formChangeHandler}>
                  {collection.entries && collection.entries.map((entry) => {
                    return (
                      <FormControlLabel value={entry.id} control={<Radio />} label={entry.label} />
@@ -887,7 +887,7 @@ const AddActorForm = () => {
              !IsTree(collection) && !collection.multipleSelection && (
 
              <FormControl component="fieldset">
-               <RadioGroup row aria-label="gender" name="gender1">
+               <RadioGroup row aria-label="entries" name="entries" onChange={formChangeHandler}>
                  {collection.entries && collection.entries.map((entry) => {
                    return (
                      <FormControlLabel value={entry.id} control={<Radio />} label={entry.label} />

@@ -142,7 +142,7 @@ const ActorAdminPage = () => {
         {   id,
             name,
             address,
-            short_description,
+            shortDescription,
             createdAt,
             updatedAt,
             city,

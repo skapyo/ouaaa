@@ -263,7 +263,7 @@ const AgendaPageLayout = () => {
                           </Grid>
 
                           <Typography component="p">
-                            {event && event.short_description}
+                            {event && event.shortDescription}
                           </Typography>
                         </div>
 
@@ -310,7 +310,7 @@ const AgendaPageLayout = () => {
                           </Grid>
 
                           <Typography component="p">
-                            {event && event.short_description}
+                            {event && event.shortDescription}
                           </Typography>
                         </div>
                         <Link href={`/event/${event.id}`}>

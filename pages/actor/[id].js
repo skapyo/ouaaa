@@ -208,7 +208,7 @@ const Actor = () => {
                 events {
                     id,
                     label,
-                    short_description,
+                    shortDescription,
                     description,
                     startedAt,
                     endedAt,

@@ -83,7 +83,7 @@ const ADDEVENT = gql`
     ) {
       id
       label
-      short_description
+      shortDescription
       facebookUrl
       description
       startedAt

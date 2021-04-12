@@ -256,7 +256,7 @@ const carto = () => {
           id
           name
           address
-          short_description
+          shortDescription
           lat
           lng
           categories {
@@ -482,7 +482,7 @@ const carto = () => {
                                 </Grid>
 
                                 <Typography component="p">
-                                  {actor && actor.short_description}
+                                  {actor && actor.shortDescription}
                                 </Typography>
                               </div>
                             </Tooltip>
@@ -545,7 +545,7 @@ const carto = () => {
                                 </Grid>
 
                                 <Typography component="p">
-                                  {actor && actor.short_description}
+                                  {actor && actor.shortDescription}
                                 </Typography>
                               </div>
                               <Link href={`/actor/${actor.id}`}>

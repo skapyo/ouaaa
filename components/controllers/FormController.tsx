@@ -187,7 +187,7 @@ const FormController = (props: FormControllerProps, ...otherprops: any[]) => {
           const ischar = /^[a-zA-Z]+$/.test(e.target.value);
           if (ischar) { setFormValue({ ...formValues, [e.target.name]: e.target.value }); }
         }
-      } else if (e.target.type == 'checkbox') {
+      } else if (e.target.type == 'checkbox' || e.target.type == 'radio') {
         let categoriesArray;
         if (formValues[e.target.name] != undefined) {
           categoriesArray = formValues[e.target.name];

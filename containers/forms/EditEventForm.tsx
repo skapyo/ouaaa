@@ -115,7 +115,7 @@ const EDIT_EVENT = gql`
     ) {
       id
       label
-      short_description
+      shortDescription
       facebookUrl
       description
       startedAt
@@ -147,7 +147,7 @@ const GET_EVENT = gql`
     event(id: $id) {
       id
       label
-      short_description
+      shortDescription
       facebookUrl
       description
       startedAt
@@ -420,7 +420,7 @@ const EditEventForm = (props) => {
     const updateFormValues = () => {
       formValues.label = eventData.event.label;
       formValues.facebookUrl = eventData.event.facebookUrl;
-      formValues.shortDescription = eventData.event.short_description;
+      formValues.shortDescription = eventData.event.shortDescription;
       formValues.description = eventData.event.description;
       formValues.address = eventData.event.address;
       formValues.postCode = eventData.event.postCode;
