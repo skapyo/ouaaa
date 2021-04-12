@@ -47,6 +47,19 @@ const useStyles = makeStyles({
     paddingTop: '5px',
     paddingBottom: '5px',
   },
+  listEntries: {
+    width: '100%',
+    padding: 'inherit!important'
+  },
+  entriesExpend: {
+    padding: 'inherit!important'
+  },
+  entries: {
+    padding: '0px 5px 0px 5px!important'
+  },
+  postCode: {
+    width: '100%'
+  }
 });
 
 function Filters(props) {
@@ -134,6 +147,7 @@ function Filters(props) {
         name="postCode"
         onChange={postCodeChangeHandler}
         error={errorPostCode}
+        className={classes.postCode}
         helperText={
           errorPostCode ? 'Le code postal doit être oomposé de 5 chiffres' : ''
         }
@@ -146,7 +160,7 @@ function Filters(props) {
             return a.position > b.position;
           };
           return (
-            <ExpansionPanel>
+            <ExpansionPanel noPadding >
               <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
                 <Typography
                   className={classes.collectionLabel}
@@ -172,13 +186,13 @@ function Filters(props) {
                   );
                 })
               }
-              <ExpansionPanelDetails>
+              <ExpansionPanelDetails className={classes.entriesExpend}>
                 {!IsTree(collection) && (
-                  <List>
+                  <List className={classes.listEntries}>
                     {collection.entries &&
                       collection.entries.map((entry) => {
                         return (
-                          <ListItem key={entry.id} role={undefined} dense>
+                          <ListItem key={entry.id} role={undefined} className={classes.entries} >
                             <ListItemText primary={entry.label} />
                             <Checkbox
                               edge="start"
