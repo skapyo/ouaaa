@@ -293,10 +293,8 @@ const carto = () => {
 
     useEffect(() => {
       // avoid first rendering
-      if (isFirstRef.current) {
-        isFirstRef.current = false;
-        return;
-      }
+
+
       const filterChange = () => {
         const newOtherCategoriesLists = Object.values(otherCategoriesChecked);
         const newEntries = [...categoriesChecked];
@@ -305,7 +303,17 @@ const carto = () => {
           if (otherCategoryList.length > 0) newEntries.push(otherCategoryList);
         });
 
-        console.log('entries', newEntries, 'postCode', postCode);
+
+        if (isFirstRef.current) {
+          //If filter still empty no refetch
+          if (newEntries.length != 0 || typeof postcode !== 'undefined') {
+            isFirstRef.current = false;
+          } else {
+            return;
+          }
+
+
+        }
         postCode !== null
           ? refetch({ entries: newEntries, postCode })
           : refetch({ entries: newEntries });
