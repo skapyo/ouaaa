@@ -286,8 +286,7 @@ const carto = () => {
 
     const { data, loading, error, refetch } = useQuery(GET_ACTORS, {
       variables: {
-        entries: categoriesChecked,
-        postCode,
+        entries: [categoriesChecked],
       },
     });
 
@@ -299,7 +298,7 @@ const carto = () => {
       }
       const filterChange = () => {
         const newOtherCategoriesLists = Object.values(otherCategoriesChecked);
-        const newEntries = [...categoriesChecked];
+        const newEntries = [categoriesChecked];
 
         newOtherCategoriesLists.forEach((otherCategoryList) => {
           if (otherCategoryList.length > 0) newEntries.push(otherCategoryList);
