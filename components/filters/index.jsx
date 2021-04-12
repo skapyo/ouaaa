@@ -99,7 +99,7 @@ function Filters(props) {
   const postCodeChangeHandler = useCallback(
     (e) => {
       const regex = /[0-9]{5}/g;
-      if (e.target.value.length === 5 && e.target.value.match(regex)) {
+      if (e.target.value.length === 0 || (e.target.value.length === 5 && e.target.value.match(regex))) {
         postCodeChange(e);
         setErrorPostCode(false);
       } else {
@@ -150,7 +150,7 @@ function Filters(props) {
               <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
                 <Typography
                   className={classes.collectionLabel}
-                  //       onClick={setDisplay(!display)}
+                //       onClick={setDisplay(!display)}
                 >
                   {collection.label}
                 </Typography>
@@ -159,18 +159,18 @@ function Filters(props) {
               {
                 // display &&
                 IsTree(collection) &&
-                  collection.entries &&
-                  collection.entries.sort(compare).map((entry) => {
-                    return (
-                      <ParentContainer
-                        key={entry.id}
-                        entry={entry}
-                        subEntries={entry.subEntries}
-                        categoryChange={categoryChange}
-                        parentCategoryChange={parentCategoryChange}
-                      />
-                    );
-                  })
+                collection.entries &&
+                collection.entries.sort(compare).map((entry) => {
+                  return (
+                    <ParentContainer
+                      key={entry.id}
+                      entry={entry}
+                      subEntries={entry.subEntries}
+                      categoryChange={categoryChange}
+                      parentCategoryChange={parentCategoryChange}
+                    />
+                  );
+                })
               }
               <ExpansionPanelDetails>
                 {!IsTree(collection) && (

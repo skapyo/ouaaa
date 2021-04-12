@@ -183,7 +183,7 @@ type FormItemProps = {
   inputName: string
   formChangeHandler: (event: ChangeEvent) => void
   value: string
-  required:boolean
+  required: boolean
   errorBool: boolean
   errorText: string
   helperText?: string
@@ -334,6 +334,10 @@ const AddActorForm = () => {
       [setImagesLogoList],
     );
 
+    const autocompleteHandler = (event, value) => {
+      formValues.contactId = value.id;
+    };
+
     const {
       objectsList: objectsListLogo,
       moveObject: moveObjectLogo,
@@ -421,6 +425,7 @@ const AddActorForm = () => {
             id: object.serverId,
             newpic: object.newpic,
             deleted: object.deleted,
+            logo: true,
             file: {
               originalPicture: object.file,
               croppedPicture: object.croppedImg.file,
@@ -442,6 +447,7 @@ const AddActorForm = () => {
             id: object.serverId,
             newpic: object.newpic,
             deleted: object.deleted,
+            main: true,
             file: {
               originalPicture: object.file,
               croppedPicture: object.croppedImg.file,
@@ -482,14 +488,14 @@ const AddActorForm = () => {
           // @ts-ignore
           description: descriptionEditor.getData(),
           // @ts-ignore
-          volunteer: volunteerEditor.getData(),
+          volunteersDescription: volunteerEditor.getData(),
           userId: parseInt(user.id),
           logoPictures,
           mainPictures,
           pictures,
         },
       });
-    }, [formValues, create, descriptionEditor]);
+    }, [formValues, create, descriptionEditor, objectsListLogo, objectsList, objectsListMain]);
     useEffect(() => {
       if (!createError && !createLoading && createData) {
         enqueueSnackbar('Acteur ajouté avec succès.', {
@@ -528,31 +534,31 @@ const AddActorForm = () => {
       <Container component="main" maxWidth="sm">
         { dataAdminActors && dataAdminActors.actorsAdmin.length > 0 && (
 
-        <Typography>
-          Bravo. Vous avez déjà créé des pages acteurs.
-          {' '}
-          <br />
+          <Typography>
+            Bravo. Vous avez déjà créé des pages acteurs.
+            {' '}
+            <br />
           Cliquez sur leurs noms pour éditer la page :
-          {dataAdminActors.actorsAdmin.map((actor) => {
-            { /* @ts-ignore */ }
-            return (
-              <Typography>
-                {/* @ts-ignore */}
-                <Link href={`/actorAdmin/actor/${actor.id}`}>
-                  {actor.name}
-                </Link>
-                {' '}
+            {dataAdminActors.actorsAdmin.map((actor) => {
+              { /* @ts-ignore */ }
+              return (
+                <Typography>
+                  {/* @ts-ignore */}
+                  <Link href={`/actorAdmin/actor/${actor.id}`}>
+                    {actor.name}
+                  </Link>
+                  {' '}
 
-              </Typography>
-            );
-          })}
+                </Typography>
+              );
+            })}
 
-          <br />
+            <br />
 
           Vous pouvez créer un autre acteur en remplissant le formulaire ci dessous :
-          <br />
-          <br />
-        </Typography>
+            <br />
+            <br />
+          </Typography>
         )}
         <Typography variant="h2" color="primary" className={styles.label}> Coordonnées </Typography>
         <FormItem
@@ -617,7 +623,7 @@ const AddActorForm = () => {
             />
           </Grid>
         </div>
-        { /* @ts-ignore */ }
+        { /* @ts-ignore */}
         {dataCollections.collections && dataCollections.collections.map((collection) => {
           if (collection.code !== 'larochelle_quarter' || !estlarochelle) return '';
 
@@ -631,21 +637,21 @@ const AddActorForm = () => {
                 {collection.label}
               </Typography>
               { // display &&
-             !IsTree(collection) && !collection.multipleSelection && (
+                !IsTree(collection) && !collection.multipleSelection && (
 
-             <FormControl component="fieldset">
-               <RadioGroup row aria-label="gender" name="gender1">
-                 {collection.entries && collection.entries.map((entry) => {
-                   return (
-                     <FormControlLabel value={entry.id} control={<Radio />} label={entry.label} />
-                   );
-                 })}
+                  <FormControl component="fieldset">
+                    <RadioGroup row aria-label="gender" name="gender1">
+                      {collection.entries && collection.entries.map((entry) => {
+                        return (
+                          <FormControlLabel value={entry.id} control={<Radio />} label={entry.label} />
+                        );
+                      })}
 
-               </RadioGroup>
-             </FormControl>
+                    </RadioGroup>
+                  </FormControl>
 
-             )
-          }
+                )
+              }
 
             </div>
           );
@@ -660,12 +666,13 @@ const AddActorForm = () => {
           <RadioGroup row aria-label="gender" name="contact" onChange={radioChangeHandler}>
             <FormControlLabel value="me" control={<Radio />} label="C'est moi " />
             <FormControlLabel value="other" control={<Radio />} label="c’est un autre (avec un compte Ouaaa existant)" />
-            { showOtherContact ? (
+            {showOtherContact ? (
               <Autocomplete
                 id="combo-box-demo"
                 options={dataUsers.users}
-                   // @ts-ignore
+                // @ts-ignore
                 getOptionLabel={(option) => `${option.surname} ${option.lastname}`}
+                onChange={autocompleteHandler}
                 style={{ width: 300 }}
                 // eslint-disable-next-line react/jsx-props-no-spreading
                 renderInput={(params) => <TextField {...params} label="Contact Ouaaa" variant="outlined" />}
@@ -778,7 +785,7 @@ const AddActorForm = () => {
           <div>Editor loading</div>
         )}
 
-        { /* @ts-ignore */ }
+        { /* @ts-ignore */}
         {dataCollections.collections && dataCollections.collections.map((collection) => {
           if (collection.code === 'larochelle_quarter') return '';
           //    const [display, setDisplay] = useState(false);
@@ -809,88 +816,88 @@ const AddActorForm = () => {
               >
                 {label}
                 {' '}
-                { helperText !== '' && (
+                {helperText !== '' && (
                   <Tooltip title={helperText}><InfoIcon /></Tooltip>
                 )}
               </Typography>
               { // display &&
-            IsTree(collection) && (
-            <TreeView
-              className={classes.rootTree}
-              defaultCollapseIcon={<ArrowDropDownIcon />}
-              defaultExpandIcon={<ArrowRightIcon />}
-              defaultEndIcon={<div style={{ width: 24 }} />}
-            >
-
-              {collection.entries && collection.entries.map((entry) => {
-                return (
-                // @ts-ignore
-                  <StyledTreeItem
-                    key={entry.id}
-                    nodeId={entry.id}
-                    labelText={entry.label}
-                    hideCheckBox
+                IsTree(collection) && (
+                  <TreeView
+                    className={classes.rootTree}
+                    defaultCollapseIcon={<ArrowDropDownIcon />}
+                    defaultExpandIcon={<ArrowRightIcon />}
+                    defaultEndIcon={<div style={{ width: 24 }} />}
                   >
-                    {entry.subEntries && entry.subEntries.map((subEntry) => {
+
+                    {collection.entries && collection.entries.map((entry) => {
                       return (
+                        // @ts-ignore
                         <StyledTreeItem
-                          key={subEntry.id}
-                           // @ts-ignore
-                          nodeId={subEntry.id}
-                          labelText={subEntry.label}
-                          categoryChange={formChangeHandler}
-                        />
+                          key={entry.id}
+                          nodeId={entry.id}
+                          labelText={entry.label}
+                          hideCheckBox
+                        >
+                          {entry.subEntries && entry.subEntries.map((subEntry) => {
+                            return (
+                              <StyledTreeItem
+                                key={subEntry.id}
+                                // @ts-ignore
+                                nodeId={subEntry.id}
+                                labelText={subEntry.label}
+                                categoryChange={formChangeHandler}
+                              />
+                            );
+                          })}
+                        </StyledTreeItem>
                       );
                     })}
-                  </StyledTreeItem>
-                );
-              })}
-            </TreeView>
-            )
-}
+                  </TreeView>
+                )
+              }
 
               { // display &&
-             !IsTree(collection) && collection.multipleSelection && (
-             <List>
-               {collection.entries && collection.entries.map((entry) => {
-                 return (
-                   <ListItem
-                     key={entry.id}
-                     role={undefined}
-                     dense
-                   >
-                     <ListItemText primary={entry.label} />
-                     <Checkbox
-                       edge="start"
-                       tabIndex={-1}
-                       disableRipple
-                       onChange={formChangeHandler}
-                       name="entries"
-                       value={entry.id}
-                       onClick={(e) => (e.stopPropagation())}
-                     />
-                   </ListItem>
-                 );
-               })}
-             </List>
-             )
-          }
+                !IsTree(collection) && collection.multipleSelection && (
+                  <List>
+                    {collection.entries && collection.entries.map((entry) => {
+                      return (
+                        <ListItem
+                          key={entry.id}
+                          role={undefined}
+                          dense
+                        >
+                          <ListItemText primary={entry.label} />
+                          <Checkbox
+                            edge="start"
+                            tabIndex={-1}
+                            disableRipple
+                            onChange={formChangeHandler}
+                            name="entries"
+                            value={entry.id}
+                            onClick={(e) => (e.stopPropagation())}
+                          />
+                        </ListItem>
+                      );
+                    })}
+                  </List>
+                )
+              }
               { // display &&
-             !IsTree(collection) && !collection.multipleSelection && (
+                !IsTree(collection) && !collection.multipleSelection && (
 
-             <FormControl component="fieldset">
-               <RadioGroup row aria-label="gender" name="gender1">
-                 {collection.entries && collection.entries.map((entry) => {
-                   return (
-                     <FormControlLabel value={entry.id} control={<Radio />} label={entry.label} />
-                   );
-                 })}
+                  <FormControl component="fieldset">
+                    <RadioGroup row aria-label="gender" name="gender1">
+                      {collection.entries && collection.entries.map((entry) => {
+                        return (
+                          <FormControlLabel value={entry.id} control={<Radio />} label={entry.label} />
+                        );
+                      })}
 
-               </RadioGroup>
-             </FormControl>
+                    </RadioGroup>
+                  </FormControl>
 
-             )
-          }
+                )
+              }
 
             </div>
           );

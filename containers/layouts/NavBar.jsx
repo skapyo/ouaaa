@@ -129,7 +129,7 @@ const NavBar = () => {
                 <img
                   className={styles.logo}
                   src="/logo.png"
-                  alt="Outils des Acteurs Alternatifs en Aunis – La Rochelle et ses communes"
+                  alt="Ouaaa : Agir pour la transition en Aunis – La Rochelle et ses communes"
                 />
               </Link>
             </Grid>
@@ -216,7 +216,7 @@ const NavBar = () => {
                         </MenuItem>
                         {user && user.role == "admin" && (
                           <MenuItem button component={Link} className={styles.menuItem} href="/administration">
-                          Administration
+                            Administration
                           </MenuItem>
                         )}
                         <MenuItem onClick={signoutHandler} className={styles.menuItem}>Se déconnecter</MenuItem>

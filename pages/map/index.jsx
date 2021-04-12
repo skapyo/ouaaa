@@ -251,8 +251,8 @@ const carto = () => {
       headerDisplay: 'static',
     });
     const GET_ACTORS = gql`
-      query actors($entries: [[String]]) {
-        actors(entries: $entries) {
+      query actors($entries: [[String]],$postCode: String) {
+        actors(entries: $entries,postCode: $postCode) {
           id
           name
           address
@@ -359,7 +359,13 @@ const carto = () => {
     });
 
     const postCodeChange = (e) => {
-      setPostCode(e.target.value);
+      debugger;
+      if (e.target.value == "") {
+        setPostCode(null);
+      } else {
+        setPostCode(e.target.value);
+      }
+
     };
 
     const otherCategoryChange = useCallback((e, collectionLabel) => {
@@ -447,10 +453,10 @@ const carto = () => {
                                   backgroundImage:
                                     actor.pictures.length >= 1
                                       ? `url(${getImageUrl(
-                                          actor.pictures.sort((a, b) =>
-                                            a.position > b.position ? 1 : -1,
-                                          )[0].croppedPicturePath,
-                                        )})`
+                                        actor.pictures.sort((a, b) =>
+                                          a.position > b.position ? 1 : -1,
+                                        )[0].croppedPicturePath,
+                                      )})`
                                       : '',
                                 }}
                               >
@@ -492,10 +498,10 @@ const carto = () => {
                                   backgroundImage:
                                     actor.pictures.length >= 1
                                       ? `url(${getImageUrl(
-                                          actor.pictures.sort((a, b) =>
-                                            a.position > b.position ? 1 : -1,
-                                          )[0].croppedPicturePath,
-                                        )})`
+                                        actor.pictures.sort((a, b) =>
+                                          a.position > b.position ? 1 : -1,
+                                        )[0].croppedPicturePath,
+                                      )})`
                                       : '',
                                 }}
                               >
