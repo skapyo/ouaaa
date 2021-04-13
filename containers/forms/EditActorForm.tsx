@@ -38,19 +38,21 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 import Collapse from '@material-ui/core/Collapse';
 import { useCookies } from 'react-cookie';
 import { useSnackbar } from 'notistack';
-
+import RadioGroup from '@material-ui/core/RadioGroup';
 import { getImageUrl } from 'utils/utils';
-
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import TreeView from '@material-ui/lab/TreeView';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import ImagesDropZone from 'components/ImageCropper/ImagesDropZone';
 import ImagesDisplay from 'components/ImageCropper/ImagesDisplay';
-
-
+import FormControl from '@material-ui/core/FormControl';
+import Radio from '@material-ui/core/Radio';
+import { Autocomplete } from '@material-ui/lab';
+import Tooltip from '@material-ui/core/Tooltip';
+import InfoIcon from '@material-ui/icons/Info';
 import useImageReader from '../../hooks/useImageReader';
 import useDnDStateManager from '../../hooks/useDnDStateManager';
-
 import useCookieRedirection from '../../hooks/useCookieRedirection';
 import {
   ValidationRules,
@@ -63,14 +65,20 @@ const EDIT_ACTOR = gql`
   mutation editActor(
     $formValues: ActorInfos
     $actorId: Int!
-    $pictures: [InputPictureType]
     $description: String!
+    $volunteerDescription:String
+    $logoPictures: [InputPictureType]
+    $mainPictures: [InputPictureType]
+    $pictures: [InputPictureType]
   ) {
     editActor(
       actorInfos: $formValues
       actorId: $actorId
+      mainPictures: $mainPictures
+      logoPictures: $logoPictures
       pictures: $pictures
       description: $description
+      volunteerDescription:$volunteerDescription
     ) {
       id
       name
@@ -110,7 +118,18 @@ const GET_CATEGORIES = graphqlTag`
     }
   }
 `;
+const GET_USERS = graphqlTag`
 
+  query users 
+  { users
+  {   id,
+    surname,
+    lastname,
+    
+  }
+}
+
+`;
 const GET_ACTOR = gql`
   query actor($id: String!) {
     actor(id: $id) {
@@ -122,9 +141,11 @@ const GET_ACTOR = gql`
       postCode
       city
       website
+      socialNetwork
       description
       lat
       lng
+      activity
       pictures {
         id
         label
@@ -175,6 +196,7 @@ const GET_COLLECTIONS = gql`
 { collections
   {   id,
       label,
+      code,
       multipleSelection,
       position
       entries {
@@ -291,6 +313,8 @@ const EditActorForm = (props) => {
   const styles = useStyles();
 
   const [checked, setChecked] = useState([0]);
+  const { data: dataUsers } = useQuery(GET_USERS, {
+  });
   const { data } = useQuery(GET_CATEGORIES, {
     fetchPolicy: 'network-only',
   });
@@ -391,7 +415,6 @@ const EditActorForm = (props) => {
       maxLimit: 10,
     },
   };
- 
 
   const Form: RenderCallback = ({
     formChangeHandler,
@@ -406,8 +429,9 @@ const EditActorForm = (props) => {
 
     const [setImagesList, loading, result, imagesListState] = useImageReader();
     const editorRef = useRef();
-    
+
     const [editorLoaded, setEditorLoaded] = useState(false);
+    const [showOtherContact, setShowOtherContact] = useState(formValues.contactId !== actorData.actor.id);
     // @ts-ignore
     const { CKEditor, ClassicEditor } = editorRef.current || {};
 
@@ -421,6 +445,63 @@ const EditActorForm = (props) => {
     }, []);
 
     const [descriptionEditor, setDescriptionEditor] = useState();
+    const [volunteerEditor, setVolunteerEditor] = useState();
+    const [estlarochelle, setEstlarochelle] = useState(false);
+    const [setImagesLogoList, loadingLogo, resultLogo, imagesLogoListState] = useImageReader();
+
+    const onDropLogoHandler = useCallback(
+      (files) => {
+        // @ts-ignore
+        setImagesLogoList(files);
+      },
+      [setImagesLogoList],
+    );
+
+    const autocompleteHandler = (event, value) => {
+      formValues.contactId = value.id;
+    };
+
+    const {
+      objectsList: objectsListLogo,
+      moveObject: moveObjectLogo,
+      findObject: findObjectLogo,
+      updateActiveIndicator: updateActiveIndicatorLogo,
+      updateDeletedIndicator: updateDeletedIndicatorLogo,
+      initState: initStateLogo,
+      addValues: addValuesLogo,
+      updateKeyIndicator: updateKeyIndicatorLogo,
+    } = useDnDStateManager([]);
+
+    useEffect(() => {
+      if (resultLogo) addValuesLogo(resultLogo);
+      // @ts-ignore
+    }, resultLogo);
+
+    const [setImagesMainList, loadingMain, resultMain, imagesMainListState] = useImageReader();
+
+    const onDropMainHandler = useCallback(
+      (files) => {
+        // @ts-ignore
+        setImagesMainList(files);
+      },
+      [setImagesMainList],
+    );
+    const {
+      objectsList: objectsListMain,
+      moveObject: moveObjectMain,
+      findObject: findObjectMain,
+      updateActiveIndicator: updateActiveIndicatorMain,
+      updateDeletedIndicator: updateDeletedIndicatorMain,
+      initState: initStateMain,
+      addValues: addValuesMain,
+      updateKeyIndicator: updateKeyIndicatorMain,
+    } = useDnDStateManager([]);
+
+    useEffect(() => {
+      if (resultMain) addValuesMain(resultMain);
+      // @ts-ignore
+    }, resultMain);
+
     const {
       objectsList,
       moveObject,
@@ -446,6 +527,50 @@ const EditActorForm = (props) => {
     );
 
     const submitHandler = useCallback(() => {
+      let logoPictures;
+      // @ts-ignore
+      if (objectsListLogo) {
+        logoPictures = objectsListLogo.map((object) => {
+          // return object.file
+          return {
+            id: object.serverId,
+            newpic: object.newpic,
+            deleted: object.deleted,
+            logo: true,
+            file: {
+              originalPicture: object.file,
+              croppedPicture: object.croppedImg.file,
+              croppedPictureModified: object.croppedImg.modified,
+              croppedX: object.croppedImg.crop.x,
+              croppedY: object.croppedImg.crop.y,
+              croppedZoom: object.croppedImg.zoom,
+              croppedRotation: object.croppedImg.rotation,
+            },
+          };
+        });
+      }
+      let mainPictures;
+      // @ts-ignore
+      if (objectsListMain) {
+        mainPictures = objectsListMain.map((object) => {
+          // return object.file
+          return {
+            id: object.serverId,
+            newpic: object.newpic,
+            deleted: object.deleted,
+            main: true,
+            file: {
+              originalPicture: object.file,
+              croppedPicture: object.croppedImg.file,
+              croppedPictureModified: object.croppedImg.modified,
+              croppedX: object.croppedImg.crop.x,
+              croppedY: object.croppedImg.crop.y,
+              croppedZoom: object.croppedImg.zoom,
+              croppedRotation: object.croppedImg.rotation,
+            },
+          };
+        });
+      }
       let files;
       // @ts-ignore
       if (objectsList) {
@@ -474,11 +599,15 @@ const EditActorForm = (props) => {
           // eslint-disable-next-line radix
           actorId: parseInt(actorData.actor.id),
           pictures: files,
+          logoPictures,
+          mainPictures,
           // @ts-ignore
           description: descriptionEditor.getData(),
+          // @ts-ignore
+          volunteerDescription: volunteerEditor.getData(),
         },
       });
-    }, [formValues, edit, objectsList, descriptionEditor]);
+    }, [formValues, edit, objectsList, descriptionEditor,volunteerEditor]);
 
     useEffect(() => {
       if (!editError && !editLoading && editData) {
@@ -501,7 +630,16 @@ const EditActorForm = (props) => {
       }
       return object.long_name;
     };
+    const [valueContactId, setValueContactId] = React.useState(formValues.contactId === actorData.actor.id ? 'me' : 'other');
 
+    const radioChangeHandler = (results, name) => {
+      setValueContactId(name);
+      if (name === 'other') {
+        setShowOtherContact(true);
+      } else {
+        setShowOtherContact(false);
+      }
+    };
     const getAddressDetails = (results) => {
       formValues.address = `${getObjectLongName(
         results,
@@ -525,6 +663,9 @@ const EditActorForm = (props) => {
       formValues.city = actorData.actor.city;
       formValues.lat = actorData.actor.lat;
       formValues.lng = actorData.actor.lng;
+      formValues.activity = actorData.actor.activity;
+      formValues.volunteerDescription = actorData.actor.volunteerDescription;
+      formValues.shortDescription = actorData.actor.shortDescription;
       const categories = [];
       actorData.actor.categories.forEach((actorcategory) => {
         // @ts-ignore
@@ -585,15 +726,7 @@ const EditActorForm = (props) => {
           required={false}
           errorText="Format du téléphone invalide. Maximum 10 chiffres."
         />
-        <FormItem
-          label="Site Internet"
-          inputName="website"
-          formChangeHandler={formChangeHandler}
-          required={false}
-          errorBool={false}
-          value={formValues.website}
-          errorText=""
-        />
+
         <FormItem
           label="Réseau social"
           inputName="socialNetwork"
@@ -603,21 +736,15 @@ const EditActorForm = (props) => {
           errorBool={false}
           errorText=""
         />
-        <Typography variant="body1" color="primary" className={styles.label}>
-          Description :
-        </Typography>
-        <p />
-        {editorLoaded ? (
-          <CKEditor
-            editor={ClassicEditor}
-            data={formValues.description}
-            onReady={(editor) => {
-              setDescriptionEditor(editor);
-            }}
-          />
-        ) : (
-          <div>Editor loading</div>
-        )}
+        <FormItem
+          label="Site Internet"
+          inputName="website"
+          formChangeHandler={formChangeHandler}
+          required={false}
+          errorBool={false}
+          value={formValues.website}
+          errorText=""
+        />
         <div className={styles.field}>
           <Grid className={styles.location}>
             <GooglePlacesAutocomplete
@@ -643,15 +770,198 @@ const EditActorForm = (props) => {
             />
           </Grid>
         </div>
+        { /* @ts-ignore */}
+        {dataCollections.collections && dataCollections.collections.map((collection) => {
+          if (collection.code !== 'larochelle_quarter' || !estlarochelle) return '';
+
+          //    const [display, setDisplay] = useState(false);
+          return (
+            <div>
+              <br />
+              <Typography
+                className={classes.collectionLabel}
+              >
+                {collection.label}
+              </Typography>
+              { // display &&
+                !IsTree(collection) && !collection.multipleSelection && (
+
+                  <FormControl component="fieldset">
+                    <RadioGroup row aria-label="entries" name="entries" onChange={formChangeHandler}>
+                      {collection.entries && collection.entries.map((entry) => {
+                        return (
+                          <FormControlLabel value={entry.id} control={<Radio />} label={entry.label} />
+                        );
+                      })}
+
+                    </RadioGroup>
+                  </FormControl>
+
+                )
+              }
+
+            </div>
+          );
+        })}
+        <Typography variant="body1" color="primary" className={styles.label}>
+          Jour et heure d'ouverture
+        </Typography>
+        <Typography variant="body1" color="primary" className={styles.label}>
+          CONTACT PRIVE pour les échanges avec Ouaaa
+        </Typography>
+        <FormControl component="fieldset">
+          <RadioGroup row aria-label="gender" name="contact" value={valueContactId} onChange={radioChangeHandler}>
+            <FormControlLabel value="me" control={<Radio />} label="C'est moi " />
+            <FormControlLabel value="other" control={<Radio />} label="c’est un autre (avec un compte Ouaaa existant)" />
+            {showOtherContact ? (
+              <Autocomplete
+                id="combo-box-demo"
+                options={dataUsers.users}
+                // @ts-ignore
+                getOptionLabel={(option) => `${option.surname} ${option.lastname}`}
+                onChange={autocompleteHandler}
+                style={{ width: 300 }}
+                // eslint-disable-next-line react/jsx-props-no-spreading
+                renderInput={(params) => <TextField {...params} label="Contact Ouaaa" variant="outlined" />}
+              />
+            ) : ('')}
+          </RadioGroup>
+        </FormControl>
+
+        <FormItem
+          label="Métier / Activité principale"
+          inputName="activity"
+          formChangeHandler={formChangeHandler}
+          value={formValues.activity}
+          required={false}
+          errorBool={false}
+          errorText=""
+          helperText="Indiquez ici votre métier ou activité principale. Cette info servira à mieux référencer votre page dans les moteurs de recherches"
+        />
+        <Typography variant="body1" color="primary" className={styles.label}>
+          Votre logo
+        </Typography>
+        {objectsListLogo ? (
+          <ImagesDisplay
+            cards={objectsListLogo}
+            moveCard={moveObjectLogo}
+            findCard={findObjectLogo}
+            updateDeletedIndicator={updateDeletedIndicatorLogo}
+            updateKeyIndicator={updateKeyIndicatorLogo}
+          />
+        ) : null}
+        <ImagesDropZone onDropHandler={onDropLogoHandler} text="Déposez ici votre logo au format jpg" />
+
+        <Typography variant="body1" color="primary" className={styles.label}>
+          Photo principale
+        </Typography>
+        {objectsListMain ? (
+          <ImagesDisplay
+            cards={objectsListMain}
+            moveCard={moveObjectMain}
+            findCard={findObjectMain}
+            updateDeletedIndicator={updateDeletedIndicatorMain}
+            updateKeyIndicator={updateKeyIndicatorMain}
+          />
+        ) : null}
+        <ImagesDropZone onDropHandler={onDropMainHandler} text="Déposez ici votre photo principale au format jpg" />
+
+        <Typography variant="body1" color="primary" className={styles.label}>
+          Autres photos
+        </Typography>
+        {objectsList ? (
+          <ImagesDisplay
+            cards={objectsList}
+            moveCard={moveObject}
+            findCard={findObject}
+            updateDeletedIndicator={updateDeletedIndicator}
+            updateKeyIndicator={updateKeyIndicator}
+          />
+        ) : null}
+        <ImagesDropZone onDropHandler={onDropHandler} text="Déposez ici votre autres photos au format jpg" />
+        <p />
+        <Tooltip title="Cette description courte s’affiche lors de la vue en liste ou dans les blocs de survol/clic de la carte. Pour qu’elle soit utile, nous vous invitons à synthéser en quelques mots le coeur de vos actions/organisation/missions">
+          <FormItem
+            label="Description courte générale"
+            inputName="shortDescription"
+            formChangeHandler={formChangeHandler}
+            value={formValues.shortDescription}
+            required={false}
+            errorBool={false}
+            errorText=""
+          />
+        </Tooltip>
+        <Typography variant="body1" color="primary" className={styles.label}>
+          Description
+          {' '}
+          <Tooltip title="Cette description longue est intégrée à votre page acteur. Elle se veut la plus explicite et détaillée possible. Un langage simple, des mots compréhensible de tous, vous permettront d’expliquer de manière didactique vos liens avec les questions de transition, vos missions/actions, votre organisation, etc. Au delà à l’accès à une information claire pour tous les internautes (y compris en situation de handicap) utilisant Ouaaa, ce texte permettra un meilleur référencement de votre page dans le moteur de recherche interne. Pour cela, pensez à utiliser des mots clé du champs sémantique de votre activité. Ex : vous êtes une asso de recyclerie : zero déchêt, réutilisation, matière, matériaux, économie circulaire, upcycling, nouvelle vie, objet, dépôt, vente, réinsertion,….">
+            <InfoIcon />
+          </Tooltip>
+        </Typography>
+        <p />
+        {editorLoaded ? (
+          <CKEditor
+            editor={ClassicEditor}
+            data={formValues.description}
+            onReady={(editor) => {
+              setDescriptionEditor(editor);
+            }}
+          />
+        ) : (
+          <div>Editor loading</div>
+        )}
+        <p />
+        <Typography variant="body1" color="primary" className={styles.label}>
+          Nos recherches en bénévolat :
+          {' '}
+          <Tooltip title="Décrivez ici les missions de bénévolat générales chez vous ou sur un de vos projet spécifique afin de donner envie aux visiteurs de cliquer sur « je deviens bénévole de votre page »">
+            <InfoIcon />
+          </Tooltip>
+        </Typography>
+        <p />
+        { editorLoaded ? (
+          <CKEditor
+            editor={ClassicEditor}
+            data={formValues.volunteer}
+            onReady={(editor) => {
+              setVolunteerEditor(editor);
+            }}
+          />
+        ) : (
+          <div>Editor loading</div>
+        )}
         { /* @ts-ignore */ }
         {dataCollections.collections && dataCollections.collections.map((collection) => {
+          if (collection.code === 'larochelle_quarter') return '';
           //    const [display, setDisplay] = useState(false);
+          let { label } = collection;
+          let helperText = '';
+          if (collection.code === 'category') {
+            label = 'Choisissez les sous-sujets dans lesquels vous souhaitez apparaître (en priorité)';
+            helperText = 'Vous avez la possibilité d’ajouter un texte libre pour expliquer votre lien au sujet choisi. Vous pouvez sélectionner autant de sujet que nécessaire, les 3 premiers serviront à référencer votre page dans les moteurs de recherches info bulle : expliquant les ensemble et les sujets qu’ils contiennent aisni que les liens avec les sous-sujets et pourquoi pas ODD / transiscope. Ces infos bulles sont aussi visible dans le filtre sur la carte pour aider les usagers de Ouaaa à filtrer leur recherche';
+          } else if (collection.code === 'actor_status') {
+            label = 'Quel est votre statut ?';
+            helperText = 'service public : toutes les collectivités, mairies, cda, cdc participant directement ou via des projets à la transition / ex : la rochelle territoire zéro carbone entreprise : tous les acteurs économiques de la transition, de l’economie sociale et solidaire... association & ONG  : toutes les structures à but non lucratif';
+          } else if (collection.code === 'public_target') {
+            label = 'Quel public visez vous principalement dans vos actions ?';
+            helperText = 'Ici nous vous proposons de choisir votre public principal. Bien sur à chaque action (evenement, campagne…) que vous créerez vous pourrez indiquer des publics différents de votre public principal.';
+          } else if (collection.code === 'collectif') {
+            label = 'En tant qu’acteur, je fais partie des collectifs & réseaux suivants :';
+            helperText = 'Sont référencés ici des collectifs et réseaux locaux. Les groupes locaux de réseaux nationaux (ex Greenpeace) ne sont pas incluent dans cette liste';
+          } else if (collection.code === 'actor_location_action') {
+            label = "Territoire d'action (1 seul choix) *";
+            helperText = 'un acteur n’est pas à côté de chez vous mais peut être se déplace-t-il dans votre zone pour le savoir cocher cette case pour faire apparaître les zones d’actions';
+          }
           return (
             <div>
               <Typography
                 className={styles.collectionLabel}
               >
-                {collection.label}
+                {label}
+                {' '}
+                {helperText !== '' && (
+                  <Tooltip title={helperText}><InfoIcon /></Tooltip>
+                )}
               </Typography>
               { // display &&
             IsTree(collection) && (
@@ -695,7 +1005,7 @@ const EditActorForm = (props) => {
             )
 }
               { // display &&
-             !IsTree(collection) && (
+             !IsTree(collection) && collection.multipleSelection && (
              <List>
                {collection.entries && collection.entries.map((entry) => {
                  return (
@@ -726,74 +1036,25 @@ const EditActorForm = (props) => {
              </List>
              )
 }
+              { // display &&
+                !IsTree(collection) && !collection.multipleSelection && (
+
+                  <FormControl component="fieldset">
+                    <RadioGroup row aria-label="entries" name="entries" defaultValue="top" onChange={formChangeHandler}>
+                      {collection.entries && collection.entries.map((entry) => {
+                        return (
+                          <FormControlLabel value={entry.id} control={<Radio />} label={entry.label} />
+                        );
+                      })}
+
+                    </RadioGroup>
+                  </FormControl>
+
+                )
+              }
             </div>
           );
         })}
-
-        <Typography variant="body1" color="primary" className={styles.label}>
-          Sélectionner une catégorie :
-        </Typography>
-        <List className={styles.field}>
-          {typeof data !== 'undefined'
-            && data.categories
-            && data.categories.map((category, index) => (
-              <div>
-                <ListItem
-                  key={category.id}
-                  role={undefined}
-                  dense
-                  button
-                  onClick={handleToggle(0, index)}
-                >
-                  <ListItemIcon />
-                  <ListItemText primary={category.label} />
-                  {open[index] ? <ExpandLess /> : <ExpandMore />}
-                </ListItem>
-                {typeof category.subCategories !== 'undefined'
-                  && category.subCategories != null
-                  && category.subCategories.map((subcategory, subIndex) => (
-                    <Collapse in={open[index]} timeout="auto" unmountOnExit>
-                      <List component="div" disablePadding>
-                        <ListItem button>
-                          <ListItemIcon>
-                            <Checkbox
-                              edge="start"
-                              tabIndex={-1}
-                              disableRipple
-                              onChange={formChangeHandler}
-                              name="categories"
-                              value={subcategory.id}
-                              // @ts-ignore
-                              checked={
-                                formValues
-                                && formValues.categories
-                                && formValues.categories.includes(subcategory.id)
-                              }
-                            />
-                          </ListItemIcon>
-                          <ListItemText primary={subcategory.label} />
-                        </ListItem>
-                      </List>
-                    </Collapse>
-                  ))}
-              </div>
-            ))}
-        </List>
-        <Typography variant="body1" color="primary">
-          <Icon />
-          Vos images
-        </Typography>
-        <br />
-        {objectsList ? (
-          <ImagesDisplay
-            cards={objectsList}
-            moveCard={moveObject}
-            findCard={findObject}
-            updateDeletedIndicator={updateDeletedIndicator}
-            updateKeyIndicator={updateKeyIndicator}
-          />
-        ) : null}
-        <ImagesDropZone onDropHandler={onDropHandler} text="Déposer ici les images ici au format jpg." />
 
         <Grid item xs={12}>
           <ClassicButton

@@ -19,6 +19,9 @@ import { useSnackbar } from 'notistack';
 import { useCookies } from 'react-cookie';
 import Head from 'next/head';
 import Parser from 'html-react-parser';
+import Fab from '@material-ui/core/Fab';
+import EditIcon from '@material-ui/icons/Edit';
+import Link from 'components/Link';
 import CardSliderEvent from '../../components/cards/CardSliderEvent';
 import Newsletter from '../../containers/layouts/Newsletter';
 import { useSessionState } from '../../context/session/session';
@@ -155,6 +158,18 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: '1em',
     paddingBottom: '1em',
     textAlign: 'center',
+  },
+  fab: {
+    position: 'fixed',
+    bottom: '40px',
+    right: '40px',
+    zIndex: '1400',
+    backgroundColor: '#bf083e',
+    color: 'white',
+    '&:hover': {
+      color: '#bf083e',
+    },
+
   },
 
 }));
@@ -511,7 +526,7 @@ const Actor = () => {
                       </span>
                     </Grid>
                   </Grid>
-                  
+
                   <Grid container className={[styles.item]}>
                     <Grid item xs={3} className={[styles.alignRight]}>
                       <Gavel className={[styles.icon]} />
@@ -634,7 +649,14 @@ const Actor = () => {
 
           </Container>
           <Newsletter />
-
+          {((data && containUser(data.actor.referents)) || (user && user.role === 'admin')) && (
+        <Link href={`/actorAdmin/actor/${id}`}>
+            <Fab className={styles.fab} aria-label="edit">
+              
+                <EditIcon />
+            </Fab>
+          </Link>
+          )}
         </Box>
       </RootRef>
     </AppLayout>
