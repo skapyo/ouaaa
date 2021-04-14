@@ -376,24 +376,40 @@ const EditActorForm = (props) => {
       .map((picture, index) => {
         if (!picture.main && !picture.logo) {
           imgInit.push({
+            // @ts-ignore
             id: index,
+            // @ts-ignore
             file: null,
+            // @ts-ignore
             img: getImageUrl(picture.originalPicturePath),
+            // @ts-ignore
             croppedImg: {
               crop: {
+                // @ts-ignore
                 x: picture.croppedX,
+                // @ts-ignore
                 y: picture.croppedY,
               },
+              // @ts-ignore
               rotation: picture.croppedRotation,
+              // @ts-ignore
               zoom: picture.croppedZoom,
+              // @ts-ignore
               file: null,
+              // @ts-ignore
               img: getImageUrl(picture.croppedPicturePath),
+              // @ts-ignore
               modified: false,
             },
+            // @ts-ignore
             activated: true,
+            // @ts-ignore
             deleted: false,
+            // @ts-ignore
             newpic: false,
+            // @ts-ignore
             serverId: picture.id,
+            // @ts-ignore
             position: picture.position,
           });
         }
@@ -411,24 +427,40 @@ const EditActorForm = (props) => {
       .map((picture, index) => {
         if (picture.logo) {
           imgInitLogo.push({
+            // @ts-ignore
             id: index,
+            // @ts-ignore
             file: null,
+            // @ts-ignore
             img: getImageUrl(picture.originalPicturePath),
+            // @ts-ignore
             croppedImg: {
               crop: {
+                // @ts-ignore
                 x: picture.croppedX,
+                // @ts-ignore
                 y: picture.croppedY,
               },
+              // @ts-ignore
               rotation: picture.croppedRotation,
+              // @ts-ignore
               zoom: picture.croppedZoom,
+              // @ts-ignore
               file: null,
+              // @ts-ignore
               img: getImageUrl(picture.croppedPicturePath),
+              // @ts-ignore
               modified: false,
             },
+            // @ts-ignore
             activated: true,
+            // @ts-ignore
             deleted: false,
+            // @ts-ignore
             newpic: false,
+            // @ts-ignore
             serverId: picture.id,
+            // @ts-ignore
             position: picture.position,
           });
         }
@@ -446,25 +478,41 @@ const EditActorForm = (props) => {
       .map((picture, index) => {
         if (picture.main) {
           imgInitMain.push({
-            id: index,
-            file: null,
-            img: getImageUrl(picture.originalPicturePath),
-            croppedImg: {
-              crop: {
-                x: picture.croppedX,
-                y: picture.croppedY,
-              },
-              rotation: picture.croppedRotation,
-              zoom: picture.croppedZoom,
-              file: null,
-              img: getImageUrl(picture.croppedPicturePath),
-              modified: false,
-            },
-            activated: true,
-            deleted: false,
-            newpic: false,
-            serverId: picture.id,
-            position: picture.position,
+           // @ts-ignore
+           id: index,
+           // @ts-ignore
+           file: null,
+           // @ts-ignore
+           img: getImageUrl(picture.originalPicturePath),
+           // @ts-ignore
+           croppedImg: {
+             crop: {
+               // @ts-ignore
+               x: picture.croppedX,
+               // @ts-ignore
+               y: picture.croppedY,
+             },
+             // @ts-ignore
+             rotation: picture.croppedRotation,
+             // @ts-ignore
+             zoom: picture.croppedZoom,
+             // @ts-ignore
+             file: null,
+             // @ts-ignore
+             img: getImageUrl(picture.croppedPicturePath),
+             // @ts-ignore
+             modified: false,
+           },
+           // @ts-ignore
+           activated: true,
+           // @ts-ignore
+           deleted: false,
+           // @ts-ignore
+           newpic: false,
+           // @ts-ignore
+           serverId: picture.id,
+           // @ts-ignore
+           position: picture.position,
           });
         }
       });
@@ -1039,6 +1087,7 @@ const EditActorForm = (props) => {
           let defaultValue = '';
           if ( !IsTree(collection) && !collection.multipleSelection && formValues
             && formValues.entries) {
+              // @ts-ignore
             formValues.entries.map((entry) => {
               let isPresent = false;
               if (collection.entries) {
