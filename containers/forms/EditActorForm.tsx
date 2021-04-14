@@ -1036,6 +1036,21 @@ const EditActorForm = (props) => {
             label = "Territoire d'action (1 seul choix) *";
             helperText = 'un acteur n’est pas à côté de chez vous mais peut être se déplace-t-il dans votre zone pour le savoir cocher cette case pour faire apparaître les zones d’actions';
           }
+          let defaultValue = '';
+          if ( !IsTree(collection) && !collection.multipleSelection && formValues
+            && formValues.entries) {
+            formValues.entries.map((entry) => {
+              let isPresent = false;
+              if (collection.entries) {
+                collection.entries.map((entryCollection) => {
+                  if (entryCollection.id === entry) isPresent = true;
+                  return isPresent;
+                });
+              }
+              if (isPresent) defaultValue = entry;
+            });
+          }
+
           return (
             <div>
               <Typography
@@ -1124,7 +1139,13 @@ const EditActorForm = (props) => {
                 !IsTree(collection) && !collection.multipleSelection && (
 
                   <FormControl component="fieldset">
-                    <RadioGroup row aria-label="entries" name="entries" defaultValue="top" onChange={formChangeHandler}>
+                    <RadioGroup
+                      row
+                      aria-label="entries"
+                      name="entries"
+                      defaultValue={defaultValue}
+                      onChange={formChangeHandler}
+                    >
                       {collection.entries && collection.entries.map((entry) => {
                         return (
                           <FormControlLabel value={entry.id} control={<Radio />} label={entry.label} />

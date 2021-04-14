@@ -205,6 +205,10 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: '#fff',
     },
   },
+  shortDescription: {
+    wordBreak: 'break-all',
+    maxWidth: '100px',
+  },
 }));
 
 const categories = {
@@ -458,7 +462,7 @@ const carto = () => {
                                     actor.pictures.length >= 1
                                       ? `url(${getImageUrl(
                                         actor.pictures.sort((a, b) =>
-                                          a.position > b.position ? 1 : -1,
+                                          a.logo ? 1 : -1,
                                         )[0].croppedPicturePath,
                                       )})`
                                       : '',
@@ -469,9 +473,9 @@ const carto = () => {
                                     className={styles.categorie}
                                     gutterBottom
                                   >
-                                    {actor.categories &&
-                                      actor.categories.length > 0 &&
-                                      actor.categories[0].label}
+                                    {actor.entries &&
+                                      actor.entries.length > 0 &&
+                                      actor.entries[0].label}
                                   </Typography>
                                 </div>
                               </div>
@@ -490,7 +494,7 @@ const carto = () => {
                                   </Grid>
                                 </Grid>
 
-                                <Typography component="p">
+                                <Typography className={styles.shortDescription}>
                                   {actor && actor.shortDescription}
                                 </Typography>
                               </div>
