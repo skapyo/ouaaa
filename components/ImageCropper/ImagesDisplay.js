@@ -87,16 +87,16 @@ const ImagePrev = ({
   };
 
   return (
-    <Grid>
+    <Grid item >
       <div
         className="card"
         ref={(node) => drag(drop(node))}
         style={{ opacity }}
       >
         <Card>
-          <img src={croppedImg.img} className={styles.image} />
+          <img src={croppedImg.img} className="image" />
         </Card>
-        <Card>
+        <Card >
           <Grid container spacing={3}>
             <Grid item >
               <HeightIcon onClick={() => openModal()} />

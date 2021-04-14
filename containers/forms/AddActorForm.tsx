@@ -532,7 +532,7 @@ const AddActorForm = () => {
         setEstlarochelle(false);
       }
     };
-
+    
     return (
       <Container component="main" maxWidth="sm">
         { dataAdminActors && dataAdminActors.actorsAdmin.length > 0 && (
@@ -629,7 +629,7 @@ const AddActorForm = () => {
         { /* @ts-ignore */}
         {dataCollections.collections && dataCollections.collections.map((collection) => {
           if (collection.code !== 'larochelle_quarter' || !estlarochelle) return '';
-          const [valueContact, setValueContact] = React.useState(formValues.contactId === user.id ? 'me' : 'other');
+          
           //    const [display, setDisplay] = useState(false);
           return (
             <div>

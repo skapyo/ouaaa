@@ -12,7 +12,9 @@
 .slick-next::before{
     color : #bf083e!important;
 }
-
+.image{
+    max-width: 200px;
+}
 /* fallback */
 @font-face {
     font-family: 'Material Icons';

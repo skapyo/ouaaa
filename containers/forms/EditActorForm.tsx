@@ -51,6 +51,7 @@ import Radio from '@material-ui/core/Radio';
 import { Autocomplete } from '@material-ui/lab';
 import Tooltip from '@material-ui/core/Tooltip';
 import InfoIcon from '@material-ui/icons/Info';
+import { useSessionDispatch, useSessionState } from 'context/session/session';
 import useImageReader from '../../hooks/useImageReader';
 import useDnDStateManager from '../../hooks/useDnDStateManager';
 import useCookieRedirection from '../../hooks/useCookieRedirection';
@@ -65,6 +66,7 @@ const EDIT_ACTOR = gql`
   mutation editActor(
     $formValues: ActorInfos
     $actorId: Int!
+    $userId: Int!
     $description: String!
     $volunteerDescription:String
     $logoPictures: [InputPictureType]
@@ -74,6 +76,7 @@ const EDIT_ACTOR = gql`
     editActor(
       actorInfos: $formValues
       actorId: $actorId
+      userId: $userId
       mainPictures: $mainPictures
       logoPictures: $logoPictures
       pictures: $pictures
@@ -89,6 +92,7 @@ const EDIT_ACTOR = gql`
       city
       website
       socialNetwork
+      shortDescription
       description
       lat
       lng
@@ -146,6 +150,8 @@ const GET_ACTOR = gql`
       lat
       lng
       activity
+      shortDescription
+      volunteerDescription
       pictures {
         id
         label
@@ -158,6 +164,8 @@ const GET_ACTOR = gql`
         croppedZoom
         croppedRotation
         position
+        logo
+        main
       }
       categories {
         id
@@ -292,7 +300,7 @@ const FormItem = (props: FormItemProps) => {
     required,
     errorBool,
     errorText,
-    helperText
+    helperText,
   } = props;
   return (
     <TextField
@@ -313,7 +321,7 @@ const FormItem = (props: FormItemProps) => {
 
 const EditActorForm = (props) => {
   const styles = useStyles();
-
+  const user = useSessionState();
   const [checked, setChecked] = useState([0]);
   const { data: dataUsers } = useQuery(GET_USERS, {
   });
@@ -357,39 +365,110 @@ const EditActorForm = (props) => {
 
   if (actorLoading) return null;
   if (actorError) return `Error! ${actorError.message}`;
-  let imgInit = [];
+  const imgInit = [];
   if (
     actorData
     && actorData.actor.pictures
     && actorData.actor.pictures.length > 0
   ) {
-    imgInit = actorData.actor.pictures
+    actorData.actor.pictures
       .sort((a, b) => (a.position > b.position ? 1 : -1))
       .map((picture, index) => {
-        return {
-          id: index,
-          file: null,
-          img: getImageUrl(picture.originalPicturePath),
-          croppedImg: {
-            crop: {
-              x: picture.croppedX,
-              y: picture.croppedY,
-            },
-            rotation: picture.croppedRotation,
-            zoom: picture.croppedZoom,
+        if (!picture.main && !picture.logo) {
+          imgInit.push({
+            id: index,
             file: null,
-            img: getImageUrl(picture.croppedPicturePath),
-            modified: false,
-          },
-          activated: true,
-          deleted: false,
-          newpic: false,
-          serverId: picture.id,
-          position: picture.position,
-        };
+            img: getImageUrl(picture.originalPicturePath),
+            croppedImg: {
+              crop: {
+                x: picture.croppedX,
+                y: picture.croppedY,
+              },
+              rotation: picture.croppedRotation,
+              zoom: picture.croppedZoom,
+              file: null,
+              img: getImageUrl(picture.croppedPicturePath),
+              modified: false,
+            },
+            activated: true,
+            deleted: false,
+            newpic: false,
+            serverId: picture.id,
+            position: picture.position,
+          });
+        }
       });
   }
 
+  const imgInitLogo = [];
+  if (
+    actorData
+    && actorData.actor.pictures
+    && actorData.actor.pictures.length > 0
+  ) {
+    actorData.actor.pictures
+      .sort((a, b) => (a.position > b.position ? 1 : -1))
+      .map((picture, index) => {
+        if (picture.logo) {
+          imgInitLogo.push({
+            id: index,
+            file: null,
+            img: getImageUrl(picture.originalPicturePath),
+            croppedImg: {
+              crop: {
+                x: picture.croppedX,
+                y: picture.croppedY,
+              },
+              rotation: picture.croppedRotation,
+              zoom: picture.croppedZoom,
+              file: null,
+              img: getImageUrl(picture.croppedPicturePath),
+              modified: false,
+            },
+            activated: true,
+            deleted: false,
+            newpic: false,
+            serverId: picture.id,
+            position: picture.position,
+          });
+        }
+      });
+  }
+
+  const imgInitMain = [];
+  if (
+    actorData
+    && actorData.actor.pictures
+    && actorData.actor.pictures.length > 0
+  ) {
+    actorData.actor.pictures
+      .sort((a, b) => (a.position > b.position ? 1 : -1))
+      .map((picture, index) => {
+        if (picture.main) {
+          imgInitMain.push({
+            id: index,
+            file: null,
+            img: getImageUrl(picture.originalPicturePath),
+            croppedImg: {
+              crop: {
+                x: picture.croppedX,
+                y: picture.croppedY,
+              },
+              rotation: picture.croppedRotation,
+              zoom: picture.croppedZoom,
+              file: null,
+              img: getImageUrl(picture.croppedPicturePath),
+              modified: false,
+            },
+            activated: true,
+            deleted: false,
+            newpic: false,
+            serverId: picture.id,
+            position: picture.position,
+          });
+        }
+      });
+  }
   const handleToggle = (value: number, index: number) => () => {
     const currentIndex = checked.indexOf(value);
     const newChecked = [...checked];
@@ -472,7 +551,7 @@ const EditActorForm = (props) => {
       initState: initStateLogo,
       addValues: addValuesLogo,
       updateKeyIndicator: updateKeyIndicatorLogo,
-    } = useDnDStateManager([]);
+    } = useDnDStateManager(imgInitLogo);
 
     useEffect(() => {
       if (resultLogo) addValuesLogo(resultLogo);
@@ -497,7 +576,7 @@ const EditActorForm = (props) => {
       initState: initStateMain,
       addValues: addValuesMain,
       updateKeyIndicator: updateKeyIndicatorMain,
-    } = useDnDStateManager([]);
+    } = useDnDStateManager(imgInitMain);
 
     useEffect(() => {
       if (resultMain) addValuesMain(resultMain);
@@ -514,6 +593,8 @@ const EditActorForm = (props) => {
       addValues,
       updateKeyIndicator,
     } = useDnDStateManager(imgInit);
+
+    imgInitLogo;
 
     useEffect(() => {
       if (result) addValues(result);
@@ -602,6 +683,7 @@ const EditActorForm = (props) => {
           actorId: parseInt(actorData.actor.id),
           pictures: files,
           logoPictures,
+          userId: parseInt(user.id),
           mainPictures,
           // @ts-ignore
           description: descriptionEditor.getData(),
@@ -609,7 +691,7 @@ const EditActorForm = (props) => {
           volunteerDescription: volunteerEditor.getData(),
         },
       });
-    }, [formValues, edit, objectsList, descriptionEditor,volunteerEditor]);
+    }, [formValues, edit, , objectsListLogo, objectsList, objectsListMain, descriptionEditor, volunteerEditor]);
 
     useEffect(() => {
       if (!editError && !editLoading && editData) {
@@ -829,7 +911,7 @@ const EditActorForm = (props) => {
             ) : ('')}
           </RadioGroup>
         </FormControl>
-
+        <p />
         <FormItem
           label="Métier / Activité principale"
           inputName="activity"
@@ -924,7 +1006,7 @@ const EditActorForm = (props) => {
         { editorLoaded ? (
           <CKEditor
             editor={ClassicEditor}
-            data={formValues.volunteer}
+            data={formValues.volunteerDescription}
             onReady={(editor) => {
               setVolunteerEditor(editor);
             }}
