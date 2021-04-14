@@ -277,6 +277,7 @@ type FormItemProps = {
   required: boolean;
   errorBool: boolean;
   errorText: string;
+  helperText?: string;
 };
 
 const FormItem = (props: FormItemProps) => {
@@ -291,6 +292,7 @@ const FormItem = (props: FormItemProps) => {
     required,
     errorBool,
     errorText,
+    helperText
   } = props;
   return (
     <TextField
@@ -304,7 +306,7 @@ const FormItem = (props: FormItemProps) => {
       fullWidth
       required={required}
       error={errorBool}
-      helperText={errorBool ? errorText : ''}
+      helperText={errorBool ? errorText : helperText}
     />
   );
 };
@@ -779,7 +781,7 @@ const EditActorForm = (props) => {
             <div>
               <br />
               <Typography
-                className={classes.collectionLabel}
+                className={styles.collectionLabel}
               >
                 {collection.label}
               </Typography>
