@@ -13,7 +13,11 @@ import Gavel from '@material-ui/icons/Gavel';
 import SupervisedUserCircle from '@material-ui/icons/SupervisedUserCircle';
 import AlternateEmail from '@material-ui/icons/AlternateEmail';
 import Language from '@material-ui/icons/Language';
+import Facebook from '@material-ui/icons/Facebook';
 import Schedule from '@material-ui/icons/Schedule';
+import People from '@material-ui/icons/People';
+
+
 import Slider from 'react-slick/lib';
 import { useSnackbar } from 'notistack';
 import { useCookies } from 'react-cookie';
@@ -194,7 +198,9 @@ const Actor = () => {
                 phone,
                 website,
                 description,
-                
+                socialNetwork
+                volunteerDescription,
+                activity,
                 categories{
                     label,
                     parentCategory{
@@ -413,6 +419,10 @@ const Actor = () => {
           {/* @ts-ignore */}
           -
           {/* @ts-ignore */}
+          {data && data.actor.activity}
+          {/* @ts-ignore */}
+          -
+          {/* @ts-ignore */}
           {data && data.actor.city}
           {/* @ts-ignore */}
           -
@@ -424,7 +434,7 @@ const Actor = () => {
       <RootRef>
         <Box>
           {data && data.actor && (
-          <Container className={styles.titleContainer} style={{ backgroundImage: data.actor.pictures.length >= 1 ? `url(${getImageUrl(data.actor.pictures.sort((a, b) => (a.position > b.position ? 1 : -1))[0].croppedPicturePath)})` : '' }} />
+            <Container className={styles.titleContainer} style={{ backgroundImage: data.actor.pictures.length >= 1 ? `url(${getImageUrl(data.actor.pictures.sort((a, b) => (a.position > b.position ? 1 : -1))[0].croppedPicturePath)})` : '' }} />
           )}
           <Container className={styles.cardInfo}>
 
@@ -435,22 +445,23 @@ const Actor = () => {
                     {data && data.actor.name}
                   </Typography>
                   {data && data.actor.entries.map((entry) => (
+
                     entry.parentEntry && entry.parentEntry.collection.code === 'category' && (
-                    <div>
-                      <Typography
-                        variant="h7"
-                        className={styles.cardTitleCategories}
-                      >
-                        {/* @ts-ignore */}
-                        {` ${entry.parentEntry && entry.parentEntry.label} `}
-                        {/* @ts-ignore */}
+                      <div>
+                        <Typography
+                          variant="h7"
+                          className={styles.cardTitleCategories}
+                        >
+                          {/* @ts-ignore */}
+                          {` ${entry.parentEntry && entry.parentEntry.label} `}
+                          {/* @ts-ignore */}
                         :
                         {/* @ts-ignore */}
-                        {` ${entry && entry.label}` }
-                        {/* @ts-ignore */}
+                          {` ${entry && entry.label}`}
+                          {/* @ts-ignore */}
 
-                      </Typography>
-                    </div>
+                        </Typography>
+                      </div>
                     )
                   ))}
                 </div>
@@ -472,33 +483,33 @@ const Actor = () => {
                       <span className={[styles.infoValue]}>
                         {data && !data.actor.city && <span> Adresse manquante</span>}
                         {data && !data.actor.address && data.actor.city && (
-                        <span>
-                          {/* @ts-ignore */}
-                          {data && data.actor.city}
-                        </span>
+                          <span>
+                            {/* @ts-ignore */}
+                            {data && data.actor.city}
+                          </span>
                         )}
                         {data && data.actor.address && data.actor.city && (
-                        <span>
-                          {/* @ts-ignore */}
-                          {data && data.actor.address}
+                          <span>
+                            {/* @ts-ignore */}
+                            {data && data.actor.address}
                           ,
-                          {/* @ts-ignore */}
-                          {data && data.actor.city}
-                        </span>
+                            {/* @ts-ignore */}
+                            {data && data.actor.city}
+                          </span>
                         )}
                       </span>
                       <div className={[styles.infoLabel]}>TERRITOIRE D'ACTION</div>
                       <span className={[styles.infoValue]}>
                         {data && data.actor.entries.map((entry) => (
                           entry && entry.collection && entry.collection.code === 'actor_location_action' && (
-                          <div>
-                            <Typography
-                              variant="h7"
-                              className={styles.cardTitleCategories}
-                            >
-                              {` ${entry && entry.label}` }
-                            </Typography>
-                          </div>
+                            <div>
+                              <Typography
+                                variant="h7"
+                                className={styles.cardTitleCategories}
+                              >
+                                {` ${entry && entry.label}`}
+                              </Typography>
+                            </div>
                           )
                         ))}
                       </span>
@@ -513,14 +524,14 @@ const Actor = () => {
                       <span className={[styles.infoValue]}>
                         {data && data.actor.entries.map((entry) => (
                           entry && entry.collection && entry.collection.code === 'public_target' && (
-                          <div>
-                            <Typography
-                              variant="h7"
-                              className={styles.cardTitleCategories}
-                            >
-                              {` ${entry && entry.label}` }
-                            </Typography>
-                          </div>
+                            <div>
+                              <Typography
+                                variant="h7"
+                                className={styles.cardTitleCategories}
+                              >
+                                {` ${entry && entry.label}`}
+                              </Typography>
+                            </div>
                           )
                         ))}
                       </span>
@@ -536,14 +547,14 @@ const Actor = () => {
                       <span className={[styles.infoValue]}>
                         {data && data.actor.entries.map((entry) => (
                           entry && entry.collection && entry.collection.code === 'actor_status' && (
-                          <div>
-                            <Typography
-                              variant="h7"
-                              className={styles.cardTitleCategories}
-                            >
-                              {` ${entry && entry.label}` }
-                            </Typography>
-                          </div>
+                            <div>
+                              <Typography
+                                variant="h7"
+                                className={styles.cardTitleCategories}
+                              >
+                                {` ${entry && entry.label}`}
+                              </Typography>
+                            </div>
                           )
                         ))}
                       </span>
@@ -572,7 +583,7 @@ const Actor = () => {
                       <Language className={[styles.icon]} />
                     </Grid>
                     <Grid item xs={8} className={[styles.alignLeft]}>
-                      <div className={[styles.infoLabel]}>SITE INTERNET</div>
+                      <div className={[styles.infoLabel]}>Site internet</div>
                       <span className={[styles.infoValue]}>
                         <a href={data && data.actor.website} target="_blank">
                           {data && data.actor.website}
@@ -582,6 +593,24 @@ const Actor = () => {
                       </span>
                     </Grid>
                   </Grid>
+
+                  {data && data.actor.socialNetwork && (
+                    <Grid container className={[styles.item]}>
+                      <Grid item xs={3} className={[styles.alignRight]}>
+                        <Facebook className={[styles.icon]} />
+                      </Grid>
+                      <Grid item xs={8} className={[styles.alignLeft]}>
+                        <div className={[styles.infoLabel]}>Reseau Social</div>
+                        <span className={[styles.infoValue]}>
+                          <a href={data && data.actor.socialNetwork} target="_blank">
+                            {data && data.actor.socialNetwork}
+                          </a>
+                          {/* @ts-ignore */}
+
+                        </span>
+                      </Grid>
+                    </Grid>
+                  )}
                   <Grid container className={[styles.item]}>
                     <Grid item xs={3} className={[styles.alignRight]}>
                       <Schedule className={[styles.icon]} />
@@ -591,27 +620,60 @@ const Actor = () => {
                     </Grid>
                   </Grid>
                 </Grid>
+                <Grid container className={[styles.item]}>
+                  <Grid item xs={3} className={[styles.alignRight]}>
+                    <People className={[styles.icon]} />
+                  </Grid>
+                  <Grid item xs={8} className={[styles.alignLeft]}>
+                    <div className={[styles.infoLabel]}>Collectif & réseaux</div>
+                    <span className={[styles.infoValue]}>
+                      {data && data.actor.entries.map((entry) => (
+                        entry && entry.collection && entry.collection.code === 'collectif' && (
+                          <div>
+                            <Typography
+                              variant="h7"
+                              className={styles.cardTitleCategories}
+                            >
+                              {` ${entry && entry.label}`}
+                            </Typography>
+                          </div>
+                        )
+                      ))}
 
+                    </span>
+                  </Grid>
+                </Grid>
               </Grid>
             </Grid>
 
-            <div className={styles.buttonVolunteer}>
-              {data && containUser(data.actor.volunteers) && (
-              <button className={styles.buttonInverse} onClick={removeVolunteerHandler}>Je ne souhaite plus être bénévole</button>
-              )}
-              {!(data && containUser(data.actor.volunteers)) && (
-              <button className={styles.button} onClick={addVolunteerHandler}>Devenir bénévole</button>
-              )}
 
-            </div>
+            {data && data.actor.volunteerDescription && (
+              <div>
+                <Typography variant="h5" className={styles.cardTitle}>
+                  Recherche de bénévole
+              </Typography>
+                <p>{data && Parser(data.actor.volunteerDescription)}</p>
+                <div className={styles.buttonVolunteer}>
+                  {data && containUser(data.actor.volunteers) && (
+                    <button className={styles.buttonInverse} onClick={removeVolunteerHandler}>Je ne souhaite plus être bénévole</button>
+                  )}
+                  {!(data && containUser(data.actor.volunteers)) && (
+                    <button className={styles.button} onClick={addVolunteerHandler}>Devenir bénévole</button>
+                  )}
 
+                </div>
+              </div>
+
+            )}
             {data && data.actor.pictures && (data.actor.pictures.length > 0) && (
-            <div>
-              <Typography variant="h5" className={styles.cardTitle}>
-                PHOTOS ET VIDEOS
+              <div>
+                <Typography variant="h5" className={styles.cardTitle}>
+                  PHOTOS ET VIDEOS
               </Typography>
 
-            </div>
+
+
+              </div>
             )}
             <Slider {...settingsSliderImage}>
               {data && data.actor.pictures && data.actor.pictures.sort((a, b) => (a.position > b.position ? 1 : -1)).map((picture) => (
@@ -620,17 +682,17 @@ const Actor = () => {
             </Slider>
 
             {data && data.actor.pictures && (data.actor.events.length > 0 || containUser(data.actor.referents)) && (
-            <div>
+              <div>
 
-              <Typography variant="h5" className={[styles.cardTitle, styles.align]}>
-                LES EVENEMENTS
+                <Typography variant="h5" className={[styles.cardTitle, styles.align]}>
+                  LES EVENEMENTS
               </Typography>
-              <Typography variant="h5" className={[styles.cardTitle, styles.align]}>
-                de
+                <Typography variant="h5" className={[styles.cardTitle, styles.align]}>
+                  de
                 {/* @ts-ignore */}
-                {data && data.actor.name}
-              </Typography>
-            </div>
+                  {data && data.actor.name}
+                </Typography>
+              </div>
             )}
             <Slider {...settingsSliderevent} className={[styles.articleCarroussel]}>
               {data && containUser(data.actor.referents) && (
@@ -650,12 +712,12 @@ const Actor = () => {
           </Container>
           <Newsletter />
           {((data && containUser(data.actor.referents)) || (user && user.role === 'admin')) && (
-        <Link href={`/actorAdmin/actor/${id}`}>
-            <Fab className={styles.fab} aria-label="edit">
-              
+            <Link href={`/actorAdmin/actor/${id}`}>
+              <Fab className={styles.fab} aria-label="edit">
+
                 <EditIcon />
-            </Fab>
-          </Link>
+              </Fab>
+            </Link>
           )}
         </Box>
       </RootRef>
