@@ -616,7 +616,10 @@ const Actor = () => {
                       <Schedule className={[styles.icon]} />
                     </Grid>
                     <Grid item xs={8} className={[styles.alignLeft]}>
-                      <div className={[styles.infoLabel]}>HORAIRE</div>
+                      <div className={[styles.infoLabel]}>Horaire</div>
+                      <span className={[styles.infoValue]}>
+
+                      </span>
                     </Grid>
                   </Grid>
                 </Grid>
