@@ -600,7 +600,7 @@ const Actor = () => {
                         <Facebook className={[styles.icon]} />
                       </Grid>
                       <Grid item xs={8} className={[styles.alignLeft]}>
-                        <div className={[styles.infoLabel]}>Reseau Social</div>
+                        <div className={[styles.infoLabel]}>Réseau social</div>
                         <span className={[styles.infoValue]}>
                           <a href={data && data.actor.socialNetwork} target="_blank">
                             {data && data.actor.socialNetwork}
