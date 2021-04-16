@@ -928,8 +928,9 @@ const EditActorForm = (props) => {
             />
           </Grid>
         </div>
-        {/* @ts-ignore */}
-        {dataCollections.collections &&
+        {/* @ts-ignore */
+        dataCollections.collections &&
+          /* @ts-ignore */
           dataCollections.collections.map((collection) => {
             if (collection.code !== 'larochelle_quarter' || !estlarochelle)
               return '';
@@ -1126,8 +1127,9 @@ const EditActorForm = (props) => {
         ) : (
           <div>Editor loading</div>
         )}
-        {/* @ts-ignore */}
-        {dataCollections.collections &&
+        {/* @ts-ignore */
+        dataCollections.collections &&
+          /* @ts-ignore */
           dataCollections.collections.map((collection) => {
             if (collection.code === 'larochelle_quarter') return '';
             //    const [display, setDisplay] = useState(false);
