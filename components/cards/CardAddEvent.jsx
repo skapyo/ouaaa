@@ -19,7 +19,6 @@ const useStyles = makeStyles({
     '&:hover': {
       cursor: 'pointer',
     },
-
   },
   bullet: {
     display: 'inline-block',
@@ -38,10 +37,9 @@ const useStyles = makeStyles({
     display: 'block',
     marginLeft: 'auto',
     marginRight: 'auto',
-
   },
   image: {
-    backgroundImage: 'url(\'/cardPicture.jpg\')',
+    backgroundImage: "url('/cardPicture.jpg')",
     backgroundPosition: 'center center',
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'over',
@@ -63,9 +61,7 @@ const useStyles = makeStyles({
   titleDiv: {
     display: 'flex',
     alignItems: 'center',
-
   },
-
 });
 
 export default function SimpleCard({ actor }) {
@@ -80,16 +76,13 @@ export default function SimpleCard({ actor }) {
 
   return (
     <Link href={`/addevent/${actor.id}`} onClick={clickHandler}>
-
       <Card className={classes.root}>
         <CardContent>
           <AddCircleIcon />
           <Typography variant="h6" component="h2" className={classes.title}>
             Ajouter un nouvel événement
           </Typography>
-
         </CardContent>
-
       </Card>
     </Link>
   );

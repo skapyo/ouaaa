@@ -67,7 +67,18 @@ const User = () => {
                     Informations personnelles :
                   </Typography>
                   <Typography variant="body1">
-                    orem ipsum dolor sit amet, consectetur adipiscing elit. Ut risus urna, sollicitudin pharetra volutpat rutrum, pulvinar eu diam. Integer scelerisque, odio nec tincidunt varius, enim mauris scelerisque nunc, id consequat dolor libero quis eros. Curabitur eget dui id dolor suscipit aliquet id sed magna. Duis malesuada orci ac metus imperdiet sollicitudin. In hac habitasse platea dictumst. Phasellus tortor diam, viverra in eleifend nec, convallis eu urna. Aliquam sed mi eget lorem cursus accumsan vel ut nunc. Integer sollicitudin risus non sagittis feugiat. Phasellus a luctus turpis. Phasellus sed luctus elit, et efficitur diam. Curabitur id posuere orci, ornare sagittis erat.
+                    orem ipsum dolor sit amet, consectetur adipiscing elit. Ut
+                    risus urna, sollicitudin pharetra volutpat rutrum, pulvinar
+                    eu diam. Integer scelerisque, odio nec tincidunt varius,
+                    enim mauris scelerisque nunc, id consequat dolor libero quis
+                    eros. Curabitur eget dui id dolor suscipit aliquet id sed
+                    magna. Duis malesuada orci ac metus imperdiet sollicitudin.
+                    In hac habitasse platea dictumst. Phasellus tortor diam,
+                    viverra in eleifend nec, convallis eu urna. Aliquam sed mi
+                    eget lorem cursus accumsan vel ut nunc. Integer sollicitudin
+                    risus non sagittis feugiat. Phasellus a luctus turpis.
+                    Phasellus sed luctus elit, et efficitur diam. Curabitur id
+                    posuere orci, ornare sagittis erat.
                   </Typography>
                 </Grid>
                 <Grid item xs={12}>
@@ -100,7 +111,12 @@ const User = () => {
               <Hidden xsDown>
                 <Avatar className={styles.avatar} />
               </Hidden>
-              <Grid container direction="column" justify="center" alignItems="center">
+              <Grid
+                container
+                direction="column"
+                justify="center"
+                alignItems="center"
+              >
                 <Grid item>
                   <SocialNetworkButton socialNetwork="Website" />
                 </Grid>

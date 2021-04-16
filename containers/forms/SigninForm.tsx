@@ -137,7 +137,8 @@ const SigninForm = () => {
       }
     }, [data, sessionDispatch, redirect]);
 
-    if (!validEmail) return (<FallbackEmailNotValidated email={formValues?.email} />);
+    if (!validEmail)
+      return <FallbackEmailNotValidated email={formValues?.email} />;
     return (
       <Container component="main" maxWidth="xs">
         <div className={styles.paper}>
@@ -170,7 +171,8 @@ const SigninForm = () => {
             type={showPassword ? 'text' : 'password'}
             autoComplete="current-password"
             defaultValue=""
-            InputProps={{ // <-- This is where the toggle button is added.
+            InputProps={{
+              // <-- This is where the toggle button is added.
               endAdornment: (
                 <InputAdornment position="end">
                   <IconButton
@@ -188,16 +190,15 @@ const SigninForm = () => {
           />
           <Box className={styles.box}>
             <FormControlLabel
-              control={(
+              control={
                 <Checkbox
                   value="remember"
                   color="primary"
                   onChange={checkBoxChangeHandler}
                 />
-                )}
+              }
               label="Se souvenir de moi"
             />
-
           </Box>
           <ClassicButton
             fullWidth

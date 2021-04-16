@@ -6,7 +6,14 @@ import FormController, {
   ValidationRuleType,
 } from 'components/controllers/FormController';
 import {
-  Avatar, Box, Grid, IconButton, InputAdornment, makeStyles, TextField, Typography,
+  Avatar,
+  Box,
+  Grid,
+  IconButton,
+  InputAdornment,
+  makeStyles,
+  TextField,
+  Typography,
 } from '@material-ui/core';
 import { useSnackbar } from 'notistack';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
@@ -111,9 +118,12 @@ const SignupForm = () => {
     useEffect(() => {
       if (data?.register) {
         setClicked(true);
-        enqueueSnackbar(`Un email de validation a été envoyé à ${formValues.email}`, {
-          preventDuplicate: true,
-        });
+        enqueueSnackbar(
+          `Un email de validation a été envoyé à ${formValues.email}`,
+          {
+            preventDuplicate: true,
+          },
+        );
       }
     }, [data, redirect]);
 
@@ -121,16 +131,14 @@ const SignupForm = () => {
       <Grid container justify="center">
         <Grid xs={3} />
         <Grid item className={styles.paper} xs={4}>
-          {clicked
-              && (
-              <p style={{ textAlign: 'center' }}>
-                Veuillez confirmer votre compte.
-                <br />
-                Un email de validation a été envoyé à :
-                {/* @ts-ignore */}
-                <b>{email}</b>
-              </p>
-              )}
+          {clicked && (
+            <p style={{ textAlign: 'center' }}>
+              Veuillez confirmer votre compte.
+              <br />
+              Un email de validation a été envoyé à :{/* @ts-ignore */}
+              <b>{email}</b>
+            </p>
+          )}
           <Avatar className={styles.avatar}>
             <LockOutlinedIcon />
           </Avatar>
@@ -184,7 +192,8 @@ const SignupForm = () => {
             label="Mot de passe"
             type={showPassword ? 'text' : 'password'}
             defaultValue=""
-            InputProps={{ // <-- This is where the toggle button is added.
+            InputProps={{
+              // <-- This is where the toggle button is added.
               endAdornment: (
                 <InputAdornment position="end">
                   <IconButton
@@ -210,7 +219,8 @@ const SignupForm = () => {
             label="Confirmation du mot de passe"
             type={showPassword ? 'text' : 'password'}
             defaultValue=""
-            InputProps={{ // <-- This is where the toggle button is added.
+            InputProps={{
+              // <-- This is where the toggle button is added.
               endAdornment: (
                 <InputAdornment position="end">
                   <IconButton
@@ -239,8 +249,7 @@ const SignupForm = () => {
           <Grid container>
             <Grid item>
               {/* @ts-ignore */}
-              Déjà inscrit ?
-              {/* @ts-ignore */}
+              Déjà inscrit ?{/* @ts-ignore */}
               <Link href="/signin">Me connecter</Link>
             </Grid>
           </Grid>
@@ -251,66 +260,66 @@ const SignupForm = () => {
             <br />
             <Typography
               color={
-                  checkPssdValidation('password', 'min')
-                  && checkPssdValidation('password', 'max')
-                    ? 'secondary'
-                    : 'primary'
-                }
+                checkPssdValidation('password', 'min') &&
+                checkPssdValidation('password', 'max')
+                  ? 'secondary'
+                  : 'primary'
+              }
             >
               Doit contenir au moins 8 caractères
             </Typography>
             <Typography
               color={
-                  checkPssdValidation('password', 'uppercase')
-                    ? 'secondary'
-                    : 'primary'
-                }
+                checkPssdValidation('password', 'uppercase')
+                  ? 'secondary'
+                  : 'primary'
+              }
             >
               Doit posséder au moins une majuscule
             </Typography>
             <Typography
               color={
-                  checkPssdValidation('password', 'lowercase')
-                    ? 'secondary'
-                    : 'primary'
-                }
+                checkPssdValidation('password', 'lowercase')
+                  ? 'secondary'
+                  : 'primary'
+              }
             >
               Doit posséder au moins une minuscule
             </Typography>
             <Typography
               color={
-                  checkPssdValidation('password', 'digits')
-                    ? 'secondary'
-                    : 'primary'
-                }
+                checkPssdValidation('password', 'digits')
+                  ? 'secondary'
+                  : 'primary'
+              }
             >
               Doit posséder au moins un chiffre
             </Typography>
             <Typography
               color={
-                  checkPssdValidation('password', 'symbols')
-                    ? 'secondary'
-                    : 'primary'
-                }
+                checkPssdValidation('password', 'symbols')
+                  ? 'secondary'
+                  : 'primary'
+              }
             >
               Doit posséder au moins caractère spécial
             </Typography>
             <Typography
               color={
-                  checkPssdValidation('password', 'spaces')
-                    ? 'secondary'
-                    : 'primary'
-                }
+                checkPssdValidation('password', 'spaces')
+                  ? 'secondary'
+                  : 'primary'
+              }
             >
               Ne doit contenir aucun espace
             </Typography>
             <Typography
               color={
-                  checkPssdValidation('password2', 'equalTo')
-                  && formValues?.password?.length > 0
-                    ? 'secondary'
-                    : 'primary'
-                }
+                checkPssdValidation('password2', 'equalTo') &&
+                formValues?.password?.length > 0
+                  ? 'secondary'
+                  : 'primary'
+              }
             >
               Les deux mots de passe renseignés doivent être identiques
             </Typography>

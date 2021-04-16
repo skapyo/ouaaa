@@ -5,9 +5,9 @@ import gql from 'graphql-tag';
 const ISLOGGED = gql`
   query isLogged {
     isLogged {
-          id,
-          role
-      }
+      id
+      role
+    }
   }
 `;
 
@@ -24,20 +24,24 @@ const withAuthSync = (WrappedComponent) => {
       }
     }, []);
 
-    return (<WrappedComponent {...props}>{children}</WrappedComponent>);
+    return <WrappedComponent {...props}>{children}</WrappedComponent>;
   };
 
   FuncComponent.getInitialProps = async (ctx) => {
-    const props = WrappedComponent.getInitialProps && await WrappedComponent.getInitialProps(ctx);
+    const props =
+      WrappedComponent.getInitialProps &&
+      (await WrappedComponent.getInitialProps(ctx));
 
     if (typeof window === 'undefined') {
       const { initOnContext } = await import('hoc/withApollo');
       initOnContext(ctx);
       const result = await ctx.apolloClient.query({ query: ISLOGGED });
-      if (result.data?.isLogged?.id) { return ({ user: result.data.isLogged, ...props }); }
+      if (result.data?.isLogged?.id) {
+        return { user: result.data.isLogged, ...props };
+      }
     }
 
-    return ({ ...props });
+    return { ...props };
   };
   return FuncComponent;
 };

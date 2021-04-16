@@ -5,13 +5,12 @@ import Search from '../../../components/Search';
 const useStyles = makeStyles((theme) => ({
   titleContainer: {
     marginTop: theme.spacing(2),
-    backgroundImage: 'url(\'./fond.jpeg\')',
+    backgroundImage: "url('./fond.jpeg')",
     backgroundSize: '100%',
     height: '24em',
     color: 'white',
     'text-align': 'center',
     padding: '3em',
-
   },
   title: {
     padding: '1em',
@@ -24,7 +23,6 @@ const useStyles = makeStyles((theme) => ({
   align: {
     'text-align': 'center',
   },
-
 }));
 
 const PresentationSection = () => {
@@ -44,7 +42,6 @@ const PresentationSection = () => {
         pour la transition écologique, sociale et démocratique en Aunis
       </Typography>
       <Search />
-
     </Container>
   );
 };

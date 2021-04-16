@@ -2,7 +2,12 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import {
-  Avatar, Container, Fade, Grid, Menu, MenuItem,
+  Avatar,
+  Container,
+  Fade,
+  Grid,
+  Menu,
+  MenuItem,
 } from '@material-ui/core';
 import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
 import Link from 'components/Link';
@@ -33,7 +38,6 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       cursor: 'pointer',
     },
-
   },
   popoverPaper: {
     marginTop: theme.spacing(2),
@@ -73,7 +77,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const SIGNOUT = gql`
-  mutation logout{
+  mutation logout {
     logout
   }
 `;
@@ -116,7 +120,6 @@ const NavBar = () => {
   return (
     <AppBar position="static" className={styles.navbar} color="inherit">
       <Container>
-
         <Toolbar>
           <Grid
             container
@@ -135,46 +138,82 @@ const NavBar = () => {
             </Grid>
             <div className={styles.navLayout}>
               <Grid item>
-                <Grid
-                  container
-                  alignItems="center"
-                >
+                <Grid container alignItems="center">
                   <Grid item>
-                    <MenuItem button component={Link} className={styles.menuItem} href="/map">LA CARTE</MenuItem>
-                  </Grid>
-                  <Grid item>
-                    <MenuItem button component={Link} className={styles.menuItem} href="/agenda">L'AGENDA</MenuItem>
-                  </Grid>
-                  <Grid item>
-                    <MenuItem button component={Link} className={styles.menuItem} href="/participate">
-                      JE
-                      PARTICIPE
+                    <MenuItem
+                      button
+                      component={Link}
+                      className={styles.menuItem}
+                      href="/map"
+                    >
+                      LA CARTE
                     </MenuItem>
                   </Grid>
                   <Grid item>
-                    <MenuItem button component={Link} className={styles.menuItem} href="/news">LE JOURNAL</MenuItem>
+                    <MenuItem
+                      button
+                      component={Link}
+                      className={styles.menuItem}
+                      href="/agenda"
+                    >
+                      L'AGENDA
+                    </MenuItem>
                   </Grid>
                   <Grid item>
-                    <MenuItem button component={Link} className={styles.menuItem} href="/about">A PROPOS</MenuItem>
+                    <MenuItem
+                      button
+                      component={Link}
+                      className={styles.menuItem}
+                      href="/participate"
+                    >
+                      JE PARTICIPE
+                    </MenuItem>
+                  </Grid>
+                  <Grid item>
+                    <MenuItem
+                      button
+                      component={Link}
+                      className={styles.menuItem}
+                      href="/news"
+                    >
+                      LE JOURNAL
+                    </MenuItem>
+                  </Grid>
+                  <Grid item>
+                    <MenuItem
+                      button
+                      component={Link}
+                      className={styles.menuItem}
+                      href="/about"
+                    >
+                      A PROPOS
+                    </MenuItem>
                   </Grid>
 
                   {!user && (
                     <Grid item>
                       {/* @ts-ignore */}
-                      <Link href="/signin" underline="none" color="textPrimary" onClick={signinClickHandler}>
+                      <Link
+                        href="/signin"
+                        underline="none"
+                        color="textPrimary"
+                        onClick={signinClickHandler}
+                      >
                         <PersonOutlineIcon className={styles.menuItem} />
                       </Link>
-
                     </Grid>
                   )}
 
                   {user && (
                     <Grid item>
-                      <Grid container onClick={handleClick} className={styles.account}>
+                      <Grid
+                        container
+                        onClick={handleClick}
+                        className={styles.account}
+                      >
                         <Grid item>
                           <Avatar
                             className={styles.avatar}
-
                             aria-controls="popover-menu"
                             aria-haspopup="true"
                           />
@@ -206,22 +245,39 @@ const NavBar = () => {
                         TransitionComponent={Fade}
                       >
                         {/* <MenuItem onClick={() => router.push('/account')} component={Link} >Mon compte</MenuItem> */}
-                        <MenuItem button component={Link} className={styles.menuItem} href="/account">
-                          Mon
-                          compte
+                        <MenuItem
+                          button
+                          component={Link}
+                          className={styles.menuItem}
+                          href="/account"
+                        >
+                          Mon compte
                         </MenuItem>
-                        <MenuItem button component={Link} className={styles.menuItem} href="/actorAdmin">
-                          Espace
-                          Acteur
+                        <MenuItem
+                          button
+                          component={Link}
+                          className={styles.menuItem}
+                          href="/actorAdmin"
+                        >
+                          Espace Acteur
                         </MenuItem>
-                        {user && user.role == "admin" && (
-                          <MenuItem button component={Link} className={styles.menuItem} href="/administration">
+                        {user && user.role == 'admin' && (
+                          <MenuItem
+                            button
+                            component={Link}
+                            className={styles.menuItem}
+                            href="/administration"
+                          >
                             Administration
                           </MenuItem>
                         )}
-                        <MenuItem onClick={signoutHandler} className={styles.menuItem}>Se déconnecter</MenuItem>
+                        <MenuItem
+                          onClick={signoutHandler}
+                          className={styles.menuItem}
+                        >
+                          Se déconnecter
+                        </MenuItem>
                       </Menu>
-
                     </Grid>
                   )}
                 </Grid>
@@ -229,47 +285,82 @@ const NavBar = () => {
             </div>
             <ButtonAppBarCollapse>
               <Grid item>
-                <Grid
-                  container
-                  spacing={3}
-                  alignItems="center"
-                >
+                <Grid container spacing={3} alignItems="center">
                   <Grid item>
-                    <MenuItem button component={Link} className={styles.menuItem} href="/map">LA CARTE</MenuItem>
-                  </Grid>
-                  <Grid item>
-                    <MenuItem button component={Link} className={styles.menuItem} href="/agenda">L'AGENDA</MenuItem>
-                  </Grid>
-                  <Grid item>
-                    <MenuItem button component={Link} className={styles.menuItem} href="/participate">
-                      JE
-                      PARTICIPE
+                    <MenuItem
+                      button
+                      component={Link}
+                      className={styles.menuItem}
+                      href="/map"
+                    >
+                      LA CARTE
                     </MenuItem>
                   </Grid>
                   <Grid item>
-                    <MenuItem button component={Link} className={styles.menuItem} href="/news">LE JOURNAL</MenuItem>
+                    <MenuItem
+                      button
+                      component={Link}
+                      className={styles.menuItem}
+                      href="/agenda"
+                    >
+                      L'AGENDA
+                    </MenuItem>
                   </Grid>
                   <Grid item>
-                    <MenuItem button component={Link} className={styles.menuItem} href="/about">A PROPOS</MenuItem>
+                    <MenuItem
+                      button
+                      component={Link}
+                      className={styles.menuItem}
+                      href="/participate"
+                    >
+                      JE PARTICIPE
+                    </MenuItem>
+                  </Grid>
+                  <Grid item>
+                    <MenuItem
+                      button
+                      component={Link}
+                      className={styles.menuItem}
+                      href="/news"
+                    >
+                      LE JOURNAL
+                    </MenuItem>
+                  </Grid>
+                  <Grid item>
+                    <MenuItem
+                      button
+                      component={Link}
+                      className={styles.menuItem}
+                      href="/about"
+                    >
+                      A PROPOS
+                    </MenuItem>
                   </Grid>
 
                   {!user && (
                     <Grid item>
                       {/* @ts-ignore */}
-                      <Link href="/signin" underline="none" color="textPrimary" onClick={signinClickHandler}>
+                      <Link
+                        href="/signin"
+                        underline="none"
+                        color="textPrimary"
+                        onClick={signinClickHandler}
+                      >
                         <PersonOutlineIcon className={styles.menuItem} />
                       </Link>
-
                     </Grid>
                   )}
 
                   {user && (
                     <Grid item>
-                      <Grid container onClick={handleClick} className={styles.account}>
+                      <Grid
+                        container
+                        onClick={handleClick}
+                        className={styles.account}
+                      >
                         <Grid item>
                           <Avatar
                             className={styles.avatar}
-
                             aria-controls="popover-menu"
                             aria-haspopup="true"
                           />
@@ -301,17 +392,29 @@ const NavBar = () => {
                         TransitionComponent={Fade}
                       >
                         {/* <MenuItem onClick={() => router.push('/account')} component={Link} >Mon compte</MenuItem> */}
-                        <MenuItem button component={Link} className={styles.menuItem} href="/account">
-                          Mon
-                          compte
+                        <MenuItem
+                          button
+                          component={Link}
+                          className={styles.menuItem}
+                          href="/account"
+                        >
+                          Mon compte
                         </MenuItem>
-                        <MenuItem button component={Link} className={styles.menuItem} href="/actorAdmin">
-                          Espace
-                          Acteur
+                        <MenuItem
+                          button
+                          component={Link}
+                          className={styles.menuItem}
+                          href="/actorAdmin"
+                        >
+                          Espace Acteur
                         </MenuItem>
-                        <MenuItem onClick={signoutHandler} className={styles.menuItem}>Se déconnecter</MenuItem>
+                        <MenuItem
+                          onClick={signoutHandler}
+                          className={styles.menuItem}
+                        >
+                          Se déconnecter
+                        </MenuItem>
                       </Menu>
-
                     </Grid>
                   )}
                 </Grid>
@@ -319,7 +422,6 @@ const NavBar = () => {
             </ButtonAppBarCollapse>
           </Grid>
         </Toolbar>
-
       </Container>
     </AppBar>
   );

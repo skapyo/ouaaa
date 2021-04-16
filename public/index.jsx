@@ -1,9 +1,5 @@
-import React, {
-  useState,
-} from 'react';
-import {
-  Box, Container, RootRef,
-} from '@material-ui/core';
+import React, { useState } from 'react';
+import { Box, Container, RootRef } from '@material-ui/core';
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/client';
 import { withApollo } from '../../hoc/withApollo';
@@ -22,7 +18,6 @@ const agenda = () => {
           <Container />
         </Box>
       </RootRef>
-
     </AppLayout>
   );
 };

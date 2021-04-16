@@ -1,6 +1,6 @@
 import ActorCard from 'components/cards/ActorCard';
 
-import {Container, makeStyles} from '@material-ui/core';
+import { Container, makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles({
   actors: {
@@ -23,7 +23,7 @@ const Actors = (data) => {
   const classes = useStyles();
 
   const compare = (a, b) => {
-    return a.name>b.name;
+    return a.name > b.name;
   };
 
   const actors = data.data && data.data.actors.slice();
@@ -31,13 +31,12 @@ const Actors = (data) => {
   return (
     <Container className={classes.actors}>
       <h1 className={classes.title}>Liste des acteurs </h1>
-      {
-      actors && actors.sort(compare).map((actor) => (
-        <div key={actor.id}>
-          <ActorCard key={actor.id} actor={actor} />
-        </div>
-      ))
-      }
+      {actors &&
+        actors.sort(compare).map((actor) => (
+          <div key={actor.id}>
+            <ActorCard key={actor.id} actor={actor} />
+          </div>
+        ))}
     </Container>
   );
 };

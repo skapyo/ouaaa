@@ -6,11 +6,13 @@ import ClassicButton from 'components/buttons/ClassicButton';
 import { withApollo } from 'hoc/withApollo';
 import { useSessionDispatch, useSessionState } from 'context/session/session';
 import gql from 'graphql-tag';
-import FormController, { RenderCallback } from 'components/controllers/FormController';
+import FormController, {
+  RenderCallback,
+} from 'components/controllers/FormController';
 
 const UPDATE_USER_INFOS = gql`
-  mutation updateUserInfos($formValues: UserInfos,$userId: Int!) {
-    updateUserInfos(userInfos: $formValues,userId: $userId) {
+  mutation updateUserInfos($formValues: UserInfos, $userId: Int!) {
+    updateUserInfos(userInfos: $formValues, userId: $userId) {
       id
       surname
       lastname
@@ -36,24 +38,21 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 type FormItemProps = {
-  label: string
-  inputName: string
-  formChangeHandler: (event: ChangeEvent) => void
-  value: string
-}
+  label: string;
+  inputName: string;
+  formChangeHandler: (event: ChangeEvent) => void;
+  value: string;
+};
 
 const FormItem = (props: FormItemProps) => {
   const styles = useStyles();
-  const {
-    label, inputName, formChangeHandler, value,
-  } = props;
+  const { label, inputName, formChangeHandler, value } = props;
   return (
     <>
       <Grid item sm={3} xs={12}>
         <Typography variant="body1" color="primary" className={styles.label}>
           {label}
-          {/* @ts-ignore */}
-          :
+          {/* @ts-ignore */}:
         </Typography>
       </Grid>
       <Grid item sm={9} xs={12}>

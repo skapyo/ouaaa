@@ -85,7 +85,7 @@ function StyledTreeItem(props) {
   //
   return (
     <TreeItem
-      label={(
+      label={
         <div className={classes.labelRoot}>
           <Typography variant="body2" className={classes.labelText}>
             {labelText}
@@ -104,7 +104,7 @@ function StyledTreeItem(props) {
             />
           )}
         </div>
-      )}
+      }
       style={{
         '--tree-view-color': color,
         '--tree-view-bg-color': bgColor,

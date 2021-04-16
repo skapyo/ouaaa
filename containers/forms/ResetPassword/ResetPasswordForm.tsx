@@ -1,10 +1,18 @@
 import React, { useCallback, useState } from 'react';
 import gql from 'graphql-tag';
-import FormController, { QueryOptions, ValidationRules, ValidationRuleType } from 'components/controllers/FormController';
+import FormController, {
+  QueryOptions,
+  ValidationRules,
+  ValidationRuleType,
+} from 'components/controllers/FormController';
 import { withApollo } from 'hoc/withApollo';
 import ResetPasswordEmailForm from 'containers/forms/ResetPassword/subForms/SendResetPsswdEmailForm';
 import {
-  Avatar, Box, Container, makeStyles, Typography,
+  Avatar,
+  Box,
+  Container,
+  makeStyles,
+  Typography,
 } from '@material-ui/core';
 import VpnKeyOutlinedIcon from '@material-ui/icons/VpnKeyOutlined';
 import ValidateEmailCodeForm from './subForms/ValidateEmailCodeForm';
@@ -84,9 +92,9 @@ const validationRules1: ValidationRules = {
 /* -- */
 
 type EmailContext = {
-  email: string | null
-  codeId: number | null
-}
+  email: string | null;
+  codeId: number | null;
+};
 
 export const EmailContext = React.createContext({
   email: null,

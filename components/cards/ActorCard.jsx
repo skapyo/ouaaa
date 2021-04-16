@@ -1,9 +1,9 @@
-import React, {useState} from 'react';
-import {makeStyles} from '@material-ui/core/styles';
+import React, { useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded';
 import FavoriteRoundedIcon from '@material-ui/icons/FavoriteRounded';
 import Link from '../Link';
-import {getImageUrl} from '../../utils/utils';
+import { getImageUrl } from '../../utils/utils';
 
 const useStyles = makeStyles((theme, props) => ({
   card: (props) => ({
@@ -90,9 +90,9 @@ const useStyles = makeStyles((theme, props) => ({
 }));
 
 const ActorCard = ({ actor }) => {
-  const color = (actor.categories[0]) ? actor.categories[0].color : '#AD2740';
-  const icon = (actor.categories[0]) ? actor.categories[0].icon : 'fruit';
-  const actorName = actor.name ;
+  const color = actor.categories[0] ? actor.categories[0].color : '#AD2740';
+  const icon = actor.categories[0] ? actor.categories[0].icon : 'fruit';
+  const actorName = actor.name;
 
   const classes = useStyles({ color, icon });
   const [favorite, setFavorite] = useState(false);
@@ -104,7 +104,17 @@ const ActorCard = ({ actor }) => {
           <div className={classes.leftContent}>
             <div className={classes.image}>
               {actor.pictures.length >= 1 && (
-              <img src={actor.pictures.length >= 1 ? getImageUrl(actor.pictures.sort((a, b) => (a.position > b.position ? 1 : -1))[0].croppedPicturePath) : ''} />
+                <img
+                  src={
+                    actor.pictures.length >= 1
+                      ? getImageUrl(
+                          actor.pictures.sort((a, b) =>
+                            a.position > b.position ? 1 : -1,
+                          )[0].croppedPicturePath,
+                        )
+                      : ''
+                  }
+                />
               )}
             </div>
             <div className={classes.text}>
@@ -115,7 +125,6 @@ const ActorCard = ({ actor }) => {
                   {/* @ts-ignore */}
                   {actor.shortDescription}
                 </span>
-          
               </div>
             </div>
           </div>
@@ -126,7 +135,9 @@ const ActorCard = ({ actor }) => {
         </div>
       </div>
       <div className={classes.favorite} onClick={() => setFavorite(!favorite)}>
-        {!favorite && <FavoriteBorderRoundedIcon className={classes.favoriteIcon} />}
+        {!favorite && (
+          <FavoriteBorderRoundedIcon className={classes.favoriteIcon} />
+        )}
         {favorite && <FavoriteRoundedIcon className={classes.favoriteIcon} />}
       </div>
     </div>

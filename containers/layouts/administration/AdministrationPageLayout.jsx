@@ -1,7 +1,13 @@
 import AppLayout from 'containers/layouts/AppLayout';
 import AppContainer from 'containers/layouts/AppContainer';
 import {
-  Grid, Box, makeStyles, Typography, Fab, Hidden, SwipeableDrawer,
+  Grid,
+  Box,
+  makeStyles,
+  Typography,
+  Fab,
+  Hidden,
+  SwipeableDrawer,
 } from '@material-ui/core';
 import AdministrationLeftMenu from 'containers/menus/AdministrationLeftMenu';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
@@ -63,7 +69,12 @@ const AdministrationPageLayout = ({ children }) => {
         <Hidden smUp>
           {!openDrawer && (
             <Fab className={styles.fab} size="large" onClick={openDrawerHander}>
-              <Grid container direction="column" justify="center" alignItems="center">
+              <Grid
+                container
+                direction="column"
+                justify="center"
+                alignItems="center"
+              >
                 <ExpandLessIcon />
                 <ExpandMoreIcon />
               </Grid>
@@ -72,7 +83,11 @@ const AdministrationPageLayout = ({ children }) => {
             </Fab>
           )}
           {openDrawer && (
-            <Fab className={styles.fab} size="large" onClick={closeDrawerHander}>
+            <Fab
+              className={styles.fab}
+              size="large"
+              onClick={closeDrawerHander}
+            >
               <CloseIcon />
             </Fab>
           )}
@@ -84,8 +99,15 @@ const AdministrationPageLayout = ({ children }) => {
             onClose={closeDrawerHander}
             onOpen={openDrawerHander}
           >
-            <Box m={2}><Typography variant="h6">Mon compte :</Typography></Box>
-            <Grid container direction="column" justify="center" alignItems="center">
+            <Box m={2}>
+              <Typography variant="h6">Mon compte :</Typography>
+            </Box>
+            <Grid
+              container
+              direction="column"
+              justify="center"
+              alignItems="center"
+            >
               <AdministrationLeftMenu />
             </Grid>
           </SwipeableDrawer>

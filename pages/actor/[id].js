@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import AppLayout from 'containers/layouts/AppLayout';
 import {
-  Box, Container, Grid, makeStyles, RootRef, Typography,
+  Box,
+  Container,
+  Grid,
+  makeStyles,
+  RootRef,
+  Typography,
 } from '@material-ui/core';
 import { withApollo } from 'hoc/withApollo.jsx';
 import { useRouter } from 'next/router';
@@ -16,7 +21,6 @@ import Language from '@material-ui/icons/Language';
 import Facebook from '@material-ui/icons/Facebook';
 import Schedule from '@material-ui/icons/Schedule';
 import People from '@material-ui/icons/People';
-
 
 import Slider from 'react-slick/lib';
 import { useSnackbar } from 'notistack';
@@ -42,7 +46,6 @@ const useStyles = makeStyles((theme) => ({
     color: 'white',
     'text-align': 'center',
     padding: '3em',
-
   },
   align: {
     'text-align': 'center',
@@ -50,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
   cardInfo: {
     padding: '5em',
     backgroundColor: 'white',
-    backgroundImage: 'url(\'/icons/planet.svg\')',
+    backgroundImage: "url('/icons/planet.svg')",
     backgroundPosition: 'right',
     backgroundRepeat: 'no-repeat',
     backgroundOpacity: ' 0.5',
@@ -81,7 +84,6 @@ const useStyles = makeStyles((theme) => ({
   },
   infoPratiqueGrid: {
     textAlign: 'center',
-
   },
   infoPratiqueTitle: {
     backgroundColor: '#2a9076',
@@ -89,9 +91,7 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     padding: '1em',
   },
-  infoPratiqueItem: {
-
-  },
+  infoPratiqueItem: {},
   alignLeft: {
     textAlign: 'left',
     padding: '1em',
@@ -101,7 +101,6 @@ const useStyles = makeStyles((theme) => ({
     padding: '1em',
   },
   item: {
-
     border: '1px solid #2a9076',
     borderStyle: 'dashed',
   },
@@ -128,7 +127,7 @@ const useStyles = makeStyles((theme) => ({
       'background-color': 'white',
       border: '2px solid #bf083e',
     },
-    backgroundImage: 'url(\'./arrow.svg\')',
+    backgroundImage: "url('./arrow.svg')",
     backgroundRepeat: 'no-repeat',
     'background-position-x': '5px',
     'background-position-y': '1px',
@@ -149,10 +148,9 @@ const useStyles = makeStyles((theme) => ({
       textDecoration: 'line-through',
       color: 'white',
       'background-color': '#bf083e',
-
     },
     fontSize: '1em',
-    backgroundImage: 'url(\'./arrow.svg\')',
+    backgroundImage: "url('./arrow.svg')",
     backgroundRepeat: 'no-repeat',
     'background-position-x': '5px',
     'background-position-y': '1px',
@@ -173,9 +171,7 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       color: '#bf083e',
     },
-
   },
-
 }));
 
 const Actor = () => {
@@ -185,117 +181,111 @@ const Actor = () => {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const [cookies, setCookie, removeCookie] = useCookies();
   const GET_ACTOR = gql`
-        query actor($id:String) {
-            actor(id:$id) {
-                id,
-                name,
-                address,
-                lat,
-                lng,
-                address,
-                city,
-                email,
-                phone,
-                website,
-                description,
-                socialNetwork
-                volunteerDescription,
-                activity,
-                categories{
-                    label,
-                    parentCategory{
-                        label
-                    },
-                    subCategories{
-                        label
-                    }
-                },
-                entries{
-                    label,
-                    collection{
-                          code,
-                          label
-                        }
-                    parentEntry{
-                        code,
-                        label,
-                        collection{
-                          code,
-                          label
-                        }
-                    },
-                    
-                },
-                events {
-                    id,
-                    label,
-                    shortDescription,
-                    description,
-                    startedAt,
-                    endedAt,
-                    published,
-                  ,
-                  pictures{
-                    id,
-                    label,
-                    originalPicturePath,
-                    originalPictureFilename,
-                    croppedPicturePath,
-                    croppedPictureFilename,
-                    croppedX,
-                    croppedY,
-                    croppedZoom,
-                    croppedRotation,
-                    position
-                  }
-                },
-                volunteers {  
-                    id,
-                    surname,
-                    lastname,
-
-                },
-                referents {   id,
-                    surname,
-                    lastname,
-
-                },
-              pictures{
-                id,
-                label,
-                originalPicturePath,
-                originalPictureFilename,
-                croppedPicturePath,
-                croppedPictureFilename,
-                croppedX,
-                croppedY,
-                croppedZoom,
-                croppedRotation,
-                position
-              }
-            }
+    query actor($id: String) {
+      actor(id: $id) {
+        id
+        name
+        address
+        lat
+        lng
+        address
+        city
+        email
+        phone
+        website
+        description
+        socialNetwork
+        volunteerDescription
+        activity
+        categories {
+          label
+          parentCategory {
+            label
+          }
+          subCategories {
+            label
+          }
         }
-    `;
+        entries {
+          label
+          collection {
+            code
+            label
+          }
+          parentEntry {
+            code
+            label
+            collection {
+              code
+              label
+            }
+          }
+        }
+        events {
+          id
+          label
+          shortDescription
+          description
+          startedAt
+          endedAt
+          published
+          pictures {
+            id
+            label
+            originalPicturePath
+            originalPictureFilename
+            croppedPicturePath
+            croppedPictureFilename
+            croppedX
+            croppedY
+            croppedZoom
+            croppedRotation
+            position
+          }
+        }
+        volunteers {
+          id
+          surname
+          lastname
+        }
+        referents {
+          id
+          surname
+          lastname
+        }
+        pictures {
+          id
+          label
+          originalPicturePath
+          originalPictureFilename
+          croppedPicturePath
+          croppedPictureFilename
+          croppedX
+          croppedY
+          croppedZoom
+          croppedRotation
+          position
+        }
+      }
+    }
+  `;
 
   const ADD_ACTOR_VOLUNTEER = gql`
-        mutation addActorVolunteer ($actorId:Int!,$userId: Int!) {
-            addActorVolunteer(actorId:$actorId,userId:$userId)
-        }
-    `;
+    mutation addActorVolunteer($actorId: Int!, $userId: Int!) {
+      addActorVolunteer(actorId: $actorId, userId: $userId)
+    }
+  `;
   const REMOVE_ACTOR_VOLUNTEER = gql`
-        mutation removeActorVolunteer ($actorId:Int!,$userId: Int!) {
-            removeActorVolunteer(actorId:$actorId,userId:$userId)
-        }
-    `;
-  const {
-    data, loading, error, refetch,
-  } = useQuery(GET_ACTOR,
-    {
-      variables: {
-        id,
-      },
-      // fetchPolicy : "no-cache"
-    });
+    mutation removeActorVolunteer($actorId: Int!, $userId: Int!) {
+      removeActorVolunteer(actorId: $actorId, userId: $userId)
+    }
+  `;
+  const { data, loading, error, refetch } = useQuery(GET_ACTOR, {
+    variables: {
+      id,
+    },
+    // fetchPolicy : "no-cache"
+  });
 
   const [stylesProps, setStylesProps] = useState({
     topImageSize: '250px',
@@ -303,12 +293,18 @@ const Actor = () => {
   });
   const styles = useStyles(stylesProps);
 
-  const [addVolunteer, { data: volunteerData, loading: volunteerLoading, error: volunteerError }] = useMutation(
-    ADD_ACTOR_VOLUNTEER,
-  );
-  const [removeVolunteer, { data: removevolunteerData, loading: removevolunteerLoading, error: removevolunteerError }] = useMutation(
-    REMOVE_ACTOR_VOLUNTEER,
-  );
+  const [
+    addVolunteer,
+    { data: volunteerData, loading: volunteerLoading, error: volunteerError },
+  ] = useMutation(ADD_ACTOR_VOLUNTEER);
+  const [
+    removeVolunteer,
+    {
+      data: removevolunteerData,
+      loading: removevolunteerLoading,
+      error: removevolunteerError,
+    },
+  ] = useMutation(REMOVE_ACTOR_VOLUNTEER);
 
   useEffect(() => {
     if (volunteerData !== undefined) {
@@ -343,23 +339,37 @@ const Actor = () => {
 
   const addVolunteerHandler = () => {
     if (user == null) {
-      setCookie('redirect_url', router.asPath, { path: `/actor/${data}` && data.actor.id });
+      setCookie('redirect_url', router.asPath, {
+        path: `/actor/${data}` && data.actor.id,
+      });
       enqueueSnackbar('Veuillez vous connecter pour devenir bénévole', {
         preventDuplicate: true,
       });
     } else {
-      addVolunteer({ variables: { actorId: parseInt(data && data.actor.id), userId: parseInt(user.id) } });
+      addVolunteer({
+        variables: {
+          actorId: parseInt(data && data.actor.id),
+          userId: parseInt(user.id),
+        },
+      });
     }
   };
 
   const removeVolunteerHandler = () => {
-    removeVolunteer({ variables: { actorId: parseInt(data && data.actor.id), userId: parseInt(user.id) } });
+    removeVolunteer({
+      variables: {
+        actorId: parseInt(data && data.actor.id),
+        userId: parseInt(user.id),
+      },
+    });
   };
   const headerRef = React.useRef();
   const settingsSliderImage = {
-
     infinite: true,
-    slidesToShow: data && data.actor.pictures && data.actor.pictures.length > 3 ? 3 : data && data.actor.pictures && data.actor.pictures.length,
+    slidesToShow:
+      data && data.actor.pictures && data.actor.pictures.length > 3
+        ? 3
+        : data && data.actor.pictures && data.actor.pictures.length,
     slidesToScroll: 1,
     // autoplay: true,
     // autoplaySpeed: 2000,
@@ -367,10 +377,14 @@ const Actor = () => {
     nextArrow: <SampleNextArrow />,
     prevArrow: <SamplePrevArrow />,
   };
-  const nbSlidetoshow = data && data.actor.events && data.actor.events.length > 5 ? 5 : (data && data.actor.events && data.actor.events.length + (containUser(data.actor.referents) ? 1 : 0));
+  const nbSlidetoshow =
+    data && data.actor.events && data.actor.events.length > 5
+      ? 5
+      : data &&
+        data.actor.events &&
+        data.actor.events.length + (containUser(data.actor.referents) ? 1 : 0);
 
   const settingsSliderevent = {
-
     infinite: true,
     slidesToShow: nbSlidetoshow,
     slidesToScroll: 1,
@@ -404,7 +418,11 @@ const Actor = () => {
   function showCategory(entries) {
     let text = '';
     entries.forEach((entry) => {
-      if (entry.parentEntry && entry.parentEntry.collection && entry.parentEntry.collection.code === 'category') {
+      if (
+        entry.parentEntry &&
+        entry.parentEntry.collection &&
+        entry.parentEntry.collection.code === 'category'
+      ) {
         text += `${entry.parentEntry.label} : ${entry.label}  `;
       }
     });
@@ -416,54 +434,59 @@ const Actor = () => {
         <title>
           {/* @ts-ignore */}
           {data && data.actor.name}
-          {/* @ts-ignore */}
-          -
-          {/* @ts-ignore */}
+          {/* @ts-ignore */}-{/* @ts-ignore */}
           {data && data.actor.activity}
-          {/* @ts-ignore */}
-          -
-          {/* @ts-ignore */}
+          {/* @ts-ignore */}-{/* @ts-ignore */}
           {data && data.actor.city}
-          {/* @ts-ignore */}
-          -
-          {/* @ts-ignore */}
+          {/* @ts-ignore */}-{/* @ts-ignore */}
           {data && showCategory(data.actor.entries)}
-
         </title>
       </Head>
       <RootRef>
         <Box>
           {data && data.actor && (
-            <Container className={styles.titleContainer} style={{ backgroundImage: data.actor.pictures.length >= 1 ? `url(${getImageUrl(data.actor.pictures.sort((a, b) => (a.position > b.position ? 1 : -1))[0].croppedPicturePath)})` : '' }} />
+            <Container
+              className={styles.titleContainer}
+              style={{
+                backgroundImage:
+                  data.actor.pictures.length >= 1
+                    ? `url(${getImageUrl(
+                        data.actor.pictures.sort((a, b) =>
+                          a.position > b.position ? 1 : -1,
+                        )[0].croppedPicturePath,
+                      )})`
+                    : '',
+              }}
+            />
           )}
           <Container className={styles.cardInfo}>
-
             <Grid container>
               <Grid item md={8} sm={10} className={styles.threePointGrid}>
                 <div>
                   <Typography variant="h5" className={styles.cardTitle}>
                     {data && data.actor.name}
                   </Typography>
-                  {data && data.actor.entries.map((entry) => (
-
-                    entry.parentEntry && entry.parentEntry.collection.code === 'category' && (
-                      <div>
-                        <Typography
-                          variant="h7"
-                          className={styles.cardTitleCategories}
-                        >
-                          {/* @ts-ignore */}
-                          {` ${entry.parentEntry && entry.parentEntry.label} `}
-                          {/* @ts-ignore */}
-                        :
-                        {/* @ts-ignore */}
-                          {` ${entry && entry.label}`}
-                          {/* @ts-ignore */}
-
-                        </Typography>
-                      </div>
-                    )
-                  ))}
+                  {data &&
+                    data.actor.entries.map(
+                      (entry) =>
+                        entry.parentEntry &&
+                        entry.parentEntry.collection.code === 'category' && (
+                          <div>
+                            <Typography
+                              variant="h7"
+                              className={styles.cardTitleCategories}
+                            >
+                              {/* @ts-ignore */}
+                              {` ${
+                                entry.parentEntry && entry.parentEntry.label
+                              } `}
+                              {/* @ts-ignore */}:{/* @ts-ignore */}
+                              {` ${entry && entry.label}`}
+                              {/* @ts-ignore */}
+                            </Typography>
+                          </div>
+                        ),
+                    )}
                 </div>
                 <p>{data && Parser(data.actor.description)}</p>
                 <div />
@@ -471,7 +494,13 @@ const Actor = () => {
 
               <Grid item md={4} sm={10} className={[styles.align]}>
                 <Grid container className={[styles.infoPratiqueGrid]}>
-                  <Typography variant="h7" className={[styles.infoPratiqueTitle, styles.infoPratiqueItem]}>
+                  <Typography
+                    variant="h7"
+                    className={[
+                      styles.infoPratiqueTitle,
+                      styles.infoPratiqueItem,
+                    ]}
+                  >
                     INFOS PRATIQUES
                   </Typography>
                   <Grid container className={[styles.item]}>
@@ -481,7 +510,9 @@ const Actor = () => {
                     <Grid item xs={8} className={[styles.alignLeft]}>
                       <div className={[styles.infoLabel]}>LOCALISATION </div>
                       <span className={[styles.infoValue]}>
-                        {data && !data.actor.city && <span> Adresse manquante</span>}
+                        {data && !data.actor.city && (
+                          <span> Adresse manquante</span>
+                        )}
                         {data && !data.actor.address && data.actor.city && (
                           <span>
                             {/* @ts-ignore */}
@@ -491,27 +522,32 @@ const Actor = () => {
                         {data && data.actor.address && data.actor.city && (
                           <span>
                             {/* @ts-ignore */}
-                            {data && data.actor.address}
-                          ,
-                            {/* @ts-ignore */}
+                            {data && data.actor.address},{/* @ts-ignore */}
                             {data && data.actor.city}
                           </span>
                         )}
                       </span>
-                      <div className={[styles.infoLabel]}>TERRITOIRE D'ACTION</div>
+                      <div className={[styles.infoLabel]}>
+                        TERRITOIRE D'ACTION
+                      </div>
                       <span className={[styles.infoValue]}>
-                        {data && data.actor.entries.map((entry) => (
-                          entry && entry.collection && entry.collection.code === 'actor_location_action' && (
-                            <div>
-                              <Typography
-                                variant="h7"
-                                className={styles.cardTitleCategories}
-                              >
-                                {` ${entry && entry.label}`}
-                              </Typography>
-                            </div>
-                          )
-                        ))}
+                        {data &&
+                          data.actor.entries.map(
+                            (entry) =>
+                              entry &&
+                              entry.collection &&
+                              entry.collection.code ===
+                                'actor_location_action' && (
+                                <div>
+                                  <Typography
+                                    variant="h7"
+                                    className={styles.cardTitleCategories}
+                                  >
+                                    {` ${entry && entry.label}`}
+                                  </Typography>
+                                </div>
+                              ),
+                          )}
                       </span>
                     </Grid>
                   </Grid>
@@ -520,20 +556,26 @@ const Actor = () => {
                       <SupervisedUserCircle className={[styles.icon]} />
                     </Grid>
                     <Grid item xs={8} className={[styles.alignLeft]}>
-                      <div className={[styles.infoLabel]}>Public principal visé</div>
+                      <div className={[styles.infoLabel]}>
+                        Public principal visé
+                      </div>
                       <span className={[styles.infoValue]}>
-                        {data && data.actor.entries.map((entry) => (
-                          entry && entry.collection && entry.collection.code === 'public_target' && (
-                            <div>
-                              <Typography
-                                variant="h7"
-                                className={styles.cardTitleCategories}
-                              >
-                                {` ${entry && entry.label}`}
-                              </Typography>
-                            </div>
-                          )
-                        ))}
+                        {data &&
+                          data.actor.entries.map(
+                            (entry) =>
+                              entry &&
+                              entry.collection &&
+                              entry.collection.code === 'public_target' && (
+                                <div>
+                                  <Typography
+                                    variant="h7"
+                                    className={styles.cardTitleCategories}
+                                  >
+                                    {` ${entry && entry.label}`}
+                                  </Typography>
+                                </div>
+                              ),
+                          )}
                       </span>
                     </Grid>
                   </Grid>
@@ -545,18 +587,22 @@ const Actor = () => {
                     <Grid item xs={8} className={[styles.alignLeft]}>
                       <div className={[styles.infoLabel]}>Statut</div>
                       <span className={[styles.infoValue]}>
-                        {data && data.actor.entries.map((entry) => (
-                          entry && entry.collection && entry.collection.code === 'actor_status' && (
-                            <div>
-                              <Typography
-                                variant="h7"
-                                className={styles.cardTitleCategories}
-                              >
-                                {` ${entry && entry.label}`}
-                              </Typography>
-                            </div>
-                          )
-                        ))}
+                        {data &&
+                          data.actor.entries.map(
+                            (entry) =>
+                              entry &&
+                              entry.collection &&
+                              entry.collection.code === 'actor_status' && (
+                                <div>
+                                  <Typography
+                                    variant="h7"
+                                    className={styles.cardTitleCategories}
+                                  >
+                                    {` ${entry && entry.label}`}
+                                  </Typography>
+                                </div>
+                              ),
+                          )}
                       </span>
                     </Grid>
                   </Grid>
@@ -566,7 +612,9 @@ const Actor = () => {
                     </Grid>
                     <Grid item xs={8} className={[styles.alignLeft]}>
                       <div className={[styles.infoLabel]}>TELEPHONE</div>
-                      <span className={[styles.infoValue]}>{data && data.actor.phone}</span>
+                      <span className={[styles.infoValue]}>
+                        {data && data.actor.phone}
+                      </span>
                     </Grid>
                   </Grid>
                   <Grid container className={[styles.item]}>
@@ -575,7 +623,9 @@ const Actor = () => {
                     </Grid>
                     <Grid item xs={8} className={[styles.alignLeft]}>
                       <div className={[styles.infoLabel]}>Email</div>
-                      <span className={[styles.infoValue]}>{data && data.actor.email}</span>
+                      <span className={[styles.infoValue]}>
+                        {data && data.actor.email}
+                      </span>
                     </Grid>
                   </Grid>
                   <Grid container className={[styles.item]}>
@@ -589,7 +639,6 @@ const Actor = () => {
                           {data && data.actor.website}
                         </a>
                         {/* @ts-ignore */}
-
                       </span>
                     </Grid>
                   </Grid>
@@ -602,11 +651,13 @@ const Actor = () => {
                       <Grid item xs={8} className={[styles.alignLeft]}>
                         <div className={[styles.infoLabel]}>Réseau social</div>
                         <span className={[styles.infoValue]}>
-                          <a href={data && data.actor.socialNetwork} target="_blank">
+                          <a
+                            href={data && data.actor.socialNetwork}
+                            target="_blank"
+                          >
                             {data && data.actor.socialNetwork}
                           </a>
                           {/* @ts-ignore */}
-
                         </span>
                       </Grid>
                     </Grid>
@@ -617,9 +668,7 @@ const Actor = () => {
                     </Grid>
                     <Grid item xs={8} className={[styles.alignLeft]}>
                       <div className={[styles.infoLabel]}>Horaire</div>
-                      <span className={[styles.infoValue]}>
-
-                      </span>
+                      <span className={[styles.infoValue]}></span>
                     </Grid>
                   </Grid>
                 </Grid>
@@ -628,96 +677,119 @@ const Actor = () => {
                     <People className={[styles.icon]} />
                   </Grid>
                   <Grid item xs={8} className={[styles.alignLeft]}>
-                    <div className={[styles.infoLabel]}>Collectif & réseaux</div>
+                    <div className={[styles.infoLabel]}>
+                      Collectif & réseaux
+                    </div>
                     <span className={[styles.infoValue]}>
-                      {data && data.actor.entries.map((entry) => (
-                        entry && entry.collection && entry.collection.code === 'collectif' && (
-                          <div>
-                            <Typography
-                              variant="h7"
-                              className={styles.cardTitleCategories}
-                            >
-                              {` ${entry && entry.label}`}
-                            </Typography>
-                          </div>
-                        )
-                      ))}
-
+                      {data &&
+                        data.actor.entries.map(
+                          (entry) =>
+                            entry &&
+                            entry.collection &&
+                            entry.collection.code === 'collectif' && (
+                              <div>
+                                <Typography
+                                  variant="h7"
+                                  className={styles.cardTitleCategories}
+                                >
+                                  {` ${entry && entry.label}`}
+                                </Typography>
+                              </div>
+                            ),
+                        )}
                     </span>
                   </Grid>
                 </Grid>
               </Grid>
             </Grid>
 
-
             {data && data.actor.volunteerDescription && (
               <div>
                 <Typography variant="h5" className={styles.cardTitle}>
                   Recherche de bénévole
-              </Typography>
+                </Typography>
                 <p>{data && Parser(data.actor.volunteerDescription)}</p>
                 <div className={styles.buttonVolunteer}>
                   {data && containUser(data.actor.volunteers) && (
-                    <button className={styles.buttonInverse} onClick={removeVolunteerHandler}>Je ne souhaite plus être bénévole</button>
+                    <button
+                      className={styles.buttonInverse}
+                      onClick={removeVolunteerHandler}
+                    >
+                      Je ne souhaite plus être bénévole
+                    </button>
                   )}
                   {!(data && containUser(data.actor.volunteers)) && (
-                    <button className={styles.button} onClick={addVolunteerHandler}>Devenir bénévole</button>
+                    <button
+                      className={styles.button}
+                      onClick={addVolunteerHandler}
+                    >
+                      Devenir bénévole
+                    </button>
                   )}
-
                 </div>
               </div>
-
             )}
-            {data && data.actor.pictures && (data.actor.pictures.length > 0) && (
+            {data && data.actor.pictures && data.actor.pictures.length > 0 && (
               <div>
                 <Typography variant="h5" className={styles.cardTitle}>
                   PHOTOS ET VIDEOS
-              </Typography>
-
-
-
-              </div>
-            )}
-            <Slider {...settingsSliderImage}>
-              {data && data.actor.pictures && data.actor.pictures.sort((a, b) => (a.position > b.position ? 1 : -1)).map((picture) => (
-                <img src={getImageUrl(picture.croppedPicturePath)} className={[styles.img]} />
-              ))}
-            </Slider>
-
-            {data && data.actor.pictures && (data.actor.events.length > 0 || containUser(data.actor.referents)) && (
-              <div>
-
-                <Typography variant="h5" className={[styles.cardTitle, styles.align]}>
-                  LES EVENEMENTS
-              </Typography>
-                <Typography variant="h5" className={[styles.cardTitle, styles.align]}>
-                  de
-                {/* @ts-ignore */}
-                  {data && data.actor.name}
                 </Typography>
               </div>
             )}
-            <Slider {...settingsSliderevent} className={[styles.articleCarroussel]}>
-              {data && containUser(data.actor.referents) && (
-                <CardAddEvent
-                  actor={data.actor}
-                />
-              )}
-
-              {data && data.actor.events && data.actor.events.map((event) => (
-                <CardSliderEvent
-                  key={event.id}
-                  event={event}
-                />
-              ))}
+            <Slider {...settingsSliderImage}>
+              {data &&
+                data.actor.pictures &&
+                data.actor.pictures
+                  .sort((a, b) => (a.position > b.position ? 1 : -1))
+                  .map((picture) => (
+                    <img
+                      src={getImageUrl(picture.croppedPicturePath)}
+                      className={[styles.img]}
+                    />
+                  ))}
             </Slider>
 
+            {data &&
+              data.actor.pictures &&
+              (data.actor.events.length > 0 ||
+                containUser(data.actor.referents)) && (
+                <div>
+                  <Typography
+                    variant="h5"
+                    className={[styles.cardTitle, styles.align]}
+                  >
+                    LES EVENEMENTS
+                  </Typography>
+                  <Typography
+                    variant="h5"
+                    className={[styles.cardTitle, styles.align]}
+                  >
+                    de
+                    {/* @ts-ignore */}
+                    {data && data.actor.name}
+                  </Typography>
+                </div>
+              )}
+            <Slider
+              {...settingsSliderevent}
+              className={[styles.articleCarroussel]}
+            >
+              {data && containUser(data.actor.referents) && (
+                <CardAddEvent actor={data.actor} />
+              )}
+
+              {data &&
+                data.actor.events &&
+                data.actor.events.map((event) => (
+                  <CardSliderEvent key={event.id} event={event} />
+                ))}
+            </Slider>
           </Container>
           <Newsletter />
-          {((data && containUser(data.actor.referents)) || (user && user.role === 'admin')) && (
+          {((data && containUser(data.actor.referents)) ||
+            (user && user.role === 'admin')) && (
             <Link href={`/actorAdmin/actor/${id}`}>
               <Fab className={styles.fab} aria-label="edit">
-
                 <EditIcon />
               </Fab>
             </Link>

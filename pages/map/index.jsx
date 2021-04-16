@@ -255,8 +255,8 @@ const carto = () => {
       headerDisplay: 'static',
     });
     const GET_ACTORS = gql`
-      query actors($entries: [[String]],$postCode: String) {
-        actors(entries: $entries,postCode: $postCode) {
+      query actors($entries: [[String]], $postCode: String) {
+        actors(entries: $entries, postCode: $postCode) {
           id
           name
           address
@@ -297,7 +297,6 @@ const carto = () => {
     useEffect(() => {
       // avoid first rendering
 
-
       const filterChange = () => {
         const newOtherCategoriesLists = Object.values(otherCategoriesChecked);
         const newEntries = [categoriesChecked];
@@ -313,10 +312,8 @@ const carto = () => {
           } else {
             return;
           }
-
-
         }
-        refetch({ entries: newEntries, postCode })
+        refetch({ entries: newEntries, postCode });
       };
       filterChange();
     }, [categoriesChecked, otherCategoriesChecked, postCode]);
@@ -368,12 +365,11 @@ const carto = () => {
     });
 
     const postCodeChange = (e) => {
-      if (e.target.value == "") {
+      if (e.target.value == '') {
         setPostCode(null);
       } else {
         setPostCode(e.target.value);
       }
-
     };
 
     const otherCategoryChange = useCallback((e, collectionLabel) => {
@@ -461,10 +457,10 @@ const carto = () => {
                                   backgroundImage:
                                     actor.pictures.length >= 1
                                       ? `url(${getImageUrl(
-                                        actor.pictures.sort((a, b) =>
-                                          a.logo ? 1 : -1,
-                                        )[0].croppedPicturePath,
-                                      )})`
+                                          actor.pictures.sort((a, b) =>
+                                            a.logo ? 1 : -1,
+                                          )[0].croppedPicturePath,
+                                        )})`
                                       : '',
                                 }}
                               >
@@ -506,10 +502,10 @@ const carto = () => {
                                   backgroundImage:
                                     actor.pictures.length >= 1
                                       ? `url(${getImageUrl(
-                                        actor.pictures.sort((a, b) =>
-                                          a.position > b.position ? 1 : -1,
-                                        )[0].croppedPicturePath,
-                                      )})`
+                                          actor.pictures.sort((a, b) =>
+                                            a.position > b.position ? 1 : -1,
+                                          )[0].croppedPicturePath,
+                                        )})`
                                       : '',
                                 }}
                               >

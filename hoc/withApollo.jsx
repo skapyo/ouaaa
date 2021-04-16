@@ -22,15 +22,16 @@ export const initOnContext = (ctx) => {
   if (process.env.NODE_ENV === 'development') {
     if (inAppContext) {
       console.warn(
-        'Warning: You have opted-out of Automatic Static Optimization due to `withApollo` in `pages/_app`.\n'
-          + 'Read more: https://err.sh/next.js/opt-out-auto-static-optimization\n',
+        'Warning: You have opted-out of Automatic Static Optimization due to `withApollo` in `pages/_app`.\n' +
+          'Read more: https://err.sh/next.js/opt-out-auto-static-optimization\n',
       );
     }
   }
 
   // Initialize ApolloClient if not already done
-  const apolloClient = ctx.apolloClient
-    || initApolloClient(ctx.apolloState || {}, inAppContext ? ctx.ctx : ctx);
+  const apolloClient =
+    ctx.apolloClient ||
+    initApolloClient(ctx.apolloState || {}, inAppContext ? ctx.ctx : ctx);
 
   // We send the Apollo Client as a prop to the component to avoid calling initApollo() twice in the server.
   // Otherwise, the component would have to call initApollo() again but this
@@ -98,7 +99,8 @@ export const withApollo = ({ ssr = false } = {}) => (PageComponent) => {
 
   // Set the correct displayName in development
   if (process.env.NODE_ENV !== 'production') {
-    const displayName = PageComponent.displayName || PageComponent.name || 'Component';
+    const displayName =
+      PageComponent.displayName || PageComponent.name || 'Component';
     WithApollo.displayName = `withApollo(${displayName})`;
   }
 

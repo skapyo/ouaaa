@@ -1,6 +1,4 @@
-import {
-  Container, Grid, makeStyles, Typography,
-} from '@material-ui/core';
+import { Container, Grid, makeStyles, Typography } from '@material-ui/core';
 import React from 'react';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -12,7 +10,7 @@ const useStyles = makeStyles((theme) => ({
   cardInfo: {
     padding: '2em',
     backgroundColor: 'white',
-    backgroundImage: 'url(\'/icons/planet.svg\')',
+    backgroundImage: "url('/icons/planet.svg')",
     backgroundSize: '30%',
     backgroundPosition: 'right',
     backgroundRepeat: 'no-repeat',
@@ -73,10 +71,9 @@ const useStyles = makeStyles((theme) => ({
       color: '#bf083e',
       'background-color': 'white',
       border: '2px solid #bf083e',
-      backgroundImage: 'url(\'./arrow-hover.svg\')',
-
+      backgroundImage: "url('./arrow-hover.svg')",
     },
-    backgroundImage: 'url(\'./arrow.svg\')',
+    backgroundImage: "url('./arrow.svg')",
     backgroundRepeat: 'no-repeat',
     'background-position-x': '5px',
     'background-position-y': '1px',
@@ -99,15 +96,14 @@ const useStyles = makeStyles((theme) => ({
       color: '#bf083e',
       'background-color': 'white',
       border: '2px solid #bf083e',
-      backgroundImage: 'url(\'./arrow-hover.svg\')',
+      backgroundImage: "url('./arrow-hover.svg')",
     },
-    backgroundImage: 'url(\'./arrow.svg\')',
+    backgroundImage: "url('./arrow.svg')",
     backgroundRepeat: 'no-repeat',
     'background-position-x': '5px',
     'background-position-y': '1px',
     'background-size': '15%',
     marginBottom: '30px',
-
   },
   map: {
     paddingLeft: '19%',
@@ -123,7 +119,6 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'justify',
   },
   listItemText: {
-
     textAlign: 'justify',
   },
 
@@ -153,7 +148,10 @@ const PresentationSection = () => {
       </Typography>
       <div className={styles.improvement}>
         <Link href="/improvment">
-          <button className={styles.buttonGrid}>DECOUVRIR LES PROCHAINES FONCTIONNALITES ET FAIRE UN RETOUR DE LA PREMIERE VERSION</button>
+          <button className={styles.buttonGrid}>
+            DECOUVRIR LES PROCHAINES FONCTIONNALITES ET FAIRE UN RETOUR DE LA
+            PREMIERE VERSION
+          </button>
         </Link>
       </div>
       <Grid container spacing={3} className={styles.flexColumn}>
@@ -168,24 +166,28 @@ const PresentationSection = () => {
           </div>
           <List className={styles.root}>
             <ListItem>
-              <ListItemText className={styles.listItemText} primary="Issu du milieu associatif : Le site est né de la volonté de 3 collectifs (Collectif Transition Citoyenne, Collectif Action Solidaire et Tiers Lieux la Proue) de disposer d’une vitrine pour se faire connaître, et disposer d’un agenda réactif pour publier leurs évènements." />
+              <ListItemText
+                className={styles.listItemText}
+                primary="Issu du milieu associatif : Le site est né de la volonté de 3 collectifs (Collectif Transition Citoyenne, Collectif Action Solidaire et Tiers Lieux la Proue) de disposer d’une vitrine pour se faire connaître, et disposer d’un agenda réactif pour publier leurs évènements."
+              />
             </ListItem>
             <ListItem>
-              <ListItemText className={styles.listItemText} primary="Créé pour et par les acteurs de la transition : Le site a été créé sur mesure par une équipe de bénévoles motivés, il permet aux acteurs de la transition de renseigner eux-mêmes leurs informations. Il sera adossé à une rencontre physique régulière, afin que virtuel et réel se complètent." />
+              <ListItemText
+                className={styles.listItemText}
+                primary="Créé pour et par les acteurs de la transition : Le site a été créé sur mesure par une équipe de bénévoles motivés, il permet aux acteurs de la transition de renseigner eux-mêmes leurs informations. Il sera adossé à une rencontre physique régulière, afin que virtuel et réel se complètent."
+              />
             </ListItem>
             <ListItem>
-              <ListItemText className={styles.listItemText} primary="Catalyseur de transition : nous pensons qu’en faisant connaître les acteurs de la transition du grand public et en renforçant les liens entre eux, nous allons accélérer la nécessaire transition de notre territoire vers un fonctionnement plus sobre, plus humain et véritablement « durable »" />
+              <ListItemText
+                className={styles.listItemText}
+                primary="Catalyseur de transition : nous pensons qu’en faisant connaître les acteurs de la transition du grand public et en renforçant les liens entre eux, nous allons accélérer la nécessaire transition de notre territoire vers un fonctionnement plus sobre, plus humain et véritablement « durable »"
+              />
             </ListItem>
           </List>
-
         </Grid>
 
         <Grid item md={6} className={styles.align}>
-          <img
-            width="60%"
-            className={styles.image}
-            src="./image_card.jpg"
-          />
+          <img width="60%" className={styles.image} src="./image_card.jpg" />
         </Grid>
       </Grid>
       <Link href="/map" className={styles.map}>
@@ -198,13 +200,13 @@ const PresentationSection = () => {
         C'EST POUR QUI ?
       </Typography>
 
-      <Grid container justify="center" className={[styles.align, styles.flexColumn]}>
+      <Grid
+        container
+        justify="center"
+        className={[styles.align, styles.flexColumn]}
+      >
         <Grid item md={5} sm={10} className={[styles.gridItem, styles.align]}>
-          <img
-            width="20%"
-            src="./people.svg"
-            className={styles.imageGrid}
-          />
+          <img width="20%" src="./people.svg" className={styles.imageGrid} />
           <Typography className={styles.titleGrid}>
             Vous êtes un citoyen et souhaitez mieux
           </Typography>
@@ -235,7 +237,6 @@ const PresentationSection = () => {
         </Grid>
       </Grid>
     </Container>
-
   );
 };
 

@@ -12,9 +12,9 @@ import { getImageUrl } from '../../../utils/utils';
 import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded';
 import FavoriteRoundedIcon from '@material-ui/icons/FavoriteRounded';
 import Link from '../../../components/Link';
-import Moment from "react-moment";
+import Moment from 'react-moment';
 if (typeof window !== 'undefined') {
-  var L = require("leaflet");
+  var L = require('leaflet');
   var Map = require('react-leaflet').Map;
   var TileLayer = require('react-leaflet').TileLayer;
   var Marker = require('react-leaflet').Marker;
@@ -63,7 +63,6 @@ const useStyles = makeStyles({
     marginLeft: 'auto',
     marginRight: 'auto',
     textAlign: 'center',
-
   },
   title: {
     textAlign: 'left',
@@ -84,9 +83,9 @@ const useStyles = makeStyles({
       color: '#bf083e',
       'background-color': 'white',
       border: '2px solid #bf083e',
-      backgroundImage: 'url(\'./arrow-hover.svg\')',
+      backgroundImage: "url('./arrow-hover.svg')",
     },
-    backgroundImage: 'url(\'./arrow.svg\')',
+    backgroundImage: "url('./arrow.svg')",
     backgroundRepeat: 'no-repeat',
     'background-position-x': '5px',
     'background-position-y': '1px',
@@ -103,13 +102,12 @@ const useStyles = makeStyles({
   favoriteIcon: {
     color: '#AD2740',
   },
-
 });
 
 const AgendaPageLayout = () => {
   const GET_EVENTS = gql`
-    query events($startingDate:String,$categories:[String]) {
-      events (startingDate:$startingDate,categories:$categories) {
+    query events($startingDate: String, $categories: [String]) {
+      events(startingDate: $startingDate, categories: $categories) {
         id
         label
         startedAt
@@ -129,22 +127,21 @@ const AgendaPageLayout = () => {
           id
           name
         }
-        pictures{
-          id,
-          label,
-          originalPicturePath,
-          originalPictureFilename,
-          croppedPicturePath,
-          croppedPictureFilename,
-          croppedX,
-          croppedY,
-          croppedZoom,
-          croppedRotation,
+        pictures {
+          id
+          label
+          originalPicturePath
+          originalPictureFilename
+          croppedPicturePath
+          croppedPictureFilename
+          croppedX
+          croppedY
+          croppedZoom
+          croppedRotation
           position
         }
-
       }
-    } 
+    }
   `;
 
   const date = new Date();
@@ -163,18 +160,12 @@ const AgendaPageLayout = () => {
 
   date.setHours(0, 0, 0, 0);
 
-
-
   const classes = useStyles();
-  const {
-    data: eventData, loading, error, refetch,
-  } = useQuery(
-    GET_EVENTS, {
+  const { data: eventData, loading, error, refetch } = useQuery(GET_EVENTS, {
     variables: {
       startingDate: date.toISOString(),
     },
-  },
-  );
+  });
   if (typeof window !== 'undefined') {
     L.Icon.Default.mergeOptions({
       iconUrl: null,
@@ -183,156 +174,210 @@ const AgendaPageLayout = () => {
   return (
     <Container className={classes.main}>
       <Grid container justify="center">
-        <Fab variant="extended" size="medium" aria-label="add" className={classes.listButton} onClick={switchMode} >
-          {!listMode && (<span>Liste</span>)}  {listMode && (<span>Carte</span>)}
+        <Fab
+          variant="extended"
+          size="medium"
+          aria-label="add"
+          className={classes.listButton}
+          onClick={switchMode}
+        >
+          {!listMode && <span>Liste</span>} {listMode && <span>Carte</span>}
         </Fab>
       </Grid>
       <Container className={classes.layout}>
         <Filters refetch={refetch} />
 
-        {listMode && eventData && eventData.events
-          && <Events data={eventData} />}
-          
-          { !listMode && <Grid item xs={10}>
+        {listMode && eventData && eventData.events && (
+          <Events data={eventData} />
+        )}
+
+        {!listMode && (
+          <Grid item xs={10}>
             <Map ref={mapRef} center={position} zoom={11}>
               <TileLayer
                 attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               />
               <MarkerClusterGroup>
-                {typeof eventData !== 'undefined' && eventData.events.map((event, index) => {
-                  let icone;
-                  let color;
-                  if (event.lat != null && event.lng != null) {
-                    if (event.categories && event.categories.length > 0 && event.categories[0].icon) {
-                      icone = `/icons/${event.categories[0].icon}.svg`;
-                      color = event.categories[0].color;
-                    } else {
-                      icone = '/icons/' + 'place' + '.svg';
-                      color = 'black';
-                    }
-                    const markerHtmlStyles = 'background-color: red';
-                    const suitcasePoint = new L.Icon({
-                      iconUrl: icone,
-                      color,
-                      fillColor: color,
-                      iconAnchor: [13, 34], // point of the icon which will correspond to marker's location
-                      iconSize: [25],
-                      popupAnchor: [1, -25],
-                      html: `<span style="${markerHtmlStyles}" />`,
-                    });
-                    return (
-                      <Marker
-                            key={`marker-${index}`} position={[event.lat, event.lng]}
-                            icon={suitcasePoint}
+                {typeof eventData !== 'undefined' &&
+                  eventData.events.map((event, index) => {
+                    let icone;
+                    let color;
+                    if (event.lat != null && event.lng != null) {
+                      if (
+                        event.categories &&
+                        event.categories.length > 0 &&
+                        event.categories[0].icon
+                      ) {
+                        icone = `/icons/${event.categories[0].icon}.svg`;
+                        color = event.categories[0].color;
+                      } else {
+                        icone = '/icons/' + 'place' + '.svg';
+                        color = 'black';
+                      }
+                      const markerHtmlStyles = 'background-color: red';
+                      const suitcasePoint = new L.Icon({
+                        iconUrl: icone,
+                        color,
+                        fillColor: color,
+                        iconAnchor: [13, 34], // point of the icon which will correspond to marker's location
+                        iconSize: [25],
+                        popupAnchor: [1, -25],
+                        html: `<span style="${markerHtmlStyles}" />`,
+                      });
+                      return (
+                        <Marker
+                          key={`marker-${index}`}
+                          position={[event.lat, event.lng]}
+                          icon={suitcasePoint}
+                        >
+                          <Tooltip>
+                            <div
+                              className={classes.image}
+                              style={{
+                                backgroundImage:
+                                  event.pictures.length >= 1
+                                    ? `url(${getImageUrl(
+                                        event.pictures.sort((a, b) =>
+                                          a.position > b.position ? 1 : -1,
+                                        )[0].croppedPicturePath,
+                                      )})`
+                                    : '',
+                              }}
                             >
-                            <Tooltip>
-                                <div className={classes.image} style={{ backgroundImage: event.pictures.length >= 1 ? `url(${getImageUrl(event.pictures.sort((a, b) => (a.position > b.position ? 1 : -1))[0].croppedPicturePath)})` : '' }}>
-                                    <div className={classes.categorie}>
-                                        <Typography className={classes.categorie} gutterBottom>
-                                            {event.categories && event.categories.length > 0 && event.categories[0].label}
-                                          </Typography>
-                                      </div>
-                                  </div>
-                                <div className={classes.content}>
-                                    <Grid container>
-                                        <Grid item xs={10}>
-                                            <div className={classes.titleDiv}>
-                                              <Typography
-                                                  variant="h6" component="h2"
-                                                  className={classes.title}
-                                              >
-                                                {event && event.label}
-                                              </Typography>
-                                                <Typography
-                                                variant="h6" component="h2"
-                                                className={classes.title}
-                                              >
-                                                  De
-                                                  <Moment format=" HH" unix>{event.startedAt / 1000}</Moment>
-                                                  h
-                                                  <Moment format="mm " unix>{event.startedAt / 1000}</Moment>
-                                                  à
-                                                  <Moment format=" HH" unix>{event.endedAt / 1000}</Moment>
-                                                  h
-                                                  <Moment format="mm " unix>{event.endedAt / 1000}</Moment>
-                                              </Typography>
-                                              </div>
-                            </Grid>
-
-                          </Grid>
-
-                          <Typography component="p">
-                            {event && event.shortDescription}
-                          </Typography>
-                        </div>
-
-                      </Tooltip>
-                      <Popup>
-
-                        <div className={classes.image} style={{ backgroundImage: event.pictures.length >= 1 ? `url(${getImageUrl(event.pictures.sort((a, b) => (a.position > b.position ? 1 : -1))[0].croppedPicturePath)})` : '' }}>
-                          <div className={classes.categorie}>
-                            <Typography className={classes.categorie} gutterBottom>
-                              {event.categories && event.categories.length > 0 && event.categories[0].label}
-                            </Typography>
-                          </div>
-                        </div>
-                        <div className={classes.content}>
-                          <Grid container>
-                            <Grid item xs={10}>
-                              <div className={classes.titleDiv}>
+                              <div className={classes.categorie}>
                                 <Typography
-                                  variant="h6" component="h2"
-                                  className={classes.title}
+                                  className={classes.categorie}
+                                  gutterBottom
                                 >
-                                  {event && event.label}
+                                  {event.categories &&
+                                    event.categories.length > 0 &&
+                                    event.categories[0].label}
                                 </Typography>
                               </div>
-                            </Grid>
+                            </div>
+                            <div className={classes.content}>
+                              <Grid container>
+                                <Grid item xs={10}>
+                                  <div className={classes.titleDiv}>
+                                    <Typography
+                                      variant="h6"
+                                      component="h2"
+                                      className={classes.title}
+                                    >
+                                      {event && event.label}
+                                    </Typography>
+                                    <Typography
+                                      variant="h6"
+                                      component="h2"
+                                      className={classes.title}
+                                    >
+                                      De
+                                      <Moment format=" HH" unix>
+                                        {event.startedAt / 1000}
+                                      </Moment>
+                                      h
+                                      <Moment format="mm " unix>
+                                        {event.startedAt / 1000}
+                                      </Moment>
+                                      à
+                                      <Moment format=" HH" unix>
+                                        {event.endedAt / 1000}
+                                      </Moment>
+                                      h
+                                      <Moment format="mm " unix>
+                                        {event.endedAt / 1000}
+                                      </Moment>
+                                    </Typography>
+                                  </div>
+                                </Grid>
+                              </Grid>
 
-                            <Grid item xs={2}>
-                              <div
-                                className={classes.favorite}
-                                onClick={() => setFavorite(!favorite)}
-                              >
-                                {!favorite && (
-                                  <FavoriteBorderRoundedIcon
-                                    className={classes.favoriteIcon}
-                                  />
-                                )}
-                                {favorite && (
-                                  <FavoriteRoundedIcon
-                                    className={classes.favoriteIcon}
-                                  />
-                                )}
+                              <Typography component="p">
+                                {event && event.shortDescription}
+                              </Typography>
+                            </div>
+                          </Tooltip>
+                          <Popup>
+                            <div
+                              className={classes.image}
+                              style={{
+                                backgroundImage:
+                                  event.pictures.length >= 1
+                                    ? `url(${getImageUrl(
+                                        event.pictures.sort((a, b) =>
+                                          a.position > b.position ? 1 : -1,
+                                        )[0].croppedPicturePath,
+                                      )})`
+                                    : '',
+                              }}
+                            >
+                              <div className={classes.categorie}>
+                                <Typography
+                                  className={classes.categorie}
+                                  gutterBottom
+                                >
+                                  {event.categories &&
+                                    event.categories.length > 0 &&
+                                    event.categories[0].label}
+                                </Typography>
                               </div>
-                            </Grid>
-                          </Grid>
+                            </div>
+                            <div className={classes.content}>
+                              <Grid container>
+                                <Grid item xs={10}>
+                                  <div className={classes.titleDiv}>
+                                    <Typography
+                                      variant="h6"
+                                      component="h2"
+                                      className={classes.title}
+                                    >
+                                      {event && event.label}
+                                    </Typography>
+                                  </div>
+                                </Grid>
 
-                          <Typography component="p">
-                            {event && event.shortDescription}
-                          </Typography>
-                        </div>
-                        <Link href={`/event/${event.id}`}>
-                          <button className={classes.buttonGrid}>EN SAVOIR PLUS</button>
-                        </Link>
+                                <Grid item xs={2}>
+                                  <div
+                                    className={classes.favorite}
+                                    onClick={() => setFavorite(!favorite)}
+                                  >
+                                    {!favorite && (
+                                      <FavoriteBorderRoundedIcon
+                                        className={classes.favoriteIcon}
+                                      />
+                                    )}
+                                    {favorite && (
+                                      <FavoriteRoundedIcon
+                                        className={classes.favoriteIcon}
+                                      />
+                                    )}
+                                  </div>
+                                </Grid>
+                              </Grid>
 
-                      </Popup>
-                    </Marker>);
-                }
-              })}
-            </MarkerClusterGroup>
-
-          </Map>
-        </Grid>
-        }
-
+                              <Typography component="p">
+                                {event && event.shortDescription}
+                              </Typography>
+                            </div>
+                            <Link href={`/event/${event.id}`}>
+                              <button className={classes.buttonGrid}>
+                                EN SAVOIR PLUS
+                              </button>
+                            </Link>
+                          </Popup>
+                        </Marker>
+                      );
+                    }
+                  })}
+              </MarkerClusterGroup>
+            </Map>
+          </Grid>
+        )}
       </Container>
       <Newsletter />
     </Container>
   );
-
-
 };
 
 export default withApollo()(AgendaPageLayout);
