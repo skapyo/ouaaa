@@ -16,7 +16,6 @@ const useStyles = makeStyles({
     '&:hover': {
       cursor: 'pointer',
     },
-
   },
   bullet: {
     display: 'inline-block',
@@ -35,7 +34,6 @@ const useStyles = makeStyles({
     display: 'block',
     marginLeft: 'auto',
     marginRight: 'auto',
-
   },
   image: {
     backgroundPosition: 'center center',
@@ -60,9 +58,7 @@ const useStyles = makeStyles({
   titleDiv: {
     display: 'flex',
     alignItems: 'center',
-
   },
-
 });
 
 export default function SimpleCard({ actor }) {
@@ -71,13 +67,26 @@ export default function SimpleCard({ actor }) {
 
   return (
     <Link href={`/actor/${actor.id}`}>
-
       <Card className={classes.root}>
         <CardContent>
-          <div className={classes.image} style={{ backgroundImage: actor.pictures.length >= 1 ? `url(${getImageUrl(actor.pictures.sort((a, b) => (a.position > b.position ? 1 : -1))[0].croppedPicturePath)})` : '' }}>
+          <div
+            className={classes.image}
+            style={{
+              backgroundImage:
+                actor.pictures.length >= 1
+                  ? `url(${getImageUrl(
+                      actor.pictures.sort((a, b) =>
+                        a.position > b.position ? 1 : -1,
+                      )[0].croppedPicturePath,
+                    )})`
+                  : '',
+            }}
+          >
             <div className={classes.categorie}>
               <Typography className={classes.categorie} gutterBottom>
-                {actor.categories && actor.categories.length > 0 && actor.categories[0].label}
+                {actor.categories &&
+                  actor.categories.length > 0 &&
+                  actor.categories[0].label}
               </Typography>
             </div>
           </div>
@@ -91,9 +100,7 @@ export default function SimpleCard({ actor }) {
               {actor && actor.shortDescription}
             </Typography>
           </div>
-
         </CardContent>
-
       </Card>
     </Link>
   );

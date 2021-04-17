@@ -5,7 +5,6 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
   search: {
-
     position: 'relative',
     borderRadius: '9em',
     backgroundColor: 'white',
@@ -14,7 +13,6 @@ const useStyles = makeStyles((theme) => ({
     margin: '0 auto',
     marginTop: theme.spacing(2),
     color: 'black',
-
   },
   searchIcon: {
     padding: theme.spacing(0, 1),
@@ -39,7 +37,6 @@ const useStyles = makeStyles((theme) => ({
 
     transition: theme.transitions.create('width'),
   },
-
 }));
 
 export default function Search() {

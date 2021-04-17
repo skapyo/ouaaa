@@ -49,17 +49,17 @@ const useStyles = makeStyles({
   },
   listEntries: {
     width: '100%',
-    padding: 'inherit!important'
+    padding: 'inherit!important',
   },
   entriesExpend: {
-    padding: 'inherit!important'
+    padding: 'inherit!important',
   },
   entries: {
-    padding: '0px 5px 0px 5px!important'
+    padding: '0px 5px 0px 5px!important',
   },
   postCode: {
-    width: '100%'
-  }
+    width: '100%',
+  },
 });
 
 function Filters(props) {
@@ -112,7 +112,10 @@ function Filters(props) {
   const postCodeChangeHandler = useCallback(
     (e) => {
       const regex = /[0-9]{5}/g;
-      if (e.target.value.length === 0 || (e.target.value.length === 5 && e.target.value.match(regex))) {
+      if (
+        e.target.value.length === 0 ||
+        (e.target.value.length === 5 && e.target.value.match(regex))
+      ) {
         postCodeChange(e);
         setErrorPostCode(false);
       } else {
@@ -160,11 +163,11 @@ function Filters(props) {
             return a.position > b.position;
           };
           return (
-            <ExpansionPanel noPadding >
+            <ExpansionPanel noPadding>
               <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
                 <Typography
                   className={classes.collectionLabel}
-                //       onClick={setDisplay(!display)}
+                  //       onClick={setDisplay(!display)}
                 >
                   {collection.label}
                 </Typography>
@@ -173,18 +176,18 @@ function Filters(props) {
               {
                 // display &&
                 IsTree(collection) &&
-                collection.entries &&
-                collection.entries.sort(compare).map((entry) => {
-                  return (
-                    <ParentContainer
-                      key={entry.id}
-                      entry={entry}
-                      subEntries={entry.subEntries}
-                      categoryChange={categoryChange}
-                      parentCategoryChange={parentCategoryChange}
-                    />
-                  );
-                })
+                  collection.entries &&
+                  collection.entries.sort(compare).map((entry) => {
+                    return (
+                      <ParentContainer
+                        key={entry.id}
+                        entry={entry}
+                        subEntries={entry.subEntries}
+                        categoryChange={categoryChange}
+                        parentCategoryChange={parentCategoryChange}
+                      />
+                    );
+                  })
               }
               <ExpansionPanelDetails className={classes.entriesExpend}>
                 {!IsTree(collection) && (
@@ -192,7 +195,11 @@ function Filters(props) {
                     {collection.entries &&
                       collection.entries.map((entry) => {
                         return (
-                          <ListItem key={entry.id} role={undefined} className={classes.entries} >
+                          <ListItem
+                            key={entry.id}
+                            role={undefined}
+                            className={classes.entries}
+                          >
                             <ListItemText primary={entry.label} />
                             <Checkbox
                               edge="start"

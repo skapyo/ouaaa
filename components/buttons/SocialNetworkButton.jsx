@@ -41,11 +41,7 @@ const SocialNetworkButton = ({ socialNetwork, width, ...props }) => {
   }
 
   return (
-    <Button
-      className={styles.root}
-      startIcon={icon}
-      {...props}
-    >
+    <Button className={styles.root} startIcon={icon} {...props}>
       {socialNetwork}
     </Button>
   );
@@ -57,7 +53,13 @@ SocialNetworkButton.defaultProps = {
 };
 
 SocialNetworkButton.propTypes = {
-  socialNetwork: PropTypes.oneOf(['Website', 'Youtube', 'Linkedin', 'Instagram', 'Facebook']),
+  socialNetwork: PropTypes.oneOf([
+    'Website',
+    'Youtube',
+    'Linkedin',
+    'Instagram',
+    'Facebook',
+  ]),
   width: PropTypes.any,
 };
 

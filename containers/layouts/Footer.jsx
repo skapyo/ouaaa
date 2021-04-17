@@ -55,7 +55,10 @@ const Footer = () => {
         Suivez nos aventures sur les réseaux sociaux :
       </Typography>
       <div className={classes.socialNetworks}>
-        <a href="https://www.facebook.com/OUtilsdesActeursAlternatifsenAunis" target="_blank">
+        <a
+          href="https://www.facebook.com/OUtilsdesActeursAlternatifsenAunis"
+          target="_blank"
+        >
           <FacebookIcon className={classes.icons} fontSize="large" />
         </a>
       </div>

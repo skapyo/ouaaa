@@ -1,10 +1,12 @@
-import React, {
-  ChangeEvent, useEffect, useRef, useState,
-} from 'react';
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import gql from 'graphql-tag';
 import { withApollo } from 'hoc/withApollo';
 import {
-  Container, Grid, makeStyles, TextField, Typography,
+  Container,
+  Grid,
+  makeStyles,
+  TextField,
+  Typography,
 } from '@material-ui/core';
 import ClassicButton from 'components/buttons/ClassicButton';
 import FormController, {
@@ -17,7 +19,10 @@ import useGraphQLErrorDisplay from 'hooks/useGraphQLErrorDisplay';
 import Checkbox from '@material-ui/core/Checkbox';
 import useCookieRedirection from 'hooks/useCookieRedirection';
 import { useSnackbar } from 'notistack';
-import GooglePlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-google-places-autocomplete';
+import GooglePlacesAutocomplete, {
+  geocodeByAddress,
+  getLatLng,
+} from 'react-google-places-autocomplete';
 import { useRouter } from 'next/router';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -27,7 +32,11 @@ import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import Collapse from '@material-ui/core/Collapse/Collapse';
 import DateFnsUtils from '@date-io/date-fns';
-import { KeyboardDatePicker, KeyboardTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import {
+  KeyboardDatePicker,
+  KeyboardTimePicker,
+  MuiPickersUtilsProvider,
+} from '@material-ui/pickers';
 import moment from 'moment';
 import { useSessionState } from '../../context/session/session';
 
@@ -76,10 +85,16 @@ const useStyles = makeStyles((theme) => ({
 
 const ADDEVENT = gql`
   mutation createEvent(
-    $eventInfos: EventInfos,$actorId: Int!$userId: Int!,$description:String!
+    $eventInfos: EventInfos
+    $actorId: Int!
+    $userId: Int!
+    $description: String!
   ) {
     createEvent(
-      eventInfos: $eventInfos,actorId: $actorId,userId: $userId,description:$description
+      eventInfos: $eventInfos
+      actorId: $actorId
+      userId: $userId
+      description: $description
     ) {
       id
       label
@@ -96,34 +111,40 @@ const ADDEVENT = gql`
 `;
 
 const GET_CATEGORIES = gql`
-query categories {
-  categories {
-    id,
-    label,
-    activated
-    subCategories {
+  query categories {
+    categories {
       id
       label
-      icon
+      activated
+      subCategories {
+        id
+        label
+        icon
+      }
     }
   }
-}
 `;
 
 type FormItemProps = {
-  label: string
-  inputName: string
-  formChangeHandler: (event: ChangeEvent) => void
-  value: string
-  required:boolean
-  errorBool: boolean
-  errorText: string
-}
+  label: string;
+  inputName: string;
+  formChangeHandler: (event: ChangeEvent) => void;
+  value: string;
+  required: boolean;
+  errorBool: boolean;
+  errorText: string;
+};
 
 const FormItem = (props: FormItemProps) => {
   const styles = useStyles();
   const {
-    label, inputName, formChangeHandler, value, required, errorBool, errorText,
+    label,
+    inputName,
+    formChangeHandler,
+    value,
+    required,
+    errorBool,
+    errorText,
   } = props;
   return (
     <TextField
@@ -145,7 +166,13 @@ const FormItem = (props: FormItemProps) => {
 const FormItemTextareaAutosize = (props: FormItemProps) => {
   const styles = useStyles();
   const {
-    label, inputName, formChangeHandler, value, required, errorBool, errorText,
+    label,
+    inputName,
+    formChangeHandler,
+    value,
+    required,
+    errorBool,
+    errorText,
   } = props;
   return (
     <TextField
@@ -184,9 +211,11 @@ const AddEventForm = ({ actorId }) => {
   }) => {
     // const { formChangeHandler, formValues, validationResult } = props;
     const [addEvent, { data, error }] = useMutation(ADDEVENT);
-    const { data: categoryData, loading: categoryLoading, error: categoryError } = useQuery(
-      GET_CATEGORIES,
-    );
+    const {
+      data: categoryData,
+      loading: categoryLoading,
+      error: categoryError,
+    } = useQuery(GET_CATEGORIES);
     useGraphQLErrorDisplay(error);
     const styles = useStyles();
     const redirect = useCookieRedirection();
@@ -198,9 +227,10 @@ const AddEventForm = ({ actorId }) => {
     const [city, setCity] = useState('');
     const [validated, setValidated] = useState(false);
 
-    const [selectedStartDate, setSelectedStartDate] = React.useState<Date | null>(
-      moment().add(1, 'hour').toDate(),
-    );
+    const [
+      selectedStartDate,
+      setSelectedStartDate,
+    ] = React.useState<Date | null>(moment().add(1, 'hour').toDate());
     const [selectedEndDate, setSelectedEndDate] = React.useState<Date | null>(
       moment().add(2, 'hour').toDate(),
     );
@@ -213,12 +243,17 @@ const AddEventForm = ({ actorId }) => {
     };
 
     useEffect(() => {
-      if ((selectedStartDate && selectedEndDate && (selectedStartDate >= selectedEndDate))
-          || (selectedStartDate && moment(selectedStartDate) <= moment())
-          || !formValues.shortDescription
-          || !formValues.categories
-          || formValues.categories?.length === 0
-          || (!address && !city)) setValidated(false);
+      if (
+        (selectedStartDate &&
+          selectedEndDate &&
+          selectedStartDate >= selectedEndDate) ||
+        (selectedStartDate && moment(selectedStartDate) <= moment()) ||
+        !formValues.shortDescription ||
+        !formValues.categories ||
+        formValues.categories?.length === 0 ||
+        (!address && !city)
+      )
+        setValidated(false);
       else setValidated(true);
     });
 
@@ -232,14 +267,16 @@ const AddEventForm = ({ actorId }) => {
       editorRef.current = {
         CKEditor: require('@ckeditor/ckeditor5-react').CKEditor,
         ClassicEditor: require('@ckeditor/ckeditor5-build-classic'),
-
       };
       setEditorLoaded(true);
     }, []);
 
     const [descriptionEditor, setDescriptionEditor] = useState();
 
-    const handleChange = (category: any, event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (
+      category: any,
+      event: React.ChangeEvent<HTMLInputElement>,
+    ) => {
       setState({ ...state, [category.id.toString()]: event.target.checked });
     };
     const [checked, setChecked] = useState([0]);
@@ -258,14 +295,25 @@ const AddEventForm = ({ actorId }) => {
     };
 
     const getObjectLongName = (results, name) => {
-      if (!results || !results[0] || !results[0].address_components) { return (''); }
-      const object = results[0].address_components.find((element) => element.types.find((type) => type == name) != undefined);
-      if (object == undefined) { return (''); }
+      if (!results || !results[0] || !results[0].address_components) {
+        return '';
+      }
+      const object = results[0].address_components.find(
+        (element) => element.types.find((type) => type == name) != undefined,
+      );
+      if (object == undefined) {
+        return '';
+      }
       return object.long_name;
     };
 
     const getAddressDetails = (results) => {
-      setAddress((`${getObjectLongName(results, 'street_number')} ${getObjectLongName(results, 'route')}`).trim());
+      setAddress(
+        `${getObjectLongName(results, 'street_number')} ${getObjectLongName(
+          results,
+          'route',
+        )}`.trim(),
+      );
       setCity(getObjectLongName(results, 'locality'));
       formValues.postCode = getObjectLongName(results, 'postal_code');
     };
@@ -284,7 +332,9 @@ const AddEventForm = ({ actorId }) => {
       let categoriesArray: number[];
       categoriesArray = [];
       checkboxes.forEach((key) => {
-        if (state[key]) { categoriesArray.push(parseInt(key)); }
+        if (state[key]) {
+          categoriesArray.push(parseInt(key));
+        }
       });
       addEvent({
         variables: {
@@ -302,7 +352,6 @@ const AddEventForm = ({ actorId }) => {
             address,
             postCode: formValues.postCode,
             city,
-
           },
           actorId: parseInt(actorId),
           userId: parseInt(user.id),
@@ -314,11 +363,7 @@ const AddEventForm = ({ actorId }) => {
 
     return (
       <Container component="main" maxWidth="sm">
-        <Typography
-          className={styles.field}
-          color="secondary"
-          variant="h6"
-        >
+        <Typography className={styles.field} color="secondary" variant="h6">
           Ajouter un événement
         </Typography>
         <FormItem
@@ -327,7 +372,9 @@ const AddEventForm = ({ actorId }) => {
           formChangeHandler={formChangeHandler}
           value={formValues.label}
           required
-          errorBool={!validationResult?.global && !!validationResult?.result.label}
+          errorBool={
+            !validationResult?.global && !!validationResult?.result.label
+          }
           errorText="Nom de l'événement requis."
         />
         <FormItem
@@ -345,14 +392,19 @@ const AddEventForm = ({ actorId }) => {
           formChangeHandler={formChangeHandler}
           value={formValues.shortDescription}
           required
-          errorBool={!validationResult?.global && !!validationResult?.result.shortDescription}
-          errorText={`Minimum 50 caractères. ${50 - formValues.shortDescription?.length} caractères restants minimum.`}
+          errorBool={
+            !validationResult?.global &&
+            !!validationResult?.result.shortDescription
+          }
+          errorText={`Minimum 50 caractères. ${
+            50 - formValues.shortDescription?.length
+          } caractères restants minimum.`}
         />
         <Typography variant="body1" color="primary" className={styles.label}>
           Description :
         </Typography>
         <p />
-        { editorLoaded ? (
+        {editorLoaded ? (
           <CKEditor
             editor={ClassicEditor}
             data={formValues.description}
@@ -378,8 +430,16 @@ const AddEventForm = ({ actorId }) => {
                 KeyboardButtonProps={{
                   'aria-label': 'change date',
                 }}
-                error={!!selectedStartDate && moment(selectedStartDate) <= moment(Date.now())}
-                helperText={(selectedStartDate && moment(selectedStartDate) <= moment(Date.now())) ? 'La date de début ne peut être dans le passé.' : ''}
+                error={
+                  !!selectedStartDate &&
+                  moment(selectedStartDate) <= moment(Date.now())
+                }
+                helperText={
+                  selectedStartDate &&
+                  moment(selectedStartDate) <= moment(Date.now())
+                    ? 'La date de début ne peut être dans le passé.'
+                    : ''
+                }
               />
               <KeyboardTimePicker
                 margin="normal"
@@ -392,7 +452,9 @@ const AddEventForm = ({ actorId }) => {
                 }}
                 ampm={false}
                 minutesStep={5}
-                error={!!selectedStartDate && (moment(selectedStartDate) <= moment())}
+                error={
+                  !!selectedStartDate && moment(selectedStartDate) <= moment()
+                }
               />
               <KeyboardDatePicker
                 disableToolbar
@@ -406,8 +468,18 @@ const AddEventForm = ({ actorId }) => {
                 KeyboardButtonProps={{
                   'aria-label': 'change date',
                 }}
-                error={!!selectedStartDate && !!selectedEndDate && (moment(selectedStartDate) >= moment(selectedEndDate))}
-                helperText={selectedStartDate && selectedEndDate && (selectedStartDate >= selectedEndDate) ? 'La date de fin doit être après la date de début.' : ''}
+                error={
+                  !!selectedStartDate &&
+                  !!selectedEndDate &&
+                  moment(selectedStartDate) >= moment(selectedEndDate)
+                }
+                helperText={
+                  selectedStartDate &&
+                  selectedEndDate &&
+                  selectedStartDate >= selectedEndDate
+                    ? 'La date de fin doit être après la date de début.'
+                    : ''
+                }
               />
               <KeyboardTimePicker
                 margin="normal"
@@ -420,7 +492,11 @@ const AddEventForm = ({ actorId }) => {
                 }}
                 ampm={false}
                 minutesStep={5}
-                error={!!selectedStartDate && !!selectedEndDate && (moment(selectedStartDate) >= moment(selectedEndDate))}
+                error={
+                  !!selectedStartDate &&
+                  !!selectedEndDate &&
+                  moment(selectedStartDate) >= moment(selectedEndDate)
+                }
               />
             </Grid>
           </MuiPickersUtilsProvider>
@@ -428,51 +504,68 @@ const AddEventForm = ({ actorId }) => {
         <Grid>
           <Typography>Catégorie(s) de l'événement *</Typography>
           <List className={styles.field}>
-            {typeof categoryData !== 'undefined' && categoryData.categories.map((category, index) => (
-              <div>
-                <ListItem key={category.id} role={undefined} dense button onClick={handleToggle(0, index)}>
-                  <ListItemIcon />
-                  <ListItemText primary={category.label} />
-                  {open[index] ? <ExpandLess /> : <ExpandMore />}
-                </ListItem>
-                {typeof category.subCategories !== 'undefined' && category.subCategories != null && category.subCategories.map((subcategory, subIndex) => (
-                  <Collapse in={open[index]} timeout="auto" unmountOnExit>
-
-                    <List component="div" disablePadding>
-                      <ListItem button>
-                        <ListItemIcon>
-                          <Checkbox
-                            edge="start"
-                            tabIndex={-1}
-                            disableRipple
-                            onChange={formChangeHandler}
-                            name="categories"
-                            value={subcategory.id}
-                          />
-                        </ListItemIcon>
-                        <ListItemText primary={subcategory.label} />
-                      </ListItem>
-                    </List>
-                  </Collapse>
-                ))}
-              </div>
-            ))}
+            {typeof categoryData !== 'undefined' &&
+              categoryData.categories.map((category, index) => (
+                <div>
+                  <ListItem
+                    key={category.id}
+                    role={undefined}
+                    dense
+                    button
+                    onClick={handleToggle(0, index)}
+                  >
+                    <ListItemIcon />
+                    <ListItemText primary={category.label} />
+                    {open[index] ? <ExpandLess /> : <ExpandMore />}
+                  </ListItem>
+                  {typeof category.subCategories !== 'undefined' &&
+                    category.subCategories != null &&
+                    category.subCategories.map((subcategory, subIndex) => (
+                      <Collapse in={open[index]} timeout="auto" unmountOnExit>
+                        <List component="div" disablePadding>
+                          <ListItem button>
+                            <ListItemIcon>
+                              <Checkbox
+                                edge="start"
+                                tabIndex={-1}
+                                disableRipple
+                                onChange={formChangeHandler}
+                                name="categories"
+                                value={subcategory.id}
+                              />
+                            </ListItemIcon>
+                            <ListItemText primary={subcategory.label} />
+                          </ListItem>
+                        </List>
+                      </Collapse>
+                    ))}
+                </div>
+              ))}
           </List>
         </Grid>
         <Grid className={styles.location}>
           <Typography>Lieu</Typography>
           <GooglePlacesAutocomplete
             placeholder="Taper et sélectionner l'adresse*"
-            initialValue={formValues.address && formValues.address.concat(' ').concat(formValues.postCode).concat(' ').concat(formValues.city)}
-            onSelect={({ description }) => (
+            initialValue={
+              formValues.address &&
+              formValues.address
+                .concat(' ')
+                .concat(formValues.postCode)
+                .concat(' ')
+                .concat(formValues.city)
+            }
+            onSelect={({ description }) =>
               geocodeByAddress(description).then((results) => {
-                getLatLng(results[0]).then((value) => {
-                  formValues.lat = `${value.lat}`;
-                  formValues.lng = `${value.lng}`;
-                }).catch((error) => console.error(error));
+                getLatLng(results[0])
+                  .then((value) => {
+                    formValues.lat = `${value.lat}`;
+                    formValues.lng = `${value.lng}`;
+                  })
+                  .catch((error) => console.error(error));
                 getAddressDetails(results);
               })
-            )}
+            }
           />
         </Grid>
         <ClassicButton
@@ -488,12 +581,7 @@ const AddEventForm = ({ actorId }) => {
     );
   };
 
-  return (
-    <FormController
-      render={Form}
-      validationRules={validationRules}
-    />
-  );
+  return <FormController render={Form} validationRules={validationRules} />;
 };
 
 export default withApollo()(AddEventForm);

@@ -1,16 +1,18 @@
 import React from 'react';
 import AppLayout from 'containers/layouts/AppLayout';
 import {
-  Box, Container, makeStyles, RootRef, Typography,
+  Box,
+  Container,
+  makeStyles,
+  RootRef,
+  Typography,
 } from '@material-ui/core';
 import Newsletter from '../../containers/layouts/Newsletter';
 
 const useStyles = makeStyles((theme) => ({
-
   align: {
     'text-align': 'center',
   },
-
 }));
 const Charter = () => {
   const styles = useStyles();

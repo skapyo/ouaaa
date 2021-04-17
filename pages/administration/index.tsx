@@ -1,5 +1,11 @@
 import { useMutation, useQuery } from '@apollo/client';
-import { createStyles, makeStyles, Theme, Typography, useTheme } from '@material-ui/core';
+import {
+  createStyles,
+  makeStyles,
+  Theme,
+  Typography,
+  useTheme,
+} from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper/Paper';
 import LastPageIcon from '@material-ui/core/SvgIcon/SvgIcon';
@@ -24,7 +30,6 @@ import Moment from 'react-moment';
 import Link from '../../components/Link';
 import { useSessionState } from '../../context/session/session';
 
-
 const useStyles = makeStyles((theme) => ({
   avatar: {
     width: '200px',
@@ -34,15 +39,16 @@ const useStyles = makeStyles((theme) => ({
   userInfosTitle: {
     marginBottom: theme.spacing(5),
   },
-
 }));
 
-const useStyles1 = makeStyles((theme: Theme) => createStyles({
-  root: {
-    flexShrink: 0,
-    marginLeft: theme.spacing(2.5),
-  },
-}));
+const useStyles1 = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      flexShrink: 0,
+      marginLeft: theme.spacing(2.5),
+    },
+  }),
+);
 
 const useStyles2 = makeStyles({
   table: {
@@ -65,7 +71,6 @@ const useStyles2 = makeStyles({
       height: '100%',
     },
   },
-
 });
 
 const Administration = () => {
@@ -73,8 +78,8 @@ const Administration = () => {
   const GET_CATEGORIES = gql`
     query categories {
       categories {
-        id,
-        label,
+        id
+        label
         activated
         subCategories {
           id
@@ -83,34 +88,29 @@ const Administration = () => {
         }
       }
     }
-    `;
-    const SAVE_CATEGORIES = gql`
-        mutation saveCategories( $actorId: Int!, $userId: Int!) {
-            validateActor( actorId: $actorId,userId: $userId) {
-                name
-
-            }
-        }
-    `;
-  const { data, loading, error, refetch } = useQuery(GET_CATEGORIES, {
-  
-  });
+  `;
+  const SAVE_CATEGORIES = gql`
+    mutation saveCategories($actorId: Int!, $userId: Int!) {
+      validateActor(actorId: $actorId, userId: $userId) {
+        name
+      }
+    }
+  `;
+  const { data, loading, error, refetch } = useQuery(GET_CATEGORIES, {});
   const classes = useStyles2();
-  
 
   const [state, setState] = React.useState({});
 
+  const [saveCategories, { data: saveCategoriesData }] = useMutation(
+    SAVE_CATEGORIES,
+    {},
+  );
 
-    const [saveCategories,{ data:saveCategoriesData, }] = useMutation(SAVE_CATEGORIES, {
-
-    });
-
-
-    useEffect(() => {
-        if (saveCategoriesData) {
-            refetch();
-        }
-    }, [saveCategoriesData]);
+  useEffect(() => {
+    if (saveCategoriesData) {
+      refetch();
+    }
+  }, [saveCategoriesData]);
   const styles = useStyles();
 
   return (
@@ -122,7 +122,6 @@ const Administration = () => {
       >
         Listes des catégories
       </Typography>
- 
     </AdministrationLayout>
   );
 };

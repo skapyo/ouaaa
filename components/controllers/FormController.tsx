@@ -1,5 +1,9 @@
 import React, {
-  ChangeEvent, useCallback, useEffect, useMemo, useState,
+  ChangeEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
 } from 'react';
 import { useMutation } from '@apollo/client';
 import { useSnackbar } from 'notistack';
@@ -9,22 +13,22 @@ import validatePasswordFormat from 'utils/validatePasswordFormat';
 import { DocumentNode } from 'graphql';
 import { useSessionState } from '../../context/session/session';
 
-type FormValues = { [key: string]: string }
+type FormValues = { [key: string]: string };
 
 export type QueryOptions = {
-  query: DocumentNode
-  resultLabel: string
+  query: DocumentNode;
+  resultLabel: string;
   mutationResultControl?:
     | ((formValues: FormValues, data: any, error: any) => boolean)
-    | 'builtin'
-  clearFormvaluesAfterControl?: boolean
+    | 'builtin';
+  clearFormvaluesAfterControl?: boolean;
   afterResultControlCallback?: (
     formValues: FormValues,
     data: any,
-    error: any
-  ) => void
-  snackbarSucceedMessage?: string
-}
+    error: any,
+  ) => void;
+  snackbarSucceedMessage?: string;
+};
 
 export enum ValidationRuleType {
   password = 'password',
@@ -38,73 +42,76 @@ export enum ValidationRuleType {
 
 type Rule =
   | {
-      rule: ValidationRuleType.password
+      rule: ValidationRuleType.password;
     }
   | {
-      rule: ValidationRuleType.equalTo
-      field: string
+      rule: ValidationRuleType.equalTo;
+      field: string;
     }
   | {
-      rule: ValidationRuleType.required
+      rule: ValidationRuleType.required;
     }
   | {
-      rule: ValidationRuleType.email
+      rule: ValidationRuleType.email;
     }
   | {
-      rule: ValidationRuleType.only
-      type: 'number' | 'string'
+      rule: ValidationRuleType.only;
+      type: 'number' | 'string';
     }
   | {
-      rule: ValidationRuleType.minLength
-      minLimit: number
+      rule: ValidationRuleType.minLength;
+      minLimit: number;
     }
   | {
-      rule: ValidationRuleType.maxLength
-      maxLimit: number
-    }
+      rule: ValidationRuleType.maxLength;
+      maxLimit: number;
+    };
 
-export type ValidationRules = { [key: string]: Rule }
+export type ValidationRules = { [key: string]: Rule };
 
 type ValidationResult = {
-  result: { [key: string]: string[] }
-  global: boolean
-}
+  result: { [key: string]: string[] };
+  global: boolean;
+};
 
 type WithMutationProps = {
-  formValues: FormValues
-  formChangeHandler: (event: ChangeEvent) => void
-  validationResult?: ValidationResult
-  setFormValue: (formValues: FormValues) => void
-  queryOptions: QueryOptions
-  setInitialFormValues: (formValues: FormValues) => void
-  clearFormvalues: () => void
-}
+  formValues: FormValues;
+  formChangeHandler: (event: ChangeEvent) => void;
+  validationResult?: ValidationResult;
+  setFormValue: (formValues: FormValues) => void;
+  queryOptions: QueryOptions;
+  setInitialFormValues: (formValues: FormValues) => void;
+  clearFormvalues: () => void;
+};
 
 type RenderCallbackProps = {
-  formValues: FormValues
-  formChangeHandler: (event: ChangeEvent) => void
-  clearFormvalues: () => void
-  validationResult?: ValidationResult
-  submitHandler?: () => void
-  loading?: boolean
-  isModified?: boolean
-}
+  formValues: FormValues;
+  formChangeHandler: (event: ChangeEvent) => void;
+  clearFormvalues: () => void;
+  validationResult?: ValidationResult;
+  submitHandler?: () => void;
+  loading?: boolean;
+  isModified?: boolean;
+};
 
-export type RenderCallback = (props: RenderCallbackProps) => JSX.Element
+export type RenderCallback = (props: RenderCallbackProps) => JSX.Element;
 
 type FormControllerProps = {
-  initValues?: FormValues
-  render: RenderCallback
-  withQuery?: boolean
-  queryOptions?: QueryOptions
-  validationRules?: ValidationRules
-}
+  initValues?: FormValues;
+  render: RenderCallback;
+  withQuery?: boolean;
+  queryOptions?: QueryOptions;
+  validationRules?: ValidationRules;
+};
 
 const withMutation = (FormComponent: RenderCallback) => (
   props: WithMutationProps,
 ) => {
   const {
-    formValues, setFormValue, queryOptions, setInitialFormValues,
+    formValues,
+    setFormValue,
+    queryOptions,
+    setInitialFormValues,
   } = props;
   const scnackbar = useSnackbar();
   const user = useSessionState();
@@ -123,20 +130,27 @@ const withMutation = (FormComponent: RenderCallback) => (
     // if (!error) {
     let next = false;
     if (queryOptions.mutationResultControl == 'builtin') {
-      if (data?.[queryOptions.resultLabel] && (typeof error === 'undefined' && !error)) next = true;
+      if (
+        data?.[queryOptions.resultLabel] &&
+        typeof error === 'undefined' &&
+        !error
+      )
+        next = true;
     } else {
-      (
-        queryOptions.mutationResultControl
-      && queryOptions.mutationResultControl(formValues, data, error)
-      );
+      queryOptions.mutationResultControl &&
+        queryOptions.mutationResultControl(formValues, data, error);
     }
 
     if (next) {
       setInitialFormValues(omitTypename(data?.[queryOptions.resultLabel]));
 
-      if (queryOptions.snackbarSucceedMessage) { scnackbar.enqueueSnackbar(queryOptions.snackbarSucceedMessage); }
+      if (queryOptions.snackbarSucceedMessage) {
+        scnackbar.enqueueSnackbar(queryOptions.snackbarSucceedMessage);
+      }
 
-      if (queryOptions.afterResultControlCallback) { queryOptions.afterResultControlCallback(formValues, data, error); }
+      if (queryOptions.afterResultControlCallback) {
+        queryOptions.afterResultControlCallback(formValues, data, error);
+      }
 
       if (queryOptions.clearFormvaluesAfterControl) {
         const keys = Object.keys(formValues);
@@ -181,11 +195,15 @@ const FormController = (props: FormControllerProps, ...otherprops: any[]) => {
         if (rule.type === 'number') {
           const isnum = /^\d+$/.test(e.target.value);
 
-          if (isnum) { setFormValue({ ...formValues, [e.target.name]: e.target.value }); }
+          if (isnum) {
+            setFormValue({ ...formValues, [e.target.name]: e.target.value });
+          }
         }
         if (rule.type === 'string') {
           const ischar = /^[a-zA-Z]+$/.test(e.target.value);
-          if (ischar) { setFormValue({ ...formValues, [e.target.name]: e.target.value }); }
+          if (ischar) {
+            setFormValue({ ...formValues, [e.target.name]: e.target.value });
+          }
         }
       } else if (e.target.type == 'checkbox' || e.target.type == 'radio') {
         let categoriesArray;
@@ -212,7 +230,9 @@ const FormController = (props: FormControllerProps, ...otherprops: any[]) => {
 
   /* a revoir */
   const isModified = useMemo(() => {
-    if (JSON.stringify(formValues) == JSON.stringify(initialFormValues)) { return false; }
+    if (JSON.stringify(formValues) == JSON.stringify(initialFormValues)) {
+      return false;
+    }
     return true;
   }, [formValues, initialFormValues]);
 
@@ -352,41 +372,47 @@ const FormController = (props: FormControllerProps, ...otherprops: any[]) => {
     }
   }, [formValues, validationRules]);
 
-  const withMutationProps = useMemo(() => ({
-    formChangeHandler,
-    isModified,
-    formValues,
-    validationResult,
-    queryOptions,
-    setInitialFormValues,
-    setFormValue,
-    clearFormvalues,
-  }), [
-    formChangeHandler,
-    isModified,
-    formValues,
-    validationResult,
-    queryOptions,
-    withQuery,
-    setInitialFormValues,
-    setFormValue,
-  ]);
+  const withMutationProps = useMemo(
+    () => ({
+      formChangeHandler,
+      isModified,
+      formValues,
+      validationResult,
+      queryOptions,
+      setInitialFormValues,
+      setFormValue,
+      clearFormvalues,
+    }),
+    [
+      formChangeHandler,
+      isModified,
+      formValues,
+      validationResult,
+      queryOptions,
+      withQuery,
+      setInitialFormValues,
+      setFormValue,
+    ],
+  );
 
-  const renderProps = useMemo(() => ({
-    formChangeHandler,
-    isModified,
-    formValues,
-    validationResult,
-    clearFormvalues,
-    ...otherprops,
-    // queryOptions: queryOptions,
-  }), [
-    formChangeHandler,
-    isModified,
-    formValues,
-    validationResult,
-    // queryOptions,
-  ]);
+  const renderProps = useMemo(
+    () => ({
+      formChangeHandler,
+      isModified,
+      formValues,
+      validationResult,
+      clearFormvalues,
+      ...otherprops,
+      // queryOptions: queryOptions,
+    }),
+    [
+      formChangeHandler,
+      isModified,
+      formValues,
+      validationResult,
+      // queryOptions,
+    ],
+  );
 
   if (withQuery) {
     if (!queryOptions) {

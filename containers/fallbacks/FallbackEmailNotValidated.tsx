@@ -12,8 +12,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const SEND_VALIDATION_EMAIL = gql`
-  mutation sendValidationEmail ($email:String!) {
-    sendValidationEmail(email:$email)
+  mutation sendValidationEmail($email: String!) {
+    sendValidationEmail(email: $email)
   }
 `;
 
@@ -22,7 +22,9 @@ const FallbackEmailNotValidated = (props: any) => {
   const styles = useStyles();
   const [clicked, setClicked] = useState(false);
   const [fail, setFail] = useState(false);
-  const [sendValidationEmail, { data, loading, error }] = useMutation(SEND_VALIDATION_EMAIL);
+  const [sendValidationEmail, { data, loading, error }] = useMutation(
+    SEND_VALIDATION_EMAIL,
+  );
 
   const sendNewEmail = () => {
     sendValidationEmail({ variables: { email: props.email } });
@@ -44,20 +46,17 @@ const FallbackEmailNotValidated = (props: any) => {
 
   return (
     <AppContainer>
-      {clicked
-        && (
+      {clicked && (
         <p style={{ textAlign: 'center' }}>
-          Un email de validation a été envoyé à :
-          {/* @ts-ignore */}
+          Un email de validation a été envoyé à :{/* @ts-ignore */}
           <b>{email}</b>
         </p>
-        )}
-      {fail
-        && (
+      )}
+      {fail && (
         <p style={{ textAlign: 'center' }}>
           Une erreur s&apos;est produite, merci de réessayer.
         </p>
-        )}
+      )}
       <Grid container justify="center">
         <Typography variant="h6">
           Votre email

@@ -14,7 +14,6 @@ const ImagesDisplay = ({
   findCard,
   updateDeletedIndicator,
   updateKeyIndicator,
-
 }) => {
   return (
     <Grid
@@ -52,7 +51,7 @@ const ImagePrev = ({
   id,
   deletedIconClickHandler,
   deleted,
-  updateKeyIndicator
+  updateKeyIndicator,
 }) => {
   const originalIndex = findCard(id).index;
 
@@ -87,7 +86,7 @@ const ImagePrev = ({
   };
 
   return (
-    <Grid item >
+    <Grid item>
       <div
         className="card"
         ref={(node) => drag(drop(node))}
@@ -96,12 +95,12 @@ const ImagePrev = ({
         <Card>
           <img src={croppedImg.img} className="image" />
         </Card>
-        <Card >
+        <Card>
           <Grid container spacing={3}>
-            <Grid item >
+            <Grid item>
               <HeightIcon onClick={() => openModal()} />
             </Grid>
-            <Grid item >
+            <Grid item>
               <DeleteIcon
                 color={deleted ? 'primary' : 'action'}
                 onClick={() => deletedIconClickHandler(id)}
@@ -121,7 +120,6 @@ const ImagePrev = ({
     </Grid>
   );
 };
-
 
 const StyledImageCropper = withStyles(styles)(ImagesDisplay);
 export default StyledImageCropper;

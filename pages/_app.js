@@ -86,9 +86,14 @@ const MyApp = (props) => {
       <Head>
         <meta charSet="utf-8" />
         <title>Ouaaa : Agir pour la transition en Aunis</title>
-        <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
-        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDvUKXlWS1470oj8C-vD6s62Bs9Y8XQf00&language=fr&region=FR&libraries=places" />
-
+        <meta
+          name="viewport"
+          content="minimum-scale=1, initial-scale=1, width=device-width"
+        />
+        <script
+          type="text/javascript"
+          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDvUKXlWS1470oj8C-vD6s62Bs9Y8XQf00&language=fr&region=FR&libraries=places"
+        />
       </Head>
       <MuiPickersUtilsProvider utils={MomentUtils}>
         <ThemeProvider theme={theme}>
@@ -123,7 +128,7 @@ const ISLOGGED = gql`
       address
       postCode
       city
-      }
+    }
   }
 `;
 
@@ -133,7 +138,9 @@ MyApp.getInitialProps = async (ctx) => {
   if (typeof window === 'undefined') {
     const { initOnContext } = await import('hoc/withApollo');
     const apolloClientCtx = initOnContext(ctx);
-    const result = await apolloClientCtx.ctx.apolloClient.query({ query: ISLOGGED });
+    const result = await apolloClientCtx.ctx.apolloClient.query({
+      query: ISLOGGED,
+    });
     if (result.data?.isLogged?.id) {
       // user = {
       //   id : result.data.isLogged.id
@@ -142,8 +149,10 @@ MyApp.getInitialProps = async (ctx) => {
     }
   }
 
-  if (user) { return ({ user }); }
-  return ({});
+  if (user) {
+    return { user };
+  }
+  return {};
 };
 
 MyApp.propTypes = {

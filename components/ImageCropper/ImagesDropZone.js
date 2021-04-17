@@ -1,15 +1,10 @@
 /* eslint-disable jsx-a11y/anchor-has-content */
-import {
-  Card,
-  Grid,
-  makeStyles,
-} from '@material-ui/core';
+import { Card, Grid, makeStyles } from '@material-ui/core';
 import React from 'react';
 import InsertPhotoIcon from '@material-ui/icons/InsertPhoto';
 import { useDropArea } from 'react-use';
 
 const useStyles = makeStyles((theme) => ({
-
   image: {
     width: '100%',
     height: '100%',
@@ -18,11 +13,8 @@ const useStyles = makeStyles((theme) => ({
     padding: '1em',
     margin: '2em',
   },
-
 }));
-const ImagesDropZone = ({
-  onDropHandler,text
-}) => {
+const ImagesDropZone = ({ onDropHandler, text }) => {
   const styles = useStyles();
 
   const [bond, state] = useDropArea({
@@ -37,9 +29,7 @@ const ImagesDropZone = ({
             <div>
               <InsertPhotoIcon />
             </div>
-            <div>
-              {text}
-            </div>
+            <div>{text}</div>
           </div>
         </Grid>
       </Grid>

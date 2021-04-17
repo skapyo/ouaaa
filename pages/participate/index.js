@@ -1,13 +1,16 @@
 import React from 'react';
 import AppLayout from 'containers/layouts/AppLayout';
 import {
-  Box, Container, makeStyles, RootRef, Typography,
+  Box,
+  Container,
+  makeStyles,
+  RootRef,
+  Typography,
 } from '@material-ui/core';
 import Newsletter from '../../containers/layouts/Newsletter';
 import Link from '../../components/Link';
 
 const useStyles = makeStyles((theme) => ({
-
   align: {
     'text-align': 'center',
   },
@@ -27,9 +30,9 @@ const useStyles = makeStyles((theme) => ({
       color: '#bf083e',
       'background-color': 'white',
       border: '2px solid #bf083e',
-      backgroundImage: 'url(\'./arrow-hover.svg\')',
+      backgroundImage: "url('./arrow-hover.svg')",
     },
-    backgroundImage: 'url(\'./arrow.svg\')',
+    backgroundImage: "url('./arrow.svg')",
     backgroundRepeat: 'no-repeat',
     'background-position-x': '5px',
     'background-position-y': '1px',
@@ -38,7 +41,6 @@ const useStyles = makeStyles((theme) => ({
       fontSize: '0.8em',
     },
   },
-
 }));
 const Participate = () => {
   const styles = useStyles();
@@ -50,14 +52,17 @@ const Participate = () => {
             <Typography variant="h1">Je Participe</Typography>
 
             <Link href="/addactor">
-              <button className={styles.buttonGrid}>JE DEVIENS UN ACTEUR</button>
+              <button className={styles.buttonGrid}>
+                JE DEVIENS UN ACTEUR
+              </button>
             </Link>
 
             <Typography variant="h4">
-              <a href="mailto:contact@acteursdelatransition.fr">Rejoins l'équipe du Ouaaa</a>
+              <a href="mailto:contact@acteursdelatransition.fr">
+                Rejoins l'équipe du Ouaaa
+              </a>
               {/* @ts-ignore */}
             </Typography>
-
           </Container>
           <Newsletter />
         </Box>

@@ -1,7 +1,11 @@
 /* eslint react/prop-types: 0 */
 import { useMutation, useQuery } from '@apollo/client';
 import {
-  Container, Grid, IconButton, makeStyles, Typography,
+  Container,
+  Grid,
+  IconButton,
+  makeStyles,
+  Typography,
 } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 
@@ -15,7 +19,9 @@ import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import TreeView from '@material-ui/lab/TreeView';
 import ClassicButton from 'components/buttons/ClassicButton';
-import FormController, { RenderCallback } from 'components/controllers/FormController';
+import FormController, {
+  RenderCallback,
+} from 'components/controllers/FormController';
 import TextField from 'components/form/TextField';
 import { useSessionDispatch, useSessionState } from 'context/session/session';
 import { default as gql, default as graphqlTag } from 'graphql-tag';
@@ -23,10 +29,17 @@ import { withApollo } from 'hoc/withApollo';
 import { useRouter, withRouter } from 'next/router';
 import { useSnackbar } from 'notistack';
 import React, {
-  ChangeEvent, useCallback, useEffect, useRef, useState,
+  ChangeEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
 } from 'react';
 import { useCookies } from 'react-cookie';
-import GooglePlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-google-places-autocomplete';
+import GooglePlacesAutocomplete, {
+  geocodeByAddress,
+  getLatLng,
+} from 'react-google-places-autocomplete';
 import { Redirect } from 'react-router-dom';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
@@ -39,14 +52,34 @@ import ImagesDisplay from 'components/ImageCropper/ImagesDisplay';
 import useCookieRedirection from '../../hooks/useCookieRedirection';
 import Link from '../../components/Link';
 import StyledTreeItem from '../../components/filters/StyledTreeItem';
-import { QueryOptions, ValidationRules, ValidationRuleType } from '../../components/controllers/FormController';
+import {
+  QueryOptions,
+  ValidationRules,
+  ValidationRuleType,
+} from '../../components/controllers/FormController';
 import useImageReader from '../../hooks/useImageReader';
 import useDnDStateManager from '../../hooks/useDnDStateManager';
 import withDndProvider from '../../hoc/withDnDProvider';
 
 const CREATE_ACTOR = gql`
-  mutation createActor($formValues: ActorInfos,$userId: Int!,$description:String!,$volunteerDescription:String $logoPictures: [InputPictureType], $mainPictures: [InputPictureType], $pictures: [InputPictureType]) {
-    createActor(actorInfos: $formValues,userId: $userId,description:$description,volunteerDescription:$volunteerDescription, pictures: $pictures, mainPictures: $mainPictures,logoPictures: $logoPictures) { 
+  mutation createActor(
+    $formValues: ActorInfos
+    $userId: Int!
+    $description: String!
+    $volunteerDescription: String
+    $logoPictures: [InputPictureType]
+    $mainPictures: [InputPictureType]
+    $pictures: [InputPictureType]
+  ) {
+    createActor(
+      actorInfos: $formValues
+      userId: $userId
+      description: $description
+      volunteerDescription: $volunteerDescription
+      pictures: $pictures
+      mainPictures: $mainPictures
+      logoPictures: $logoPictures
+    ) {
       id
       name
       email
@@ -54,8 +87,8 @@ const CREATE_ACTOR = gql`
       address
       postCode
       city
-      website,
-      socialNetwork 
+      website
+      socialNetwork
       description
       lat
       lng
@@ -64,23 +97,24 @@ const CREATE_ACTOR = gql`
 `;
 
 const GET_COLLECTIONS = gql`
-{ collections
-  {   id,
-      code,
-      label,
-      multipleSelection,
-      position,
+  {
+    collections {
+      id
+      code
+      label
+      multipleSelection
+      position
       actor
       entries {
-          id,
+        id
+        label
+        subEntries {
+          id
           label
-          subEntries {
-              id,
-              label
-          }
+        }
       }
+    }
   }
-}
 `;
 const GET_ACTORS = graphqlTag`
 
@@ -182,20 +216,27 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 type FormItemProps = {
-  label: string
-  inputName: string
-  formChangeHandler: (event: ChangeEvent) => void
-  value: string
-  required: boolean
-  errorBool: boolean
-  errorText: string
-  helperText?: string
-}
+  label: string;
+  inputName: string;
+  formChangeHandler: (event: ChangeEvent) => void;
+  value: string;
+  required: boolean;
+  errorBool: boolean;
+  errorText: string;
+  helperText?: string;
+};
 
 const FormItem = (props: FormItemProps) => {
   const styles = useStyles();
   const {
-    label, inputName, formChangeHandler, value, required, errorBool, errorText, helperText,
+    label,
+    inputName,
+    formChangeHandler,
+    value,
+    required,
+    errorBool,
+    errorText,
+    helperText,
   } = props;
   return (
     <TextField
@@ -217,7 +258,14 @@ const FormItem = (props: FormItemProps) => {
 const FormItemTextareaAutosize = (props: FormItemProps) => {
   const styles = useStyles();
   const {
-    label, inputName, formChangeHandler, value, required, errorBool, errorText, helperText,
+    label,
+    inputName,
+    formChangeHandler,
+    value,
+    required,
+    errorBool,
+    errorText,
+    helperText,
   } = props;
   return (
     <TextField
@@ -251,8 +299,7 @@ const AddActorForm = () => {
       userId: user.id,
     },
   });
-  const { data: dataUsers } = useQuery(GET_USERS, {
-  });
+  const { data: dataUsers } = useQuery(GET_USERS, {});
   const [open, setOpen] = React.useState([false]);
   const [cookies, setCookie, removeCookie] = useCookies();
 
@@ -271,15 +318,15 @@ const AddActorForm = () => {
     return isTree;
   }
   const [dataCollections, setDataCollections] = useState({});
-  const {
-    loading: loadingCollections,
-    error: errorCollections,
-  } = useQuery(GET_COLLECTIONS, {
-    fetchPolicy: 'network-only',
-    onCompleted: (data) => {
-      setDataCollections(data);
+  const { loading: loadingCollections, error: errorCollections } = useQuery(
+    GET_COLLECTIONS,
+    {
+      fetchPolicy: 'network-only',
+      onCompleted: (data) => {
+        setDataCollections(data);
+      },
     },
-  });
+  );
   const handleToggle = (value: number, index: number) => () => {
     const currentIndex = checked.indexOf(value);
     const newChecked = [...checked];
@@ -326,8 +373,16 @@ const AddActorForm = () => {
     const [volunteerEditor, setVolunteerEditor] = useState();
 
     const [estlarochelle, setEstlarochelle] = useState(false);
-    const [create, { data: createData, loading: createLoading, error: createError }] = useMutation(CREATE_ACTOR);
-    const [setImagesLogoList, loadingLogo, resultLogo, imagesLogoListState] = useImageReader();
+    const [
+      create,
+      { data: createData, loading: createLoading, error: createError },
+    ] = useMutation(CREATE_ACTOR);
+    const [
+      setImagesLogoList,
+      loadingLogo,
+      resultLogo,
+      imagesLogoListState,
+    ] = useImageReader();
 
     const onDropLogoHandler = useCallback(
       (files) => {
@@ -357,7 +412,12 @@ const AddActorForm = () => {
       // @ts-ignore
     }, resultLogo);
 
-    const [setImagesMainList, loadingMain, resultMain, imagesMainListState] = useImageReader();
+    const [
+      setImagesMainList,
+      loadingMain,
+      resultMain,
+      imagesMainListState,
+    ] = useImageReader();
 
     const onDropMainHandler = useCallback(
       (files) => {
@@ -413,7 +473,6 @@ const AddActorForm = () => {
       editorRef.current = {
         CKEditor: require('@ckeditor/ckeditor5-react').CKEditor,
         ClassicEditor: require('@ckeditor/ckeditor5-build-classic'),
-
       };
       setEditorLoaded(true);
     }, []);
@@ -498,7 +557,14 @@ const AddActorForm = () => {
           pictures,
         },
       });
-    }, [formValues, create, descriptionEditor, objectsListLogo, objectsList, objectsListMain]);
+    }, [
+      formValues,
+      create,
+      descriptionEditor,
+      objectsListLogo,
+      objectsList,
+      objectsListMain,
+    ]);
     useEffect(() => {
       if (!createError && !createLoading && createData) {
         enqueueSnackbar('Acteur ajouté avec succès.', {
@@ -509,9 +575,15 @@ const AddActorForm = () => {
     }, [createLoading, createError, createData]);
 
     const getObjectLongName = (results, name) => {
-      if (!results || !results[0] || !results[0].address_components) { return (''); }
-      const object = results[0].address_components.find((element) => element.types.find((type) => type == name) != undefined);
-      if (object == undefined) { return (''); }
+      if (!results || !results[0] || !results[0].address_components) {
+        return '';
+      }
+      const object = results[0].address_components.find(
+        (element) => element.types.find((type) => type == name) != undefined,
+      );
+      if (object == undefined) {
+        return '';
+      }
       return object.long_name;
     };
     const radioChangeHandler = (results, name) => {
@@ -523,7 +595,10 @@ const AddActorForm = () => {
     };
 
     const getAddressDetails = (results) => {
-      formValues.address = (`${getObjectLongName(results, 'street_number')} ${getObjectLongName(results, 'route')}`).trim();
+      formValues.address = `${getObjectLongName(
+        results,
+        'street_number',
+      )} ${getObjectLongName(results, 'route')}`.trim();
       formValues.city = getObjectLongName(results, 'locality');
       formValues.postCode = getObjectLongName(results, 'postal_code');
       if (formValues.postCode === '17000') {
@@ -532,45 +607,46 @@ const AddActorForm = () => {
         setEstlarochelle(false);
       }
     };
-    
+
     return (
       <Container component="main" maxWidth="sm">
-        { dataAdminActors && dataAdminActors.actorsAdmin.length > 0 && (
-
+        {dataAdminActors && dataAdminActors.actorsAdmin.length > 0 && (
           <Typography>
-            Bravo. Vous avez déjà créé des pages acteurs.
-            {' '}
-            <br />
-          Cliquez sur leurs noms pour éditer la page :
+            Bravo. Vous avez déjà créé des pages acteurs. <br />
+            Cliquez sur leurs noms pour éditer la page :
             {dataAdminActors.actorsAdmin.map((actor) => {
-              { /* @ts-ignore */ }
+              {
+                /* @ts-ignore */
+              }
               return (
                 <Typography>
                   {/* @ts-ignore */}
                   <Link href={`/actorAdmin/actor/${actor.id}`}>
                     {actor.name}
-                  </Link>
-                  {' '}
-
+                  </Link>{' '}
                 </Typography>
               );
             })}
-
             <br />
-
-          Vous pouvez créer un autre acteur en remplissant le formulaire ci dessous :
+            Vous pouvez créer un autre acteur en remplissant le formulaire ci
+            dessous :
             <br />
             <br />
           </Typography>
         )}
-        <Typography variant="h2" color="primary" className={styles.label}> Coordonnées </Typography>
+        <Typography variant="h2" color="primary" className={styles.label}>
+          {' '}
+          Coordonnées{' '}
+        </Typography>
         <FormItem
           label="Nom de l'acteur"
           inputName="name"
           formChangeHandler={formChangeHandler}
           value={formValues.name}
           required
-          errorBool={!validationResult?.global && !!validationResult?.result.name}
+          errorBool={
+            !validationResult?.global && !!validationResult?.result.name
+          }
           errorText="Nom de l'acteur requis."
         />
         <FormItem
@@ -579,7 +655,11 @@ const AddActorForm = () => {
           formChangeHandler={formChangeHandler}
           value={formValues.email}
           required
-          errorBool={!!formValues.email && !validationResult?.global && !!validationResult?.result.email}
+          errorBool={
+            !!formValues.email &&
+            !validationResult?.global &&
+            !!validationResult?.result.email
+          }
           errorText="Format de l'email invalide."
         />
         <FormItem
@@ -588,7 +668,9 @@ const AddActorForm = () => {
           formChangeHandler={formChangeHandler}
           value={formValues.phone}
           required={false}
-          errorBool={!validationResult?.global && !!validationResult?.result.phone}
+          errorBool={
+            !validationResult?.global && !!validationResult?.result.phone
+          }
           errorText="Format du téléphone invalide. Maximum 10 chiffres."
         />
         <FormItem
@@ -613,52 +695,70 @@ const AddActorForm = () => {
           <Grid className={styles.location}>
             <GooglePlacesAutocomplete
               placeholder="Taper et sélectionner la localisation *"
-              initialValue={formValues.address ? formValues.address.concat(' ').concat(formValues.postCode).concat(' ').concat(formValues.city) : formValues.city && formValues.city}
-              onSelect={({ description }) => (
+              initialValue={
+                formValues.address
+                  ? formValues.address
+                      .concat(' ')
+                      .concat(formValues.postCode)
+                      .concat(' ')
+                      .concat(formValues.city)
+                  : formValues.city && formValues.city
+              }
+              onSelect={({ description }) =>
                 geocodeByAddress(description).then((results) => {
-                  getLatLng(results[0]).then((value) => {
-                    formValues.lat = `${value.lat}`;
-                    formValues.lng = `${value.lng}`;
-                  }).catch((error) => console.error(error));
+                  getLatLng(results[0])
+                    .then((value) => {
+                      formValues.lat = `${value.lat}`;
+                      formValues.lng = `${value.lng}`;
+                    })
+                    .catch((error) => console.error(error));
                   getAddressDetails(results);
                 })
-              )}
+              }
             />
           </Grid>
         </div>
-        { /* @ts-ignore */}
-        {dataCollections.collections && dataCollections.collections.map((collection) => {
-          if (collection.code !== 'larochelle_quarter' || !estlarochelle) return '';
-          
-          //    const [display, setDisplay] = useState(false);
-          return (
-            <div>
-              <br />
-              <Typography
-                className={classes.collectionLabel}
-              >
-                {collection.label}
-              </Typography>
-              { // display &&
-                !IsTree(collection) && !collection.multipleSelection && (
+        {/* @ts-ignore */
+        dataCollections.collections &&
+          /* @ts-ignore */
+          dataCollections.collections.map((collection) => {
+            if (collection.code !== 'larochelle_quarter' || !estlarochelle)
+              return '';
 
-                  <FormControl component="fieldset">
-                    <RadioGroup row aria-label="entries" name="entries"  onChange={formChangeHandler}>
-                      {collection.entries && collection.entries.map((entry) => {
-                        return (
-                          <FormControlLabel value={entry.id} control={<Radio />} label={entry.label} />
-                        );
-                      })}
-
-                    </RadioGroup>
-                  </FormControl>
-
-                )
-              }
-
-            </div>
-          );
-        })}
+            //    const [display, setDisplay] = useState(false);
+            return (
+              <div>
+                <br />
+                <Typography className={classes.collectionLabel}>
+                  {collection.label}
+                </Typography>
+                {
+                  // display &&
+                  !IsTree(collection) && !collection.multipleSelection && (
+                    <FormControl component="fieldset">
+                      <RadioGroup
+                        row
+                        aria-label="entries"
+                        name="entries"
+                        onChange={formChangeHandler}
+                      >
+                        {collection.entries &&
+                          collection.entries.map((entry) => {
+                            return (
+                              <FormControlLabel
+                                value={entry.id}
+                                control={<Radio />}
+                                label={entry.label}
+                              />
+                            );
+                          })}
+                      </RadioGroup>
+                    </FormControl>
+                  )
+                }
+              </div>
+            );
+          })}
         <Typography variant="body1" color="primary" className={styles.label}>
           Jour et heure d'ouverture
         </Typography>
@@ -666,21 +766,44 @@ const AddActorForm = () => {
           CONTACT PRIVE pour les échanges avec Ouaaa
         </Typography>
         <FormControl component="fieldset">
-          <RadioGroup row aria-label="gender" name="contact" onChange={radioChangeHandler}>
-            <FormControlLabel value="me" control={<Radio />} label="C'est moi " />
-            <FormControlLabel value="other" control={<Radio />} label="c’est un autre (avec un compte Ouaaa existant)" />
+          <RadioGroup
+            row
+            aria-label="gender"
+            name="contact"
+            onChange={radioChangeHandler}
+          >
+            <FormControlLabel
+              value="me"
+              control={<Radio />}
+              label="C'est moi "
+            />
+            <FormControlLabel
+              value="other"
+              control={<Radio />}
+              label="c’est un autre (avec un compte Ouaaa existant)"
+            />
             {showOtherContact ? (
               <Autocomplete
                 id="combo-box-demo"
                 options={dataUsers.users}
                 // @ts-ignore
-                getOptionLabel={(option) => `${option.surname} ${option.lastname}`}
+                getOptionLabel={(option) =>
+                  `${option.surname} ${option.lastname}`
+                }
                 onChange={autocompleteHandler}
                 style={{ width: 300 }}
                 // eslint-disable-next-line react/jsx-props-no-spreading
-                renderInput={(params) => <TextField {...params} label="Contact Ouaaa" variant="outlined" />}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Contact Ouaaa"
+                    variant="outlined"
+                  />
+                )}
               />
-            ) : ('')}
+            ) : (
+              ''
+            )}
           </RadioGroup>
         </FormControl>
 
@@ -706,7 +829,10 @@ const AddActorForm = () => {
             updateKeyIndicator={updateKeyIndicatorLogo}
           />
         ) : null}
-        <ImagesDropZone onDropHandler={onDropLogoHandler} text="Déposez ici votre logo au format jpg" />
+        <ImagesDropZone
+          onDropHandler={onDropLogoHandler}
+          text="Déposez ici votre logo au format jpg"
+        />
 
         <Typography variant="body1" color="primary" className={styles.label}>
           Photo principale
@@ -720,7 +846,10 @@ const AddActorForm = () => {
             updateKeyIndicator={updateKeyIndicatorMain}
           />
         ) : null}
-        <ImagesDropZone onDropHandler={onDropMainHandler} text="Déposez ici votre photo principale au format jpg" />
+        <ImagesDropZone
+          onDropHandler={onDropMainHandler}
+          text="Déposez ici votre photo principale au format jpg"
+        />
 
         <Typography variant="body1" color="primary" className={styles.label}>
           Autres photos
@@ -734,7 +863,10 @@ const AddActorForm = () => {
             updateKeyIndicator={updateKeyIndicator}
           />
         ) : null}
-        <ImagesDropZone onDropHandler={onDropHandler} text="Déposez ici votre autres photos au format jpg" />
+        <ImagesDropZone
+          onDropHandler={onDropHandler}
+          text="Déposez ici votre autres photos au format jpg"
+        />
 
         <p />
         <Tooltip title="Cette description courte s’affiche lors de la vue en liste ou dans les blocs de survol/clic de la carte. Pour qu’elle soit utile, nous vous invitons à synthéser en quelques mots le coeur de vos actions/organisation/missions">
@@ -750,14 +882,13 @@ const AddActorForm = () => {
         </Tooltip>
 
         <Typography variant="body1" color="primary" className={styles.label}>
-          Description
-          {' '}
+          Description{' '}
           <Tooltip title="Cette description longue est intégrée à votre page acteur. Elle se veut la plus explicite et détaillée possible. Un langage simple, des mots compréhensible de tous, vous permettront d’expliquer de manière didactique vos liens avec les questions de transition, vos missions/actions, votre organisation, etc. Au delà à l’accès à une information claire pour tous les internautes (y compris en situation de handicap) utilisant Ouaaa, ce texte permettra un meilleur référencement de votre page dans le moteur de recherche interne. Pour cela, pensez à utiliser des mots clé du champs sémantique de votre activité. Ex : vous êtes une asso de recyclerie : zero déchêt, réutilisation, matière, matériaux, économie circulaire, upcycling, nouvelle vie, objet, dépôt, vente, réinsertion,….">
             <InfoIcon />
           </Tooltip>
         </Typography>
 
-        { editorLoaded ? (
+        {editorLoaded ? (
           <CKEditor
             editor={ClassicEditor}
             data={formValues.description}
@@ -769,14 +900,13 @@ const AddActorForm = () => {
           <div>Editor loading</div>
         )}
         <Typography variant="body1" color="primary" className={styles.label}>
-          Nos recherches en bénévolat :
-          {' '}
+          Nos recherches en bénévolat :{' '}
           <Tooltip title="Décrivez ici les missions de bénévolat générales chez vous ou sur un de vos projet spécifique afin de donner envie aux visiteurs de cliquer sur « je deviens bénévole de votre page »">
             <InfoIcon />
           </Tooltip>
         </Typography>
         <p />
-        { editorLoaded ? (
+        {editorLoaded ? (
           <CKEditor
             editor={ClassicEditor}
             data={formValues.volunteer}
@@ -788,125 +918,144 @@ const AddActorForm = () => {
           <div>Editor loading</div>
         )}
 
-        { /* @ts-ignore */}
-        {dataCollections.collections && dataCollections.collections.map((collection) => {
-          if (collection.code === 'larochelle_quarter') return '';
-          //    const [display, setDisplay] = useState(false);
-          let { label } = collection;
-          let helperText = '';
-          if (collection.code === 'category') {
-            label = 'Choisissez les sous-sujets dans lesquels vous souhaitez apparaître (en priorité)';
-            helperText = 'Vous avez la possibilité d’ajouter un texte libre pour expliquer votre lien au sujet choisi. Vous pouvez sélectionner autant de sujet que nécessaire, les 3 premiers serviront à référencer votre page dans les moteurs de recherches info bulle : expliquant les ensemble et les sujets qu’ils contiennent aisni que les liens avec les sous-sujets et pourquoi pas ODD / transiscope. Ces infos bulles sont aussi visible dans le filtre sur la carte pour aider les usagers de Ouaaa à filtrer leur recherche';
-          } else if (collection.code === 'actor_status') {
-            label = 'Quel est votre statut ?';
-            helperText = 'service public : toutes les collectivités, mairies, cda, cdc participant directement ou via des projets à la transition / ex : la rochelle territoire zéro carbone entreprise : tous les acteurs économiques de la transition, de l’economie sociale et solidaire... association & ONG  : toutes les structures à but non lucratif';
-          } else if (collection.code === 'public_target') {
-            label = 'Quel public visez vous principalement dans vos actions ?';
-            helperText = 'Ici nous vous proposons de choisir votre public principal. Bien sur à chaque action (evenement, campagne…) que vous créerez vous pourrez indiquer des publics différents de votre public principal.';
-          } else if (collection.code === 'collectif') {
-            label = 'En tant qu’acteur, je fais partie des collectifs & réseaux suivants :';
-            helperText = 'Sont référencés ici des collectifs et réseaux locaux. Les groupes locaux de réseaux nationaux (ex Greenpeace) ne sont pas incluent dans cette liste';
-          } else if (collection.code === 'actor_location_action') {
-            label = "Territoire d'action (1 seul choix) *";
-            helperText = 'un acteur n’est pas à côté de chez vous mais peut être se déplace-t-il dans votre zone pour le savoir cocher cette case pour faire apparaître les zones d’actions';
-          }
+        {/* @ts-ignore */
+        dataCollections.collections &&
+          /* @ts-ignore */
+          dataCollections.collections.map((collection) => {
+            if (collection.code === 'larochelle_quarter') return '';
+            //    const [display, setDisplay] = useState(false);
+            let { label } = collection;
+            let helperText = '';
+            if (collection.code === 'category') {
+              label =
+                'Choisissez les sous-sujets dans lesquels vous souhaitez apparaître (en priorité)';
+              helperText =
+                'Vous avez la possibilité d’ajouter un texte libre pour expliquer votre lien au sujet choisi. Vous pouvez sélectionner autant de sujet que nécessaire, les 3 premiers serviront à référencer votre page dans les moteurs de recherches info bulle : expliquant les ensemble et les sujets qu’ils contiennent aisni que les liens avec les sous-sujets et pourquoi pas ODD / transiscope. Ces infos bulles sont aussi visible dans le filtre sur la carte pour aider les usagers de Ouaaa à filtrer leur recherche';
+            } else if (collection.code === 'actor_status') {
+              label = 'Quel est votre statut ?';
+              helperText =
+                'service public : toutes les collectivités, mairies, cda, cdc participant directement ou via des projets à la transition / ex : la rochelle territoire zéro carbone entreprise : tous les acteurs économiques de la transition, de l’economie sociale et solidaire... association & ONG  : toutes les structures à but non lucratif';
+            } else if (collection.code === 'public_target') {
+              label =
+                'Quel public visez vous principalement dans vos actions ?';
+              helperText =
+                'Ici nous vous proposons de choisir votre public principal. Bien sur à chaque action (evenement, campagne…) que vous créerez vous pourrez indiquer des publics différents de votre public principal.';
+            } else if (collection.code === 'collectif') {
+              label =
+                'En tant qu’acteur, je fais partie des collectifs & réseaux suivants :';
+              helperText =
+                'Sont référencés ici des collectifs et réseaux locaux. Les groupes locaux de réseaux nationaux (ex Greenpeace) ne sont pas incluent dans cette liste';
+            } else if (collection.code === 'actor_location_action') {
+              label = "Territoire d'action (1 seul choix) *";
+              helperText =
+                'un acteur n’est pas à côté de chez vous mais peut être se déplace-t-il dans votre zone pour le savoir cocher cette case pour faire apparaître les zones d’actions';
+            }
 
-          return (
-            <div>
-              <br />
-              <Typography
-                className={classes.collectionLabel}
-              >
-                {label}
-                {' '}
-                {helperText !== '' && (
-                  <Tooltip title={helperText}><InfoIcon /></Tooltip>
-                )}
-              </Typography>
-              { // display &&
-                IsTree(collection) && (
-                  <TreeView
-                    className={classes.rootTree}
-                    defaultCollapseIcon={<ArrowDropDownIcon />}
-                    defaultExpandIcon={<ArrowRightIcon />}
-                    defaultEndIcon={<div style={{ width: 24 }} />}
-                  >
+            return (
+              <div>
+                <br />
+                <Typography className={classes.collectionLabel}>
+                  {label}{' '}
+                  {helperText !== '' && (
+                    <Tooltip title={helperText}>
+                      <InfoIcon />
+                    </Tooltip>
+                  )}
+                </Typography>
+                {
+                  // display &&
+                  IsTree(collection) && (
+                    <TreeView
+                      className={classes.rootTree}
+                      defaultCollapseIcon={<ArrowDropDownIcon />}
+                      defaultExpandIcon={<ArrowRightIcon />}
+                      defaultEndIcon={<div style={{ width: 24 }} />}
+                    >
+                      {collection.entries &&
+                        collection.entries.map((entry) => {
+                          return (
+                            // @ts-ignore
+                            <StyledTreeItem
+                              key={entry.id}
+                              nodeId={entry.id}
+                              labelText={entry.label}
+                              hideCheckBox
+                            >
+                              {entry.subEntries &&
+                                entry.subEntries.map((subEntry) => {
+                                  return (
+                                    <StyledTreeItem
+                                      key={subEntry.id}
+                                      // @ts-ignore
+                                      nodeId={subEntry.id}
+                                      labelText={subEntry.label}
+                                      categoryChange={formChangeHandler}
+                                    />
+                                  );
+                                })}
+                            </StyledTreeItem>
+                          );
+                        })}
+                    </TreeView>
+                  )
+                }
 
-                    {collection.entries && collection.entries.map((entry) => {
-                      return (
-                        // @ts-ignore
-                        <StyledTreeItem
-                          key={entry.id}
-                          nodeId={entry.id}
-                          labelText={entry.label}
-                          hideCheckBox
-                        >
-                          {entry.subEntries && entry.subEntries.map((subEntry) => {
+                {
+                  // display &&
+                  !IsTree(collection) && collection.multipleSelection && (
+                    <List>
+                      {collection.entries &&
+                        collection.entries.map((entry) => {
+                          return (
+                            <ListItem key={entry.id} role={undefined} dense>
+                              <ListItemText primary={entry.label} />
+                              <Checkbox
+                                edge="start"
+                                tabIndex={-1}
+                                disableRipple
+                                onChange={formChangeHandler}
+                                name="entries"
+                                value={entry.id}
+                                onClick={(e) => e.stopPropagation()}
+                              />
+                            </ListItem>
+                          );
+                        })}
+                    </List>
+                  )
+                }
+                {
+                  // display &&
+                  !IsTree(collection) && !collection.multipleSelection && (
+                    <FormControl component="fieldset">
+                      <RadioGroup
+                        row
+                        aria-label="entries"
+                        name="entries"
+                        onChange={formChangeHandler}
+                      >
+                        {collection.entries &&
+                          collection.entries.map((entry) => {
                             return (
-                              <StyledTreeItem
-                                key={subEntry.id}
-                                // @ts-ignore
-                                nodeId={subEntry.id}
-                                labelText={subEntry.label}
-                                categoryChange={formChangeHandler}
+                              <FormControlLabel
+                                value={entry.id}
+                                control={<Radio />}
+                                label={entry.label}
                               />
                             );
                           })}
-                        </StyledTreeItem>
-                      );
-                    })}
-                  </TreeView>
-                )
-              }
-
-              { // display &&
-                !IsTree(collection) && collection.multipleSelection && (
-                  <List>
-                    {collection.entries && collection.entries.map((entry) => {
-                      return (
-                        <ListItem
-                          key={entry.id}
-                          role={undefined}
-                          dense
-                        >
-                          <ListItemText primary={entry.label} />
-                          <Checkbox
-                            edge="start"
-                            tabIndex={-1}
-                            disableRipple
-                            onChange={formChangeHandler}
-                            name="entries"
-                            value={entry.id}
-                            onClick={(e) => (e.stopPropagation())}
-                          />
-                        </ListItem>
-                      );
-                    })}
-                  </List>
-                )
-              }
-              { // display &&
-                !IsTree(collection) && !collection.multipleSelection && (
-
-                  <FormControl component="fieldset">
-                    <RadioGroup row aria-label="entries" name="entries" onChange={formChangeHandler}>
-                      {collection.entries && collection.entries.map((entry) => {
-                        return (
-                          <FormControlLabel value={entry.id} control={<Radio />} label={entry.label} />
-                        );
-                      })}
-
-                    </RadioGroup>
-                  </FormControl>
-
-                )
-              }
-
-            </div>
-          );
-        })}
+                      </RadioGroup>
+                    </FormControl>
+                  )
+                }
+              </div>
+            );
+          })}
         <br />
-        <div>Une fois créé, vous pourrez modifier les informations et ajouter des photos dans votre espace acteur</div>
+        <div>
+          Une fois créé, vous pourrez modifier les informations et ajouter des
+          photos dans votre espace acteur
+        </div>
         <p />
         <Grid item xs={12}>
           <ClassicButton
@@ -944,12 +1093,7 @@ const AddActorForm = () => {
     clearFormvaluesAfterControl: true,
   };
 
-  return (
-    <FormController
-      render={Form}
-      validationRules={validationRules}
-    />
-  );
+  return <FormController render={Form} validationRules={validationRules} />;
 };
 
 export default withDndProvider(withRouter(withApollo()(AddActorForm)));

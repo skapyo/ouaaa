@@ -3,7 +3,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import gql from 'graphql-tag';
 import { useMutation } from '@apollo/client';
 import { withApollo } from 'hoc/withApollo';
-import FormController, { ValidationRuleType } from 'components/controllers/FormController';
+import FormController, {
+  ValidationRuleType,
+} from 'components/controllers/FormController';
 import { Container, TextField, Typography } from '@material-ui/core';
 import ClassicButton from 'components/buttons/ClassicButton';
 import SearchIcon from '@material-ui/icons/Search';
@@ -103,9 +105,9 @@ const useStyles = makeStyles((theme) => ({
       color: '#bf083e',
       'background-color': 'white',
       border: '2px solid #bf083e',
-      backgroundImage: 'url(\'./arrow-hover.svg\')',
+      backgroundImage: "url('./arrow-hover.svg')",
     },
-    backgroundImage: 'url(\'./arrow.svg\')',
+    backgroundImage: "url('./arrow.svg')",
     backgroundRepeat: 'no-repeat',
     'background-position-x': '5px',
     'background-position-y': '1px',
@@ -114,20 +116,16 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ADD_NEWSLETTER_EMAIL = gql`
-  mutation createNewsletterEmail (
-    $email: String!
-  ) {
-    createNewsletterEmail (email: $email) {
+  mutation createNewsletterEmail($email: String!) {
+    createNewsletterEmail(email: $email) {
       id
     }
   }
 `;
 
 const ADD_NEWSLETTER_USER = gql`
-  mutation createNewsletterUser (
-    $userId: Int!
-  ) {
-    createNewsletterUser (userId: $userId) {
+  mutation createNewsletterUser($userId: Int!) {
+    createNewsletterUser(userId: $userId) {
       id
     }
   }
@@ -146,8 +144,13 @@ const Newsletter = () => {
     const [subscribed, setSubscribed] = useState(false);
     const { formChangeHandler, formValues, validationResult } = props;
 
-    const [newsletterEmail, { data: dataVisitor, error: errorVisitor }] = useMutation(ADD_NEWSLETTER_EMAIL);
-    const [newsletterUser, { data: dataUser, error: errorUser }] = useMutation(ADD_NEWSLETTER_USER);
+    const [
+      newsletterEmail,
+      { data: dataVisitor, error: errorVisitor },
+    ] = useMutation(ADD_NEWSLETTER_EMAIL);
+    const [newsletterUser, { data: dataUser, error: errorUser }] = useMutation(
+      ADD_NEWSLETTER_USER,
+    );
 
     const subscription = useCallback(() => {
       // vérifier qu'il n'y a pas de doublons
@@ -164,8 +167,18 @@ const Newsletter = () => {
           },
         });
       }
-      if (!errorVisitor && !errorUser) { setSubscribed(true); }
-    }, [newsletterEmail, newsletterUser, formValues, setSubscribed, errorVisitor, errorUser, user]);
+      if (!errorVisitor && !errorUser) {
+        setSubscribed(true);
+      }
+    }, [
+      newsletterEmail,
+      newsletterUser,
+      formValues,
+      setSubscribed,
+      errorVisitor,
+      errorUser,
+      user,
+    ]);
 
     return (
       <Container className={[styles.newsletter]}>
@@ -174,8 +187,7 @@ const Newsletter = () => {
           <br />
           INSCRIVEZ-VOUS À NOTRE NEWSLETTER
         </Typography>
-        {!subscribed && !user
-          && (
+        {!subscribed && !user && (
           <div className={styles.search}>
             <TextField
               variant="outlined"
@@ -199,13 +211,17 @@ const Newsletter = () => {
               <SearchIcon />
             </ClassicButton>
           </div>
-          )}
-        {
-          !subscribed && user
-          && <button className={styles.buttonGrid} onClick={subscription}>M'abonner à la newsletter</button>
-        }
-        {subscribed
-          && <Typography variant="h5">Inscription à la newsletter bien effectuée.</Typography>}
+        )}
+        {!subscribed && user && (
+          <button className={styles.buttonGrid} onClick={subscription}>
+            M'abonner à la newsletter
+          </button>
+        )}
+        {subscribed && (
+          <Typography variant="h5">
+            Inscription à la newsletter bien effectuée.
+          </Typography>
+        )}
       </Container>
     );
   };

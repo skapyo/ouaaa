@@ -7,14 +7,8 @@ import { useMutation } from '@apollo/client';
 import FallbackEmailValidated from 'containers/fallbacks/FallbackEmailValidated';
 
 const VALIDATE_EMAIL = gql`
-  mutation validateEmail (
-    $email: String!,
-    $token: String!
-  ) {
-    validateEmail(
-      email: $email,
-      token: $token
-    )
+  mutation validateEmail($email: String!, $token: String!) {
+    validateEmail(email: $email, token: $token)
   }
 `;
 
@@ -29,9 +23,7 @@ const EmailValidation = () => {
   }, [email, token, validateEmail]);
 
   if (data) {
-    return (
-      <FallbackEmailValidated email={email} />
-    );
+    return <FallbackEmailValidated email={email} />;
   }
   if (error) {
     Router.push('/');

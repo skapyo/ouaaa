@@ -1,12 +1,15 @@
 import React from 'react';
 import AppLayout from 'containers/layouts/AppLayout';
 import {
-  Box, Container, makeStyles, RootRef, Typography,
+  Box,
+  Container,
+  makeStyles,
+  RootRef,
+  Typography,
 } from '@material-ui/core';
 import Newsletter from '../../containers/layouts/Newsletter';
 
 const useStyles = makeStyles((theme) => ({
-
   align: {
     'text-align': 'center',
   },
@@ -24,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
       color: '#bf083e',
       'background-color': 'white',
     },
-    backgroundImage: 'url(\'./arrow.svg\')',
+    backgroundImage: "url('./arrow.svg')",
     backgroundRepeat: 'no-repeat',
     'background-position-x': '5px',
     'background-position-y': '1px',
@@ -34,7 +37,6 @@ const useStyles = makeStyles((theme) => ({
   imageGrid: {
     padding: '2em',
   },
-
 }));
 const Improvment = () => {
   const styles = useStyles();
@@ -42,20 +44,23 @@ const Improvment = () => {
     <AppLayout>
       <RootRef>
         <Box>
-
           <Container className={styles.align}>
-
-            <Typography variant="h1">
-              Les fonctionnalités
-            </Typography>
+            <Typography variant="h1">Les fonctionnalités</Typography>
             <img
               width="70%"
               className={styles.imageGrid}
               src="./improvment.png"
             />
             <div>
-              <a rel="noopener noreferrer" href="https://privatecloud.acteursdelatransition.fr/s/66XSkfa963CA8Xg" target="_blank">
-                <button className={styles.button}>Faire un retour d'expérience ou apporter une idée d'amélioration</button>
+              <a
+                rel="noopener noreferrer"
+                href="https://privatecloud.acteursdelatransition.fr/s/66XSkfa963CA8Xg"
+                target="_blank"
+              >
+                <button className={styles.button}>
+                  Faire un retour d'expérience ou apporter une idée
+                  d'amélioration
+                </button>
               </a>
             </div>
           </Container>

@@ -1,6 +1,4 @@
-import {
-  Avatar, Grid, makeStyles, Typography,
-} from '@material-ui/core';
+import { Avatar, Grid, makeStyles, Typography } from '@material-ui/core';
 import UserInfosForm from 'containers/forms/UserInfosForm';
 import AccountPageLayout from 'containers/layouts/accountPage/AccountPageLayout';
 import React from 'react';
@@ -15,7 +13,6 @@ const useStyles = makeStyles((theme) => ({
   userInfosTitle: {
     marginBottom: theme.spacing(5),
   },
-
 }));
 
 const AccountPage = () => {
@@ -25,7 +22,6 @@ const AccountPage = () => {
     <AccountPageLayout>
       <Grid container spacing={2}>
         <Grid item lg={7}>
-
           <Typography
             color="secondary"
             variant="h6"
@@ -36,13 +32,15 @@ const AccountPage = () => {
           Si vous êtes acteur, éditer les informations dans
           {/* @ts-ignore */}
           <Link href="/actorAdmin">Espace Acteur</Link>
-
           <UserInfosForm />
-
         </Grid>
         <Grid item lg={5}>
-
-          <Grid container justify="center" alignItems="center" direction="column">
+          <Grid
+            container
+            justify="center"
+            alignItems="center"
+            direction="column"
+          >
             <Typography
               color="secondary"
               variant="h6"
@@ -51,9 +49,7 @@ const AccountPage = () => {
               Ma photo
             </Typography>
             <Avatar className={styles.avatar} />
-
           </Grid>
-
         </Grid>
       </Grid>
     </AccountPageLayout>

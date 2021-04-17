@@ -39,11 +39,16 @@ const useStyles = makeStyles((theme) => ({
     height: '300px!important',
     width: 'inherit!important',
   },
-
 }));
 
 const ImageCropper = ({
-  src, open, onClose, classes, croppedImg, updateKeyIndicator, id,
+  src,
+  open,
+  onClose,
+  classes,
+  croppedImg,
+  updateKeyIndicator,
+  id,
 }) => {
   const [crop, setCrop] = useState(croppedImg.crop);
   const [rotation, setRotation] = useState(croppedImg.rotation);
@@ -70,32 +75,22 @@ const ImageCropper = ({
   }, [croppedAreaPixels, rotation, src]);
 
   const saveCroppedImage = () => {
-    updateKeyIndicator(
-      id,
-      'croppedImg',
-      {
-        crop,
-        rotation,
-        zoom,
-        file: croppedImage.file,
-        img: croppedImage.url,
-        modified: true,
-      },
-    );
+    updateKeyIndicator(id, 'croppedImg', {
+      crop,
+      rotation,
+      zoom,
+      file: croppedImage.file,
+      img: croppedImage.url,
+      modified: true,
+    });
     onClose();
   };
 
   return (
-    <Modal
-
-      open={open}
-      onClose={onClose}
-      className={styles.popup}
-    >
+    <Modal open={open} onClose={onClose} className={styles.popup}>
       {/* <Modal.Content> */}
 
       <div>
-
         <div className={styles.cropContainer}>
           <Grid>
             <Grid item xs={8}>
@@ -105,7 +100,7 @@ const ImageCropper = ({
                 rotation={rotation}
                 zoom={zoom}
                 aspect={4 / 3}
-                        // cropSize={{width:1024,height:768}}
+                // cropSize={{width:1024,height:768}}
                 onCropChange={setCrop}
                 onRotationChange={setRotation}
                 onCropComplete={onCropComplete}
@@ -117,7 +112,6 @@ const ImageCropper = ({
                 }}
               />
             </Grid>
-
           </Grid>
         </div>
         <div className={styles.controls}>
@@ -184,8 +178,11 @@ const ImageCropper = ({
           </Grid>
           <Grid container>
             <Grid item xs={12}>
-              { croppedImage.url && (
-              <Image src={croppedImage ? croppedImage.url : null} className={styles.cropImage} />
+              {croppedImage.url && (
+                <Image
+                  src={croppedImage ? croppedImage.url : null}
+                  className={styles.cropImage}
+                />
               )}
             </Grid>
           </Grid>

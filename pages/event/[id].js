@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import AppLayout from 'containers/layouts/AppLayout';
 import {
-  Box, Container, Grid, makeStyles, RootRef, Typography,
+  Box,
+  Container,
+  Grid,
+  makeStyles,
+  RootRef,
+  Typography,
 } from '@material-ui/core';
 import { withApollo } from 'hoc/withApollo.jsx';
 import { useRouter } from 'next/router';
@@ -31,7 +36,6 @@ const useStyles = makeStyles((theme) => ({
     color: 'white',
     'text-align': 'center',
     padding: '3em',
-
   },
   align: {
     'text-align': 'center',
@@ -39,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
   cardInfo: {
     padding: '5em',
     backgroundColor: 'white',
-    backgroundImage: 'url(\'/icons/planet.svg\')',
+    backgroundImage: "url('/icons/planet.svg')",
     backgroundPosition: 'right',
     backgroundRepeat: 'no-repeat',
     backgroundOpacity: ' 0.5',
@@ -65,7 +69,6 @@ const useStyles = makeStyles((theme) => ({
   },
   infoPratiqueGrid: {
     textAlign: 'center',
-
   },
   infoPratiqueTitle: {
     backgroundColor: '#2a9076',
@@ -73,9 +76,7 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     padding: '1em',
   },
-  infoPratiqueItem: {
-
-  },
+  infoPratiqueItem: {},
   alignLeft: {
     textAlign: 'left',
     padding: '1em',
@@ -85,7 +86,6 @@ const useStyles = makeStyles((theme) => ({
     padding: '1em',
   },
   item: {
-
     border: '1px solid #2a9076',
     borderStyle: 'dashed',
   },
@@ -119,9 +119,8 @@ const useStyles = makeStyles((theme) => ({
       color: '#bf083e',
       'background-color': 'white',
       border: '2px solid #bf083e',
-
     },
-    backgroundImage: 'url(\'./arrow.svg\')',
+    backgroundImage: "url('./arrow.svg')",
     backgroundRepeat: 'no-repeat',
     'background-position-x': '5px',
     'background-position-y': '1px',
@@ -142,9 +141,8 @@ const useStyles = makeStyles((theme) => ({
       textDecoration: 'line-through',
       color: 'white',
       'background-color': '#bf083e',
-
     },
-    backgroundImage: 'url(\'./arrow.svg\')',
+    backgroundImage: "url('./arrow.svg')",
     backgroundRepeat: 'no-repeat',
     'background-position-x': '5px',
     'background-position-y': '1px',
@@ -156,7 +154,6 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: '1em',
     textAlign: 'center',
   },
-
 }));
 
 const Event = () => {
@@ -164,102 +161,107 @@ const Event = () => {
   const { id } = router.query;
 
   const GET_EVENT = gql`
-        query event($id:String) {
-            event(id:$id) {
-                id,
-                label,
-                description,
-                lat,
-                lng,
-                address,
-                city,
-                startedAt,
-                endedAt,
-                categories{
-                    label,
-                    parentCategory{
-                        label
-                    },
-                    subCategories{
-                        label
-                    }
-                },
-                actors {   id,
-                    name,
-                    address,
-                    lat,
-                    lng,
-                    categories{
-                        label
-                    },
-                    ,
-                    pictures{
-                        id,
-                        label,
-                        originalPicturePath,
-                        originalPictureFilename,
-                        croppedPicturePath,
-                        croppedPictureFilename,
-                        croppedX,
-                        croppedY,
-                        croppedZoom,
-                        croppedRotation,
-                        position
-                    }
-                    
-                },
-                participants {   id,
-                    surname,
-                    lastname,
-
-                },
-                pictures{
-                    id,
-                    label,
-                    originalPicturePath,
-                    originalPictureFilename,
-                    croppedPicturePath,
-                    croppedPictureFilename,
-                    croppedX,
-                    croppedY,
-                    croppedZoom,
-                    croppedRotation,
-                    position
-                }
-                
-            }
+    query event($id: String) {
+      event(id: $id) {
+        id
+        label
+        description
+        lat
+        lng
+        address
+        city
+        startedAt
+        endedAt
+        categories {
+          label
+          parentCategory {
+            label
+          }
+          subCategories {
+            label
+          }
         }
-    `;
+        actors {
+          id
+          name
+          address
+          lat
+          lng
+          categories {
+            label
+          }
+          pictures {
+            id
+            label
+            originalPicturePath
+            originalPictureFilename
+            croppedPicturePath
+            croppedPictureFilename
+            croppedX
+            croppedY
+            croppedZoom
+            croppedRotation
+            position
+          }
+        }
+        participants {
+          id
+          surname
+          lastname
+        }
+        pictures {
+          id
+          label
+          originalPicturePath
+          originalPictureFilename
+          croppedPicturePath
+          croppedPictureFilename
+          croppedX
+          croppedY
+          croppedZoom
+          croppedRotation
+          position
+        }
+      }
+    }
+  `;
   const ADD_EVENT_PARTICIPATE = gql`
-        mutation addEventParticipate ($eventId:Int!,$userId: Int!) {
-            addEventParticipate(eventId:$eventId,userId:$userId)
-        }
-    `;
+    mutation addEventParticipate($eventId: Int!, $userId: Int!) {
+      addEventParticipate(eventId: $eventId, userId: $userId)
+    }
+  `;
   const REMOVE_EVENT_PARTICIPATE = gql`
-        mutation removeEventParticipate ($eventId:Int!,$userId: Int!) {
-            removeEventParticipate(eventId:$eventId,userId:$userId)
-        }
-    `;
-  const {
-    data, loading, error, refetch,
-  } = useQuery(GET_EVENT,
-    {
-      variables: {
-        id,
-      },
-    });
+    mutation removeEventParticipate($eventId: Int!, $userId: Int!) {
+      removeEventParticipate(eventId: $eventId, userId: $userId)
+    }
+  `;
+  const { data, loading, error, refetch } = useQuery(GET_EVENT, {
+    variables: {
+      id,
+    },
+  });
 
   const [stylesProps, setStylesProps] = useState({
     topImageSize: '250px',
     headerDisplay: 'static',
   });
 
-  const [addParticipate, { data: participateData, loading: participateLoading, error: participateError }] = useMutation(
-    ADD_EVENT_PARTICIPATE,
-  );
-  const [removeParticipate, { data: removeparticipateData, loading: removeparticipateLoading, error: removeparticipateError }] = useMutation(
-    REMOVE_EVENT_PARTICIPATE,
-  );
+  const [
+    addParticipate,
+    {
+      data: participateData,
+      loading: participateLoading,
+      error: participateError,
+    },
+  ] = useMutation(ADD_EVENT_PARTICIPATE);
+  const [
+    removeParticipate,
+    {
+      data: removeparticipateData,
+      loading: removeparticipateLoading,
+      error: removeparticipateError,
+    },
+  ] = useMutation(REMOVE_EVENT_PARTICIPATE);
 
   useEffect(() => {
     if (participateData !== undefined) {
@@ -297,25 +299,39 @@ const Event = () => {
 
   const addParticipateHandler = () => {
     if (user == null) {
-      setCookie('redirect_url', router.asPath, { path: `/event/${data.event.id}` });
+      setCookie('redirect_url', router.asPath, {
+        path: `/event/${data.event.id}`,
+      });
       enqueueSnackbar("Veuillez vous connecter pour participer à l'événement", {
         preventDuplicate: true,
       });
     } else {
-      addParticipate({ variables: { eventId: parseInt(data && data.event.id), userId: parseInt(user.id) } });
+      addParticipate({
+        variables: {
+          eventId: parseInt(data && data.event.id),
+          userId: parseInt(user.id),
+        },
+      });
     }
   };
 
   const removeParticipateHandler = () => {
-    removeParticipate({ variables: { eventId: parseInt(data && data.event.id), userId: parseInt(user.id) } });
+    removeParticipate({
+      variables: {
+        eventId: parseInt(data && data.event.id),
+        userId: parseInt(user.id),
+      },
+    });
   };
 
   const styles = useStyles(stylesProps);
 
   const settingsSliderevent = {
-
     infinite: true,
-    slidesToShow: data && data.event.actors.length > 5 ? 5 : data && data.event.actors.length,
+    slidesToShow:
+      data && data.event.actors.length > 5
+        ? 5
+        : data && data.event.actors.length,
     slidesToScroll: 1,
     // autoplay: true,
     // autoplaySpeed: 2000,
@@ -324,9 +340,11 @@ const Event = () => {
     prevArrow: <SamplePrevArrow />,
   };
   const settingsSliderImage = {
-
     infinite: true,
-    slidesToShow: data && data.event.pictures && data.event.pictures.length > 3 ? 3 : data && data.event.pictures && data.event.pictures.length,
+    slidesToShow:
+      data && data.event.pictures && data.event.pictures.length > 3
+        ? 3
+        : data && data.event.pictures && data.event.pictures.length,
     slidesToScroll: 1,
     // autoplay: true,
     // autoplaySpeed: 2000,
@@ -362,50 +380,58 @@ const Event = () => {
       <Head>
         <title>
           {/* @ts-ignore */}
-          {data && data.event.label}
-          -
-          {/* @ts-ignore */}
+          {data && data.event.label}-{/* @ts-ignore */}
           {data && data.event.city}
-          {/* @ts-ignore */}
-          -
-          {/* @ts-ignore */}
-          {data && data.event.categories.map((category) => {
-            return (category.parentCategory && `${category.parentCategory.label} : ${category.label}  `);
-          })}
+          {/* @ts-ignore */}-{/* @ts-ignore */}
+          {data &&
+            data.event.categories.map((category) => {
+              return (
+                category.parentCategory &&
+                `${category.parentCategory.label} : ${category.label}  `
+              );
+            })}
         </title>
       </Head>
       <RootRef>
         <Box>
           {data && data.event && (
-          <Container className={styles.titleContainer} style={{ backgroundImage: data && data.event && data.event.pictures.length >= 1 ? `url(${getImageUrl(data.event.pictures.sort((a, b) => (a.position > b.position ? 1 : -1))[0].croppedPicturePath)})` : '' }} />
+            <Container
+              className={styles.titleContainer}
+              style={{
+                backgroundImage:
+                  data && data.event && data.event.pictures.length >= 1
+                    ? `url(${getImageUrl(
+                        data.event.pictures.sort((a, b) =>
+                          a.position > b.position ? 1 : -1,
+                        )[0].croppedPicturePath,
+                      )})`
+                    : '',
+              }}
+            />
           )}
           <Container className={styles.cardInfo}>
-
             <Grid container spacing={3}>
               <Grid item md={8} sm={10} className={styles.threePointGrid}>
                 <div>
                   <Typography variant="h5" className={styles.cardTitle}>
                     {data && data.event.label}
                   </Typography>
-                  {data && data.event.categories.map((category) => (
-                    <div>
+                  {data &&
+                    data.event.categories.map((category) => (
+                      <div>
                         <Typography
-                            variant="h7"
-                            className={styles.cardTitleCategories}
-                          >
-                            {/* @ts-ignore */}
-                            {category.parentCategory
-                                                && category.parentCategory.label}
-                            {/* @ts-ignore */}
-                            :
-                                                {/* @ts-ignore */}
-                            {category
-                                                && category.label}
-                            {/* @ts-ignore */}
-
-                          </Typography>
+                          variant="h7"
+                          className={styles.cardTitleCategories}
+                        >
+                          {/* @ts-ignore */}
+                          {category.parentCategory &&
+                            category.parentCategory.label}
+                          {/* @ts-ignore */}:{/* @ts-ignore */}
+                          {category && category.label}
+                          {/* @ts-ignore */}
+                        </Typography>
                       </div>
-                  ))}
+                    ))}
                 </div>
                 <p>{data && Parser(data.event.description)}</p>
                 <div />
@@ -413,100 +439,120 @@ const Event = () => {
 
               <Grid md={4} sm={10} className={[styles.align]}>
                 <Grid container className={[styles.infoPratiqueGrid]}>
-                  <Typography variant="h7" className={[styles.infoPratiqueTitle, styles.infoPratiqueItem]}>
+                  <Typography
+                    variant="h7"
+                    className={[
+                      styles.infoPratiqueTitle,
+                      styles.infoPratiqueItem,
+                    ]}
+                  >
                     INFOS PRATIQUES
-                                    </Typography>
+                  </Typography>
                   <Grid container className={[styles.item]}>
                     <Grid item xs={3} className={[styles.alignRight]}>
-                        <Place className={[styles.icon]} />
-                      </Grid>
+                      <Place className={[styles.icon]} />
+                    </Grid>
                     <Grid item xs={8} className={[styles.alignLeft]}>
-                        <div className={[styles.infoLabel]}>LOCALISATION</div>
-                        <span className={[styles.infoValue]}>
-                            {data && !data.event.city && <span> Adresse manquante</span>}
-                            {data && !data.event.address && data.event.city && (
-                              <span>
-                                    {/* @ts-ignore */}
-                                    {data && data.event.city}
-                                  </span>
-                              )}
-                            {data && data.event.address && data.event.city && (
-                              <span>
-                                    {/* @ts-ignore */}
-                                    {data && data.event.address}
-                                    ,
-                                    {/* @ts-ignore */}
-                                    {data.event.city}
-                                  </span>
-                              )}
+                      <div className={[styles.infoLabel]}>LOCALISATION</div>
+                      <span className={[styles.infoValue]}>
+                        {data && !data.event.city && (
+                          <span> Adresse manquante</span>
+                        )}
+                        {data && !data.event.address && data.event.city && (
+                          <span>
+                            {/* @ts-ignore */}
+                            {data && data.event.city}
                           </span>
-                      </Grid>
+                        )}
+                        {data && data.event.address && data.event.city && (
+                          <span>
+                            {/* @ts-ignore */}
+                            {data && data.event.address},{/* @ts-ignore */}
+                            {data.event.city}
+                          </span>
+                        )}
+                      </span>
+                    </Grid>
                   </Grid>
                   <Grid container className={[styles.item]}>
                     <Grid item xs={3} className={[styles.alignRight]}>
-                        <Schedule className={[styles.icon]} />
-                      </Grid>
+                      <Schedule className={[styles.icon]} />
+                    </Grid>
                     <Grid item xs={8} className={[styles.alignLeft]}>
-                        <div className={[styles.infoLabel]}>Date de début</div>
-                        <span className={[styles.infoValue]}>
-                            <Moment format=" DD/MM HH:mm" unix>{data && data.event.startedAt / 1000}</Moment>
-                          </span>
-                        <div className={[styles.infoLabel]}>Date de fin</div>
-                        <span className={[styles.infoValue]}>
-                            <Moment format=" DD/MM HH:mm" unix>{data && data.event.endedAt / 1000}</Moment>
-                          </span>
-
-                      </Grid>
+                      <div className={[styles.infoLabel]}>Date de début</div>
+                      <span className={[styles.infoValue]}>
+                        <Moment format=" DD/MM HH:mm" unix>
+                          {data && data.event.startedAt / 1000}
+                        </Moment>
+                      </span>
+                      <div className={[styles.infoLabel]}>Date de fin</div>
+                      <span className={[styles.infoValue]}>
+                        <Moment format=" DD/MM HH:mm" unix>
+                          {data && data.event.endedAt / 1000}
+                        </Moment>
+                      </span>
+                    </Grid>
                   </Grid>
                 </Grid>
               </Grid>
-
             </Grid>
 
             <div className={styles.buttonParticipate}>
               {data && containUser(data.event.participants) && (
-                <button className={styles.buttonInverse} onClick={removeParticipateHandler}>Je ne participe plus</button>
+                <button
+                  className={styles.buttonInverse}
+                  onClick={removeParticipateHandler}
+                >
+                  Je ne participe plus
+                </button>
               )}
               {!(data && containUser(data.event.participants)) && (
-                <button className={styles.button} onClick={addParticipateHandler}>Je participe</button>
+                <button
+                  className={styles.button}
+                  onClick={addParticipateHandler}
+                >
+                  Je participe
+                </button>
               )}
-
             </div>
-            {data && data.event.pictures && (data.event.pictures.length > 0) && (
-            <div>
-              <Typography variant="h5" className={styles.cardTitle}>
-                PHOTOS ET VIDEOS
-              </Typography>
-
-            </div>
+            {data && data.event.pictures && data.event.pictures.length > 0 && (
+              <div>
+                <Typography variant="h5" className={styles.cardTitle}>
+                  PHOTOS ET VIDEOS
+                </Typography>
+              </div>
             )}
             <Slider {...settingsSliderImage}>
-              {data && data.event.pictures && data.event.pictures.sort((a, b) => (a.position > b.position ? 1 : -1)).map((picture) => (
-                <img src={getImageUrl(picture.croppedPicturePath)} className={[styles.img]} />
-              ))}
+              {data &&
+                data.event.pictures &&
+                data.event.pictures
+                  .sort((a, b) => (a.position > b.position ? 1 : -1))
+                  .map((picture) => (
+                    <img
+                      src={getImageUrl(picture.croppedPicturePath)}
+                      className={[styles.img]}
+                    />
+                  ))}
             </Slider>
             <div>
-
-              <Typography variant="h5" className={[styles.cardTitle, styles.align]}>
+              <Typography
+                variant="h5"
+                className={[styles.cardTitle, styles.align]}
+              >
                 LES ACTEURS PARTICIPANTS
               </Typography>
             </div>
-            <Slider {...settingsSliderevent} className={[styles.articleCarroussel]}>
-
-              {data && data.event.actors.map((actor) => {
-                return (
-
-                  <CardSliderActor
-                    key={actor.id}
-                    actor={actor}
-                  />
-                );
-              })}
+            <Slider
+              {...settingsSliderevent}
+              className={[styles.articleCarroussel]}
+            >
+              {data &&
+                data.event.actors.map((actor) => {
+                  return <CardSliderActor key={actor.id} actor={actor} />;
+                })}
             </Slider>
-
           </Container>
           <Newsletter />
-
         </Box>
       </RootRef>
     </AppLayout>

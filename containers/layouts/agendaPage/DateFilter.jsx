@@ -3,12 +3,13 @@ import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import DateFnsUtils from '@date-io/date-fns';
 import { fr } from 'date-fns/locale';
-import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import {
+  KeyboardDatePicker,
+  MuiPickersUtilsProvider,
+} from '@material-ui/pickers';
 
 const DateFilter = (refetch) => {
-  const [selectedDate, setSelectedDate] = React.useState(
-    Date.now(),
-  );
+  const [selectedDate, setSelectedDate] = React.useState(Date.now());
 
   const handleDateChange = (date) => {
     setSelectedDate(date);

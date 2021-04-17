@@ -8,7 +8,8 @@ const FallbackAlreadyConnected = () => {
       <AppContainer>
         <Grid container justify="center">
           <Typography variant="h6">
-            Vous ne pouvez pas accéder à cette page car vous êtes déja identifiés.
+            Vous ne pouvez pas accéder à cette page car vous êtes déja
+            identifiés.
           </Typography>
         </Grid>
       </AppContainer>

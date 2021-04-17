@@ -68,7 +68,7 @@ const EDIT_ACTOR = gql`
     $actorId: Int!
     $userId: Int!
     $description: String!
-    $volunteerDescription:String
+    $volunteerDescription: String
     $logoPictures: [InputPictureType]
     $mainPictures: [InputPictureType]
     $pictures: [InputPictureType]
@@ -81,7 +81,7 @@ const EDIT_ACTOR = gql`
       logoPictures: $logoPictures
       pictures: $pictures
       description: $description
-      volunteerDescription:$volunteerDescription
+      volunteerDescription: $volunteerDescription
     ) {
       id
       name
@@ -176,47 +176,49 @@ const GET_ACTOR = gql`
         subCategories {
           label
         }
-      },
-      entries{
-        id,
-        label,
-        parentEntry{
-            id,
-            code,
-            label
-        },
-        subEntries{
-            id,
-            code,
-            label
-        },
-        collection{
-          id,
-          code,
+      }
+      entries {
+        id
+        label
+        parentEntry {
+          id
+          code
           label
         }
-    },
+        subEntries {
+          id
+          code
+          label
+        }
+        collection {
+          id
+          code
+          label
+        }
+      }
     }
   }
 `;
 
 const GET_COLLECTIONS = gql`
-{ collections
-  {   id,
-      label,
-      code,
-      multipleSelection,
+  {
+    collections {
+      id
+      label
+      code
+      multipleSelection
       position
       entries {
-          id,
+        id
+        label
+        subEntries {
+          id
           label
-          subEntries {
-              id,
-              label
-          }
+        }
       }
+    }
   }
-}`;
+`;
 const useStyles = makeStyles((theme) => ({
   gridContainer: {
     marginTop: theme.spacing(5),
@@ -323,8 +325,7 @@ const EditActorForm = (props) => {
   const styles = useStyles();
   const user = useSessionState();
   const [checked, setChecked] = useState([0]);
-  const { data: dataUsers } = useQuery(GET_USERS, {
-  });
+  const { data: dataUsers } = useQuery(GET_USERS, {});
   const { data } = useQuery(GET_CATEGORIES, {
     fetchPolicy: 'network-only',
   });
@@ -353,23 +354,23 @@ const EditActorForm = (props) => {
     return isTree;
   }
   const [dataCollections, setDataCollections] = useState({});
-  const {
-    loading: loadingCollections,
-    error: errorCollections,
-  } = useQuery(GET_COLLECTIONS, {
-    fetchPolicy: 'network-only',
-    onCompleted: (data) => {
-      setDataCollections(data);
+  const { loading: loadingCollections, error: errorCollections } = useQuery(
+    GET_COLLECTIONS,
+    {
+      fetchPolicy: 'network-only',
+      onCompleted: (data) => {
+        setDataCollections(data);
+      },
     },
-  });
+  );
 
   if (actorLoading) return null;
   if (actorError) return `Error! ${actorError.message}`;
   const imgInit = [];
   if (
-    actorData
-    && actorData.actor.pictures
-    && actorData.actor.pictures.length > 0
+    actorData &&
+    actorData.actor.pictures &&
+    actorData.actor.pictures.length > 0
   ) {
     actorData.actor.pictures
       .sort((a, b) => (a.position > b.position ? 1 : -1))
@@ -418,9 +419,9 @@ const EditActorForm = (props) => {
 
   const imgInitLogo = [];
   if (
-    actorData
-    && actorData.actor.pictures
-    && actorData.actor.pictures.length > 0
+    actorData &&
+    actorData.actor.pictures &&
+    actorData.actor.pictures.length > 0
   ) {
     actorData.actor.pictures
       .sort((a, b) => (a.position > b.position ? 1 : -1))
@@ -469,50 +470,50 @@ const EditActorForm = (props) => {
 
   const imgInitMain = [];
   if (
-    actorData
-    && actorData.actor.pictures
-    && actorData.actor.pictures.length > 0
+    actorData &&
+    actorData.actor.pictures &&
+    actorData.actor.pictures.length > 0
   ) {
     actorData.actor.pictures
       .sort((a, b) => (a.position > b.position ? 1 : -1))
       .map((picture, index) => {
         if (picture.main) {
           imgInitMain.push({
-           // @ts-ignore
-           id: index,
-           // @ts-ignore
-           file: null,
-           // @ts-ignore
-           img: getImageUrl(picture.originalPicturePath),
-           // @ts-ignore
-           croppedImg: {
-             crop: {
-               // @ts-ignore
-               x: picture.croppedX,
-               // @ts-ignore
-               y: picture.croppedY,
-             },
-             // @ts-ignore
-             rotation: picture.croppedRotation,
-             // @ts-ignore
-             zoom: picture.croppedZoom,
-             // @ts-ignore
-             file: null,
-             // @ts-ignore
-             img: getImageUrl(picture.croppedPicturePath),
-             // @ts-ignore
-             modified: false,
-           },
-           // @ts-ignore
-           activated: true,
-           // @ts-ignore
-           deleted: false,
-           // @ts-ignore
-           newpic: false,
-           // @ts-ignore
-           serverId: picture.id,
-           // @ts-ignore
-           position: picture.position,
+            // @ts-ignore
+            id: index,
+            // @ts-ignore
+            file: null,
+            // @ts-ignore
+            img: getImageUrl(picture.originalPicturePath),
+            // @ts-ignore
+            croppedImg: {
+              crop: {
+                // @ts-ignore
+                x: picture.croppedX,
+                // @ts-ignore
+                y: picture.croppedY,
+              },
+              // @ts-ignore
+              rotation: picture.croppedRotation,
+              // @ts-ignore
+              zoom: picture.croppedZoom,
+              // @ts-ignore
+              file: null,
+              // @ts-ignore
+              img: getImageUrl(picture.croppedPicturePath),
+              // @ts-ignore
+              modified: false,
+            },
+            // @ts-ignore
+            activated: true,
+            // @ts-ignore
+            deleted: false,
+            // @ts-ignore
+            newpic: false,
+            // @ts-ignore
+            serverId: picture.id,
+            // @ts-ignore
+            position: picture.position,
           });
         }
       });
@@ -560,7 +561,9 @@ const EditActorForm = (props) => {
     const editorRef = useRef();
 
     const [editorLoaded, setEditorLoaded] = useState(false);
-    const [showOtherContact, setShowOtherContact] = useState(formValues.contactId !== actorData.actor.id);
+    const [showOtherContact, setShowOtherContact] = useState(
+      formValues.contactId !== actorData.actor.id,
+    );
     // @ts-ignore
     const { CKEditor, ClassicEditor } = editorRef.current || {};
 
@@ -576,7 +579,12 @@ const EditActorForm = (props) => {
     const [descriptionEditor, setDescriptionEditor] = useState();
     const [volunteerEditor, setVolunteerEditor] = useState();
     const [estlarochelle, setEstlarochelle] = useState(false);
-    const [setImagesLogoList, loadingLogo, resultLogo, imagesLogoListState] = useImageReader();
+    const [
+      setImagesLogoList,
+      loadingLogo,
+      resultLogo,
+      imagesLogoListState,
+    ] = useImageReader();
 
     const onDropLogoHandler = useCallback(
       (files) => {
@@ -606,7 +614,12 @@ const EditActorForm = (props) => {
       // @ts-ignore
     }, resultLogo);
 
-    const [setImagesMainList, loadingMain, resultMain, imagesMainListState] = useImageReader();
+    const [
+      setImagesMainList,
+      loadingMain,
+      resultMain,
+      imagesMainListState,
+    ] = useImageReader();
 
     const onDropMainHandler = useCallback(
       (files) => {
@@ -739,7 +752,16 @@ const EditActorForm = (props) => {
           volunteerDescription: volunteerEditor.getData(),
         },
       });
-    }, [formValues, edit, , objectsListLogo, objectsList, objectsListMain, descriptionEditor, volunteerEditor]);
+    }, [
+      formValues,
+      edit,
+      ,
+      objectsListLogo,
+      objectsList,
+      objectsListMain,
+      descriptionEditor,
+      volunteerEditor,
+    ]);
 
     useEffect(() => {
       if (!editError && !editLoading && editData) {
@@ -762,7 +784,9 @@ const EditActorForm = (props) => {
       }
       return object.long_name;
     };
-    const [valueContactId, setValueContactId] = React.useState(formValues.contactId === actorData.actor.id ? 'me' : 'other');
+    const [valueContactId, setValueContactId] = React.useState(
+      formValues.contactId === actorData.actor.id ? 'me' : 'other',
+    );
 
     const radioChangeHandler = (results, name) => {
       setValueContactId(name);
@@ -884,57 +908,67 @@ const EditActorForm = (props) => {
               initialValue={
                 formValues.address
                   ? formValues.address
-                    .concat(' ')
-                    .concat(formValues.postCode)
-                    .concat(' ')
-                    .concat(formValues.city)
+                      .concat(' ')
+                      .concat(formValues.postCode)
+                      .concat(' ')
+                      .concat(formValues.city)
                   : formValues.city && formValues.city
               }
-              onSelect={({ description }) => geocodeByAddress(description).then((results) => {
-                getLatLng(results[0])
-                  .then((value) => {
-                    formValues.lat = `${value.lat}`;
-                    formValues.lng = `${value.lng}`;
-                  })
-                  .catch((error) => console.error(error));
-                getAddressDetails(results);
-              })}
+              onSelect={({ description }) =>
+                geocodeByAddress(description).then((results) => {
+                  getLatLng(results[0])
+                    .then((value) => {
+                      formValues.lat = `${value.lat}`;
+                      formValues.lng = `${value.lng}`;
+                    })
+                    .catch((error) => console.error(error));
+                  getAddressDetails(results);
+                })
+              }
             />
           </Grid>
         </div>
-        { /* @ts-ignore */}
-        {dataCollections.collections && dataCollections.collections.map((collection) => {
-          if (collection.code !== 'larochelle_quarter' || !estlarochelle) return '';
+        {/* @ts-ignore */
+        dataCollections.collections &&
+          /* @ts-ignore */
+          dataCollections.collections.map((collection) => {
+            if (collection.code !== 'larochelle_quarter' || !estlarochelle)
+              return '';
 
-          //    const [display, setDisplay] = useState(false);
-          return (
-            <div>
-              <br />
-              <Typography
-                className={styles.collectionLabel}
-              >
-                {collection.label}
-              </Typography>
-              { // display &&
-                !IsTree(collection) && !collection.multipleSelection && (
-
-                  <FormControl component="fieldset">
-                    <RadioGroup row aria-label="entries" name="entries" onChange={formChangeHandler}>
-                      {collection.entries && collection.entries.map((entry) => {
-                        return (
-                          <FormControlLabel value={entry.id} control={<Radio />} label={entry.label} />
-                        );
-                      })}
-
-                    </RadioGroup>
-                  </FormControl>
-
-                )
-              }
-
-            </div>
-          );
-        })}
+            //    const [display, setDisplay] = useState(false);
+            return (
+              <div>
+                <br />
+                <Typography className={styles.collectionLabel}>
+                  {collection.label}
+                </Typography>
+                {
+                  // display &&
+                  !IsTree(collection) && !collection.multipleSelection && (
+                    <FormControl component="fieldset">
+                      <RadioGroup
+                        row
+                        aria-label="entries"
+                        name="entries"
+                        onChange={formChangeHandler}
+                      >
+                        {collection.entries &&
+                          collection.entries.map((entry) => {
+                            return (
+                              <FormControlLabel
+                                value={entry.id}
+                                control={<Radio />}
+                                label={entry.label}
+                              />
+                            );
+                          })}
+                      </RadioGroup>
+                    </FormControl>
+                  )
+                }
+              </div>
+            );
+          })}
         <Typography variant="body1" color="primary" className={styles.label}>
           Jour et heure d'ouverture
         </Typography>
@@ -942,21 +976,45 @@ const EditActorForm = (props) => {
           CONTACT PRIVE pour les échanges avec Ouaaa
         </Typography>
         <FormControl component="fieldset">
-          <RadioGroup row aria-label="gender" name="contact" value={valueContactId} onChange={radioChangeHandler}>
-            <FormControlLabel value="me" control={<Radio />} label="C'est moi " />
-            <FormControlLabel value="other" control={<Radio />} label="c’est un autre (avec un compte Ouaaa existant)" />
+          <RadioGroup
+            row
+            aria-label="gender"
+            name="contact"
+            value={valueContactId}
+            onChange={radioChangeHandler}
+          >
+            <FormControlLabel
+              value="me"
+              control={<Radio />}
+              label="C'est moi "
+            />
+            <FormControlLabel
+              value="other"
+              control={<Radio />}
+              label="c’est un autre (avec un compte Ouaaa existant)"
+            />
             {showOtherContact ? (
               <Autocomplete
                 id="combo-box-demo"
                 options={dataUsers.users}
                 // @ts-ignore
-                getOptionLabel={(option) => `${option.surname} ${option.lastname}`}
+                getOptionLabel={(option) =>
+                  `${option.surname} ${option.lastname}`
+                }
                 onChange={autocompleteHandler}
                 style={{ width: 300 }}
                 // eslint-disable-next-line react/jsx-props-no-spreading
-                renderInput={(params) => <TextField {...params} label="Contact Ouaaa" variant="outlined" />}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Contact Ouaaa"
+                    variant="outlined"
+                  />
+                )}
               />
-            ) : ('')}
+            ) : (
+              ''
+            )}
           </RadioGroup>
         </FormControl>
         <p />
@@ -982,7 +1040,10 @@ const EditActorForm = (props) => {
             updateKeyIndicator={updateKeyIndicatorLogo}
           />
         ) : null}
-        <ImagesDropZone onDropHandler={onDropLogoHandler} text="Déposez ici votre logo au format jpg" />
+        <ImagesDropZone
+          onDropHandler={onDropLogoHandler}
+          text="Déposez ici votre logo au format jpg"
+        />
 
         <Typography variant="body1" color="primary" className={styles.label}>
           Photo principale
@@ -996,7 +1057,10 @@ const EditActorForm = (props) => {
             updateKeyIndicator={updateKeyIndicatorMain}
           />
         ) : null}
-        <ImagesDropZone onDropHandler={onDropMainHandler} text="Déposez ici votre photo principale au format jpg" />
+        <ImagesDropZone
+          onDropHandler={onDropMainHandler}
+          text="Déposez ici votre photo principale au format jpg"
+        />
 
         <Typography variant="body1" color="primary" className={styles.label}>
           Autres photos
@@ -1010,7 +1074,10 @@ const EditActorForm = (props) => {
             updateKeyIndicator={updateKeyIndicator}
           />
         ) : null}
-        <ImagesDropZone onDropHandler={onDropHandler} text="Déposez ici votre autres photos au format jpg" />
+        <ImagesDropZone
+          onDropHandler={onDropHandler}
+          text="Déposez ici votre autres photos au format jpg"
+        />
         <p />
         <Tooltip title="Cette description courte s’affiche lors de la vue en liste ou dans les blocs de survol/clic de la carte. Pour qu’elle soit utile, nous vous invitons à synthéser en quelques mots le coeur de vos actions/organisation/missions">
           <FormItem
@@ -1024,8 +1091,7 @@ const EditActorForm = (props) => {
           />
         </Tooltip>
         <Typography variant="body1" color="primary" className={styles.label}>
-          Description
-          {' '}
+          Description{' '}
           <Tooltip title="Cette description longue est intégrée à votre page acteur. Elle se veut la plus explicite et détaillée possible. Un langage simple, des mots compréhensible de tous, vous permettront d’expliquer de manière didactique vos liens avec les questions de transition, vos missions/actions, votre organisation, etc. Au delà à l’accès à une information claire pour tous les internautes (y compris en situation de handicap) utilisant Ouaaa, ce texte permettra un meilleur référencement de votre page dans le moteur de recherche interne. Pour cela, pensez à utiliser des mots clé du champs sémantique de votre activité. Ex : vous êtes une asso de recyclerie : zero déchêt, réutilisation, matière, matériaux, économie circulaire, upcycling, nouvelle vie, objet, dépôt, vente, réinsertion,….">
             <InfoIcon />
           </Tooltip>
@@ -1044,14 +1110,13 @@ const EditActorForm = (props) => {
         )}
         <p />
         <Typography variant="body1" color="primary" className={styles.label}>
-          Nos recherches en bénévolat :
-          {' '}
+          Nos recherches en bénévolat :{' '}
           <Tooltip title="Décrivez ici les missions de bénévolat générales chez vous ou sur un de vos projet spécifique afin de donner envie aux visiteurs de cliquer sur « je deviens bénévole de votre page »">
             <InfoIcon />
           </Tooltip>
         </Typography>
         <p />
-        { editorLoaded ? (
+        {editorLoaded ? (
           <CKEditor
             editor={ClassicEditor}
             data={formValues.volunteerDescription}
@@ -1062,153 +1127,169 @@ const EditActorForm = (props) => {
         ) : (
           <div>Editor loading</div>
         )}
-        { /* @ts-ignore */ }
-        {dataCollections.collections && dataCollections.collections.map((collection) => {
-          if (collection.code === 'larochelle_quarter') return '';
-          //    const [display, setDisplay] = useState(false);
-          let { label } = collection;
-          let helperText = '';
-          if (collection.code === 'category') {
-            label = 'Choisissez les sous-sujets dans lesquels vous souhaitez apparaître (en priorité)';
-            helperText = 'Vous avez la possibilité d’ajouter un texte libre pour expliquer votre lien au sujet choisi. Vous pouvez sélectionner autant de sujet que nécessaire, les 3 premiers serviront à référencer votre page dans les moteurs de recherches info bulle : expliquant les ensemble et les sujets qu’ils contiennent aisni que les liens avec les sous-sujets et pourquoi pas ODD / transiscope. Ces infos bulles sont aussi visible dans le filtre sur la carte pour aider les usagers de Ouaaa à filtrer leur recherche';
-          } else if (collection.code === 'actor_status') {
-            label = 'Quel est votre statut ?';
-            helperText = 'service public : toutes les collectivités, mairies, cda, cdc participant directement ou via des projets à la transition / ex : la rochelle territoire zéro carbone entreprise : tous les acteurs économiques de la transition, de l’economie sociale et solidaire... association & ONG  : toutes les structures à but non lucratif';
-          } else if (collection.code === 'public_target') {
-            label = 'Quel public visez vous principalement dans vos actions ?';
-            helperText = 'Ici nous vous proposons de choisir votre public principal. Bien sur à chaque action (evenement, campagne…) que vous créerez vous pourrez indiquer des publics différents de votre public principal.';
-          } else if (collection.code === 'collectif') {
-            label = 'En tant qu’acteur, je fais partie des collectifs & réseaux suivants :';
-            helperText = 'Sont référencés ici des collectifs et réseaux locaux. Les groupes locaux de réseaux nationaux (ex Greenpeace) ne sont pas incluent dans cette liste';
-          } else if (collection.code === 'actor_location_action') {
-            label = "Territoire d'action (1 seul choix) *";
-            helperText = 'un acteur n’est pas à côté de chez vous mais peut être se déplace-t-il dans votre zone pour le savoir cocher cette case pour faire apparaître les zones d’actions';
-          }
-          let defaultValue = '';
-          if ( !IsTree(collection) && !collection.multipleSelection && formValues
-            && formValues.entries) {
+        {/* @ts-ignore */
+        dataCollections.collections &&
+          /* @ts-ignore */
+          dataCollections.collections.map((collection) => {
+            if (collection.code === 'larochelle_quarter') return '';
+            //    const [display, setDisplay] = useState(false);
+            let { label } = collection;
+            let helperText = '';
+            if (collection.code === 'category') {
+              label =
+                'Choisissez les sous-sujets dans lesquels vous souhaitez apparaître (en priorité)';
+              helperText =
+                'Vous avez la possibilité d’ajouter un texte libre pour expliquer votre lien au sujet choisi. Vous pouvez sélectionner autant de sujet que nécessaire, les 3 premiers serviront à référencer votre page dans les moteurs de recherches info bulle : expliquant les ensemble et les sujets qu’ils contiennent aisni que les liens avec les sous-sujets et pourquoi pas ODD / transiscope. Ces infos bulles sont aussi visible dans le filtre sur la carte pour aider les usagers de Ouaaa à filtrer leur recherche';
+            } else if (collection.code === 'actor_status') {
+              label = 'Quel est votre statut ?';
+              helperText =
+                'service public : toutes les collectivités, mairies, cda, cdc participant directement ou via des projets à la transition / ex : la rochelle territoire zéro carbone entreprise : tous les acteurs économiques de la transition, de l’economie sociale et solidaire... association & ONG  : toutes les structures à but non lucratif';
+            } else if (collection.code === 'public_target') {
+              label =
+                'Quel public visez vous principalement dans vos actions ?';
+              helperText =
+                'Ici nous vous proposons de choisir votre public principal. Bien sur à chaque action (evenement, campagne…) que vous créerez vous pourrez indiquer des publics différents de votre public principal.';
+            } else if (collection.code === 'collectif') {
+              label =
+                'En tant qu’acteur, je fais partie des collectifs & réseaux suivants :';
+              helperText =
+                'Sont référencés ici des collectifs et réseaux locaux. Les groupes locaux de réseaux nationaux (ex Greenpeace) ne sont pas incluent dans cette liste';
+            } else if (collection.code === 'actor_location_action') {
+              label = "Territoire d'action (1 seul choix) *";
+              helperText =
+                'un acteur n’est pas à côté de chez vous mais peut être se déplace-t-il dans votre zone pour le savoir cocher cette case pour faire apparaître les zones d’actions';
+            }
+            let defaultValue = '';
+            if (
+              !IsTree(collection) &&
+              !collection.multipleSelection &&
+              formValues &&
+              formValues.entries
+            ) {
               // @ts-ignore
-            formValues.entries.map((entry) => {
-              let isPresent = false;
-              if (collection.entries) {
-                collection.entries.map((entryCollection) => {
-                  if (entryCollection.id === entry) isPresent = true;
-                  return isPresent;
-                });
-              }
-              if (isPresent) defaultValue = entry;
-            });
-          }
+              formValues.entries.map((entry) => {
+                let isPresent = false;
+                if (collection.entries) {
+                  collection.entries.map((entryCollection) => {
+                    if (entryCollection.id === entry) isPresent = true;
+                    return isPresent;
+                  });
+                }
+                if (isPresent) defaultValue = entry;
+              });
+            }
 
-          return (
-            <div>
-              <Typography
-                className={styles.collectionLabel}
-              >
-                {label}
-                {' '}
-                {helperText !== '' && (
-                  <Tooltip title={helperText}><InfoIcon /></Tooltip>
-                )}
-              </Typography>
-              { // display &&
-            IsTree(collection) && (
-            <TreeView
-              className={styles.rootTree}
-              defaultCollapseIcon={<ArrowDropDownIcon />}
-              defaultExpandIcon={<ArrowRightIcon />}
-              defaultEndIcon={<div style={{ width: 24 }} />}
-            >
-
-              {collection.entries && collection.entries.map((entry) => {
-                return (
-                // @ts-ignore
-                  <StyledTreeItem
-                    key={entry.id}
-                    nodeId={entry.id}
-                    labelText={entry.label}
-                    hideCheckBox
-                  >
-                    {entry.subEntries && entry.subEntries.map((subEntry) => {
-                      return (
-                        <StyledTreeItem
-                          key={subEntry.id}
-                            // @ts-ignore
-                          nodeId={subEntry.id}
-                          labelText={subEntry.label}
-                          formValues={updateFormValues}
-                          categoryChange={formChangeHandler}
-                          checked={
-                            formValues
-                            && formValues.entries
-                            && formValues.entries.includes(subEntry.id)
-                          }
-                        />
-                      );
-                    })}
-                  </StyledTreeItem>
-                );
-              })}
-            </TreeView>
-            )
-}
-              { // display &&
-             !IsTree(collection) && collection.multipleSelection && (
-             <List>
-               {collection.entries && collection.entries.map((entry) => {
-                 return (
-                   <ListItem
-                     key={entry.id}
-                     role={undefined}
-                     dense
-                   >
-                     <ListItemText primary={entry.label} />
-                     <Checkbox
-                       edge="start"
-                       tabIndex={-1}
-                       disableRipple
-                       onChange={formChangeHandler}
-                       name="entries"
-                       value={entry.id}
-                         // @ts-ignore
-                       checked={
-                          formValues
-                          && formValues.entries
-                          && formValues.entries.includes(entry.id)
-                        }
-                       onClick={(e) => (e.stopPropagation())}
-                     />
-                   </ListItem>
-                 );
-               })}
-             </List>
-             )
-}
-              { // display &&
-                !IsTree(collection) && !collection.multipleSelection && (
-
-                  <FormControl component="fieldset">
-                    <RadioGroup
-                      row
-                      aria-label="entries"
-                      name="entries"
-                      defaultValue={defaultValue}
-                      onChange={formChangeHandler}
+            return (
+              <div>
+                <Typography className={styles.collectionLabel}>
+                  {label}{' '}
+                  {helperText !== '' && (
+                    <Tooltip title={helperText}>
+                      <InfoIcon />
+                    </Tooltip>
+                  )}
+                </Typography>
+                {
+                  // display &&
+                  IsTree(collection) && (
+                    <TreeView
+                      className={styles.rootTree}
+                      defaultCollapseIcon={<ArrowDropDownIcon />}
+                      defaultExpandIcon={<ArrowRightIcon />}
+                      defaultEndIcon={<div style={{ width: 24 }} />}
                     >
-                      {collection.entries && collection.entries.map((entry) => {
-                        return (
-                          <FormControlLabel value={entry.id} control={<Radio />} label={entry.label} />
-                        );
-                      })}
-
-                    </RadioGroup>
-                  </FormControl>
-
-                )
-              }
-            </div>
-          );
-        })}
+                      {collection.entries &&
+                        collection.entries.map((entry) => {
+                          return (
+                            // @ts-ignore
+                            <StyledTreeItem
+                              key={entry.id}
+                              nodeId={entry.id}
+                              labelText={entry.label}
+                              hideCheckBox
+                            >
+                              {entry.subEntries &&
+                                entry.subEntries.map((subEntry) => {
+                                  return (
+                                    <StyledTreeItem
+                                      key={subEntry.id}
+                                      // @ts-ignore
+                                      nodeId={subEntry.id}
+                                      labelText={subEntry.label}
+                                      formValues={updateFormValues}
+                                      categoryChange={formChangeHandler}
+                                      checked={
+                                        formValues &&
+                                        formValues.entries &&
+                                        formValues.entries.includes(subEntry.id)
+                                      }
+                                    />
+                                  );
+                                })}
+                            </StyledTreeItem>
+                          );
+                        })}
+                    </TreeView>
+                  )
+                }
+                {
+                  // display &&
+                  !IsTree(collection) && collection.multipleSelection && (
+                    <List>
+                      {collection.entries &&
+                        collection.entries.map((entry) => {
+                          return (
+                            <ListItem key={entry.id} role={undefined} dense>
+                              <ListItemText primary={entry.label} />
+                              <Checkbox
+                                edge="start"
+                                tabIndex={-1}
+                                disableRipple
+                                onChange={formChangeHandler}
+                                name="entries"
+                                value={entry.id}
+                                // @ts-ignore
+                                checked={
+                                  formValues &&
+                                  formValues.entries &&
+                                  formValues.entries.includes(entry.id)
+                                }
+                                onClick={(e) => e.stopPropagation()}
+                              />
+                            </ListItem>
+                          );
+                        })}
+                    </List>
+                  )
+                }
+                {
+                  // display &&
+                  !IsTree(collection) && !collection.multipleSelection && (
+                    <FormControl component="fieldset">
+                      <RadioGroup
+                        row
+                        aria-label="entries"
+                        name="entries"
+                        defaultValue={defaultValue}
+                        onChange={formChangeHandler}
+                      >
+                        {collection.entries &&
+                          collection.entries.map((entry) => {
+                            return (
+                              <FormControlLabel
+                                value={entry.id}
+                                control={<Radio />}
+                                label={entry.label}
+                              />
+                            );
+                          })}
+                      </RadioGroup>
+                    </FormControl>
+                  )
+                }
+              </div>
+            );
+          })}
 
         <Grid item xs={12}>
           <ClassicButton

@@ -1,9 +1,7 @@
 /* eslint react/prop-types: 0 */
 import { ChangeEvent, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import {
-  Box, Grid, makeStyles, Typography,
-} from '@material-ui/core';
+import { Box, Grid, makeStyles, Typography } from '@material-ui/core';
 import TextField from 'components/form/TextField';
 import ClassicButton from 'components/buttons/ClassicButton';
 import { withApollo } from 'hoc/withApollo';
@@ -24,17 +22,15 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 type FormItemProps = {
-  label: string
-  inputName: string
-  formChangeHandler: (event: ChangeEvent) => void
-  value: string
-  autoComplete?: string
-}
+  label: string;
+  inputName: string;
+  formChangeHandler: (event: ChangeEvent) => void;
+  value: string;
+  autoComplete?: string;
+};
 
 const FormItem = (props: FormItemProps) => {
-  const {
-    label, inputName, formChangeHandler, value, autoComplete,
-  } = props;
+  const { label, inputName, formChangeHandler, value, autoComplete } = props;
   const styles = useStyles();
 
   return (
@@ -42,8 +38,7 @@ const FormItem = (props: FormItemProps) => {
       <Grid item sm={3} xs={12}>
         <Typography variant="body1" color="primary" className={styles.label}>
           {label}
-          {/* @ts-ignore */}
-          :
+          {/* @ts-ignore */}:
         </Typography>
       </Grid>
       <Grid item sm={9} xs={12}>
@@ -81,8 +76,8 @@ const validationRules: ValidationRules = {
 };
 
 const UPDATE_USER_PASSWORD = gql`
-  mutation updateUserPassword($formValues: UpdatePasswordInfos,$userId: Int!) {
-    updateUserPassword(updatePasswordInfos: $formValues,userId: $userId)
+  mutation updateUserPassword($formValues: UpdatePasswordInfos, $userId: Int!) {
+    updateUserPassword(updatePasswordInfos: $formValues, userId: $userId)
   }
 `;
 
@@ -153,8 +148,8 @@ const UserInfosForm = () => {
             <br />
             <Typography
               color={
-                checkPssdValidation('newPassword1', 'min')
-                && checkPssdValidation('newPassword1', 'max')
+                checkPssdValidation('newPassword1', 'min') &&
+                checkPssdValidation('newPassword1', 'max')
                   ? 'secondary'
                   : 'primary'
               }
@@ -211,8 +206,8 @@ const UserInfosForm = () => {
             <br />
             <Typography
               color={
-                checkPssdValidation('newPassword2', 'equalTo')
-                && formValues?.newPassword1?.length > 0
+                checkPssdValidation('newPassword2', 'equalTo') &&
+                formValues?.newPassword1?.length > 0
                   ? 'secondary'
                   : 'primary'
               }
@@ -230,7 +225,7 @@ const UserInfosForm = () => {
     <FormController
       render={Form}
       withQuery
-        // @ts-ignore
+      // @ts-ignore
       queryOptions={queryOptions}
       validationRules={validationRules}
     />
