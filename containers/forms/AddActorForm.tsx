@@ -60,6 +60,7 @@ import {
 import useImageReader from '../../hooks/useImageReader';
 import useDnDStateManager from '../../hooks/useDnDStateManager';
 import withDndProvider from '../../hoc/withDnDProvider';
+import Entries from './Entries';
 
 const CREATE_ACTOR = gql`
   mutation createActor(
@@ -968,38 +969,40 @@ const AddActorForm = () => {
                   {
                     // display &&
                     IsTree(collection) && (
-                      <TreeView
-                        className={classes.rootTree}
-                        defaultCollapseIcon={<ArrowDropDownIcon />}
-                        defaultExpandIcon={<ArrowRightIcon />}
-                        defaultEndIcon={<div style={{ width: 24 }} />}
-                      >
-                        {collection.entries &&
-                          collection.entries.map((entry) => {
-                            return (
-                              // @ts-ignore
-                              <StyledTreeItem
-                                key={entry.id}
-                                nodeId={entry.id}
-                                labelText={entry.label}
-                                hideCheckBox
-                              >
-                                {entry.subEntries &&
-                                  entry.subEntries.map((subEntry) => {
-                                    return (
-                                      <StyledTreeItem
-                                        key={subEntry.id}
-                                        // @ts-ignore
-                                        nodeId={subEntry.id}
-                                        labelText={subEntry.label}
-                                        categoryChange={formChangeHandler}
-                                      />
-                                    );
-                                  })}
-                              </StyledTreeItem>
-                            );
-                          })}
-                      </TreeView>
+                      <Entries>
+                        <TreeView
+                          className={classes.rootTree}
+                          defaultCollapseIcon={<ArrowDropDownIcon />}
+                          defaultExpandIcon={<ArrowRightIcon />}
+                          defaultEndIcon={<div style={{ width: 24 }} />}
+                        >
+                          {collection.entries &&
+                            collection.entries.map((entry) => {
+                              return (
+                                // @ts-ignore
+                                <StyledTreeItem
+                                  key={entry.id}
+                                  nodeId={entry.id}
+                                  labelText={entry.label}
+                                  hideCheckBox
+                                >
+                                  {entry.subEntries &&
+                                    entry.subEntries.map((subEntry) => {
+                                      return (
+                                        <StyledTreeItem
+                                          key={subEntry.id}
+                                          // @ts-ignore
+                                          nodeId={subEntry.id}
+                                          labelText={subEntry.label}
+                                          categoryChange={formChangeHandler}
+                                        />
+                                      );
+                                    })}
+                                </StyledTreeItem>
+                              );
+                            })}
+                        </TreeView>
+                      </Entries>
                     )
                   }
 

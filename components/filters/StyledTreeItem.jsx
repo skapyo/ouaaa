@@ -6,6 +6,7 @@ import TreeItem from '@material-ui/lab/TreeItem';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import ParentFilterContext from './ParentFilterContext';
+import { EntriesContext } from 'containers/forms/Entries';
 
 const useTreeItemStyles = makeStyles((theme) => ({
   root: {
@@ -66,6 +67,13 @@ function StyledTreeItem(props) {
   } = props;
 
   const context = useContext(ParentFilterContext);
+  const entriesContext = useContext(EntriesContext);
+
+  const isThisEntryNotInTopSEO =
+    entriesContext.getList().indexOf(parseInt(other.nodeId, 10)) >= 3;
+
+  if (isThisEntryNotInTopSEO)
+    console.log('This is exceeding : ' + other.nodeId);
 
   const handleCheckboxChange = (event) => {
     const checkStatus = event.target.checked;
@@ -76,6 +84,9 @@ function StyledTreeItem(props) {
       context.checkHandleToggle(event);
     } else {
       categoryChange(event);
+      checkStatus
+        ? entriesContext.addCheckedCheckbox(parseInt(other.nodeId, 10))
+        : entriesContext.removeCheckedCheckbox(parseInt(other.nodeId), 10);
       if (typeof context.handleChildCheckboxChange !== 'undefined') {
         context.handleChildCheckboxChange(checkStatus, index);
       }
