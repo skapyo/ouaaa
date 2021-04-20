@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 
 import PropTypes from 'prop-types';
-import { Checkbox } from '@material-ui/core';
+import { Checkbox, TextField } from '@material-ui/core';
 import TreeItem from '@material-ui/lab/TreeItem';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
@@ -49,6 +49,9 @@ const useTreeItemStyles = makeStyles((theme) => ({
     fontWeight: 'inherit',
     flexGrow: 1,
   },
+  entryDescription: {
+    width: '100%',
+  },
 }));
 
 function StyledTreeItem(props) {
@@ -92,30 +95,44 @@ function StyledTreeItem(props) {
       }
     }
   };
-
+  const handleDescriptionChange = (event) => {
+    debugger;
+   
+  };
   //
   return (
     <TreeItem
-      label={
-        <div className={classes.labelRoot}>
-          <Typography variant="body2" className={classes.labelText}>
-            {labelText}
-          </Typography>
-          {!hideCheckBox && (
-            <Checkbox
-              edge="start"
-              tabIndex={-1}
-              disableRipple
-              name="entries"
-              value={other.nodeId}
-              style={{ color: '#019077' }}
-              checked={checked}
-              onChange={handleCheckboxChange}
-              onClick={(e) => e.stopPropagation()}
-            />
+      label={(
+        <div>
+          <div className={classes.labelRoot}>
+            <Typography variant="body2" className={classes.labelText}>
+              {labelText}
+            </Typography>
+            {!hideCheckBox && (
+              <Checkbox
+                edge="start"
+                tabIndex={-1}
+                disableRipple
+                name="entries"
+                value={other.nodeId}
+                style={{ color: '#019077' }}
+                checked={checked}
+                onChange={handleCheckboxChange}
+                onClick={(e) => e.stopPropagation()}
+              />
+            )}
+          </div>
+          {!hideCheckBox && checked && (
+          <TextField
+            className={classes.entryDescription}
+            variant="outlined"
+            name={`link${other.nodeId}`}
+            placeholder="Votre lien avec le sujet"
+            onChange={handleDescriptionChange}
+          />
           )}
         </div>
-      }
+      )}
       style={{
         '--tree-view-color': color,
         '--tree-view-bg-color': bgColor,

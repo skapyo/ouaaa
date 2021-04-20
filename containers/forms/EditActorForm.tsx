@@ -736,7 +736,6 @@ const EditActorForm = (props) => {
           };
         });
       }
-
       edit({
         variables: {
           formValues,
