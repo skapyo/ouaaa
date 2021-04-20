@@ -131,14 +131,13 @@ const withMutation = (FormComponent: RenderCallback) => (
     let next = false;
     if (queryOptions.mutationResultControl == 'builtin') {
       if (
-        data?.[queryOptions.resultLabel] &&
-        typeof error === 'undefined' &&
-        !error
-      )
-        next = true;
+        data?.[queryOptions.resultLabel]
+        && typeof error === 'undefined'
+        && !error
+      ) next = true;
     } else {
-      queryOptions.mutationResultControl &&
-        queryOptions.mutationResultControl(formValues, data, error);
+      queryOptions.mutationResultControl
+        && queryOptions.mutationResultControl(formValues, data, error);
     }
 
     if (next) {
@@ -191,7 +190,39 @@ const FormController = (props: FormControllerProps, ...otherprops: any[]) => {
     (e) => {
       // if there an only rule on the field
       const rule = validationRules?.[e.target.name];
-      if (rule?.rule === ValidationRuleType.only) {
+      // Custom code for entry
+      if (e.entryId !== undefined) {
+        let entriesWithInformationArray;
+        if (formValues.entriesWithInformation !== undefined) {
+          entriesWithInformationArray = formValues.entriesWithInformation;
+        } else {
+          entriesWithInformationArray = [];
+        }
+        let existingEntryInformation;
+        let index = 0;
+        entriesWithInformationArray.map(
+          (linkDescription) => {
+            index += 1;
+            if (linkDescription.entryId === e.entryId) {
+              existingEntryInformation = linkDescription;
+            }
+            return '';
+          },
+        );
+        if (e.target.type === 'checkbox' && !e.target.checked) {
+          entriesWithInformationArray.splice(index - 1, 1);
+        }
+
+        if (existingEntryInformation) {
+          if (e.linkDescription !== undefined) {
+            existingEntryInformation.linkDescription = e.linkDescription;
+          }
+        } else {
+          const data = { entryId: e.entryId, linkDescription: e.linkDescription, topSEO: e.topSEO };
+          entriesWithInformationArray.push(data);
+        }
+        setFormValue({ ...formValues, entriesWithInformation: entriesWithInformationArray });
+      } else if (rule?.rule === ValidationRuleType.only) {
         if (rule.type === 'number') {
           const isnum = /^\d+$/.test(e.target.value);
 

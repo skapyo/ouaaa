@@ -205,9 +205,9 @@ const Newsletter = () => {
             <ClassicButton
               variant="contained"
               className={styles.searchIcon}
-              onClick={subscription}
+                 onClick={subscription}
               disabled={!validationResult?.global}
-            >
+            > 
               <SearchIcon />
             </ClassicButton>
           </div>

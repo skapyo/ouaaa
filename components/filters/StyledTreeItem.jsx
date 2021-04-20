@@ -1,12 +1,14 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 
 import PropTypes from 'prop-types';
 import { Checkbox, TextField } from '@material-ui/core';
 import TreeItem from '@material-ui/lab/TreeItem';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import ParentFilterContext from './ParentFilterContext';
 import { EntriesContext } from 'containers/forms/Entries';
+import Tooltip from '@material-ui/core/Tooltip';
+import InfoIcon from '@material-ui/icons/Info';
+import ParentFilterContext from './ParentFilterContext';
 
 const useTreeItemStyles = makeStyles((theme) => ({
   root: {
@@ -72,21 +74,21 @@ function StyledTreeItem(props) {
   const context = useContext(ParentFilterContext);
   const entriesContext = useContext(EntriesContext);
 
-  const isThisEntryNotInTopSEO =
-    entriesContext.getList().indexOf(parseInt(other.nodeId, 10)) >= 3;
+  const isThisEntryNotInTopSEO = entriesContext.getList().indexOf(parseInt(other.nodeId, 10)) >= 3;
 
-  if (isThisEntryNotInTopSEO)
-    console.log('This is exceeding : ' + other.nodeId);
-
+  const [ischecked, setIschecked] = useState(checked);
   const handleCheckboxChange = (event) => {
     const checkStatus = event.target.checked;
+    setIschecked(checkStatus);
     const index = parseInt(id, 10);
-
     if (isParent) {
       context.handleParentCheckboxChange(checkStatus);
       context.checkHandleToggle(event);
     } else {
-      categoryChange(event);
+      const eventEntry = event;
+      eventEntry.entryId = other.nodeId;
+      eventEntry.topSEO = !isThisEntryNotInTopSEO;
+      categoryChange(eventEntry);
       checkStatus
         ? entriesContext.addCheckedCheckbox(parseInt(other.nodeId, 10))
         : entriesContext.removeCheckedCheckbox(parseInt(other.nodeId), 10);
@@ -96,8 +98,11 @@ function StyledTreeItem(props) {
     }
   };
   const handleDescriptionChange = (event) => {
-    debugger;
-   
+    const eventEntry = event;
+    eventEntry.entryId = other.nodeId;
+    eventEntry.topSEO = !isThisEntryNotInTopSEO;
+    eventEntry.linkDescription = event.target.value;
+    categoryChange(event);
   };
   //
   return (
@@ -108,6 +113,11 @@ function StyledTreeItem(props) {
             <Typography variant="body2" className={classes.labelText}>
               {labelText}
             </Typography>
+            {isThisEntryNotInTopSEO && (
+            <Tooltip title="Seuls les 3 premiers sujets seront utilsés pour le référencement">
+              <InfoIcon />
+            </Tooltip>
+            )}
             {!hideCheckBox && (
               <Checkbox
                 edge="start"
@@ -121,12 +131,13 @@ function StyledTreeItem(props) {
                 onClick={(e) => e.stopPropagation()}
               />
             )}
+
           </div>
-          {!hideCheckBox && checked && (
+          {ischecked && !hideCheckBox && (
           <TextField
             className={classes.entryDescription}
             variant="outlined"
-            name={`link${other.nodeId}`}
+            name="linkDescription"
             placeholder="Votre lien avec le sujet"
             onChange={handleDescriptionChange}
           />
