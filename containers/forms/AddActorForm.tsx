@@ -238,7 +238,6 @@ const FormItem = (props: FormItemProps) => {
     errorBool,
     errorText,
     helperText,
-    inputProps,
   } = props;
   return (
     <TextField
@@ -253,7 +252,6 @@ const FormItem = (props: FormItemProps) => {
       required={required}
       error={errorBool}
       helperText={errorBool ? errorText : helperText}
-      inputProps={inputProps}
     />
   );
 };
