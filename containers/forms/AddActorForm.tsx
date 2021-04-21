@@ -238,6 +238,7 @@ const FormItem = (props: FormItemProps) => {
     errorBool,
     errorText,
     helperText,
+    inputProps,
   } = props;
   return (
     <TextField
@@ -252,6 +253,7 @@ const FormItem = (props: FormItemProps) => {
       required={required}
       error={errorBool}
       helperText={errorBool ? errorText : helperText}
+      inputProps={inputProps}
     />
   );
 };
@@ -351,6 +353,10 @@ const AddActorForm = () => {
     phone: {
       rule: ValidationRuleType.only && ValidationRuleType.maxLength,
       maxLimit: 10,
+    },
+    shortDescription: {
+      rule: ValidationRuleType.only && ValidationRuleType.maxLength,
+      maxLimit: 90,
     },
     description: {
       rule: ValidationRuleType.required && ValidationRuleType.minLength,
@@ -879,8 +885,10 @@ const AddActorForm = () => {
             formChangeHandler={formChangeHandler}
             value={formValues.shortDescription}
             required={false}
-            errorBool={false}
-            errorText=""
+            errorBool={
+              !validationResult?.global && !!validationResult?.result.shortDescription
+            }
+            errorText="90 caractères maximum"
           />
         </Tooltip>
 
@@ -985,6 +993,7 @@ const AddActorForm = () => {
                                   nodeId={entry.id}
                                   labelText={entry.label}
                                   hideCheckBox
+                                  isForm
                                 >
                                   {entry.subEntries &&
                                     entry.subEntries.map((subEntry) => {
@@ -995,6 +1004,7 @@ const AddActorForm = () => {
                                           nodeId={subEntry.id}
                                           labelText={subEntry.label}
                                           categoryChange={formChangeHandler}
+                                          isForm
                                         />
                                       );
                                     })}

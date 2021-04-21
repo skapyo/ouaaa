@@ -68,14 +68,17 @@ function StyledTreeItem(props) {
     checked,
     id,
     isParent,
+    isForm,
     ...other
   } = props;
 
   const context = useContext(ParentFilterContext);
   const entriesContext = useContext(EntriesContext);
-
-  const isThisEntryNotInTopSEO = entriesContext.getList().indexOf(parseInt(other.nodeId, 10)) >= 3;
-
+  let isThisEntryNotInTopSEO = false;
+  if (entriesContext !== undefined) {
+    isThisEntryNotInTopSEO = entriesContext.getList().indexOf(parseInt(other.nodeId, 10))
+    >= 3;
+  }
   const [ischecked, setIschecked] = useState(checked);
   const handleCheckboxChange = (event) => {
     const checkStatus = event.target.checked;
@@ -86,12 +89,16 @@ function StyledTreeItem(props) {
       context.checkHandleToggle(event);
     } else {
       const eventEntry = event;
-      eventEntry.entryId = other.nodeId;
-      eventEntry.topSEO = !isThisEntryNotInTopSEO;
+      if (entriesContext) {
+        
+        checkStatus
+          ? entriesContext.addCheckedCheckbox(parseInt(other.nodeId, 10))
+          : entriesContext.removeCheckedCheckbox(parseInt(other.nodeId), 10);
+
+        eventEntry.entryId = other.nodeId;
+        eventEntry.topSEO = entriesContext.getList().indexOf(parseInt(other.nodeId, 10)) >= 3;
+      }
       categoryChange(eventEntry);
-      checkStatus
-        ? entriesContext.addCheckedCheckbox(parseInt(other.nodeId, 10))
-        : entriesContext.removeCheckedCheckbox(parseInt(other.nodeId), 10);
       if (typeof context.handleChildCheckboxChange !== 'undefined') {
         context.handleChildCheckboxChange(checkStatus, index);
       }
@@ -99,9 +106,9 @@ function StyledTreeItem(props) {
   };
   const handleDescriptionChange = (event) => {
     const eventEntry = event;
-    eventEntry.entryId = other.nodeId;
-    eventEntry.topSEO = !isThisEntryNotInTopSEO;
-    eventEntry.linkDescription = event.target.value;
+    eventEntry.target.entryId = other.nodeId;
+    eventEntry.target.topSEO = !isThisEntryNotInTopSEO;
+    eventEntry.target.linkDescription = event.target.value;
     categoryChange(event);
   };
   //
@@ -113,12 +120,12 @@ function StyledTreeItem(props) {
             <Typography variant="body2" className={classes.labelText}>
               {labelText}
             </Typography>
-            {isThisEntryNotInTopSEO && (
+            {isForm && isThisEntryNotInTopSEO && (
             <Tooltip title="Seuls les 3 premiers sujets seront utilsés pour le référencement">
               <InfoIcon />
             </Tooltip>
             )}
-            {!hideCheckBox && (
+            { !hideCheckBox && (
               <Checkbox
                 edge="start"
                 tabIndex={-1}
@@ -126,14 +133,14 @@ function StyledTreeItem(props) {
                 name="entries"
                 value={other.nodeId}
                 style={{ color: '#019077' }}
-                checked={checked}
+                checked={ischecked}
                 onChange={handleCheckboxChange}
                 onClick={(e) => e.stopPropagation()}
               />
             )}
 
           </div>
-          {ischecked && !hideCheckBox && (
+          {isForm && ischecked && !hideCheckBox && (
           <TextField
             className={classes.entryDescription}
             variant="outlined"
@@ -171,6 +178,7 @@ StyledTreeItem.propTypes = {
   hideCheckBox: PropTypes.boolean,
   isParent: PropTypes.boolean,
   id: PropTypes.string,
+  isForm: PropTypes.boolean,
 };
 
 export default StyledTreeItem;

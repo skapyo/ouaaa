@@ -23,6 +23,8 @@ import gql from 'graphql-tag';
 import { useQuery } from '@apollo/client';
 import { makeStyles } from '@material-ui/core/styles';
 import ParentContainer from './ParentContainer';
+import Entries from 'containers/forms/Entries';
+
 
 const useStyles = makeStyles({
   root: {
@@ -172,23 +174,25 @@ function Filters(props) {
                   {collection.label}
                 </Typography>
               </ExpansionPanelSummary>
-
-              {
-                // display &&
-                IsTree(collection) &&
-                  collection.entries &&
-                  collection.entries.sort(compare).map((entry) => {
-                    return (
-                      <ParentContainer
-                        key={entry.id}
-                        entry={entry}
-                        subEntries={entry.subEntries}
-                        categoryChange={categoryChange}
-                        parentCategoryChange={parentCategoryChange}
-                      />
-                    );
-                  })
-              }
+              <Entries>
+                {
+                  // display &&
+                  IsTree(collection) &&
+                    collection.entries &&
+                    collection.entries.sort(compare).map((entry) => {
+                      return (
+                        <ParentContainer
+                          key={entry.id}
+                          entry={entry}
+                          subEntries={entry.subEntries}
+                          categoryChange={categoryChange}
+                          parentCategoryChange={parentCategoryChange}
+                          isForm={false}
+                        />
+                      );
+                    })
+                }
+              </Entries>
               <ExpansionPanelDetails className={classes.entriesExpend}>
                 {!IsTree(collection) && (
                   <List className={classes.listEntries}>

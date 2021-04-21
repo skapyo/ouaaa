@@ -42,6 +42,7 @@ function ParentContainer(props) {
     entry,
     categoryChange,
     parentCategoryChange,
+    isForm,
     ...other
   } = props;
 
@@ -188,6 +189,7 @@ function ParentContainer(props) {
             defaultCollapseIcon={<ArrowDropDownIcon />}
             defaultExpandIcon={<ArrowRightIcon />}
             defaultEndIcon={<div style={{ width: 24 }} />}
+            
           >
             <StyledTreeItem
               key={parentCheckbox.id}
@@ -197,6 +199,7 @@ function ParentContainer(props) {
               parentCategoryChange={parentCategoryChange}
               isParent
               checked={parentCheckboxChecked}
+              isForm={isForm}
             >
               {checkboxes.map((subEntry) => {
                 return (

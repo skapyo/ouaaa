@@ -191,7 +191,7 @@ const FormController = (props: FormControllerProps, ...otherprops: any[]) => {
       // if there an only rule on the field
       const rule = validationRules?.[e.target.name];
       // Custom code for entry
-      if (e.entryId !== undefined) {
+      if (e.target.entryId !== undefined) {
         let entriesWithInformationArray;
         if (formValues.entriesWithInformation !== undefined) {
           entriesWithInformationArray = formValues.entriesWithInformation;
@@ -203,22 +203,26 @@ const FormController = (props: FormControllerProps, ...otherprops: any[]) => {
         entriesWithInformationArray.map(
           (linkDescription) => {
             index += 1;
-            if (linkDescription.entryId === e.entryId) {
+            if (linkDescription.entryId === e.target.entryId) {
               existingEntryInformation = linkDescription;
             }
             return '';
           },
         );
         if (e.target.type === 'checkbox' && !e.target.checked) {
-          entriesWithInformationArray.splice(index - 1, 1);
+          entriesWithInformationArray.splice(index, 1);
         }
 
         if (existingEntryInformation) {
-          if (e.linkDescription !== undefined) {
-            existingEntryInformation.linkDescription = e.linkDescription;
+          if (e.target.linkDescription !== undefined) {
+            existingEntryInformation.linkDescription = e.target.linkDescription;
           }
         } else {
-          const data = { entryId: e.entryId, linkDescription: e.linkDescription, topSEO: e.topSEO };
+          const data = {
+            entryId: e.target.entryId,
+            linkDescription: e.target.linkDescription,
+            topSEO: e.target.topSEO,
+          };
           entriesWithInformationArray.push(data);
         }
         setFormValue({ ...formValues, entriesWithInformation: entriesWithInformationArray });
