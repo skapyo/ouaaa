@@ -865,6 +865,7 @@ const EditActorForm = (props) => {
       entriesWithInformationArray.map(
         (linkDescription) => {
           index += 1;
+           // @ts-ignore
           if (linkDescription.entryId === id) {
             existingEntryInformation = linkDescription;
           }
