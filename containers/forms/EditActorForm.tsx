@@ -860,6 +860,7 @@ const EditActorForm = (props) => {
         // @ts-ignore
         entriesWithInformation.push({ entryId: actorentry.id, linkDescription: actorentry.actorEntries.linkDescription, topSEO: actorentry.actorEntries.topSEO });
         if (actorentry.actorEntries.topSEO !== null) {
+           // @ts-ignore
           initentriesWithInformation.push(parseInt(actorentry.id, 10));
         }
       });
@@ -1234,6 +1235,7 @@ const EditActorForm = (props) => {
                   {
                     // display &&
                     IsTree(collection) && (
+                       // @ts-ignore
                       <Entries initValues={initentriesWithInformation}>
                         <TreeView
                           className={styles.rootTree}

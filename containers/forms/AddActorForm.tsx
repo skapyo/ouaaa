@@ -975,7 +975,7 @@ const AddActorForm = () => {
                   {
                     // display &&
                     IsTree(collection) && (
-                      <Entries>
+                      <Entries initValues={[]}>
                         <TreeView
                           className={classes.rootTree}
                           defaultCollapseIcon={<ArrowDropDownIcon />}

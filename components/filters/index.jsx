@@ -175,7 +175,7 @@ function Filters(props) {
                   {collection.label}
                 </Typography>
               </ExpansionPanelSummary>
-              <Entries>
+              <Entries initValues={[]}>
                 {
                   // display &&
                   IsTree(collection) &&
