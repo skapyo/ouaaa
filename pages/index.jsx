@@ -118,8 +118,8 @@ const Index = () => {
           <Container className={[styles.geoContainer]}>
             <Typography className={[styles.align]}>
               Le site a vocation à répertorier les acteurs de la transition sur
-              les 3 communautés de communes constituant l'Aunis : la CDA de la
-              Rochelle, la CDC Aunis Atlantique et la CDC Aunis Sud. Ainsi,
+              les 4 communautés de communes constituant l'Aunis : la CDA de la
+              Rochelle, la CDC Aunis Atlantique, la CDC de l'ile de ré, et la CDC Aunis Sud. Ainsi,
               l’information sera disponible aussi bien pour les habitants des
               zones les plus urbaines : La Rochelle et sa première couronne
               (Aytré, Lagord, Périgny, Angoulins), Chatelaillon, Surgères,

@@ -184,6 +184,7 @@ const GET_ACTOR = gql`
         actorEntries {
         linkDescription,
         topSEO,
+        id,
        }
         parentEntry {
           id
@@ -194,6 +195,11 @@ const GET_ACTOR = gql`
           id
           code
           label
+          actorEntries {
+          linkDescription,
+          topSEO,
+          id,
+          }
         }
         collection {
           id
@@ -814,6 +820,7 @@ const EditActorForm = (props) => {
     };
 
     const [firstRender, setFirstRender] = useState(true);
+    const [initentriesWithInformation, setInitentriesWithInformation] = useState([String]);
 
     const updateFormValues = () => {
       formValues.name = actorData.actor.name;
@@ -847,12 +854,14 @@ const EditActorForm = (props) => {
 
       // @ts-ignore
       formValues.entries = entries;
-      
+
       const entriesWithInformation = [];
       actorData.actor.entries.forEach((actorentry) => {
-        debugger;
         // @ts-ignore
         entriesWithInformation.push({ entryId: actorentry.id, linkDescription: actorentry.actorEntries.linkDescription, topSEO: actorentry.actorEntries.topSEO });
+        if (actorentry.actorEntries.topSEO !== null) {
+          initentriesWithInformation.push(parseInt(actorentry.id, 10));
+        }
       });
 
       // @ts-ignore
@@ -865,7 +874,7 @@ const EditActorForm = (props) => {
       entriesWithInformationArray.map(
         (linkDescription) => {
           index += 1;
-           // @ts-ignore
+          // @ts-ignore
           if (linkDescription.entryId === id) {
             existingEntryInformation = linkDescription;
           }
@@ -873,9 +882,9 @@ const EditActorForm = (props) => {
         },
       );
       if (existingEntryInformation !== undefined) {
-        return true;
+        return existingEntryInformation;
       }
-      return false;
+      return null;
     };
 
     if (firstRender && !actorLoading && !actorError) {
@@ -1225,7 +1234,7 @@ const EditActorForm = (props) => {
                   {
                     // display &&
                     IsTree(collection) && (
-                      <Entries>
+                      <Entries initValues={initentriesWithInformation}>
                         <TreeView
                           className={styles.rootTree}
                           defaultCollapseIcon={<ArrowDropDownIcon />}
@@ -1253,11 +1262,12 @@ const EditActorForm = (props) => {
                                           labelText={subEntry.label}
                                           formValues={updateFormValues}
                                           categoryChange={formChangeHandler}
+                                          linkDescription={isEntriesWithInformationContains(formValues.entriesWithInformation, subEntry.id) !== null ? isEntriesWithInformationContains(formValues.entriesWithInformation, subEntry.id).linkDescription : ''}
                                           isForm
                                           checked={
                                             formValues
                                             && formValues.entriesWithInformation
-                                            && isEntriesWithInformationContains(formValues.entriesWithInformation, subEntry.id)
+                                            && isEntriesWithInformationContains(formValues.entriesWithInformation, subEntry.id) !== null
                                           }
                                         />
                                       );

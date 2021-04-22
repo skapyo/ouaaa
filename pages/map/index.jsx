@@ -218,7 +218,7 @@ const categories = {
 const otherCategories = {
   "Territoire d'actions": [],
   "Statut d'acteur": [],
-  'Public principale visé': [],
+  'Public principal visé': [],
   'Collectif & réseaux': [],
 };
 

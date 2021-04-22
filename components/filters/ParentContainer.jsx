@@ -71,13 +71,12 @@ function ParentContainer(props) {
       return a.position > b.position;
     };
 
-    entry.subEntries.sort(compare).map(({ id, label }) => {
+    entry.subEntries.sort(compare).map(({ id, label, actorEntries }) => {
       newCheckboxesState.push({
         id,
         label,
         checked: false,
       });
-
       newNodesArray.push(id);
     });
 
@@ -189,7 +188,7 @@ function ParentContainer(props) {
             defaultCollapseIcon={<ArrowDropDownIcon />}
             defaultExpandIcon={<ArrowRightIcon />}
             defaultEndIcon={<div style={{ width: 24 }} />}
-            
+
           >
             <StyledTreeItem
               key={parentCheckbox.id}

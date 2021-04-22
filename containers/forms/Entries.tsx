@@ -1,16 +1,16 @@
 import * as React from 'react';
 
 export interface EntriesProps {
-  children: JSX.Element;
+  children: JSX.Element,
+  initValues : Array<number>;
 }
 export const EntriesContext = React.createContext({});
 
-const Entries: React.FunctionComponent<EntriesProps> = ({ children }) => {
-  let [checkedCheckboxes, setCheckedCheckboxes]: [
+const Entries: React.FunctionComponent<EntriesProps> = ({ children, initValues }) => {
+  const [checkedCheckboxes, setCheckedCheckboxes]: [
     Array<number>,
     Function,
-  ] = React.useState([]);
-
+  ] = React.useState(initValues !== undefined ? initValues : []);
   const addCheckedCheckbox: Function = (item: number) => {
     setCheckedCheckboxes([...checkedCheckboxes, item]);
     if (checkedCheckboxes.length >= 3) return true;

@@ -54,6 +54,10 @@ const useTreeItemStyles = makeStyles((theme) => ({
   entryDescription: {
     width: '100%',
   },
+  checkbox: {
+    padding: '1px',
+    margin: '0px 0px 0px 3px',
+  },
 }));
 
 function StyledTreeItem(props) {
@@ -77,8 +81,9 @@ function StyledTreeItem(props) {
   let isThisEntryNotInTopSEO = false;
   if (entriesContext !== undefined) {
     isThisEntryNotInTopSEO = entriesContext.getList().indexOf(parseInt(other.nodeId, 10))
-    >= 3;
+    > 3;
   }
+
   const [ischecked, setIschecked] = useState(checked);
   const handleCheckboxChange = (event) => {
     const checkStatus = event.target.checked;
@@ -90,13 +95,15 @@ function StyledTreeItem(props) {
     } else {
       const eventEntry = event;
       if (entriesContext) {
-        
-        checkStatus
-          ? entriesContext.addCheckedCheckbox(parseInt(other.nodeId, 10))
-          : entriesContext.removeCheckedCheckbox(parseInt(other.nodeId), 10);
-
-        eventEntry.entryId = other.nodeId;
-        eventEntry.topSEO = entriesContext.getList().indexOf(parseInt(other.nodeId, 10)) >= 3;
+        let isTopSEO;
+        if (checkStatus) {
+          isTopSEO = !entriesContext.addCheckedCheckbox(parseInt(other.nodeId, 10));
+        } else {
+          entriesContext.removeCheckedCheckbox(parseInt(other.nodeId), 10);
+        }
+        eventEntry.target.entryId = other.nodeId;
+        eventEntry.target.topSEO = entriesContext.getList().indexOf(parseInt(other.nodeId, 10))
+        > 3;
       }
       categoryChange(eventEntry);
       if (typeof context.handleChildCheckboxChange !== 'undefined') {
@@ -107,7 +114,7 @@ function StyledTreeItem(props) {
   const handleDescriptionChange = (event) => {
     const eventEntry = event;
     eventEntry.target.entryId = other.nodeId;
-    eventEntry.target.topSEO = !isThisEntryNotInTopSEO;
+    // eventEntry.target.topSEO = !isThisEntryNotInTopSEO;
     eventEntry.target.linkDescription = event.target.value;
     categoryChange(event);
   };
@@ -132,9 +139,10 @@ function StyledTreeItem(props) {
                 disableRipple
                 name="entries"
                 value={other.nodeId}
-                style={{ color: '#019077' }}
+                className={classes.checkbox}
+                style={{ color: '#019077'}}
                 checked={ischecked}
-                onChange={handleCheckboxChange}
+                onChange={(e) => handleCheckboxChange(e)}
                 onClick={(e) => e.stopPropagation()}
               />
             )}
@@ -147,6 +155,8 @@ function StyledTreeItem(props) {
             name="linkDescription"
             placeholder="Votre lien avec le sujet"
             onChange={handleDescriptionChange}
+            value={other.linkDescription}
+            linkDescription
           />
           )}
         </div>

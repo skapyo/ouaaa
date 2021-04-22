@@ -39,6 +39,7 @@ const useStyles = makeStyles({
     '& input': {
       boxShadow: 'initial!important',
     },
+    width: '100%',
   },
   listItem: {
     paddingTop: '0px',
@@ -59,8 +60,8 @@ const useStyles = makeStyles({
   entries: {
     padding: '0px 5px 0px 5px!important',
   },
-  postCode: {
-    width: '100%',
+  expansionPanel:{
+    margin: "inherit!important"
   },
 });
 
@@ -165,7 +166,7 @@ function Filters(props) {
             return a.position > b.position;
           };
           return (
-            <ExpansionPanel noPadding>
+            <ExpansionPanel noPadding className={classes.expansionPanel}>
               <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
                 <Typography
                   className={classes.collectionLabel}
