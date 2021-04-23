@@ -191,7 +191,6 @@ const FormController = (props: FormControllerProps, ...otherprops: any[]) => {
       // if there an only rule on the field
       const rule = validationRules?.[e.target.name];
       // Custom code for entry
-      debugger;
       if (e.target.entryId !== undefined) {
         let entriesWithInformationArray;
         if (formValues.entriesWithInformation !== undefined) {
@@ -214,7 +213,7 @@ const FormController = (props: FormControllerProps, ...otherprops: any[]) => {
             }
           },
         );
-        let categoriesArray ;
+        let categoriesArray;
         if (formValues.entries != undefined) {
           categoriesArray = formValues.entries;
         } else {
@@ -230,7 +229,6 @@ const FormController = (props: FormControllerProps, ...otherprops: any[]) => {
           categoriesArray.push(e.target.value);
         }
 
-  
         if (existingEntryInformation) {
           if (e.target.linkDescription !== undefined) {
             existingEntryInformation.linkDescription = e.target.linkDescription;
@@ -244,7 +242,6 @@ const FormController = (props: FormControllerProps, ...otherprops: any[]) => {
           entriesWithInformationArray.push(data);
         }
         setFormValue({ ...formValues, entriesWithInformation: entriesWithInformationArray, entries: categoriesArray });
-    
       } else if (rule?.rule === ValidationRuleType.only) {
         if (rule.type === 'number') {
           const isnum = /^\d+$/.test(e.target.value);
@@ -261,7 +258,7 @@ const FormController = (props: FormControllerProps, ...otherprops: any[]) => {
         }
       } else if (e.target.type == 'checkbox' || e.target.type == 'radio') {
         let categoriesArray;
-        debugger;
+
         if (formValues[e.target.name] != undefined) {
           categoriesArray = formValues[e.target.name];
         } else {
@@ -275,7 +272,42 @@ const FormController = (props: FormControllerProps, ...otherprops: any[]) => {
             categoriesArray.splice(index, 1);
           }
         }
-        setFormValue({ ...formValues, [e.target.name]: categoriesArray });
+        let entriesWithInformationArray;
+        if (formValues.entriesWithInformation !== undefined) {
+          entriesWithInformationArray = formValues.entriesWithInformation;
+        } else {
+          entriesWithInformationArray = [];
+        }
+        if (e.target.oldValueToRemove !== '') {
+
+          if (entriesWithInformationArray !== undefined) {
+            let existingEntryInformation;
+            let index = 0;
+            entriesWithInformationArray.map(
+              (linkDescription) => {
+                if (existingEntryInformation === undefined) {
+                  if (linkDescription.entryId === e.target.oldValueToRemove) {
+                    existingEntryInformation = linkDescription;
+                  } else {
+                    index += 1;
+                  }
+                  return '';
+                }
+              },
+            );
+            if (existingEntryInformation !== undefined) {
+              entriesWithInformationArray.splice(index, 1);
+              console.log(entriesWithInformationArray+ " " + index);
+            }
+          }
+          const index = categoriesArray.indexOf(e.target.oldValueToRemove);
+          if (index > -1) {
+            categoriesArray.splice(index, 1);
+            console.log(categoriesArray+ " " + index);
+          }
+        }
+
+        setFormValue({ ...formValues, entriesWithInformation: entriesWithInformationArray,  [e.target.name]: categoriesArray  });
       } else {
         setFormValue({ ...formValues, [e.target.name]: e.target.value });
       }

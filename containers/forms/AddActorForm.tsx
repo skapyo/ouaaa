@@ -404,7 +404,6 @@ const AddActorForm = () => {
     const isEntriesWithInformationContains: Function = (entriesWithInformationArray: Array<Object>, id : number) => {
       let existingEntryInformation;
       let index = 0;
-      debugger;
       entriesWithInformationArray.map(
         (linkDescription) => {
           index += 1;
@@ -420,7 +419,7 @@ const AddActorForm = () => {
       }
       return false;
     };
-    
+
     const {
       objectsList: objectsListLogo,
       moveObject: moveObjectLogo,

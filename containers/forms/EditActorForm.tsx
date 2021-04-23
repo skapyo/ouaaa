@@ -15,6 +15,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import TextField from 'components/form/TextField';
+import CustomRadioGroup from 'components/form/CustomRadioGroup';
 import ClassicButton from 'components/buttons/ClassicButton';
 import { withApollo } from 'hoc/withApollo';
 import { useRouter, withRouter } from 'next/router';
@@ -63,6 +64,7 @@ import withDndProvider from '../../hoc/withDnDProvider';
 import StyledTreeItem from '../../components/filters/StyledTreeItem';
 import Entries from './Entries';
 import RadioGroupForContext from './RadioGroupForContext';
+import UserInfosForm from './UserInfosForm';
 
 const EDIT_ACTOR = gql`
   mutation editActor(
@@ -208,6 +210,7 @@ const GET_ACTOR = gql`
           label
         }
       }
+      contact_id
       
     }
   }
@@ -877,7 +880,6 @@ const EditActorForm = (props) => {
     };
 
     const isEntriesWithInformationContains: Function = (entriesWithInformationArray: Array<Object>, id : number) => {
-      debugger;
       let existingEntryInformation;
       let index = 0;
       entriesWithInformationArray.map(
@@ -894,6 +896,17 @@ const EditActorForm = (props) => {
         return existingEntryInformation;
       }
       return null;
+    };
+    const getDefaultValueContact = () => {
+      let defaultUser;
+      if (dataUsers.users !== null) {
+        dataUsers.users.map((user) => {
+          if (user.id === actorData.actor.contact_id) {
+            defaultUser = user;
+          }
+        });
+      }
+      return defaultUser;
     };
 
     if (firstRender && !actorLoading && !actorError) {
@@ -1055,6 +1068,7 @@ const EditActorForm = (props) => {
                 // @ts-ignore
                 getOptionLabel={(option) => `${option.surname} ${option.lastname}`}
                 onChange={autocompleteHandler}
+                defaultValue={getDefaultValueContact()}
                 style={{ width: 300 }}
                 // eslint-disable-next-line react/jsx-props-no-spreading
                 renderInput={(params) => (
@@ -1322,26 +1336,11 @@ const EditActorForm = (props) => {
                     // display &&
                     !IsTree(collection) && !collection.multipleSelection && (
                       <RadioGroupForContext initValue={defaultValue}>
-                        <FormControl component="fieldset">
-                          <RadioGroup
-                            row
-                            aria-label="entries"
-                            name="entries"
-                            defaultValue={defaultValue}
-                            onChange={formChangeHandler}
-                          >
-                            {collection.entries
-                            && collection.entries.map((entry) => {
-                              return (
-                                <FormControlLabel
-                                  value={entry.id}
-                                  control={<Radio />}
-                                  label={entry.label}
-                                />
-                              );
-                            })}
-                          </RadioGroup>
-                        </FormControl>
+                        <CustomRadioGroup
+                          formChangeHandler={formChangeHandler}
+                          collection={collection}
+                          defaultValue={defaultValue}
+                        />
                       </RadioGroupForContext>
                     )
                   }
