@@ -10,6 +10,7 @@ import {
 import DeleteIcon from '@material-ui/icons/Delete';
 
 import InfoIcon from '@material-ui/icons/Info';
+import CustomRadioGroup from 'components/form/CustomRadioGroup';
 import Tooltip from '@material-ui/core/Tooltip';
 import Checkbox from '@material-ui/core/Checkbox';
 import List from '@material-ui/core/List';
@@ -61,6 +62,7 @@ import useImageReader from '../../hooks/useImageReader';
 import useDnDStateManager from '../../hooks/useDnDStateManager';
 import withDndProvider from '../../hoc/withDnDProvider';
 import Entries from './Entries';
+import RadioGroupForContext from './RadioGroupForContext';
 
 const CREATE_ACTOR = gql`
   mutation createActor(
@@ -632,13 +634,13 @@ const AddActorForm = () => {
       }
     };
 
-
-
     return (
       <Container component="main" maxWidth="sm">
         {dataAdminActors && dataAdminActors.actorsAdmin.length > 0 && (
           <Typography>
-            Bravo. Vous avez déjà créé des pages acteurs. <br />
+            Bravo. Vous avez déjà créé des pages acteurs.
+            {' '}
+            <br />
             Cliquez sur leurs noms pour éditer la page :
             {dataAdminActors.actorsAdmin.map((actor) => {
               {
@@ -649,7 +651,8 @@ const AddActorForm = () => {
                   {/* @ts-ignore */}
                   <Link href={`/actorAdmin/actor/${actor.id}`}>
                     {actor.name}
-                  </Link>{' '}
+                  </Link>
+                  {' '}
                 </Typography>
               );
             })}
@@ -662,7 +665,8 @@ const AddActorForm = () => {
         )}
         <Typography variant="h2" color="primary" className={styles.label}>
           {' '}
-          Coordonnées{' '}
+          Coordonnées
+          {' '}
         </Typography>
         <FormItem
           label="Nom de l'acteur"
@@ -682,9 +686,9 @@ const AddActorForm = () => {
           value={formValues.email}
           required
           errorBool={
-            !!formValues.email &&
-            !validationResult?.global &&
-            !!validationResult?.result.email
+            !!formValues.email
+            && !validationResult?.global
+            && !!validationResult?.result.email
           }
           errorText="Format de l'email invalide."
         />
@@ -724,33 +728,30 @@ const AddActorForm = () => {
               initialValue={
                 formValues.address
                   ? formValues.address
-                      .concat(' ')
-                      .concat(formValues.postCode)
-                      .concat(' ')
-                      .concat(formValues.city)
+                    .concat(' ')
+                    .concat(formValues.postCode)
+                    .concat(' ')
+                    .concat(formValues.city)
                   : formValues.city && formValues.city
               }
-              onSelect={({ description }) =>
-                geocodeByAddress(description).then((results) => {
-                  getLatLng(results[0])
-                    .then((value) => {
-                      formValues.lat = `${value.lat}`;
-                      formValues.lng = `${value.lng}`;
-                    })
-                    .catch((error) => console.error(error));
-                  getAddressDetails(results);
-                })
-              }
+              onSelect={({ description }) => geocodeByAddress(description).then((results) => {
+                getLatLng(results[0])
+                  .then((value) => {
+                    formValues.lat = `${value.lat}`;
+                    formValues.lng = `${value.lng}`;
+                  })
+                  .catch((error) => console.error(error));
+                getAddressDetails(results);
+              })}
             />
           </Grid>
         </div>
         {
           /* @ts-ignore */
-          dataCollections.collections &&
+          dataCollections.collections
             /* @ts-ignore */
-            dataCollections.collections.map((collection) => {
-              if (collection.code !== 'larochelle_quarter' || !estlarochelle)
-                return '';
+            && dataCollections.collections.map((collection) => {
+              if (collection.code !== 'larochelle_quarter' || !estlarochelle) return '';
 
               //    const [display, setDisplay] = useState(false);
               return (
@@ -769,8 +770,8 @@ const AddActorForm = () => {
                           name="entries"
                           onChange={formChangeHandler}
                         >
-                          {collection.entries &&
-                            collection.entries.map((entry) => {
+                          {collection.entries
+                            && collection.entries.map((entry) => {
                               return (
                                 <FormControlLabel
                                   value={entry.id}
@@ -815,9 +816,7 @@ const AddActorForm = () => {
                 id="combo-box-demo"
                 options={dataUsers.users}
                 // @ts-ignore
-                getOptionLabel={(option) =>
-                  `${option.surname} ${option.lastname}`
-                }
+                getOptionLabel={(option) => `${option.surname} ${option.lastname}`}
                 onChange={autocompleteHandler}
                 style={{ width: 300 }}
                 // eslint-disable-next-line react/jsx-props-no-spreading
@@ -912,7 +911,8 @@ const AddActorForm = () => {
         </Tooltip>
 
         <Typography variant="body1" color="primary" className={styles.label}>
-          Description{' '}
+          Description
+          {' '}
           <Tooltip title="Cette description longue est intégrée à votre page acteur. Elle se veut la plus explicite et détaillée possible. Un langage simple, des mots compréhensible de tous, vous permettront d’expliquer de manière didactique vos liens avec les questions de transition, vos missions/actions, votre organisation, etc. Au delà à l’accès à une information claire pour tous les internautes (y compris en situation de handicap) utilisant Ouaaa, ce texte permettra un meilleur référencement de votre page dans le moteur de recherche interne. Pour cela, pensez à utiliser des mots clé du champs sémantique de votre activité. Ex : vous êtes une asso de recyclerie : zero déchêt, réutilisation, matière, matériaux, économie circulaire, upcycling, nouvelle vie, objet, dépôt, vente, réinsertion,….">
             <InfoIcon />
           </Tooltip>
@@ -930,7 +930,8 @@ const AddActorForm = () => {
           <div>Editor loading</div>
         )}
         <Typography variant="body1" color="primary" className={styles.label}>
-          Nos recherches en bénévolat :{' '}
+          Nos recherches en bénévolat :
+          {' '}
           <Tooltip title="Décrivez ici les missions de bénévolat générales chez vous ou sur un de vos projet spécifique afin de donner envie aux visiteurs de cliquer sur « je deviens bénévole de votre page »">
             <InfoIcon />
           </Tooltip>
@@ -950,43 +951,36 @@ const AddActorForm = () => {
 
         {
           /* @ts-ignore */
-          dataCollections.collections &&
+          dataCollections.collections
             /* @ts-ignore */
-            dataCollections.collections.map((collection) => {
+            && dataCollections.collections.map((collection) => {
               if (collection.code === 'larochelle_quarter') return '';
               //    const [display, setDisplay] = useState(false);
               let { label } = collection;
               let helperText = '';
               if (collection.code === 'category') {
-                label =
-                  'Choisissez les sous-sujets dans lesquels vous souhaitez apparaître (en priorité)';
-                helperText =
-                  'Vous avez la possibilité d’ajouter un texte libre pour expliquer votre lien au sujet choisi. Vous pouvez sélectionner autant de sujet que nécessaire, les 3 premiers serviront à référencer votre page dans les moteurs de recherches info bulle : expliquant les ensemble et les sujets qu’ils contiennent aisni que les liens avec les sous-sujets et pourquoi pas ODD / transiscope. Ces infos bulles sont aussi visible dans le filtre sur la carte pour aider les usagers de Ouaaa à filtrer leur recherche';
+                label = 'Choisissez les sous-sujets dans lesquels vous souhaitez apparaître (en priorité)';
+                helperText = 'Vous avez la possibilité d’ajouter un texte libre pour expliquer votre lien au sujet choisi. Vous pouvez sélectionner autant de sujet que nécessaire, les 3 premiers serviront à référencer votre page dans les moteurs de recherches info bulle : expliquant les ensemble et les sujets qu’ils contiennent aisni que les liens avec les sous-sujets et pourquoi pas ODD / transiscope. Ces infos bulles sont aussi visible dans le filtre sur la carte pour aider les usagers de Ouaaa à filtrer leur recherche';
               } else if (collection.code === 'actor_status') {
                 label = 'Quel est votre statut ?';
-                helperText =
-                  'service public : toutes les collectivités, mairies, cda, cdc participant directement ou via des projets à la transition / ex : la rochelle territoire zéro carbone entreprise : tous les acteurs économiques de la transition, de l’economie sociale et solidaire... association & ONG  : toutes les structures à but non lucratif';
+                helperText = 'service public : toutes les collectivités, mairies, cda, cdc participant directement ou via des projets à la transition / ex : la rochelle territoire zéro carbone entreprise : tous les acteurs économiques de la transition, de l’economie sociale et solidaire... association & ONG  : toutes les structures à but non lucratif';
               } else if (collection.code === 'public_target') {
-                label =
-                  'Quel public visez vous principalement dans vos actions ?';
-                helperText =
-                  'Ici nous vous proposons de choisir votre public principal. Bien sur à chaque action (evenement, campagne…) que vous créerez vous pourrez indiquer des publics différents de votre public principal.';
+                label = 'Quel public visez vous principalement dans vos actions ?';
+                helperText = 'Ici nous vous proposons de choisir votre public principal. Bien sur à chaque action (evenement, campagne…) que vous créerez vous pourrez indiquer des publics différents de votre public principal.';
               } else if (collection.code === 'collectif') {
-                label =
-                  'En tant qu’acteur, je fais partie des collectifs & réseaux suivants :';
-                helperText =
-                  'Sont référencés ici des collectifs et réseaux locaux. Les groupes locaux de réseaux nationaux (ex Greenpeace) ne sont pas incluent dans cette liste';
+                label = 'En tant qu’acteur, je fais partie des collectifs & réseaux suivants :';
+                helperText = 'Sont référencés ici des collectifs et réseaux locaux. Les groupes locaux de réseaux nationaux (ex Greenpeace) ne sont pas incluent dans cette liste';
               } else if (collection.code === 'actor_location_action') {
                 label = "Territoire d'action (1 seul choix) *";
-                helperText =
-                  'un acteur n’est pas à côté de chez vous mais peut être se déplace-t-il dans votre zone pour le savoir cocher cette case pour faire apparaître les zones d’actions';
+                helperText = 'un acteur n’est pas à côté de chez vous mais peut être se déplace-t-il dans votre zone pour le savoir cocher cette case pour faire apparaître les zones d’actions';
               }
 
               return (
                 <div>
                   <br />
                   <Typography className={classes.collectionLabel}>
-                    {label}{' '}
+                    {label}
+                    {' '}
                     {helperText !== '' && (
                       <Tooltip title={helperText}>
                         <InfoIcon />
@@ -1003,8 +997,8 @@ const AddActorForm = () => {
                           defaultExpandIcon={<ArrowRightIcon />}
                           defaultEndIcon={<div style={{ width: 24 }} />}
                         >
-                          {collection.entries &&
-                            collection.entries.map((entry) => {
+                          {collection.entries
+                            && collection.entries.map((entry) => {
                               return (
                                 // @ts-ignore
                                 <StyledTreeItem
@@ -1014,8 +1008,8 @@ const AddActorForm = () => {
                                   hideCheckBox
                                   isForm
                                 >
-                                  {entry.subEntries &&
-                                    entry.subEntries.map((subEntry) => {
+                                  {entry.subEntries
+                                    && entry.subEntries.map((subEntry) => {
                                       return (
                                         <StyledTreeItem
                                           key={subEntry.id}
@@ -1044,8 +1038,8 @@ const AddActorForm = () => {
                     // display &&
                     !IsTree(collection) && collection.multipleSelection && (
                       <List>
-                        {collection.entries &&
-                          collection.entries.map((entry) => {
+                        {collection.entries
+                          && collection.entries.map((entry) => {
                             return (
                               <ListItem key={entry.id} role={undefined} dense>
                                 <ListItemText primary={entry.label} />
@@ -1067,25 +1061,13 @@ const AddActorForm = () => {
                   {
                     // display &&
                     !IsTree(collection) && !collection.multipleSelection && (
-                      <FormControl component="fieldset">
-                        <RadioGroup
-                          row
-                          aria-label="entries"
-                          name="entries"
-                          onChange={formChangeHandler}
-                        >
-                          {collection.entries &&
-                            collection.entries.map((entry) => {
-                              return (
-                                <FormControlLabel
-                                  value={entry.id}
-                                  control={<Radio />}
-                                  label={entry.label}
-                                />
-                              );
-                            })}
-                        </RadioGroup>
-                      </FormControl>
+                      <RadioGroupForContext initValue={' '}>
+                        <CustomRadioGroup
+                          formChangeHandler={formChangeHandler}
+                          collection={collection}
+                        />
+                      </RadioGroupForContext>
+
                     )
                   }
                 </div>
