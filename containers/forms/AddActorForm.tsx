@@ -401,6 +401,26 @@ const AddActorForm = () => {
       formValues.contactId = value.id;
     };
 
+    const isEntriesWithInformationContains: Function = (entriesWithInformationArray: Array<Object>, id : number) => {
+      let existingEntryInformation;
+      let index = 0;
+      debugger;
+      entriesWithInformationArray.map(
+        (linkDescription) => {
+          index += 1;
+          // @ts-ignore
+          if (linkDescription.entryId === id) {
+            existingEntryInformation = linkDescription;
+          }
+          return '';
+        },
+      );
+      if (existingEntryInformation !== undefined) {
+        return true;
+      }
+      return false;
+    };
+    
     const {
       objectsList: objectsListLogo,
       moveObject: moveObjectLogo,
@@ -612,6 +632,8 @@ const AddActorForm = () => {
         setEstlarochelle(false);
       }
     };
+
+
 
     return (
       <Container component="main" maxWidth="sm">
@@ -1003,6 +1025,11 @@ const AddActorForm = () => {
                                           labelText={subEntry.label}
                                           categoryChange={formChangeHandler}
                                           isForm
+                                          checked={
+                                            formValues
+                                            && formValues.entriesWithInformation
+                                            && isEntriesWithInformationContains(formValues.entriesWithInformation, subEntry.id)
+                                          }
                                         />
                                       );
                                     })}

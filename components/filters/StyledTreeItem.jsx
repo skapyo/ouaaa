@@ -81,13 +81,16 @@ function StyledTreeItem(props) {
   let isThisEntryNotInTopSEO = false;
   if (entriesContext !== undefined) {
     isThisEntryNotInTopSEO = entriesContext.getList().indexOf(parseInt(other.nodeId, 10))
-    > 3;
+    >= 3;
+    console.log(!isThisEntryNotInTopSEO +' '+ entriesContext.getList() + ' ' + parseInt(other.nodeId, 10))
+
   }
 
-  const [ischecked, setIschecked] = useState(checked);
+
+
   const handleCheckboxChange = (event) => {
+   
     const checkStatus = event.target.checked;
-    setIschecked(checkStatus);
     const index = parseInt(id, 10);
     if (isParent) {
       context.handleParentCheckboxChange(checkStatus);
@@ -102,8 +105,7 @@ function StyledTreeItem(props) {
           entriesContext.removeCheckedCheckbox(parseInt(other.nodeId), 10);
         }
         eventEntry.target.entryId = other.nodeId;
-        eventEntry.target.topSEO = entriesContext.getList().indexOf(parseInt(other.nodeId, 10))
-        > 3;
+        eventEntry.target.topSEO = isTopSEO;
       }
       categoryChange(eventEntry);
       if (typeof context.handleChildCheckboxChange !== 'undefined') {
@@ -119,6 +121,7 @@ function StyledTreeItem(props) {
     categoryChange(event);
   };
   //
+  console.log(checked + ' ' + other.nodeId)
   return (
     <TreeItem
       label={(
@@ -141,14 +144,14 @@ function StyledTreeItem(props) {
                 value={other.nodeId}
                 className={classes.checkbox}
                 style={{ color: '#019077'}}
-                checked={ischecked}
+                checked={checked}
                 onChange={(e) => handleCheckboxChange(e)}
                 onClick={(e) => e.stopPropagation()}
               />
             )}
 
           </div>
-          {isForm && ischecked && !hideCheckBox && (
+          {isForm && checked && !hideCheckBox && (
           <TextField
             className={classes.entryDescription}
             variant="outlined"

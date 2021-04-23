@@ -62,6 +62,7 @@ import {
 import withDndProvider from '../../hoc/withDnDProvider';
 import StyledTreeItem from '../../components/filters/StyledTreeItem';
 import Entries from './Entries';
+import RadioGroupForContext from './RadioGroupForContext';
 
 const EDIT_ACTOR = gql`
   mutation editActor(
@@ -820,7 +821,7 @@ const EditActorForm = (props) => {
     };
 
     const [firstRender, setFirstRender] = useState(true);
-    const [initentriesWithInformation, setInitentriesWithInformation] = useState([String]);
+    const [initentriesWithInformation, setInitentriesWithInformation] = useState([]);
 
     const updateFormValues = () => {
       formValues.name = actorData.actor.name;
@@ -859,9 +860,15 @@ const EditActorForm = (props) => {
       actorData.actor.entries.forEach((actorentry) => {
         // @ts-ignore
         entriesWithInformation.push({ entryId: actorentry.id, linkDescription: actorentry.actorEntries.linkDescription, topSEO: actorentry.actorEntries.topSEO });
-        if (actorentry.actorEntries.topSEO !== null) {
-           // @ts-ignore
-          initentriesWithInformation.push(parseInt(actorentry.id, 10));
+
+        if (actorentry.parentEntry != null) {
+          // if top seo add in at the beginning of the list
+          // @ts-ignore
+          if (actorentry.actorEntries.topSEO) {
+            initentriesWithInformation.unshift(parseInt(actorentry.id, 10));
+          } else {
+            initentriesWithInformation.push(parseInt(actorentry.id, 10));
+          }
         }
       });
 
@@ -870,6 +877,7 @@ const EditActorForm = (props) => {
     };
 
     const isEntriesWithInformationContains: Function = (entriesWithInformationArray: Array<Object>, id : number) => {
+      debugger;
       let existingEntryInformation;
       let index = 0;
       entriesWithInformationArray.map(
@@ -1220,7 +1228,6 @@ const EditActorForm = (props) => {
                   if (isPresent) defaultValue = entry;
                 });
               }
-
               return (
                 <div>
                   <Typography className={styles.collectionLabel}>
@@ -1235,7 +1242,7 @@ const EditActorForm = (props) => {
                   {
                     // display &&
                     IsTree(collection) && (
-                       // @ts-ignore
+                    // @ts-ignore
                       <Entries initValues={initentriesWithInformation}>
                         <TreeView
                           className={styles.rootTree}
@@ -1314,15 +1321,16 @@ const EditActorForm = (props) => {
                   {
                     // display &&
                     !IsTree(collection) && !collection.multipleSelection && (
-                      <FormControl component="fieldset">
-                        <RadioGroup
-                          row
-                          aria-label="entries"
-                          name="entries"
-                          defaultValue={defaultValue}
-                          onChange={formChangeHandler}
-                        >
-                          {collection.entries
+                      <RadioGroupForContext initValue={defaultValue}>
+                        <FormControl component="fieldset">
+                          <RadioGroup
+                            row
+                            aria-label="entries"
+                            name="entries"
+                            defaultValue={defaultValue}
+                            onChange={formChangeHandler}
+                          >
+                            {collection.entries
                             && collection.entries.map((entry) => {
                               return (
                                 <FormControlLabel
@@ -1332,8 +1340,9 @@ const EditActorForm = (props) => {
                                 />
                               );
                             })}
-                        </RadioGroup>
-                      </FormControl>
+                          </RadioGroup>
+                        </FormControl>
+                      </RadioGroupForContext>
                     )
                   }
                 </div>
