@@ -7,11 +7,11 @@ export interface RadioGroupProps {
 }
 export const RadioGroupContext = React.createContext({});
 
-const RadioGroupForContext: React.FunctionComponent<RadioGroupProps> = ({ children, initValues }) => {
+const RadioGroupForContext: React.FunctionComponent<RadioGroupProps> = ({ children, initValue }) => {
   const [currentValue, setCurrentValue]: [
     string,
     Function,
-  ] = React.useState(initValues !== undefined ? initValues : '');
+  ] = React.useState(initValue !== undefined ? initValue : '');
  
 
   const getCurrentValue: Function = () => {

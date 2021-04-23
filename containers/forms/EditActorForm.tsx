@@ -868,8 +868,10 @@ const EditActorForm = (props) => {
           // if top seo add in at the beginning of the list
           // @ts-ignore
           if (actorentry.actorEntries.topSEO) {
+             // @ts-ignore
             initentriesWithInformation.unshift(parseInt(actorentry.id, 10));
           } else {
+             // @ts-ignore
             initentriesWithInformation.push(parseInt(actorentry.id, 10));
           }
         }
