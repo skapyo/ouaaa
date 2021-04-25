@@ -948,6 +948,7 @@ const AddActorForm = () => {
               />
             </Hidden>
           </>
+<<<<<<< HEAD
         ) : (
           <div>Editor loading</div>
         )}
@@ -984,6 +985,8 @@ const AddActorForm = () => {
               />
             </Hidden>
           </>
+=======
+>>>>>>> e58ecfa573866b445917a3e35bc7cb4eb7679699
         ) : (
           <div>Editor loading</div>
         )}
