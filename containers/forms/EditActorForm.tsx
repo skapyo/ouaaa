@@ -53,6 +53,7 @@ import { Autocomplete } from '@material-ui/lab';
 import Tooltip from '@material-ui/core/Tooltip';
 import InfoIcon from '@material-ui/icons/Info';
 import { useSessionDispatch, useSessionState } from 'context/session/session';
+import Hidden from '@material-ui/core/Hidden';
 import useImageReader from '../../hooks/useImageReader';
 import useDnDStateManager from '../../hooks/useDnDStateManager';
 import useCookieRedirection from '../../hooks/useCookieRedirection';
@@ -292,6 +293,11 @@ const useStyles = makeStyles((theme) => ({
     '&:focus > $content $label, &:hover > $content $label, &$selected > $content $label': {
       backgroundColor: 'transparent',
     },
+
+  },
+  treeParent: {
+    border: '1px solid #ccc!important',
+    padding: '5px 0 5px 0',
   },
 }));
 
@@ -868,10 +874,10 @@ const EditActorForm = (props) => {
           // if top seo add in at the beginning of the list
           // @ts-ignore
           if (actorentry.actorEntries.topSEO) {
-             // @ts-ignore
+            // @ts-ignore
             initentriesWithInformation.unshift(parseInt(actorentry.id, 10));
           } else {
-             // @ts-ignore
+            // @ts-ignore
             initentriesWithInformation.push(parseInt(actorentry.id, 10));
           }
         }
@@ -1170,13 +1176,30 @@ const EditActorForm = (props) => {
         </Typography>
         <p />
         {editorLoaded ? (
-          <CKEditor
-            editor={ClassicEditor}
-            data={formValues.description}
-            onReady={(editor) => {
-              setDescriptionEditor(editor);
-            }}
-          />
+          <>
+            <Hidden mdDown>
+              <CKEditor
+
+                editor={ClassicEditor}
+                data={formValues.description}
+                onReady={(editor) => {
+                  setDescriptionEditor(editor);
+                }}
+              />
+            </Hidden>
+            <Hidden lgUp>
+              <CKEditor
+                config={{
+                  toolbar: ['bold', 'italic'],
+                }}
+                editor={ClassicEditor}
+                data={formValues.description}
+                onReady={(editor) => {
+                  setDescriptionEditor(editor);
+                }}
+              />
+            </Hidden>
+          </>
         ) : (
           <div>Editor loading</div>
         )}
@@ -1190,16 +1213,33 @@ const EditActorForm = (props) => {
         </Typography>
         <p />
         {editorLoaded ? (
-          <CKEditor
-            editor={ClassicEditor}
-            data={formValues.volunteerDescription}
-            onReady={(editor) => {
-              setVolunteerEditor(editor);
-            }}
-          />
+          <>
+            <Hidden mdDown>
+              <CKEditor
+                editor={ClassicEditor}
+                data={formValues.volunteerDescription}
+                onReady={(editor) => {
+                  setVolunteerEditor(editor);
+                }}
+              />
+            </Hidden>
+            <Hidden lgUp>
+              <CKEditor
+                config={{
+                  toolbar: ['bold', 'italic'],
+                }}
+                editor={ClassicEditor}
+                data={formValues.volunteerDescription}
+                onReady={(editor) => {
+                  setVolunteerEditor(editor);
+                }}
+              />
+            </Hidden>
+          </>
         ) : (
           <div>Editor loading</div>
         )}
+
         {
           /* @ts-ignore */
           dataCollections.collections
@@ -1255,6 +1295,7 @@ const EditActorForm = (props) => {
                       </Tooltip>
                     )}
                   </Typography>
+                  <br />
                   {
                     // display &&
                     IsTree(collection) && (
@@ -1276,6 +1317,7 @@ const EditActorForm = (props) => {
                                   labelText={entry.label}
                                   hideCheckBox
                                   isForm
+                                  className={styles.treeParent}
                                 >
                                   {entry.subEntries
                                     && entry.subEntries.map((subEntry) => {

@@ -43,12 +43,12 @@ const ImagesDropZone = ({ onDropHandler, text }) => {
             className={styles.input}
             id="contained-button-file"
             multiple
-            onChange={(e) => {debugger; onDropHandler(Array.from(e.target.files))}}
+            onChange={(e) => {onDropHandler(Array.from(e.target.files))}}
             type="file"
           />
           <label htmlFor="contained-button-file">
             <Button variant="contained" color="primary" component="span">
-              Upload
+            Téléverser
             </Button>
           </label>
         </Grid>
@@ -60,7 +60,7 @@ const ImagesDropZone = ({ onDropHandler, text }) => {
             className={styles.input}
             id="contained-button-file"
             multiple
-            onChange={(e) => {debugger; onDropHandler(Array.from(e.target.files))}}
+            onChange={(e) => {onDropHandler(Array.from(e.target.files))}}
             type="file"
           />
           <label htmlFor="contained-button-file">
