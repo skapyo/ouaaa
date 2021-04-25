@@ -3,7 +3,8 @@ import { Card, Grid, makeStyles } from '@material-ui/core';
 import React from 'react';
 import InsertPhotoIcon from '@material-ui/icons/InsertPhoto';
 import { useDropArea } from 'react-use';
-
+import Button from '@material-ui/core/Button';
+import Hidden from '@material-ui/core/Hidden';
 const useStyles = makeStyles((theme) => ({
   image: {
     width: '100%',
@@ -12,6 +13,9 @@ const useStyles = makeStyles((theme) => ({
   dropZone: {
     padding: '1em',
     margin: '2em',
+  },
+  input: {
+    display: 'none',
   },
 }));
 const ImagesDropZone = ({ onDropHandler, text }) => {
@@ -24,14 +28,48 @@ const ImagesDropZone = ({ onDropHandler, text }) => {
   return (
     <Card className={styles.dropZone}>
       <Grid container alignItems="center">
-        <Grid item xs={12}>
-          <div {...bond}>
-            <div>
-              <InsertPhotoIcon />
+        <Hidden mdDown>
+          <Grid item xs={8}>
+            <div {...bond}>
+              <div>
+                <InsertPhotoIcon />
+              </div>
+              <div>{text}</div>
             </div>
-            <div>{text}</div>
-          </div>
+          </Grid>
+          <Grid item xs={4}>
+          <input
+            accept="image/jpeg"
+            className={styles.input}
+            id="contained-button-file"
+            multiple
+            onChange={(e) => {debugger; onDropHandler(Array.from(e.target.files))}}
+            type="file"
+          />
+          <label htmlFor="contained-button-file">
+            <Button variant="contained" color="primary" component="span">
+              Upload
+            </Button>
+          </label>
         </Grid>
+        </Hidden>
+        <Hidden lgUp>
+          <Grid item xs={12}>
+          <input
+            accept="image/jpeg"
+            className={styles.input}
+            id="contained-button-file"
+            multiple
+            onChange={(e) => {debugger; onDropHandler(Array.from(e.target.files))}}
+            type="file"
+          />
+          <label htmlFor="contained-button-file">
+            <Button variant="contained" color="primary" component="span">
+              Téléverser
+            </Button>
+          </label>
+        </Grid>
+        </Hidden>
       </Grid>
     </Card>
   );
