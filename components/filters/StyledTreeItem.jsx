@@ -156,7 +156,7 @@ function StyledTreeItem(props) {
             className={classes.entryDescription}
             variant="outlined"
             name="linkDescription"
-            placeholder="Votre lien avec le sujet"
+            placeholder={`Votre lien avec le sujet ${labelText}`}
             onChange={handleDescriptionChange}
             value={other.linkDescription}
             linkDescription

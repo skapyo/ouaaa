@@ -50,6 +50,7 @@ import FormLabel from '@material-ui/core/FormLabel';
 import { Autocomplete } from '@material-ui/lab';
 import ImagesDropZone from 'components/ImageCropper/ImagesDropZone';
 import ImagesDisplay from 'components/ImageCropper/ImagesDisplay';
+import Hidden from '@material-ui/core/Hidden';
 import useCookieRedirection from '../../hooks/useCookieRedirection';
 import Link from '../../components/Link';
 import StyledTreeItem from '../../components/filters/StyledTreeItem';
@@ -216,6 +217,10 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: 'transparent',
     },
   },
+  treeParent: {
+    border: '1px solid #ccc!important',
+    padding: '5px 0 5px 0',
+  },
 }));
 
 type FormItemProps = {
@@ -375,7 +380,7 @@ const AddActorForm = () => {
     const [showOtherContact, setShowOtherContact] = useState(false);
 
     // @ts-ignore
-    const { CKEditor, ClassicEditor } = editorRef.current || {};
+    const { CKEditor, ClassicEditor, Alignment } = editorRef.current || {};
     const [descriptionEditor, setDescriptionEditor] = useState();
     const [volunteerEditor, setVolunteerEditor] = useState();
 
@@ -919,32 +924,30 @@ const AddActorForm = () => {
         </Typography>
 
         {editorLoaded ? (
-          <CKEditor
-            editor={ClassicEditor}
-            data={formValues.description}
-            onReady={(editor) => {
-              setDescriptionEditor(editor);
-            }}
-          />
-        ) : (
-          <div>Editor loading</div>
-        )}
-        <Typography variant="body1" color="primary" className={styles.label}>
-          Nos recherches en bénévolat :
-          {' '}
-          <Tooltip title="Décrivez ici les missions de bénévolat générales chez vous ou sur un de vos projet spécifique afin de donner envie aux visiteurs de cliquer sur « je deviens bénévole de votre page »">
-            <InfoIcon />
-          </Tooltip>
-        </Typography>
-        <p />
-        {editorLoaded ? (
-          <CKEditor
-            editor={ClassicEditor}
-            data={formValues.volunteer}
-            onReady={(editor) => {
-              setVolunteerEditor(editor);
-            }}
-          />
+          <>
+            <Hidden mdDown>
+              <CKEditor
+                
+                editor={ClassicEditor}
+                data={formValues.description}
+                onReady={(editor) => {
+                  setDescriptionEditor(editor);
+                }}
+              />
+            </Hidden>
+            <Hidden lgUp>
+              <CKEditor
+              config={{
+                toolbar: ['bold', 'italic'],
+              }}
+                editor={ClassicEditor}
+                data={formValues.description}
+                onReady={(editor) => {
+                  setDescriptionEditor(editor);
+                }}
+              />
+            </Hidden>
+          </>
         ) : (
           <div>Editor loading</div>
         )}
@@ -987,6 +990,7 @@ const AddActorForm = () => {
                       </Tooltip>
                     )}
                   </Typography>
+                  <br />
                   {
                     // display &&
                     IsTree(collection) && (
@@ -1007,6 +1011,7 @@ const AddActorForm = () => {
                                   labelText={entry.label}
                                   hideCheckBox
                                   isForm
+                                  className={classes.treeParent}
                                 >
                                   {entry.subEntries
                                     && entry.subEntries.map((subEntry) => {
