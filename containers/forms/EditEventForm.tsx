@@ -919,58 +919,7 @@ const EditEventForm = (props) => {
           </MuiPickersUtilsProvider>
         </Grid>
         <p />
-        <Grid>
-          <Typography>Catégorie(s) de l'événement *</Typography>
-          <List className={styles.field}>
-            {typeof categoryData !== 'undefined' &&
-              categoryData.categories.map((category, index) => (
-                <div>
-                  <ListItem
-                    key={category.id}
-                    role={undefined}
-                    dense
-                    button
-                    onClick={handleToggle(0, index)}
-                  >
-                    <ListItemIcon />
-                    <ListItemText primary={category.label} />
-                    {openCategory[index] ? <ExpandLess /> : <ExpandMore />}
-                  </ListItem>
-                  {typeof category.subCategories !== 'undefined' &&
-                    category.subCategories != null &&
-                    category.subCategories.map((subcategory, subIndex) => (
-                      <Collapse
-                        in={openCategory[index]}
-                        timeout="auto"
-                        unmountOnExit
-                      >
-                        <List component="div" disablePadding>
-                          <ListItem button>
-                            <ListItemIcon>
-                              <Checkbox
-                                edge="start"
-                                tabIndex={-1}
-                                disableRipple
-                                onChange={formChangeHandler}
-                                name="categories"
-                                value={subcategory.id}
-                                // @ts-ignore
-                                checked={
-                                  formValues &&
-                                  formValues.categories &&
-                                  formValues.categories.includes(subcategory.id)
-                                }
-                              />
-                            </ListItemIcon>
-                            <ListItemText primary={subcategory.label} />
-                          </ListItem>
-                        </List>
-                      </Collapse>
-                    ))}
-                </div>
-              ))}
-          </List>
-        </Grid>
+       
         <Grid className={styles.location}>
           <Typography>Lieu</Typography>
           <GooglePlacesAutocomplete

@@ -225,6 +225,7 @@ const GET_COLLECTIONS = gql`
       code
       multipleSelection
       position
+      actor
       entries {
         id
         label
@@ -1009,6 +1010,7 @@ const EditActorForm = (props) => {
             /* @ts-ignore */
             && dataCollections.collections.map((collection) => {
               if (collection.code !== 'larochelle_quarter' || !estlarochelle) return '';
+              if (!collection.actor) return '';
 
               //    const [display, setDisplay] = useState(false);
               return (
@@ -1245,6 +1247,7 @@ const EditActorForm = (props) => {
           dataCollections.collections
             /* @ts-ignore */
             && dataCollections.collections.map((collection) => {
+              if (!collection.actor) return '';
               if (collection.code === 'larochelle_quarter') return '';
               //    const [display, setDisplay] = useState(false);
               let { label } = collection;

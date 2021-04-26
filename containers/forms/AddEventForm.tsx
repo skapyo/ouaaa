@@ -1,4 +1,6 @@
-import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
+import React, {
+  ChangeEvent, useEffect, useRef, useState,
+} from 'react';
 import gql from 'graphql-tag';
 import { withApollo } from 'hoc/withApollo';
 import {
@@ -26,19 +28,24 @@ import GooglePlacesAutocomplete, {
 import { useRouter } from 'next/router';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText/ListItemText';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
-import Collapse from '@material-ui/core/Collapse/Collapse';
 import DateFnsUtils from '@date-io/date-fns';
+import Tooltip from '@material-ui/core/Tooltip';
+import InfoIcon from '@material-ui/icons/Info';
+import TreeView from '@material-ui/lab/TreeView';
 import {
   KeyboardDatePicker,
   KeyboardTimePicker,
   MuiPickersUtilsProvider,
 } from '@material-ui/pickers';
 import moment from 'moment';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import ArrowRightIcon from '@material-ui/icons/ArrowRight';
+import CustomRadioGroup from 'components/form/CustomRadioGroup';
+import Entries from './Entries';
 import { useSessionState } from '../../context/session/session';
+import StyledTreeItem from '../../components/filters/StyledTreeItem';
+import RadioGroupForContext from './RadioGroupForContext';
 
 const useStyles = makeStyles((theme) => ({
   field: {
@@ -81,7 +88,47 @@ const useStyles = makeStyles((theme) => ({
   label: {
     fontWeight: 600,
   },
+  collectionLabel: {
+    textAlign: 'center',
+    color: '#bf083e',
+  },
+  rootTree: {
+    color: theme.palette.text.secondary,
+    '&:hover > $content': {
+      backgroundColor: theme.palette.action.hover,
+    },
+    '&:focus > $content, &$selected > $content': {
+      backgroundColor: `var(--tree-view-bg-color, ${theme.palette.grey[400]})`,
+      color: 'var(--tree-view-color)',
+    },
+    '&:focus > $content $label, &:hover > $content $label, &$selected > $content $label': {
+      backgroundColor: 'transparent',
+    },
+  },
+  treeParent: {
+    border: '1px solid #ccc!important',
+    padding: '5px 0 5px 0',
+  },
 }));
+
+const isEntriesWithInformationContains: Function = (entriesWithInformationArray: Array<Object>, id : number) => {
+  let existingEntryInformation;
+  let index = 0;
+  entriesWithInformationArray.map(
+    (linkDescription) => {
+      index += 1;
+      // @ts-ignore
+      if (linkDescription.entryId === id) {
+        existingEntryInformation = linkDescription;
+      }
+      return '';
+    },
+  );
+  if (existingEntryInformation !== undefined) {
+    return true;
+  }
+  return false;
+};
 
 const ADDEVENT = gql`
   mutation createEvent(
@@ -120,6 +167,27 @@ const GET_CATEGORIES = gql`
         id
         label
         icon
+      }
+    }
+  }
+`;
+const GET_COLLECTIONS = gql`
+  {
+    collections {
+      id
+      code
+      label
+      multipleSelection
+      position
+      actor
+      event
+      entries {
+        id
+        label
+        subEntries {
+          id
+          label
+        }
       }
     }
   }
@@ -203,7 +271,20 @@ const AddEventForm = ({ actorId }) => {
       minLimit: 50,
     },
   };
-
+  function IsTree(collection) {
+    let isTree = false;
+    if (collection.entries) {
+      collection.entries.map((entry) => {
+        if (entry.subEntries) {
+          entry.subEntries.map((subentry) => {
+            isTree = true;
+            return isTree;
+          });
+        }
+      });
+    }
+    return isTree;
+  }
   const Form: RenderCallback = ({
     formChangeHandler,
     validationResult,
@@ -244,16 +325,15 @@ const AddEventForm = ({ actorId }) => {
 
     useEffect(() => {
       if (
-        (selectedStartDate &&
-          selectedEndDate &&
-          selectedStartDate >= selectedEndDate) ||
-        (selectedStartDate && moment(selectedStartDate) <= moment()) ||
-        !formValues.shortDescription ||
-        !formValues.categories ||
-        formValues.categories?.length === 0 ||
-        (!address && !city)
-      )
-        setValidated(false);
+        (selectedStartDate
+          && selectedEndDate
+          && selectedStartDate >= selectedEndDate)
+        || (selectedStartDate && moment(selectedStartDate) <= moment())
+        || !formValues.shortDescription
+        || !formValues.categories
+        || formValues.categories?.length === 0
+        || (!address && !city)
+      ) setValidated(false);
       else setValidated(true);
     });
 
@@ -327,6 +407,17 @@ const AddEventForm = ({ actorId }) => {
       }
     }, [data]);
 
+    const [dataCollections, setDataCollections] = useState({});
+    const { loading: loadingCollections, error: errorCollections } = useQuery(
+      GET_COLLECTIONS,
+      {
+        fetchPolicy: 'network-only',
+        onCompleted: (datac) => {
+          setDataCollections(datac);
+        },
+      },
+    );
+
     const submitHandler = () => {
       const checkboxes = Object.keys(state);
       let categoriesArray: number[];
@@ -393,8 +484,8 @@ const AddEventForm = ({ actorId }) => {
           value={formValues.shortDescription}
           required
           errorBool={
-            !validationResult?.global &&
-            !!validationResult?.result.shortDescription
+            !validationResult?.global
+            && !!validationResult?.result.shortDescription
           }
           errorText={`Minimum 50 caractères. ${
             50 - formValues.shortDescription?.length
@@ -431,12 +522,12 @@ const AddEventForm = ({ actorId }) => {
                   'aria-label': 'change date',
                 }}
                 error={
-                  !!selectedStartDate &&
-                  moment(selectedStartDate) <= moment(Date.now())
+                  !!selectedStartDate
+                  && moment(selectedStartDate) <= moment(Date.now())
                 }
                 helperText={
-                  selectedStartDate &&
-                  moment(selectedStartDate) <= moment(Date.now())
+                  selectedStartDate
+                  && moment(selectedStartDate) <= moment(Date.now())
                     ? 'La date de début ne peut être dans le passé.'
                     : ''
                 }
@@ -469,14 +560,14 @@ const AddEventForm = ({ actorId }) => {
                   'aria-label': 'change date',
                 }}
                 error={
-                  !!selectedStartDate &&
-                  !!selectedEndDate &&
-                  moment(selectedStartDate) >= moment(selectedEndDate)
+                  !!selectedStartDate
+                  && !!selectedEndDate
+                  && moment(selectedStartDate) >= moment(selectedEndDate)
                 }
                 helperText={
-                  selectedStartDate &&
-                  selectedEndDate &&
-                  selectedStartDate >= selectedEndDate
+                  selectedStartDate
+                  && selectedEndDate
+                  && selectedStartDate >= selectedEndDate
                     ? 'La date de fin doit être après la date de début.'
                     : ''
                 }
@@ -493,79 +584,163 @@ const AddEventForm = ({ actorId }) => {
                 ampm={false}
                 minutesStep={5}
                 error={
-                  !!selectedStartDate &&
-                  !!selectedEndDate &&
-                  moment(selectedStartDate) >= moment(selectedEndDate)
+                  !!selectedStartDate
+                  && !!selectedEndDate
+                  && moment(selectedStartDate) >= moment(selectedEndDate)
                 }
               />
             </Grid>
           </MuiPickersUtilsProvider>
         </Grid>
-        <Grid>
-          <Typography>Catégorie(s) de l'événement *</Typography>
-          <List className={styles.field}>
-            {typeof categoryData !== 'undefined' &&
-              categoryData.categories.map((category, index) => (
+        {
+          /* @ts-ignore */
+          dataCollections.collections
+            /* @ts-ignore */
+            && dataCollections.collections.map((collection) => {
+              if (!collection.event) return '';
+              if (collection.code === 'larochelle_quarter') return '';
+              //    const [display, setDisplay] = useState(false);
+              let { label } = collection;
+              let helperText = '';
+              if (collection.code === 'category') {
+                label = 'Choisissez les sous-sujets dans lesquels vous souhaitez apparaître (en priorité)';
+                helperText = 'Vous avez la possibilité d’ajouter un texte libre pour expliquer votre lien au sujet choisi. Vous pouvez sélectionner autant de sujet que nécessaire, les 3 premiers serviront à référencer votre page dans les moteurs de recherches info bulle : expliquant les ensemble et les sujets qu’ils contiennent aisni que les liens avec les sous-sujets et pourquoi pas ODD / transiscope. Ces infos bulles sont aussi visible dans le filtre sur la carte pour aider les usagers de Ouaaa à filtrer leur recherche';
+              } else if (collection.code === 'actor_status') {
+                label = 'Quel est votre statut ?';
+                helperText = 'service public : toutes les collectivités, mairies, cda, cdc participant directement ou via des projets à la transition / ex : la rochelle territoire zéro carbone entreprise : tous les acteurs économiques de la transition, de l’economie sociale et solidaire... association & ONG  : toutes les structures à but non lucratif';
+              } else if (collection.code === 'public_target') {
+                label = 'Quel public visez vous principalement dans vos actions ?';
+                helperText = 'Ici nous vous proposons de choisir votre public principal. Bien sur à chaque action (evenement, campagne…) que vous créerez vous pourrez indiquer des publics différents de votre public principal.';
+              } else if (collection.code === 'collectif') {
+                label = 'En tant qu’acteur, je fais partie des collectifs & réseaux suivants :';
+                helperText = 'Sont référencés ici des collectifs et réseaux locaux. Les groupes locaux de réseaux nationaux (ex Greenpeace) ne sont pas incluent dans cette liste';
+              } else if (collection.code === 'actor_location_action') {
+                label = "Territoire d'action (1 seul choix) *";
+                helperText = 'un acteur n’est pas à côté de chez vous mais peut être se déplace-t-il dans votre zone pour le savoir cocher cette case pour faire apparaître les zones d’actions';
+              }
+
+              return (
                 <div>
-                  <ListItem
-                    key={category.id}
-                    role={undefined}
-                    dense
-                    button
-                    onClick={handleToggle(0, index)}
-                  >
-                    <ListItemIcon />
-                    <ListItemText primary={category.label} />
-                    {open[index] ? <ExpandLess /> : <ExpandMore />}
-                  </ListItem>
-                  {typeof category.subCategories !== 'undefined' &&
-                    category.subCategories != null &&
-                    category.subCategories.map((subcategory, subIndex) => (
-                      <Collapse in={open[index]} timeout="auto" unmountOnExit>
-                        <List component="div" disablePadding>
-                          <ListItem button>
-                            <ListItemIcon>
-                              <Checkbox
-                                edge="start"
-                                tabIndex={-1}
-                                disableRipple
-                                onChange={formChangeHandler}
-                                name="categories"
-                                value={subcategory.id}
-                              />
-                            </ListItemIcon>
-                            <ListItemText primary={subcategory.label} />
-                          </ListItem>
-                        </List>
-                      </Collapse>
-                    ))}
+                  <br />
+                  <Typography className={styles.collectionLabel}>
+                    {label}
+                    {' '}
+                    {helperText !== '' && (
+                      <Tooltip title={helperText}>
+                        <InfoIcon />
+                      </Tooltip>
+                    )}
+                  </Typography>
+                  <br />
+                  {
+                    // display &&
+                    IsTree(collection) && (
+                      <Entries initValues={[]}>
+                        <TreeView
+                          className={styles.rootTree}
+                          defaultCollapseIcon={<ArrowDropDownIcon />}
+                          defaultExpandIcon={<ArrowRightIcon />}
+                          defaultEndIcon={<div style={{ width: 24 }} />}
+                        >
+                          {collection.entries
+                            && collection.entries.map((entry) => {
+                              return (
+                                // @ts-ignore
+                                <StyledTreeItem
+                                  key={entry.id}
+                                  nodeId={entry.id}
+                                  labelText={entry.label}
+                                  hideCheckBox
+                                  isForm
+                                  className={styles.treeParent}
+                                >
+                                  {entry.subEntries
+                                    && entry.subEntries.map((subEntry) => {
+                                      return (
+                                        <StyledTreeItem
+                                          key={subEntry.id}
+                                          // @ts-ignore
+                                          nodeId={subEntry.id}
+                                          labelText={subEntry.label}
+                                          categoryChange={formChangeHandler}
+                                          isForm
+                                          checked={
+                                            formValues
+                                            && formValues.entriesWithInformation
+                                            && isEntriesWithInformationContains(formValues.entriesWithInformation, subEntry.id)
+                                          }
+                                        />
+                                      );
+                                    })}
+                                </StyledTreeItem>
+                              );
+                            })}
+                        </TreeView>
+                      </Entries>
+                    )
+                  }
+
+                  {
+                    // display &&
+                    !IsTree(collection) && collection.multipleSelection && (
+                      <List>
+                        {collection.entries
+                          && collection.entries.map((entry) => {
+                            return (
+                              <ListItem key={entry.id} role={undefined} dense>
+                                <ListItemText primary={entry.label} />
+                                <Checkbox
+                                  edge="start"
+                                  tabIndex={-1}
+                                  disableRipple
+                                  onChange={formChangeHandler}
+                                  name="entries"
+                                  value={entry.id}
+                                  onClick={(e) => e.stopPropagation()}
+                                />
+                              </ListItem>
+                            );
+                          })}
+                      </List>
+                    )
+                  }
+                  {
+                    // display &&
+                    !IsTree(collection) && !collection.multipleSelection && (
+                      <RadioGroupForContext initValue={' '}>
+                        <CustomRadioGroup
+                          formChangeHandler={formChangeHandler}
+                          collection={collection}
+                        />
+                      </RadioGroupForContext>
+
+                    )
+                  }
                 </div>
-              ))}
-          </List>
-        </Grid>
+              );
+            })
+        }
         <Grid className={styles.location}>
           <Typography>Lieu</Typography>
           <GooglePlacesAutocomplete
             placeholder="Taper et sélectionner l'adresse*"
             initialValue={
-              formValues.address &&
               formValues.address
+              && formValues.address
                 .concat(' ')
                 .concat(formValues.postCode)
                 .concat(' ')
                 .concat(formValues.city)
             }
-            onSelect={({ description }) =>
-              geocodeByAddress(description).then((results) => {
-                getLatLng(results[0])
-                  .then((value) => {
-                    formValues.lat = `${value.lat}`;
-                    formValues.lng = `${value.lng}`;
-                  })
-                  .catch((error) => console.error(error));
-                getAddressDetails(results);
-              })
-            }
+            onSelect={({ description }) => geocodeByAddress(description).then((results) => {
+              getLatLng(results[0])
+                .then((value) => {
+                  formValues.lat = `${value.lat}`;
+                  formValues.lng = `${value.lng}`;
+                })
+                .catch((error) => console.error(error));
+              getAddressDetails(results);
+            })}
           />
         </Grid>
         <ClassicButton

@@ -992,6 +992,7 @@ const AddActorForm = () => {
           dataCollections.collections
             /* @ts-ignore */
             && dataCollections.collections.map((collection) => {
+              if (!collection.actor) return '';
               if (collection.code === 'larochelle_quarter') return '';
               //    const [display, setDisplay] = useState(false);
               let { label } = collection;

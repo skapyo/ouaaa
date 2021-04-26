@@ -146,7 +146,7 @@ const NavBar = () => {
                       className={styles.menuItem}
                       href="/map"
                     >
-                      LA CARTE
+                      ACTEURS
                     </MenuItem>
                   </Grid>
                   <Grid item>
@@ -156,7 +156,7 @@ const NavBar = () => {
                       className={styles.menuItem}
                       href="/agenda"
                     >
-                      L'AGENDA
+                      AGENDA DES ACTIONS
                     </MenuItem>
                   </Grid>
                   <Grid item>
@@ -293,7 +293,7 @@ const NavBar = () => {
                       className={styles.menuItem}
                       href="/map"
                     >
-                      LA CARTE
+                      ACTEURS
                     </MenuItem>
                   </Grid>
                   <Grid item>
@@ -303,7 +303,7 @@ const NavBar = () => {
                       className={styles.menuItem}
                       href="/agenda"
                     >
-                      L'AGENDA
+                      AGENDA DES ACTIONS
                     </MenuItem>
                   </Grid>
                   <Grid item>

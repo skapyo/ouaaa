@@ -5,6 +5,7 @@ import {
   Theme,
   Typography,
   useTheme,
+  Grid,
 } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper/Paper';
@@ -22,6 +23,9 @@ import Edit from '@material-ui/icons/Edit';
 import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
+import AddCircleOutline from '@material-ui/icons/AddCircleOutline';
+
+
 import ActorAdminPageLayout from 'containers/layouts/actorAdminPage/ActorAdminPageLayout';
 import gql from 'graphql-tag';
 import { withApollo } from 'hoc/withApollo';
@@ -39,16 +43,29 @@ const useStyles = makeStyles((theme) => ({
   userInfosTitle: {
     marginBottom: theme.spacing(5),
   },
+  buttonGrid: {
+    color: 'white',
+    'background-color': '#bf083e',
+    border: 'none',
+    padding: '0 1em 0 1em',
+    fontSize: '16px',
+    borderRadius: '1.5em',
+    height: '32px',
+    '&:hover': {
+      cursor: 'pointer',
+      color: '#bf083e',
+      'background-color': 'white',
+      border: '2px solid #bf083e',
+    }
+  },
 }));
 
-const useStyles1 = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      flexShrink: 0,
-      marginLeft: theme.spacing(2.5),
-    },
-  }),
-);
+const useStyles1 = makeStyles((theme: Theme) => createStyles({
+  root: {
+    flexShrink: 0,
+    marginLeft: theme.spacing(2.5),
+  },
+}));
 interface TablePaginationActionsProps {
   count: number;
   page: number;
@@ -62,7 +79,9 @@ interface TablePaginationActionsProps {
 function TablePaginationActions(props: TablePaginationActionsProps) {
   const classes = useStyles1();
   const theme = useTheme();
-  const { count, page, rowsPerPage, onChangePage } = props;
+  const {
+    count, page, rowsPerPage, onChangePage,
+  } = props;
 
   const handleFirstPageButtonClick = (
     event: React.MouseEvent<HTMLButtonElement>,
@@ -199,7 +218,9 @@ const ActorAdminPage = () => {
       }
     }
   `;
-  const { data, loading, error, refetch } = useQuery(GET_ACTORS, {
+  const {
+    data, loading, error, refetch,
+  } = useQuery(GET_ACTORS, {
     variables: {
       userId: user && user.id,
     },
@@ -213,8 +234,7 @@ const ActorAdminPage = () => {
     row = data.actorsAdmin.length;
   }
 
-  const emptyRows =
-    rowsPerPage - Math.min(rowsPerPage, row - page * rowsPerPage);
+  const emptyRows = rowsPerPage - Math.min(rowsPerPage, row - page * rowsPerPage);
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
@@ -264,13 +284,23 @@ const ActorAdminPage = () => {
 
   return (
     <ActorAdminPageLayout>
-      <Typography
-        color="secondary"
-        variant="h6"
-        className={styles.userInfosTitle}
-      >
-        Listes des acteurs dont vous êtes administrateur
-      </Typography>
+      <Grid container>
+        <Grid item xs={9}>
+          <Typography
+            color="secondary"
+            variant="h6"
+            className={styles.userInfosTitle}
+          >
+            Listes des acteurs dont vous êtes administrateur
+          </Typography>
+        </Grid>
+        <Grid item xs={3}>
+          <Link href="/addactor">
+            <button className={styles.buttonGrid}> Créer une nouvelle page</button>
+          </Link>
+        </Grid>
+      </Grid>
+
       {typeof data !== 'undefined' && (
         <TableContainer component={Paper}>
           <Table className={classes.table} aria-label="custom pagination table">
@@ -308,13 +338,16 @@ const ActorAdminPage = () => {
                     <TableCell style={{ width: 160 }} align="left">
                       Personne ayant validé
                     </TableCell>
+                    <TableCell style={{ width: 160 }} align="left">
+                      Ajouter un événement
+                    </TableCell>
                   </>
                 )}
               </TableRow>
             </TableHead>
             <TableBody>
-              {typeof data !== 'undefined' &&
-                data.actorsAdmin.map((actor) => (
+              {typeof data !== 'undefined'
+                && data.actorsAdmin.map((actor) => (
                   <TableRow key={actor.id} hover>
                     <TableCell component="th" scope="row">
                       {/* @ts-ignore */}
@@ -336,8 +369,8 @@ const ActorAdminPage = () => {
                       {actor.city}
                     </TableCell>
                     <TableCell style={{ width: 160 }} align="left">
-                      {typeof actor.referents !== 'undefined' &&
-                        actor.referents.map((referent) => {
+                      {typeof actor.referents !== 'undefined'
+                        && actor.referents.map((referent) => {
                           {
                             referent.surname;
                           }
@@ -352,14 +385,14 @@ const ActorAdminPage = () => {
                           }
                         })}
                     </TableCell>
-                    <TableCell style={{ width: 160 }} align="left">
+                    <TableCell style={{ width: 160 }} align="center">
                       {/* @ts-ignore */}
                       <Link href={`/actor/${actor.id}`}>
                         Lien vers page acteur
                       </Link>
                     </TableCell>
 
-                    <TableCell style={{ width: 160 }} align="right">
+                    <TableCell style={{ width: 160 }} align="center">
                       {/* @ts-ignore */}
                       <Link href={`/actorAdmin/actor/${actor.id}`}>
                         <Edit />
@@ -367,7 +400,7 @@ const ActorAdminPage = () => {
                     </TableCell>
                     {user && user.role == 'admin' && (
                       <>
-                        <TableCell style={{ width: 160 }} align="left">
+                        <TableCell style={{ width: 160 }} align="center">
                           <CheckCircleIcon
                             style={{
                               color: actor.isValidated ? 'green' : 'orange',
@@ -375,17 +408,25 @@ const ActorAdminPage = () => {
                             onClick={() => validate(actor)}
                           />
                         </TableCell>
-                        <TableCell style={{ width: 160 }} align="left">
+                        <TableCell style={{ width: 160 }} align="center">
                           {actor.dateValidation && (
                             <Moment format="DD/MM HH:mm" unix>
                               {actor.dateValidation / 1000}
                             </Moment>
                           )}
                         </TableCell>
-                        <TableCell style={{ width: 160 }} align="left">
-                          {actor.userValidated && actor.userValidated.surname}{' '}
+                        <TableCell style={{ width: 160 }} align="center">
+                          {actor.userValidated && actor.userValidated.surname}
+                          {' '}
                           {actor.userValidated && actor.userValidated.lastname}
                         </TableCell>
+                        <TableCell style={{ width: 160 }} align="center">
+                          {/* @ts-ignore */}
+                          <Link href={`/addevent/${actor.id}`}>
+                            <AddCircleOutline />
+                          </Link>
+                        </TableCell>
+                        
                       </>
                     )}
                   </TableRow>
