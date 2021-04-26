@@ -295,6 +295,7 @@ const ActorAdminPage = () => {
           </Typography>
         </Grid>
         <Grid item xs={3}>
+           {/* @ts-ignore */}
           <Link href="/addactor">
             <button className={styles.buttonGrid}> Créer une nouvelle page</button>
           </Link>
