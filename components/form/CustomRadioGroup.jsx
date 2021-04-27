@@ -10,7 +10,7 @@ function CustomRadioGroup(props) {
   const {
     formChangeHandler,
     defaultValue,
-    collection,
+    entries,
     ...other
   } = props;
   const radioGroupContect = useContext(RadioGroupContext);
@@ -19,7 +19,7 @@ function CustomRadioGroup(props) {
   }
 
   const handleChange = (event) => {
-  //  formChangeHandler(event);
+    //  formChangeHandler(event);
     const eventModified = event;
     eventModified.target.oldValueToRemove = radioGroupContect.getCurrentValue();
     formChangeHandler(event);
@@ -34,16 +34,16 @@ function CustomRadioGroup(props) {
         defaultValue={defaultValue}
         onChange={(e) => handleChange(e)}
       >
-        {collection.entries
-    && collection.entries.map((entry) => {
-      return (
-        <FormControlLabel
-          value={entry.id}
-          control={<Radio />}
-          label={entry.label}
-        />
-      );
-    })}
+        {entries
+          && entries.map((entry) => {
+            return (
+              <FormControlLabel
+                value={entry.id}
+                control={<Radio />}
+                label={entry.label}
+              />
+            );
+          })}
       </RadioGroup>
     </FormControl>
   );

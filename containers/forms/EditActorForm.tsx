@@ -780,7 +780,7 @@ const EditActorForm = (props) => {
       });
     }, [
       formValues,
-      edit,,
+      edit, ,
       objectsListLogo,
       objectsList,
       objectsListMain,
@@ -888,7 +888,7 @@ const EditActorForm = (props) => {
       formValues.entriesWithInformation = entriesWithInformation;
     };
 
-    const isEntriesWithInformationContains: Function = (entriesWithInformationArray: Array<Object>, id : number) => {
+    const isEntriesWithInformationContains: Function = (entriesWithInformationArray: Array<Object>, id: number) => {
       let existingEntryInformation;
       let index = 0;
       entriesWithInformationArray.map(
@@ -1007,45 +1007,45 @@ const EditActorForm = (props) => {
         {
           /* @ts-ignore */
           dataCollections.collections
-            /* @ts-ignore */
-            && dataCollections.collections.map((collection) => {
-              if (collection.code !== 'larochelle_quarter' || !estlarochelle) return '';
-              if (!collection.actor) return '';
+          /* @ts-ignore */
+          && dataCollections.collections.map((collection) => {
+            if (collection.code !== 'larochelle_quarter' || !estlarochelle) return '';
+            if (!collection.actor) return '';
 
-              //    const [display, setDisplay] = useState(false);
-              return (
-                <div>
-                  <br />
-                  <Typography className={styles.collectionLabel}>
-                    {collection.label}
-                  </Typography>
-                  {
-                    // display &&
-                    !IsTree(collection) && !collection.multipleSelection && (
-                      <FormControl component="fieldset">
-                        <RadioGroup
-                          row
-                          aria-label="entries"
-                          name="entries"
-                          onChange={formChangeHandler}
-                        >
-                          {collection.entries
-                            && collection.entries.map((entry) => {
-                              return (
-                                <FormControlLabel
-                                  value={entry.id}
-                                  control={<Radio />}
-                                  label={entry.label}
-                                />
-                              );
-                            })}
-                        </RadioGroup>
-                      </FormControl>
-                    )
-                  }
-                </div>
-              );
-            })
+            //    const [display, setDisplay] = useState(false);
+            return (
+              <div>
+                <br />
+                <Typography className={styles.collectionLabel}>
+                  {collection.label}
+                </Typography>
+                {
+                  // display &&
+                  !IsTree(collection) && !collection.multipleSelection && (
+                    <FormControl component="fieldset">
+                      <RadioGroup
+                        row
+                        aria-label="entries"
+                        name="entries"
+                        onChange={formChangeHandler}
+                      >
+                        {collection.entries
+                          && collection.entries.map((entry) => {
+                            return (
+                              <FormControlLabel
+                                value={entry.id}
+                                control={<Radio />}
+                                label={entry.label}
+                              />
+                            );
+                          })}
+                      </RadioGroup>
+                    </FormControl>
+                  )
+                }
+              </div>
+            );
+          })
         }
         <Typography variant="body1" color="primary" className={styles.label}>
           Jour et heure d'ouverture
@@ -1245,155 +1245,155 @@ const EditActorForm = (props) => {
         {
           /* @ts-ignore */
           dataCollections.collections
-            /* @ts-ignore */
-            && dataCollections.collections.map((collection) => {
-              if (!collection.actor) return '';
-              if (collection.code === 'larochelle_quarter') return '';
-              //    const [display, setDisplay] = useState(false);
-              let { label } = collection;
-              let helperText = '';
-              if (collection.code === 'category') {
-                label = 'Choisissez les sous-sujets dans lesquels vous souhaitez apparaître (en priorité)';
-                helperText = 'Vous avez la possibilité d’ajouter un texte libre pour expliquer votre lien au sujet choisi. Vous pouvez sélectionner autant de sujet que nécessaire, les 3 premiers serviront à référencer votre page dans les moteurs de recherches info bulle : expliquant les ensemble et les sujets qu’ils contiennent aisni que les liens avec les sous-sujets et pourquoi pas ODD / transiscope. Ces infos bulles sont aussi visible dans le filtre sur la carte pour aider les usagers de Ouaaa à filtrer leur recherche';
-              } else if (collection.code === 'actor_status') {
-                label = 'Quel est votre statut ?';
-                helperText = 'service public : toutes les collectivités, mairies, cda, cdc participant directement ou via des projets à la transition / ex : la rochelle territoire zéro carbone entreprise : tous les acteurs économiques de la transition, de l’economie sociale et solidaire... association & ONG  : toutes les structures à but non lucratif';
-              } else if (collection.code === 'public_target') {
-                label = 'Quel public visez vous principalement dans vos actions ?';
-                helperText = 'Ici nous vous proposons de choisir votre public principal. Bien sur à chaque action (evenement, campagne…) que vous créerez vous pourrez indiquer des publics différents de votre public principal.';
-              } else if (collection.code === 'collectif') {
-                label = 'En tant qu’acteur, je fais partie des collectifs & réseaux suivants :';
-                helperText = 'Sont référencés ici des collectifs et réseaux locaux. Les groupes locaux de réseaux nationaux (ex Greenpeace) ne sont pas incluent dans cette liste';
-              } else if (collection.code === 'actor_location_action') {
-                label = "Territoire d'action (1 seul choix) *";
-                helperText = 'un acteur n’est pas à côté de chez vous mais peut être se déplace-t-il dans votre zone pour le savoir cocher cette case pour faire apparaître les zones d’actions';
-              }
-              let defaultValue = '';
-              if (
-                !IsTree(collection)
-                && !collection.multipleSelection
-                && formValues
-                && formValues.entries
-              ) {
-                // @ts-ignore
-                formValues.entries.map((entry) => {
-                  let isPresent = false;
-                  if (collection.entries) {
-                    collection.entries.map((entryCollection) => {
-                      if (entryCollection.id === entry) isPresent = true;
-                      return isPresent;
-                    });
-                  }
-                  if (isPresent) defaultValue = entry;
-                });
-              }
-              return (
-                <div>
-                  <Typography className={styles.collectionLabel}>
-                    {label}
-                    {' '}
-                    {helperText !== '' && (
-                      <Tooltip title={helperText}>
-                        <InfoIcon />
-                      </Tooltip>
-                    )}
-                  </Typography>
-                  <br />
-                  {
-                    // display &&
-                    IsTree(collection) && (
+          /* @ts-ignore */
+          && dataCollections.collections.map((collection) => {
+            if (!collection.actor) return '';
+            if (collection.code === 'larochelle_quarter') return '';
+            //    const [display, setDisplay] = useState(false);
+            let { label } = collection;
+            let helperText = '';
+            if (collection.code === 'category') {
+              label = 'Choisissez les sous-sujets dans lesquels vous souhaitez apparaître (en priorité)';
+              helperText = 'Vous avez la possibilité d’ajouter un texte libre pour expliquer votre lien au sujet choisi. Vous pouvez sélectionner autant de sujet que nécessaire, les 3 premiers serviront à référencer votre page dans les moteurs de recherches info bulle : expliquant les ensemble et les sujets qu’ils contiennent aisni que les liens avec les sous-sujets et pourquoi pas ODD / transiscope. Ces infos bulles sont aussi visible dans le filtre sur la carte pour aider les usagers de Ouaaa à filtrer leur recherche';
+            } else if (collection.code === 'actor_status') {
+              label = 'Quel est votre statut ?';
+              helperText = 'service public : toutes les collectivités, mairies, cda, cdc participant directement ou via des projets à la transition / ex : la rochelle territoire zéro carbone entreprise : tous les acteurs économiques de la transition, de l’economie sociale et solidaire... association & ONG  : toutes les structures à but non lucratif';
+            } else if (collection.code === 'public_target') {
+              label = 'Quel public visez vous principalement dans vos actions ?';
+              helperText = 'Ici nous vous proposons de choisir votre public principal. Bien sur à chaque action (evenement, campagne…) que vous créerez vous pourrez indiquer des publics différents de votre public principal.';
+            } else if (collection.code === 'collectif') {
+              label = 'En tant qu’acteur, je fais partie des collectifs & réseaux suivants :';
+              helperText = 'Sont référencés ici des collectifs et réseaux locaux. Les groupes locaux de réseaux nationaux (ex Greenpeace) ne sont pas incluent dans cette liste';
+            } else if (collection.code === 'actor_location_action') {
+              label = "Territoire d'action (1 seul choix) *";
+              helperText = 'un acteur n’est pas à côté de chez vous mais peut être se déplace-t-il dans votre zone pour le savoir cocher cette case pour faire apparaître les zones d’actions';
+            }
+            let defaultValue = '';
+            if (
+              !IsTree(collection)
+              && !collection.multipleSelection
+              && formValues
+              && formValues.entries
+            ) {
+              // @ts-ignore
+              formValues.entries.map((entry) => {
+                let isPresent = false;
+                if (collection.entries) {
+                  collection.entries.map((entryCollection) => {
+                    if (entryCollection.id === entry) isPresent = true;
+                    return isPresent;
+                  });
+                }
+                if (isPresent) defaultValue = entry;
+              });
+            }
+            return (
+              <div>
+                <Typography className={styles.collectionLabel}>
+                  {label}
+                  {' '}
+                  {helperText !== '' && (
+                    <Tooltip title={helperText}>
+                      <InfoIcon />
+                    </Tooltip>
+                  )}
+                </Typography>
+                <br />
+                {
+                  // display &&
+                  IsTree(collection) && (
                     // @ts-ignore
-                      <Entries initValues={initentriesWithInformation}>
-                        <TreeView
-                          className={styles.rootTree}
-                          defaultCollapseIcon={<ArrowDropDownIcon />}
-                          defaultExpandIcon={<ArrowRightIcon />}
-                          defaultEndIcon={<div style={{ width: 24 }} />}
-                        >
-                          {collection.entries
-                            && collection.entries.map((entry) => {
-                              return (
-                                // @ts-ignore
-                                <StyledTreeItem
-                                  key={entry.id}
-                                  nodeId={entry.id}
-                                  labelText={entry.label}
-                                  hideCheckBox
-                                  isForm
-                                  className={styles.treeParent}
-                                >
-                                  {entry.subEntries
-                                    && entry.subEntries.map((subEntry) => {
-                                      return (
-                                        <StyledTreeItem
-                                          key={subEntry.id}
-                                          // @ts-ignore
-                                          nodeId={subEntry.id}
-                                          labelText={subEntry.label}
-                                          formValues={updateFormValues}
-                                          categoryChange={formChangeHandler}
-                                          linkDescription={isEntriesWithInformationContains(formValues.entriesWithInformation, subEntry.id) !== null ? isEntriesWithInformationContains(formValues.entriesWithInformation, subEntry.id).linkDescription : ''}
-                                          isForm
-                                          checked={
-                                            formValues
-                                            && formValues.entriesWithInformation
-                                            && isEntriesWithInformationContains(formValues.entriesWithInformation, subEntry.id) !== null
-                                          }
-                                        />
-                                      );
-                                    })}
-                                </StyledTreeItem>
-                              );
-                            })}
-                        </TreeView>
-                      </Entries>
-                    )
-                  }
-                  {
-                    // display &&
-                    !IsTree(collection) && collection.multipleSelection && (
-                      <List>
+                    <Entries initValues={initentriesWithInformation}>
+                      <TreeView
+                        className={styles.rootTree}
+                        defaultCollapseIcon={<ArrowDropDownIcon />}
+                        defaultExpandIcon={<ArrowRightIcon />}
+                        defaultEndIcon={<div style={{ width: 24 }} />}
+                      >
                         {collection.entries
                           && collection.entries.map((entry) => {
                             return (
-                              <ListItem key={entry.id} role={undefined} dense>
-                                <ListItemText primary={entry.label} />
-                                <Checkbox
-                                  edge="start"
-                                  tabIndex={-1}
-                                  disableRipple
-                                  onChange={formChangeHandler}
-                                  name="entries"
-                                  value={entry.id}
-                                  // @ts-ignore
-                                  checked={
-                                    formValues
-                                    && formValues.entries
-                                    && formValues.entries.includes(entry.id)
-                                  }
-                                  onClick={(e) => e.stopPropagation()}
-                                />
-                              </ListItem>
+                              // @ts-ignore
+                              <StyledTreeItem
+                                key={entry.id}
+                                nodeId={entry.id}
+                                labelText={entry.label}
+                                hideCheckBox
+                                isForm
+                                className={styles.treeParent}
+                              >
+                                {entry.subEntries
+                                  && entry.subEntries.map((subEntry) => {
+                                    return (
+                                      <StyledTreeItem
+                                        key={subEntry.id}
+                                        // @ts-ignore
+                                        nodeId={subEntry.id}
+                                        labelText={subEntry.label}
+                                        formValues={updateFormValues}
+                                        categoryChange={formChangeHandler}
+                                        linkDescription={isEntriesWithInformationContains(formValues.entriesWithInformation, subEntry.id) !== null ? isEntriesWithInformationContains(formValues.entriesWithInformation, subEntry.id).linkDescription : ''}
+                                        isForm
+                                        checked={
+                                          formValues
+                                          && formValues.entriesWithInformation
+                                          && isEntriesWithInformationContains(formValues.entriesWithInformation, subEntry.id) !== null
+                                        }
+                                      />
+                                    );
+                                  })}
+                              </StyledTreeItem>
                             );
                           })}
-                      </List>
-                    )
-                  }
-                  {
-                    // display &&
-                    !IsTree(collection) && !collection.multipleSelection && (
-                      <RadioGroupForContext initValue={defaultValue}>
-                        <CustomRadioGroup
-                          formChangeHandler={formChangeHandler}
-                          collection={collection}
-                          defaultValue={defaultValue}
-                        />
-                      </RadioGroupForContext>
-                    )
-                  }
-                </div>
-              );
-            })
+                      </TreeView>
+                    </Entries>
+                  )
+                }
+                {
+                  // display &&
+                  !IsTree(collection) && collection.multipleSelection && (
+                    <List>
+                      {collection.entries
+                        && collection.entries.map((entry) => {
+                          return (
+                            <ListItem key={entry.id} role={undefined} dense>
+                              <ListItemText primary={entry.label} />
+                              <Checkbox
+                                edge="start"
+                                tabIndex={-1}
+                                disableRipple
+                                onChange={formChangeHandler}
+                                name="entries"
+                                value={entry.id}
+                                // @ts-ignore
+                                checked={
+                                  formValues
+                                  && formValues.entries
+                                  && formValues.entries.includes(entry.id)
+                                }
+                                onClick={(e) => e.stopPropagation()}
+                              />
+                            </ListItem>
+                          );
+                        })}
+                    </List>
+                  )
+                }
+                {
+                  // display &&
+                  !IsTree(collection) && !collection.multipleSelection && (
+                    <RadioGroupForContext initValue={defaultValue}>
+                      <CustomRadioGroup
+                        formChangeHandler={formChangeHandler}
+                        entries={collection.entries}
+                        defaultValue={defaultValue}
+                      />
+                    </RadioGroupForContext>
+                  )
+                }
+              </div>
+            );
+          })
         }
 
         <Grid item xs={12}>
