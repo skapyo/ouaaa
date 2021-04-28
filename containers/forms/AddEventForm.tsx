@@ -1,5 +1,5 @@
 import React, {
-  ChangeEvent, useEffect, useRef, useState,
+  ChangeEvent, useCallback, useEffect, useRef, useState,
 } from 'react';
 import gql from 'graphql-tag';
 import { withApollo } from 'hoc/withApollo';
@@ -51,10 +51,17 @@ import Avatar from '@material-ui/core/Avatar';
 import { getImageUrl } from 'utils/utils';
 import IconButton from '@material-ui/core/IconButton';
 import { Autocomplete } from '@material-ui/lab';
+import FormControl from '@material-ui/core/FormControl';
+import RadioGroup from '@material-ui/core/RadioGroup';
 import Entries from './Entries';
 import { useSessionState } from '../../context/session/session';
 import StyledTreeItem from '../../components/filters/StyledTreeItem';
 import RadioGroupForContext from './RadioGroupForContext';
+import useImageReader from '../../hooks/useImageReader';
+import useDnDStateManager from '../../hooks/useDnDStateManager';
+import withDndProvider from '../../hoc/withDnDProvider';
+import ImagesDropZone from 'components/ImageCropper/ImagesDropZone';
+import ImagesDisplay from 'components/ImageCropper/ImagesDisplay';
 
 const useStyles = makeStyles((theme) => ({
   field: {
@@ -101,6 +108,9 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
     color: '#bf083e',
   },
+  justify: {
+    textAlign: 'justify',
+  },
   rootTree: {
     color: theme.palette.text.secondary,
     '&:hover > $content': {
@@ -118,6 +128,9 @@ const useStyles = makeStyles((theme) => ({
     border: '1px solid #ccc!important',
     padding: '5px 0 5px 0',
     width: '100%',
+  },
+  container: {
+    textAlign: 'center',
   },
 }));
 
@@ -313,8 +326,8 @@ const AddEventForm = ({ actorId }) => {
       rule: ValidationRuleType.required,
     },
     shortDescription: {
-      rule: ValidationRuleType.required && ValidationRuleType.minLength,
-      minLimit: 50,
+      rule: ValidationRuleType.required && ValidationRuleType.maxLength,
+      maxLimit: 90,
     },
   };
   function IsTree(collection) {
@@ -361,6 +374,7 @@ const AddEventForm = ({ actorId }) => {
     const [city, setCity] = useState('');
     const [validated, setValidated] = useState(false);
     const [showOtherActors, setShowOtherActors] = useState(false);
+    const [showRegisterLink, setShowRegisterLink] = useState(false);
 
     const [actors] = useState([]);
     const {
@@ -372,11 +386,93 @@ const AddEventForm = ({ actorId }) => {
     });
 
     const [
+      setImagesLogoList,
+      loadingLogo,
+      resultLogo,
+      imagesLogoListState,
+    ] = useImageReader();
+
+    const onDropLogoHandler = useCallback(
+      (files) => {
+        // @ts-ignore
+        setImagesLogoList(files);
+      },
+      [setImagesLogoList],
+    );
+
+    const {
+      objectsList: objectsListLogo,
+      moveObject: moveObjectLogo,
+      findObject: findObjectLogo,
+      updateActiveIndicator: updateActiveIndicatorLogo,
+      updateDeletedIndicator: updateDeletedIndicatorLogo,
+      initState: initStateLogo,
+      addValues: addValuesLogo,
+      updateKeyIndicator: updateKeyIndicatorLogo,
+    } = useDnDStateManager([]);
+
+    useEffect(() => {
+      if (resultLogo) addValuesLogo(resultLogo);
+      // @ts-ignore
+    }, resultLogo);
+
+    const [
+      setImagesMainList,
+      loadingMain,
+      resultMain,
+      imagesMainListState,
+    ] = useImageReader();
+
+    const onDropMainHandler = useCallback(
+      (files) => {
+        // @ts-ignore
+        setImagesMainList(files);
+      },
+      [setImagesMainList],
+    );
+    const {
+      objectsList: objectsListMain,
+      moveObject: moveObjectMain,
+      findObject: findObjectMain,
+      updateActiveIndicator: updateActiveIndicatorMain,
+      updateDeletedIndicator: updateDeletedIndicatorMain,
+      initState: initStateMain,
+      addValues: addValuesMain,
+      updateKeyIndicator: updateKeyIndicatorMain,
+    } = useDnDStateManager([]);
+
+    useEffect(() => {
+      if (resultMain) addValuesMain(resultMain);
+      // @ts-ignore
+    }, resultMain);
+
+    const [setImagesList, loading, result, imagesListState] = useImageReader();
+
+    const onDropHandler = useCallback(
+      (files) => {
+        // @ts-ignore
+        setImagesList(files);
+      },
+      [setImagesList],
+    );
+
+    const {
+      objectsList,
+      moveObject,
+      findObject,
+      updateActiveIndicator,
+      updateDeletedIndicator,
+      initState,
+      addValues,
+      updateKeyIndicator,
+    } = useDnDStateManager([]);
+
+    const [
       selectedStartDate,
       setSelectedStartDate,
-    ] = React.useState<Date | null>(moment().add(1, 'hour').toDate());
+    ] = React.useState<Date | null>(moment().set('minute', 0).set('hour', 14).add(1, 'day').toDate());
     const [selectedEndDate, setSelectedEndDate] = React.useState<Date | null>(
-      moment().add(2, 'hour').toDate(),
+      moment().set('minute', 0).set('hour', 18).add(1, 'day').toDate(),
     );
 
     const handleStartDateChange = (date: Date | null) => {
@@ -495,6 +591,73 @@ const AddEventForm = ({ actorId }) => {
     );
 
     const submitHandler = () => {
+      let logoPictures;
+      // @ts-ignore
+      if (objectsListLogo) {
+        logoPictures = objectsListLogo.map((object) => {
+          // return object.file
+          return {
+            id: object.serverId,
+            newpic: object.newpic,
+            deleted: object.deleted,
+            logo: true,
+            file: {
+              originalPicture: object.file,
+              croppedPicture: object.croppedImg.file,
+              croppedPictureModified: object.croppedImg.modified,
+              croppedX: object.croppedImg.crop.x,
+              croppedY: object.croppedImg.crop.y,
+              croppedZoom: object.croppedImg.zoom,
+              croppedRotation: object.croppedImg.rotation,
+            },
+          };
+        });
+      }
+      let mainPictures;
+      // @ts-ignore
+      if (objectsListMain) {
+        mainPictures = objectsListMain.map((object) => {
+          // return object.file
+          return {
+            id: object.serverId,
+            newpic: object.newpic,
+            deleted: object.deleted,
+            main: true,
+            file: {
+              originalPicture: object.file,
+              croppedPicture: object.croppedImg.file,
+              croppedPictureModified: object.croppedImg.modified,
+              croppedX: object.croppedImg.crop.x,
+              croppedY: object.croppedImg.crop.y,
+              croppedZoom: object.croppedImg.zoom,
+              croppedRotation: object.croppedImg.rotation,
+            },
+          };
+        });
+      }
+      let pictures;
+      // @ts-ignore
+      if (objectsList) {
+        pictures = objectsList.map((object) => {
+          // return object.file
+          return {
+            id: object.serverId,
+            newpic: object.newpic,
+            deleted: object.deleted,
+            file: {
+              originalPicture: object.file,
+              croppedPicture: object.croppedImg.file,
+              croppedPictureModified: object.croppedImg.modified,
+              croppedX: object.croppedImg.crop.x,
+              croppedY: object.croppedImg.crop.y,
+              croppedZoom: object.croppedImg.zoom,
+              croppedRotation: object.croppedImg.rotation,
+            },
+          };
+        });
+      }
+
+
       const checkboxes = Object.keys(state);
       let categoriesArray: number[];
       categoriesArray = [];
@@ -519,6 +682,9 @@ const AddEventForm = ({ actorId }) => {
             address,
             postCode: formValues.postCode,
             city,
+            logoPictures,
+            mainPictures,
+            pictures,
           },
           actorId: parseInt(actorId),
           userId: parseInt(user.id),
@@ -541,7 +707,7 @@ const AddEventForm = ({ actorId }) => {
     };
 
     return (
-      <Container component="main" maxWidth="sm">
+      <Container component="main" maxWidth="sm" className={styles.container}>
         <Typography className={styles.field} color="secondary" variant="h6">
           Ajouter un événement
         </Typography>
@@ -949,8 +1115,61 @@ const AddEventForm = ({ actorId }) => {
           ''
         )}
         <br />
+
+        <Typography className={styles.collectionLabel}>
+          Inscription à l’évement
+          {' '}
+        </Typography>
+        <br />
+        <FormControl component="fieldset">
+          <RadioGroup
+            row
+            aria-label="register"
+            name="register"
+            onChange={formChangeHandler}
+          >
+
+            <p>
+            <Grid container>
+              <Grid item xs={11}>
+                <FormControlLabel
+                  value="withoutLink"
+                  control={<Radio />}
+                  label="'Je participe à l’action' j’accepte que mes coordonnées soient transmises à l’acteur pour les infos concernant cette action"
+                  onChange={() => setShowRegisterLink(false)}
+                  className={styles.justify}
+                />
+              </Grid>
+              <Grid item xs={1}>
+                <Tooltip title="Permet de récupérer les adresses mails et téléphones des gens, donc évite à l'utilisateur de remplir un formulaire">
+                  <InfoIcon />
+                </Tooltip>
+              </Grid>
+            </Grid>
+            </p>
+            <FormControlLabel
+              value="withLink"
+              control={<Radio />}
+              className={styles.justify}
+              label="'Je participe à l’action'  envoie vers un Lien externe de l'événement valable si vous avez un formulaire plus précis que les fichier ouaaa (ex : stage, formation) ou billeterie en ligne"
+              onChange={() => setShowRegisterLink(true)}
+            />
+            {showRegisterLink && (
+              <FormItem
+                label="Lien externe de participation à l'événement"
+                inputName="registerLink"
+                formChangeHandler={formChangeHandler}
+                value={formValues.registerLink}
+                required={false}
+                errorBool={false}
+                errorText=""
+              />
+            )}
+          </RadioGroup>
+        </FormControl>
+        <p />
         <FormItem
-          label="Lien Facebook de l'événement"
+          label="Lien externe de l'événement (Facebook ou site)"
           inputName="facebookUrl"
           formChangeHandler={formChangeHandler}
           value={formValues.facebookUrl}
@@ -958,7 +1177,7 @@ const AddEventForm = ({ actorId }) => {
           errorBool={false}
           errorText=""
         />
-        <FormItemTextareaAutosize
+        <FormItem
           label="Description courte"
           inputName="shortDescription"
           formChangeHandler={formChangeHandler}
@@ -968,8 +1187,8 @@ const AddEventForm = ({ actorId }) => {
             !validationResult?.global
             && !!validationResult?.result.shortDescription
           }
-          errorText={`Minimum 50 caractères. ${50 - formValues.shortDescription?.length
-          } caractères restants minimum.`}
+          errorText={`Maximum 90 caractères. ${formValues.shortDescription?.length - 90 
+          } caractères en trop.`}
         />
         <Typography variant="body1" color="primary" className={styles.label}>
           Description :
@@ -986,6 +1205,58 @@ const AddEventForm = ({ actorId }) => {
         ) : (
           <div>Editor loading</div>
         )}
+        <br />
+ <Typography variant="body1" color="primary" className={styles.label}>
+          Votre logo
+        </Typography>
+        {objectsListLogo ? (
+          <ImagesDisplay
+            cards={objectsListLogo}
+            moveCard={moveObjectLogo}
+            findCard={findObjectLogo}
+            updateDeletedIndicator={updateDeletedIndicatorLogo}
+            updateKeyIndicator={updateKeyIndicatorLogo}
+          />
+        ) : null}
+        <ImagesDropZone
+          onDropHandler={onDropLogoHandler}
+          text="Déposez ici votre logo au format jpg"
+        />
+        <br />
+        <Typography variant="body1" color="primary" className={styles.label}>
+          Photo principale
+        </Typography>
+        {objectsListMain ? (
+          <ImagesDisplay
+            cards={objectsListMain}
+            moveCard={moveObjectMain}
+            findCard={findObjectMain}
+            updateDeletedIndicator={updateDeletedIndicatorMain}
+            updateKeyIndicator={updateKeyIndicatorMain}
+          />
+        ) : null}
+        <ImagesDropZone
+          onDropHandler={onDropMainHandler}
+          text="Déposez ici votre photo principale au format jpg"
+        />
+        <br />
+        <Typography variant="body1" color="primary" className={styles.label}>
+          Autres photos
+        </Typography>
+        {objectsList ? (
+          <ImagesDisplay
+            cards={objectsList}
+            moveCard={moveObject}
+            findCard={findObject}
+            updateDeletedIndicator={updateDeletedIndicator}
+            updateKeyIndicator={updateKeyIndicator}
+          />
+        ) : null}
+        <ImagesDropZone
+          onDropHandler={onDropHandler}
+          text="Déposez ici votre autres photos au format jpg"
+        />
+
 
         <ClassicButton
           fullWidth
@@ -1003,7 +1274,7 @@ const AddEventForm = ({ actorId }) => {
   return <FormController render={Form} validationRules={validationRules} />;
 };
 
-export default withApollo()(AddEventForm);
+export default withDndProvider(withApollo()(AddEventForm));
 function value(value: any) {
   throw new Error('Function not implemented.');
 }
