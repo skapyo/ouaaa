@@ -20,6 +20,7 @@ import { getImageUrl } from '../../utils/utils';
 import Fab from '@material-ui/core/Fab';
 import Actors from 'containers/layouts/mapPage/actors';
 import Filters from '../../components/filters';
+import Parser from 'html-react-parser';
 
 if (typeof window !== 'undefined') {
   var L = require('leaflet');
@@ -153,6 +154,7 @@ const useStyles = makeStyles((theme) => ({
   },
   content: {
     padding: '10px',
+    width: '100%',
   },
   date: {
     textAlign: 'right',
@@ -207,7 +209,7 @@ const useStyles = makeStyles((theme) => ({
   },
   shortDescription: {
     wordBreak: 'break-all',
-    maxWidth: '100px',
+    width: '100%',
   },
 }));
 
@@ -371,6 +373,27 @@ const carto = () => {
         setPostCode(e.target.value);
       }
     };
+    function splitWord(word, number) {
+      if (word != null) {
+        var indexMax = Math.round(word.length / number);
+        var wordSplit = '';
+        if (indexMax > 1) {
+          for (let i = 0; i < indexMax; i++) {
+            wordSplit += word.slice(i * number, (i + 1) * number);
+            if (i + 1 <= indexMax) {
+              wordSplit += '<br><br> '
+            }
+          }
+          return wordSplit;
+        } else {
+          return word;
+        }
+      } else {
+        return '';
+      }
+    };
+
+
 
     const otherCategoryChange = useCallback((e, collectionLabel) => {
       const newOtherCategories = { ...otherCategoriesChecked };
@@ -457,10 +480,10 @@ const carto = () => {
                                   backgroundImage:
                                     actor.pictures.length >= 1
                                       ? `url(${getImageUrl(
-                                          actor.pictures.sort((a, b) =>
-                                            a.logo ? 1 : -1,
-                                          )[0].croppedPicturePath,
-                                        )})`
+                                        actor.pictures.sort((a, b) =>
+                                          a.logo ? 1 : -1,
+                                        )[0].croppedPicturePath,
+                                      )})`
                                       : '',
                                 }}
                               >
@@ -476,23 +499,18 @@ const carto = () => {
                                 </div>
                               </div>
                               <div className={styles.content}>
-                                <Grid container>
-                                  <Grid item xs={10}>
-                                    <div className={styles.titleDiv}>
-                                      <Typography
-                                        variant="h6"
-                                        component="h2"
-                                        className={styles.title}
-                                      >
-                                        {actor && actor.name}
-                                      </Typography>
-                                    </div>
-                                  </Grid>
-                                </Grid>
-
-                                <Typography className={styles.shortDescription}>
-                                  {actor && actor.shortDescription}
-                                </Typography>
+                                <div className={styles.titleDiv}>
+                                  <Typography
+                                    variant="h6"
+                                    component="h2"
+                                    className={styles.title}
+                                  >
+                                    {actor && actor.name}
+                                  </Typography>
+                                </div>
+                                <p className={styles.shortDescription} >
+                                  {actor && Parser(splitWord(actor.shortDescription, 30))}
+                                </p>
                               </div>
                             </Tooltip>
                             <Popup>
@@ -502,10 +520,10 @@ const carto = () => {
                                   backgroundImage:
                                     actor.pictures.length >= 1
                                       ? `url(${getImageUrl(
-                                          actor.pictures.sort((a, b) =>
-                                            a.position > b.position ? 1 : -1,
-                                          )[0].croppedPicturePath,
-                                        )})`
+                                        actor.pictures.sort((a, b) =>
+                                          a.logo ? 1 : -1,
+                                        )[0].croppedPicturePath,
+                                      )})`
                                       : '',
                                 }}
                               >
