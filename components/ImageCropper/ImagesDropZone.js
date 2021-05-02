@@ -5,6 +5,7 @@ import InsertPhotoIcon from '@material-ui/icons/InsertPhoto';
 import { useDropArea } from 'react-use';
 import Button from '@material-ui/core/Button';
 import Hidden from '@material-ui/core/Hidden';
+
 const useStyles = makeStyles((theme) => ({
   image: {
     width: '100%',
@@ -22,9 +23,13 @@ const ImagesDropZone = ({ onDropHandler, text }) => {
   const styles = useStyles();
 
   const [bond, state] = useDropArea({
-    onFiles: (files) => onDropHandler(files),
+    onFiles: (files) => { onDropHandler(files); },
   });
 
+  const fileUpload = (files) => {
+    onDropHandler(files);
+  };
+  const idInput = `contained-button-file${Math.random()}`;
   return (
     <Card className={styles.dropZone}>
       <Grid container alignItems="center">
@@ -38,37 +43,37 @@ const ImagesDropZone = ({ onDropHandler, text }) => {
             </div>
           </Grid>
           <Grid item xs={4}>
-          <input
-            accept="image/jpeg"
-            className={styles.input}
-            id="contained-button-file"
-            multiple
-            onChange={(e) => {onDropHandler(Array.from(e.target.files))}}
-            type="file"
-          />
-          <label htmlFor="contained-button-file">
-            <Button variant="contained" color="primary" component="span">
-            Téléverser
-            </Button>
-          </label>
-        </Grid>
+            <input
+              accept="image/jpeg"
+              className={styles.input}
+              id={idInput}
+              multiple
+              onChange={(e) => { fileUpload(Array.from(e.target.files)); }}
+              type="file"
+            />
+            <label htmlFor={idInput}>
+              <Button variant="contained" color="primary" component="span">
+                Téléverser
+              </Button>
+            </label>
+          </Grid>
         </Hidden>
         <Hidden lgUp>
           <Grid item xs={12}>
-          <input
-            accept="image/jpeg"
-            className={styles.input}
-            id="contained-button-file"
-            multiple
-            onChange={(e) => {onDropHandler(Array.from(e.target.files))}}
-            type="file"
-          />
-          <label htmlFor="contained-button-file">
-            <Button variant="contained" color="primary" component="span">
-              Téléverser
-            </Button>
-          </label>
-        </Grid>
+            <input
+              accept="image/jpeg"
+              className={styles.input}
+              id="contained-button-file"
+              multiple
+              onChange={(e) => { fileUpload(Array.from(e.target.files)); }}
+              type="file"
+            />
+            <label htmlFor="contained-button-file">
+              <Button variant="contained" color="primary" component="span">
+                Téléverser
+              </Button>
+            </label>
+          </Grid>
         </Hidden>
       </Grid>
     </Card>

@@ -53,6 +53,8 @@ import IconButton from '@material-ui/core/IconButton';
 import { Autocomplete } from '@material-ui/lab';
 import FormControl from '@material-ui/core/FormControl';
 import RadioGroup from '@material-ui/core/RadioGroup';
+import ImagesDropZone from 'components/ImageCropper/ImagesDropZone';
+import ImagesDisplay from 'components/ImageCropper/ImagesDisplay';
 import Entries from './Entries';
 import { useSessionState } from '../../context/session/session';
 import StyledTreeItem from '../../components/filters/StyledTreeItem';
@@ -60,8 +62,6 @@ import RadioGroupForContext from './RadioGroupForContext';
 import useImageReader from '../../hooks/useImageReader';
 import useDnDStateManager from '../../hooks/useDnDStateManager';
 import withDndProvider from '../../hoc/withDnDProvider';
-import ImagesDropZone from 'components/ImageCropper/ImagesDropZone';
-import ImagesDisplay from 'components/ImageCropper/ImagesDisplay';
 
 const useStyles = makeStyles((theme) => ({
   field: {
@@ -159,12 +159,20 @@ const ADDEVENT = gql`
     $actorId: Int!
     $userId: Int!
     $description: String!
+    $practicalInfo: String
+    $logoPictures: [InputPictureType]
+    $mainPictures: [InputPictureType]
+    $pictures: [InputPictureType]
   ) {
     createEvent(
       eventInfos: $eventInfos
       actorId: $actorId
       userId: $userId
       description: $description
+      practicalInfo: $practicalInfo
+      pictures: $pictures
+      mainPictures: $mainPictures
+      logoPictures: $logoPictures
     ) {
       id
       label
@@ -176,6 +184,7 @@ const ADDEVENT = gql`
       published
       lat
       lng
+      registerLink
     }
   }
 `;
@@ -377,6 +386,7 @@ const AddEventForm = ({ actorId }) => {
     const [showRegisterLink, setShowRegisterLink] = useState(false);
 
     const [actors] = useState([]);
+    const [actorsId] = useState([]);
     const {
       loading: actorLoading,
       error: actorError,
@@ -394,6 +404,7 @@ const AddEventForm = ({ actorId }) => {
 
     const onDropLogoHandler = useCallback(
       (files) => {
+
         // @ts-ignore
         setImagesLogoList(files);
       },
@@ -467,12 +478,19 @@ const AddEventForm = ({ actorId }) => {
       updateKeyIndicator,
     } = useDnDStateManager([]);
 
+    useEffect(() => {
+      if (result) addValues(result);
+      // @ts-ignore
+    }, result);
+
     const [
       selectedStartDate,
       setSelectedStartDate,
-    ] = React.useState<Date | null>(moment().set('minute', 0).set('hour', 14).add(1, 'day').toDate());
+    ] = React.useState<Date | null>(moment().set('minute', 0).set('hour', 14).add(1, 'day')
+      .toDate());
     const [selectedEndDate, setSelectedEndDate] = React.useState<Date | null>(
-      moment().set('minute', 0).set('hour', 18).add(1, 'day').toDate(),
+      moment().set('minute', 0).set('hour', 18).add(1, 'day')
+        .toDate(),
     );
 
     const handleStartDateChange = (date: Date | null) => {
@@ -489,11 +507,12 @@ const AddEventForm = ({ actorId }) => {
           && selectedStartDate >= selectedEndDate)
         || (selectedStartDate && moment(selectedStartDate) <= moment())
         || !formValues.shortDescription
-        || !formValues.categories
-        || formValues.categories?.length === 0
+        || !formValues.entries
+        || formValues.entries?.length === 0
         || (!address && !city)
       ) setValidated(false);
       else setValidated(true);
+
     });
 
     const editorRef = useRef();
@@ -511,6 +530,7 @@ const AddEventForm = ({ actorId }) => {
     }, []);
 
     const [descriptionEditor, setDescriptionEditor] = useState();
+    const [praticalInfoEditor, setPraticalInfoEditor] = useState();
 
     const handleChange = (
       category: any,
@@ -657,7 +677,6 @@ const AddEventForm = ({ actorId }) => {
         });
       }
 
-
       const checkboxes = Object.keys(state);
       let categoriesArray: number[];
       categoriesArray = [];
@@ -682,24 +701,31 @@ const AddEventForm = ({ actorId }) => {
             address,
             postCode: formValues.postCode,
             city,
-            logoPictures,
-            mainPictures,
-            pictures,
+            registerLink: formValues.registerLink,
           },
           actorId: parseInt(actorId),
           userId: parseInt(user.id),
           // @ts-ignore
           description: descriptionEditor.getData(),
+          // @ts-ignore
+          praticalInfo: praticalInfoEditor.getData(),
+          logoPictures,
+          mainPictures,
+          pictures,
         },
       });
     };
 
     const autocompleteHandler = (event, valueActor) => {
-      if (typeof formValues.actors === 'undefined') {
-        // setFormValue(...formValues, 'actors': []);
-      }
+      let eventModified = event;
+      
       /* @ts-ignore */
       actors.push(valueActor);
+      /* @ts-ignore */
+      actorsId.push(valueActor.id);
+      eventModified.target.name = 'actors';
+      eventModified.target.value = actorsId;
+      formChangeHandler(eventModified);
       setShowOtherActors(false);
     };
     const handleAddActor = () => {
@@ -1094,6 +1120,7 @@ const AddEventForm = ({ actorId }) => {
             <AddCircleOutline />
           </IconButton>
         </Grid>
+
         {showOtherActors ? (
           <Autocomplete
             id="combo-box-demo"
@@ -1116,6 +1143,28 @@ const AddEventForm = ({ actorId }) => {
         )}
         <br />
 
+
+        <Typography variant="body1" color="primary" className={styles.label}>
+          Infos pratiques complément :
+          {' '}
+        </Typography>
+        <p />
+        {editorLoaded ? (
+          <>
+            <CKEditor
+              editor={ClassicEditor}
+              data={formValues.praticalInfo}
+              onReady={(editor) => {
+                setPraticalInfoEditor(editor);
+              }}
+            />
+
+          </>
+        ) : (
+          <div>Editor loading</div>
+        )}
+        <br />
+        <br />
         <Typography className={styles.collectionLabel}>
           Inscription à l’évement
           {' '}
@@ -1130,22 +1179,22 @@ const AddEventForm = ({ actorId }) => {
           >
 
             <p>
-            <Grid container>
-              <Grid item xs={11}>
-                <FormControlLabel
-                  value="withoutLink"
-                  control={<Radio />}
-                  label="'Je participe à l’action' j’accepte que mes coordonnées soient transmises à l’acteur pour les infos concernant cette action"
-                  onChange={() => setShowRegisterLink(false)}
-                  className={styles.justify}
-                />
+              <Grid container>
+                <Grid item xs={11}>
+                  <FormControlLabel
+                    value="withoutLink"
+                    control={<Radio />}
+                    label="'Je participe à l’action' j’accepte que mes coordonnées soient transmises à l’acteur pour les infos concernant cette action"
+                    onChange={() => setShowRegisterLink(false)}
+                    className={styles.justify}
+                  />
+                </Grid>
+                <Grid item xs={1}>
+                  <Tooltip title="Permet de récupérer les adresses mails et téléphones des gens, donc évite à l'utilisateur de remplir un formulaire">
+                    <InfoIcon />
+                  </Tooltip>
+                </Grid>
               </Grid>
-              <Grid item xs={1}>
-                <Tooltip title="Permet de récupérer les adresses mails et téléphones des gens, donc évite à l'utilisateur de remplir un formulaire">
-                  <InfoIcon />
-                </Tooltip>
-              </Grid>
-            </Grid>
             </p>
             <FormControlLabel
               value="withLink"
@@ -1187,7 +1236,7 @@ const AddEventForm = ({ actorId }) => {
             !validationResult?.global
             && !!validationResult?.result.shortDescription
           }
-          errorText={`Maximum 90 caractères. ${formValues.shortDescription?.length - 90 
+          errorText={`Maximum 90 caractères. ${formValues.shortDescription?.length - 90
           } caractères en trop.`}
         />
         <Typography variant="body1" color="primary" className={styles.label}>
@@ -1206,7 +1255,7 @@ const AddEventForm = ({ actorId }) => {
           <div>Editor loading</div>
         )}
         <br />
- <Typography variant="body1" color="primary" className={styles.label}>
+        <Typography variant="body1" color="primary" className={styles.label}>
           Votre logo
         </Typography>
         {objectsListLogo ? (
@@ -1256,7 +1305,6 @@ const AddEventForm = ({ actorId }) => {
           onDropHandler={onDropHandler}
           text="Déposez ici votre autres photos au format jpg"
         />
-
 
         <ClassicButton
           fullWidth
