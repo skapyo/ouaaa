@@ -530,7 +530,7 @@ const AddEventForm = ({ actorId }) => {
     }, []);
 
     const [descriptionEditor, setDescriptionEditor] = useState();
-    const [praticalInfoEditor, setPraticalInfoEditor] = useState();
+    const [practicalInfoEditor, setPracticalInfoEditor] = useState();
 
     const handleChange = (
       category: any,
@@ -695,20 +695,22 @@ const AddEventForm = ({ actorId }) => {
             startedAt: selectedStartDate,
             endedAt: selectedEndDate,
             published: false,
-            categories: formValues.categories,
+            entries: formValues.entries,
             lat: parseFloat(formValues.lat),
             lng: parseFloat(formValues.lng),
             address,
             postCode: formValues.postCode,
             city,
             registerLink: formValues.registerLink,
+            categories: formValues.categories,
+            actors: formValues.actors,
           },
           actorId: parseInt(actorId),
           userId: parseInt(user.id),
           // @ts-ignore
           description: descriptionEditor.getData(),
           // @ts-ignore
-          praticalInfo: praticalInfoEditor.getData(),
+          practicalInfo: practicalInfoEditor.getData(),
           logoPictures,
           mainPictures,
           pictures,
@@ -1153,9 +1155,9 @@ const AddEventForm = ({ actorId }) => {
           <>
             <CKEditor
               editor={ClassicEditor}
-              data={formValues.praticalInfo}
+              data={formValues.practicalInfo}
               onReady={(editor) => {
-                setPraticalInfoEditor(editor);
+                setPracticalInfoEditor(editor);
               }}
             />
 

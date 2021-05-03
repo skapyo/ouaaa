@@ -16,6 +16,9 @@ import Place from '@material-ui/icons/Place';
 import Schedule from '@material-ui/icons/Schedule';
 import Slider from 'react-slick/lib';
 import CardSliderActor from 'components/cards/CardSliderActor';
+import SupervisedUserCircle from '@material-ui/icons/SupervisedUserCircle';
+import Euro from '@material-ui/icons/Euro';
+import LocalOffer from '@material-ui/icons/LocalOffer';
 
 import Moment from 'react-moment';
 import { useCookies } from 'react-cookie';
@@ -172,6 +175,8 @@ const Event = () => {
         city
         startedAt
         endedAt
+        registerLink
+        practicalInfo
         categories {
           label
           parentCategory {
@@ -179,6 +184,21 @@ const Event = () => {
           }
           subCategories {
             label
+          }
+        }
+        entries {
+          label
+          collection {
+            code
+            label
+          }
+          parentEntry {
+            code
+            label
+            collection {
+              code
+              label
+            }
           }
         }
         actors {
@@ -235,7 +255,9 @@ const Event = () => {
       removeEventParticipate(eventId: $eventId, userId: $userId)
     }
   `;
-  const { data, loading, error, refetch } = useQuery(GET_EVENT, {
+  const {
+    data, loading, error, refetch,
+  } = useQuery(GET_EVENT, {
     variables: {
       id,
     },
@@ -374,22 +396,32 @@ const Event = () => {
       />
     );
   }
-
+  function showCategory(entries) {
+    let text = '';
+    entries.forEach((entry) => {
+      if (
+        entry.parentEntry
+        && entry.parentEntry.collection
+        && entry.parentEntry.collection.code === 'category'
+      ) {
+        text += `${entry.parentEntry.label} : ${entry.label}  `;
+      }
+    });
+    return text;
+  }
   return (
     <AppLayout>
       <Head>
         <title>
           {/* @ts-ignore */}
-          {data && data.event.label}-{/* @ts-ignore */}
+          {data && data.event.label}
+          -
+          {/* @ts-ignore */}
           {data && data.event.city}
-          {/* @ts-ignore */}-{/* @ts-ignore */}
-          {data &&
-            data.event.categories.map((category) => {
-              return (
-                category.parentCategory &&
-                `${category.parentCategory.label} : ${category.label}  `
-              );
-            })}
+          {/* @ts-ignore */}
+          -
+          {/* @ts-ignore */}
+          {data && showCategory(data.event.entries)}
         </title>
       </Head>
       <RootRef>
@@ -401,10 +433,8 @@ const Event = () => {
                 backgroundImage:
                   data && data.event && data.event.pictures.length >= 1
                     ? `url(${getImageUrl(
-                        data.event.pictures.sort((a, b) =>
-                          a.position > b.position ? 1 : -1,
-                        )[0].croppedPicturePath,
-                      )})`
+                      data.event.pictures.sort((a, b) => (a.position > b.position ? 1 : -1))[0].croppedPicturePath,
+                    )})`
                     : '',
               }}
             />
@@ -416,22 +446,28 @@ const Event = () => {
                   <Typography variant="h5" className={styles.cardTitle}>
                     {data && data.event.label}
                   </Typography>
-                  {data &&
-                    data.event.categories.map((category) => (
-                      <div>
-                        <Typography
-                          variant="h7"
-                          className={styles.cardTitleCategories}
-                        >
-                          {/* @ts-ignore */}
-                          {category.parentCategory &&
-                            category.parentCategory.label}
-                          {/* @ts-ignore */}:{/* @ts-ignore */}
-                          {category && category.label}
-                          {/* @ts-ignore */}
-                        </Typography>
-                      </div>
-                    ))}
+                  {data
+                    && data.event.entries.map(
+                      (entry) => entry.parentEntry
+                        && entry.parentEntry.collection.code === 'category' && (
+                          <div>
+                            <Typography
+                              variant="h7"
+                              className={styles.cardTitleCategories}
+                            >
+                              {/* @ts-ignore */}
+                              {` ${
+                                entry.parentEntry && entry.parentEntry.label
+                              } `}
+                              {/* @ts-ignore */}
+                              :
+                              {/* @ts-ignore */}
+                              {` ${entry && entry.label}`}
+                              {/* @ts-ignore */}
+                            </Typography>
+                          </div>
+                      ),
+                    )}
                 </div>
                 <p>{data && Parser(data.event.description)}</p>
                 <div />
@@ -448,6 +484,61 @@ const Event = () => {
                   >
                     INFOS PRATIQUES
                   </Typography>
+                  <Grid container className={[styles.item]}>
+                    <Grid item xs={3} className={[styles.alignRight]}>
+                      <LocalOffer className={[styles.icon]} />
+                    </Grid>
+                    <Grid item xs={8} className={[styles.alignLeft]}>
+                      <div className={[styles.infoLabel]}>TYPE</div>
+                      <span className={[styles.infoValue]}>
+                        {data
+                          && data.event.entries.map(
+                            (entry) => entry
+                              && entry.parentEntry
+                              && entry.parentEntry.collection
+                              && entry.parentEntry.collection.code
+                                === 'event_type' && (
+                                <div>
+                                  <Typography
+                                    variant="h7"
+                                    className={styles.cardTitleCategories}
+                                  >
+                                    {`${entry && entry.parentEntry.label} : ${entry && entry.label}`}
+                                  </Typography>
+                                </div>
+                            ),
+                          )}
+                      </span>
+                    </Grid>
+                  </Grid>
+                  <Grid container className={[styles.item]}>
+                    <Grid item xs={3} className={[styles.alignRight]}>
+                      <SupervisedUserCircle className={[styles.icon]} />
+                    </Grid>
+                    <Grid item xs={8} className={[styles.alignLeft]}>
+                      <div className={[styles.infoLabel]}>
+                        Public cible
+                      </div>
+                      <span className={[styles.infoValue]}>
+                        {data
+                          && data.event.entries.map(
+                            (entry) => entry
+                              && entry.collection
+                              && entry.collection.code === 'event_public_target' && (
+                                <div>
+                                  <Typography
+                                    variant="h7"
+                                    className={styles.cardTitleCategories}
+                                  >
+                                    {` ${entry && entry.label}`}
+                                  </Typography>
+                                </div>
+                            ),
+                          )}
+                      </span>
+                    </Grid>
+                  </Grid>
+
                   <Grid container className={[styles.item]}>
                     <Grid item xs={3} className={[styles.alignRight]}>
                       <Place className={[styles.icon]} />
@@ -467,7 +558,9 @@ const Event = () => {
                         {data && data.event.address && data.event.city && (
                           <span>
                             {/* @ts-ignore */}
-                            {data && data.event.address},{/* @ts-ignore */}
+                            {data && data.event.address}
+                            ,
+                            {/* @ts-ignore */}
                             {data.event.city}
                           </span>
                         )}
@@ -490,6 +583,33 @@ const Event = () => {
                         <Moment format=" DD/MM HH:mm" unix>
                           {data && data.event.endedAt / 1000}
                         </Moment>
+                      </span>
+                    </Grid>
+                  </Grid>
+                  <Grid container className={[styles.item]}>
+                    <Grid item xs={3} className={[styles.alignRight]}>
+                      <Euro className={[styles.icon]} />
+                    </Grid>
+                    <Grid item xs={8} className={[styles.alignLeft]}>
+                      <div className={[styles.infoLabel]}>
+                        Tarif
+                      </div>
+                      <span className={[styles.infoValue]}>
+                        {data
+                          && data.event.entries.map(
+                            (entry) => entry
+                              && entry.collection
+                              && entry.collection.code === 'event_price' && (
+                                <div>
+                                  <Typography
+                                    variant="h7"
+                                    className={styles.cardTitleCategories}
+                                  >
+                                    {` ${entry && entry.label}`}
+                                  </Typography>
+                                </div>
+                            ),
+                          )}
                       </span>
                     </Grid>
                   </Grid>
@@ -523,9 +643,9 @@ const Event = () => {
               </div>
             )}
             <Slider {...settingsSliderImage}>
-              {data &&
-                data.event.pictures &&
-                data.event.pictures
+              {data
+                && data.event.pictures
+                && data.event.pictures
                   .sort((a, b) => (a.position > b.position ? 1 : -1))
                   .map((picture) => (
                     <img
@@ -534,6 +654,19 @@ const Event = () => {
                     />
                   ))}
             </Slider>
+            { data && data.event.practicalInfo && (
+            <div>
+              <div>
+                <Typography
+                  variant="h5"
+                  className={[styles.cardTitle, styles.align]}
+                >
+                  INFO PRATIQUES COMPLEMENTS
+                </Typography>
+              </div>
+              <p>{data && Parser(data.event.practicalInfo)}</p>
+            </div>
+            )}
             <div>
               <Typography
                 variant="h5"
@@ -546,8 +679,8 @@ const Event = () => {
               {...settingsSliderevent}
               className={[styles.articleCarroussel]}
             >
-              {data &&
-                data.event.actors.map((actor) => {
+              {data
+                && data.event.actors.map((actor) => {
                   return <CardSliderActor key={actor.id} actor={actor} />;
                 })}
             </Slider>
