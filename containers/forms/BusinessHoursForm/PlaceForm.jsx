@@ -24,7 +24,7 @@ function PlaceForm({ addPlace }) {
         onChange={(e) => setValue(e.target.value)}
       />
 
-      <TextField
+      {/* <TextField
         id="filled-disabled"
         label="Emplacement"
         defaultValue={value}
@@ -32,7 +32,7 @@ function PlaceForm({ addPlace }) {
         // inputRef={valueRef}
         onChange={(e) => setValue(e.target.value)}
         helperText="Indiquez ici le lieu de rendez-vous"
-      />
+      /> */}
     </form>
   );
 }
