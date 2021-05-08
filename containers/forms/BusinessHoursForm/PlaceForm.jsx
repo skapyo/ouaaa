@@ -23,16 +23,6 @@ function PlaceForm({ addPlace }) {
         value={value}
         onChange={(e) => setValue(e.target.value)}
       />
-
-      {/* <TextField
-        id="filled-disabled"
-        label="Emplacement"
-        defaultValue={value}
-        variant="outlined"
-        // inputRef={valueRef}
-        onChange={(e) => setValue(e.target.value)}
-        helperText="Indiquez ici le lieu de rendez-vous"
-      /> */}
     </form>
   );
 }
