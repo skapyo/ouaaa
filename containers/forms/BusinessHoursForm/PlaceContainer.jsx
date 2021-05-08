@@ -27,7 +27,7 @@ function PlaceContainer(props) {
 
   return (
     <div>
-      <h1>places content</h1>
+      <p>Veuillez entrer les differents emplacements</p>
       <div className="places">
         {places.map((place, index) => (
           <Place

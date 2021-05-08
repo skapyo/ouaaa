@@ -7,17 +7,8 @@ import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
+import AddRoundedIcon from '@material-ui/icons/AddRounded';
 import TimePicker from './TimePicker';
-
-const WEEKDAYS = [
-  { id: 1, day: 'L', selected: false },
-  { id: 2, day: 'M', selected: false },
-  { id: 3, day: 'M', selected: false },
-  { id: 4, day: 'J', selected: false },
-  { id: 5, day: 'V', selected: false },
-  { id: 6, day: 'S', selected: false },
-  { id: 7, day: 'D', selected: false },
-];
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -29,7 +20,6 @@ const useStyles = makeStyles((theme) => ({
     padding: '0 0px',
     display: 'flex',
     flexDirection: 'row',
-    display: 'flex',
     padding: '5px',
   },
   days: {
@@ -171,9 +161,10 @@ export default function TimeContainer(props) {
           <Button
             className={classes.button}
             color="primary"
+            variant="outlined"
             onClick={addTimeRange}
           >
-            Ajouter un horaire
+            <AddRoundedIcon />
           </Button>
         </section>
       )}
