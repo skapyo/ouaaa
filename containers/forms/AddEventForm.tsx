@@ -532,27 +532,7 @@ const AddEventForm = ({ actorId }) => {
     const [descriptionEditor, setDescriptionEditor] = useState();
     const [practicalInfoEditor, setPracticalInfoEditor] = useState();
 
-    const handleChange = (
-      category: any,
-      event: React.ChangeEvent<HTMLInputElement>,
-    ) => {
-      setState({ ...state, [category.id.toString()]: event.target.checked });
-    };
-    const [checked, setChecked] = useState([0]);
-    const handleToggle = (value: number, index: number) => () => {
-      const currentIndex = checked.indexOf(value);
-      const newChecked = [...checked];
-
-      if (currentIndex === -1) {
-        newChecked.push(value);
-      } else {
-        newChecked.splice(currentIndex, 1);
-      }
-
-      setChecked(newChecked);
-      open[index] = !open[index];
-    };
-
+    
     const getObjectLongName = (results, name) => {
       if (!results || !results[0] || !results[0].address_components) {
         return '';

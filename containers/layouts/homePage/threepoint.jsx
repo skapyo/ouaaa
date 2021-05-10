@@ -1,4 +1,6 @@
-import { Container, Grid, makeStyles, Typography } from '@material-ui/core';
+import {
+  Container, Grid, makeStyles, Typography,
+} from '@material-ui/core';
 import React from 'react';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -190,16 +192,14 @@ const PresentationSection = () => {
           <img width="60%" className={styles.image} src="./image_card.jpg" />
         </Grid>
       </Grid>
-      <Link href="/map" className={styles.map}>
-        <button className={styles.button}>VOIR LA CARTE</button>
-      </Link>
+      <br />
       <Typography variant="h2" className={[styles.cardTitle, styles.align]}>
         Ouaaa : Agir pour la transition en Aunis
       </Typography>
       <Typography variant="h3" className={[styles.cardTitle, styles.align]}>
         C'EST POUR QUI ?
       </Typography>
-
+      <br />
       <Grid
         container
         justify="center"

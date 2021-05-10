@@ -71,8 +71,8 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   logo: {
-    width: '8em',
-    marginTop: '1em',
+    width: '10em',
+
   },
 }));
 
@@ -146,7 +146,7 @@ const NavBar = () => {
                       className={styles.menuItem}
                       href="/map"
                     >
-                      ACTEURS
+                      CARTE DES ACTEURS
                     </MenuItem>
                   </Grid>
                   <Grid item>
@@ -176,7 +176,7 @@ const NavBar = () => {
                       className={styles.menuItem}
                       href="/news"
                     >
-                      LE JOURNAL
+                      INFO & ARTICLES
                     </MenuItem>
                   </Grid>
                   <Grid item>

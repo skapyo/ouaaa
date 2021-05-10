@@ -25,6 +25,9 @@ import { useCookies } from 'react-cookie';
 import { useSnackbar } from 'notistack';
 import Head from 'next/head';
 import Parser from 'html-react-parser';
+import Fab from '@material-ui/core/Fab';
+import EditIcon from '@material-ui/icons/Edit';
+import Link from 'components/Link';
 import { getImageUrl } from '../../utils/utils';
 import { useSessionState } from '../../context/session/session';
 import Newsletter from '../../containers/layouts/Newsletter';
@@ -157,6 +160,17 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: '1em',
     textAlign: 'center',
   },
+  fab: {
+    position: 'fixed',
+    bottom: '40px',
+    right: '40px',
+    zIndex: '1400',
+    backgroundColor: '#bf083e',
+    color: 'white',
+    '&:hover': {
+      color: '#bf083e',
+    },
+  },
 }));
 
 const Event = () => {
@@ -225,6 +239,11 @@ const Event = () => {
           }
         }
         participants {
+          id
+          surname
+          lastname
+        }
+        referents {
           id
           surname
           lastname
@@ -686,6 +705,14 @@ const Event = () => {
             </Slider>
           </Container>
           <Newsletter />
+          {((data && containUser(data.event.referents))
+            || (user && user.role === 'admin')) && (
+            <Link href={`/actorAdmin/event/${id}`}>
+              <Fab className={styles.fab} aria-label="edit">
+                <EditIcon />
+              </Fab>
+            </Link>
+          )}
         </Box>
       </RootRef>
     </AppLayout>

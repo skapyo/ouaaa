@@ -156,7 +156,7 @@ const LastActor = () => {
   return (
     <Container className={[styles.event]}>
       <Typography variant="h5" className={[styles.cardTitle, styles.align]}>
-        LES EVENEMENTS RECENTS
+        LES EVENEMENTS A VENIR
       </Typography>
       <Slider {...settings} className={[styles.articleCarroussel]}>
         {eventToRender?.eventData &&
