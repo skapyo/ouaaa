@@ -682,8 +682,6 @@ const EditActorForm = (props) => {
       updateKeyIndicator,
     } = useDnDStateManager(imgInit);
 
-    imgInitLogo;
-
     useEffect(() => {
       if (result) addValues(result);
       // @ts-ignore

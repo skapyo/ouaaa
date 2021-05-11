@@ -1120,6 +1120,7 @@ const AddActorForm = () => {
                         <CustomRadioGroup
                           formChangeHandler={formChangeHandler}
                           entries={collection.entries}
+         
                         />
                       </RadioGroupForContext>
                     )

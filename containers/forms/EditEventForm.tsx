@@ -76,6 +76,7 @@ import CustomRadioGroupForm from 'components/form/CustomRadioGroupForm';
 import ImagesDisplay from 'components/ImageCropper/ImagesDisplay';
 import ImagesDropZone from 'components/ImageCropper/ImagesDropZone';
 import IconButton from '@material-ui/core/IconButton';
+import { FlashOnTwoTone } from '@material-ui/icons';
 import RadioGroupForContext from './RadioGroupForContext';
 import withDndProvider from '../../hoc/withDnDProvider';
 import useImageReader from '../../hooks/useImageReader';
@@ -243,9 +244,11 @@ const GET_EVENT = gql`
       shortDescription
       facebookUrl
       description
+      practicalInfo
       startedAt
       endedAt
       published
+      registerLink
       categories {
         id
         label
@@ -267,6 +270,8 @@ const GET_EVENT = gql`
         croppedZoom
         croppedRotation
         position
+        main
+        logo
       }
       categories {
         id
@@ -424,8 +429,8 @@ const EditEventForm = (props) => {
       rule: ValidationRuleType.required,
     },
     shortDescription: {
-      rule: ValidationRuleType.required && ValidationRuleType.minLength,
-      minLimit: 50,
+      rule: ValidationRuleType.only && ValidationRuleType.maxLength,
+      maxLimit: 90,
     },
   };
 
@@ -461,6 +466,158 @@ const EditEventForm = (props) => {
     variables: { id: props.id.toString() },
   });
 
+  const imgInit = [];
+  if (
+    eventData
+    && eventData.event.pictures
+    && eventData.event.pictures.length > 0
+  ) {
+    eventData.event.pictures
+      .sort((a, b) => (a.position > b.position ? 1 : -1))
+      .map((picture, index) => {
+        if (!picture.main && !picture.logo) {
+          imgInit.push({
+            // @ts-ignore
+            id: index,
+            // @ts-ignore
+            file: null,
+            // @ts-ignore
+            img: getImageUrl(picture.originalPicturePath),
+            // @ts-ignore
+            croppedImg: {
+              crop: {
+                // @ts-ignore
+                x: picture.croppedX,
+                // @ts-ignore
+                y: picture.croppedY,
+              },
+              // @ts-ignore
+              rotation: picture.croppedRotation,
+              // @ts-ignore
+              zoom: picture.croppedZoom,
+              // @ts-ignore
+              file: null,
+              // @ts-ignore
+              img: getImageUrl(picture.croppedPicturePath),
+              // @ts-ignore
+              modified: false,
+            },
+            // @ts-ignore
+            activated: true,
+            // @ts-ignore
+            deleted: false,
+            // @ts-ignore
+            newpic: false,
+            // @ts-ignore
+            serverId: picture.id,
+            // @ts-ignore
+            position: picture.position,
+          });
+        }
+      });
+  }
+
+  const imgInitLogo = [];
+  if (
+    eventData
+    && eventData.event.pictures
+    && eventData.event.pictures.length > 0
+  ) {
+    eventData.event.pictures
+      .sort((a, b) => (a.position > b.position ? 1 : -1))
+      .map((picture, index) => {
+        if (picture.logo) {
+          imgInitLogo.push({
+            // @ts-ignore
+            id: index,
+            // @ts-ignore
+            file: null,
+            // @ts-ignore
+            img: getImageUrl(picture.originalPicturePath),
+            // @ts-ignore
+            croppedImg: {
+              crop: {
+                // @ts-ignore
+                x: picture.croppedX,
+                // @ts-ignore
+                y: picture.croppedY,
+              },
+              // @ts-ignore
+              rotation: picture.croppedRotation,
+              // @ts-ignore
+              zoom: picture.croppedZoom,
+              // @ts-ignore
+              file: null,
+              // @ts-ignore
+              img: getImageUrl(picture.croppedPicturePath),
+              // @ts-ignore
+              modified: false,
+            },
+            // @ts-ignore
+            activated: true,
+            // @ts-ignore
+            deleted: false,
+            // @ts-ignore
+            newpic: false,
+            // @ts-ignore
+            serverId: picture.id,
+            // @ts-ignore
+            position: picture.position,
+          });
+        }
+      });
+  }
+
+  const imgInitMain = [];
+  if (
+    eventData
+    && eventData.event.pictures
+    && eventData.event.pictures.length > 0
+  ) {
+    eventData.event.pictures
+      .sort((a, b) => (a.position > b.position ? 1 : -1))
+      .map((picture, index) => {
+        if (picture.main) {
+          imgInitMain.push({
+            // @ts-ignore
+            id: index,
+            // @ts-ignore
+            file: null,
+            // @ts-ignore
+            img: getImageUrl(picture.originalPicturePath),
+            // @ts-ignore
+            croppedImg: {
+              crop: {
+                // @ts-ignore
+                x: picture.croppedX,
+                // @ts-ignore
+                y: picture.croppedY,
+              },
+              // @ts-ignore
+              rotation: picture.croppedRotation,
+              // @ts-ignore
+              zoom: picture.croppedZoom,
+              // @ts-ignore
+              file: null,
+              // @ts-ignore
+              img: getImageUrl(picture.croppedPicturePath),
+              // @ts-ignore
+              modified: false,
+            },
+            // @ts-ignore
+            activated: true,
+            // @ts-ignore
+            deleted: false,
+            // @ts-ignore
+            newpic: false,
+            // @ts-ignore
+            serverId: picture.id,
+            // @ts-ignore
+            position: picture.position,
+          });
+        }
+      });
+  }
   const router = useRouter();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const [
@@ -556,8 +713,6 @@ const EditEventForm = (props) => {
       else setValidated(true);
     });
 
-
-  
     const editorRef = useRef();
     const [editorLoaded, setEditorLoaded] = useState(false);
     // @ts-ignore
@@ -625,29 +780,25 @@ const EditEventForm = (props) => {
       formValues.facebookUrl = eventData.event.facebookUrl;
       formValues.shortDescription = eventData.event.shortDescription;
       formValues.description = eventData.event.description;
+      formValues.practicalInfo = eventData.event.practicalInfo;
       formValues.address = eventData.event.address;
       formValues.postCode = eventData.event.postCode;
       formValues.city = eventData.event.city;
       formValues.lat = eventData.event.lat;
       formValues.lng = eventData.event.lng;
+      formValues.registerLink = eventData.event.registerLink;
+      setShowRegisterLink(formValues.registerLink !== undefined && formValues.registerLink !== '');
+
       setAddress(eventData.event.address);
       setCity(eventData.event.city);
       setSelectedStartDate(new Date(parseInt(eventData.event.startedAt)));
       setSelectedEndDate(new Date(parseInt(eventData.event.endedAt)));
-      const categories = [];
-      eventData.event.categories.forEach((actorcategory) => {
-        // @ts-ignore
-        categories.push(actorcategory.id);
-      });
       const entries = [];
       eventData.event.entries.forEach((actorentry) => {
         // @ts-ignore
         entries.push(actorentry.id);
       });
-
       // @ts-ignore
-      formValues.categories = categories;
-       // @ts-ignore
       formValues.entries = entries;
     };
     if (firstRender) {
@@ -690,7 +841,7 @@ const EditEventForm = (props) => {
       initState: initStateLogo,
       addValues: addValuesLogo,
       updateKeyIndicator: updateKeyIndicatorLogo,
-    } = useDnDStateManager([]);
+    } = useDnDStateManager(imgInitLogo);
 
     useEffect(() => {
       if (resultLogo) addValuesLogo(resultLogo);
@@ -720,7 +871,7 @@ const EditEventForm = (props) => {
       initState: initStateMain,
       addValues: addValuesMain,
       updateKeyIndicator: updateKeyIndicatorMain,
-    } = useDnDStateManager([]);
+    } = useDnDStateManager(imgInitMain);
 
     useEffect(() => {
       if (resultMain) addValuesMain(resultMain);
@@ -741,6 +892,11 @@ const EditEventForm = (props) => {
       [setImagesList],
     );
 
+    useEffect(() => {
+      if (result) addValues(result);
+      // @ts-ignore
+    }, result);
+
     const {
       objectsList,
       moveObject,
@@ -750,45 +906,7 @@ const EditEventForm = (props) => {
       initState,
       addValues,
       updateKeyIndicator,
-    } = useDnDStateManager([]);
-
-    useEffect(() => {
-      if (result) addValues(result);
-      // @ts-ignore
-    }, result);
-
-    let imgInit = [];
-    if (
-      eventData
-      && eventData.event.pictures
-      && eventData.event.pictures.length > 0
-    ) {
-      imgInit = eventData.event.pictures
-        .sort((a, b) => (a.position > b.position ? 1 : -1))
-        .map((picture, index) => {
-          return {
-            id: index,
-            file: null,
-            img: getImageUrl(picture.originalPicturePath),
-            croppedImg: {
-              crop: {
-                x: picture.croppedX,
-                y: picture.croppedY,
-              },
-              rotation: picture.croppedRotation,
-              zoom: picture.croppedZoom,
-              file: null,
-              img: getImageUrl(picture.croppedPicturePath),
-              modified: false,
-            },
-            activated: true,
-            deleted: false,
-            newpic: false,
-            serverId: picture.id,
-            position: picture.position,
-          };
-        });
-    }
+    } = useDnDStateManager(imgInit);
 
     const submitHandler = () => {
       const checkboxes = Object.keys(state);
@@ -874,7 +992,8 @@ const EditEventForm = (props) => {
             startedAt: selectedStartDate,
             endedAt: selectedEndDate,
             published: false,
-            categories: formValues.categories,
+            entries: formValues.entries,
+            registerLink: formValues.registerLink,
             lat: parseFloat(formValues.lat),
             lng: parseFloat(formValues.lng),
             address,
@@ -1060,7 +1179,7 @@ const EditEventForm = (props) => {
                                 value={entry.id}
                                 onClick={(e) => e.stopPropagation()}
                                   // @ts-ignore
-                                  checked={
+                                checked={
                                     formValues
                                     && formValues.entries
                                     && formValues.entries.includes(entry.id)
@@ -1222,7 +1341,18 @@ const EditEventForm = (props) => {
               helperText = 'Vous avez la possibilité d’ajouter un texte libre pour expliquer votre lien au sujet choisi. Vous pouvez sélectionner autant de sujet que nécessaire, les 3 premiers serviront à référencer votre page dans les moteurs de recherches info bulle : expliquant les ensemble et les sujets qu’ils contiennent aisni que les liens avec les sous-sujets et pourquoi pas ODD / transiscope. Ces infos bulles sont aussi visible dans le filtre sur la carte pour aider les usagers de Ouaaa à filtrer leur recherche';
             }
             if (collection.code !== 'event_price') return '';
-
+            let defaultValue = '';
+            // @ts-ignore
+            formValues.entries.map((entry) => {
+              let isPresent = false;
+              if (collection.entries) {
+                collection.entries.map((entryCollection) => {
+                  if (entryCollection.id === entry) isPresent = true;
+                  return isPresent;
+                });
+              }
+              if (isPresent) defaultValue = entry;
+            });
             return (
               <div>
                 <br />
@@ -1238,35 +1368,12 @@ const EditEventForm = (props) => {
                 <br />
                 {
                   // display &&
-                  !IsTree(collection) && collection.multipleSelection && (
-                    <List>
-                      {collection.entries
-                        && collection.entries.map((entry) => {
-                          return (
-                            <ListItem key={entry.id} role={undefined} dense>
-                              <ListItemText primary={entry.label} />
-                              <Checkbox
-                                edge="start"
-                                tabIndex={-1}
-                                disableRipple
-                                onChange={formChangeHandler}
-                                name="entries"
-                                value={entry.id}
-                                onClick={(e) => e.stopPropagation()}
-                              />
-                            </ListItem>
-                          );
-                        })}
-                    </List>
-                  )
-                }
-                {
-                  // display &&
                   !IsTree(collection) && !collection.multipleSelection && (
-                    <RadioGroupForContext initValue={' '}>
+                    <RadioGroupForContext initValue={defaultValue}>
                       <CustomRadioGroup
                         formChangeHandler={formChangeHandler}
                         entries={collection.entries}
+                        defaultValue={defaultValue}
                       />
                     </RadioGroupForContext>
 
@@ -1364,8 +1471,9 @@ const EditEventForm = (props) => {
                     value="withoutLink"
                     control={<Radio />}
                     label="'Je participe à l’action' j’accepte que mes coordonnées soient transmises à l’acteur pour les infos concernant cette action"
-                    onChange={() => setShowRegisterLink(false)}
+                    onChange={() => { setShowRegisterLink(false); formValues.registerLink = ''; }}
                     className={styles.justify}
+                    checked={!showRegisterLink}
                   />
                 </Grid>
                 <Grid item xs={1}>
@@ -1381,16 +1489,17 @@ const EditEventForm = (props) => {
               className={styles.justify}
               label="'Je participe à l’action'  envoie vers un Lien externe de l'événement valable si vous avez un formulaire plus précis que les fichier ouaaa (ex : stage, formation) ou billeterie en ligne"
               onChange={() => setShowRegisterLink(true)}
+              checked={showRegisterLink}
             />
             {showRegisterLink && (
               <FormItem
                 label="Lien externe de participation à l'événement"
                 inputName="registerLink"
                 formChangeHandler={formChangeHandler}
-                value={formValues.registerLink}
                 required={false}
                 errorBool={false}
                 errorText=""
+                value={formValues.registerLink}
               />
             )}
           </RadioGroup>

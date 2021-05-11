@@ -884,6 +884,7 @@ const AddEventForm = ({ actorId }) => {
                       <CustomRadioGroup
                         formChangeHandler={formChangeHandler}
                         entries={collection.entries}
+                      
                       />
                     </RadioGroupForContext>
 
