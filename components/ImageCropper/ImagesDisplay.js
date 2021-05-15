@@ -6,6 +6,7 @@ import { makeStyles, withStyles } from '@material-ui/core/styles';
 import ImageCropper from 'components/ImageCropper/ImageCropper';
 import DeleteIcon from '@material-ui/icons/Delete';
 import HeightIcon from '@material-ui/icons/Height';
+import { red } from '@material-ui/core/colors';
 import styles from './styles.module.css';
 
 const ImagesDisplay = ({
@@ -85,6 +86,8 @@ const ImagePrev = ({
     setOpenedInd(true);
   };
 
+  if (deleted) return (<></>);
+
   return (
     <Grid item>
       <div
@@ -102,7 +105,7 @@ const ImagePrev = ({
             </Grid>
             <Grid item>
               <DeleteIcon
-                color={deleted ? 'primary' : 'action'}
+                color={deleted ? 'secondary' : 'action'}
                 onClick={() => deletedIconClickHandler(id)}
               />
             </Grid>
