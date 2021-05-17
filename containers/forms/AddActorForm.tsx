@@ -797,7 +797,7 @@ const AddActorForm = () => {
         <Typography variant="body1" color="primary" className={styles.label}>
           Jour et heure d'ouverture
         </Typography>
-        <SchedulerContainer className={styles.schedulerContainer} />
+        <SchedulerContainer />
 
         <Typography variant="body1" color="primary" className={styles.label}>
           CONTACT PRIVE pour les échanges avec Ouaaa

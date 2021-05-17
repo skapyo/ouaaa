@@ -80,16 +80,18 @@ function StyledTreeItem(props) {
   const entriesContext = useContext(EntriesContext);
   let isThisEntryNotInTopSEO = false;
   if (entriesContext !== undefined) {
-    isThisEntryNotInTopSEO = entriesContext.getList().indexOf(parseInt(other.nodeId, 10))
-    >= 3;
-    console.log(!isThisEntryNotInTopSEO +' '+ entriesContext.getList() + ' ' + parseInt(other.nodeId, 10))
-
+    isThisEntryNotInTopSEO =
+      entriesContext.getList().indexOf(parseInt(other.nodeId, 10)) >= 3;
+    console.log(
+      !isThisEntryNotInTopSEO +
+        ' ' +
+        entriesContext.getList() +
+        ' ' +
+        parseInt(other.nodeId, 10),
+    );
   }
 
-
-
   const handleCheckboxChange = (event) => {
-   
     const checkStatus = event.target.checked;
     const index = parseInt(id, 10);
     if (isParent) {
@@ -100,7 +102,9 @@ function StyledTreeItem(props) {
       if (entriesContext) {
         let isTopSEO;
         if (checkStatus) {
-          isTopSEO = !entriesContext.addCheckedCheckbox(parseInt(other.nodeId, 10));
+          isTopSEO = !entriesContext.addCheckedCheckbox(
+            parseInt(other.nodeId, 10),
+          );
         } else {
           entriesContext.removeCheckedCheckbox(parseInt(other.nodeId), 10);
         }
@@ -121,21 +125,21 @@ function StyledTreeItem(props) {
     categoryChange(event);
   };
   //
-  console.log(checked + ' ' + other.nodeId)
+  console.log(checked + ' ' + other.nodeId);
   return (
     <TreeItem
-      label={(
+      label={
         <div>
           <div className={classes.labelRoot}>
             <Typography variant="body2" className={classes.labelText}>
               {labelText}
             </Typography>
             {isForm && isThisEntryNotInTopSEO && (
-            <Tooltip title="Seuls les 3 premiers sujets seront utilsés pour le référencement">
-              <InfoIcon />
-            </Tooltip>
+              <Tooltip title="Seuls les 3 premiers sujets seront utilsés pour le référencement">
+                <InfoIcon />
+              </Tooltip>
             )}
-            { !hideCheckBox && (
+            {!hideCheckBox && (
               <Checkbox
                 edge="start"
                 tabIndex={-1}
@@ -143,27 +147,26 @@ function StyledTreeItem(props) {
                 name="entries"
                 value={other.nodeId}
                 className={classes.checkbox}
-                style={{ color: '#019077'}}
+                style={{ color: '#019077' }}
                 checked={checked}
                 onChange={(e) => handleCheckboxChange(e)}
                 onClick={(e) => e.stopPropagation()}
               />
             )}
-
           </div>
           {isForm && checked && !hideCheckBox && (
-          <TextField
-            className={classes.entryDescription}
-            variant="outlined"
-            name="linkDescription"
-            placeholder={`Votre lien avec le sujet ${labelText}`}
-            onChange={handleDescriptionChange}
-            value={other.linkDescription}
-            linkDescription
-          />
+            <TextField
+              className={classes.entryDescription}
+              variant="outlined"
+              name="linkDescription"
+              placeholder={`Votre lien avec le sujet ${labelText}`}
+              onChange={handleDescriptionChange}
+              value={other.linkDescription}
+              linkDescription
+            />
           )}
         </div>
-      )}
+      }
       style={{
         '--tree-view-color': color,
         '--tree-view-bg-color': bgColor,
