@@ -1,26 +1,26 @@
 import React, { useState, useContext, useEffect, useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { nanoid } from 'nanoid';
-import ButtonDay from './ButtonDay';
 import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
+// import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import AddRoundedIcon from '@material-ui/icons/AddRounded';
+import ButtonDay from './ButtonDay';
 import TimePicker from './TimePicker';
 
 const useStyles = makeStyles((theme) => ({
   container: {
     display: 'flex',
     flexDirection: 'row',
+    justifyContent: 'flex-end',
   },
   section: {
     color: 'white',
     padding: '0 0px',
     display: 'flex',
-    flexDirection: 'row',
-    padding: '5px',
+    flexDirection: 'column',
   },
   days: {
     color: 'white',
@@ -28,7 +28,6 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
-    padding: '5px',
   },
   places: {
     display: 'flex',
@@ -42,9 +41,13 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
-    padding: '5px',
   },
-  button: {
+  buttonAdd: {
+    marginTop: 'auto',
+    textTransform: 'none',
+    color: '#3f51b5',
+  },
+  buttonDelete: {
     marginTop: 'auto',
   },
 }));
@@ -110,64 +113,68 @@ export default function TimeContainer(props) {
   }, [weekdays, hours, location]);
 
   return (
-    <div className={classes.section}>
-      <IconButton aria-label="delete" className={classes.deleteButton}>
+    <div className={classes.container}>
+      <div className={classes.section}>
+        {weekdays && (
+          <section>
+            <div className={classes.places}>
+              <div className={classes.days}>
+                {weekdays.map((day) => {
+                  return (
+                    <div className="day">
+                      <ButtonDay
+                        dayId={day.id}
+                        text={day.day}
+                        selectDays={selectDays}
+                        selected={day.selected}
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+              {places.length > 0 && (
+                <>
+                  <h4>Emplacements</h4>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={location}
+                    onChange={(e) => selectLocation(e.target.value)}
+                  >
+                    {places.map((place) => {
+                      return (
+                        <MenuItem value={place.text}>{place.text}</MenuItem>
+                      );
+                    })}
+                  </Select>
+                </>
+              )}
+            </div>
+            <div className={classes.timerange}>
+              {timeRangeList.length > 0 &&
+                timeRangeList.map((e, index) => {
+                  return (
+                    <TimePicker selectHours={selectHours} indexTimer={index} />
+                  );
+                })}
+            </div>
+
+            <Button
+              className={classes.buttonAdd}
+              color="blue"
+              onClick={addTimeRange}
+            >
+              Ajouter des horaires
+            </Button>
+          </section>
+        )}
+      </div>
+      <Button aria-label="delete" className={classes.buttonDelete}>
         <DeleteIcon
+          fontSize="small"
           onClick={(e) => deleteTimeContainer(e, indexTimeContainer)}
         />
-      </IconButton>
-      {weekdays && (
-        <section className={classes.container}>
-          <div className={classes.places}>
-            <div className={classes.days}>
-              {weekdays.map((day) => {
-                return (
-                  <div className="day">
-                    <ButtonDay
-                      dayId={day.id}
-                      text={day.day}
-                      selectDays={selectDays}
-                      selected={day.selected}
-                    ></ButtonDay>
-                  </div>
-                );
-              })}
-            </div>
-            {places.length > 0 && (
-              <>
-                <h4>Emplacements</h4>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={location}
-                  onChange={(e) => selectLocation(e.target.value)}
-                >
-                  {places.map((place) => {
-                    return <MenuItem value={place.text}>{place.text}</MenuItem>;
-                  })}
-                </Select>
-              </>
-            )}
-          </div>
-          <div className={classes.timerange}>
-            {timeRangeList.length > 0 &&
-              timeRangeList.map((e, index) => {
-                return (
-                  <TimePicker selectHours={selectHours} indexTimer={index} />
-                );
-              })}
-          </div>
-
-          <Button
-            className={classes.button}
-            color="primary"
-            variant="outlined"
-            onClick={addTimeRange}
-          >
-            <AddRoundedIcon />
-          </Button>
-        </section>
-      )}
+      </Button>
     </div>
   );
 }

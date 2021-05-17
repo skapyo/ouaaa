@@ -756,8 +756,9 @@ const AddActorForm = () => {
           dataCollections.collections &&
             /* @ts-ignore */
             dataCollections.collections.map((collection) => {
-              if (collection.code !== 'larochelle_quarter' || !estlarochelle)
+              if (collection.code !== 'larochelle_quarter' || !estlarochelle) {
                 return '';
+              }
 
               //    const [display, setDisplay] = useState(false);
               return (
@@ -797,7 +798,7 @@ const AddActorForm = () => {
         <Typography variant="body1" color="primary" className={styles.label}>
           Jour et heure d'ouverture
         </Typography>
-        <SchedulerContainer />
+        <SchedulerContainer className={styles.label} />
 
         <Typography variant="body1" color="primary" className={styles.label}>
           CONTACT PRIVE pour les échanges avec Ouaaa

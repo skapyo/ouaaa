@@ -1,14 +1,18 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import TimeContainer from './TimeContainer';
 import Button from '@material-ui/core/Button';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
-import FormControl from '@material-ui/core/FormControl';
-import Input from '@material-ui/core/Input';
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+
+import TimeContainer from './TimeContainer';
 import PlaceContainer from './PlaceContainer';
 
 const useStyles = makeStyles((theme) => ({
+  main: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
   container: {
     display: 'flex',
     flexDirection: 'column',
@@ -16,12 +20,11 @@ const useStyles = makeStyles((theme) => ({
   timeContainer: {
     display: 'flex',
     flexDirection: 'row',
+    marginTop: '20px',
   },
   button: {
-    marginRight: 'auto',
-  },
-  buttonDelete: {
-    // marginRight: "auto",
+    marginTop: 'auto',
+    // position: 'relative',
   },
 }));
 
@@ -101,42 +104,42 @@ export default function SchedulerContainer() {
   }, [timeFrames]);
 
   return (
-    <div className={classes.container}>
-      <div>
-        <FormControlLabel
-          control={
-            <Switch
-              checked={uniquePlace}
-              onChange={() => setUniquePlace(!uniquePlace)}
-              name="Unique Place"
-            />
-          }
-          label={uniquePlace ? 'Emplacement unique' : 'Plusieurs emplacements'}
-        />
-        {!uniquePlace && <PlaceContainer updatePlaces={updatePlaces} />}
-      </div>
-
-      {timeContainerList.length > 0 &&
-        timeContainerList.map((days, index) => {
-          return (
-            <div className={classes.timeContainer}>
-              <TimeContainer
-                updateWeekDays={updateWeekDays}
-                updateTimeFrames={updateTimeFrames}
-                availableDays={days}
-                indexTimeContainer={index}
-                deleteTimeContainer={deleteTimeContainer}
-                places={places}
+    <div className={classes.main}>
+      <div className={classes.container}>
+        <div>
+          <FormControlLabel
+            control={
+              <Switch
+                checked={uniquePlace}
+                onChange={() => setUniquePlace(!uniquePlace)}
+                name="Unique Place"
               />
-            </div>
-          );
-        })}
-      <Button
-        className={classes.button}
-        variant="outlined"
-        onClick={addTimeContainer}
-      >
-        Ajouter une nouvelle ligne
+            }
+            label={
+              uniquePlace ? 'Emplacement unique' : 'Plusieurs emplacements'
+            }
+          />
+          {!uniquePlace && <PlaceContainer updatePlaces={updatePlaces} />}
+        </div>
+
+        {timeContainerList.length > 0 &&
+          timeContainerList.map((days, index) => {
+            return (
+              <div className={classes.timeContainer}>
+                <TimeContainer
+                  updateWeekDays={updateWeekDays}
+                  updateTimeFrames={updateTimeFrames}
+                  availableDays={days}
+                  indexTimeContainer={index}
+                  deleteTimeContainer={deleteTimeContainer}
+                  places={places}
+                />
+              </div>
+            );
+          })}
+      </div>
+      <Button className={classes.button} onClick={addTimeContainer}>
+        <AddCircleOutlineIcon fontSize="small" />
       </Button>
     </div>
   );

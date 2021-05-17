@@ -5,11 +5,13 @@ import TextField from '@material-ui/core/TextField';
 const useStyles = makeStyles((theme) => ({
   container: {
     display: 'flex',
+    justifyContent: 'center',
+    marginTop: '10px',
   },
   textField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    width: 80,
+    marginLeft: theme.spacing(0.5),
+    marginRight: theme.spacing(0.5),
+    width: 75,
   },
 }));
 
