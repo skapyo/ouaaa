@@ -63,12 +63,12 @@ const ImagesDropZone = ({ onDropHandler, text }) => {
             <input
               accept="image/jpeg"
               className={styles.input}
-              id="contained-button-file"
+              id={idInput}
               multiple
               onChange={(e) => { fileUpload(Array.from(e.target.files)); }}
               type="file"
             />
-            <label htmlFor="contained-button-file">
+             <label htmlFor={idInput}>
               <Button variant="contained" color="primary" component="span">
                 Téléverser
               </Button>

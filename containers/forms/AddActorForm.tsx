@@ -1096,6 +1096,7 @@ const AddActorForm = () => {
                           collection.entries.map((entry) => {
                             return (
                               <ListItem key={entry.id} role={undefined} dense>
+                                {/* @ts-ignore */}
                                 <ListItemText primary={entry.label} />
                                 <Checkbox
                                   edge="start"
@@ -1119,6 +1120,7 @@ const AddActorForm = () => {
                         <CustomRadioGroup
                           formChangeHandler={formChangeHandler}
                           entries={collection.entries}
+         
                         />
                       </RadioGroupForContext>
                     )

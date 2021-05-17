@@ -682,8 +682,6 @@ const EditActorForm = (props) => {
       updateKeyIndicator,
     } = useDnDStateManager(imgInit);
 
-    imgInitLogo;
-
     useEffect(() => {
       if (result) addValues(result);
       // @ts-ignore
@@ -1357,6 +1355,7 @@ const EditActorForm = (props) => {
                         && collection.entries.map((entry) => {
                           return (
                             <ListItem key={entry.id} role={undefined} dense>
+                               {/* @ts-ignore */}
                               <ListItemText primary={entry.label} />
                               <Checkbox
                                 edge="start"

@@ -9,7 +9,7 @@ import Button from '@material-ui/core/Button';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import styles from './styles.module.css';
 import getCroppedImg from './cropImage';
-
+import CloseIcon from '@material-ui/icons/Close';
 // const dogImg =
 //   'https://img.huffingtonpost.com/asset/5ab4d4ac2000007d06eb2c56.jpeg?cache=sih0jwle4e&ops=1910_1000'
 
@@ -38,6 +38,11 @@ const useStyles = makeStyles((theme) => ({
     align: 'center',
     height: '300px!important',
     width: 'inherit!important',
+  },
+  close: {
+    background: 'white',
+    align: 'right',
+    padding: '0.5em',
   },
 }));
 
@@ -89,8 +94,10 @@ const ImageCropper = ({
   return (
     <Modal open={open} onClose={onClose} className={styles.popup}>
       {/* <Modal.Content> */}
-
       <div>
+      <Grid container justify="flex-end" className={styles.close}>
+          <CloseIcon onClick={onClose} justify="center" alignItems="center"></CloseIcon>
+      </Grid>
         <div className={styles.cropContainer}>
           <Grid>
             <Grid item xs={8}>
