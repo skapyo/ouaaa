@@ -1,12 +1,11 @@
+/* eslint-disable react/jsx-wrap-multilines */
 import React, { useState, useContext, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 
 import TimeContainer from './TimeContainer';
-import PlaceContainer from './PlaceContainer';
 
 const useStyles = makeStyles((theme) => ({
   main: {
@@ -16,6 +15,7 @@ const useStyles = makeStyles((theme) => ({
   container: {
     display: 'flex',
     flexDirection: 'column',
+    justifyContent: 'center',
   },
   timeContainer: {
     display: 'flex',
@@ -24,7 +24,6 @@ const useStyles = makeStyles((theme) => ({
   },
   button: {
     marginTop: 'auto',
-    // position: 'relative',
   },
 }));
 
@@ -38,13 +37,13 @@ const WEEKDAYS = [
   { id: 7, day: 'D', selected: false },
 ];
 
-export default function SchedulerContainer() {
+const SchedulerContainer = (props) => {
   const classes = useStyles();
 
   const [timeContainerList, setTimeContainerList] = useState([WEEKDAYS]);
   const [availableDays, setAvailableDays] = useState(WEEKDAYS);
   const [timeFrames, setTimesFrames] = useState([]);
-  const [uniquePlace, setUniquePlace] = useState(true);
+  const [showPlace, setShowPlace] = useState(true);
   const [places, setPlaces] = useState([]);
 
   const addTimeContainer = () => {
@@ -110,16 +109,13 @@ export default function SchedulerContainer() {
           <FormControlLabel
             control={
               <Switch
-                checked={uniquePlace}
-                onChange={() => setUniquePlace(!uniquePlace)}
+                checked={showPlace}
+                onChange={() => setShowPlace(!showPlace)}
                 name="Unique Place"
               />
             }
-            label={
-              uniquePlace ? 'Emplacement unique' : 'Plusieurs emplacements'
-            }
+            label={showPlace ? 'Cacher les lieux' : 'Afficher les lieux'}
           />
-          {!uniquePlace && <PlaceContainer updatePlaces={updatePlaces} />}
         </div>
 
         {timeContainerList.length > 0 &&
@@ -133,14 +129,18 @@ export default function SchedulerContainer() {
                   indexTimeContainer={index}
                   deleteTimeContainer={deleteTimeContainer}
                   places={places}
+                  showPlace={showPlace}
+                  updatePlaces={updatePlaces}
                 />
               </div>
             );
           })}
       </div>
-      <Button className={classes.button} onClick={addTimeContainer}>
+      <span className={classes.button} onClick={addTimeContainer} disableRipple>
         <AddCircleOutlineIcon fontSize="small" />
-      </Button>
+      </span>
     </div>
   );
-}
+};
+
+export default SchedulerContainer;

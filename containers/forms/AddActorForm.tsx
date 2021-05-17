@@ -179,7 +179,6 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(3),
     width: '100%!important',
   },
-
   location: {
     margin: '1em 0',
     '& input': {
@@ -798,7 +797,7 @@ const AddActorForm = () => {
         <Typography variant="body1" color="primary" className={styles.label}>
           Jour et heure d'ouverture
         </Typography>
-        <SchedulerContainer className={styles.label} />
+        <SchedulerContainer className={styles.schedulerContainer} />
 
         <Typography variant="body1" color="primary" className={styles.label}>
           CONTACT PRIVE pour les échanges avec Ouaaa

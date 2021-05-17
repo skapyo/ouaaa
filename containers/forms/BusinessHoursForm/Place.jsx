@@ -1,24 +1,11 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
 import Chip from '@material-ui/core/Chip';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 
-const useStyles = makeStyles((theme) => ({
-  container: {
-    display: 'flex',
-    flexWrap: 'wrap',
-  },
-  textField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    width: 80,
-  },
-}));
-
-function Place({ place, index, removePlace }) {
-  const classes = useStyles();
-
+const Place = ({ place, index, removePlace }) => {
   return (
     <Chip
       size="small"
@@ -28,6 +15,6 @@ function Place({ place, index, removePlace }) {
       onDelete={() => removePlace(index)}
     />
   );
-}
+};
 
 export default Place;

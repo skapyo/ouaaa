@@ -6,8 +6,6 @@ import InputLabel from '@material-ui/core/InputLabel';
 function PlaceForm({ addPlace }) {
   const [value, setValue] = React.useState('');
 
-  //   const valueRef = useRef('');
-
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!value) return;
