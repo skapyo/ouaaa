@@ -52,7 +52,7 @@ export default function TimePicker(props) {
           shrink: true,
         }}
         inputProps={{
-          step: 1200, // 5 min
+          step: 600, // 5 min
         }}
         onChange={(e) => changeStartTime(e)}
       />
@@ -66,7 +66,7 @@ export default function TimePicker(props) {
           shrink: true,
         }}
         inputProps={{
-          step: 1200, // 5 min
+          step: 600, // 5 min
         }}
         onChange={(e) => changeEndTime(e)}
       />

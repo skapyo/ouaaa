@@ -173,11 +173,12 @@ const TimeContainer = (props) => {
           </>
         )}
       </div>
-      <Button aria-label="delete" className={classes.buttonDelete}>
-        <DeleteIcon
-          fontSize="small"
-          onClick={(e) => deleteTimeContainer(e, indexTimeContainer)}
-        />
+      <Button
+        aria-label="delete"
+        className={classes.buttonDelete}
+        onClick={(e) => deleteTimeContainer(e, indexTimeContainer)}
+      >
+        <DeleteIcon fontSize="small" />
       </Button>
     </div>
   );

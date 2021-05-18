@@ -10,7 +10,7 @@ const Place = ({ place, index, removePlace }) => {
     <Chip
       size="small"
       icon={<LocationOnIcon />}
-      label={place.text}
+      label={place}
       onClick={() => console.log('here')}
       onDelete={() => removePlace(index)}
     />
