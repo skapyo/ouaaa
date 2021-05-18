@@ -591,6 +591,7 @@ const EditActorForm = (props) => {
     const [showOtherContact, setShowOtherContact] = useState(
       formValues.contactId !== actorData.actor.id,
     );
+    const [showOtherContactList, setShowOtherContactList] = useState(false);
     // @ts-ignore
     const { CKEditor, ClassicEditor } = editorRef.current || {};
 
@@ -613,9 +614,20 @@ const EditActorForm = (props) => {
       imagesLogoListState,
     ] = useImageReader();
 
-   
+    const inputChangeHandler = (event, value) => {
+      if (event.target.value) {
+        if (event.target.value.length < 3) {
+          setShowOtherContactList(false);
+        } else {
+          setShowOtherContactList(true);
+        }
+      }
+    };
     const autocompleteHandler = (event, value) => {
-      formValues.contactId = value.id;
+      if (value) {
+        formValues.contactId = value.id;
+      }
+      setShowOtherContactList(false);
     };
 
     const {
@@ -631,33 +643,31 @@ const EditActorForm = (props) => {
 
     const onDropLogoHandler = useCallback(
       (files) => {
-        var hasAlreadyOnePicture = false;
+        let hasAlreadyOnePicture = false;
         if (objectsListLogo) {
-        objectsListLogo.map((object) => {
-        if(!object.deleted){
-            hasAlreadyOnePicture=true;
-          }
+          objectsListLogo.map((object) => {
+            if (!object.deleted) {
+              hasAlreadyOnePicture = true;
+            }
+          });
         }
-        );
-      }
-      if(hasAlreadyOnePicture){
-        enqueueSnackbar('Une seule photo de logo possible', {
-          preventDuplicate: true,
-        });
-      }else{
-        if(files.length >1){
-          files=files.slice(0, 1);
+        if (hasAlreadyOnePicture) {
           enqueueSnackbar('Une seule photo de logo possible', {
             preventDuplicate: true,
           });
+        } else {
+          if (files.length > 1) {
+            files = files.slice(0, 1);
+            enqueueSnackbar('Une seule photo de logo possible', {
+              preventDuplicate: true,
+            });
+          }
+          // @ts-ignore
+          setImagesLogoList(files);
         }
-        // @ts-ignore
-        setImagesLogoList(files);
-      }
       },
-      [setImagesLogoList,objectsListLogo],
+      [setImagesLogoList, objectsListLogo],
     );
-
 
     useEffect(() => {
       if (resultLogo) addValuesLogo(resultLogo);
@@ -670,7 +680,6 @@ const EditActorForm = (props) => {
       resultMain,
       imagesMainListState,
     ] = useImageReader();
-
 
     const {
       objectsList: objectsListMain,
@@ -685,33 +694,32 @@ const EditActorForm = (props) => {
 
     const onDropMainHandler = useCallback(
       (files) => {
-        var hasAlreadyOnePicture = false;
+        let hasAlreadyOnePicture = false;
         if (objectsListMain) {
           objectsListMain.map((object) => {
-        if(!object.deleted){
-            hasAlreadyOnePicture=true;
-          }
+            if (!object.deleted) {
+              hasAlreadyOnePicture = true;
+            }
+          });
         }
-        );
-      }
-      if(hasAlreadyOnePicture){
-        enqueueSnackbar('Une seule photo principale possible', {
-          preventDuplicate: true,
-        });
-      }else{
-        if(files.length >1){
-          files=files.slice(0, 1);
+        if (hasAlreadyOnePicture) {
           enqueueSnackbar('Une seule photo principale possible', {
             preventDuplicate: true,
           });
+        } else {
+          if (files.length > 1) {
+            files = files.slice(0, 1);
+            enqueueSnackbar('Une seule photo principale possible', {
+              preventDuplicate: true,
+            });
+          }
+          // @ts-ignore
+          setImagesMainList(files);
         }
-        // @ts-ignore
-        setImagesMainList(files);
-      }
       },
-      [setImagesMainList,objectsListMain],
+      [setImagesMainList, objectsListMain],
     );
-    
+
     useEffect(() => {
       if (resultMain) addValuesMain(resultMain);
       // @ts-ignore
@@ -1115,28 +1123,39 @@ const EditActorForm = (props) => {
               control={<Radio />}
               label="c’est un autre (avec un compte Ouaaa existant)"
             />
-            {showOtherContact ? (
-              <Autocomplete
-                id="combo-box-demo"
-                options={dataUsers.users}
-                // @ts-ignore
-                getOptionLabel={(option) => `${option.surname} ${option.lastname}`}
-                onChange={autocompleteHandler}
-                defaultValue={getDefaultValueContact()}
-                style={{ width: 300 }}
-                // eslint-disable-next-line react/jsx-props-no-spreading
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Contact Ouaaa"
-                    variant="outlined"
-                  />
-                )}
-              />
-            ) : (
-              ''
-            )}
+           
           </RadioGroup>
+          <p>
+        
+        {showOtherContact ? (
+          <Autocomplete
+            id="combo-box-demo"
+            options={dataUsers.users}
+            // @ts-ignore
+            onInput={inputChangeHandler}
+            open={showOtherContactList}
+            // @ts-ignore
+            getOptionLabel={(option) => `${option.surname} ${option.lastname}`}
+            onChange={autocompleteHandler}
+            defaultValue={getDefaultValueContact()}
+            style={{ width: 300 }}
+            // eslint-disable-next-line react/jsx-props-no-spreading
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Contact Ouaaa"
+                variant="outlined"
+                placeholder="Tapez les 3 premières lettres"
+              />
+            )}
+            noOptionsText="Pas de compte associé"
+            clearText="Effacer"
+            closeText="Fermer"
+          />
+        ) : (
+          ''
+        )}
+        </p>
         </FormControl>
         <p />
         <FormItem
@@ -1401,7 +1420,7 @@ const EditActorForm = (props) => {
                         && collection.entries.map((entry) => {
                           return (
                             <ListItem key={entry.id} role={undefined} dense>
-                               {/* @ts-ignore */}
+                              {/* @ts-ignore */}
                               <ListItemText primary={entry.label} />
                               <Checkbox
                                 edge="start"
