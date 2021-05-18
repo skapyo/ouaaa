@@ -1,18 +1,24 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+/* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react';
-import FormControl from '@material-ui/core/FormControl';
-import Input from '@material-ui/core/Input';
+import Button from '@material-ui/core/Button';
+
 import Place from './Place';
 import PlaceForm from './PlaceForm';
 
-function PlaceContainer(props) {
-  const { updatePlaces } = props;
+const PlaceContainer = (props) => {
+  const { updatePlaces, showPlace, selectLocation } = props;
 
   const [places, setPlaces] = useState([]);
+  const [currentPlace, setCurrentPlace] = useState(null);
+  const [getLocation, setGetLocation] = useState(true);
 
-  const addPlace = (text) => {
-    const newPlaces = [...places, { text }];
+  const addPlace = (place) => {
+    const newPlaces = [...places, { place }];
     setPlaces(newPlaces);
     console.log('new places', places);
+    selectLocation(place);
+    setCurrentPlace(place);
   };
 
   const removePlace = (index) => {
@@ -27,22 +33,21 @@ function PlaceContainer(props) {
 
   return (
     <div>
-      <p>Veuillez entrer les differents emplacements</p>
+      {showPlace && !getLocation && (
+        <Button onClick={() => setGetLocation(!getLocation)}>
+          Ajouter un lieu
+        </Button>
+      )}
       <div className="places">
-        {places.map((place, index) => (
-          <Place
-            key={index}
-            index={index}
-            place={place}
-            removePlace={removePlace}
-          />
-        ))}
+        {currentPlace !== null && showPlace && (
+          <Place place={currentPlace} removePlace={removePlace} />
+        )}
       </div>
-      <div className="create-todo">
+      {showPlace && getLocation && currentPlace === null && (
         <PlaceForm addPlace={addPlace} />
-      </div>
+      )}
     </div>
   );
-}
+};
 
 export default PlaceContainer;

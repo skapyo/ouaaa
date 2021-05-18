@@ -179,7 +179,6 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(3),
     width: '100%!important',
   },
-
   location: {
     margin: '1em 0',
     '& input': {
@@ -397,16 +396,16 @@ const AddActorForm = () => {
       resultLogo,
       imagesLogoListState,
     ] = useImageReader();
-    
- 
+
+
     const inputChangeHandler = (event, value) => {
 
-      if (event.target.value) {  
+      if (event.target.value) {
         if (event.target.value.length < 3) {
           setShowOtherContactList(false);
         } else {
           setShowOtherContactList(true);
-         
+
         }
       }
     };
@@ -814,7 +813,9 @@ const AddActorForm = () => {
           dataCollections.collections
             /* @ts-ignore */
             && dataCollections.collections.map((collection) => {
-              if (collection.code !== 'larochelle_quarter' || !estlarochelle) return '';
+              if (collection.code !== 'larochelle_quarter' || !estlarochelle){
+                return '';
+              }
 
               //    const [display, setDisplay] = useState(false);
               return (
@@ -877,7 +878,7 @@ const AddActorForm = () => {
               label="c’est un autre (avec un compte Ouaaa existant)"
             />
 
-            
+
 
           </RadioGroup>
           <p>
@@ -892,7 +893,7 @@ const AddActorForm = () => {
                 onInput={inputChangeHandler}
                 open={showOtherContactList}
                 style={{ width: 300 }}
-       
+
                 // eslint-disable-next-line react/jsx-props-no-spreading
                 renderInput={(params) => (
                   <TextField

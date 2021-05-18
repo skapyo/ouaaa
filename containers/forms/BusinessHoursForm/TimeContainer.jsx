@@ -1,26 +1,23 @@
 import React, { useState, useContext, useEffect, useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { nanoid } from 'nanoid';
-import ButtonDay from './ButtonDay';
 import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-import AddRoundedIcon from '@material-ui/icons/AddRounded';
+
+import ButtonDay from './ButtonDay';
 import TimePicker from './TimePicker';
+import PlaceContainer from './PlaceContainer';
 
 const useStyles = makeStyles((theme) => ({
   container: {
     display: 'flex',
     flexDirection: 'row',
+    justifyContent: 'flex-end',
   },
   section: {
     color: 'white',
     padding: '0 0px',
     display: 'flex',
     flexDirection: 'row',
-    padding: '5px',
   },
   days: {
     color: 'white',
@@ -28,13 +25,16 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
-    padding: '5px',
   },
   places: {
     display: 'flex',
-    flexDirection: 'column',
+    flexDirection: 'row',
     flexWrap: 'wrap',
     color: 'black',
+  },
+  daysplaces: {
+    display: 'flex',
+    flexDirection: 'column',
   },
   timerange: {
     color: 'white',
@@ -42,14 +42,27 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
-    padding: '5px',
   },
-  button: {
+  timepicker: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  buttonAdd: {
     marginTop: 'auto',
+    textTransform: 'none',
+    color: '#3f51b5',
+  },
+  buttonDelete: {
+    display: 'inline',
+    width: '20%',
+    marginTop: 'auto',
+    maxWidth: '10px',
+    marginLeft: '0',
+    padding: '0 0',
   },
 }));
 
-export default function TimeContainer(props) {
+const TimeContainer = (props) => {
   const classes = useStyles();
 
   const {
@@ -58,7 +71,8 @@ export default function TimeContainer(props) {
     availableDays,
     indexTimeContainer,
     deleteTimeContainer,
-    places,
+    updatePlaces,
+    showPlace,
   } = props;
 
   const [hours, setHours] = useState([]);
@@ -76,13 +90,7 @@ export default function TimeContainer(props) {
       day.id === +dayId ? { ...day, selected: !day.selected } : day,
     );
 
-    // console.log(selectedDays);
-
     setWeekDays(selectedDays);
-  };
-
-  const selectLocation = (activeLocation) => {
-    setLocation(activeLocation);
   };
 
   const selectHours = (startTime, endTime, indexTimer) => {
@@ -101,6 +109,10 @@ export default function TimeContainer(props) {
     }
   };
 
+  const selectLocation = (location) => {
+    setLocation(location);
+  };
+
   useEffect(() => {
     const newTimeFrame = [weekdays, hours, location];
 
@@ -110,64 +122,66 @@ export default function TimeContainer(props) {
   }, [weekdays, hours, location]);
 
   return (
-    <div className={classes.section}>
-      <IconButton aria-label="delete" className={classes.deleteButton}>
-        <DeleteIcon
-          onClick={(e) => deleteTimeContainer(e, indexTimeContainer)}
-        />
-      </IconButton>
-      {weekdays && (
-        <section className={classes.container}>
-          <div className={classes.places}>
-            <div className={classes.days}>
-              {weekdays.map((day) => {
-                return (
-                  <div className="day">
-                    <ButtonDay
-                      dayId={day.id}
-                      text={day.day}
-                      selectDays={selectDays}
-                      selected={day.selected}
-                    ></ButtonDay>
-                  </div>
-                );
-              })}
+    <div className={classes.container}>
+      <div className={classes.section}>
+        {weekdays && (
+          <>
+            <div className={classes.daysplaces}>
+              <div className={classes.days}>
+                {weekdays.map((day) => {
+                  return (
+                    <div className="day">
+                      <ButtonDay
+                        dayId={day.id}
+                        text={day.day}
+                        selectDays={selectDays}
+                        selected={day.selected}
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+              <div className={classes.places}>
+                <PlaceContainer
+                  updatePlaces={updatePlaces}
+                  showPlace={showPlace}
+                  selectLocation={selectLocation}
+                />
+              </div>
             </div>
-            {places.length > 0 && (
-              <>
-                <h4>Emplacements</h4>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={location}
-                  onChange={(e) => selectLocation(e.target.value)}
-                >
-                  {places.map((place) => {
-                    return <MenuItem value={place.text}>{place.text}</MenuItem>;
+            <div className={classes.timepicker}>
+              {' '}
+              <div className={classes.timerange}>
+                {timeRangeList.length > 0 &&
+                  timeRangeList.map((e, index) => {
+                    return (
+                      <TimePicker
+                        selectHours={selectHours}
+                        indexTimer={index}
+                      />
+                    );
                   })}
-                </Select>
-              </>
-            )}
-          </div>
-          <div className={classes.timerange}>
-            {timeRangeList.length > 0 &&
-              timeRangeList.map((e, index) => {
-                return (
-                  <TimePicker selectHours={selectHours} indexTimer={index} />
-                );
-              })}
-          </div>
-
-          <Button
-            className={classes.button}
-            color="primary"
-            variant="outlined"
-            onClick={addTimeRange}
-          >
-            <AddRoundedIcon />
-          </Button>
-        </section>
-      )}
+              </div>
+              <Button
+                className={classes.buttonAdd}
+                color="blue"
+                onClick={addTimeRange}
+              >
+                Ajouter des horaires
+              </Button>
+            </div>
+          </>
+        )}
+      </div>
+      <Button
+        aria-label="delete"
+        className={classes.buttonDelete}
+        onClick={(e) => deleteTimeContainer(e, indexTimeContainer)}
+      >
+        <DeleteIcon fontSize="small" />
+      </Button>
     </div>
   );
-}
+};
+
+export default TimeContainer;
