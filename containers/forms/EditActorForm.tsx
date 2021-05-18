@@ -613,14 +613,7 @@ const EditActorForm = (props) => {
       imagesLogoListState,
     ] = useImageReader();
 
-    const onDropLogoHandler = useCallback(
-      (files) => {
-        // @ts-ignore
-        setImagesLogoList(files);
-      },
-      [setImagesLogoList],
-    );
-
+   
     const autocompleteHandler = (event, value) => {
       formValues.contactId = value.id;
     };
@@ -636,6 +629,36 @@ const EditActorForm = (props) => {
       updateKeyIndicator: updateKeyIndicatorLogo,
     } = useDnDStateManager(imgInitLogo);
 
+    const onDropLogoHandler = useCallback(
+      (files) => {
+        var hasAlreadyOnePicture = false;
+        if (objectsListLogo) {
+        objectsListLogo.map((object) => {
+        if(!object.deleted){
+            hasAlreadyOnePicture=true;
+          }
+        }
+        );
+      }
+      if(hasAlreadyOnePicture){
+        enqueueSnackbar('Une seule photo de logo possible', {
+          preventDuplicate: true,
+        });
+      }else{
+        if(files.length >1){
+          files=files.slice(0, 1);
+          enqueueSnackbar('Une seule photo de logo possible', {
+            preventDuplicate: true,
+          });
+        }
+        // @ts-ignore
+        setImagesLogoList(files);
+      }
+      },
+      [setImagesLogoList,objectsListLogo],
+    );
+
+
     useEffect(() => {
       if (resultLogo) addValuesLogo(resultLogo);
       // @ts-ignore
@@ -648,13 +671,7 @@ const EditActorForm = (props) => {
       imagesMainListState,
     ] = useImageReader();
 
-    const onDropMainHandler = useCallback(
-      (files) => {
-        // @ts-ignore
-        setImagesMainList(files);
-      },
-      [setImagesMainList],
-    );
+
     const {
       objectsList: objectsListMain,
       moveObject: moveObjectMain,
@@ -666,6 +683,35 @@ const EditActorForm = (props) => {
       updateKeyIndicator: updateKeyIndicatorMain,
     } = useDnDStateManager(imgInitMain);
 
+    const onDropMainHandler = useCallback(
+      (files) => {
+        var hasAlreadyOnePicture = false;
+        if (objectsListMain) {
+          objectsListMain.map((object) => {
+        if(!object.deleted){
+            hasAlreadyOnePicture=true;
+          }
+        }
+        );
+      }
+      if(hasAlreadyOnePicture){
+        enqueueSnackbar('Une seule photo principale possible', {
+          preventDuplicate: true,
+        });
+      }else{
+        if(files.length >1){
+          files=files.slice(0, 1);
+          enqueueSnackbar('Une seule photo principale possible', {
+            preventDuplicate: true,
+          });
+        }
+        // @ts-ignore
+        setImagesMainList(files);
+      }
+      },
+      [setImagesMainList,objectsListMain],
+    );
+    
     useEffect(() => {
       if (resultMain) addValuesMain(resultMain);
       // @ts-ignore

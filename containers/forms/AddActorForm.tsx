@@ -399,10 +399,31 @@ const AddActorForm = () => {
 
     const onDropLogoHandler = useCallback(
       (files) => {
+        var hasAlreadyOnePicture = false;
+        if (objectsListLogo) {
+        objectsListLogo.map((object) => {
+        if(!object.deleted){
+            hasAlreadyOnePicture=true;
+          }
+        }
+        );
+      }
+      if(hasAlreadyOnePicture){
+        enqueueSnackbar('Une seule photo de logo possible', {
+          preventDuplicate: true,
+        });
+      }else{
+        if(files.length >1){
+          files=files.slice(0, 1);
+          enqueueSnackbar('Une seule photo de logo possible', {
+            preventDuplicate: true,
+          });
+        }
         // @ts-ignore
         setImagesLogoList(files);
+      }
       },
-      [setImagesLogoList],
+      [setImagesLogoList,objectsListLogo],
     );
 
     const autocompleteHandler = (event, value) => {
@@ -452,13 +473,6 @@ const AddActorForm = () => {
       imagesMainListState,
     ] = useImageReader();
 
-    const onDropMainHandler = useCallback(
-      (files) => {
-        // @ts-ignore
-        setImagesMainList(files);
-      },
-      [setImagesMainList],
-    );
     const {
       objectsList: objectsListMain,
       moveObject: moveObjectMain,
@@ -470,6 +484,34 @@ const AddActorForm = () => {
       updateKeyIndicator: updateKeyIndicatorMain,
     } = useDnDStateManager([]);
 
+    const onDropMainHandler = useCallback(
+      (files) => {
+        var hasAlreadyOnePicture = false;
+        if (objectsListMain) {
+          objectsListMain.map((object) => {
+        if(!object.deleted){
+            hasAlreadyOnePicture=true;
+          }
+        }
+        );
+      }
+      if(hasAlreadyOnePicture){
+        enqueueSnackbar('Une seule photo principale possible', {
+          preventDuplicate: true,
+        });
+      }else{
+        if(files.length >1){
+          files=files.slice(0, 1);
+          enqueueSnackbar('Une seule photo principale possible', {
+            preventDuplicate: true,
+          });
+        }
+        // @ts-ignore
+        setImagesMainList(files);
+      }
+      },
+      [setImagesMainList,objectsListMain],
+    );
     useEffect(() => {
       if (resultMain) addValuesMain(resultMain);
       // @ts-ignore
