@@ -655,10 +655,12 @@ const AddActorForm = () => {
     ]);
     useEffect(() => {
       if (!createError && !createLoading && createData) {
-        enqueueSnackbar('Acteur ajouté avec succès.', {
-          preventDuplicate: true,
-        });
-        router.push(`/actor/${createData.createActor.id}`);
+        setTimeout(() => {
+          enqueueSnackbar('Acteur ajouté avec succès.', {
+            preventDuplicate: true,
+          });
+          router.push(`/actor/${createData.createActor.id}`);
+        },1000);
       }
     }, [createLoading, createError, createData]);
 

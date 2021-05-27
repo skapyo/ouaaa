@@ -842,10 +842,12 @@ const EditActorForm = (props) => {
 
     useEffect(() => {
       if (!editError && !editLoading && editData) {
-        enqueueSnackbar('Acteur mis à jour.', {
-          preventDuplicate: true,
-        });
-        router.push(`/actor/${actorData.actor.id}`);
+        setTimeout(() => {
+          enqueueSnackbar('Acteur mis à jour.', {
+            preventDuplicate: true,
+          });
+          router.push(`/actor/${actorData.actor.id}`);
+        },1000);
       }
     }, [editLoading, editError]);
 
@@ -1123,39 +1125,39 @@ const EditActorForm = (props) => {
               control={<Radio />}
               label="c’est un autre (avec un compte Ouaaa existant)"
             />
-           
+
           </RadioGroup>
           <p>
-        
-        {showOtherContact ? (
-          <Autocomplete
-            id="combo-box-demo"
-            options={dataUsers.users}
+
+            {showOtherContact ? (
+              <Autocomplete
+                id="combo-box-demo"
+                options={dataUsers.users}
             // @ts-ignore
-            onInput={inputChangeHandler}
-            open={showOtherContactList}
+                onInput={inputChangeHandler}
+                open={showOtherContactList}
             // @ts-ignore
-            getOptionLabel={(option) => `${option.surname} ${option.lastname}`}
-            onChange={autocompleteHandler}
-            defaultValue={getDefaultValueContact()}
-            style={{ width: 300 }}
+                getOptionLabel={(option) => `${option.surname} ${option.lastname}`}
+                onChange={autocompleteHandler}
+                defaultValue={getDefaultValueContact()}
+                style={{ width: 300 }}
             // eslint-disable-next-line react/jsx-props-no-spreading
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="Contact Ouaaa"
-                variant="outlined"
-                placeholder="Tapez les 3 premières lettres"
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Contact Ouaaa"
+                    variant="outlined"
+                    placeholder="Tapez les 3 premières lettres"
+                  />
+                )}
+                noOptionsText="Pas de compte associé"
+                clearText="Effacer"
+                closeText="Fermer"
               />
+            ) : (
+              ''
             )}
-            noOptionsText="Pas de compte associé"
-            clearText="Effacer"
-            closeText="Fermer"
-          />
-        ) : (
-          ''
-        )}
-        </p>
+          </p>
         </FormControl>
         <p />
         <FormItem
