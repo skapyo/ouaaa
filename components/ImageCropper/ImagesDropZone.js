@@ -5,7 +5,7 @@ import InsertPhotoIcon from '@material-ui/icons/InsertPhoto';
 import { useDropArea } from 'react-use';
 import Button from '@material-ui/core/Button';
 import Hidden from '@material-ui/core/Hidden';
-
+import { useSnackbar } from 'notistack';
 const useStyles = makeStyles((theme) => ({
   image: {
     width: '100%',
@@ -21,13 +21,23 @@ const useStyles = makeStyles((theme) => ({
 }));
 const ImagesDropZone = ({ onDropHandler, text }) => {
   const styles = useStyles();
-
+  const scnackbar = useSnackbar();
   const [bond, state] = useDropArea({
-    onFiles: (files) => { onDropHandler(files); },
+    onFiles: (files) => {
+      if (files[0].type === 'image/jpeg' || files[0].type === 'image/jpg') {
+        onDropHandler(files);
+      }else{
+        scnackbar.enqueueSnackbar("Seules les images au format jpeg sont autorisées");
+      }
+    },
   });
 
   const fileUpload = (files) => {
-    onDropHandler(files);
+    if (files[0].type === 'image/jpeg' || files[0].type === 'image/jpg') {
+      onDropHandler(files);
+    }else{
+      scnackbar.enqueueSnackbar("Seules les images au format jpeg sont autorisées");
+    }
   };
   const idInput = `contained-button-file${Math.random()}`;
   return (
@@ -68,7 +78,7 @@ const ImagesDropZone = ({ onDropHandler, text }) => {
               onChange={(e) => { fileUpload(Array.from(e.target.files)); }}
               type="file"
             />
-             <label htmlFor={idInput}>
+            <label htmlFor={idInput}>
               <Button variant="contained" color="primary" component="span">
                 Téléverser
               </Button>
