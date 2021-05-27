@@ -306,6 +306,7 @@ const AddActorForm = () => {
     variables: {
       userId: user.id,
     },
+    fetchPolicy: 'no-cache',
   });
   const { data: dataUsers } = useQuery(GET_USERS, {});
   const [open, setOpen] = React.useState([false]);
@@ -397,20 +398,17 @@ const AddActorForm = () => {
       imagesLogoListState,
     ] = useImageReader();
 
-
     const inputChangeHandler = (event, value) => {
-
       if (event.target.value) {
         if (event.target.value.length < 3) {
           setShowOtherContactList(false);
         } else {
           setShowOtherContactList(true);
-
         }
       }
     };
     const autocompleteHandler = (event, value) => {
-      if(value){
+      if (value) {
         formValues.contactId = value.id;
       }
       setShowOtherContactList(false);
@@ -655,12 +653,10 @@ const AddActorForm = () => {
     ]);
     useEffect(() => {
       if (!createError && !createLoading && createData) {
-        setTimeout(() => {
-          enqueueSnackbar('Acteur ajouté avec succès.', {
-            preventDuplicate: true,
-          });
-          router.push(`/actor/${createData.createActor.id}`);
-        },1000);
+        enqueueSnackbar('Acteur ajouté avec succès.', {
+          preventDuplicate: true,
+        });
+        router.push(`/actor/${createData.createActor.id}`);
       }
     }, [createLoading, createError, createData]);
 
@@ -815,7 +811,7 @@ const AddActorForm = () => {
           dataCollections.collections
             /* @ts-ignore */
             && dataCollections.collections.map((collection) => {
-              if (collection.code !== 'larochelle_quarter' || !estlarochelle){
+              if (collection.code !== 'larochelle_quarter' || !estlarochelle) {
                 return '';
               }
 
@@ -880,11 +876,9 @@ const AddActorForm = () => {
               label="c’est un autre (avec un compte Ouaaa existant)"
             />
 
-
-
           </RadioGroup>
           <p>
-          {showOtherContact ? (
+            {showOtherContact ? (
               <Autocomplete
                 id="combo-box-demo"
                 options={dataUsers.users}
@@ -912,7 +906,7 @@ const AddActorForm = () => {
             ) : (
               ''
             )}
-        </p>
+          </p>
         </FormControl>
 
         <FormItem

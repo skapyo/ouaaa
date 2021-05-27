@@ -360,6 +360,7 @@ const EditActorForm = (props) => {
     data: actorData,
   } = useQuery(GET_ACTOR, {
     variables: { id: props.id.toString() },
+    fetchPolicy: 'network-only',
   });
 
   function IsTree(collection) {
@@ -842,12 +843,10 @@ const EditActorForm = (props) => {
 
     useEffect(() => {
       if (!editError && !editLoading && editData) {
-        setTimeout(() => {
-          enqueueSnackbar('Acteur mis à jour.', {
-            preventDuplicate: true,
-          });
-          router.push(`/actor/${actorData.actor.id}`);
-        },1000);
+        enqueueSnackbar('Acteur mis à jour.', {
+          preventDuplicate: true,
+        });
+        router.push(`/actor/${actorData.actor.id}`);
       }
     }, [editLoading, editError]);
 
