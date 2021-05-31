@@ -360,6 +360,7 @@ const EditActorForm = (props) => {
     data: actorData,
   } = useQuery(GET_ACTOR, {
     variables: { id: props.id.toString() },
+    fetchPolicy: 'network-only',
   });
 
   function IsTree(collection) {
@@ -591,6 +592,7 @@ const EditActorForm = (props) => {
     const [showOtherContact, setShowOtherContact] = useState(
       formValues.contactId !== actorData.actor.id,
     );
+    const [showOtherContactList, setShowOtherContactList] = useState(false);
     // @ts-ignore
     const { CKEditor, ClassicEditor } = editorRef.current || {};
 
@@ -613,16 +615,20 @@ const EditActorForm = (props) => {
       imagesLogoListState,
     ] = useImageReader();
 
-    const onDropLogoHandler = useCallback(
-      (files) => {
-        // @ts-ignore
-        setImagesLogoList(files);
-      },
-      [setImagesLogoList],
-    );
-
+    const inputChangeHandler = (event, value) => {
+      if (event.target.value) {
+        if (event.target.value.length < 3) {
+          setShowOtherContactList(false);
+        } else {
+          setShowOtherContactList(true);
+        }
+      }
+    };
     const autocompleteHandler = (event, value) => {
-      formValues.contactId = value.id;
+      if (value) {
+        formValues.contactId = value.id;
+      }
+      setShowOtherContactList(false);
     };
 
     const {
@@ -636,6 +642,34 @@ const EditActorForm = (props) => {
       updateKeyIndicator: updateKeyIndicatorLogo,
     } = useDnDStateManager(imgInitLogo);
 
+    const onDropLogoHandler = useCallback(
+      (files) => {
+        let hasAlreadyOnePicture = false;
+        if (objectsListLogo) {
+          objectsListLogo.map((object) => {
+            if (!object.deleted) {
+              hasAlreadyOnePicture = true;
+            }
+          });
+        }
+        if (hasAlreadyOnePicture) {
+          enqueueSnackbar('Une seule photo de logo possible', {
+            preventDuplicate: true,
+          });
+        } else {
+          if (files.length > 1) {
+            files = files.slice(0, 1);
+            enqueueSnackbar('Une seule photo de logo possible', {
+              preventDuplicate: true,
+            });
+          }
+          // @ts-ignore
+          setImagesLogoList(files);
+        }
+      },
+      [setImagesLogoList, objectsListLogo],
+    );
+
     useEffect(() => {
       if (resultLogo) addValuesLogo(resultLogo);
       // @ts-ignore
@@ -648,13 +682,6 @@ const EditActorForm = (props) => {
       imagesMainListState,
     ] = useImageReader();
 
-    const onDropMainHandler = useCallback(
-      (files) => {
-        // @ts-ignore
-        setImagesMainList(files);
-      },
-      [setImagesMainList],
-    );
     const {
       objectsList: objectsListMain,
       moveObject: moveObjectMain,
@@ -665,6 +692,34 @@ const EditActorForm = (props) => {
       addValues: addValuesMain,
       updateKeyIndicator: updateKeyIndicatorMain,
     } = useDnDStateManager(imgInitMain);
+
+    const onDropMainHandler = useCallback(
+      (files) => {
+        let hasAlreadyOnePicture = false;
+        if (objectsListMain) {
+          objectsListMain.map((object) => {
+            if (!object.deleted) {
+              hasAlreadyOnePicture = true;
+            }
+          });
+        }
+        if (hasAlreadyOnePicture) {
+          enqueueSnackbar('Une seule photo principale possible', {
+            preventDuplicate: true,
+          });
+        } else {
+          if (files.length > 1) {
+            files = files.slice(0, 1);
+            enqueueSnackbar('Une seule photo principale possible', {
+              preventDuplicate: true,
+            });
+          }
+          // @ts-ignore
+          setImagesMainList(files);
+        }
+      },
+      [setImagesMainList, objectsListMain],
+    );
 
     useEffect(() => {
       if (resultMain) addValuesMain(resultMain);
@@ -1069,28 +1124,39 @@ const EditActorForm = (props) => {
               control={<Radio />}
               label="c’est un autre (avec un compte Ouaaa existant)"
             />
+
+          </RadioGroup>
+          <p>
+
             {showOtherContact ? (
               <Autocomplete
                 id="combo-box-demo"
                 options={dataUsers.users}
-                // @ts-ignore
+            // @ts-ignore
+                onInput={inputChangeHandler}
+                open={showOtherContactList}
+            // @ts-ignore
                 getOptionLabel={(option) => `${option.surname} ${option.lastname}`}
                 onChange={autocompleteHandler}
                 defaultValue={getDefaultValueContact()}
                 style={{ width: 300 }}
-                // eslint-disable-next-line react/jsx-props-no-spreading
+            // eslint-disable-next-line react/jsx-props-no-spreading
                 renderInput={(params) => (
                   <TextField
                     {...params}
                     label="Contact Ouaaa"
                     variant="outlined"
+                    placeholder="Tapez les 3 premières lettres"
                   />
                 )}
+                noOptionsText="Pas de compte associé"
+                clearText="Effacer"
+                closeText="Fermer"
               />
             ) : (
               ''
             )}
-          </RadioGroup>
+          </p>
         </FormControl>
         <p />
         <FormItem
@@ -1355,7 +1421,7 @@ const EditActorForm = (props) => {
                         && collection.entries.map((entry) => {
                           return (
                             <ListItem key={entry.id} role={undefined} dense>
-                               {/* @ts-ignore */}
+                              {/* @ts-ignore */}
                               <ListItemText primary={entry.label} />
                               <Checkbox
                                 edge="start"

@@ -280,12 +280,6 @@ const Actor = () => {
       removeActorVolunteer(actorId: $actorId, userId: $userId)
     }
   `;
-  const { data, loading, error, refetch } = useQuery(GET_ACTOR, {
-    variables: {
-      id,
-    },
-    // fetchPolicy : "no-cache"
-  });
 
   const [stylesProps, setStylesProps] = useState({
     topImageSize: '250px',
@@ -337,6 +331,14 @@ const Actor = () => {
     return isContained;
   }
 
+  const {
+    data, loading, error, refetch,
+  } = useQuery(GET_ACTOR, {
+    variables: {
+      id,
+    },
+    fetchPolicy: user && user.role === 'admin' ? 'no-cache' : 'cache-first',
+  });
   const addVolunteerHandler = () => {
     if (user == null) {
       setCookie('redirect_url', router.asPath, {
@@ -377,12 +379,11 @@ const Actor = () => {
     nextArrow: <SampleNextArrow />,
     prevArrow: <SamplePrevArrow />,
   };
-  const nbSlidetoshow =
-    data && data.actor.events && data.actor.events.length > 5
-      ? 5
-      : data &&
-        data.actor.events &&
-        data.actor.events.length + (containUser(data.actor.referents) ? 1 : 0);
+  const nbSlidetoshow = data && data.actor.events && data.actor.events.length > 5
+    ? 5
+    : data
+        && data.actor.events
+        && data.actor.events.length + (containUser(data.actor.referents) ? 1 : 0);
 
   const settingsSliderevent = {
     infinite: true,
@@ -419,9 +420,9 @@ const Actor = () => {
     let text = '';
     entries.forEach((entry) => {
       if (
-        entry.parentEntry &&
-        entry.parentEntry.collection &&
-        entry.parentEntry.collection.code === 'category'
+        entry.parentEntry
+        && entry.parentEntry.collection
+        && entry.parentEntry.collection.code === 'category'
       ) {
         text += `${entry.parentEntry.label} : ${entry.label}  `;
       }
@@ -434,11 +435,17 @@ const Actor = () => {
         <title>
           {/* @ts-ignore */}
           {data && data.actor.name}
-          {/* @ts-ignore */}-{/* @ts-ignore */}
+          {/* @ts-ignore */}
+          -
+          {/* @ts-ignore */}
           {data && data.actor.activity}
-          {/* @ts-ignore */}-{/* @ts-ignore */}
+          {/* @ts-ignore */}
+          -
+          {/* @ts-ignore */}
           {data && data.actor.city}
-          {/* @ts-ignore */}-{/* @ts-ignore */}
+          {/* @ts-ignore */}
+          -
+          {/* @ts-ignore */}
           {data && showCategory(data.actor.entries)}
         </title>
       </Head>
@@ -451,10 +458,8 @@ const Actor = () => {
                 backgroundImage:
                   data.actor.pictures.length >= 1
                     ? `url(${getImageUrl(
-                        data.actor.pictures.sort((a, b) =>
-                          a.position > b.position ? 1 : -1,
-                        )[0].croppedPicturePath,
-                      )})`
+                      data.actor.pictures.sort((a, b) => (a.position > b.position ? 1 : -1))[0].croppedPicturePath,
+                    )})`
                     : '',
               }}
             />
@@ -466,11 +471,10 @@ const Actor = () => {
                   <Typography variant="h5" className={styles.cardTitle}>
                     {data && data.actor.name}
                   </Typography>
-                  {data &&
-                    data.actor.entries.map(
-                      (entry) =>
-                        entry.parentEntry &&
-                        entry.parentEntry.collection.code === 'category' && (
+                  {data
+                    && data.actor.entries.map(
+                      (entry) => entry.parentEntry
+                        && entry.parentEntry.collection.code === 'category' && (
                           <div>
                             <Typography
                               variant="h7"
@@ -480,12 +484,14 @@ const Actor = () => {
                               {` ${
                                 entry.parentEntry && entry.parentEntry.label
                               } `}
-                              {/* @ts-ignore */}:{/* @ts-ignore */}
+                              {/* @ts-ignore */}
+                              :
+                              {/* @ts-ignore */}
                               {` ${entry && entry.label}`}
                               {/* @ts-ignore */}
                             </Typography>
                           </div>
-                        ),
+                      ),
                     )}
                 </div>
                 <p>{data && Parser(data.actor.description)}</p>
@@ -522,7 +528,9 @@ const Actor = () => {
                         {data && data.actor.address && data.actor.city && (
                           <span>
                             {/* @ts-ignore */}
-                            {data && data.actor.address},{/* @ts-ignore */}
+                            {data && data.actor.address}
+                            ,
+                            {/* @ts-ignore */}
                             {data && data.actor.city}
                           </span>
                         )}
@@ -531,13 +539,12 @@ const Actor = () => {
                         TERRITOIRE D'ACTION
                       </div>
                       <span className={[styles.infoValue]}>
-                        {data &&
-                          data.actor.entries.map(
-                            (entry) =>
-                              entry &&
-                              entry.collection &&
-                              entry.collection.code ===
-                                'actor_location_action' && (
+                        {data
+                          && data.actor.entries.map(
+                            (entry) => entry
+                              && entry.collection
+                              && entry.collection.code
+                                === 'actor_location_action' && (
                                 <div>
                                   <Typography
                                     variant="h7"
@@ -546,7 +553,7 @@ const Actor = () => {
                                     {` ${entry && entry.label}`}
                                   </Typography>
                                 </div>
-                              ),
+                            ),
                           )}
                       </span>
                     </Grid>
@@ -560,12 +567,11 @@ const Actor = () => {
                         Public principal visé
                       </div>
                       <span className={[styles.infoValue]}>
-                        {data &&
-                          data.actor.entries.map(
-                            (entry) =>
-                              entry &&
-                              entry.collection &&
-                              entry.collection.code === 'public_target' && (
+                        {data
+                          && data.actor.entries.map(
+                            (entry) => entry
+                              && entry.collection
+                              && entry.collection.code === 'public_target' && (
                                 <div>
                                   <Typography
                                     variant="h7"
@@ -574,7 +580,7 @@ const Actor = () => {
                                     {` ${entry && entry.label}`}
                                   </Typography>
                                 </div>
-                              ),
+                            ),
                           )}
                       </span>
                     </Grid>
@@ -587,12 +593,11 @@ const Actor = () => {
                     <Grid item xs={8} className={[styles.alignLeft]}>
                       <div className={[styles.infoLabel]}>Statut</div>
                       <span className={[styles.infoValue]}>
-                        {data &&
-                          data.actor.entries.map(
-                            (entry) =>
-                              entry &&
-                              entry.collection &&
-                              entry.collection.code === 'actor_status' && (
+                        {data
+                          && data.actor.entries.map(
+                            (entry) => entry
+                              && entry.collection
+                              && entry.collection.code === 'actor_status' && (
                                 <div>
                                   <Typography
                                     variant="h7"
@@ -601,7 +606,7 @@ const Actor = () => {
                                     {` ${entry && entry.label}`}
                                   </Typography>
                                 </div>
-                              ),
+                            ),
                           )}
                       </span>
                     </Grid>
@@ -668,7 +673,7 @@ const Actor = () => {
                     </Grid>
                     <Grid item xs={8} className={[styles.alignLeft]}>
                       <div className={[styles.infoLabel]}>Horaire</div>
-                      <span className={[styles.infoValue]}></span>
+                      <span className={[styles.infoValue]} />
                     </Grid>
                   </Grid>
                 </Grid>
@@ -681,12 +686,11 @@ const Actor = () => {
                       Collectif & réseaux
                     </div>
                     <span className={[styles.infoValue]}>
-                      {data &&
-                        data.actor.entries.map(
-                          (entry) =>
-                            entry &&
-                            entry.collection &&
-                            entry.collection.code === 'collectif' && (
+                      {data
+                        && data.actor.entries.map(
+                          (entry) => entry
+                            && entry.collection
+                            && entry.collection.code === 'collectif' && (
                               <div>
                                 <Typography
                                   variant="h7"
@@ -695,7 +699,7 @@ const Actor = () => {
                                   {` ${entry && entry.label}`}
                                 </Typography>
                               </div>
-                            ),
+                          ),
                         )}
                     </span>
                   </Grid>
@@ -737,9 +741,9 @@ const Actor = () => {
               </div>
             )}
             <Slider {...settingsSliderImage}>
-              {data &&
-                data.actor.pictures &&
-                data.actor.pictures
+              {data
+                && data.actor.pictures
+                && data.actor.pictures
                   .sort((a, b) => (a.position > b.position ? 1 : -1))
                   .map((picture) => (
                     <img
@@ -749,10 +753,10 @@ const Actor = () => {
                   ))}
             </Slider>
 
-            {data &&
-              data.actor.pictures &&
-              (data.actor.events.length > 0 ||
-                containUser(data.actor.referents)) && (
+            {data
+              && data.actor.pictures
+              && (data.actor.events.length > 0
+                || containUser(data.actor.referents)) && (
                 <div>
                   <Typography
                     variant="h5"
@@ -769,7 +773,7 @@ const Actor = () => {
                     {data && data.actor.name}
                   </Typography>
                 </div>
-              )}
+            )}
             <Slider
               {...settingsSliderevent}
               className={[styles.articleCarroussel]}
@@ -778,16 +782,16 @@ const Actor = () => {
                 <CardAddEvent actor={data.actor} />
               )}
 
-              {data &&
-                data.actor.events &&
-                data.actor.events.map((event) => (
+              {data
+                && data.actor.events
+                && data.actor.events.map((event) => (
                   <CardSliderEvent key={event.id} event={event} />
                 ))}
             </Slider>
           </Container>
           <Newsletter />
-          {((data && containUser(data.actor.referents)) ||
-            (user && user.role === 'admin')) && (
+          {((data && containUser(data.actor.referents))
+            || (user && user.role === 'admin')) && (
             <Link href={`/actorAdmin/actor/${id}`}>
               <Fab className={styles.fab} aria-label="edit">
                 <EditIcon />
