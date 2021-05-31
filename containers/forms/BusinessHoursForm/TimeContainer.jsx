@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect, useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import DeleteIcon from '@material-ui/icons/Delete';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 import ButtonDay from './ButtonDay';
 import TimePicker from './TimePicker';
@@ -10,25 +11,30 @@ import PlaceContainer from './PlaceContainer';
 const useStyles = makeStyles((theme) => ({
   container: {
     display: 'flex',
-    flexDirection: 'row',
     justifyContent: 'flex-end',
   },
   section: {
     color: 'white',
     padding: '0 0px',
     display: 'flex',
-    flexDirection: 'row',
+    [theme.breakpoints.down('sm')]: {
+      flexDirection: 'column',
+    },
+    [theme.breakpoints.up('md')]: {
+      flexDirection: 'row',
+    },
+    [theme.breakpoints.up('lg')]: {
+      flexDirection: 'row',
+    },
   },
   days: {
     color: 'white',
     padding: '0 0px',
     display: 'flex',
-    flexDirection: 'row',
     justifyContent: 'center',
   },
   places: {
     display: 'flex',
-    flexDirection: 'row',
     flexWrap: 'wrap',
     color: 'black',
   },
@@ -63,6 +69,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const TimeContainer = (props) => {
+  const matches = useMediaQuery('(min-width:600px)');
+
   const classes = useStyles();
 
   const {
