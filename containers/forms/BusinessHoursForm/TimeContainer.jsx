@@ -2,7 +2,6 @@ import React, { useState, useContext, useEffect, useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import DeleteIcon from '@material-ui/icons/Delete';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 import ButtonDay from './ButtonDay';
 import TimePicker from './TimePicker';
@@ -69,8 +68,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const TimeContainer = (props) => {
-  const matches = useMediaQuery('(min-width:600px)');
-
   const classes = useStyles();
 
   const {
