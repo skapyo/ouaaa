@@ -144,11 +144,17 @@ const PresentationSection = () => {
       <Typography className={styles.inprogress}>
         <Build />
         {/* @ts-ignore */}
-        Site en cours de développement.
+        _ Site en cours de développement. _
         <Build />
-        <p>Abonnez-vous à la newsletter pour suivre les avancées.</p>
+        <Link href="/addactor">
+              <button className={styles.buttonGrid}>
+                JE M'INSCRIS EN TANT QU'ACTEUR DE LA TRANSITION
+              </button>
+            </Link>
+        {/*<p>Abonnez-vous à la newsletter pour suivre les avancées.</p>*/}
       </Typography>
-      <div className={styles.improvement}>
+         
+       {/*<div className={styles.improvement}>
         <Link href="/improvment">
           <button className={styles.buttonGrid}>
             DECOUVRIR LES PROCHAINES FONCTIONNALITES ET FAIRE UN RETOUR DE LA
@@ -235,7 +241,9 @@ const PresentationSection = () => {
             <button className={styles.buttonGrid}>JE DEVIENS UN ACTEUR</button>
           </Link>
         </Grid>
+      
       </Grid>
+        */}
     </Container>
   );
 };

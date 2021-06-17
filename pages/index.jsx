@@ -111,11 +111,11 @@ const Index = () => {
     <AppLayout>
       <RootRef>
         <Box>
-          <PresentationSection />
+           <PresentationSection /> 
 
-          <ThreePoint />
+           <ThreePoint />
 
-          <Container className={[styles.geoContainer]}>
+           {/* <Container className={[styles.geoContainer]}>
             <Typography className={[styles.align]}>
               Le site a vocation à répertorier les acteurs de la transition sur
               les 4 communautés de communes constituant l'Aunis : la CDA de la
@@ -134,6 +134,7 @@ const Index = () => {
           <LastEvent />
 
           <Newsletter />
+          */}
         </Box>
       </RootRef>
     </AppLayout>

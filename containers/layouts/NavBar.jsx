@@ -149,7 +149,7 @@ const NavBar = () => {
                       CARTE DES ACTEURS
                     </MenuItem>
                   </Grid>
-                  <Grid item>
+                  {/*<Grid item>
                     <MenuItem
                       button
                       component={Link}
@@ -189,6 +189,7 @@ const NavBar = () => {
                       A PROPOS
                     </MenuItem>
                   </Grid>
+                */}
 
                   {!user && (
                     <Grid item>

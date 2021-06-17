@@ -41,7 +41,7 @@ const PresentationSection = () => {
         <br />
         pour la transition écologique, sociale et démocratique en Aunis
       </Typography>
-      <Search />
+     {/*  <Search /> */}
     </Container>
   );
 };

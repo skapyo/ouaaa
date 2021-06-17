@@ -59,10 +59,18 @@ const useStyles = makeStyles({
   },
   entries: {
     padding: '0px 5px 0px 5px!important',
+
   },
   expansionPanel:{
-    margin: "inherit!important"
+    margin: "inherit!important",
+    padding: "inherit!important",
   },
+  expansionPanelSummary: {
+    padding: '0px 5px 0px 5px!important',
+  },
+  entriesCheckbox:{
+    padding:'4px',
+  }
 });
 
 function Filters(props) {
@@ -167,7 +175,7 @@ function Filters(props) {
           };
           return (
             <ExpansionPanel noPadding className={classes.expansionPanel}>
-              <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+              <ExpansionPanelSummary className={classes.expansionPanelSummary} expandIcon={<ExpandMoreIcon />}>
                 <Typography
                   className={classes.collectionLabel}
                   //       onClick={setDisplay(!display)}
@@ -175,7 +183,7 @@ function Filters(props) {
                   {collection.label}
                 </Typography>
               </ExpansionPanelSummary>
-              <Entries initValues={[]}>
+              <Entries  className={classes.entries} initValues={[]}>
                 {
                   // display &&
                   IsTree(collection) &&
@@ -214,6 +222,7 @@ function Filters(props) {
                                 otherCategoryChange(e, collection.label)
                               }
                               name="{categoryChange.id}"
+                              className={classes.entriesCheckbox}
                               value={entry.id}
                               onClick={(e) => e.stopPropagation()}
                             />
