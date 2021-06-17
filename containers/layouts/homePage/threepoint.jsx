@@ -59,7 +59,10 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: '30px',
     paddingBottom: '20px',
   },
+
   buttonGrid: {
+
+    fontSize: '0.6em',
     margin: '1.5em 0 1.5em 0 ',
     color: 'white',
     'background-color': '#bf083e',
@@ -79,7 +82,6 @@ const useStyles = makeStyles((theme) => ({
     backgroundRepeat: 'no-repeat',
     'background-position-x': '5px',
     'background-position-y': '1px',
-    fontSize: '1em',
     [theme.breakpoints.down('sm')]: {
       fontSize: '0.8em',
     },
@@ -146,15 +148,16 @@ const PresentationSection = () => {
         {/* @ts-ignore */}
         _ Site en cours de développement. _
         <Build />
+        <p />
         <Link href="/addactor">
-              <button className={styles.buttonGrid}>
-                JE M'INSCRIS EN TANT QU'ACTEUR DE LA TRANSITION
-              </button>
-            </Link>
-        {/*<p>Abonnez-vous à la newsletter pour suivre les avancées.</p>*/}
+          <button className={styles.buttonGrid}>
+            JE M'INSCRIS EN TANT QU'ACTEUR DE LA TRANSITION
+          </button>
+        </Link>
+        {/* <p>Abonnez-vous à la newsletter pour suivre les avancées.</p> */}
       </Typography>
-         
-       {/*<div className={styles.improvement}>
+
+      {/* <div className={styles.improvement}>
         <Link href="/improvment">
           <button className={styles.buttonGrid}>
             DECOUVRIR LES PROCHAINES FONCTIONNALITES ET FAIRE UN RETOUR DE LA
@@ -241,7 +244,7 @@ const PresentationSection = () => {
             <button className={styles.buttonGrid}>JE DEVIENS UN ACTEUR</button>
           </Link>
         </Grid>
-      
+
       </Grid>
         */}
     </Container>

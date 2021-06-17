@@ -998,6 +998,9 @@ const AddActorForm = () => {
           <>
             <Hidden mdDown>
               <CKEditor
+                config={{
+                  toolbar: ['bold', 'italic'],
+                }}
                 editor={ClassicEditor}
                 data={formValues.description}
                 onReady={(editor) => {
@@ -1034,6 +1037,9 @@ const AddActorForm = () => {
           <>
             <Hidden mdDown>
               <CKEditor
+                config={{
+                  toolbar: ['bold', 'italic'],
+                }}
                 editor={ClassicEditor}
                 data={formValues.volunteerDescription}
                 onReady={(editor) => {
