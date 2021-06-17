@@ -22,9 +22,8 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/client';
 import { makeStyles } from '@material-ui/core/styles';
-import ParentContainer from './ParentContainer';
 import Entries from 'containers/forms/Entries';
-
+import ParentContainer from './ParentContainer';
 
 const useStyles = makeStyles({
   root: {
@@ -61,16 +60,16 @@ const useStyles = makeStyles({
     padding: '0px 5px 0px 5px!important',
 
   },
-  expansionPanel:{
-    margin: "inherit!important",
-    padding: "inherit!important",
+  expansionPanel: {
+    margin: 'inherit!important',
+    padding: 'inherit!important',
   },
   expansionPanelSummary: {
     padding: '0px 5px 0px 5px!important',
   },
-  entriesCheckbox:{
-    padding:'4px',
-  }
+  entriesCheckbox: {
+    padding: '4px',
+  },
 });
 
 function Filters(props) {
@@ -124,8 +123,8 @@ function Filters(props) {
     (e) => {
       const regex = /[0-9]{5}/g;
       if (
-        e.target.value.length === 0 ||
-        (e.target.value.length === 5 && e.target.value.match(regex))
+        e.target.value.length === 0
+        || (e.target.value.length === 5 && e.target.value.match(regex))
       ) {
         postCodeChange(e);
         setErrorPostCode(false);
@@ -154,7 +153,7 @@ function Filters(props) {
   };
 
   return (
-    <Grid item xs={2} alignItems="center">
+    <Grid item xm={12} sm={2} alignItems="center">
       <TextField
         variant="outlined"
         label="Code Postal"
@@ -167,14 +166,14 @@ function Filters(props) {
         }
       />
 
-      {dataCollections.collections &&
-        dataCollections.collections.map((collection) => {
+      {dataCollections.collections
+        && dataCollections.collections.map((collection) => {
           if (!(collection.filter && collection.actor)) return '';
           const compare = (a, b) => {
             return a.position > b.position;
           };
           return (
-            <ExpansionPanel noPadding className={classes.expansionPanel}>
+            <ExpansionPanel defaultExpanded={ IsTree(collection) ? true : false}  className={classes.expansionPanel}>
               <ExpansionPanelSummary className={classes.expansionPanelSummary} expandIcon={<ExpandMoreIcon />}>
                 <Typography
                   className={classes.collectionLabel}
@@ -183,12 +182,12 @@ function Filters(props) {
                   {collection.label}
                 </Typography>
               </ExpansionPanelSummary>
-              <Entries  className={classes.entries} initValues={[]}>
+              <Entries className={classes.entries} initValues={[]}>
                 {
                   // display &&
-                  IsTree(collection) &&
-                    collection.entries &&
-                    collection.entries.sort(compare).map((entry) => {
+                  IsTree(collection)
+                    && collection.entries
+                    && collection.entries.sort(compare).map((entry) => {
                       return (
                         <ParentContainer
                           key={entry.id}
@@ -205,8 +204,8 @@ function Filters(props) {
               <ExpansionPanelDetails className={classes.entriesExpend}>
                 {!IsTree(collection) && (
                   <List className={classes.listEntries}>
-                    {collection.entries &&
-                      collection.entries.map((entry) => {
+                    {collection.entries
+                      && collection.entries.map((entry) => {
                         return (
                           <ListItem
                             key={entry.id}
@@ -218,9 +217,7 @@ function Filters(props) {
                               edge="start"
                               tabIndex={-1}
                               disableRipple
-                              onChange={(e) =>
-                                otherCategoryChange(e, collection.label)
-                              }
+                              onChange={(e) => otherCategoryChange(e, collection.label)}
                               name="{categoryChange.id}"
                               className={classes.entriesCheckbox}
                               value={entry.id}
