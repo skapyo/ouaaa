@@ -1,6 +1,8 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
+import { KeyboardTimePicker } from '@material-ui/pickers';
+import moment from 'moment';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -18,57 +20,56 @@ const useStyles = makeStyles((theme) => ({
 export default function TimePicker(props) {
   const classes = useStyles();
 
-  const [startTime, setStartTime] = useState('07:30');
-  const [endTime, setEndTime] = useState('8:00');
-  const startRef = useRef();
-  const endRef = useRef();
-
   const { selectHours, indexTimer } = props;
 
-  const changeStartTime = (e) => {
-    const newTime = e.target.value;
-    setStartTime(newTime);
-  };
+  const [selectedStartDate, setSelectedStartDate] = React.useState(
+    moment().set('minute', 0).set('hour', 8).add(1, 'day').toDate(),
+  );
+  const [selectedEndDate, setSelectedEndDate] = React.useState(
+    moment().set('minute', 0).set('hour', 18).add(1, 'day').toDate(),
+  );
 
-  const changeEndTime = (e) => {
-    const newTime = e.target.value;
-    setEndTime(newTime);
+  const handleStartDateChange = (date) => {
+    setSelectedStartDate(date);
+  };
+  const handleEndDateChange = (date) => {
+    setSelectedEndDate(date);
   };
 
   useEffect(() => {
     console.log(indexTimer);
-    selectHours(startTime, endTime, indexTimer);
-  }, [startTime, endTime]);
+    selectHours(selectedStartDate, selectedEndDate, indexTimer);
+  }, [selectedStartDate, selectedEndDate]);
 
   return (
     <form className={classes.container} noValidate>
-      <TextField
-        ref={startRef}
+      <KeyboardTimePicker
+        margin="normal"
+        id="time-picker"
         label="à partir de"
-        type="time"
-        defaultValue="07:30"
-        className={classes.textField}
-        InputLabelProps={{
-          shrink: true,
+        value={selectedStartDate}
+        onChange={handleStartDateChange}
+        KeyboardButtonProps={{
+          'aria-label': 'change time',
         }}
-        inputProps={{
-          step: 600, // 5 min
-        }}
-        onChange={(e) => changeStartTime(e)}
+        // keyboardIcon={false}
+        timeIcon={false}
+        ampm={false}
+        minutesStep={5}
+        error={!!selectedStartDate && moment(selectedStartDate) <= moment()}
       />
-      <TextField
-        inputRef={endRef}
+      <KeyboardTimePicker
+        margin="normal"
+        id="time-picker"
         label="jusqu'à"
-        type="time"
-        defaultValue="08:00"
-        className={classes.textField}
-        InputLabelProps={{
-          shrink: true,
+        value={selectedEndDate}
+        onChange={handleStartDateChange}
+        KeyboardButtonProps={{
+          'aria-label': 'change time',
         }}
-        inputProps={{
-          step: 600, // 5 min
-        }}
-        onChange={(e) => changeEndTime(e)}
+        ampm={false}
+        minutesStep={5}
+        error={!!selectedStartDate && moment(selectedStartDate) <= moment()}
       />
     </form>
   );

@@ -3,6 +3,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
+import Button from '@material-ui/core/Button';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 
 import TimeContainer from './TimeContainer';
@@ -10,16 +11,17 @@ import TimeContainer from './TimeContainer';
 const useStyles = makeStyles((theme) => ({
   main: {
     display: 'flex',
-    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   container: {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
+    alignItems: 'flex-start',
   },
   timeContainer: {
     display: 'flex',
-    flexDirection: 'row',
     marginTop: '20px',
   },
   button: {
@@ -136,9 +138,13 @@ const SchedulerContainer = (props) => {
             );
           })}
       </div>
-      <span className={classes.button} onClick={addTimeContainer} disableRipple>
+      <Button
+        className={classes.button}
+        onClick={addTimeContainer}
+        disableRipple
+      >
         <AddCircleOutlineIcon fontSize="small" />
-      </span>
+      </Button>
     </div>
   );
 };

@@ -10,25 +10,30 @@ import PlaceContainer from './PlaceContainer';
 const useStyles = makeStyles((theme) => ({
   container: {
     display: 'flex',
-    flexDirection: 'row',
     justifyContent: 'flex-end',
   },
   section: {
     color: 'white',
     padding: '0 0px',
     display: 'flex',
-    flexDirection: 'row',
+    [theme.breakpoints.down('sm')]: {
+      flexDirection: 'column',
+    },
+    [theme.breakpoints.up('md')]: {
+      flexDirection: 'row',
+    },
+    [theme.breakpoints.up('lg')]: {
+      flexDirection: 'row',
+    },
   },
   days: {
     color: 'white',
     padding: '0 0px',
     display: 'flex',
-    flexDirection: 'row',
     justifyContent: 'center',
   },
   places: {
     display: 'flex',
-    flexDirection: 'row',
     flexWrap: 'wrap',
     color: 'black',
   },
