@@ -18,7 +18,7 @@ import Gavel from '@material-ui/icons/Gavel';
 import SupervisedUserCircle from '@material-ui/icons/SupervisedUserCircle';
 import AlternateEmail from '@material-ui/icons/AlternateEmail';
 import Language from '@material-ui/icons/Language';
-import Facebook from '@material-ui/icons/Facebook';
+import Share from '@material-ui/icons/Share';
 import Schedule from '@material-ui/icons/Schedule';
 import People from '@material-ui/icons/People';
 
@@ -677,7 +677,7 @@ const Actor = () => {
                   {data && data.actor.socialNetwork && (
                     <Grid container className={[styles.item]}>
                       <Grid item xs={3} className={[styles.alignRight]}>
-                        <Facebook className={[styles.icon]} />
+                        <Share className={[styles.icon]} />
                       </Grid>
                       <Grid item xs={8} className={[styles.alignLeft]}>
                         <div className={[styles.infoLabel]}>Réseau social</div>

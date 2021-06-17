@@ -4,7 +4,7 @@ import { Container, makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles({
   actors: {
-    width: '50%',
+    width: '100%',
     margin: '0',
   },
   title: {

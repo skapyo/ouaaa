@@ -434,7 +434,7 @@ const carto = () => {
           />
 
           {listMode && (
-            <Grid item xs={10}>
+            <Grid item sm={10} xs={12}>
               <Map ref={mapRef} center={position} zoom={11}>
                 <TileLayer
                   attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -532,9 +532,9 @@ const carto = () => {
                                     className={styles.categorie}
                                     gutterBottom
                                   >
-                                    {actor.categories &&
-                                      actor.categories.length > 0 &&
-                                      actor.categories[0].label}
+                                    {actor.entries &&
+                                      actor.entries.length > 0 &&
+                                      actor.entries[0].label}
                                   </Typography>
                                 </div>
                               </div>
@@ -590,7 +590,7 @@ const carto = () => {
             </Grid>
           )}
           {!listMode && (
-            <Grid item xs={10} justify="center">
+            <Grid item  sm={10} xs={12} justify="center">
               {typeof data !== 'undefined' && <Actors data={data} />}
             </Grid>
           )}
