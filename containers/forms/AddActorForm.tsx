@@ -221,6 +221,9 @@ const useStyles = makeStyles((theme) => ({
     border: '1px solid #ccc!important',
     padding: '5px 0 5px 0',
   },
+  introduction: {
+    textAlign: 'justify',
+  }
 }));
 
 type FormItemProps = {
@@ -696,6 +699,31 @@ const AddActorForm = () => {
 
     return (
       <Container component="main" maxWidth="sm">
+        <br />
+        <Typography className={styles.introduction} >
+          Féliciations, vous avez un compte 'OUAAA !' personnel et vous vous apprêtez à créer une page Acteur. <br />
+          Voici quelques informations : avec votre compte, vous  pouvez créer plusieurs pages Acteurs,
+          mais chacune d’elles doit être créée via ce formulaire.
+          Vous deviendrez alors l’administrateur principal de chacun d’entre elles.<br />
+          Un acteur de la transition peut avoir n’importe quel statut juridique,
+          les collectifs et particuliers peuvent donc aussi être référencés
+          sur OUAAA !.
+          <br />
+          <br />
+
+          Nous vous invitons à lire notre <a href="/charter" >charte</a> afin de savoir si vous
+          adhérez aux valeurs de OUAAA !. Pour soumettre votre inscription, nous vous
+          invitons a remplir a minima les champs marqués d’une « * ».  <br /> Une fois votre
+          inscription validée par notre équipe, votre page acteur sera visible 
+          de tous les visiteurs de OUAAA ! :  sur la carte, dans l’annuaire,
+          etc.
+          <br />
+          <br />
+          Vous pourrez actualiser les infos de votre/vos page(s) Acteurs dès que nécessaire
+          via la page d’édition  et diffuser ses événement/actions via l’éditeur dédié.
+        </Typography>
+        <br />
+        <br />
         {dataAdminActors && dataAdminActors.actorsAdmin.length > 0 && (
           <Typography>
             Bravo. Vous avez déjà créé des pages acteurs.

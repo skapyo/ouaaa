@@ -66,6 +66,7 @@ import StyledTreeItem from '../../components/filters/StyledTreeItem';
 import Entries from './Entries';
 import RadioGroupForContext from './RadioGroupForContext';
 import UserInfosForm from './UserInfosForm';
+import { LensTwoTone } from '@material-ui/icons';
 
 const EDIT_ACTOR = gql`
   mutation editActor(
@@ -440,7 +441,7 @@ const EditActorForm = (props) => {
         }
       });
   }
- 
+
   const imgInitLogo = [];
   if (
     actorData
@@ -556,6 +557,25 @@ const EditActorForm = (props) => {
     open[index] = !open[index];
   };
 
+  function getEntryPresentInCollection(entries, collection) {
+    let entryFound;
+    let isPresent = false;
+    // @ts-ignore
+    entries.map((entry) => {
+      if (collection.entries) {
+        collection.entries.map((entryCollection) => {
+          if (entryCollection.id === entry) {
+            isPresent = true;
+            entryFound = entry;
+          }
+          return isPresent;
+        });
+      }
+      return entry;
+    });
+    if (entryFound) return entryFound;
+  }
+
   const validationRules: ValidationRules = {
     name: {
       rule: ValidationRuleType.required,
@@ -594,7 +614,7 @@ const EditActorForm = (props) => {
     const editorRef = useRef();
 
     const [editorLoaded, setEditorLoaded] = useState(false);
-    
+
     const [showOtherContact, setShowOtherContact] = useState(
       formValues.contactId !== actorData.actor.id,
     );
@@ -887,6 +907,12 @@ const EditActorForm = (props) => {
       )} ${getObjectLongName(results, 'route')}`.trim();
       formValues.city = getObjectLongName(results, 'locality');
       formValues.postCode = getObjectLongName(results, 'postal_code');
+      debugger;
+      if (formValues.postCode === '17000') {
+        setEstlarochelle(true);
+      } else {
+        setEstlarochelle(false);
+      }
     };
 
     const [firstRender, setFirstRender] = useState(true);
@@ -912,7 +938,11 @@ const EditActorForm = (props) => {
         // @ts-ignore
         categories.push(actorcategory.id);
       });
-
+      if (formValues.postCode === '17000') {
+        setEstlarochelle(true);
+      } else {
+        setEstlarochelle(false);
+      }
       // @ts-ignore
       formValues.categories = categories;
 
@@ -1079,6 +1109,7 @@ const EditActorForm = (props) => {
                   {collection.label}
                 </Typography>
                 {
+
                   // display &&
                   !IsTree(collection) && !collection.multipleSelection && (
                     <FormControl component="fieldset">
@@ -1087,6 +1118,8 @@ const EditActorForm = (props) => {
                         aria-label="entries"
                         name="entries"
                         onChange={formChangeHandler}
+                         // @ts-ignore
+                        value={getEntryPresentInCollection(formValues.entries, collection)}
                       >
                         {collection.entries
                           && collection.entries.map((entry) => {
@@ -1249,17 +1282,17 @@ const EditActorForm = (props) => {
         <p />
         {editorLoaded ? (
           <>
-  
-              <CKEditor
-                config={{
-                  toolbar: ['bold', 'italic'],
-                }}
-                editor={ClassicEditor}
-                data={formValues.description}
-                onReady={(editor) => {
-                  setDescriptionEditor(editor);
-                }}
-              />
+
+            <CKEditor
+              config={{
+                toolbar: ['bold', 'italic'],
+              }}
+              editor={ClassicEditor}
+              data={formValues.description}
+              onReady={(editor) => {
+                setDescriptionEditor(editor);
+              }}
+            />
           </>
         ) : (
           <div>Editor loading</div>
@@ -1275,16 +1308,16 @@ const EditActorForm = (props) => {
         <p />
         {editorLoaded ? (
           <>
-              <CKEditor
-                config={{
-                  toolbar: ['bold', 'italic'],
-                }}
-                editor={ClassicEditor}
-                data={formValues.volunteerDescription}
-                onReady={(editor) => {
-                  setVolunteerEditor(editor);
-                }}
-              />
+            <CKEditor
+              config={{
+                toolbar: ['bold', 'italic'],
+              }}
+              editor={ClassicEditor}
+              data={formValues.volunteerDescription}
+              onReady={(editor) => {
+                setVolunteerEditor(editor);
+              }}
+            />
           </>
         ) : (
           <div>Editor loading</div>

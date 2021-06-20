@@ -115,6 +115,9 @@ const useStyles = makeStyles((theme) => ({
     maxHeight: '200px',
     width: 'inherit!important',
   },
+  hide: {
+    display: 'none',
+  },
   button: {
     margin: '2.5em 0 2.5em 0 ',
     color: 'white',
@@ -421,13 +424,29 @@ const Actor = () => {
   }
   function showCategory(entries) {
     let text = '';
+    const nbEntryToShow = 1;
+    let nbEntry = 0;
     entries.forEach((entry) => {
       if (
         entry.parentEntry
         && entry.parentEntry.collection
-        && entry.parentEntry.collection.code === 'category'
+        && entry.parentEntry.collection.code === 'category' && nbEntry <= nbEntryToShow
       ) {
         text += `${entry.parentEntry.label} : ${entry.label}  `;
+        nbEntry += 1;
+      }
+    });
+    return text;
+  }
+
+  function showLaRochelleQuarter(entries) {
+    let text = '';
+    entries.forEach((entry) => {
+      if (
+        entry
+        && entry.collection
+        && entry.collection.code === 'larochelle_quarter') {
+        text += `, ${entry.label}`;
       }
     });
     return text;
@@ -436,9 +455,9 @@ const Actor = () => {
     <AppLayout>
       <Head>
         <title>
+
           {/* @ts-ignore */}
           {data && data.actor.name}
-          {/* @ts-ignore */}
           -
           {/* @ts-ignore */}
           {data && data.actor.activity}
@@ -447,6 +466,8 @@ const Actor = () => {
           {/* @ts-ignore */}
           {data && data.actor.city}
           {/* @ts-ignore */}
+          {data && showLaRochelleQuarter(data.actor.entries)}
+          {/* @ts-ignore */}
           -
           {/* @ts-ignore */}
           {data && showCategory(data.actor.entries)}
@@ -454,6 +475,25 @@ const Actor = () => {
       </Head>
       <RootRef>
         <Box>
+          <Typography variant="h1" className={styles.hide}>
+            {/* @ts-ignore */}
+            {data && data.actor.name}
+            {/* @ts-ignore *
+          -
+          {/* @ts-ignore */}
+            {data && data.actor.activity}
+            {/* @ts-ignore */}
+            -
+            {/* @ts-ignore */}
+            {data && data.actor.city}
+            {/* @ts-ignore */}
+            {data && showLaRochelleQuarter(data.actor.entries)}
+            {/* @ts-ignore */}
+            -
+            {/* @ts-ignore */}
+            {data && showCategory(data.actor.entries)}
+          </Typography>
+
           {data && data.actor && (
             <Container
               className={styles.titleContainer}
@@ -471,7 +511,7 @@ const Actor = () => {
             <Grid container>
               <Grid item md={8} sm={10} className={styles.threePointGrid}>
                 <div>
-                  <Typography variant="h5" className={styles.cardTitle}>
+                  <Typography variant="h2" className={styles.cardTitle}>
                     {data && data.actor.name}
                   </Typography>
                   {data
@@ -693,7 +733,7 @@ const Actor = () => {
                       </Grid>
                     </Grid>
                   )}
-                  {/*<Grid container className={[styles.item]}>
+                  {/* <Grid container className={[styles.item]}>
                     <Grid item xs={3} className={[styles.alignRight]}>
                       <Schedule className={[styles.icon]} />
                     </Grid>
@@ -701,11 +741,11 @@ const Actor = () => {
                       <div className={[styles.infoLabel]}>Horaire</div>
                       <span className={[styles.infoValue]} />
                     </Grid>
-                  </Grid>*/}
+                  </Grid> */}
                 </Grid>
-                  
-                   { data && entriesHasElementWithCode(data.actor.entries, 'collectif') && (
-                  <div className={[styles.infoDiv]}>
+
+                { data && entriesHasElementWithCode(data.actor.entries, 'collectif') && (
+                <div className={[styles.infoDiv]}>
                   <Grid container className={[styles.item]}>
                     <Grid item xs={3} className={[styles.alignRight]}>
                       <People className={[styles.icon]} />
@@ -734,7 +774,7 @@ const Actor = () => {
                     </Grid>
                   </Grid>
                 </div>
-                  )}
+                )}
               </Grid>
             </Grid>
 
