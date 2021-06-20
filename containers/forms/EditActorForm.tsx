@@ -54,6 +54,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import InfoIcon from '@material-ui/icons/Info';
 import { useSessionDispatch, useSessionState } from 'context/session/session';
 import Hidden from '@material-ui/core/Hidden';
+import { LensTwoTone } from '@material-ui/icons';
 import useImageReader from '../../hooks/useImageReader';
 import useDnDStateManager from '../../hooks/useDnDStateManager';
 import useCookieRedirection from '../../hooks/useCookieRedirection';
@@ -66,7 +67,6 @@ import StyledTreeItem from '../../components/filters/StyledTreeItem';
 import Entries from './Entries';
 import RadioGroupForContext from './RadioGroupForContext';
 import UserInfosForm from './UserInfosForm';
-import { LensTwoTone } from '@material-ui/icons';
 
 const EDIT_ACTOR = gql`
   mutation editActor(
@@ -907,7 +907,6 @@ const EditActorForm = (props) => {
       )} ${getObjectLongName(results, 'route')}`.trim();
       formValues.city = getObjectLongName(results, 'locality');
       formValues.postCode = getObjectLongName(results, 'postal_code');
-      debugger;
       if (formValues.postCode === '17000') {
         setEstlarochelle(true);
       } else {
@@ -1108,33 +1107,16 @@ const EditActorForm = (props) => {
                 <Typography className={styles.collectionLabel}>
                   {collection.label}
                 </Typography>
-                {
+                <RadioGroupForContext
+                  initValue={getEntryPresentInCollection(formValues.entries, collection)}
+                >
+                  <CustomRadioGroup
+                    formChangeHandler={formChangeHandler}
+                    entries={collection.entries}
+                    defaultValue={getEntryPresentInCollection(formValues.entries, collection)}
+                  />
+                </RadioGroupForContext>
 
-                  // display &&
-                  !IsTree(collection) && !collection.multipleSelection && (
-                    <FormControl component="fieldset">
-                      <RadioGroup
-                        row
-                        aria-label="entries"
-                        name="entries"
-                        onChange={formChangeHandler}
-                         // @ts-ignore
-                        value={getEntryPresentInCollection(formValues.entries, collection)}
-                      >
-                        {collection.entries
-                          && collection.entries.map((entry) => {
-                            return (
-                              <FormControlLabel
-                                value={entry.id}
-                                control={<Radio />}
-                                label={entry.label}
-                              />
-                            );
-                          })}
-                      </RadioGroup>
-                    </FormControl>
-                  )
-                }
               </div>
             );
           })

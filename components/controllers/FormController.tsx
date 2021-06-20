@@ -188,7 +188,6 @@ const FormController = (props: FormControllerProps, ...otherprops: any[]) => {
   const [validationResult, setValidationResult] = useState<ValidationResult>();
   const formChangeHandler = useCallback(
     (e) => {
-      debugger;
       // if there an only rule on the field
       const rule = validationRules?.[e.target.name];
       // Custom code for entry

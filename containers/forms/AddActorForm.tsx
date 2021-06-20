@@ -845,6 +845,7 @@ const AddActorForm = () => {
 
               //    const [display, setDisplay] = useState(false);
               return (
+                
                 <div>
                   <br />
                   <Typography className={classes.collectionLabel}>
