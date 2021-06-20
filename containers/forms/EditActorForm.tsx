@@ -440,7 +440,7 @@ const EditActorForm = (props) => {
         }
       });
   }
-
+ 
   const imgInitLogo = [];
   if (
     actorData
@@ -585,10 +585,17 @@ const EditActorForm = (props) => {
       { data: editData, loading: editLoading, error: editError },
     ] = useMutation(EDIT_ACTOR);
 
+    debugger;
+    if (user === undefined || user == null) {
+      enqueueSnackbar('Veuillez vous connecter pour effectuer des modifications.', {
+        preventDuplicate: true,
+      });
+    }
     const [setImagesList, loading, result, imagesListState] = useImageReader();
     const editorRef = useRef();
 
     const [editorLoaded, setEditorLoaded] = useState(false);
+    
     const [showOtherContact, setShowOtherContact] = useState(
       formValues.contactId !== actorData.actor.id,
     );
@@ -1464,7 +1471,7 @@ const EditActorForm = (props) => {
         <Grid item xs={12}>
           <ClassicButton
             onClick={submitHandler}
-            disabled={!validationResult?.global}
+            disabled={!validationResult?.global || user == null}
           >
             Sauvegarder les modifications
           </ClassicButton>

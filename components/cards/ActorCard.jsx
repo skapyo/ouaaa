@@ -69,7 +69,7 @@ const useStyles = makeStyles((theme, props) => ({
     '& img': {
       height: '100%',
       width: '100%',
-      objectFit: 'cover',
+      objectFit: 'contain',
       borderRadius: '50%',
     },
   },
