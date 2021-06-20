@@ -498,6 +498,7 @@ const carto = () => {
                                   </Typography>
                                 </div>
                               </div>
+                              
                               <div className={styles.content}>
                                 <div className={styles.titleDiv}>
                                   <Typography
@@ -509,20 +510,18 @@ const carto = () => {
                                   </Typography>
                                 </div>
                                 <p className={styles.shortDescription} >
-                                  {actor && Parser(splitWord(actor.shortDescription, 30))}
+                                  {actor && Parser(splitWord(actor.shortDescription, 300))}
                                 </p>
                               </div>
                             </Tooltip>
                             <Popup>
-                              <div
+                            <div
                                 className={styles.image}
                                 style={{
                                   backgroundImage:
                                     actor.pictures.length >= 1
                                       ? `url(${getImageUrl(
-                                        actor.pictures.sort((a, b) =>
-                                          a.logo ? 1 : -1,
-                                        )[0].croppedPicturePath,
+                                        actor.pictures[0].croppedPicturePath,
                                       )})`
                                       : '',
                                 }}
