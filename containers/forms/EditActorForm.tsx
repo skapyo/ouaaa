@@ -301,6 +301,12 @@ const useStyles = makeStyles((theme) => ({
     border: '1px solid #ccc!important',
     padding: '5px 0 5px 0',
   },
+  helperText: {
+    lineHeight: '1.66',
+    fontSize: '0.75rem',
+    color: 'rgba(0, 0, 0, 0.54)',
+    textAlign: 'justify',
+  },
 }));
 
 type FormItemProps = {
