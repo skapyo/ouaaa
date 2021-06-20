@@ -741,7 +741,7 @@ const Actor = () => {
             {data && data.actor.volunteerDescription && (
               <div>
                 <Typography variant="h5" className={styles.cardTitle}>
-                  Recherche de bénévole
+                  Recherche de bénévoles
                 </Typography>
                 <p>{data && Parser(data.actor.volunteerDescription)}</p>
                 <div className={styles.buttonVolunteer}>

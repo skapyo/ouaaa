@@ -585,7 +585,6 @@ const EditActorForm = (props) => {
       { data: editData, loading: editLoading, error: editError },
     ] = useMutation(EDIT_ACTOR);
 
-    debugger;
     if (user === undefined || user == null) {
       enqueueSnackbar('Veuillez vous connecter pour effectuer des modifications.', {
         preventDuplicate: true,
@@ -1190,7 +1189,7 @@ const EditActorForm = (props) => {
         ) : null}
         <ImagesDropZone
           onDropHandler={onDropLogoHandler}
-          text="Déposez ici votre logo au format jpg"
+          text="Déposez ici votre logo au format jpg et de poids inférieur à 2Mo"
         />
 
         <Typography variant="body1" color="primary" className={styles.label}>
@@ -1207,7 +1206,7 @@ const EditActorForm = (props) => {
         ) : null}
         <ImagesDropZone
           onDropHandler={onDropMainHandler}
-          text="Déposez ici votre photo principale au format jpg"
+          text="Déposez ici votre photo principale au  et de poids inférieur à 2Mo"
         />
 
         <Typography variant="body1" color="primary" className={styles.label}>
@@ -1224,7 +1223,7 @@ const EditActorForm = (props) => {
         ) : null}
         <ImagesDropZone
           onDropHandler={onDropHandler}
-          text="Déposez ici votre autres photos au format jpg"
+          text="Déposez ici votre autres photos au format jpg et de poids inférieur à 2Mo"
         />
         <p />
         <Tooltip title="Cette description courte s’affiche lors de la vue en liste ou dans les blocs de survol/clic de la carte. Pour qu’elle soit utile, nous vous invitons à synthéser en quelques mots le coeur de vos actions/organisation/missions">
@@ -1250,17 +1249,7 @@ const EditActorForm = (props) => {
         <p />
         {editorLoaded ? (
           <>
-            <Hidden mdDown>
-              <CKEditor
-
-                editor={ClassicEditor}
-                data={formValues.description}
-                onReady={(editor) => {
-                  setDescriptionEditor(editor);
-                }}
-              />
-            </Hidden>
-            <Hidden lgUp>
+  
               <CKEditor
                 config={{
                   toolbar: ['bold', 'italic'],
@@ -1271,7 +1260,6 @@ const EditActorForm = (props) => {
                   setDescriptionEditor(editor);
                 }}
               />
-            </Hidden>
           </>
         ) : (
           <div>Editor loading</div>
@@ -1287,16 +1275,6 @@ const EditActorForm = (props) => {
         <p />
         {editorLoaded ? (
           <>
-            <Hidden mdDown>
-              <CKEditor
-                editor={ClassicEditor}
-                data={formValues.volunteerDescription}
-                onReady={(editor) => {
-                  setVolunteerEditor(editor);
-                }}
-              />
-            </Hidden>
-            <Hidden lgUp>
               <CKEditor
                 config={{
                   toolbar: ['bold', 'italic'],
@@ -1307,7 +1285,6 @@ const EditActorForm = (props) => {
                   setVolunteerEditor(editor);
                 }}
               />
-            </Hidden>
           </>
         ) : (
           <div>Editor loading</div>

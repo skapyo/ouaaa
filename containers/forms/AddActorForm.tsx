@@ -933,7 +933,7 @@ const AddActorForm = () => {
         ) : null}
         <ImagesDropZone
           onDropHandler={onDropLogoHandler}
-          text="Déposez ici votre logo au format jpg"
+          text="Déposez ici votre logo au format jpg et de poids inférieur à 2Mo"
         />
 
         <Typography variant="body1" color="primary" className={styles.label}>
@@ -950,7 +950,7 @@ const AddActorForm = () => {
         ) : null}
         <ImagesDropZone
           onDropHandler={onDropMainHandler}
-          text="Déposez ici votre photo principale au format jpg"
+          text="Déposez ici votre photo principale au format jpg et de poids inférieur à 2Mo"
         />
 
         <Typography variant="body1" color="primary" className={styles.label}>
@@ -967,7 +967,7 @@ const AddActorForm = () => {
         ) : null}
         <ImagesDropZone
           onDropHandler={onDropHandler}
-          text="Déposez ici votre autres photos au format jpg"
+          text="Déposez ici votre autres photos au format jpg et de poids inférieur à 2Mo"
         />
 
         <p />

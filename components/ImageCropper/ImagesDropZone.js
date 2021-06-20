@@ -63,7 +63,7 @@ const ImagesDropZone = ({ onDropHandler, text }) => {
             />
             <label htmlFor={idInput}>
               <Button variant="contained" color="primary" component="span">
-                Téléverser
+                Ajouter une image
               </Button>
             </label>
           </Grid>
@@ -80,7 +80,7 @@ const ImagesDropZone = ({ onDropHandler, text }) => {
             />
             <label htmlFor={idInput}>
               <Button variant="contained" color="primary" component="span">
-                Téléverser
+               Ajouter une image
               </Button>
             </label>
           </Grid>

@@ -1252,7 +1252,7 @@ const AddEventForm = ({ actorId }) => {
         ) : null}
         <ImagesDropZone
           onDropHandler={onDropLogoHandler}
-          text="Déposez ici votre logo au format jpg"
+          text="Déposez ici votre logo au format jpg et de poids inférieur à 2Mo"
         />
         <br />
         <Typography variant="body1" color="primary" className={styles.label}>
@@ -1269,7 +1269,7 @@ const AddEventForm = ({ actorId }) => {
         ) : null}
         <ImagesDropZone
           onDropHandler={onDropMainHandler}
-          text="Déposez ici votre photo principale au format jpg"
+          text="Déposez ici votre photo principale au format jpg et de poids inférieur à 2Mo"
         />
         <br />
         <Typography variant="body1" color="primary" className={styles.label}>
