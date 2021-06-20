@@ -1557,7 +1557,7 @@ const EditEventForm = (props) => {
         ) : null}
         <ImagesDropZone
           onDropHandler={onDropLogoHandler}
-          text="Déposez ici votre logo au format jpg  et de poids inférieur à 2Mo"
+          text="Déposez ici votre logo au format jpg  et de poids inférieur à 4Mo"
         />
         <br />
         <Typography variant="body1" color="primary" className={styles.label}>
@@ -1574,7 +1574,7 @@ const EditEventForm = (props) => {
         ) : null}
         <ImagesDropZone
           onDropHandler={onDropMainHandler}
-          text="Déposez ici votre photo principale au format jpg et de poids inférieur à 2Mo"
+          text="Déposez ici votre photo principale au format jpg et de poids inférieur à 4Mo"
         />
         <br />
         <Typography variant="body1" color="primary" className={styles.label}>
@@ -1591,7 +1591,7 @@ const EditEventForm = (props) => {
         ) : null}
         <ImagesDropZone
           onDropHandler={onDropHandler}
-          text="Déposez ici votre autres photos au format jpg et de poids inférieur à 2Mo"
+          text="Déposez ici votre autres photos au format jpg et de poids inférieur à 4Mo"
         />
         <ClassicButton
           fullWidth
