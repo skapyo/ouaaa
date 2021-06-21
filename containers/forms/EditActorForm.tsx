@@ -1159,15 +1159,15 @@ const EditActorForm = (props) => {
               <Autocomplete
                 id="combo-box-demo"
                 options={dataUsers.users}
-            // @ts-ignore
+                // @ts-ignore
                 onInput={inputChangeHandler}
                 open={showOtherContactList}
-            // @ts-ignore
+                // @ts-ignore
                 getOptionLabel={(option) => `${option.surname} ${option.lastname}`}
                 onChange={autocompleteHandler}
                 defaultValue={getDefaultValueContact()}
                 style={{ width: 300 }}
-            // eslint-disable-next-line react/jsx-props-no-spreading
+                // eslint-disable-next-line react/jsx-props-no-spreading
                 renderInput={(params) => (
                   <TextField
                     {...params}
@@ -1194,7 +1194,7 @@ const EditActorForm = (props) => {
           required={false}
           errorBool={false}
           errorText=""
-          helperText="Indiquez ici votre métier ou activité principale. Cette info servira à mieux référencer votre page dans les moteurs de recherche. Ex : boulanger bio"  />
+          helperText="Indiquez ici votre métier ou activité principale. Cette info servira à mieux référencer votre page dans les moteurs de recherche. Ex : boulanger bio" />
         <Typography variant="body1" color="primary" className={styles.label}>
           Votre logo
         </Typography>
@@ -1252,19 +1252,20 @@ const EditActorForm = (props) => {
           text="Déposez ici votre autres photos au format jpg et de poids inférieur à 4Mo"
         />
         <p />
-        <Tooltip title="Cette description courte s’affichera en vue liste et dans les blocs de survol/clic de la carte. Merci de synthétiser vos objectifs en quelques mots.">
-          <FormItem
-            label="Description courte générale"
-            inputName="shortDescription"
-            formChangeHandler={formChangeHandler}
-            value={formValues.shortDescription}
-            required={false}
-            errorBool={
-              !validationResult?.global && !!validationResult?.result.shortDescription
-            }
-            errorText="90 caractères maximum"
-          />
-        </Tooltip>
+        <FormItem
+          label="Description courte générale"
+          inputName="shortDescription"
+          formChangeHandler={formChangeHandler}
+          value={formValues.shortDescription}
+          required={false}
+          errorBool={
+            !validationResult?.global && !!validationResult?.result.shortDescription
+          }
+          errorText="90 caractères maximum"
+          helperText="Cette description courte s’affichera en vue liste et dans les blocs de survol/clic de la carte. Merci de synthétiser vos objectifs en quelques mots."
+
+        />
+
         <Typography variant="body1" color="primary" className={styles.label}>
           Description
         </Typography>
