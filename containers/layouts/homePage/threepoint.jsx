@@ -12,12 +12,6 @@ const useStyles = makeStyles((theme) => ({
   cardInfo: {
     padding: '2em',
     backgroundColor: 'white',
-    backgroundImage: "url('/icons/planet.svg')",
-    backgroundSize: '30%',
-    backgroundPosition: 'right',
-    backgroundRepeat: 'no-repeat',
-    backgroundOpacity: ' 0.5',
-    backgroundPositionY: '226px',
     borderRadius: '0.5em',
     width: '80%',
     justify: 'center',
