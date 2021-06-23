@@ -6,7 +6,7 @@ import FacebookIcon from '@material-ui/icons/Facebook';
 const useStyles = makeStyles({
   footer: {
     color: 'white',
-    backgroundColor: '#2a9076',
+    backgroundColor: '#2C367E',
     border: 'none',
     height: '29em',
     textAlign: 'center',
@@ -16,7 +16,7 @@ const useStyles = makeStyles({
     color: 'white',
     align: 'center',
     fontWeight: 700,
-    fontFamily: 'rowdies',
+    
     fontSize: '2.5em',
     marginTop: '1em',
   },

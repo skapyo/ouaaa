@@ -8,8 +8,8 @@ const useStyles = makeStyles({
     margin: '0',
   },
   title: {
-    color: '#4A8E78',
-    fontFamily: 'rowdies',
+    color: '#2C367E',
+    
     fontSize: '2.3em',
   },
   date: {

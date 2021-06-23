@@ -149,7 +149,7 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     textAlign: 'left',
-    color: '#2a9076',
+    color: '#2C367E',
     width: '100%',
   },
   content: {
@@ -158,7 +158,7 @@ const useStyles = makeStyles((theme) => ({
   },
   date: {
     textAlign: 'right',
-    color: '#2a9076',
+    color: '#2C367E',
   },
   titleDiv: {
     display: 'flex',
@@ -167,17 +167,17 @@ const useStyles = makeStyles((theme) => ({
   buttonGrid: {
     margin: '2.5em 0 2.5em 0 ',
     color: 'white',
-    'background-color': '#bf083e',
+    'background-color': '#2C367E',
     border: 'none',
-    fontFamily: 'rowdies',
+    
     borderRadius: '1.5em',
     padding: '0 3em 0 3em',
     height: '2.5em',
     '&:hover': {
       cursor: 'pointer',
-      color: '#bf083e',
+      color: '#2C367E',
       'background-color': 'white',
-      border: '2px solid #bf083e',
+      border: '2px solid #2C367E',
       backgroundImage: "url('./arrow-hover.svg')",
     },
     backgroundImage: "url('./arrow.svg')",
@@ -201,9 +201,9 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: '-4em',
     zIndex: '10000',
     color: '#fff',
-    backgroundColor: '#bf083e',
+    backgroundColor: '#2C367E',
     '&:hover': {
-      color: '#bf083e',
+      color: '#2C367E',
       backgroundColor: '#fff',
     },
   },

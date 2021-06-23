@@ -13,7 +13,7 @@ const styles = (theme) => ({
     boxShadow: 'none',
   },
   menuIcon: {
-    color: '#2a9076',
+    color: '#2C367E',
   },
 });
 

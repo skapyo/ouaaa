@@ -147,7 +147,7 @@ const useStyles = makeStyles((theme) => ({
   },
   collectionLabel: {
     textAlign: 'center',
-    color: '#bf083e',
+    color: '#2C367E',
   },
   justify: {
     textAlign: 'justify',

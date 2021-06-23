@@ -7,10 +7,10 @@
   src: url('../public/font/Rowdies-Bold.ttf') format('truetype');
 }
 .slick-prev::before {
-  color: #bf083e !important;
+  color: #2C367E !important;
 }
 .slick-next::before {
-  color: #bf083e !important;
+  color: #2C367E !important;
 }
 .image {
   max-width: 200px;
@@ -45,7 +45,7 @@
 }
 
 .MuiStepIcon-root.MuiStepIcon-active {
-  color: #bf083e !important;
+  color: #2C367E !important;
 }
 .markercluster-map {
   height: 90vh;

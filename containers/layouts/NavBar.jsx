@@ -47,10 +47,10 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: '450',
   },
   menuItem: {
-    color: '#2a9076',
+    color: '#2C367E',
   },
   title: {
-    color: '#bf083e',
+    color: '#2C367E',
     marginLeft: '4em',
     fontSize: '3em',
   },

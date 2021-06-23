@@ -22,10 +22,10 @@ import 'react-leaflet-markercluster/dist/styles.min.css';
 const theme = createMuiTheme({
   palette: {
     primary: {
-      main: '#484848',
+      main: '#2C367E',
     },
     secondary: {
-      main: '#25AAA4',
+      main: '#2C367E',
     },
     warning: {
       main: '#BF083E',
@@ -49,23 +49,23 @@ const theme = createMuiTheme({
       lineHeight: 1.7,
     },
     h5: {
-      color: '#2a9076',
-      fontFamily: 'rowdies',
+      color: '#2C367E',
+      
     },
     h1: {
       fontSize: '4rem',
-      color: '#2a9076',
-      fontFamily: 'rowdies',
+      color: '#2C367E',
+      
     },
     h2: {
       fontSize: '1.5rem',
-      color: '#2a9076',
-      fontFamily: 'rowdies',
+      color: '#2C367E',
+      
     },
     h3: {
       fontSize: '1.5rem',
-      color: '#2a9076',
-      fontFamily: 'rowdies',
+      color: '#2C367E',
+      
     },
   },
 });

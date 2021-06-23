@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
     width: '56px',
     height: '52px',
     borderRadius: '30px',
-    backgroundColor: '#bf083e',
+    backgroundColor: '#2C367E',
     color: 'white',
     position: 'absolute',
     right: '2px',
@@ -82,9 +82,9 @@ const useStyles = makeStyles((theme) => ({
   },
   cardTitle: {
     align: 'center',
-    fontFamily: 'rowdies',
+    
     fontSize: '2.2em',
-    color: '#2a9076',
+    color: '#2C367E',
     letterSpacing: '2px',
     marginBottom: '3em',
     [theme.breakpoints.down('sm')]: {
@@ -93,18 +93,18 @@ const useStyles = makeStyles((theme) => ({
   },
   buttonGrid: {
     color: 'white',
-    'background-color': '#bf083e',
+    'background-color': '#2C367E',
     border: 'none',
-    fontFamily: 'rowdies',
+    
     fontSize: '18px',
     borderRadius: '1.5em',
     padding: '0 3em 0 3em',
     height: '52px',
     '&:hover': {
       cursor: 'pointer',
-      color: '#bf083e',
+      color: '#2C367E',
       'background-color': 'white',
-      border: '2px solid #bf083e',
+      border: '2px solid #2C367E',
       backgroundImage: "url('./arrow-hover.svg')",
     },
     backgroundImage: "url('./arrow.svg')",

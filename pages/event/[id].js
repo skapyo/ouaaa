@@ -77,7 +77,7 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
   },
   infoPratiqueTitle: {
-    backgroundColor: '#2a9076',
+    backgroundColor: '#2C367E',
     color: 'white',
     width: '100%',
     padding: '1em',
@@ -92,7 +92,7 @@ const useStyles = makeStyles((theme) => ({
     padding: '1em',
   },
   item: {
-    border: '1px solid #2a9076',
+    border: '1px solid #2C367E',
     borderStyle: 'dashed',
   },
   icon: {
@@ -114,17 +114,17 @@ const useStyles = makeStyles((theme) => ({
   button: {
     margin: '2.5em 0 2.5em 0 ',
     color: 'white',
-    'background-color': '#bf083e',
+    'background-color': '#2C367E',
     border: 'none',
-    fontFamily: 'rowdies',
+    
     borderRadius: '1.5em',
     padding: '0 3em 0 3em',
     height: '2.5em',
     '&:hover': {
       cursor: 'pointer',
-      color: '#bf083e',
+      color: '#2C367E',
       'background-color': 'white',
-      border: '2px solid #bf083e',
+      border: '2px solid #2C367E',
     },
     backgroundImage: "url('./arrow.svg')",
     backgroundRepeat: 'no-repeat',
@@ -135,10 +135,10 @@ const useStyles = makeStyles((theme) => ({
   },
   buttonInverse: {
     margin: '2.5em 0 2.5em 0 ',
-    border: '2px solid #bf083e',
-    color: '#bf083e',
+    border: '2px solid #2C367E',
+    color: '#2C367E',
     'background-color': 'white',
-    fontFamily: 'rowdies',
+    
     borderRadius: '1.5em',
     padding: '0 3em 0 3em',
     height: '2.5em',
@@ -146,7 +146,7 @@ const useStyles = makeStyles((theme) => ({
       cursor: 'pointer',
       textDecoration: 'line-through',
       color: 'white',
-      'background-color': '#bf083e',
+      'background-color': '#2C367E',
     },
     backgroundImage: "url('./arrow.svg')",
     backgroundRepeat: 'no-repeat',
@@ -165,10 +165,10 @@ const useStyles = makeStyles((theme) => ({
     bottom: '40px',
     right: '40px',
     zIndex: '1400',
-    backgroundColor: '#bf083e',
+    backgroundColor: '#2C367E',
     color: 'white',
     '&:hover': {
-      color: '#bf083e',
+      color: '#2C367E',
     },
   },
 }));

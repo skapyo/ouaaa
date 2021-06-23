@@ -45,7 +45,7 @@ const useStyles = makeStyles({
   },
   title: {
     textAlign: 'left',
-    color: '#2a9076',
+    color: '#2C367E',
     width: '100%',
     fontSize: '1.5rem',
   },
@@ -54,7 +54,7 @@ const useStyles = makeStyles({
   },
   date: {
     textAlign: 'right',
-    color: '#2a9076',
+    color: '#2C367E',
   },
   titleDiv: {
     display: 'flex',

@@ -16,15 +16,15 @@ const useStyles = makeStyles((theme) => ({
   button: {
     margin: '2.5em 0 2.5em 0 ',
     color: 'white',
-    'background-color': '#bf083e',
+    'background-color': '#2C367E',
     border: 'none',
-    fontFamily: 'rowdies',
+    
     borderRadius: '1.5em',
     padding: '0 3em 0 3em',
     height: '2.5em',
     '&:hover': {
       cursor: 'pointer',
-      color: '#bf083e',
+      color: '#2C367E',
       'background-color': 'white',
     },
     backgroundImage: "url('./arrow.svg')",

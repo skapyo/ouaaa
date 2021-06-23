@@ -147,7 +147,7 @@ function StyledTreeItem(props) {
                 name="entries"
                 value={other.nodeId}
                 className={classes.checkbox}
-                style={{ color: '#019077' }}
+                style={{ color: '#2C367E' }}
                 checked={checked}
                 onChange={(e) => handleCheckboxChange(e)}
                 onClick={(e) => e.stopPropagation()}

@@ -32,7 +32,7 @@ const useStyles = makeStyles({
   },
   collectionLabel: {
     textAlign: 'center',
-    color: '#bf083e',
+    color: '#2C367E',
   },
   postCode: {
     '& input': {

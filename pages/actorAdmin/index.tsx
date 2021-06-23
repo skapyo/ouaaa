@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
   },
   buttonGrid: {
     color: 'white',
-    'background-color': '#bf083e',
+    'background-color': '#2C367E',
     border: 'none',
     padding: '0 1em 0 1em',
     fontSize: '16px',
@@ -53,9 +53,9 @@ const useStyles = makeStyles((theme) => ({
     height: '32px',
     '&:hover': {
       cursor: 'pointer',
-      color: '#bf083e',
+      color: '#2C367E',
       'background-color': 'white',
-      border: '2px solid #bf083e',
+      border: '2px solid #2C367E',
     }
   },
 }));

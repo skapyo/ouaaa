@@ -139,7 +139,7 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: 400,
   },
   buttonAuthentification: {
-    backgroundColor: '#bf083e!important',
+    backgroundColor: '#2C367E!important',
   },
   registerInfo: {
     padding: '2em',
