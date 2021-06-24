@@ -68,7 +68,11 @@ const useStyles = makeStyles({
     padding: '0px 5px 0px 5px!important',
   },
   entriesCheckbox: {
-    padding: '4px',
+    padding: '1px',
+  },
+  listItemText: {
+    marginTop: '0px',
+    marginBottom: '0px',
   },
 });
 
@@ -212,7 +216,7 @@ function Filters(props) {
                             role={undefined}
                             className={classes.entries}
                           >
-                            <ListItemText primary={entry.label} />
+                            <ListItemText primary={entry.label}  className={classes.listItemText}/>
                             <Checkbox
                               edge="start"
                               tabIndex={-1}

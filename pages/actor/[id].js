@@ -77,7 +77,7 @@ const useStyles = makeStyles((theme) => ({
   infoValue: {
     color: theme.typography.h5.color,
     fontWeight: 700,
-    wordBreak: 'break-all',
+    whiteSpace: 'break-spaces',
   },
   infoLabel: {
     color: theme.typography.h5.color,
@@ -509,7 +509,7 @@ const Actor = () => {
           )}
           <Container className={styles.cardInfo}>
             <Grid container>
-              <Grid item md={8} sm={10} className={styles.threePointGrid}>
+              <Grid item md={7} sm={10} className={styles.threePointGrid}>
                 <div>
                   <Typography variant="h2" className={styles.cardTitle}>
                     {data && data.actor.name}
@@ -541,7 +541,7 @@ const Actor = () => {
                 <div />
               </Grid>
 
-              <Grid item md={4} sm={10} className={[styles.align]}>
+              <Grid item md={5} sm={10} className={[styles.align]}>
                 <Grid container className={[styles.infoPratiqueGrid]}>
                   <Typography
                     variant="h7"
@@ -571,10 +571,7 @@ const Actor = () => {
                         {data && data.actor.address && data.actor.city && (
                           <span>
                             {/* @ts-ignore */}
-                            {data && data.actor.address}
-                            ,
-                            {/* @ts-ignore */}
-                            {data && data.actor.city}
+                            {(data && data.actor.address) +' ' +(data && data.actor.city)}
                           </span>
                         )}
                       </span>
@@ -833,15 +830,7 @@ const Actor = () => {
                     variant="h5"
                     className={[styles.cardTitle, styles.align]}
                   >
-                    LES EVENEMENTS
-                  </Typography>
-                  <Typography
-                    variant="h5"
-                    className={[styles.cardTitle, styles.align]}
-                  >
-                    de
-                    {/* @ts-ignore */}
-                    {data && data.actor.name}
+                    LES ÉVÉNEMENTS DE : {data && data.actor.name}
                   </Typography>
                 </div>
             )}

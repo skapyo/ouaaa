@@ -251,7 +251,7 @@ const carto = () => {
     L.Icon.Default.mergeOptions({
       iconUrl: null,
     });
-
+    const [popupOpen, setPopupOpen] = useState(false);
     const [stylesProps, setStylesProps] = useState({
       topImageSize: '250px',
       headerDisplay: 'static',
@@ -474,7 +474,8 @@ const carto = () => {
                             position={[actor.lat, actor.lng]}
                             icon={suitcasePoint}
                           >
-                            <Tooltip>
+                            <Tooltip
+                            >
                               <div
                                 className={styles.image}
                                 style={{

@@ -1042,7 +1042,6 @@ const AddActorForm = () => {
 
         />
 
-
         <Typography variant="body1" color="primary" className={styles.label}>
           Description
         </Typography>
@@ -1185,6 +1184,7 @@ const AddActorForm = () => {
                         defaultCollapseIcon={<ArrowDropDownIcon />}
                         defaultExpandIcon={<ArrowRightIcon />}
                         defaultEndIcon={<div style={{ width: 24 }} />}
+                        defaultExpanded={collection.entries && collection.entries.map((entry) => { return entry.id; })}
                       >
                         {collection.entries
                           && collection.entries.map((entry) => {
@@ -1196,6 +1196,7 @@ const AddActorForm = () => {
                                 labelText={entry.label}
                                 hideCheckBox
                                 isForm
+                                bgColor="grey"
                                 className={classes.treeParent}
                               >
                                 {entry.subEntries
