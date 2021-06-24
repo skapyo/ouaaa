@@ -285,6 +285,7 @@ const carto = () => {
             croppedZoom
             croppedRotation
             position
+            logo
           }
         }
       }
@@ -481,7 +482,7 @@ const carto = () => {
                                     actor.pictures.length >= 1
                                       ? `url(${getImageUrl(
                                         actor.pictures.sort((a, b) =>
-                                          a.logo ? 1 : -1,
+                                          a.logo ? -1 : 1,
                                         )[0].croppedPicturePath,
                                       )})`
                                       : '',

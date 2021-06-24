@@ -7,9 +7,9 @@ import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/core/Slider';
 import Button from '@material-ui/core/Button';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
+import CloseIcon from '@material-ui/icons/Close';
 import styles from './styles.module.css';
 import getCroppedImg from './cropImage';
-import CloseIcon from '@material-ui/icons/Close';
 // const dogImg =
 //   'https://img.huffingtonpost.com/asset/5ab4d4ac2000007d06eb2c56.jpeg?cache=sih0jwle4e&ops=1910_1000'
 
@@ -56,6 +56,7 @@ const ImageCropper = ({
   id,
 }) => {
   const [crop, setCrop] = useState(croppedImg.crop);
+  const [shouldVisualise, setShouldVisualise] = useState(true);
   const [rotation, setRotation] = useState(croppedImg.rotation);
   const [zoom, setZoom] = useState(croppedImg.zoom);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
@@ -74,12 +75,14 @@ const ImageCropper = ({
         rotation,
       );
       setCroppedImage(croppedImage);
+      setShouldVisualise(false);
     } catch (e) {
       console.error(e);
     }
   }, [croppedAreaPixels, rotation, src]);
 
   const saveCroppedImage = () => {
+    setShouldVisualise(true);
     updateKeyIndicator(id, 'croppedImg', {
       crop,
       rotation,
@@ -95,9 +98,9 @@ const ImageCropper = ({
     <Modal open={open} onClose={onClose} className={styles.popup}>
       {/* <Modal.Content> */}
       <div>
-      <Grid container justify="flex-end" className={styles.close}>
-          <CloseIcon onClick={onClose} justify="center" alignItems="center"></CloseIcon>
-      </Grid>
+        <Grid container justify="flex-end" className={styles.close}>
+          <CloseIcon onClick={onClose} justify="center" alignItems="center" />
+        </Grid>
         <div className={styles.cropContainer}>
           <Grid>
             <Grid item xs={8}>
@@ -138,7 +141,7 @@ const ImageCropper = ({
                   step={0.1}
                   aria-labelledby="Zoom"
                   classes={{ container: styles.slider }}
-                  onChange={(e, zoom) => setZoom(zoom)}
+                  onChange={(e, zoom) => {setShouldVisualise(true); setZoom(zoom);}}
                 />
               </div>
             </Grid>
@@ -157,7 +160,7 @@ const ImageCropper = ({
                   step={1}
                   aria-labelledby="Rotation"
                   classes={{ container: styles.slider }}
-                  onChange={(e, rotation) => setRotation(rotation)}
+                  onChange={(e, rotation) => {setShouldVisualise(true); setRotation(rotation);}}
                 />
               </div>
             </Grid>
@@ -177,7 +180,7 @@ const ImageCropper = ({
                 variant="contained"
                 color="primary"
                 classes={{ root: styles.cropButton }}
-                disabled={!croppedImage.url}
+                disabled={shouldVisualise}
               >
                 Sauvegarder
               </Button>
@@ -185,7 +188,7 @@ const ImageCropper = ({
           </Grid>
           <Grid container>
             <Grid item xs={12}>
-              {croppedImage.url && (
+              {croppedImage && croppedImage.url && (
                 <Image
                   src={croppedImage ? croppedImage.url : null}
                   className={styles.cropImage}

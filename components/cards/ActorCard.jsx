@@ -108,9 +108,9 @@ const ActorCard = ({ actor }) => {
                   src={
                     actor.pictures.length >= 1
                       ? getImageUrl(
-                          actor.pictures.sort((a, b) =>
-                            a.position > b.position ? 1 : -1,
-                          )[0].croppedPicturePath,
+                        actor.pictures.sort((a, b) =>
+                        (a.logo ? -1 : 1)-(b.logo ? -1 : 1),
+                      )[0].croppedPicturePath,
                         )
                       : ''
                   }
