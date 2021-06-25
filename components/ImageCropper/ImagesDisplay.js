@@ -100,9 +100,9 @@ const ImagePrev = ({
         </Card>
         <Card>
           <Grid container spacing={3}>
-            <Grid item>
+            {/* <Grid item>
               <HeightIcon onClick={() => openModal()} />
-            </Grid>
+            </Grid>*/}
             <Grid item>
               <DeleteIcon
                 color={deleted ? 'secondary' : 'action'}

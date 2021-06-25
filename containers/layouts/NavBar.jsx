@@ -294,9 +294,10 @@ const NavBar = () => {
                       className={styles.menuItem}
                       href="/map"
                     >
-                      ACTEURS
+                      CARTE DES ACTEURS
                     </MenuItem>
                   </Grid>
+                   {/*
                   <Grid item>
                     <MenuItem
                       button
@@ -337,7 +338,7 @@ const NavBar = () => {
                       A PROPOS
                     </MenuItem>
                   </Grid>
-
+*/}
                   {!user && (
                     <Grid item>
                       {/* @ts-ignore */}
