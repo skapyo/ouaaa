@@ -25,8 +25,14 @@ const ImagesDropZone = ({ onDropHandler, text }) => {
   const [bond, state] = useDropArea({
     onFiles: (files) => {
       if (files[0].type === 'image/jpeg' || files[0].type === 'image/jpg') {
-        onDropHandler(files);
-      }else{
+        if (files[0].size > 4e6) {
+          scnackbar.enqueueSnackbar("L'image ne doit pas excéder 4Mo");
+        } else {
+          {
+            onDropHandler(files);
+          }
+        }
+      } else {
         scnackbar.enqueueSnackbar("Seules les images au format jpeg sont autorisées");
       }
     },
@@ -34,8 +40,14 @@ const ImagesDropZone = ({ onDropHandler, text }) => {
 
   const fileUpload = (files) => {
     if (files[0].type === 'image/jpeg' || files[0].type === 'image/jpg') {
-      onDropHandler(files);
-    }else{
+      if (files[0].size > 4e6) {
+        scnackbar.enqueueSnackbar("L'image ne doit pas excéder 4Mo");
+      } else {
+        {
+          onDropHandler(files);
+        }
+      }
+    } else {
       scnackbar.enqueueSnackbar("Seules les images au format jpeg sont autorisées");
     }
   };
@@ -80,7 +92,7 @@ const ImagesDropZone = ({ onDropHandler, text }) => {
             />
             <label htmlFor={idInput}>
               <Button variant="contained" color="primary" component="span">
-               Ajouter une image
+                Ajouter une image
               </Button>
             </label>
           </Grid>
