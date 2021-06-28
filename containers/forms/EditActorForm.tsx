@@ -1131,7 +1131,7 @@ const EditActorForm = (props) => {
           Jour et heure d'ouverture
         </Typography>
         <Typography variant="body1" color="primary" className={styles.label}>
-          CONTACT PRIVE pour les échanges avec Ouaaa
+          CONTACT PRIVE pour les échanges avec <i>OUAAA!</i>
         </Typography>
         <FormControl component="fieldset">
           <RadioGroup
@@ -1149,7 +1149,7 @@ const EditActorForm = (props) => {
             <FormControlLabel
               value="other"
               control={<Radio />}
-              label="c’est un autre (avec un compte Ouaaa existant)"
+              label="c’est un autre (avec un compte <i>OUAAA!</i> existant)"
             />
 
           </RadioGroup>
@@ -1171,7 +1171,7 @@ const EditActorForm = (props) => {
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    label="Contact Ouaaa"
+                    label="Contact <i>OUAAA!</i>"
                     variant="outlined"
                     placeholder="Tapez les 3 premières lettres"
                   />
@@ -1277,7 +1277,7 @@ const EditActorForm = (props) => {
           de manière didactique vos liens avec les questions de transition,
           vos missions/actions, votre organisation, etc. Au delà de l’accès
           à une information claire pour tous les internautes (y compris en
-          situation de handicap) utilisant OUAAA !, ce texte permettra
+          situation de handicap) utilisant <i>OUAAA!</i>, ce texte permettra
           un meilleur référencement de votre page dans le moteur de
           recherche interne. Pour cela, pensez à utiliser des mots clé du
           champ sémantique de votre activité. Ex : vous êtes une

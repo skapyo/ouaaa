@@ -85,7 +85,7 @@ const useStyles = makeStyles((theme) => ({
     color: 'white',
     'background-color': '#2C367E',
     border: 'none',
-    
+
     borderRadius: '1.5em',
     padding: '0 3em 0 3em',
     minHeight: '2.5em',
@@ -150,17 +150,17 @@ const PresentationSection = () => {
   return (
     <Container className={styles.cardInfo}>
       <Typography className={styles.inprogress}>
-          <img className={styles.inprogress} src="./in_progress.png" />
+        <img className={styles.inprogress} src="./in_progress.png" />
         <p />
         {/* <p>Abonnez-vous à la newsletter pour suivre les avancées.</p> */}
       </Typography>
 
-     
+
       <Grid container spacing={3} className={styles.flexColumn}>
         <Grid item md={6}>
           <div className={styles.gridTitle}>
             <Typography variant="h3" className={styles.cardTitle}>
-              OUAAA !
+              <i>OUAAA!</i>
             </Typography>
             <Typography variant="h3" className={styles.cardTitle}>
               C'EST QUOUUA ?
@@ -171,7 +171,7 @@ const PresentationSection = () => {
             <ListItem>
               <ListItemText
                 className={styles.listItemText}
-                primary="OUAAA est le site des initiatives, des réseaux et des acteurs de la transition vers une société plus humaine et plus écologique sur le territoire de l'Aunis (nord Charente-Maritime)."
+                primary="<i>OUAAA!</i> est le site des initiatives, des réseaux et des acteurs de la transition vers une société plus humaine et plus écologique sur le territoire de l'Aunis (nord Charente-Maritime)."
               />
             </ListItem>
             <ListItem>
@@ -183,13 +183,13 @@ const PresentationSection = () => {
             <ListItem>
               <ListItemText
                 className={styles.listItemText}
-                primary="100% coopératif et animé par une équipe bénévole : sans but lucratif, Ouaaa est développé sur la base d’outils libres, il est utilisable et clonable par tous."
+                primary="100% coopératif et animé par une équipe bénévole : sans but lucratif, <i>OUAAA!</i> est développé sur la base d’outils libres, il est utilisable et clonable par tous."
               />
             </ListItem>
             <ListItem>
               <ListItemText
                 className={styles.listItemText}
-                primary="Plateforme d’information et d’engagement, Ouaaa ! veut accélérer la transition vers un fonctionnement plus sobre, plus humain et véritablement « durable » dans les communautés de communes Aunis Atlantique, Aunis Sud, dans l’agglomération de La Rochelle, et dans l'Île de Ré."
+                primary="Plateforme d’information et d’engagement, <i>OUAAA!</i> veut accélérer la transition vers un fonctionnement plus sobre, plus humain et véritablement « durable » dans les communautés de communes Aunis Atlantique, Aunis Sud, dans l’agglomération de La Rochelle, et dans l'Île de Ré."
               />
             </ListItem>
           </List>
@@ -210,7 +210,7 @@ const PresentationSection = () => {
       {/*
       <br />
       <Typography variant="h2" className={[styles.cardTitle, styles.align]}>
-        Ouaaa : Agir pour la transition en Aunis
+        <i>OUAAA!</i> : Agir pour la transition en Aunis
       </Typography>
       <Typography variant="h3" className={[styles.cardTitle, styles.align]}>
         C'EST POUR QUI ?

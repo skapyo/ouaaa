@@ -53,7 +53,7 @@ const About = () => {
               <br />
               <div>
                 C'est ainsi que le site va bientôt voir le jour sous le nom de
-                Ouaaa : Outil des Acteurs Alternatifs en Aunis.
+                <i>OUAAA!</i> : Outil des Acteurs Alternatifs en Aunis.
               </div>
             </Typography>
             <br />

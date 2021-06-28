@@ -85,7 +85,7 @@ const MyApp = (props) => {
     <>
       <Head>
         <meta charSet="utf-8" />
-        <title>Ouaaa : Agir pour la transition en Aunis</title>
+        <title><i>OUAAA!</i> : Agir pour la transition en Aunis</title>
         <meta
           name="viewport"
           content="minimum-scale=1, initial-scale=1, width=device-width"

@@ -132,7 +132,7 @@ const NavBar = () => {
                 <img
                   className={styles.logo}
                   src="/logo.png"
-                  alt="Ouaaa : Agir pour la transition en Aunis – La Rochelle et ses communes"
+                  alt="<i>OUAAA!</i> : Agir pour la transition en Aunis – La Rochelle et ses communes"
                 />
               </Link>
             </Grid>
@@ -297,7 +297,7 @@ const NavBar = () => {
                       CARTE DES ACTEURS
                     </MenuItem>
                   </Grid>
-                   {/*
+                  {/*
                   <Grid item>
                     <MenuItem
                       button

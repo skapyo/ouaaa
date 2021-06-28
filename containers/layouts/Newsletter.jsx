@@ -82,7 +82,7 @@ const useStyles = makeStyles((theme) => ({
   },
   cardTitle: {
     align: 'center',
-    
+
     fontSize: '2.2em',
     color: '#2C367E',
     letterSpacing: '2px',
@@ -95,7 +95,7 @@ const useStyles = makeStyles((theme) => ({
     color: 'white',
     'background-color': '#2C367E',
     border: 'none',
-    
+
     fontSize: '18px',
     borderRadius: '1.5em',
     padding: '0 3em 0 3em',
@@ -183,7 +183,7 @@ const Newsletter = () => {
     return (
       <Container className={[styles.newsletter]}>
         <Typography variant="h2" className={[styles.cardTitle, styles.align]}>
-          POUR NE RIEN RATER DE #OUAAA
+          POUR NE RIEN RATER DE <i>OUAAA!</i>
           <br />
           INSCRIVEZ-VOUS À NOTRE NEWSLETTER
         </Typography>
@@ -205,9 +205,9 @@ const Newsletter = () => {
             <ClassicButton
               variant="contained"
               className={styles.searchIcon}
-                 onClick={subscription}
+              onClick={subscription}
               disabled={!validationResult?.global}
-            > 
+            >
               <SearchIcon />
             </ClassicButton>
           </div>

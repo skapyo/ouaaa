@@ -707,16 +707,16 @@ const AddActorForm = () => {
       <Container component="main" maxWidth="sm">
         <br />
         <Typography className={styles.introduction}>
-          Féliciations, vous avez un compte 'OUAAA !' personnel et vous vous apprêtez à créer une page Acteur.
+          Félicitations, vous avez un compte <i>OUAAA!</i> personnel et vous vous apprêtez à créer une page Acteur.
           {' '}
           <br />
           Voici quelques informations : avec votre compte, vous  pouvez créer plusieurs pages Acteurs,
           mais chacune d’elles doit être créée via ce formulaire.
-          Vous deviendrez alors l’administrateur principal de chacun d’entre elles.
+          Vous deviendrez alors l’administrateur principal de chacune d’entre elles.
           <br />
           Un acteur de la transition peut avoir n’importe quel statut juridique,
           les collectifs et particuliers peuvent donc aussi être référencés
-          sur OUAAA !.
+          sur <i>OUAAA!</i>.
           <br />
           <br />
 
@@ -725,19 +725,19 @@ const AddActorForm = () => {
           <a href="/charter">charte</a>
           {' '}
           afin de savoir si vous
-          adhérez aux valeurs de OUAAA !. Pour soumettre votre inscription, nous vous
-          invitons a remplir a minima les champs marqués d’une « * ».
+          adhérez aux valeurs de <i>OUAAA!</i>. Pour soumettre votre inscription, nous vous
+          invitons à remplir à minima les champs marqués d’une « * ».
           {' '}
           <br />
           {' '}
           Une fois votre
           inscription validée par notre équipe, votre page acteur sera visible
-          de tous les visiteurs de OUAAA ! :  sur la carte, dans l’annuaire,
-          etc.
+          de tous les visiteurs de <i>OUAAA!</i>
           <br />
           <br />
           Vous pourrez actualiser les infos de votre/vos page(s) Acteurs dès que nécessaire
-          via la page d’édition  et diffuser ses événement/actions via l’éditeur dédié.
+          via votre espace acteur (rubrique « administrer mes pages acteurs »)
+          via (logo du crayon) accessible directement depuis votre page acteur.
         </Typography>
         <br />
         <br />
@@ -902,7 +902,7 @@ const AddActorForm = () => {
         <SchedulerContainer />
 
         <Typography variant="body1" color="primary" className={styles.label}>
-          CONTACT PRIVE pour les échanges avec Ouaaa
+          CONTACT PRIVE pour les échanges avec <i>OUAAA!</i>
         </Typography>
         <FormControl component="fieldset">
           <RadioGroup
@@ -919,7 +919,7 @@ const AddActorForm = () => {
             <FormControlLabel
               value="other"
               control={<Radio />}
-              label="c’est un autre (avec un compte Ouaaa existant)"
+              label="c’est un autre (avec un compte <i>OUAAA!</i> existant)"
             />
 
           </RadioGroup>
@@ -940,7 +940,7 @@ const AddActorForm = () => {
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    label="Contact Ouaaa"
+                    label="Contact <i>OUAAA!</i>"
                     variant="outlined"
                     placeholder="Tapez les 3 premières lettre du contact"
                   />

@@ -1017,7 +1017,7 @@ const AddEventForm = ({ actorId }) => {
             let helperText = '';
             if (collection.code === 'category') {
               label = 'Choisissez les sous-sujets dans lesquels vous souhaitez apparaître (en priorité)';
-              helperText = 'Vous avez la possibilité d’ajouter un texte libre pour expliquer votre lien au sujet choisi. Vous pouvez sélectionner autant de sujet que nécessaire, les 3 premiers serviront à référencer votre page dans les moteurs de recherches info bulle : expliquant les ensemble et les sujets qu’ils contiennent aisni que les liens avec les sous-sujets et pourquoi pas ODD / transiscope. Ces infos bulles sont aussi visible dans le filtre sur la carte pour aider les usagers de Ouaaa à filtrer leur recherche';
+              helperText = 'Vous avez la possibilité d’ajouter un texte libre pour expliquer votre lien au sujet choisi. Vous pouvez sélectionner autant de sujet que nécessaire, les 3 premiers serviront à référencer votre page dans les moteurs de recherches info bulle : expliquant les ensemble et les sujets qu’ils contiennent aisni que les liens avec les sous-sujets et pourquoi pas ODD / transiscope. Ces infos bulles sont aussi visible dans le filtre sur la carte pour aider les usagers de <i>OUAAA!</i> à filtrer leur recherche';
             }
             if (collection.code !== 'event_price') return '';
 
@@ -1183,7 +1183,7 @@ const AddEventForm = ({ actorId }) => {
               value="withLink"
               control={<Radio />}
               className={styles.justify}
-              label="'Je participe à l’action'  envoie vers un Lien externe de l'événement valable si vous avez un formulaire plus précis que les fichier ouaaa (ex : stage, formation) ou billeterie en ligne"
+              label="'Je participe à l’action'  envoie vers un Lien externe de l'événement valable si vous avez un formulaire plus précis que les fichier <i>OUAAA!</i> (ex : stage, formation) ou billeterie en ligne"
               onChange={() => setShowRegisterLink(true)}
             />
             {showRegisterLink && (
