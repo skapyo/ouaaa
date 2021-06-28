@@ -77,6 +77,7 @@ const CREATE_ACTOR = gql`
     $logoPictures: [InputPictureType]
     $mainPictures: [InputPictureType]
     $pictures: [InputPictureType]
+    $openingHours: [OpeningHour]
   ) {
     createActor(
       actorInfos: $formValues
@@ -86,6 +87,7 @@ const CREATE_ACTOR = gql`
       pictures: $pictures
       mainPictures: $mainPictures
       logoPictures: $logoPictures
+      openingHours: $openingHours
     ) {
       id
       name
@@ -409,6 +411,7 @@ const AddActorForm = () => {
     const { CKEditor, ClassicEditor, Alignment } = editorRef.current || {};
     const [descriptionEditor, setDescriptionEditor] = useState();
     const [volunteerEditor, setVolunteerEditor] = useState();
+    const [openingHours, setOpeningHours] = useState();
 
     const [estlarochelle, setEstlarochelle] = useState(false);
     const [
@@ -653,7 +656,7 @@ const AddActorForm = () => {
           };
         });
       }
-
+debugger;
       create({
         variables: {
           formValues,
@@ -665,6 +668,7 @@ const AddActorForm = () => {
           logoPictures,
           mainPictures,
           pictures,
+          openingHours,
         },
       });
     }, [
@@ -916,7 +920,7 @@ const AddActorForm = () => {
         <Typography variant="body1" color="primary" className={styles.label}>
           Jour et heure d'ouverture
         </Typography>
-        <SchedulerContainer />
+        <SchedulerContainer onChange={setOpeningHours} />
 
         <Typography variant="body1" color="primary" className={styles.label}>
           CONTACT PRIVE pour les échanges avec <i>OUAAA!</i>

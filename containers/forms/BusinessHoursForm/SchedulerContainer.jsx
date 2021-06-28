@@ -40,6 +40,10 @@ const WEEKDAYS = [
 ];
 
 const SchedulerContainer = (props) => {
+  const {
+    onChange,
+    ...other
+  } = props;
   const classes = useStyles();
 
   const [timeContainerList, setTimeContainerList] = useState([WEEKDAYS]);
@@ -101,6 +105,9 @@ const SchedulerContainer = (props) => {
 
   useEffect(() => {
     console.log('freshed', timeFrames);
+
+      onChange(timeFrames);
+
     // call to API
   }, [timeFrames]);
 
@@ -120,8 +127,8 @@ const SchedulerContainer = (props) => {
           />
         </div>
 
-        {timeContainerList.length > 0 &&
-          timeContainerList.map((days, index) => {
+        {timeContainerList.length > 0
+          && timeContainerList.map((days, index) => {
             return (
               <div className={classes.timeContainer}>
                 <TimeContainer
