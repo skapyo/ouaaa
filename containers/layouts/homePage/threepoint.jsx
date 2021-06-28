@@ -171,7 +171,11 @@ const PresentationSection = () => {
             <ListItem>
               <ListItemText
                 className={styles.listItemText}
-                primary="<i>OUAAA!</i> est le site des initiatives, des réseaux et des acteurs de la transition vers une société plus humaine et plus écologique sur le territoire de l'Aunis (nord Charente-Maritime)."
+                primary={
+                  <>
+                    <i>OUAAA!</i> est le site des initiatives, des réseaux et des acteurs de la transition vers une société plus humaine et plus écologique sur le territoire de l'Aunis (nord Charente-Maritime).
+                  </>
+                }
               />
             </ListItem>
             <ListItem>
@@ -183,13 +187,21 @@ const PresentationSection = () => {
             <ListItem>
               <ListItemText
                 className={styles.listItemText}
-                primary="100% coopératif et animé par une équipe bénévole : sans but lucratif, <i>OUAAA!</i> est développé sur la base d’outils libres, il est utilisable et clonable par tous."
+                primary={
+                  <>
+                    100% coopératif et animé par une équipe bénévole : sans but lucratif, <i>OUAAA!</i> est développé sur la base d’outils libres, il est utilisable et clonable par tous.
+                  </>
+                }
               />
             </ListItem>
             <ListItem>
               <ListItemText
                 className={styles.listItemText}
-                primary="Plateforme d’information et d’engagement, <i>OUAAA!</i> veut accélérer la transition vers un fonctionnement plus sobre, plus humain et véritablement « durable » dans les communautés de communes Aunis Atlantique, Aunis Sud, dans l’agglomération de La Rochelle, et dans l'Île de Ré."
+                primary={
+                  <>
+                    Plateforme d’information et d’engagement, <i>OUAAA!</i> veut accélérer la transition vers un fonctionnement plus sobre, plus humain et véritablement « durable » dans les communautés de communes Aunis Atlantique, Aunis Sud, dans l’agglomération de La Rochelle, et dans l'Île de Ré.
+                  </>
+                }
               />
             </ListItem>
           </List>

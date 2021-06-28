@@ -51,8 +51,8 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(3, 0, 2),
   },
   signup: {
-    border: 'solid 1px #25AAA4',
-    color: '#25AAA4',
+    border: 'solid 1px #D96552',
+    color: '#D96552',
     background: 'none',
     '&:hover': {
       background: 'none',

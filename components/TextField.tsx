@@ -5,10 +5,10 @@ const StyledTextField = styled(TextField)({
     fontSize: '24px',
     fontWeight: '500',
     '&:hover fieldset': {
-      borderColor: '#25AAA4',
+      borderColor: '#D96552',
     },
     '&.Mui-focused fieldset': {
-      borderColor: '#25AAA4',
+      borderColor: '#D96552',
       borderWidth: '2px',
     },
     '&.Mui-disabled input': {
@@ -18,7 +18,7 @@ const StyledTextField = styled(TextField)({
       // fontWeight: "700",
       // fontSize: "24px"
       zIndex: 1000,
-      // color: "#25AAA4"
+      // color: "#D96552"
     },
     '&.Mui-disabled fieldset': {
       // borderColor: "none",

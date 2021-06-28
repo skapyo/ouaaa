@@ -34,7 +34,7 @@ export default function ButtonDay(props) {
     <StyledButton
       onClick={handleClick}
       variant="contained"
-      style={{ backgroundColor: flag ? '#2C367E' : '#25AAA4' }}
+      style={{ backgroundColor: flag ? '#2C367E' : '#D96552' }}
       data-id={dayId}
       disabled={alreadySelected}
     >

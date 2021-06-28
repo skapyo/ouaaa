@@ -919,7 +919,11 @@ const AddActorForm = () => {
             <FormControlLabel
               value="other"
               control={<Radio />}
-              label="c’est un autre (avec un compte <i>OUAAA!</i> existant)"
+              label={
+                <>
+                  c’est un autre (avec un compte <i>OUAAA!</i> existant)
+                </>
+              }
             />
 
           </RadioGroup>

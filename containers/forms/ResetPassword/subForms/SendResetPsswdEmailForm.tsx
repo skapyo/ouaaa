@@ -57,7 +57,7 @@ const ResetPasswordEmailForm: RenderCallback = (props) => {
               left: '50%',
               marginTop: '-12px',
               marginLeft: '-16px',
-              color: '#25AAA4',
+              color: '#D96552',
             }}
             size={30}
           />
