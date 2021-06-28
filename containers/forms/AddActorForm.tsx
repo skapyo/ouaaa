@@ -20,6 +20,8 @@ import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import TreeView from '@material-ui/lab/TreeView';
 import ClassicButton from 'components/buttons/ClassicButton';
+import Fab from '@material-ui/core/Fab';
+import EditIcon from '@material-ui/icons/Edit';
 import FormController, {
   RenderCallback,
 } from 'components/controllers/FormController';
@@ -230,6 +232,19 @@ const useStyles = makeStyles((theme) => ({
     color: 'rgba(0, 0, 0, 0.54)',
     textAlign: 'justify',
   },
+  fab: {
+    backgroundColor: '#2C367E',
+    color: 'white',
+    '&:hover': {
+      backgroundColor: '#2C367E',
+      color: 'white',
+      cursor: "default"
+    },
+  },
+  editIcon: {
+    width: "15px",
+    height: "15px"
+  }
 }));
 
 type FormItemProps = {
@@ -737,7 +752,9 @@ const AddActorForm = () => {
           <br />
           Vous pourrez actualiser les infos de votre/vos page(s) Acteurs dès que nécessaire
           via votre espace acteur (rubrique « administrer mes pages acteurs »)
-          via (logo du crayon) accessible directement depuis votre page acteur.
+          via  <Fab size="small" className={styles.fab} aria-label="edit">
+            <EditIcon className={styles.editIcon} />
+          </Fab>  accessible directement depuis votre page acteur.
         </Typography>
         <br />
         <br />
