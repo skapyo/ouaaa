@@ -656,7 +656,7 @@ const AddActorForm = () => {
           };
         });
       }
-      debugger;
+
       create({
         variables: {
           formValues,
@@ -921,7 +921,7 @@ const AddActorForm = () => {
           Jour et heure d'ouverture
         </Typography>
         <SchedulerContainer onChange={setOpeningHours} />
-
+        <p />
         <Typography variant="body1" color="primary" className={styles.label}>
           CONTACT PRIVE pour les échanges avec <i>OUAAA!</i>
         </Typography>

@@ -67,6 +67,7 @@ import StyledTreeItem from '../../components/filters/StyledTreeItem';
 import Entries from './Entries';
 import RadioGroupForContext from './RadioGroupForContext';
 import UserInfosForm from './UserInfosForm';
+import SchedulerContainer from './BusinessHoursForm/SchedulerContainer';
 
 const EDIT_ACTOR = gql`
   mutation editActor(
@@ -78,6 +79,7 @@ const EDIT_ACTOR = gql`
     $logoPictures: [InputPictureType]
     $mainPictures: [InputPictureType]
     $pictures: [InputPictureType]
+    $openingHours: [InputOpeningHour]
   ) {
     editActor(
       actorInfos: $formValues
@@ -88,6 +90,7 @@ const EDIT_ACTOR = gql`
       pictures: $pictures
       description: $description
       volunteerDescription: $volunteerDescription
+      openingHours: $openingHours
     ) {
       id
       name
@@ -213,7 +216,15 @@ const GET_ACTOR = gql`
         }
       }
       contact_id
-      
+      openingHours {
+          days {
+            id,
+            day,
+            selected
+          }
+          hours
+          place
+        }
     }
   }
 `;
@@ -355,6 +366,8 @@ const EditActorForm = (props) => {
   const styles = useStyles();
   const user = useSessionState();
   const [checked, setChecked] = useState([0]);
+  const [openingHours, setOpeningHours] = useState();
+
   const { data: dataUsers } = useQuery(GET_USERS, {});
   const { data } = useQuery(GET_CATEGORIES, {
     fetchPolicy: 'network-only',
@@ -861,6 +874,7 @@ const EditActorForm = (props) => {
           description: descriptionEditor.getData(),
           // @ts-ignore
           volunteerDescription: volunteerEditor.getData(),
+          openingHours,
         },
       });
     }, [
@@ -871,6 +885,7 @@ const EditActorForm = (props) => {
       objectsListMain,
       descriptionEditor,
       volunteerEditor,
+      openingHours
     ]);
 
     useEffect(() => {
@@ -906,6 +921,18 @@ const EditActorForm = (props) => {
         setShowOtherContact(false);
       }
     };
+    const getTimeFramesFromData = (initDatas) => {
+      const openingHours = initDatas.map((openingHour) => {
+        const timeFrames = [3];
+        timeFrames[0] = openingHour.days;
+        timeFrames[1] = openingHour.hours;
+        timeFrames[2] = openingHour.place;
+        return timeFrames;
+      });
+      console.log('opening ', openingHours);
+      return openingHours;
+    };
+
     const getAddressDetails = (results) => {
       formValues.address = `${getObjectLongName(
         results,
@@ -1002,7 +1029,7 @@ const EditActorForm = (props) => {
     };
     const getDefaultValueContact = () => {
       let defaultUser;
-      if (dataUsers.users !== null) {
+      if (dataUsers && dataUsers.users !== null) {
         dataUsers.users.map((user) => {
           if (user.id === actorData.actor.contact_id) {
             defaultUser = user;
@@ -1127,9 +1154,11 @@ const EditActorForm = (props) => {
             );
           })
         }
-        <Typography variant="body1" color="primary" className={styles.label}>
+         <Typography variant="body1" color="primary" className={styles.label}>
           Jour et heure d'ouverture
         </Typography>
+        <SchedulerContainer onChange={setOpeningHours}  initData={actorData && getTimeFramesFromData(actorData.actor.openingHours)}/>
+        <p />
         <Typography variant="body1" color="primary" className={styles.label}>
           CONTACT PRIVE pour les échanges avec <i>OUAAA!</i>
         </Typography>
@@ -1162,7 +1191,7 @@ const EditActorForm = (props) => {
             {showOtherContact ? (
               <Autocomplete
                 id="combo-box-demo"
-                options={dataUsers.users}
+                options={dataUsers && dataUsers.users}
                 // @ts-ignore
                 onInput={inputChangeHandler}
                 open={showOtherContactList}

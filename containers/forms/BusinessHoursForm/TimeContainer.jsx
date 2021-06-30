@@ -1,4 +1,6 @@
-import React, { useState, useContext, useEffect, useRef } from 'react';
+import React, {
+  useState, useContext, useEffect, useRef,
+} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -78,6 +80,7 @@ const TimeContainer = (props) => {
     deleteTimeContainer,
     updatePlaces,
     showPlace,
+    initData,
   } = props;
 
   const [hours, setHours] = useState([]);
@@ -91,9 +94,7 @@ const TimeContainer = (props) => {
 
   const selectDays = (e) => {
     const dayId = e.currentTarget.dataset.id;
-    const selectedDays = [...weekdays].map((day) =>
-      day.id === +dayId ? { ...day, selected: !day.selected } : day,
-    );
+    const selectedDays = [...weekdays].map((day) => (day.id === +dayId ? { ...day, selected: !day.selected } : day));
 
     setWeekDays(selectedDays);
   };
@@ -119,11 +120,11 @@ const TimeContainer = (props) => {
   };
 
   useEffect(() => {
-    const newTimeFrame = [weekdays, hours, location];
+      const newTimeFrame = [weekdays, hours, location];
 
-    if (hours.length > 0) {
-      updateTimeFrames(newTimeFrame, indexTimeContainer);
-    }
+      if (hours.length > 0) {
+        updateTimeFrames(newTimeFrame, indexTimeContainer);
+      }
   }, [weekdays, hours, location]);
 
   return (
@@ -157,8 +158,8 @@ const TimeContainer = (props) => {
             <div className={classes.timepicker}>
               {' '}
               <div className={classes.timerange}>
-                {timeRangeList.length > 0 &&
-                  timeRangeList.map((e, index) => {
+                {timeRangeList.length > 0
+                  && timeRangeList.map((e, index) => {
                     return (
                       <TimePicker
                         selectHours={selectHours}

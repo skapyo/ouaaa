@@ -28,6 +28,7 @@ export default function ButtonDay(props) {
   const handleClick = (e) => {
     setFlag(!flag);
     selectDays(e);
+    
   };
 
   return (

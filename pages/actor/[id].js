@@ -384,19 +384,19 @@ const Actor = () => {
   const getDay = (dayNumber) => {
     switch (dayNumber) {
       case '1':
-        return 'Lu';
+        return 'Lu ';
       case '2':
-        return 'Ma';
+        return 'Ma ';
       case '3':
-        return 'Mer';
+        return 'Mer ';
       case '4':
-        return 'Jeu';
+        return 'Jeu ';
       case '5':
-        return 'Ven';
+        return 'Ven ';
       case '6':
-        return 'Sam';
+        return 'Sam ';
       case '7':
-        return 'Dim';
+        return 'Dim ';
       default:
         return '';
     }
@@ -780,15 +780,13 @@ const Actor = () => {
                       {data && data.actor.openingHours.map((openingHour) => {
                         return (
                           <span className={[styles.infoValue]}>
-                            {openingHour.days.map((day) => {
+                            {openingHour.days.map((day, index) => {
                               return (
                                 <>
                                   {day.selected && getDay(day.id)}
-                                  {' '}
                                 </>
                               );
                             })}
-                            {' '}
                             {openingHour.hours.map((hourtab) => {
                               return (
                                 <>
@@ -805,6 +803,7 @@ const Actor = () => {
                                 </>
                               );
                             })}
+                            <br />
 
                           </span>
                         );

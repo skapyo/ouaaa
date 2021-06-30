@@ -42,16 +42,22 @@ const WEEKDAYS = [
 const SchedulerContainer = (props) => {
   const {
     onChange,
+    initData,
     ...other
   } = props;
   const classes = useStyles();
 
   const [timeContainerList, setTimeContainerList] = useState([WEEKDAYS]);
   const [availableDays, setAvailableDays] = useState(WEEKDAYS);
-  const [timeFrames, setTimesFrames] = useState([]);
+  const [timeFrames, setTimesFrames] = useState(initData !== undefined ? initData : []);
   const [showPlace, setShowPlace] = useState(true);
   const [places, setPlaces] = useState([]);
 
+  /* useEffect(() => {
+    debugger;
+    setTimeContainerList([initData !== undefined ? initData[0][0] : [WEEKDAYS]]);
+  }, [initData]);
+  */
   const addTimeContainer = () => {
     const newTimeContainerList = [...timeContainerList, availableDays];
     setTimeContainerList(newTimeContainerList);
@@ -62,7 +68,7 @@ const SchedulerContainer = (props) => {
   };
 
   const updateTimeFrames = (timeFrame, index) => {
-    //console.log('follow up timeFrames', index, timeFrames.length);
+    // console.log('follow up timeFrames', index, timeFrames.length);
 
     if (index + 1 > timeFrames.length) {
       setTimesFrames([...timeFrames, timeFrame]);
@@ -104,17 +110,18 @@ const SchedulerContainer = (props) => {
   };
 
   useEffect(() => {
-
-
-    let openingHours = timeFrames.map((timeFrames) => {
-      let openingHour = {};
+    const openingHours = timeFrames.map((timeFrames) => {
+      const openingHour = {};
       openingHour.days = timeFrames[0];
+      openingHour.days.map((day) => {
+        delete day.__typename;
+        return 'ok';
+      });
       openingHour.hours = timeFrames[1];
       openingHour.place = timeFrames[2];
       return openingHour;
     });
-    console.log('freshed', openingHours);
-    onChange('');
+    console.log('openingHourss', openingHours);
     onChange(openingHours);
 
     // call to API
@@ -149,6 +156,7 @@ const SchedulerContainer = (props) => {
                   places={places}
                   showPlace={showPlace}
                   updatePlaces={updatePlaces}
+                  initData={initData}
                 />
               </div>
             );
