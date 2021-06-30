@@ -742,7 +742,7 @@ const Actor = () => {
                       <Grid item xs={8} className={[styles.alignLeft]}>
                         <div className={[styles.infoLabel]}>Site internet</div>
                         <span className={[styles.infoValue]}>
-                          <a href={data && data.actor.website} target="_blank">
+                          <a href={data && data.actor.website} target="_blank" rel="noreferrer"> 
                             {data && data.actor.website}
                           </a>
                           {/* @ts-ignore */}
@@ -926,11 +926,11 @@ const Actor = () => {
           <Newsletter />
           {((data && containUser(data.actor.referents))
             || (user && user.role === 'admin')) && (
-            <Link href={`/actorAdmin/actor/${id}`}>
+            <a href={`/actorAdmin/actor/${id}`} target="_blank" rel="noreferrer">
               <Fab className={styles.fab} aria-label="edit">
                 <EditIcon />
               </Fab>
-            </Link>
+            </a>
           )}
         </Box>
       </RootRef>
