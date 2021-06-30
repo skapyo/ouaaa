@@ -576,11 +576,11 @@ const carto = () => {
                                   {actor && actor.shortDescription}
                                 </Typography>
                               </div>
-                              <Link href={`/actor/${actor.id}`}>
+                              <a href={`/actor/${actor.id}`} target="_blank"> 
                                 <button className={styles.buttonGrid}>
                                   EN SAVOIR PLUS
                                 </button>
-                              </Link>
+                              </a>
                             </Popup>
                           </Marker>
                         );

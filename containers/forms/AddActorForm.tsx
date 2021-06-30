@@ -77,7 +77,7 @@ const CREATE_ACTOR = gql`
     $logoPictures: [InputPictureType]
     $mainPictures: [InputPictureType]
     $pictures: [InputPictureType]
-    $openingHours: [OpeningHour]
+    $openingHours: [InputOpeningHour]
   ) {
     createActor(
       actorInfos: $formValues

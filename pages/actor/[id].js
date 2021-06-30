@@ -30,6 +30,7 @@ import Parser from 'html-react-parser';
 import Fab from '@material-ui/core/Fab';
 import EditIcon from '@material-ui/icons/Edit';
 import Link from 'components/Link';
+import moment from 'moment';
 import CardSliderEvent from '../../components/cards/CardSliderEvent';
 import Newsletter from '../../containers/layouts/Newsletter';
 import { useSessionState } from '../../context/session/session';
@@ -123,7 +124,7 @@ const useStyles = makeStyles((theme) => ({
     color: 'white',
     'background-color': '#2C367E',
     border: 'none',
-    
+
     borderRadius: '1.5em',
     padding: '0 3em 0 3em',
     height: '2.5em',
@@ -145,7 +146,7 @@ const useStyles = makeStyles((theme) => ({
     color: '#2C367E',
     'background-color': 'white',
     border: '2px solid #2C367E',
-    
+
     borderRadius: '1.5em',
     padding: '0 3em 0 3em',
     height: '2.5em',
@@ -272,6 +273,15 @@ const Actor = () => {
           croppedRotation
           position
         }
+        openingHours {
+          days {
+            id,
+            day,
+            selected
+          }
+          hours
+          place
+        }
       }
     }
   `;
@@ -371,6 +381,36 @@ const Actor = () => {
       },
     });
   };
+  const getDay = (dayNumber) => {
+    switch (dayNumber) {
+      case '1':
+        return 'Lu';
+      case '2':
+        return 'Ma';
+      case '3':
+        return 'Mer';
+      case '4':
+        return 'Jeu';
+      case '5':
+        return 'Ven';
+      case '6':
+        return 'Sam';
+      case '7':
+        return 'Dim';
+      default:
+        return '';
+    }
+  };
+
+  const WEEKDAYS = [
+    { id: 1, day: 'L', selected: false },
+    { id: 2, day: 'M', selected: false },
+    { id: 3, day: 'M', selected: false },
+    { id: 4, day: 'J', selected: false },
+    { id: 5, day: 'V', selected: false },
+    { id: 6, day: 'S', selected: false },
+    { id: 7, day: 'D', selected: false },
+  ];
   const headerRef = React.useRef();
   const settingsSliderImage = {
     infinite: true,
@@ -571,7 +611,7 @@ const Actor = () => {
                         {data && data.actor.address && data.actor.city && (
                           <span>
                             {/* @ts-ignore */}
-                            {(data && data.actor.address) +' ' +(data && data.actor.city)}
+                            {`${data && data.actor.address} ${data && data.actor.city}`}
                           </span>
                         )}
                       </span>
@@ -730,17 +770,50 @@ const Actor = () => {
                       </Grid>
                     </Grid>
                   )}
-                  {/* <Grid container className={[styles.item]}>
+                  {data && data.actor.openingHours && (
+                  <Grid container className={[styles.item]}>
                     <Grid item xs={3} className={[styles.alignRight]}>
                       <Schedule className={[styles.icon]} />
                     </Grid>
                     <Grid item xs={8} className={[styles.alignLeft]}>
                       <div className={[styles.infoLabel]}>Horaire</div>
-                      <span className={[styles.infoValue]} />
-                    </Grid>
-                  </Grid> */}
-                </Grid>
+                      {data && data.actor.openingHours.map((openingHour) => {
+                        return (
+                          <span className={[styles.infoValue]}>
+                            {openingHour.days.map((day) => {
+                              return (
+                                <>
+                                  {day.selected && getDay(day.id)}
+                                  {' '}
+                                </>
+                              );
+                            })}
+                            {' '}
+                            {openingHour.hours.map((hourtab) => {
+                              return (
+                                <>
+                                  {hourtab.map((hour, index) => {
+                                    return (
+                                      <>
+                                        {moment(hour).format('HH')}
+                                        h
+                                        {moment(hour).format('mm')}
+                                        {index === 0 && ' - '}
+                                      </>
+                                    );
+                                  })}
+                                </>
+                              );
+                            })}
 
+                          </span>
+                        );
+                      })}
+                    </Grid>
+                  </Grid>
+
+                  )}
+                </Grid>
                 { data && entriesHasElementWithCode(data.actor.entries, 'collectif') && (
                 <div className={[styles.infoDiv]}>
                   <Grid container className={[styles.item]}>
@@ -830,7 +903,9 @@ const Actor = () => {
                     variant="h5"
                     className={[styles.cardTitle, styles.align]}
                   >
-                    LES ÉVÉNEMENTS DE : {data && data.actor.name}
+                    LES ÉVÉNEMENTS DE :
+                    {' '}
+                    {data && data.actor.name}
                   </Typography>
                 </div>
             )}
