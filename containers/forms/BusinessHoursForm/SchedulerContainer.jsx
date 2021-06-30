@@ -62,21 +62,21 @@ const SchedulerContainer = (props) => {
   };
 
   const updateTimeFrames = (timeFrame, index) => {
-    console.log('follow up timeFrames', index, timeFrames.length);
+    //console.log('follow up timeFrames', index, timeFrames.length);
 
     if (index + 1 > timeFrames.length) {
       setTimesFrames([...timeFrames, timeFrame]);
-      console.log('new timeframe added');
+      // console.log('new timeframe added');
     } else {
       const newTimeFramesList = [...timeFrames].map((currentTimeFrame, ind) => {
         return index == ind ? timeFrame : currentTimeFrame;
       });
 
       setTimesFrames(newTimeFramesList);
-      console.log('old timeframe updated');
+      // console.log('old timeframe updated');
     }
 
-    console.log('list of timeFrames', timeFrames);
+    //  console.log('list of timeFrames', timeFrames);
   };
 
   const deleteTimeContainer = (e, index) => {
@@ -92,7 +92,7 @@ const SchedulerContainer = (props) => {
       },
     );
 
-    console.log('newTimeFramesList', newTimeFramesList);
+    //   console.log('newTimeFramesList', newTimeFramesList);
 
     setTimesFrames(newTimeFramesList);
     setTimeContainerList(newTimeContainerList);
@@ -100,13 +100,22 @@ const SchedulerContainer = (props) => {
 
   const updatePlaces = (newPlaces) => {
     setPlaces(newPlaces);
-    console.log(places);
+    //  console.log(places);
   };
 
   useEffect(() => {
-    console.log('freshed', timeFrames);
 
-      onChange(timeFrames);
+
+    let openingHours = timeFrames.map((timeFrames) => {
+      let openingHour = {};
+      openingHour.days = timeFrames[0];
+      openingHour.hours = timeFrames[1];
+      openingHour.place = timeFrames[2];
+      return openingHour;
+    });
+    console.log('freshed', openingHours);
+    onChange('');
+    onChange(openingHours);
 
     // call to API
   }, [timeFrames]);

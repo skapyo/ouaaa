@@ -297,13 +297,13 @@ const FormController = (props: FormControllerProps, ...otherprops: any[]) => {
             );
             if (existingEntryInformation !== undefined) {
               entriesWithInformationArray.splice(index, 1);
-              console.log(entriesWithInformationArray+ " " + index);
+              //console.log(entriesWithInformationArray+ " " + index);
             }
           }
           const index = categoriesArray.indexOf(e.target.oldValueToRemove);
           if (index > -1) {
             categoriesArray.splice(index, 1);
-            console.log(categoriesArray+ " " + index);
+            //console.log(categoriesArray+ " " + index);
           }
         }
 

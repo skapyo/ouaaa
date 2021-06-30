@@ -11,7 +11,7 @@ const Place = ({ place, index, removePlace }) => {
       size="small"
       icon={<LocationOnIcon />}
       label={place}
-      onClick={() => console.log('here')}
+//      onClick={() => }
       onDelete={() => removePlace(index)}
     />
   );

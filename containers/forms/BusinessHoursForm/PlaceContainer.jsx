@@ -16,7 +16,7 @@ const PlaceContainer = (props) => {
   const addPlace = (place) => {
     const newPlaces = [...places, { place }];
     setPlaces(newPlaces);
-    console.log('new places', places);
+    //console.log('new places', places);
     selectLocation(place);
     setCurrentPlace(place);
   };

@@ -656,7 +656,7 @@ const AddActorForm = () => {
           };
         });
       }
-debugger;
+      debugger;
       create({
         variables: {
           formValues,
@@ -677,7 +677,7 @@ debugger;
       descriptionEditor,
       objectsListLogo,
       objectsList,
-      objectsListMain,
+      objectsListMain, openingHours
     ]);
     useEffect(() => {
       if (!createError && !createLoading && createData) {
