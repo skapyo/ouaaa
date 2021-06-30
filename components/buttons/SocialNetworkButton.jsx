@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
-import { Button } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import {Button} from '@material-ui/core';
+import {makeStyles} from '@material-ui/core/styles';
 
 import YouTubeIcon from '@material-ui/icons/YouTube';
 import InstagramIcon from '@material-ui/icons/Instagram';
@@ -41,11 +41,7 @@ const SocialNetworkButton = ({ socialNetwork, width, ...props }) => {
   }
 
   return (
-    <Button
-      className={styles.root}
-      startIcon={icon}
-      {...props}
-    >
+    <Button className={styles.root} startIcon={icon} {...props}>
       {socialNetwork}
     </Button>
   );
@@ -57,7 +53,13 @@ SocialNetworkButton.defaultProps = {
 };
 
 SocialNetworkButton.propTypes = {
-  socialNetwork: PropTypes.oneOf(['Website', 'Youtube', 'Linkedin', 'Instagram', 'Facebook']),
+  socialNetwork: PropTypes.oneOf([
+    'Website',
+    'Youtube',
+    'Linkedin',
+    'Instagram',
+    'Facebook',
+  ]),
   width: PropTypes.any,
 };
 

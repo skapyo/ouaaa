@@ -7,9 +7,9 @@ import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/core/Slider';
 import Button from '@material-ui/core/Button';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
+import CloseIcon from '@material-ui/icons/Close';
 import styles from './styles.module.css';
 import getCroppedImg from './cropImage';
-
 // const dogImg =
 //   'https://img.huffingtonpost.com/asset/5ab4d4ac2000007d06eb2c56.jpeg?cache=sih0jwle4e&ops=1910_1000'
 
@@ -39,13 +39,24 @@ const useStyles = makeStyles((theme) => ({
     height: '300px!important',
     width: 'inherit!important',
   },
-
+  close: {
+    background: 'white',
+    align: 'right',
+    padding: '0.5em',
+  },
 }));
 
 const ImageCropper = ({
-  src, open, onClose, classes, croppedImg, updateKeyIndicator, id,
+  src,
+  open,
+  onClose,
+  classes,
+  croppedImg,
+  updateKeyIndicator,
+  id,
 }) => {
   const [crop, setCrop] = useState(croppedImg.crop);
+  const [shouldVisualise, setShouldVisualise] = useState(true);
   const [rotation, setRotation] = useState(croppedImg.rotation);
   const [zoom, setZoom] = useState(croppedImg.zoom);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
@@ -64,38 +75,32 @@ const ImageCropper = ({
         rotation,
       );
       setCroppedImage(croppedImage);
+      setShouldVisualise(false);
     } catch (e) {
       console.error(e);
     }
   }, [croppedAreaPixels, rotation, src]);
 
   const saveCroppedImage = () => {
-    updateKeyIndicator(
-      id,
-      'croppedImg',
-      {
-        crop,
-        rotation,
-        zoom,
-        file: croppedImage.file,
-        img: croppedImage.url,
-        modified: true,
-      },
-    );
+    setShouldVisualise(true);
+    updateKeyIndicator(id, 'croppedImg', {
+      crop,
+      rotation,
+      zoom,
+      file: croppedImage.file,
+      img: croppedImage.url,
+      modified: true,
+    });
     onClose();
   };
 
   return (
-    <Modal
-
-      open={open}
-      onClose={onClose}
-      className={styles.popup}
-    >
+    <Modal open={open} onClose={onClose} className={styles.popup}>
       {/* <Modal.Content> */}
-
       <div>
-
+        <Grid container justify="flex-end" className={styles.close}>
+          <CloseIcon onClick={onClose} justify="center" alignItems="center" />
+        </Grid>
         <div className={styles.cropContainer}>
           <Grid>
             <Grid item xs={8}>
@@ -105,7 +110,7 @@ const ImageCropper = ({
                 rotation={rotation}
                 zoom={zoom}
                 aspect={4 / 3}
-                        // cropSize={{width:1024,height:768}}
+                // cropSize={{width:1024,height:768}}
                 onCropChange={setCrop}
                 onRotationChange={setRotation}
                 onCropComplete={onCropComplete}
@@ -117,7 +122,6 @@ const ImageCropper = ({
                 }}
               />
             </Grid>
-
           </Grid>
         </div>
         <div className={styles.controls}>
@@ -137,7 +141,7 @@ const ImageCropper = ({
                   step={0.1}
                   aria-labelledby="Zoom"
                   classes={{ container: styles.slider }}
-                  onChange={(e, zoom) => setZoom(zoom)}
+                  onChange={(e, zoom) => {setShouldVisualise(true); setZoom(zoom);}}
                 />
               </div>
             </Grid>
@@ -156,7 +160,7 @@ const ImageCropper = ({
                   step={1}
                   aria-labelledby="Rotation"
                   classes={{ container: styles.slider }}
-                  onChange={(e, rotation) => setRotation(rotation)}
+                  onChange={(e, rotation) => {setShouldVisualise(true); setRotation(rotation);}}
                 />
               </div>
             </Grid>
@@ -176,7 +180,7 @@ const ImageCropper = ({
                 variant="contained"
                 color="primary"
                 classes={{ root: styles.cropButton }}
-                disabled={!croppedImage.url}
+                disabled={shouldVisualise}
               >
                 Sauvegarder
               </Button>
@@ -184,8 +188,11 @@ const ImageCropper = ({
           </Grid>
           <Grid container>
             <Grid item xs={12}>
-              { croppedImage.url && (
-              <Image src={croppedImage ? croppedImage.url : null} className={styles.cropImage} />
+              {croppedImage && croppedImage.url && (
+                <Image
+                  src={croppedImage ? croppedImage.url : null}
+                  className={styles.cropImage}
+                />
               )}
             </Grid>
           </Grid>

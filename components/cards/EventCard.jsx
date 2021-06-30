@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import React, {useState} from 'react';
+import {makeStyles} from '@material-ui/core/styles';
 import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded';
 import FavoriteRoundedIcon from '@material-ui/icons/FavoriteRounded';
 import Moment from 'react-moment';
 import Link from '../Link';
-import { getImageUrl } from '../../utils/utils';
+import {getImageUrl} from '../../utils/utils';
 
 const useStyles = makeStyles((theme, props) => ({
   card: (props) => ({
@@ -91,9 +91,11 @@ const useStyles = makeStyles((theme, props) => ({
 }));
 
 const EventCard = ({ event }) => {
-  const color = (event.categories[0]) ? event.categories[0].color : '#AD2740';
-  const icon = (event.categories[0]) ? event.categories[0].icon : 'fruit';
-  const actorName = (event.actors[0]) ? event.actors[0].name : 'Potager de la Jarne';
+  const color = event.categories[0] ? event.categories[0].color : '#AD2740';
+  const icon = event.categories[0] ? event.categories[0].icon : 'fruit';
+  const actorName = event.actors[0]
+    ? event.actors[0].name
+    : 'Potager de la Jarne';
 
   const classes = useStyles({ color, icon });
   const [favorite, setFavorite] = useState(false);
@@ -105,7 +107,17 @@ const EventCard = ({ event }) => {
           <div className={classes.leftContent}>
             <div className={classes.image}>
               {event.pictures.length >= 1 && (
-              <img src={event.pictures.length >= 1 ? getImageUrl(event.pictures.sort((a, b) => (a.position > b.position ? 1 : -1))[0].croppedPicturePath) : ''} />
+                <img
+                  src={
+                    event.pictures.length >= 1
+                      ? getImageUrl(
+                          event.pictures.sort((a, b) =>
+                            a.position > b.position ? 1 : -1,
+                          )[0].croppedPicturePath,
+                        )
+                      : ''
+                  }
+                />
               )}
             </div>
             <div className={classes.text}>
@@ -113,29 +125,34 @@ const EventCard = ({ event }) => {
               <div className={classes.label}>{event.label}</div>
               <div className={classes.eventDetails}>
                 De
-                <Moment format=" HH" unix>{event.startedAt / 1000}</Moment>
+                <Moment format=" HH" unix>
+                  {event.startedAt / 1000}
+                </Moment>
                 h
-                <Moment format="mm " unix>{event.startedAt / 1000}</Moment>
+                <Moment format="mm " unix>
+                  {event.startedAt / 1000}
+                </Moment>
                 à
-                <Moment format=" HH" unix>{event.endedAt / 1000}</Moment>
+                <Moment format=" HH" unix>
+                  {event.endedAt / 1000}
+                </Moment>
                 h
-                <Moment format="mm " unix>{event.endedAt / 1000}</Moment>
-                -
-                {!event.city && <span> Adresse manquante</span>}
+                <Moment format="mm " unix>
+                  {event.endedAt / 1000}
+                </Moment>
+                -{!event.city && <span> Adresse manquante</span>}
                 {!event.address && event.city && (
-                <span>
-                  {/* @ts-ignore */}
-                  {event.city}
-                </span>
+                  <span>
+                    {/* @ts-ignore */}
+                    {event.city}
+                  </span>
                 )}
                 {event.address && event.city && (
-                <span>
-                  {/* @ts-ignore */}
-                  {event.address}
-                  ,
-                  {/* @ts-ignore */}
-                  {event.city}
-                </span>
+                  <span>
+                    {/* @ts-ignore */}
+                    {event.address},{/* @ts-ignore */}
+                    {event.city}
+                  </span>
                 )}
               </div>
             </div>
@@ -147,7 +164,9 @@ const EventCard = ({ event }) => {
         </div>
       </div>
       <div className={classes.favorite} onClick={() => setFavorite(!favorite)}>
-        {!favorite && <FavoriteBorderRoundedIcon className={classes.favoriteIcon} />}
+        {!favorite && (
+          <FavoriteBorderRoundedIcon className={classes.favoriteIcon} />
+        )}
         {favorite && <FavoriteRoundedIcon className={classes.favoriteIcon} />}
       </div>
     </div>

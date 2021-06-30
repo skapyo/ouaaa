@@ -12,12 +12,6 @@ const useStyles = makeStyles((theme) => ({
   cardInfo: {
     padding: '2em',
     backgroundColor: 'white',
-    backgroundImage: 'url(\'/icons/planet.svg\')',
-    backgroundSize: '30%',
-    backgroundPosition: 'right',
-    backgroundRepeat: 'no-repeat',
-    backgroundOpacity: ' 0.5',
-    backgroundPositionY: '226px',
     borderRadius: '0.5em',
     width: '80%',
     justify: 'center',
@@ -32,10 +26,10 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   inprogress: {
-    color: '#bf083e',
+    color: '#2C367E',
     textAlign: 'center',
-    paddingTop: '2em',
     fontSize: '2em',
+    height: '170px',
     [theme.breakpoints.down('sm')]: {
       fontSize: '1.4em',
     },
@@ -48,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: theme.typography.h5.fontFamily,
   },
   image: {
-    'box-shadow': '11px 11px 13px -3px rgba(0, 0, 0, 0.46)',
+    width: '100%',
   },
   gridItem: {
     'background-color': '#f9f9f9',
@@ -59,28 +53,29 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: '30px',
     paddingBottom: '20px',
   },
+
   buttonGrid: {
+
+    fontSize: '1em',
     margin: '1.5em 0 1.5em 0 ',
     color: 'white',
-    'background-color': '#bf083e',
+    'background-color': '#2C367E',
     border: 'none',
-    fontFamily: 'rowdies',
+    fontWeight: 'bold',
     borderRadius: '1.5em',
     padding: '0.2em 3em 0.2em 3em',
     minHeight: '2.5em',
     '&:hover': {
       cursor: 'pointer',
-      color: '#bf083e',
+      color: '#2C367E',
       'background-color': 'white',
-      border: '2px solid #bf083e',
-      backgroundImage: 'url(\'./arrow-hover.svg\')',
-
+      border: '2px solid #2C367E',
+      backgroundImage: "url('./arrow-hover.svg')",
     },
-    backgroundImage: 'url(\'./arrow.svg\')',
+    backgroundImage: "url('./arrow.svg')",
     backgroundRepeat: 'no-repeat',
     'background-position-x': '5px',
     'background-position-y': '1px',
-    fontSize: '1em',
     [theme.breakpoints.down('sm')]: {
       fontSize: '0.8em',
     },
@@ -88,32 +83,31 @@ const useStyles = makeStyles((theme) => ({
   button: {
     margin: '2.5em 0 2.5em 0 ',
     color: 'white',
-    'background-color': '#bf083e',
+    'background-color': '#2C367E',
     border: 'none',
-    fontFamily: 'rowdies',
+
     borderRadius: '1.5em',
     padding: '0 3em 0 3em',
     minHeight: '2.5em',
     '&:hover': {
       cursor: 'pointer',
-      color: '#bf083e',
+      color: '#2C367E',
       'background-color': 'white',
-      border: '2px solid #bf083e',
-      backgroundImage: 'url(\'./arrow-hover.svg\')',
+      border: '2px solid #2C367E',
+      backgroundImage: "url('./arrow-hover.svg')",
     },
-    backgroundImage: 'url(\'./arrow.svg\')',
+    backgroundImage: "url('./arrow.svg')",
     backgroundRepeat: 'no-repeat',
     'background-position-x': '5px',
     'background-position-y': '1px',
     'background-size': '15%',
     marginBottom: '30px',
-
   },
   map: {
     paddingLeft: '19%',
   },
   titleGrid: {
-    color: '#2a9076',
+    color: '#2C367E',
     fontSize: '12px',
     lineHeight: 'inherit',
   },
@@ -123,7 +117,6 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'justify',
   },
   listItemText: {
-
     textAlign: 'justify',
   },
 
@@ -137,6 +130,18 @@ const useStyles = makeStyles((theme) => ({
       alignItems: 'center',
     },
   },
+  gridTitle: {
+    paddingLeft: '16px',
+    paddingRight: '16px',
+  },
+  border: {
+    width: '3em',
+    borderColor: '#2C367E',
+    borderBottom: 'solid',
+    borderBottomColor: '#2C367E',
+    color: '#2C367E',
+    height: '1em',
+  }
 }));
 
 const PresentationSection = () => {
@@ -145,66 +150,91 @@ const PresentationSection = () => {
   return (
     <Container className={styles.cardInfo}>
       <Typography className={styles.inprogress}>
-        <Build />
-        {/* @ts-ignore */}
-        Site en cours de développement.
-        <Build />
-        <p>Abonnez-vous à la newsletter pour suivre les avancées.</p>
+        <img className={styles.inprogress} src="./in_progress.png" />
+        <p />
+        {/* <p>Abonnez-vous à la newsletter pour suivre les avancées.</p> */}
       </Typography>
-      <div className={styles.improvement}>
-        <Link href="/improvment">
-          <button className={styles.buttonGrid}>DECOUVRIR LES PROCHAINES FONCTIONNALITES ET FAIRE UN RETOUR DE LA PREMIERE VERSION</button>
-        </Link>
-      </div>
+
+
       <Grid container spacing={3} className={styles.flexColumn}>
         <Grid item md={6}>
-          <div className={[styles.align]}>
-            <Typography variant="h2" className={styles.cardTitle}>
-              OUAAA
+          <div className={styles.gridTitle}>
+            <Typography variant="h3" className={styles.cardTitle}>
+              <i>OUAAA!</i>
             </Typography>
             <Typography variant="h3" className={styles.cardTitle}>
-              EN 3 POINTS
+              C'EST QUOUUA ?
             </Typography>
+            <div className={styles.border} />
           </div>
           <List className={styles.root}>
             <ListItem>
-              <ListItemText className={styles.listItemText} primary="Issu du milieu associatif : Le site est né de la volonté de 3 collectifs (Collectif Transition Citoyenne, Collectif Action Solidaire et Tiers Lieux la Proue) de disposer d’une vitrine pour se faire connaître, et disposer d’un agenda réactif pour publier leurs évènements." />
+              <ListItemText
+                className={styles.listItemText}
+                primary={
+                  <>
+                    <i>OUAAA!</i> est le site des initiatives, des réseaux et des acteurs de la transition vers une société plus humaine et plus écologique sur le territoire de l'Aunis (nord Charente-Maritime).
+                  </>
+                }
+              />
             </ListItem>
             <ListItem>
-              <ListItemText className={styles.listItemText} primary="Créé pour et par les acteurs de la transition : Le site a été créé sur mesure par une équipe de bénévoles motivés, il permet aux acteurs de la transition de renseigner eux-mêmes leurs informations. Il sera adossé à une rencontre physique régulière, afin que virtuel et réel se complètent." />
+              <ListItemText
+                className={styles.listItemText}
+                primary="L'idée du site est née en 2020 de la volonté de 3 collectifs citoyens de créer une vitrine pour permettre à tous celles et ceux qui souhaitent changer la société de devenir acteur.rices de la transition sociale, environnementale, de renforcer les liens entre elles.eux, et de se faire connaître auprès du plus grand nombre."
+              />
             </ListItem>
             <ListItem>
-              <ListItemText className={styles.listItemText} primary="Catalyseur de transition : nous pensons qu’en faisant connaître les acteurs de la transition du grand public et en renforçant les liens entre eux, nous allons accélérer la nécessaire transition de notre territoire vers un fonctionnement plus sobre, plus humain et véritablement « durable »" />
+              <ListItemText
+                className={styles.listItemText}
+                primary={
+                  <>
+                    100% coopératif et animé par une équipe bénévole : sans but lucratif, <i>OUAAA!</i> est développé sur la base d’outils libres, il est utilisable et clonable par tous.
+                  </>
+                }
+              />
+            </ListItem>
+            <ListItem>
+              <ListItemText
+                className={styles.listItemText}
+                primary={
+                  <>
+                    Plateforme d’information et d’engagement, <i>OUAAA!</i> veut accélérer la transition vers un fonctionnement plus sobre, plus humain et véritablement « durable » dans les communautés de communes Aunis Atlantique, Aunis Sud, dans l’agglomération de La Rochelle, et dans l'Île de Ré.
+                  </>
+                }
+              />
             </ListItem>
           </List>
 
+          <div className={styles.align}>
+            <Link href="/map">
+              <button className={styles.buttonGrid}>
+                VOIR LA CARTE
+              </button>
+            </Link>
+          </div>
         </Grid>
 
         <Grid item md={6} className={styles.align}>
-          <img
-            width="60%"
-            className={styles.image}
-            src="./image_card.jpg"
-          />
+          <img className={styles.image} src="./image_accueil.png" />
         </Grid>
       </Grid>
-      <Link href="/map" className={styles.map}>
-        <button className={styles.button}>VOIR LA CARTE</button>
-      </Link>
+      {/*
+      <br />
       <Typography variant="h2" className={[styles.cardTitle, styles.align]}>
-        Outils des Acteurs Alternatifs en Aunis
+        <i>OUAAA!</i> : Agir pour la transition en Aunis
       </Typography>
       <Typography variant="h3" className={[styles.cardTitle, styles.align]}>
         C'EST POUR QUI ?
       </Typography>
-
-      <Grid container justify="center" className={[styles.align, styles.flexColumn]}>
+      <br />
+      <Grid
+        container
+        justify="center"
+        className={[styles.align, styles.flexColumn]}
+      >
         <Grid item md={5} sm={10} className={[styles.gridItem, styles.align]}>
-          <img
-            width="20%"
-            src="./people.svg"
-            className={styles.imageGrid}
-          />
+          <img width="20%" src="./people.svg" className={styles.imageGrid} />
           <Typography className={styles.titleGrid}>
             Vous êtes un citoyen et souhaitez mieux
           </Typography>
@@ -233,9 +263,10 @@ const PresentationSection = () => {
             <button className={styles.buttonGrid}>JE DEVIENS UN ACTEUR</button>
           </Link>
         </Grid>
-      </Grid>
-    </Container>
 
+      </Grid>
+        */}
+    </Container>
   );
 };
 

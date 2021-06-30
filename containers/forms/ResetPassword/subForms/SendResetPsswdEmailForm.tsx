@@ -1,15 +1,15 @@
-import ClassicButton from "components/buttons/ClassicButton"
-import { RenderCallback } from "components/controllers/FormController"
-import { TextField, CircularProgress, Button, Box } from "@material-ui/core"
-import { makeStyles } from "@material-ui/core"
-import { useState } from "react"
+import ClassicButton from 'components/buttons/ClassicButton';
+import { RenderCallback } from 'components/controllers/FormController';
+import { TextField, CircularProgress, Button, Box } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
+import { useState } from 'react';
 // import { SetEmailContext } from "containers/forms/ResetPassword/ResetPasswordForm"
 
 const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
-}))
+}));
 
 const ResetPasswordEmailForm: RenderCallback = (props) => {
   const {
@@ -18,11 +18,11 @@ const ResetPasswordEmailForm: RenderCallback = (props) => {
     validationResult,
     submitHandler,
     loading,
-  } = props
+  } = props;
 
   // const [loadingInd, setLoadingInd] = useState<boolean>(false)
 
-  const styles = useStyles()
+  const styles = useStyles();
 
   return (
     <>
@@ -35,10 +35,10 @@ const ResetPasswordEmailForm: RenderCallback = (props) => {
         name="email"
         autoComplete="current-email"
         autoFocus
-        value={formValues?.email || ""}
+        value={formValues?.email || ''}
         onChange={formChangeHandler}
       />
-      <Box style={{ position: "relative" }}>
+      <Box style={{ position: 'relative' }}>
         <ClassicButton
           fullWidth
           variant="contained"
@@ -52,19 +52,19 @@ const ResetPasswordEmailForm: RenderCallback = (props) => {
         {loading && (
           <CircularProgress
             style={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              marginTop: "-12px",
-              marginLeft: "-16px",
-              color: "#25AAA4",
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              marginTop: '-12px',
+              marginLeft: '-16px',
+              color: '#D96552',
             }}
             size={30}
           />
         )}
       </Box>
     </>
-  )
-}
+  );
+};
 
-export default ResetPasswordEmailForm
+export default ResetPasswordEmailForm;

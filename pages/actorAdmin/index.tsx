@@ -1,29 +1,38 @@
-import {createStyles, makeStyles, Theme, Typography, useTheme,} from '@material-ui/core';
-import {withApollo} from 'hoc/withApollo';
-import ActorAdminPageLayout from 'containers/layouts/actorAdminPage/ActorAdminPageLayout';
-import {useMutation, useQuery} from '@apollo/client';
-import React, {useCallback, useEffect} from 'react';
-import gql from 'graphql-tag';
+import { useMutation, useQuery } from '@apollo/client';
+import {
+  createStyles,
+  makeStyles,
+  Theme,
+  Typography,
+  useTheme,
+  Grid,
+} from '@material-ui/core';
+import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper/Paper';
+import LastPageIcon from '@material-ui/core/SvgIcon/SvgIcon';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
-import TableRow from '@material-ui/core/TableRow';
-import TableHead from '@material-ui/core/TableHead';
-
-import Edit from '@material-ui/icons/Edit';
 import TableCell from '@material-ui/core/TableCell/TableCell';
-import TableFooter from '@material-ui/core/TableFooter';
-import TablePagination from '@material-ui/core/TablePagination';
 import TableContainer from '@material-ui/core/TableContainer';
-import IconButton from '@material-ui/core/IconButton';
-import LastPageIcon from '@material-ui/core/SvgIcon/SvgIcon';
+import TableFooter from '@material-ui/core/TableFooter';
+import TableHead from '@material-ui/core/TableHead';
+import TablePagination from '@material-ui/core/TablePagination';
+import TableRow from '@material-ui/core/TableRow';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import Edit from '@material-ui/icons/Edit';
+import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
-import FirstPageIcon from '@material-ui/icons/FirstPage';
+import AddCircleOutline from '@material-ui/icons/AddCircleOutline';
+
+
+import ActorAdminPageLayout from 'containers/layouts/actorAdminPage/ActorAdminPageLayout';
+import gql from 'graphql-tag';
+import { withApollo } from 'hoc/withApollo';
+import React, { useCallback, useEffect } from 'react';
 import Moment from 'react-moment';
 import Link from '../../components/Link';
-import {useSessionState} from '../../context/session/session';
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import { useSessionState } from '../../context/session/session';
 
 const useStyles = makeStyles((theme) => ({
   avatar: {
@@ -34,7 +43,21 @@ const useStyles = makeStyles((theme) => ({
   userInfosTitle: {
     marginBottom: theme.spacing(5),
   },
-
+  buttonGrid: {
+    color: 'white',
+    'background-color': '#2C367E',
+    border: 'none',
+    padding: '0 1em 0 1em',
+    fontSize: '16px',
+    borderRadius: '1.5em',
+    height: '32px',
+    '&:hover': {
+      cursor: 'pointer',
+      color: '#2C367E',
+      'background-color': 'white',
+      border: '2px solid #2C367E',
+    }
+  },
 }));
 
 const useStyles1 = makeStyles((theme: Theme) => createStyles({
@@ -44,10 +67,13 @@ const useStyles1 = makeStyles((theme: Theme) => createStyles({
   },
 }));
 interface TablePaginationActionsProps {
-    count: number;
-    page: number;
-    rowsPerPage: number;
-    onChangePage: (event: React.MouseEvent<HTMLButtonElement>, newPage: number) => void;
+  count: number;
+  page: number;
+  rowsPerPage: number;
+  onChangePage: (
+    event: React.MouseEvent<HTMLButtonElement>,
+    newPage: number,
+  ) => void;
 }
 
 function TablePaginationActions(props: TablePaginationActionsProps) {
@@ -57,19 +83,27 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
     count, page, rowsPerPage, onChangePage,
   } = props;
 
-  const handleFirstPageButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleFirstPageButtonClick = (
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) => {
     onChangePage(event, 0);
   };
 
-  const handleBackButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleBackButtonClick = (
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) => {
     onChangePage(event, page - 1);
   };
 
-  const handleNextButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleNextButtonClick = (
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) => {
     onChangePage(event, page + 1);
   };
 
-  const handleLastPageButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleLastPageButtonClick = (
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) => {
     onChangePage(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
   };
 
@@ -82,15 +116,27 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
       >
         {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
       </IconButton>
-      <IconButton onClick={handleBackButtonClick} disabled={page === 0} aria-label="previous page">
-        {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+      <IconButton
+        onClick={handleBackButtonClick}
+        disabled={page === 0}
+        aria-label="previous page"
+      >
+        {theme.direction === 'rtl' ? (
+          <KeyboardArrowRight />
+        ) : (
+          <KeyboardArrowLeft />
+        )}
       </IconButton>
       <IconButton
         onClick={handleNextButtonClick}
         disabled={page >= Math.ceil(count / rowsPerPage) - 1}
         aria-label="next page"
       >
-        {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+        {theme.direction === 'rtl' ? (
+          <KeyboardArrowLeft />
+        ) : (
+          <KeyboardArrowRight />
+        )}
       </IconButton>
       <IconButton
         onClick={handleLastPageButtonClick}
@@ -128,67 +174,61 @@ const useStyles2 = makeStyles({
       height: '100%',
     },
   },
-
 });
 
 const ActorAdminPage = () => {
   const user = useSessionState();
   const GET_ACTORS = gql`
-
-        query actorsAdmin (
-            $userId: String!
-        )
-        { actorsAdmin(userId: $userId)
-        {   id,
-            name,
-            address,
-            short_description,
-            createdAt,
-            updatedAt,
-            city,
-            lat,
-            lng,
-            categories{
-                label
-            }
-            referents{
-                surname,
-                lastname,
-                email,
-                phone
-            }
-            ,
-            isValidated,
-            dateValidation,
-            userValidated {
-                surname,
-                lastname,
-                email,
-                phone
-            }
+    query actorsAdmin($userId: String!) {
+      actorsAdmin(userId: $userId) {
+        id
+        name
+        address
+        shortDescription
+        createdAt
+        updatedAt
+        city
+        lat
+        lng
+        categories {
+          label
         }
+        referents {
+          surname
+          lastname
+          email
+          phone
         }
-        
-    `;
-
-    const VALIDATE_ACTOR = gql`
-        mutation validateActor( $actorId: Int!, $userId: Int!) {
-            validateActor( actorId: $actorId,userId: $userId) {
-                name
-
-            }
+        isValidated
+        dateValidation
+        userValidated {
+          surname
+          lastname
+          email
+          phone
         }
-    `;
-  const { data, loading, error, refetch } = useQuery(GET_ACTORS, {
+      }
+    }
+  `;
+
+  const VALIDATE_ACTOR = gql`
+    mutation validateActor($actorId: Int!, $userId: Int!) {
+      validateActor(actorId: $actorId, userId: $userId) {
+        name
+      }
+    }
+  `;
+  const {
+    data, loading, error, refetch,
+  } = useQuery(GET_ACTORS, {
     variables: {
       userId: user && user.id,
     },
-
   });
   const classes = useStyles2();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-    const [actorIdValidated, setActorIdValidated] = React.useState(0);
+  const [actorIdValidated, setActorIdValidated] = React.useState(0);
   let row = 0;
   if (typeof data !== 'undefined') {
     row = data.actorsAdmin.length;
@@ -196,7 +236,10 @@ const ActorAdminPage = () => {
 
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, row - page * rowsPerPage);
 
-  const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
+  const handleChangePage = (
+    event: React.MouseEvent<HTMLButtonElement> | null,
+    newPage: number,
+  ) => {
     setPage(newPage);
   };
 
@@ -213,35 +256,52 @@ const ActorAdminPage = () => {
     setState({ ...state, [actor.id.toString()]: event.target.checked });
   };
 
-    const [validateActor,{ data:dataValidateActor, }] = useMutation(VALIDATE_ACTOR, {
-        variables: {
-            actorId:actorIdValidated,
-            userId: parseInt(user && user.id),
-        },
-    });
+  const [validateActor, { data: dataValidateActor }] = useMutation(
+    VALIDATE_ACTOR,
+    {
+      variables: {
+        actorId: actorIdValidated,
+        userId: parseInt(user && user.id),
+      },
+    },
+  );
 
-    const validate = useCallback((actor) => {
-       if(!actor.isValidated){
-           setActorIdValidated( parseInt(actor.id))
-           validateActor()
-       }
-    }, [validateActor]);
-    useEffect(() => {
-        if (dataValidateActor) {
-            refetch();
-        }
-    }, [dataValidateActor]);
+  const validate = useCallback(
+    (actor) => {
+      if (!actor.isValidated) {
+        setActorIdValidated(parseInt(actor.id));
+        validateActor();
+      }
+    },
+    [validateActor],
+  );
+  useEffect(() => {
+    if (dataValidateActor) {
+      refetch();
+    }
+  }, [dataValidateActor]);
   const styles = useStyles();
 
   return (
     <ActorAdminPageLayout>
-      <Typography
-        color="secondary"
-        variant="h6"
-        className={styles.userInfosTitle}
-      >
-        Listes des acteurs dont vous êtes administrateur
-      </Typography>
+      <Grid container>
+        <Grid item xs={9}>
+          <Typography
+            color="secondary"
+            variant="h6"
+            className={styles.userInfosTitle}
+          >
+            Listes des acteurs dont vous êtes administrateur
+          </Typography>
+        </Grid>
+        <Grid item xs={3}>
+           {/* @ts-ignore */}
+          <Link href="/addactor">
+            <button className={styles.buttonGrid}> Créer une nouvelle page</button>
+          </Link>
+        </Grid>
+      </Grid>
+
       {typeof data !== 'undefined' && (
         <TableContainer component={Paper}>
           <Table className={classes.table} aria-label="custom pagination table">
@@ -268,74 +328,110 @@ const ActorAdminPage = () => {
                 <TableCell style={{ width: 160 }} align="left">
                   Editer la page
                 </TableCell>
-                  {user && user.role == "admin" && (
-                      <>
-                      <TableCell style={{width: 160}} align="left">
-                          Validation
-                      </TableCell>
-                      <TableCell style={{width: 160}} align="left">
-                             Date de validation
-                      </TableCell>
-                      <TableCell style={{width: 160}} align="left">
-                             Personne ayant validé
-                      </TableCell>
-                      </>
-                  )
-                  }
+                {user && user.role == 'admin' && (
+                  <>
+                    <TableCell style={{ width: 160 }} align="left">
+                      Validation
+                    </TableCell>
+                    <TableCell style={{ width: 160 }} align="left">
+                      Date de validation
+                    </TableCell>
+                    <TableCell style={{ width: 160 }} align="left">
+                      Personne ayant validé
+                    </TableCell>
+                    <TableCell style={{ width: 160 }} align="left">
+                      Ajouter un événement
+                    </TableCell>
+                  </>
+                )}
               </TableRow>
             </TableHead>
             <TableBody>
-              {typeof data !== 'undefined' && data.actorsAdmin.map((actor) => (
-                <TableRow key={actor.id} hover>
-                  <TableCell component="th" scope="row">
+              {typeof data !== 'undefined'
+                && data.actorsAdmin.map((actor) => (
+                  <TableRow key={actor.id} hover>
+                    <TableCell component="th" scope="row">
                       {/* @ts-ignore */}
                       <Link href={`/actorAdmin/actor/${actor.id}`}>
-                    {actor.name}
+                        {actor.name}
                       </Link>
-                  </TableCell>
-                  <TableCell style={{ width: 160 }} align="left">
-                    <Moment format="DD/MM HH:mm" unix>{actor.createdAt / 1000}</Moment>
-                  </TableCell>
-                  <TableCell style={{ width: 160 }} align="left">
-                    <Moment format="DD/MM HH:mm" unix>{actor.updatedAt / 1000}</Moment>
-                  </TableCell>
-                  <TableCell style={{ width: 160 }} align="left">
-                    {actor.city}
-                  </TableCell>
-                  <TableCell style={{ width: 160 }} align="left">
-                    {typeof actor.referents !== 'undefined' && actor.referents.map((referent) => {
-                      { referent.surname; } { referent.lastname; } { referent.email; } { referent.phone; }
-                    })}
-                  </TableCell>
-                  <TableCell style={{ width: 160 }} align="left">
-                    {/* @ts-ignore */}
-                    <Link href={`/actor/${actor.id}`}>
-                      Lien vers page acteur
-                    </Link>
-                  </TableCell>
-
-                  <TableCell style={{ width: 160 }} align="right">
+                    </TableCell>
+                    <TableCell style={{ width: 160 }} align="left">
+                      <Moment format="DD/MM HH:mm" unix>
+                        {actor.createdAt / 1000}
+                      </Moment>
+                    </TableCell>
+                    <TableCell style={{ width: 160 }} align="left">
+                      <Moment format="DD/MM HH:mm" unix>
+                        {actor.updatedAt / 1000}
+                      </Moment>
+                    </TableCell>
+                    <TableCell style={{ width: 160 }} align="left">
+                      {actor.city}
+                    </TableCell>
+                    <TableCell style={{ width: 160 }} align="left">
+                      {typeof actor.referents !== 'undefined'
+                        && actor.referents.map((referent) => {
+                          {
+                            referent.surname;
+                          }
+                          {
+                            referent.lastname;
+                          }
+                          {
+                            referent.email;
+                          }
+                          {
+                            referent.phone;
+                          }
+                        })}
+                    </TableCell>
+                    <TableCell style={{ width: 160 }} align="center">
                       {/* @ts-ignore */}
-                    <Link href={`/actorAdmin/actor/${actor.id}`}>
-                      <Edit />
-                    </Link>
-                  </TableCell>
-                    {user && user.role == "admin" && (
-                        <>
-                        <TableCell style={{width: 160}} align="left">
-                            <CheckCircleIcon style={{ color:actor.isValidated?"green":"orange"}}   onClick={() => validate(actor)}/>
+                      <Link href={`/actor/${actor.id}`}>
+                        Lien vers page acteur
+                      </Link>
+                    </TableCell>
+
+                    <TableCell style={{ width: 160 }} align="center">
+                      {/* @ts-ignore */}
+                      <Link href={`/actorAdmin/actor/${actor.id}`}>
+                        <Edit />
+                      </Link>
+                    </TableCell>
+                    {user && user.role == 'admin' && (
+                      <>
+                        <TableCell style={{ width: 160 }} align="center">
+                          <CheckCircleIcon
+                            style={{
+                              color: actor.isValidated ? 'green' : 'orange',
+                            }}
+                            onClick={() => validate(actor)}
+                          />
                         </TableCell>
-                        <TableCell style={{width: 160}} align="left">
-                            { actor.dateValidation && (  <Moment format="DD/MM HH:mm" unix>{actor.dateValidation / 1000}</Moment> )}
+                        <TableCell style={{ width: 160 }} align="center">
+                          {actor.dateValidation && (
+                            <Moment format="DD/MM HH:mm" unix>
+                              {actor.dateValidation / 1000}
+                            </Moment>
+                          )}
                         </TableCell>
-                            <TableCell style={{width: 160}} align="left">
-                             { actor.userValidated && actor.userValidated.surname} {actor.userValidated && actor.userValidated.lastname }
-                            </TableCell>
-                        </>
-                    )
-                    }
-                </TableRow>
-              ))}
+                        <TableCell style={{ width: 160 }} align="center">
+                          {actor.userValidated && actor.userValidated.surname}
+                          {' '}
+                          {actor.userValidated && actor.userValidated.lastname}
+                        </TableCell>
+                        <TableCell style={{ width: 160 }} align="center">
+                          {/* @ts-ignore */}
+                          <Link href={`/addevent/${actor.id}`}>
+                            <AddCircleOutline />
+                          </Link>
+                        </TableCell>
+                        
+                      </>
+                    )}
+                  </TableRow>
+                ))}
 
               <TableRow style={{ height: 53 * emptyRows }}>
                 <TableCell colSpan={6} />
@@ -346,7 +442,9 @@ const ActorAdminPage = () => {
                 <TablePagination
                   rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
                   colSpan={3}
-                  count={typeof data !== 'undefined' ? data.actorsAdmin.length : 0}
+                  count={
+                    typeof data !== 'undefined' ? data.actorsAdmin.length : 0
+                  }
                   rowsPerPage={rowsPerPage}
                   page={page}
                   SelectProps={{

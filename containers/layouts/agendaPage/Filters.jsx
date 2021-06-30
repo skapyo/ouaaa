@@ -11,8 +11,8 @@ const useStyles = makeStyles({
     margin: '0',
   },
   title: {
-    color: '#4A8E78',
-    fontFamily: 'rowdies',
+    color: '#2C367E',
+    
     fontSize: '2.3em',
     margin: '1.3em 0.5em 0.5em',
   },

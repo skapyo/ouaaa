@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import {makeStyles} from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
@@ -28,18 +28,19 @@ export default function SimpleCard() {
 
   return (
     <Card className={classes.root}>
-
       <CardContent>
-        <Typography className={classes.title} color="textSecondary" gutterBottom>
+        <Typography
+          className={classes.title}
+          color="textSecondary"
+          gutterBottom
+        >
           Word of the Day
         </Typography>
         <Typography variant="h5" component="h2">
           be
           {bull}
           nev
-          {bull}
-          o
-          {bull}
+          {bull}o{bull}
           lent
         </Typography>
         <Typography className={classes.pos} color="textSecondary">

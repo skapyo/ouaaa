@@ -1,7 +1,5 @@
 import AppLayout from 'containers/layouts/AppLayout';
-import {
-  Box, Container, RootRef, Typography,
-} from '@material-ui/core';
+import { Box, Container, RootRef, Typography } from '@material-ui/core';
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { withApollo } from 'hoc/withApollo';
@@ -12,7 +10,6 @@ import LastActor from '../containers/layouts/homePage/lastActor';
 import LastEvent from '../containers/layouts/homePage/lastEvent';
 
 const useStyles = makeStyles((theme) => ({
-
   leftTitle: {
     fontWeight: theme.typography.fontWeightBold,
     marginBottom: theme.spacing(2),
@@ -29,20 +26,20 @@ const useStyles = makeStyles((theme) => ({
   buttonGrid: {
     margin: '2.5em 0 2.5em 0 ',
     color: 'white',
-    'background-color': '#bf083e',
+    'background-color': '#2C367E',
     border: 'none',
-    fontFamily: 'rowdies',
+    
     borderRadius: '1.5em',
     padding: '0 3em 0 3em',
     height: '2.5em',
     '&:hover': {
       cursor: 'pointer',
-      color: '#bf083e',
+      color: '#2C367E',
       'background-color': 'white',
-      border: '2px solid #bf083e',
-      backgroundImage: 'url(\'./arrow-hover.svg\')',
+      border: '2px solid #2C367E',
+      backgroundImage: "url('./arrow-hover.svg')",
     },
-    backgroundImage: 'url(\'./arrow.svg\')',
+    backgroundImage: "url('./arrow.svg')",
     backgroundRepeat: 'no-repeat',
     'background-position-x': '5px',
     'background-position-y': '1px',
@@ -114,14 +111,21 @@ const Index = () => {
     <AppLayout>
       <RootRef>
         <Box>
-          <PresentationSection />
+           <PresentationSection /> 
 
-          <ThreePoint />
+           <ThreePoint />
 
-          <Container className={[styles.geoContainer]}>
+           {/* <Container className={[styles.geoContainer]}>
             <Typography className={[styles.align]}>
-              Le site a vocation à répertorier les acteurs de la transition sur les 3 communautés de communes constituant l'Aunis : la CDA de la Rochelle, la CDC Aunis Atlantique et la CDC Aunis Sud.
-              Ainsi, l’information sera disponible aussi bien pour les habitants des zones les plus urbaines : La Rochelle et sa première couronne (Aytré, Lagord, Périgny, Angoulins), Chatelaillon, Surgères, Marans, Courçon, Aigrefeuille que pour ceux des zones les plus rurales : Clavette, St Médard, Puyravault, Ballons, le Thou, Chambon, Ballon, St Saturnin du Bois, St Jean de Liversay, Benon.
+              Le site a vocation à répertorier les acteurs de la transition sur
+              les 4 communautés de communes constituant l'Aunis : la CDA de la
+              Rochelle, la CDC Aunis Atlantique, la CDC de l'ile de ré, et la CDC Aunis Sud. Ainsi,
+              l’information sera disponible aussi bien pour les habitants des
+              zones les plus urbaines : La Rochelle et sa première couronne
+              (Aytré, Lagord, Périgny, Angoulins), Chatelaillon, Surgères,
+              Marans, Courçon, Aigrefeuille que pour ceux des zones les plus
+              rurales : Clavette, St Médard, Puyravault, Ballons, le Thou,
+              Chambon, Ballon, St Saturnin du Bois, St Jean de Liversay, Benon.
             </Typography>
           </Container>
 
@@ -130,8 +134,8 @@ const Index = () => {
           <LastEvent />
 
           <Newsletter />
+          */}
         </Box>
-
       </RootRef>
     </AppLayout>
   );

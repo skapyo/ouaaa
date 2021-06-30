@@ -13,14 +13,12 @@ const SecurityPage = () => {
 
   return (
     <AccountPageLayout>
-
       <Typography
         color="secondary"
         variant="h6"
         className={styles.userInfosTitle}
       >
         Modifier mon mot de passe
-
       </Typography>
       <UpdatePasswordForm />
     </AccountPageLayout>

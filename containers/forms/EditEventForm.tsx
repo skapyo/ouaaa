@@ -1,19 +1,40 @@
-import React, {ChangeEvent, useCallback, useEffect, useRef, useState} from 'react';
-import {gql, useMutation, useQuery} from '@apollo/client';
-import {withApollo} from 'hoc/withApollo';
-import {Card, Container, Grid, makeStyles, TextField, Typography,} from '@material-ui/core';
+import React, {
+  ChangeEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
+import { gql, useMutation, useQuery } from '@apollo/client';
+import { withApollo } from 'hoc/withApollo';
+import {
+  Card,
+  Container,
+  FormControlLabel,
+  Grid,
+  makeStyles,
+  Radio,
+  TextField,
+  Tooltip,
+  Typography,
+} from '@material-ui/core';
 import ClassicButton from 'components/buttons/ClassicButton';
 import FormController, {
   RenderCallback,
   ValidationRules,
   ValidationRuleType,
 } from 'components/controllers/FormController';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import useGraphQLErrorDisplay from 'hooks/useGraphQLErrorDisplay';
 import Checkbox from '@material-ui/core/Checkbox';
 import useCookieRedirection from 'hooks/useCookieRedirection';
-import {useSnackbar} from 'notistack';
-import GooglePlacesAutocomplete, {geocodeByAddress, getLatLng} from 'react-google-places-autocomplete';
-import {useRouter, withRouter} from 'next/router';
+import { useSnackbar } from 'notistack';
+import GooglePlacesAutocomplete, {
+  geocodeByAddress,
+  getLatLng,
+} from 'react-google-places-autocomplete';
+import { useRouter, withRouter } from 'next/router';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon/ListItemIcon';
@@ -22,27 +43,46 @@ import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import Collapse from '@material-ui/core/Collapse/Collapse';
 import DateFnsUtils from '@date-io/date-fns';
-import {KeyboardDatePicker, KeyboardTimePicker, MuiPickersUtilsProvider} from '@material-ui/pickers';
+import {
+  KeyboardDatePicker,
+  KeyboardTimePicker,
+  MuiPickersUtilsProvider,
+} from '@material-ui/pickers';
 import moment from 'moment';
 import Dialog from '@material-ui/core/Dialog';
+import AddCircleOutline from '@material-ui/icons/AddCircleOutline';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 import FallbackPageNotFound from 'containers/fallbacks/FallbackPageNotFound';
-import {useSessionState} from '../../context/session/session';
-import Icon from "@material-ui/core/Icon";
-import ImageCropper from 'components/ImageCropper/ImageCropper'
-import useDnDStateManager from '../../hooks/useDnDStateManager';
+import Icon from '@material-ui/core/Icon';
+import ImageCropper from 'components/ImageCropper/ImageCropper';
 import InsertPhotoIcon from '@material-ui/icons/InsertPhoto';
-import {getImageUrl} from 'utils/utils';
-import useImageReader from '../../hooks/useImageReader';
-import {useDrag, useDrop} from "react-dnd";
-import HeightIcon from "@material-ui/core/SvgIcon/SvgIcon";
+import { getImageUrl } from 'utils/utils';
+import FormControl from '@material-ui/core/FormControl';
+import { useDrag, useDrop } from 'react-dnd';
+import HeightIcon from '@material-ui/core/SvgIcon/SvgIcon';
 import DeleteIcon from '@material-ui/icons/Delete';
-import {useDropArea} from "react-use";
-import withDndProvider from "../../hoc/withDnDProvider";
+import { useDropArea } from 'react-use';
+import { Autocomplete, TreeView } from '@material-ui/lab';
+import RadioGroup from '@material-ui/core/RadioGroup';
+
+import StyledTreeItem from 'components/filters/StyledTreeItem';
+import InfoIcon from '@material-ui/icons/Info';
+import CustomRadioGroup from 'components/form/CustomRadioGroup';
+import CustomRadioGroupForm from 'components/form/CustomRadioGroupForm';
+import ImagesDisplay from 'components/ImageCropper/ImagesDisplay';
+import ImagesDropZone from 'components/ImageCropper/ImagesDropZone';
+import IconButton from '@material-ui/core/IconButton';
+import { FlashOnTwoTone } from '@material-ui/icons';
+import RadioGroupForContext from './RadioGroupForContext';
+import withDndProvider from '../../hoc/withDnDProvider';
+import useImageReader from '../../hooks/useImageReader';
+import useDnDStateManager from '../../hooks/useDnDStateManager';
+import { useSessionState } from '../../context/session/session';
+import Entries from './Entries';
 
 const useStyles = makeStyles((theme) => ({
   field: {
@@ -90,32 +130,86 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       background: 'none',
     },
-
-  },dropZone:{    
-    padding : "1em",
-    margin :"2em"
   },
-  image:{
-    width:'100%',
-    height:'100%'
+  dropZone: {
+    padding: '1em',
+    margin: '2em',
   },
-  main :{
-    textAlign:"center"
-  },label: {
+  image: {
+    width: '100%',
+    height: '100%',
+  },
+  main: {
+    textAlign: 'center',
+  },
+  label: {
     fontWeight: 600,
+  },
+  collectionLabel: {
+    textAlign: 'center',
+    color: '#2C367E',
+  },
+  justify: {
+    textAlign: 'justify',
+  },
+  rootTree: {
+    color: theme.palette.text.secondary,
+    '&:hover > $content': {
+      backgroundColor: theme.palette.action.hover,
+    },
+    '&:focus > $content, &$selected > $content': {
+      backgroundColor: `var(--tree-view-bg-color, ${theme.palette.grey[400]})`,
+      color: 'var(--tree-view-color)',
+    },
+    '&:focus > $content $label, &:hover > $content $label, &$selected > $content $label': {
+      backgroundColor: 'transparent',
+    },
+  },
+  treeParent: {
+    border: '1px solid #ccc!important',
+    padding: '5px 0 5px 0',
+    width: '100%',
+  },
+  container: {
+    textAlign: 'center',
   },
 }));
 
+const isEntriesWithInformationContains: Function = (entriesWithInformationArray: Array<Object>, id: number) => {
+  let existingEntryInformation;
+  let index = 0;
+  entriesWithInformationArray.map(
+    (linkDescription) => {
+      index += 1;
+      // @ts-ignore
+      if (linkDescription.entryId === id) {
+        existingEntryInformation = linkDescription;
+      }
+      return '';
+    },
+  );
+  if (existingEntryInformation !== undefined) {
+    return true;
+  }
+  return false;
+};
+
 const EDIT_EVENT = gql`
   mutation editEvent(
-    $eventInfos: EventInfos, $eventId: Int!,$pictures:[InputPictureType],$description:String!
+    $eventInfos: EventInfos
+    $eventId: Int!
+    $pictures: [InputPictureType]
+    $description: String!
   ) {
     editEvent(
-      eventInfos: $eventInfos, eventId: $eventId,,pictures: $pictures,description:$description
+      eventInfos: $eventInfos
+      eventId: $eventId
+      pictures: $pictures
+      description: $description
     ) {
       id
       label
-      short_description
+      shortDescription
       facebookUrl
       description
       startedAt
@@ -130,8 +224,8 @@ const EDIT_EVENT = gql`
 const GET_CATEGORIES = gql`
   query categories {
     categories {
-      id,
-      label,
+      id
+      label
       activated
       subCategories {
         id
@@ -147,12 +241,14 @@ const GET_EVENT = gql`
     event(id: $id) {
       id
       label
-      short_description
+      shortDescription
       facebookUrl
       description
+      practicalInfo
       startedAt
       endedAt
       published
+      registerLink
       categories {
         id
         label
@@ -162,26 +258,90 @@ const GET_EVENT = gql`
       address
       postCode
       city
-      pictures{
-        id,
-        label,
-        originalPicturePath,
-        originalPictureFilename,
-        croppedPicturePath,
-        croppedPictureFilename,
-        croppedX,
-        croppedY,
-        croppedZoom,
-        croppedRotation,
+      pictures {
+        id
+        label
+        originalPicturePath
+        originalPictureFilename
+        croppedPicturePath
+        croppedPictureFilename
+        croppedX
+        croppedY
+        croppedZoom
+        croppedRotation
         position
-      },
-      categories{
-        id,
-        label,
-        parentCategory{
+        main
+        logo
+      }
+      categories {
+        id
+        label
+        parentCategory {
           label
-        },
-        subCategories{
+        }
+        subCategories {
+          label
+        }
+      }
+      entries {
+        id
+        label
+        actorEntries {
+        linkDescription,
+        topSEO,
+        id,
+       }
+        parentEntry {
+          id
+          code
+          label
+        }
+        subEntries {
+          id
+          code
+          label
+          actorEntries {
+          linkDescription,
+          topSEO,
+          id,
+          }
+        }
+        collection {
+          id
+          code
+          label
+        }
+      }
+    }
+  }
+`;
+const GET_ACTORS = gql`
+query actors {
+  actors {
+    id
+    name
+    pictures {
+      originalPicturePath
+      logo
+    }
+  }
+}
+`;
+const GET_COLLECTIONS = gql`
+  {
+    collections {
+      id
+      code
+      label
+      multipleSelection
+      position
+      actor
+      event
+      entries {
+        id
+        label
+        subEntries {
+          id
           label
         }
       }
@@ -191,65 +351,75 @@ const GET_EVENT = gql`
 
 const DELETE_EVENT = gql`
   mutation deleteEvent($eventId: Int!) {
-    deleteEvent(
-      eventId: $eventId
-    )
+    deleteEvent(eventId: $eventId)
   }
 `;
 
 type FormItemProps = {
-  label: string
-  inputName: string
-  formChangeHandler: (event: ChangeEvent) => void
-  value: string
-  required:boolean
-  errorBool: boolean
-  errorText: string
-}
+  label: string;
+  inputName: string;
+  formChangeHandler: (event: ChangeEvent) => void;
+  value: string;
+  required: boolean;
+  errorBool: boolean;
+  errorText: string;
+};
 
 const FormItem = (props: FormItemProps) => {
   const styles = useStyles();
   const {
-    label, inputName, formChangeHandler, value, required, errorBool, errorText,
+    label,
+    inputName,
+    formChangeHandler,
+    value,
+    required,
+    errorBool,
+    errorText,
   } = props;
   return (
-      <TextField
-          className={styles.field}
-          variant="outlined"
-          value={value}
-          label={label}
-          name={inputName}
-          onChange={formChangeHandler}
-          defaultValue=""
-          fullWidth
-          required={required}
-          error={errorBool}
-          helperText={errorBool ? errorText : ''}
-      />
+    <TextField
+      className={styles.field}
+      variant="outlined"
+      value={value}
+      label={label}
+      name={inputName}
+      onChange={formChangeHandler}
+      defaultValue=""
+      fullWidth
+      required={required}
+      error={errorBool}
+      helperText={errorBool ? errorText : ''}
+    />
   );
 };
 
 const FormItemTextareaAutosize = (props: FormItemProps) => {
   const styles = useStyles();
   const {
-    label, inputName, formChangeHandler, value, required, errorBool, errorText,
+    label,
+    inputName,
+    formChangeHandler,
+    value,
+    required,
+    errorBool,
+    errorText,
   } = props;
   return (
-      <TextField
-          multiline
-          rows={4}
-          className={styles.field}
-          variant="outlined"
-          value={value}
-          label={label}
-          name={inputName}
-          onChange={formChangeHandler}
-          defaultValue=""
-          fullWidth
-          required={required}
-          error={errorBool}
-          helperText={errorBool ? errorText : ''}
-      />
+    <TextField
+      multiline
+      rows={4}
+      className={styles.field}
+      variant="outlined"
+      value={value}
+      label={label}
+      name={inputName}
+      onChange={formChangeHandler}
+      defaultValue=""
+      fullWidth
+      required={required}
+      error={errorBool}
+      helperText={errorBool ? errorText : ''}
+    />
   );
 };
 
@@ -259,18 +429,201 @@ const EditEventForm = (props) => {
       rule: ValidationRuleType.required,
     },
     shortDescription: {
-      rule: ValidationRuleType.required && ValidationRuleType.minLength,
-      minLimit: 50,
-    }
+      rule: ValidationRuleType.only && ValidationRuleType.maxLength,
+      maxLimit: 90,
+    },
   };
 
-  const { loading: eventLoading, error: eventError, data: eventData } = useQuery(GET_EVENT, {
+  function IsTree(collection) {
+    let isTree = false;
+    if (collection.entries) {
+      collection.entries.map((entry) => {
+        if (entry.subEntries) {
+          entry.subEntries.map((subentry) => {
+            isTree = true;
+            return isTree;
+          });
+        }
+      });
+    }
+    return isTree;
+  }
+  const [dataCollections, setDataCollections] = useState({});
+  const { loading: loadingCollections, error: errorCollections } = useQuery(
+    GET_COLLECTIONS,
+    {
+      fetchPolicy: 'network-only',
+      onCompleted: (data) => {
+        setDataCollections(data);
+      },
+    },
+  );
+  const {
+    loading: eventLoading,
+    error: eventError,
+    data: eventData,
+  } = useQuery(GET_EVENT, {
     variables: { id: props.id.toString() },
   });
 
+  const imgInit = [];
+  if (
+    eventData
+    && eventData.event.pictures
+    && eventData.event.pictures.length > 0
+  ) {
+    eventData.event.pictures
+      .sort((a, b) => (a.position > b.position ? 1 : -1))
+      .map((picture, index) => {
+        if (!picture.main && !picture.logo) {
+          imgInit.push({
+            // @ts-ignore
+            id: index,
+            // @ts-ignore
+            file: null,
+            // @ts-ignore
+            img: getImageUrl(picture.originalPicturePath),
+            // @ts-ignore
+            croppedImg: {
+              crop: {
+                // @ts-ignore
+                x: picture.croppedX,
+                // @ts-ignore
+                y: picture.croppedY,
+              },
+              // @ts-ignore
+              rotation: picture.croppedRotation,
+              // @ts-ignore
+              zoom: picture.croppedZoom,
+              // @ts-ignore
+              file: null,
+              // @ts-ignore
+              img: getImageUrl(picture.croppedPicturePath),
+              // @ts-ignore
+              modified: false,
+            },
+            // @ts-ignore
+            activated: true,
+            // @ts-ignore
+            deleted: false,
+            // @ts-ignore
+            newpic: false,
+            // @ts-ignore
+            serverId: picture.id,
+            // @ts-ignore
+            position: picture.position,
+          });
+        }
+      });
+  }
+
+  const imgInitLogo = [];
+  if (
+    eventData
+    && eventData.event.pictures
+    && eventData.event.pictures.length > 0
+  ) {
+    eventData.event.pictures
+      .sort((a, b) => (a.position > b.position ? 1 : -1))
+      .map((picture, index) => {
+        if (picture.logo) {
+          imgInitLogo.push({
+            // @ts-ignore
+            id: index,
+            // @ts-ignore
+            file: null,
+            // @ts-ignore
+            img: getImageUrl(picture.originalPicturePath),
+            // @ts-ignore
+            croppedImg: {
+              crop: {
+                // @ts-ignore
+                x: picture.croppedX,
+                // @ts-ignore
+                y: picture.croppedY,
+              },
+              // @ts-ignore
+              rotation: picture.croppedRotation,
+              // @ts-ignore
+              zoom: picture.croppedZoom,
+              // @ts-ignore
+              file: null,
+              // @ts-ignore
+              img: getImageUrl(picture.croppedPicturePath),
+              // @ts-ignore
+              modified: false,
+            },
+            // @ts-ignore
+            activated: true,
+            // @ts-ignore
+            deleted: false,
+            // @ts-ignore
+            newpic: false,
+            // @ts-ignore
+            serverId: picture.id,
+            // @ts-ignore
+            position: picture.position,
+          });
+        }
+      });
+  }
+
+  const imgInitMain = [];
+  if (
+    eventData
+    && eventData.event.pictures
+    && eventData.event.pictures.length > 0
+  ) {
+    eventData.event.pictures
+      .sort((a, b) => (a.position > b.position ? 1 : -1))
+      .map((picture, index) => {
+        if (picture.main) {
+          imgInitMain.push({
+            // @ts-ignore
+            id: index,
+            // @ts-ignore
+            file: null,
+            // @ts-ignore
+            img: getImageUrl(picture.originalPicturePath),
+            // @ts-ignore
+            croppedImg: {
+              crop: {
+                // @ts-ignore
+                x: picture.croppedX,
+                // @ts-ignore
+                y: picture.croppedY,
+              },
+              // @ts-ignore
+              rotation: picture.croppedRotation,
+              // @ts-ignore
+              zoom: picture.croppedZoom,
+              // @ts-ignore
+              file: null,
+              // @ts-ignore
+              img: getImageUrl(picture.croppedPicturePath),
+              // @ts-ignore
+              modified: false,
+            },
+            // @ts-ignore
+            activated: true,
+            // @ts-ignore
+            deleted: false,
+            // @ts-ignore
+            newpic: false,
+            // @ts-ignore
+            serverId: picture.id,
+            // @ts-ignore
+            position: picture.position,
+          });
+        }
+      });
+  }
   const router = useRouter();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-  const [deleteEvent, { data: deleteData, error: deleteError, loading: deleteLoading }] = useMutation(DELETE_EVENT);
+  const [
+    deleteEvent,
+    { data: deleteData, error: deleteError, loading: deleteLoading },
+  ] = useMutation(DELETE_EVENT);
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -297,22 +650,24 @@ const EditEventForm = (props) => {
       });
       router.push('/actorAdmin/event');
     } else if (deleteError) {
-      enqueueSnackbar('La suppression de l\'événement a échoué.', {
+      enqueueSnackbar("La suppression de l'événement a échoué.", {
         preventDuplicate: true,
       });
     }
   }, [deleteData, deleteError, deleteLoading]);
 
   const Form: RenderCallback = ({
-                                  formChangeHandler,
-                                  validationResult,
-                                  formValues,
-                                }) => {
+    formChangeHandler,
+    validationResult,
+    formValues,
+  }) => {
     // const { formChangeHandler, formValues, validationResult } = props;
     const [editEvent, { data, error }] = useMutation(EDIT_EVENT);
-    const { data: categoryData, loading: categoryLoading, error: categoryError } = useQuery(
-        GET_CATEGORIES,
-    );
+    const {
+      data: categoryData,
+      loading: categoryLoading,
+      error: categoryError,
+    } = useQuery(GET_CATEGORIES);
     useGraphQLErrorDisplay(error);
     const styles = useStyles();
     const redirect = useCookieRedirection();
@@ -322,11 +677,17 @@ const EditEventForm = (props) => {
     const [city, setCity] = useState('');
     const [validated, setValidated] = useState(false);
     const [dateChange, setDateChange] = useState(false);
-    const [selectedStartDate, setSelectedStartDate] = React.useState<Date | null>(
-        moment().add(1, 'hour').toDate(),
-    );
+    const [showOtherActors, setShowOtherActors] = useState(false);
+    const [showRegisterLink, setShowRegisterLink] = useState(false);
+
+    const [actors] = useState([]);
+    const [actorsId] = useState([]);
+    const [
+      selectedStartDate,
+      setSelectedStartDate,
+    ] = React.useState<Date | null>(moment().add(1, 'hour').toDate());
     const [selectedEndDate, setSelectedEndDate] = React.useState<Date | null>(
-        moment().add(2, 'hour').toDate(),
+      moment().add(2, 'hour').toDate(),
     );
 
     const handleStartDateChange = (date: Date | null) => {
@@ -339,59 +700,56 @@ const EditEventForm = (props) => {
     };
 
     useEffect(() => {
-      if ((selectedStartDate && selectedEndDate && (selectedStartDate >= selectedEndDate))
-          || (selectedStartDate && moment(selectedStartDate) <= moment())
-          || !formValues.shortDescription
-          // || !formValues.categories
-          // || formValues.categories?.length === 0
-          || (!address && !city)) setValidated(false);
+      if (
+        (selectedStartDate
+          && selectedEndDate
+          && selectedStartDate >= selectedEndDate)
+        || (selectedStartDate && moment(selectedStartDate) <= moment())
+        || !formValues.shortDescription
+        // || !formValues.categories
+        // || formValues.categories?.length === 0
+        || (!address && !city)
+      ) setValidated(false);
       else setValidated(true);
     });
 
-    const handleChange = (category: any, event: React.ChangeEvent<HTMLInputElement>) => {
-      setState({ ...state, [category.id.toString()]: event.target.checked });
-    };
-    const [checked, setChecked] = useState([0]);
-    const [openCategory, setOpenCategory] = React.useState([false]);
-    const handleToggle = (value: number, index: number) => () => {
-      const currentIndex = checked.indexOf(value);
-      const newChecked = [...checked];
-
-      if (currentIndex === -1) {
-        newChecked.push(value);
-      } else {
-        newChecked.splice(currentIndex, 1);
-      }
-      setChecked(newChecked);
-      openCategory[index] = !openCategory[index];
-    };
-
-    const editorRef = useRef()
-    const [ editorLoaded, setEditorLoaded ] = useState( false )
+    const editorRef = useRef();
+    const [editorLoaded, setEditorLoaded] = useState(false);
     // @ts-ignore
-    const { CKEditor, ClassicEditor } = editorRef.current || {}
+    const { CKEditor, ClassicEditor } = editorRef.current || {};
 
-    useEffect( () => {
+    useEffect(() => {
       // @ts-ignore
       editorRef.current = {
-        CKEditor: require( '@ckeditor/ckeditor5-react' ).CKEditor,
-        ClassicEditor: require( '@ckeditor/ckeditor5-build-classic' )
+        CKEditor: require('@ckeditor/ckeditor5-react').CKEditor,
+        ClassicEditor: require('@ckeditor/ckeditor5-build-classic'),
+      };
+      setEditorLoaded(true);
+    }, []);
 
-      }
-      setEditorLoaded( true )
-    }, [] )
-
-    const [descriptionEditor, setDescriptionEditor] = useState()
+    const [descriptionEditor, setDescriptionEditor] = useState();
+    const [practicalInfoEditor, setPracticalInfoEditor] = useState();
 
     const getObjectLongName = (results, name) => {
-      if (!results || !results[0] || !results[0].address_components) { return (''); }
-      const object = results[0].address_components.find((element) => element.types.find((type) => type == name) != undefined);
-      if (object == undefined) { return (''); }
+      if (!results || !results[0] || !results[0].address_components) {
+        return '';
+      }
+      const object = results[0].address_components.find(
+        (element) => element.types.find((type) => type == name) != undefined,
+      );
+      if (object == undefined) {
+        return '';
+      }
       return object.long_name;
     };
 
     const getAddressDetails = (results) => {
-      setAddress((`${getObjectLongName(results, 'street_number')} ${getObjectLongName(results, 'route')}`).trim());
+      setAddress(
+        `${getObjectLongName(results, 'street_number')} ${getObjectLongName(
+          results,
+          'route',
+        )}`.trim(),
+      );
       setCity(getObjectLongName(results, 'locality'));
       formValues.postCode = getObjectLongName(results, 'postal_code');
     };
@@ -420,25 +778,28 @@ const EditEventForm = (props) => {
     const updateFormValues = () => {
       formValues.label = eventData.event.label;
       formValues.facebookUrl = eventData.event.facebookUrl;
-      formValues.shortDescription = eventData.event.short_description;
+      formValues.shortDescription = eventData.event.shortDescription;
       formValues.description = eventData.event.description;
+      formValues.practicalInfo = eventData.event.practicalInfo;
       formValues.address = eventData.event.address;
       formValues.postCode = eventData.event.postCode;
       formValues.city = eventData.event.city;
       formValues.lat = eventData.event.lat;
       formValues.lng = eventData.event.lng;
+      formValues.registerLink = eventData.event.registerLink;
+      setShowRegisterLink(formValues.registerLink !== undefined && formValues.registerLink !== '');
+
       setAddress(eventData.event.address);
       setCity(eventData.event.city);
       setSelectedStartDate(new Date(parseInt(eventData.event.startedAt)));
       setSelectedEndDate(new Date(parseInt(eventData.event.endedAt)));
-      var categories = [];
-      eventData.event.categories.forEach((actorcategory) => {
+      const entries = [];
+      eventData.event.entries.forEach((actorentry) => {
         // @ts-ignore
-        categories.push(actorcategory.id)
+        entries.push(actorentry.id);
       });
-
       // @ts-ignore
-      formValues.categories =categories;
+      formValues.entries = entries;
     };
     if (firstRender) {
       initFormValues();
@@ -448,59 +809,93 @@ const EditEventForm = (props) => {
       setFirstRender(false);
     }
 
-    const [setImagesList, loading, result,imagesListState] = useImageReader();
+    const {
+      data: actorsData,
+      loading: actorsLoading,
+      error: actorsError,
+    } = useQuery(GET_ACTORS);
 
-    var imgInit = [];
-    if(eventData && eventData.event.pictures && eventData.event.pictures.length > 0 ) {
+    const [
+      setImagesLogoList,
+      loadingLogo,
+      resultLogo,
+      imagesLogoListState,
+    ] = useImageReader();
 
-      imgInit = eventData.event.pictures.sort((a, b) => a.position > b.position ? 1 : -1).map((picture, index) => {
-
-        return {
-          id: index,
-          file: null,
-          img: getImageUrl(picture.originalPicturePath),
-          croppedImg: {
-            crop: {
-              x: picture.croppedX,
-              y: picture.croppedY
-            },
-            rotation: picture.croppedRotation,
-            zoom: picture.croppedZoom,
-            file: null,
-            img: getImageUrl(picture.croppedPicturePath),
-            modified: false
-          },
-          activated: true,
-          deleted: false,
-          newpic: false,
-          serverId: picture.id,
-          position:picture.position,
-        };
-      });
-    }
-    const ImagesDropZone = ({onDropHandler}) => {
-
-      const [bond, state] = useDropArea({
-        onFiles: files => onDropHandler(files)
-      });
-
-      return (
-          <Card className={styles.dropZone}>
-            <Grid container alignItems="center">
-              <Grid item xs={12} >
-                <div {...bond}>
-                  <div >
-                    <InsertPhotoIcon />
-                  </div>
-                  <div >
-                    Déposer les images ici au format jpg. La première image sera aussi l'image de couverture ...
-                  </div>
-                </div>
-              </Grid>
-            </Grid>
-          </Card>
-      );
+    const onDropLogoHandler = useCallback(
+      (files) => {
+        // @ts-ignore
+        setImagesLogoList(files);
+      },
+      [setImagesLogoList],
+    );
+    const autocompleteHandler = (event, value) => {
+      formValues.contactId = value.id;
     };
+    const {
+      objectsList: objectsListLogo,
+      moveObject: moveObjectLogo,
+      findObject: findObjectLogo,
+      updateActiveIndicator: updateActiveIndicatorLogo,
+      updateDeletedIndicator: updateDeletedIndicatorLogo,
+      initState: initStateLogo,
+      addValues: addValuesLogo,
+      updateKeyIndicator: updateKeyIndicatorLogo,
+    } = useDnDStateManager(imgInitLogo);
+
+    useEffect(() => {
+      if (resultLogo) addValuesLogo(resultLogo);
+      // @ts-ignore
+    }, resultLogo);
+
+    const [
+      setImagesMainList,
+      loadingMain,
+      resultMain,
+      imagesMainListState,
+    ] = useImageReader();
+
+    const onDropMainHandler = useCallback(
+      (files) => {
+        // @ts-ignore
+        setImagesMainList(files);
+      },
+      [setImagesMainList],
+    );
+    const {
+      objectsList: objectsListMain,
+      moveObject: moveObjectMain,
+      findObject: findObjectMain,
+      updateActiveIndicator: updateActiveIndicatorMain,
+      updateDeletedIndicator: updateDeletedIndicatorMain,
+      initState: initStateMain,
+      addValues: addValuesMain,
+      updateKeyIndicator: updateKeyIndicatorMain,
+    } = useDnDStateManager(imgInitMain);
+
+    useEffect(() => {
+      if (resultMain) addValuesMain(resultMain);
+      // @ts-ignore
+    }, resultMain);
+
+    const [setImagesList, loading, result, imagesListState] = useImageReader();
+
+    const handleAddActor = () => {
+      setShowOtherActors(true);
+    };
+
+    const onDropHandler = useCallback(
+      (files) => {
+        // @ts-ignore
+        setImagesList(files);
+      },
+      [setImagesList],
+    );
+
+    useEffect(() => {
+      if (result) addValues(result);
+      // @ts-ignore
+    }, result);
 
     const {
       objectsList,
@@ -510,37 +905,83 @@ const EditEventForm = (props) => {
       updateDeletedIndicator,
       initState,
       addValues,
-      updateKeyIndicator
+      updateKeyIndicator,
     } = useDnDStateManager(imgInit);
 
-
     const submitHandler = () => {
-      var files ;
-
       const checkboxes = Object.keys(state);
       let categoriesArray: number[];
       categoriesArray = [];
       checkboxes.forEach((key) => {
-        if (state[key]) { categoriesArray.push(parseInt(key)); }
+        if (state[key]) {
+          categoriesArray.push(parseInt(key));
+        }
       });
-      if(objectsList)
-        files = objectsList.map((object) =>{
+      let logoPictures;
+      // @ts-ignore
+      if (objectsListLogo) {
+        logoPictures = objectsListLogo.map((object) => {
           // return object.file
           return {
-            id : object.serverId,
-            newpic : object.newpic,
-            deleted : object.deleted,
-            file : {
-              originalPicture:object.file,
-              croppedPicture:object.croppedImg.file,
-              croppedPictureModified : object.croppedImg.modified,
-              croppedX:object.croppedImg.crop.x,
-              croppedY:object.croppedImg.crop.y,
-              croppedZoom:object.croppedImg.zoom,
-              croppedRotation:object.croppedImg.rotation
-            }
-          }
+            id: object.serverId,
+            newpic: object.newpic,
+            deleted: object.deleted,
+            logo: true,
+            file: {
+              originalPicture: object.file,
+              croppedPicture: object.croppedImg.file,
+              croppedPictureModified: object.croppedImg.modified,
+              croppedX: object.croppedImg.crop.x,
+              croppedY: object.croppedImg.crop.y,
+              croppedZoom: object.croppedImg.zoom,
+              croppedRotation: object.croppedImg.rotation,
+            },
+          };
         });
+      }
+      let mainPictures;
+      // @ts-ignore
+      if (objectsListMain) {
+        mainPictures = objectsListMain.map((object) => {
+          // return object.file
+          return {
+            id: object.serverId,
+            newpic: object.newpic,
+            deleted: object.deleted,
+            main: true,
+            file: {
+              originalPicture: object.file,
+              croppedPicture: object.croppedImg.file,
+              croppedPictureModified: object.croppedImg.modified,
+              croppedX: object.croppedImg.crop.x,
+              croppedY: object.croppedImg.crop.y,
+              croppedZoom: object.croppedImg.zoom,
+              croppedRotation: object.croppedImg.rotation,
+            },
+          };
+        });
+      }
+      let pictures;
+      // @ts-ignore
+      if (objectsList) {
+        pictures = objectsList.map((object) => {
+          // return object.file
+          return {
+            id: object.serverId,
+            newpic: object.newpic,
+            deleted: object.deleted,
+            file: {
+              originalPicture: object.file,
+              croppedPicture: object.croppedImg.file,
+              croppedPictureModified: object.croppedImg.modified,
+              croppedX: object.croppedImg.crop.x,
+              croppedY: object.croppedImg.crop.y,
+              croppedZoom: object.croppedImg.zoom,
+              croppedRotation: object.croppedImg.rotation,
+            },
+          };
+        });
+      }
       editEvent({
         variables: {
           eventInfos: {
@@ -551,372 +992,660 @@ const EditEventForm = (props) => {
             startedAt: selectedStartDate,
             endedAt: selectedEndDate,
             published: false,
-            categories: formValues.categories,
+            entries: formValues.entries,
+            registerLink: formValues.registerLink,
             lat: parseFloat(formValues.lat),
             lng: parseFloat(formValues.lng),
             address,
             postCode: formValues.postCode,
             city,
-
           },
           eventId: parseInt(eventData.event.id),
-          pictures:files,
+          logoPictures,
+          mainPictures,
+          pictures,
           // @ts-ignore
-          description:descriptionEditor.getData()
+          description: descriptionEditor.getData(),
+          // @ts-ignore
+          practicalInfo: practicalInfoEditor.getData(),
         },
       });
     };
-    const ImagesDisplay = ({cards,moveCard,findCard,updateActiveIndicator,updateDeletedIndicator,updateKeyIndicator}) => {
-      // console.log('cards');
-      // console.log(cards);
-      // console.log('--cards--');
-      return (
-          <Grid container alignItems="center"
-              // justify='center'
-                spacing={3}>
-            {
-              cards.map((file) => (
-                  <ImagePrev
-                      id={file.id}
-                      key={`image${file.id}`}
-                      originalImg = {file.img}
-                      croppedImg = {file.croppedImg}
-                      moveCard={moveCard}
-                      findCard={findCard}
-                      deletedIconClickHandler={updateDeletedIndicator}
-                      updateKeyIndicator={updateKeyIndicator}
-                      deleted = {file.deleted}
-                      file={file}
-                  />
 
-              ))
-            }
-          </Grid>
-      );
-
-    };
-    const ItemTypes = {
-      PIC: "pic"
-    };
-    const ImagePrev = ({file,originalImg,croppedImg,moveCard,findCard,id,deletedIconClickHandler,deleted,updateKeyIndicator}) => {
-
-      const originalIndex = findCard(id).index;
-
-      const [{ isDragging }, drag] = useDrag({
-        item: { type: ItemTypes.PIC, id, originalIndex },
-        collect: monitor => ({
-          isDragging: monitor.isDragging()
-        })
-      });
-
-      {/* @ts-ignore */}
-      const [, drop] = useDrop({
-        accept: ItemTypes.PIC,
-        canDrop: () => false,
-        // @ts-ignore
-        hover({ id: draggedId }) {
-          if (draggedId !== id) {
-            const { index: overIndex } = findCard(id);
-            moveCard(draggedId, overIndex);
-          }
-        }
-      });
-
-      const opacity =  1 ;
-
-      //gestion de la modal du cropper
-      const [modalOpened, setOpenedInd] = useState(false);
-      const openModal = () => {
-        setOpenedInd(true);
-      };
-
-
-      return (
-          <Grid item xs={3} >
-            <div className='card'  ref={node => drag(drop(node))}  style={{ opacity}} >
-              <Card>
-                <img  src={croppedImg.img} className={styles.image} />
-              </Card>
-              <Card>
-                <Grid container spacing={3}>
-                  <Grid item xs={3}>
-                    <HeightIcon  onClick={() => openModal()}/>
-                  </Grid>
-                  <Grid item xs={3}>
-                    <DeleteIcon color={deleted? 'primary' : 'action' } onClick={() => deletedIconClickHandler(id)}/>
-                  </Grid>
-                </Grid>
-              </Card>
-              <ImageCropper
-                  updateKeyIndicator={updateKeyIndicator}
-                  id={id}
-                  croppedImg = {file.croppedImg}
-                  src={originalImg}
-                  open={modalOpened}
-                  onClose={() => setOpenedInd(false) }
-              />
-            </div>
-          </Grid>
-      );
-
-    };
-
-      //gestion de la modal du cropper
-      const [modalOpened, setOpenedInd] = useState(false);
-      const openModal = () => {
-        setOpenedInd(true);
-      };
-
-
-
-      useEffect(() => {
-        if(result)
-          addValues(result);
-        // @ts-ignore
-      },result)
-
-      const onDropHandler = useCallback((files) => {
-        // @ts-ignore
-        setImagesList(files);
-      },[setImagesList]);
+    useEffect(() => {
+      if (result) addValues(result);
+      // @ts-ignore
+    }, result);
 
     return (
-        <Container component="main" maxWidth="sm"   className={styles.main}>
-          <Typography
-              className={styles.field}
-              color="secondary"
-              variant="h6"
-          >
-            Éditer un événement
-          </Typography>
-          <FormItem
-              label="Nom de l'événement"
-              inputName="label"
-              formChangeHandler={formChangeHandler}
-              value={formValues.label}
-              required
-              errorBool={!validationResult?.global && !!validationResult?.result.label}
-              errorText="Nom de l'événement requis."
-          />
-          <FormItem
-              label="Lien Facebook de l'événement"
-              inputName="facebookUrl"
-              formChangeHandler={formChangeHandler}
-              value={formValues.facebookUrl}
-              required={false}
-              errorBool={false}
-              errorText=""
-          />
-          <FormItemTextareaAutosize
-              label="Description courte"
-              inputName="shortDescription"
-              formChangeHandler={formChangeHandler}
-              value={formValues.shortDescription}
-              required
-              errorBool={!validationResult?.global && !!validationResult?.result.shortDescription}
-              errorText={`Minimum 50 caractères. ${50 - formValues.shortDescription?.length} caractères restants minimum.`}
-          />
-          <Typography variant="body1" color="primary" className={styles.label}>
-            Description :
-          </Typography>
-          <p></p>
-          { editorLoaded ? (  <CKEditor
-              editor={ ClassicEditor }
-              data={formValues.description}
-              onReady={ editor => {
-                setDescriptionEditor(editor)
-              } }
-
-          />) : (
-              <div>Editor loading</div>
-          )
+      <Container component="main" maxWidth="sm" className={styles.main}>
+        <Typography className={styles.field} color="secondary" variant="h6">
+          Éditer un événement
+        </Typography>
+        <FormItem
+          label="Nom de l'événement"
+          inputName="label"
+          formChangeHandler={formChangeHandler}
+          value={formValues.label}
+          required
+          errorBool={
+            !validationResult?.global && !!validationResult?.result.label
           }
-          <Grid className={styles.datetime}>
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-              <Grid container justify="space-around">
-                <KeyboardDatePicker
-                    disableToolbar
-                    variant="inline"
-                    format="dd/MM/yyyy"
-                    margin="normal"
-                    id="date-picker-inline"
-                    label="Date de début"
-                    value={selectedStartDate}
-                    onChange={handleStartDateChange}
-                    KeyboardButtonProps={{
-                      'aria-label': 'change date',
-                    }}
-                    error={dateChange&& !!selectedStartDate && moment(selectedStartDate) <= moment(Date.now())}
-                    helperText={(dateChange && selectedStartDate && moment(selectedStartDate) <= moment(Date.now())) ? 'La date de début ne peut être dans le passé.' : ''}
-                />
-                <KeyboardTimePicker
-                    margin="normal"
-                    id="time-picker"
-                    label="Heure de début"
-                    value={selectedStartDate}
-                    onChange={handleStartDateChange}
-                    KeyboardButtonProps={{
-                      'aria-label': 'change time',
-                    }}
-                    ampm={false}
-                    minutesStep={5}
-                    error={dateChange && !!selectedStartDate && (moment(selectedStartDate) <= moment())}
-                />
-                <KeyboardDatePicker
-                    disableToolbar
-                    variant="inline"
-                    format="dd/MM/yyyy"
-                    margin="normal"
-                    id="date-picker-inline"
-                    label="Date de fin"
-                    value={selectedEndDate}
-                    onChange={handleEndDateChange}
-                    KeyboardButtonProps={{
-                      'aria-label': 'change date',
-                    }}
-                    error={dateChange && !!selectedStartDate && !!selectedEndDate && (moment(selectedStartDate) >= moment(selectedEndDate))}
-                    helperText={dateChange&& selectedStartDate && selectedEndDate && (selectedStartDate >= selectedEndDate) ? 'La date de fin doit être après la date de début.' : ''}
-                />
-                <KeyboardTimePicker
-                    margin="normal"
-                    id="time-picker"
-                    label="Heure de fin"
-                    value={selectedEndDate}
-                    onChange={handleEndDateChange}
-                    KeyboardButtonProps={{
-                      'aria-label': 'change time',
-                    }}
-                    ampm={false}
-                    minutesStep={5}
-                    error={dateChange && !!selectedStartDate && !!selectedEndDate && (moment(selectedStartDate) >= moment(selectedEndDate))}
-                />
-              </Grid>
-            </MuiPickersUtilsProvider>
-          </Grid>
-          <p/>
-          <Grid>
-            <Typography>Catégorie(s) de l'événement *</Typography>
-            <List className={styles.field}>
-              {typeof categoryData !== 'undefined' && categoryData.categories.map((category, index) => (
-                  <div>
-                    <ListItem key={category.id} role={undefined} dense button onClick={handleToggle(0, index)}>
-                      <ListItemIcon />
-                      <ListItemText primary={category.label} />
-                      {openCategory[index] ? <ExpandLess /> : <ExpandMore />}
-                    </ListItem>
-                    {typeof category.subCategories !== 'undefined' && category.subCategories != null && category.subCategories.map((subcategory, subIndex) => (
-                        <Collapse in={openCategory[index]} timeout="auto" unmountOnExit>
+          errorText="Nom de l'événement requis."
+        />
+        {
+          /* @ts-ignore */
+          dataCollections.collections
+          /* @ts-ignore */
+          && dataCollections.collections.map((collection) => {
+            if (!collection.event) return '';
+            if (collection.code === 'larochelle_quarter') return '';
+            //    const [display, setDisplay] = useState(false);
+            let { label } = collection;
+            let helperText = '';
+            if (collection.code === 'event_type') {
+              label = 'Type d’action * (choix unique)';
+              helperText = 'attention si vous proposez une action dans le cadre d’un festival, coché ici le type d’action et non la case festival. Vous pourrez plus loin dans le formulaire rattaché votre action au festival dans laquelle elle s’inclue';
+            } else if (collection.code === 'category') {
+              label = "Catégorie de l'événement";
+              helperText = 'un événement peut traiter un sous-sujet non  associé au départ avec la page acteur. Vous pouvez choisir plusieurs sujets à rattacher à votre événement';
+            }
 
-                          <List component="div" disablePadding>
-                            <ListItem button>
-                              <ListItemIcon>
-                                <Checkbox
-                                    edge="start"
-                                    tabIndex={-1}
-                                    disableRipple
-                                    onChange={formChangeHandler}
-                                    name="categories"
-                                    value={subcategory.id}
-                                    // @ts-ignore
-                                    checked={ formValues && formValues.categories && formValues.categories.includes(subcategory.id)}
-                                />
-                              </ListItemIcon>
-                              <ListItemText primary={subcategory.label} />
+            if (collection.code === 'event_price') return '';
+            return (
+              <div>
+                <br />
+                <Typography className={styles.collectionLabel}>
+                  {label}
+                  {' '}
+                  {helperText !== '' && (
+                    <Tooltip title={helperText}>
+                      <InfoIcon />
+                    </Tooltip>
+                  )}
+                </Typography>
+                <br />
+                {
+                  // display &&
+                  IsTree(collection) && collection.multipleSelection && (
+                    <Entries initValues={[]}>
+                      <TreeView
+                        className={styles.rootTree}
+                        defaultCollapseIcon={<ArrowDropDownIcon />}
+                        defaultExpandIcon={<ArrowRightIcon />}
+                        defaultEndIcon={<div style={{ width: 24 }} />}
+                      >
+                        {collection.entries
+                          && collection.entries.map((entry) => {
+                            return (
+                              // @ts-ignore
+                              <StyledTreeItem
+                                key={entry.id}
+                                nodeId={entry.id}
+                                labelText={entry.label}
+                                hideCheckBox
+                                isForm
+                                className={styles.treeParent}
+                              >
+                                {entry.subEntries
+                                  && entry.subEntries.map((subEntry) => {
+                                    return (
+                                      <StyledTreeItem
+                                        key={subEntry.id}
+                                        // @ts-ignore
+                                        nodeId={subEntry.id}
+                                        labelText={subEntry.label}
+                                        categoryChange={formChangeHandler}
+                                        checked={
+                                          formValues
+                                          && formValues.entries.includes(subEntry.id)
+                                        }
+                                      />
+                                    );
+                                  })}
+                              </StyledTreeItem>
+                            );
+                          })}
+                      </TreeView>
+                    </Entries>
+                  )
+                }
+                {
+                  // display &&
+                  IsTree(collection) && !collection.multipleSelection && (
+                    // @ts-ignore
+                    <Entries initValues={formValues.entries}>
+                      <RadioGroupForContext initValue={formValues.entries}>
+                        <TreeView
+                          className={styles.rootTree}
+                          defaultCollapseIcon={<ArrowDropDownIcon />}
+                          defaultExpandIcon={<ArrowRightIcon />}
+                          defaultEndIcon={<div style={{ width: 24 }} />}
+                        >
+                          <CustomRadioGroupForm
+                            formChangeHandler={formChangeHandler}
+                          >
+                            {collection.entries
+                            && collection.entries.map((entry) => {
+                              return (
+                                // @ts-ignore
+                                <StyledTreeItem
+                                  key={entry.id}
+                                  nodeId={entry.id}
+                                  labelText={entry.label}
+                                  hideCheckBox
+                                  isForm
+                                  className={styles.treeParent}
+                                >
+
+                                  {entry.subEntries
+                                          && entry.subEntries.map((entry) => {
+                                            return (
+                                              <FormControlLabel
+                                                value={entry.id}
+                                                control={<Radio />}
+                                                label={entry.label}
+                                                 // @ts-ignore
+                                                checked={
+                                                  formValues.entries
+                                                  && formValues.entries.includes(entry.id)
+                                                }
+                                              />
+                                            );
+                                          })}
+                                </StyledTreeItem>
+                              );
+                            })}
+                          </CustomRadioGroupForm>
+                        </TreeView>
+                      </RadioGroupForContext>
+                    </Entries>
+                  )
+                }
+                {// display &&
+                  !IsTree(collection) && collection.multipleSelection && (
+                    <List>
+                      {collection.entries
+                        && collection.entries.map((entry) => {
+                          return (
+                            <ListItem key={entry.id} role={undefined} dense>
+                              <ListItemText primary={entry.label} />
+                              <Checkbox
+                                edge="start"
+                                tabIndex={-1}
+                                disableRipple
+                                onChange={formChangeHandler}
+                                name="entries"
+                                value={entry.id}
+                                onClick={(e) => e.stopPropagation()}
+                                  // @ts-ignore
+                                checked={
+                                    formValues
+                                    && formValues.entries
+                                    && formValues.entries.includes(entry.id)
+                                  }
+                              />
                             </ListItem>
-                          </List>
-                        </Collapse>
-                    ))}
-                  </div>
-              ))}
-            </List>
-          </Grid>
-          <Grid className={styles.location}>
-            <Typography>Lieu</Typography>
-            <GooglePlacesAutocomplete
-                placeholder="Taper et sélectionner l'adresse*"
-                initialValue={formValues.address && formValues.address.concat(' ').concat(formValues.postCode).concat(' ').concat(formValues.city)}
-                onSelect={({ description }) => (
-                    geocodeByAddress(description).then((results) => {
-                      getLatLng(results[0]).then((value) => {
-                        formValues.lat = `${value.lat}`;
-                        formValues.lng = `${value.lng}`;
-                      }).catch((error) => console.error(error));
-                      getAddressDetails(results);
-                    })
-                )}
-            />
-          </Grid>
-            <Typography variant="body1" color="primary" >
-                <Icon/>
-                Images de l'événement
-            </Typography>
-            <br />
-            { objectsList?
-                < ImagesDisplay
-                    cards = {objectsList}
-                    moveCard = {moveObject}
-                    findCard = {findObject}
-                    updateActiveIndicator = {updateActiveIndicator}
-                    updateDeletedIndicator = {updateDeletedIndicator}
-                    updateKeyIndicator = {updateKeyIndicator}
-                /> : null }
-            < ImagesDropZone onDropHandler={onDropHandler} />
+                          );
+                        })}
+                    </List>
+                  )
+                }
+                {
+                  // display &&
+                  !IsTree(collection) && !collection.multipleSelection && (
+                    <RadioGroupForContext initValue={' '}>
+                      <CustomRadioGroup
+                        formChangeHandler={formChangeHandler}
+                        entries={collection.entries}
+                      />
+                    </RadioGroupForContext>
 
-            <ClassicButton
-              fullWidth
-              variant="contained"
-              className={styles.submit}
-              onClick={submitHandler}
-              disabled={!validationResult?.global || !validated}
+                  )
+                }
+
+              </div>
+            );
+          })
+        }
+        <Grid className={styles.location}>
+          <Typography>Adresse complète de l’événement *</Typography>
+          <GooglePlacesAutocomplete
+            placeholder="Taper et sélectionner l'adresse*"
+            initialValue={
+              formValues.address
+              && formValues.address
+                .concat(' ')
+                .concat(formValues.postCode)
+                .concat(' ')
+                .concat(formValues.city)
+            }
+            onSelect={({ description }) => geocodeByAddress(description).then((results) => {
+              getLatLng(results[0])
+                .then((value) => {
+                  formValues.lat = `${value.lat}`;
+                  formValues.lng = `${value.lng}`;
+                })
+                .catch((error) => console.error(error));
+              getAddressDetails(results);
+            })}
+          />
+        </Grid>
+
+        <Grid className={styles.datetime}>
+          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <Grid container justify="space-around">
+              <KeyboardDatePicker
+                disableToolbar
+                variant="inline"
+                format="dd/MM/yyyy"
+                margin="normal"
+                id="date-picker-inline"
+                label="Date de début"
+                value={selectedStartDate}
+                onChange={handleStartDateChange}
+                KeyboardButtonProps={{
+                  'aria-label': 'change date',
+                }}
+                error={
+                  dateChange
+                  && !!selectedStartDate
+                  && moment(selectedStartDate) <= moment(Date.now())
+                }
+                helperText={
+                  dateChange
+                  && selectedStartDate
+                  && moment(selectedStartDate) <= moment(Date.now())
+                    ? 'La date de début ne peut être dans le passé.'
+                    : ''
+                }
+              />
+              <KeyboardTimePicker
+                margin="normal"
+                id="time-picker"
+                label="Heure de début"
+                value={selectedStartDate}
+                onChange={handleStartDateChange}
+                KeyboardButtonProps={{
+                  'aria-label': 'change time',
+                }}
+                ampm={false}
+                minutesStep={5}
+                error={
+                  dateChange
+                  && !!selectedStartDate
+                  && moment(selectedStartDate) <= moment()
+                }
+              />
+              <KeyboardDatePicker
+                disableToolbar
+                variant="inline"
+                format="dd/MM/yyyy"
+                margin="normal"
+                id="date-picker-inline"
+                label="Date de fin"
+                value={selectedEndDate}
+                onChange={handleEndDateChange}
+                KeyboardButtonProps={{
+                  'aria-label': 'change date',
+                }}
+                error={
+                  dateChange
+                  && !!selectedStartDate
+                  && !!selectedEndDate
+                  && moment(selectedStartDate) >= moment(selectedEndDate)
+                }
+                helperText={
+                  dateChange
+                  && selectedStartDate
+                  && selectedEndDate
+                  && selectedStartDate >= selectedEndDate
+                    ? 'La date de fin doit être après la date de début.'
+                    : ''
+                }
+              />
+              <KeyboardTimePicker
+                margin="normal"
+                id="time-picker"
+                label="Heure de fin"
+                value={selectedEndDate}
+                onChange={handleEndDateChange}
+                KeyboardButtonProps={{
+                  'aria-label': 'change time',
+                }}
+                ampm={false}
+                minutesStep={5}
+                error={
+                  dateChange
+                  && !!selectedStartDate
+                  && !!selectedEndDate
+                  && moment(selectedStartDate) >= moment(selectedEndDate)
+                }
+              />
+            </Grid>
+          </MuiPickersUtilsProvider>
+        </Grid>
+        <p />
+        {
+          /* @ts-ignore */
+          dataCollections.collections
+          /* @ts-ignore */
+          && dataCollections.collections.map((collection) => {
+            if (!collection.event) return '';
+            if (collection.code === 'larochelle_quarter') return '';
+            //    const [display, setDisplay] = useState(false);
+            let { label } = collection;
+            let helperText = '';
+            if (collection.code === 'category') {
+              label = 'Choisissez les sous-sujets dans lesquels vous souhaitez apparaître (en priorité)';
+              helperText = 'Vous avez la possibilité d’ajouter un texte libre pour expliquer votre lien au sujet choisi. Vous pouvez sélectionner autant de sujet que nécessaire, les 3 premiers serviront à référencer votre page dans les moteurs de recherches info bulle : expliquant les ensemble et les sujets qu’ils contiennent aisni que les liens avec les sous-sujets et pourquoi pas ODD / transiscope. Ces infos bulles sont aussi visible dans le filtre sur la carte pour aider les usagers de Ouaaa à filtrer leur recherche';
+            }
+            if (collection.code !== 'event_price') return '';
+            let defaultValue = '';
+            // @ts-ignore
+            formValues.entries.map((entry) => {
+              let isPresent = false;
+              if (collection.entries) {
+                collection.entries.map((entryCollection) => {
+                  if (entryCollection.id === entry) isPresent = true;
+                  return isPresent;
+                });
+              }
+              if (isPresent) defaultValue = entry;
+            });
+            return (
+              <div>
+                <br />
+                <Typography className={styles.collectionLabel}>
+                  {label}
+                  {' '}
+                  {helperText !== '' && (
+                    <Tooltip title={helperText}>
+                      <InfoIcon />
+                    </Tooltip>
+                  )}
+                </Typography>
+                <br />
+                {
+                  // display &&
+                  !IsTree(collection) && !collection.multipleSelection && (
+                    <RadioGroupForContext initValue={defaultValue}>
+                      <CustomRadioGroup
+                        formChangeHandler={formChangeHandler}
+                        entries={collection.entries}
+                        defaultValue={defaultValue}
+                      />
+                    </RadioGroupForContext>
+
+                  )
+                }
+              </div>
+            );
+          })
+        }
+
+        <Typography className={styles.collectionLabel}>
+          Acteur(s) associé(s) à l’action
+          {' '}
+          <Tooltip title="Permet d’ajouter d’autres acteurs pour une action co-réalisée">
+            <InfoIcon />
+          </Tooltip>
+        </Typography>
+        <br />
+
+        <Grid container>
+          { actors && actors.map((actor) => (
+            <div>
+              {/* @ts-ignore */}
+              <Tooltip title={actor.name}>
+                {/* @ts-ignore */}
+                <Avatar alt={actor.name} src={getLogo(actor.pictures)} />
+              </Tooltip>
+            </div>
+          ))}
+          <IconButton key="close" aria-label="Close" color="inherit" onClick={handleAddActor}>
+            <AddCircleOutline />
+          </IconButton>
+        </Grid>
+
+        {showOtherActors ? (
+          <Autocomplete
+            id="combo-box-demo"
+            options={actorsData.actors}
+                // @ts-ignore
+            getOptionLabel={(option) => `${option.name} `}
+            onChange={autocompleteHandler}
+            style={{ width: 300 }}
+                // eslint-disable-next-line react/jsx-props-no-spreading
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Acteurs"
+                variant="outlined"
+              />
+            )}
+          />
+        ) : (
+          ''
+        )}
+        <br />
+
+        <Typography variant="body1" color="primary" className={styles.label}>
+          Infos pratiques complément :
+          {' '}
+        </Typography>
+        <p />
+        {editorLoaded ? (
+          <>
+            <CKEditor
+              editor={ClassicEditor}
+              data={formValues.practicalInfo}
+              onReady={(editor) => {
+                setPracticalInfoEditor(editor);
+              }}
+            />
+
+          </>
+        ) : (
+          <div>Editor loading</div>
+        )}
+        <br />
+        <br />
+        <Typography className={styles.collectionLabel}>
+          Inscription à l’évement
+          {' '}
+        </Typography>
+        <br />
+        <FormControl component="fieldset">
+          <RadioGroup
+            row
+            aria-label="register"
+            name="register"
+            onChange={formChangeHandler}
           >
-            Mettre à jour cet événement
-          </ClassicButton>
-          <ClassicButton
-              fullWidth
-              variant="contained"
-              className={styles.delete}
-              onClick={handleClickOpen}
-          >
-            Supprimer cet événement
-          </ClassicButton>
-          <Dialog
-              open={open}
-              onClose={handleClose}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-          >
-            <DialogTitle id="alert-dialog-title">Êtes-vous sûr(e) de vouloir supprimer cet événement ?</DialogTitle>
-            <DialogContent>
-              <DialogContentText id="alert-dialog-description">
-                Une fois supprimé, cet événement sera définitivement supprimé.
-                Il ne sera plus visible sur notre plateforme, ni pour vous, ni pour les visiteurs.
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleClose} color="primary">
-                Annuler
-              </Button>
-              <Button onClick={submitDeleteEvent} color="primary" autoFocus>
-                Supprimer
-              </Button>
-            </DialogActions>
-          </Dialog>
-        </Container>
+
+            <p>
+              <Grid container>
+                <Grid item xs={11}>
+                  <FormControlLabel
+                    value="withoutLink"
+                    control={<Radio />}
+                    label="'Je participe à l’action' j’accepte que mes coordonnées soient transmises à l’acteur pour les infos concernant cette action"
+                    onChange={() => { setShowRegisterLink(false); formValues.registerLink = ''; }}
+                    className={styles.justify}
+                    checked={!showRegisterLink}
+                  />
+                </Grid>
+                <Grid item xs={1}>
+                  <Tooltip title="Permet de récupérer les adresses mails et téléphones des gens, donc évite à l'utilisateur de remplir un formulaire">
+                    <InfoIcon />
+                  </Tooltip>
+                </Grid>
+              </Grid>
+            </p>
+            <FormControlLabel
+              value="withLink"
+              control={<Radio />}
+              className={styles.justify}
+              label="'Je participe à l’action'  envoie vers un Lien externe de l'événement valable si vous avez un formulaire plus précis que les fichier ouaaa (ex : stage, formation) ou billeterie en ligne"
+              onChange={() => setShowRegisterLink(true)}
+              checked={showRegisterLink}
+            />
+            {showRegisterLink && (
+              <FormItem
+                label="Lien externe de participation à l'événement"
+                inputName="registerLink"
+                formChangeHandler={formChangeHandler}
+                required={false}
+                errorBool={false}
+                errorText=""
+                value={formValues.registerLink}
+              />
+            )}
+          </RadioGroup>
+        </FormControl>
+        <p />
+
+        <FormItem
+          label="Lien externe de l'événement (Facebook ou site)"
+          inputName="facebookUrl"
+          formChangeHandler={formChangeHandler}
+          value={formValues.facebookUrl}
+          required={false}
+          errorBool={false}
+          errorText=""
+        />
+        <FormItemTextareaAutosize
+          label="Description courte"
+          inputName="shortDescription"
+          formChangeHandler={formChangeHandler}
+          value={formValues.shortDescription}
+          required
+          errorBool={
+            !validationResult?.global
+            && !!validationResult?.result.shortDescription
+          }
+          errorText={`Maximum 90 caractères. ${formValues.shortDescription?.length - 90
+          } caractères en trop.`}
+        />
+        <Typography variant="body1" color="primary" className={styles.label}>
+          Description :
+        </Typography>
+        <p />
+        {editorLoaded ? (
+          <CKEditor
+            editor={ClassicEditor}
+            data={formValues.description}
+            onReady={(editor) => {
+              setDescriptionEditor(editor);
+            }}
+          />
+        ) : (
+          <div>Editor loading</div>
+        )}
+        <Typography variant="body1" color="primary" className={styles.label}>
+          Votre logo
+        </Typography>
+        {objectsListLogo ? (
+          <ImagesDisplay
+            cards={objectsListLogo}
+            moveCard={moveObjectLogo}
+            findCard={findObjectLogo}
+            updateDeletedIndicator={updateDeletedIndicatorLogo}
+            updateKeyIndicator={updateKeyIndicatorLogo}
+          />
+        ) : null}
+        <ImagesDropZone
+          onDropHandler={onDropLogoHandler}
+          text="Déposez ici votre logo au format jpg  et de poids inférieur à 4Mo"
+        />
+        <br />
+        <Typography variant="body1" color="primary" className={styles.label}>
+          Photo principale
+        </Typography>
+        {objectsListMain ? (
+          <ImagesDisplay
+            cards={objectsListMain}
+            moveCard={moveObjectMain}
+            findCard={findObjectMain}
+            updateDeletedIndicator={updateDeletedIndicatorMain}
+            updateKeyIndicator={updateKeyIndicatorMain}
+          />
+        ) : null}
+        <ImagesDropZone
+          onDropHandler={onDropMainHandler}
+          text="Déposez ici votre photo principale au format jpg et de poids inférieur à 4Mo"
+        />
+        <br />
+        <Typography variant="body1" color="primary" className={styles.label}>
+          Autres photos
+        </Typography>
+        {objectsList ? (
+          <ImagesDisplay
+            cards={objectsList}
+            moveCard={moveObject}
+            findCard={findObject}
+            updateDeletedIndicator={updateDeletedIndicator}
+            updateKeyIndicator={updateKeyIndicator}
+          />
+        ) : null}
+        <ImagesDropZone
+          onDropHandler={onDropHandler}
+          text="Déposez ici votre autres photos au format jpg et de poids inférieur à 4Mo"
+        />
+        <ClassicButton
+          fullWidth
+          variant="contained"
+          className={styles.submit}
+          onClick={submitHandler}
+          disabled={!validationResult?.global || !validated}
+        >
+          Mettre à jour cet événement
+        </ClassicButton>
+        <ClassicButton
+          fullWidth
+          variant="contained"
+          className={styles.delete}
+          onClick={handleClickOpen}
+        >
+          Supprimer cet événement
+        </ClassicButton>
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">
+            Êtes-vous sûr(e) de vouloir supprimer cet événement ?
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              Une fois supprimé, cet événement sera définitivement supprimé. Il
+              ne sera plus visible sur notre plateforme, ni pour vous, ni pour
+              les visiteurs.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} color="primary">
+              Annuler
+            </Button>
+            <Button onClick={submitDeleteEvent} color="primary" autoFocus>
+              Supprimer
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </Container>
     );
   };
 
   if (eventLoading) {
-    return (null);
+    return null;
   }
   if (eventError) {
-    return (<FallbackPageNotFound />);
+    return <FallbackPageNotFound />;
   }
-  return (
-      <FormController
-          render={Form}
-          validationRules={validationRules}
-      />
-  );
+  return <FormController render={Form} validationRules={validationRules} />;
 };
 
 export default withDndProvider(withRouter(withApollo()(EditEventForm)));

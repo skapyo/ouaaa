@@ -23,20 +23,20 @@ const useStyles = makeStyles((theme) => ({
   buttonGrid: {
     margin: '2.5em 0 2.5em 0 ',
     color: 'white',
-    'background-color': '#bf083e',
+    'background-color': '#2C367E',
     border: 'none',
-    fontFamily: 'rowdies',
+    
     borderRadius: '1.5em',
     padding: '0 3em 0 3em',
     height: '2.5em',
     '&:hover': {
       cursor: 'pointer',
-      color: '#bf083e',
+      color: '#2C367E',
       'background-color': 'white',
-      border: '2px solid #bf083e',
-      backgroundImage: 'url(\'./arrow-hover.svg\')',
+      border: '2px solid #2C367E',
+      backgroundImage: "url('./arrow-hover.svg')",
     },
-    backgroundImage: 'url(\'./arrow.svg\')',
+    backgroundImage: "url('./arrow.svg')",
     backgroundRepeat: 'no-repeat',
     'background-position-x': '5px',
     'background-position-y': '1px',
@@ -54,58 +54,61 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: '5em',
     textAlign: 'center',
     backgroundColor: '#e8f4f2',
-    backgroundImage: 'url(\'/icons/calendar-home.svg\')',
+    backgroundImage: "url('/icons/calendar-home.svg')",
     backgroundSize: '30%',
     backgroundPosition: 'right',
     backgroundPositionY: 'bottom',
     backgroundRepeat: 'no-repeat',
     backgroundOpacity: ' 0.5',
-
   },
 }));
 
 const LastActor = () => {
   const GET_EVENTS = gql`
-        query events {
-            events {
-                id,
-                label,
-                short_description,
-                description,
-                startedAt,
-                endedAt,
-                published,
-                categories{
-                    id
-                    label
-                    icon
-                    color
-                },
-                pictures{
-                    id,
-                    label,
-                    originalPicturePath,
-                    originalPictureFilename,
-                    croppedPicturePath,
-                    croppedPictureFilename,
-                    croppedX,
-                    croppedY,
-                    croppedZoom,
-                    croppedRotation,
-                    position
-                }
-            }
+    query events($limit: Int, $sort: String, $way: String) {
+      events(limit: $limit, sort: $sort, way: $way) {
+        id
+        label
+        shortDescription
+        description
+        startedAt
+        endedAt
+        published
+        categories {
+          id
+          label
+          icon
+          color
         }
-    `;
+        pictures {
+          id
+          label
+          originalPicturePath
+          originalPictureFilename
+          croppedPicturePath
+          croppedPictureFilename
+          croppedX
+          croppedY
+          croppedZoom
+          croppedRotation
+          position
+        }
+      }
+    }
+  `;
   const [eventToRender, setEventToRender] = useState(null);
 
-  const { data: eventData, loading: loadingEvent, error: errorEvent } = useQuery(
-    GET_EVENTS,
-    {
-
-      // fetchPolicy : "no-cache"
+  const {
+    data: eventData,
+    loading: loadingEvent,
+    error: errorEvent,
+  } = useQuery(GET_EVENTS, {
+    variables: {
+      limit: 4,
+      sort: 'createdAt',
+      way: 'DESC',
     },
-  );
+  });
 
   useEffect(() => {
     setEventToRender({
@@ -139,7 +142,10 @@ const LastActor = () => {
   const settings = {
     dots: true,
     infinite: true,
-    slidesToShow: eventToRender?.eventData && eventToRender.eventData.events.length > 5 ? 5 : eventToRender?.eventData && eventToRender.eventData.events.length,
+    slidesToShow:
+      eventToRender?.eventData && eventToRender.eventData.events.length > 5
+        ? 5
+        : eventToRender?.eventData && eventToRender.eventData.events.length,
     slidesToScroll: 1,
     // autoplay: true,
     // autoplaySpeed: 2000,
@@ -150,25 +156,22 @@ const LastActor = () => {
   return (
     <Container className={[styles.event]}>
       <Typography variant="h5" className={[styles.cardTitle, styles.align]}>
-        LES EVENEMENTS RECENTS
+        LES EVENEMENTS A VENIR
       </Typography>
       <Slider {...settings} className={[styles.articleCarroussel]}>
-        {eventToRender?.eventData && eventToRender.eventData.events.map((event) => {
-          return (
-            <CardSliderEvent
-              key={event.id}
-              event={event}
-            />
-          );
-        })}
+        {eventToRender?.eventData &&
+          eventToRender.eventData.events.map((event) => {
+            return <CardSliderEvent key={event.id} event={event} />;
+          })}
       </Slider>
       <div className={styles.buttonArticle}>
         <Link href="/agenda">
-          <button className={styles.buttonGrid}>VOIR TOUS LES EVENEMENTS</button>
+          <button className={styles.buttonGrid}>
+            VOIR TOUS LES EVENEMENTS
+          </button>
         </Link>
       </div>
     </Container>
-
   );
 };
 

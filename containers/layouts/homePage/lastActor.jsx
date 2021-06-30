@@ -1,10 +1,10 @@
-import {Container, makeStyles, Typography} from '@material-ui/core';
-import React, {useEffect, useState} from 'react';
+import { Container, makeStyles, Typography } from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
 import Slider from 'react-slick/lib';
-import {useQuery} from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import gql from 'graphql-tag';
 import CardSliderActor from '../../../components/cards/CardSliderActor';
-import {withApollo} from '../../../hoc/withApollo';
+import { withApollo } from '../../../hoc/withApollo';
 import Link from '../../../components/Link';
 
 const useStyles = makeStyles((theme) => ({
@@ -23,20 +23,20 @@ const useStyles = makeStyles((theme) => ({
   buttonGrid: {
     margin: '2.5em 0 2.5em 0 ',
     color: 'white',
-    'background-color': '#bf083e',
+    'background-color': '#2C367E',
     border: 'none',
-    fontFamily: 'rowdies',
+    
     borderRadius: '1.5em',
     padding: '0 3em 0 3em',
     height: '2.5em',
     '&:hover': {
       cursor: 'pointer',
-      color: '#bf083e',
+      color: '#2C367E',
       'background-color': 'white',
-      border: '2px solid #bf083e',
-      backgroundImage: 'url(\'./arrow-hover.svg\')',
+      border: '2px solid #2C367E',
+      backgroundImage: "url('./arrow-hover.svg')",
     },
-    backgroundImage: 'url(\'./arrow.svg\')',
+    backgroundImage: "url('./arrow.svg')",
     backgroundRepeat: 'no-repeat',
     'background-position-x': '5px',
     'background-position-y': '1px',
@@ -50,40 +50,46 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: '1em',
   },
 }));
-
 const LastActor = () => {
   const GET_ACTORS = gql`
-        { actors
-        {   id,
-            name,
-            address,
-            lat,
-            lng,
-            categories{
-                label
-            },
+    query actors($limit: Int, $sort: String, $way: String) {
+      actors(limit: $limit, sort: $sort, way: $way) {
+        id
+        name
+        address
+        lat
+        lng
+        categories {
+          label
+        }
 
-            pictures{
-                id,
-                label,
-                originalPicturePath,
-                originalPictureFilename,
-                croppedPicturePath,
-                croppedPictureFilename,
-                croppedX,
-                croppedY,
-                croppedZoom,
-                croppedRotation,
-                position
-            }
+        pictures {
+          id
+          label
+          originalPicturePath
+          originalPictureFilename
+          croppedPicturePath
+          croppedPictureFilename
+          croppedX
+          croppedY
+          croppedZoom
+          croppedRotation
+          position
         }
-        }
-    `;
+      }
+    }
+  `;
   const [actorToRender, setActorToRender] = useState(null);
 
-  const { data: actorData, loading: loadingActor, error: errorActor } = useQuery(GET_ACTORS, {
+  const {
+    data: actorData,
+    loading: loadingActor,
+    error: errorActor,
+  } = useQuery(GET_ACTORS, {
     variables: {
-      limit: '3',
+      limit: 4,
+      sort: 'createdAt',
+      way: 'DESC',
     },
   });
 
@@ -119,7 +125,10 @@ const LastActor = () => {
   const settings = {
     dots: true,
     infinite: true,
-    slidesToShow: actorToRender?.actorData && actorToRender.actorData.actors.length > 5 ? 5 : actorToRender?.actorData && actorToRender.actorData.actors.length,
+    slidesToShow:
+      actorToRender?.actorData && actorToRender.actorData.actors.length > 5
+        ? 5
+        : actorToRender?.actorData && actorToRender.actorData.actors.length,
     slidesToScroll: 1,
     // autoplay: true,
     // autoplaySpeed: 2000,
@@ -134,16 +143,10 @@ const LastActor = () => {
       </Typography>
 
       <Slider {...settings} className={[styles.articleCarroussel]}>
-        {actorToRender?.actorData && actorToRender.actorData.actors.map((actor) => {
-          return (
-
-            <CardSliderActor
-
-              key={actor.id}
-              actor={actor}
-            />
-          );
-        })}
+        {actorToRender?.actorData &&
+          actorToRender.actorData.actors.map((actor) => {
+            return <CardSliderActor key={actor.id} actor={actor} />;
+          })}
       </Slider>
       <div className={styles.buttonArticle}>
         <Link href="/map">
@@ -151,7 +154,6 @@ const LastActor = () => {
         </Link>
       </div>
     </Container>
-
   );
 };
 

@@ -1,11 +1,11 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import {makeStyles} from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import Moment from 'react-moment';
 import Link from '../Link';
-import { getImageUrl } from '../../utils/utils';
+import {getImageUrl} from '../../utils/utils';
 
 const useStyles = makeStyles({
   root: {
@@ -17,7 +17,6 @@ const useStyles = makeStyles({
     '&:hover': {
       cursor: 'pointer',
     },
-
   },
   bullet: {
     display: 'inline-block',
@@ -36,7 +35,6 @@ const useStyles = makeStyles({
     display: 'block',
     marginLeft: 'auto',
     marginRight: 'auto',
-
   },
   image: {
     backgroundPosition: 'center center',
@@ -47,7 +45,7 @@ const useStyles = makeStyles({
   },
   title: {
     textAlign: 'left',
-    color: '#2a9076',
+    color: '#2C367E',
     width: '100%',
     fontSize: '1.5rem',
   },
@@ -56,14 +54,12 @@ const useStyles = makeStyles({
   },
   date: {
     textAlign: 'right',
-    color: '#2a9076',
+    color: '#2C367E',
   },
   titleDiv: {
     display: 'flex',
     alignItems: 'center',
-
   },
-
 });
 
 export default function SimpleCard({ event }) {
@@ -74,10 +70,24 @@ export default function SimpleCard({ event }) {
     <Link href={`/event/${event.id}`}>
       <Card className={classes.root}>
         <CardContent>
-          <div className={classes.image} style={{ backgroundImage: event.pictures.length >= 1 ? `url(${getImageUrl(event.pictures.sort((a, b) => (a.position > b.position ? 1 : -1))[0].croppedPicturePath)})` : '' }}>
+          <div
+            className={classes.image}
+            style={{
+              backgroundImage:
+                event.pictures.length >= 1
+                  ? `url(${getImageUrl(
+                      event.pictures.sort((a, b) =>
+                        a.position > b.position ? 1 : -1,
+                      )[0].croppedPicturePath,
+                    )})`
+                  : '',
+            }}
+          >
             <div className={classes.categorie}>
               <Typography className={classes.categorie} gutterBottom>
-                {event.categories && event.categories.length > 0 && event.categories[0].label}
+                {event.categories &&
+                  event.categories.length > 0 &&
+                  event.categories[0].label}
               </Typography>
             </div>
           </div>
@@ -87,16 +97,16 @@ export default function SimpleCard({ event }) {
                 {event && event.label}
               </Typography>
               <Typography className={classes.date} color="textSecondary">
-                <Moment format="DD/MM HH:mm" unix>{event && event.startedAt / 1000}</Moment>
+                <Moment format="DD/MM HH:mm" unix>
+                  {event && event.startedAt / 1000}
+                </Moment>
               </Typography>
             </div>
             <Typography variant="body" component="p">
               {event && event.shortDescription}
             </Typography>
           </div>
-
         </CardContent>
-
       </Card>
     </Link>
   );

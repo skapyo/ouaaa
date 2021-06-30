@@ -3,7 +3,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import gql from 'graphql-tag';
 import { useMutation } from '@apollo/client';
 import { withApollo } from 'hoc/withApollo';
-import FormController, { ValidationRuleType } from 'components/controllers/FormController';
+import FormController, {
+  ValidationRuleType,
+} from 'components/controllers/FormController';
 import { Container, TextField, Typography } from '@material-ui/core';
 import ClassicButton from 'components/buttons/ClassicButton';
 import SearchIcon from '@material-ui/icons/Search';
@@ -38,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
     width: '56px',
     height: '52px',
     borderRadius: '30px',
-    backgroundColor: '#bf083e',
+    backgroundColor: '#2C367E',
     color: 'white',
     position: 'absolute',
     right: '2px',
@@ -80,9 +82,9 @@ const useStyles = makeStyles((theme) => ({
   },
   cardTitle: {
     align: 'center',
-    fontFamily: 'rowdies',
+
     fontSize: '2.2em',
-    color: '#2a9076',
+    color: '#2C367E',
     letterSpacing: '2px',
     marginBottom: '3em',
     [theme.breakpoints.down('sm')]: {
@@ -91,21 +93,21 @@ const useStyles = makeStyles((theme) => ({
   },
   buttonGrid: {
     color: 'white',
-    'background-color': '#bf083e',
+    'background-color': '#2C367E',
     border: 'none',
-    fontFamily: 'rowdies',
+
     fontSize: '18px',
     borderRadius: '1.5em',
     padding: '0 3em 0 3em',
     height: '52px',
     '&:hover': {
       cursor: 'pointer',
-      color: '#bf083e',
+      color: '#2C367E',
       'background-color': 'white',
-      border: '2px solid #bf083e',
-      backgroundImage: 'url(\'./arrow-hover.svg\')',
+      border: '2px solid #2C367E',
+      backgroundImage: "url('./arrow-hover.svg')",
     },
-    backgroundImage: 'url(\'./arrow.svg\')',
+    backgroundImage: "url('./arrow.svg')",
     backgroundRepeat: 'no-repeat',
     'background-position-x': '5px',
     'background-position-y': '1px',
@@ -114,20 +116,16 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ADD_NEWSLETTER_EMAIL = gql`
-  mutation createNewsletterEmail (
-    $email: String!
-  ) {
-    createNewsletterEmail (email: $email) {
+  mutation createNewsletterEmail($email: String!) {
+    createNewsletterEmail(email: $email) {
       id
     }
   }
 `;
 
 const ADD_NEWSLETTER_USER = gql`
-  mutation createNewsletterUser (
-    $userId: Int!
-  ) {
-    createNewsletterUser (userId: $userId) {
+  mutation createNewsletterUser($userId: Int!) {
+    createNewsletterUser(userId: $userId) {
       id
     }
   }
@@ -146,8 +144,13 @@ const Newsletter = () => {
     const [subscribed, setSubscribed] = useState(false);
     const { formChangeHandler, formValues, validationResult } = props;
 
-    const [newsletterEmail, { data: dataVisitor, error: errorVisitor }] = useMutation(ADD_NEWSLETTER_EMAIL);
-    const [newsletterUser, { data: dataUser, error: errorUser }] = useMutation(ADD_NEWSLETTER_USER);
+    const [
+      newsletterEmail,
+      { data: dataVisitor, error: errorVisitor },
+    ] = useMutation(ADD_NEWSLETTER_EMAIL);
+    const [newsletterUser, { data: dataUser, error: errorUser }] = useMutation(
+      ADD_NEWSLETTER_USER,
+    );
 
     const subscription = useCallback(() => {
       // vérifier qu'il n'y a pas de doublons
@@ -164,18 +167,27 @@ const Newsletter = () => {
           },
         });
       }
-      if (!errorVisitor && !errorUser) { setSubscribed(true); }
-    }, [newsletterEmail, newsletterUser, formValues, setSubscribed, errorVisitor, errorUser, user]);
+      if (!errorVisitor && !errorUser) {
+        setSubscribed(true);
+      }
+    }, [
+      newsletterEmail,
+      newsletterUser,
+      formValues,
+      setSubscribed,
+      errorVisitor,
+      errorUser,
+      user,
+    ]);
 
     return (
       <Container className={[styles.newsletter]}>
         <Typography variant="h2" className={[styles.cardTitle, styles.align]}>
-          POUR NE RIEN RATER DE #OUAAA
+          POUR NE RIEN RATER DE <i>OUAAA!</i>
           <br />
           INSCRIVEZ-VOUS À NOTRE NEWSLETTER
         </Typography>
-        {!subscribed && !user
-          && (
+        {!subscribed && !user && (
           <div className={styles.search}>
             <TextField
               variant="outlined"
@@ -199,13 +211,17 @@ const Newsletter = () => {
               <SearchIcon />
             </ClassicButton>
           </div>
-          )}
-        {
-          !subscribed && user
-          && <button className={styles.buttonGrid} onClick={subscription}>M'abonner à la newsletter</button>
-        }
-        {subscribed
-          && <Typography variant="h5">Inscription à la newsletter bien effectuée.</Typography>}
+        )}
+        {!subscribed && user && (
+          <button className={styles.buttonGrid} onClick={subscription}>
+            M'abonner à la newsletter
+          </button>
+        )}
+        {subscribed && (
+          <Typography variant="h5">
+            Inscription à la newsletter bien effectuée.
+          </Typography>
+        )}
       </Container>
     );
   };

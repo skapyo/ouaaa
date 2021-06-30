@@ -1,8 +1,8 @@
-import React, {useCallback, useEffect, useRef, useState,} from 'react';
-import {Grid, Typography} from '@material-ui/core';
-import {makeStyles} from '@material-ui/core/styles';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { Grid, Typography } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import gql from 'graphql-tag';
-import {useQuery} from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded';
 import FavoriteRoundedIcon from '@material-ui/icons/FavoriteRounded';
 import List from '@material-ui/core/List';
@@ -14,20 +14,22 @@ import Checkbox from '@material-ui/core/Checkbox/Checkbox';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import Link from '../../components/Link';
-import {withApollo} from '../../hoc/withApollo';
+import { withApollo } from '../../hoc/withApollo';
 import AppLayout from '../../containers/layouts/AppLayout';
-import {getImageUrl} from '../../utils/utils';
+import { getImageUrl } from '../../utils/utils';
 import Fab from '@material-ui/core/Fab';
 import Actors from 'containers/layouts/mapPage/actors';
+import Filters from '../../components/filters';
+import Parser from 'html-react-parser';
 
 if (typeof window !== 'undefined') {
-    var L = require("leaflet");
-    var Map = require('react-leaflet').Map;
-    var TileLayer = require('react-leaflet').TileLayer;
-    var Marker = require('react-leaflet').Marker;
-    var Popup = require('react-leaflet').Popup;
-    var Tooltip = require('react-leaflet').Tooltip;
-    var MarkerClusterGroup =require('react-leaflet-markercluster').default;
+  var L = require('leaflet');
+  var Map = require('react-leaflet').Map;
+  var TileLayer = require('react-leaflet').TileLayer;
+  var Marker = require('react-leaflet').Marker;
+  var Popup = require('react-leaflet').Popup;
+  var Tooltip = require('react-leaflet').Tooltip;
+  var MarkerClusterGroup = require('react-leaflet-markercluster').default;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -118,7 +120,6 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       cursor: 'pointer',
     },
-
   },
   bullet: {
     display: 'inline-block',
@@ -138,7 +139,6 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: 'auto',
     marginRight: 'auto',
     textAlign: 'center',
-
   },
   image: {
     backgroundPosition: 'center center',
@@ -149,38 +149,38 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     textAlign: 'left',
-    color: '#2a9076',
+    color: '#2C367E',
     width: '100%',
   },
   content: {
     padding: '10px',
+    width: '100%',
   },
   date: {
     textAlign: 'right',
-    color: '#2a9076',
+    color: '#2C367E',
   },
   titleDiv: {
     display: 'flex',
     alignItems: 'center',
-
   },
   buttonGrid: {
     margin: '2.5em 0 2.5em 0 ',
     color: 'white',
-    'background-color': '#bf083e',
+    'background-color': '#2C367E',
     border: 'none',
-    fontFamily: 'rowdies',
+
     borderRadius: '1.5em',
     padding: '0 3em 0 3em',
     height: '2.5em',
     '&:hover': {
       cursor: 'pointer',
-      color: '#bf083e',
+      color: '#2C367E',
       'background-color': 'white',
-      border: '2px solid #bf083e',
-      backgroundImage: 'url(\'./arrow-hover.svg\')',
+      border: '2px solid #2C367E',
+      backgroundImage: "url('./arrow-hover.svg')",
     },
-    backgroundImage: 'url(\'./arrow.svg\')',
+    backgroundImage: "url('./arrow.svg')",
     backgroundRepeat: 'no-repeat',
     'background-position-x': '5px',
     'background-position-y': '1px',
@@ -198,136 +198,46 @@ const useStyles = makeStyles((theme) => ({
     color: '#AD2740',
   },
   listButton: {
-    marginTop: '-5em',
+    marginBottom: '-4em',
     zIndex: '10000',
     color: '#fff',
-    backgroundColor: '#bf083e',
+    backgroundColor: '#2C367E',
     '&:hover': {
-      color: '#bf083e',
+      color: '#2C367E',
       backgroundColor: '#fff',
     },
   },
+  shortDescription: {
+    wordBreak: 'break-all',
+    width: '100%',
+  },
 }));
 
-const categoriesChecked = [];
+const categories = {
+  Sujets: [],
+};
+
+const otherCategories = {
+  "Territoire d'actions": [],
+  "Statut d'acteur": [],
+  'Public principal visé': [],
+  'Collectif & réseaux': [],
+};
 
 const carto = () => {
   const mapRef = useRef();
-
-  const [stylesProps, setStylesProps] = useState({
-    topImageSize: '250px',
-    headerDisplay: 'static',
-  });
-  const GET_ACTORS = gql`
-        query actors($categories:[String]) {
-            actors(categories:$categories) 
-        {   id,
-            name,
-            address,
-            short_description,
-            lat,
-            lng,
-            categories{
-                label
-                icon
-                color
-            },
-            entries{
-                label
-            },
-            pictures{
-                id,
-                label,
-                originalPicturePath,
-                originalPictureFilename,
-                croppedPicturePath,
-                croppedPictureFilename,
-                croppedX,
-                croppedY,
-                croppedZoom,
-                croppedRotation,
-                position
-            }
-        }
-        }
-    `;
-  const GET_CATEGORIES = gql`
-        { categories
-        {   id,
-            label
-            icon
-            color
-            
-            subCategories {
-                id,
-                label
-                icon
-                color
-                subCategories {
-                    id,
-                    label
-                    icon
-                    color
-                    subCategories {
-                        label
-                        icon
-                    }
-                }
-            }
-        }
-        }
-    `;
-
-  const [checked, setChecked] = useState([0]);
-
-  const newChecked = [...checked];
-
-  const { data: dataCategorie, loading: loadingCategorie, error: errorCategorie } = useQuery(GET_CATEGORIES, { fetchPolicy: 'network-only' });
-
-  const {
-    data, loading, error, refetch,
-  } = useQuery(GET_ACTORS, {
-    variables: {
-      categories: categoriesChecked,
-    },
-  });
-
-  const markers = [[51.505, -0.09]];
-
-  const [open, setOpen] = React.useState([false]);
-
-  const handleToggle = (value, index) => () => {
-    const currentIndex = checked.indexOf(value);
-
-    if (currentIndex === -1) {
-      newChecked.push(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
-    setChecked(newChecked);
-    open[index] = !open[index];
-  };
-
-  const categoryChange = useCallback(
-    (e) => {
-      const currentIndex = categoriesChecked.indexOf(e.target.value);
-
-      if (currentIndex === -1) {
-        categoriesChecked.push(e.target.value);
-      } else {
-        categoriesChecked.splice(currentIndex, 1);
-      }
-      refetch({ categories: categoriesChecked });
-    },
+  const [categoriesChecked, setCategoriesChecked] = useState(categories.Sujets);
+  const [otherCategoriesChecked, setOtherCategoriesChecked] = useState(
+    otherCategories,
   );
+  const [favorite, setFavorite] = useState(false);
+  const [listMode, setListMode] = useState(true);
+  const [postCode, setPostCode] = useState(null);
+  const isFirstRef = useRef(true);
 
   useEffect(() => {
     const { current = {} } = mapRef;
   }, [mapRef]);
-
-  const [favorite, setFavorite] = useState(false);
-
-  const [listMode, setListMode] = useState(true);
 
   const styles = useStyles();
 
@@ -337,193 +247,358 @@ const carto = () => {
     setListMode(!listMode);
   }, [listMode]);
 
-
   if (typeof window !== 'undefined') {
     L.Icon.Default.mergeOptions({
       iconUrl: null,
+    });
+    const [popupOpen, setPopupOpen] = useState(false);
+    const [stylesProps, setStylesProps] = useState({
+      topImageSize: '250px',
+      headerDisplay: 'static',
+    });
+    const GET_ACTORS = gql`
+      query actors($entries: [[String]], $postCode: String) {
+        actors(entries: $entries, postCode: $postCode) {
+          id
+          name
+          address
+          shortDescription
+          lat
+          lng
+          categories {
+            label
+            icon
+            color
+          }
+          entries {
+            label
+          }
+          pictures {
+            id
+            label
+            originalPicturePath
+            originalPictureFilename
+            croppedPicturePath
+            croppedPictureFilename
+            croppedX
+            croppedY
+            croppedZoom
+            croppedRotation
+            position
+            logo
+          }
+        }
+      }
+    `;
+
+    const { data, loading, error, refetch } = useQuery(GET_ACTORS, {
+      variables: {
+        entries: [categoriesChecked],
+      },
+    });
+
+    useEffect(() => {
+      // avoid first rendering
+
+      const filterChange = () => {
+        const newOtherCategoriesLists = Object.values(otherCategoriesChecked);
+        const newEntries = [categoriesChecked];
+
+        newOtherCategoriesLists.forEach((otherCategoryList) => {
+          if (otherCategoryList.length > 0) newEntries.push(otherCategoryList);
+        });
+
+        if (isFirstRef.current) {
+          //If filter still empty no refetch
+          if (newEntries.length != 0 || typeof postcode !== 'undefined') {
+            isFirstRef.current = false;
+          } else {
+            return;
+          }
+        }
+        refetch({ entries: newEntries, postCode });
+      };
+      filterChange();
+    }, [categoriesChecked, otherCategoriesChecked, postCode]);
+
+    const parentCategoryChange = useCallback((arr) => {
+      const tempCategories = [...categoriesChecked];
+      const tempCategoriesChecked = [];
+      const tempCategoriesUnchecked = [];
+      arr.forEach((checkbox) => {
+        const { checked, id } = checkbox;
+        if (checked) {
+          tempCategoriesChecked.push(id);
+        }
+        if (!checked) {
+          tempCategoriesUnchecked.push(id);
+        }
+      });
+
+      // delete the unchecked boxes
+      tempCategoriesUnchecked.forEach((value) => {
+        const currentIndex = tempCategories.indexOf(value);
+        if (currentIndex !== -1) {
+          tempCategories.splice(currentIndex, 1);
+        }
+      });
+
+      // add the recent checkedboxes
+      const newCategoriesChecked = [
+        ...new Set([...tempCategories, ...tempCategoriesChecked]),
+      ];
+
+      setCategoriesChecked(newCategoriesChecked);
+    });
+
+    const categoryChange = useCallback((e) => {
+      const tempCategories = [...categoriesChecked];
+
+      const categoryId = e.target.value;
+
+      const currentIndex = tempCategories.indexOf(categoryId);
+
+      if (currentIndex === -1) {
+        tempCategories.push(categoryId);
+      } else {
+        tempCategories.splice(currentIndex, 1);
+      }
+
+      setCategoriesChecked(tempCategories);
+    });
+
+    const postCodeChange = (e) => {
+      if (e.target.value == '') {
+        setPostCode(null);
+      } else {
+        setPostCode(e.target.value);
+      }
+    };
+    function splitWord(word, number) {
+      if (word != null) {
+        var indexMax = Math.round(word.length / number);
+        var wordSplit = '';
+        if (indexMax > 1) {
+          for (let i = 0; i < indexMax; i++) {
+            wordSplit += word.slice(i * number, (i + 1) * number);
+            if (i + 1 <= indexMax) {
+              wordSplit += '<br><br> '
+            }
+          }
+          return wordSplit;
+        } else {
+          return word;
+        }
+      } else {
+        return '';
+      }
+    };
+
+
+
+    const otherCategoryChange = useCallback((e, collectionLabel) => {
+      const newOtherCategories = { ...otherCategoriesChecked };
+
+      const otherCategoryId = e.target.value;
+      const tempCollection = newOtherCategories[collectionLabel];
+
+      const currentIndex = tempCollection.indexOf(otherCategoryId);
+
+      if (currentIndex === -1) {
+        tempCollection.push(otherCategoryId);
+      } else {
+        tempCollection.splice(currentIndex, 1);
+      }
+
+      setOtherCategoriesChecked(newOtherCategories);
     });
 
     return (
       <AppLayout>
         <Grid container className={styles.layout}>
-          <Grid item xs={2}>
-            <List>
-              {typeof dataCategorie !== 'undefined' && dataCategorie.categories.map((category, index) => {
-                return (
-                  <div>
-                    <ListItem key={category.id} role={undefined} dense button onClick={handleToggle(0, index)}>
-                          <ListItemIcon />
-                          <ListItemText primary={category.label} />
-                          {open[index] ? <ExpandLess /> : <ExpandMore />}
-                        </ListItem>
-                    {typeof category.subCategories !== 'undefined' && category.subCategories != null && category.subCategories.map((subcategory, subIndex) => {
-                          return (
-                              <Collapse in={open[index]} timeout="auto" unmountOnExit>
-                                  <List component="div" disablePadding>
-                                      <ListItem button>
-                                          <ListItemIcon>
-                                              <Checkbox
-                                                  edge="start"
-                                                  tabIndex={-1}
-                                                  disableRipple
-                                                  name="categories"
-                                                  value={subcategory.id}
-                                                  onChange={categoryChange}
-                                                  />
-                                            </ListItemIcon>
-                                          <ListItemText primary={subcategory.label} />
-                                        </ListItem>
-                                    </List>
-                                </Collapse>
-
-                          );
-                        })}
-                  </div>
-                );
-              })}
-
-            </List>
+          <Grid container justify="center">
+            <Fab
+              variant="extended"
+              size="medium"
+              aria-label="add"
+              className={styles.listButton}
+              onClick={switchMode}
+            >
+              {listMode && <span>Liste</span>} {!listMode && <span>Carte</span>}
+            </Fab>
           </Grid>
+          <Filters
+            parentCategoryChange={parentCategoryChange}
+            categoryChange={categoryChange}
+            otherCategoryChange={otherCategoryChange}
+            postCodeChange={postCodeChange}
+          />
 
-          { listMode && <Grid item xs={10}>
-            <Map ref={mapRef} center={position} zoom={11}>
-              <TileLayer
-                attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              />
-              <MarkerClusterGroup>
-                {typeof data !== 'undefined' && data.actors.map((actor, index) => {
-                  let icone;
-                  let color;
-                  if (actor.lat != null && actor.lng != null) {
-                    if (actor.categories && actor.categories.length > 0 && actor.categories[0].icon) {
-                      icone = `/icons/${actor.categories[0].icon}.svg`;
-                      color = actor.categories[0].color;
-                    } else {
-                      icone = '/icons/' + 'place' + '.svg';
-                      color = 'black';
-                    }
-                    const markerHtmlStyles = 'background-color: red';
-                    const suitcasePoint = new L.Icon({
-                      iconUrl: icone,
-                      color,
-                      fillColor: color,
-                      iconAnchor: [13, 34], // point of the icon which will correspond to marker's location
-                      iconSize: [25],
-                      popupAnchor: [1, -25],
-                      html: `<span style="${markerHtmlStyles}" />`,
-                    });
-                    return (
-                      <Marker
-                            key={`marker-${index}`} position={[actor.lat, actor.lng]}
+          {listMode && (
+            <Grid item sm={10} xs={12}>
+              <Map ref={mapRef} center={position} zoom={11}>
+                <TileLayer
+                  attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                />
+                <MarkerClusterGroup>
+                  {typeof data !== 'undefined' &&
+                    data.actors.map((actor, index) => {
+                      let icone;
+                      let color;
+                      if (actor.lat != null && actor.lng != null) {
+                        if (
+                          actor.categories &&
+                          actor.categories.length > 0 &&
+                          actor.categories[0].icon
+                        ) {
+                          icone = `/icons/${actor.categories[0].icon}.svg`;
+                          color = actor.categories[0].color;
+                        } else {
+                          icone = '/icons/' + 'place' + '.svg';
+                          color = 'black';
+                        }
+                        const markerHtmlStyles = 'background-color: red';
+                        const suitcasePoint = new L.Icon({
+                          iconUrl: icone,
+                          color,
+                          fillColor: color,
+                          iconAnchor: [13, 34], // point of the icon which will correspond to marker's location
+                          iconSize: [25],
+                          popupAnchor: [1, -25],
+                          html: `<span style="${markerHtmlStyles}" />`,
+                        });
+                        return (
+                          <Marker
+                            key={`marker-${index}`}
+                            position={[actor.lat, actor.lng]}
                             icon={suitcasePoint}
+                          >
+                            <Tooltip
                             >
-                            <Tooltip>
-                                <div className={styles.image} style={{ backgroundImage: actor.pictures.length >= 1 ? `url(${getImageUrl(actor.pictures.sort((a, b) => (a.position > b.position ? 1 : -1))[0].croppedPicturePath)})` : '' }}>
-                                    <div className={styles.categorie}>
-                                        <Typography className={styles.categorie} gutterBottom>
-                                            {actor.categories && actor.categories.length > 0 && actor.categories[0].label}
-                                          </Typography>
-                                      </div>
-                                  </div>
-                                <div className={styles.content}>
-                                    <Grid container>
-                                        <Grid item xs={10}>
-                                            <div className={styles.titleDiv}>
-                                                <Typography
-                                                variant="h6" component="h2"
-                                                className={styles.title}
-                                              >
-                                                {actor && actor.name}
-                                              </Typography>
-                                              </div>
-                                          </Grid>
+                              <div
+                                className={styles.image}
+                                style={{
+                                  backgroundImage:
+                                    actor.pictures.length >= 1
+                                      ? `url(${getImageUrl(
+                                        actor.pictures.sort((a, b) =>
+                                          a.logo ? -1 : 1,
+                                        )[0].croppedPicturePath,
+                                      )})`
+                                      : '',
+                                }}
+                              >
+                                <div className={styles.categorie}>
+                                  <Typography
+                                    className={styles.categorie}
+                                    gutterBottom
+                                  >
+                                    {actor.entries &&
+                                      actor.entries.length > 0 &&
+                                      actor.entries[0].label}
+                                  </Typography>
+                                </div>
+                              </div>
 
-                                      </Grid>
-
-                                    <Typography component="p">
-                                        {actor && actor.short_description}
-                                      </Typography>
-                                  </div>
-
-                              </Tooltip>
+                              <div className={styles.content}>
+                                <div className={styles.titleDiv}>
+                                  <Typography
+                                    variant="h6"
+                                    component="h2"
+                                    className={styles.title}
+                                  >
+                                    {actor && actor.name}
+                                  </Typography>
+                                </div>
+                                <p className={styles.shortDescription} >
+                                  {actor && Parser(splitWord(actor.shortDescription, 300))}
+                                </p>
+                              </div>
+                            </Tooltip>
                             <Popup>
-
-                                <div className={styles.image} style={{ backgroundImage: actor.pictures.length >= 1 ? `url(${getImageUrl(actor.pictures.sort((a, b) => (a.position > b.position ? 1 : -1))[0].croppedPicturePath)})` : '' }}>
-                                    <div className={styles.categorie}>
-                                        <Typography className={styles.categorie} gutterBottom>
-                                            {actor.categories && actor.categories.length > 0 && actor.categories[0].label}
-                                          </Typography>
-                                      </div>
-                                  </div>
-                                <div className={styles.content}>
-                                    <Grid container>
-                                        <Grid item xs={10}>
-                                            <div className={styles.titleDiv}>
-                                                <Typography
-                                                variant="h6" component="h2"
-                                                className={styles.title}
-                                              >
-                                                {actor && actor.name}
-                                              </Typography>
-                                              </div>
-                                          </Grid>
-
-                                        <Grid item xs={2}>
-                                            <div
-                                                className={styles.favorite}
-                                                onClick={() => setFavorite(!favorite)}
-                                              >
-                                                {!favorite && (
-                                              <FavoriteBorderRoundedIcon
-                                                      className={styles.favoriteIcon}
-                                                    />
-                                              )}
-                                                {favorite && (
-                                              <FavoriteRoundedIcon
-                                                      className={styles.favoriteIcon}
-                                                    />
-                                              )}
-                                              </div>
-                                          </Grid>
-                                      </Grid>
-
-                                    <Typography component="p">
-                                        {actor && actor.short_description}
+                            <div
+                                className={styles.image}
+                                style={{
+                                  backgroundImage:
+                                    actor.pictures.length >= 1
+                                      ? `url(${getImageUrl(
+                                        actor.pictures[0].croppedPicturePath,
+                                      )})`
+                                      : '',
+                                }}
+                              >
+                                <div className={styles.categorie}>
+                                  <Typography
+                                    className={styles.categorie}
+                                    gutterBottom
+                                  >
+                                    {actor.entries &&
+                                      actor.entries.length > 0 &&
+                                      actor.entries[0].label}
+                                  </Typography>
+                                </div>
+                              </div>
+                              <div className={styles.content}>
+                                <Grid container>
+                                  <Grid item xs={10}>
+                                    <div className={styles.titleDiv}>
+                                      <Typography
+                                        variant="h6"
+                                        component="h2"
+                                        className={styles.title}
+                                      >
+                                        {actor && actor.name}
                                       </Typography>
-                                  </div>
-                                <Link href={`/actor/${actor.id}`}>
-                                    <button className={styles.buttonGrid}>EN SAVOIR PLUS</button>
-                                  </Link>
+                                    </div>
+                                  </Grid>
 
-                              </Popup>
-                          </Marker>);
-                  }
-                })}
-              </MarkerClusterGroup>
-                
-            </Map>
-          </Grid>
-          }
-             { !listMode && <Grid item xs={10} justify = "center">
-           {typeof data !== 'undefined' && 
-              <Actors data={data} />
-           }
-                </Grid>
-               }
-          <Grid container justify = "center">
-          <Fab variant="extended"size="medium"  aria-label="add" className={styles.listButton} onClick={switchMode} >
-          { listMode && ( <span>Liste</span> ) }  { !listMode && ( <span>Carte</span> ) }
-                </Fab>
-          </Grid>
+                                  <Grid item xs={2}>
+                                    <div
+                                      className={styles.favorite}
+                                      onClick={() => setFavorite(!favorite)}
+                                    >
+                                      {!favorite && (
+                                        <FavoriteBorderRoundedIcon
+                                          className={styles.favoriteIcon}
+                                        />
+                                      )}
+                                      {favorite && (
+                                        <FavoriteRoundedIcon
+                                          className={styles.favoriteIcon}
+                                        />
+                                      )}
+                                    </div>
+                                  </Grid>
+                                </Grid>
+
+                                <Typography component="p">
+                                  {actor && actor.shortDescription}
+                                </Typography>
+                              </div>
+                              <a href={`/actor/${actor.id}`} target="_blank">
+                                <button className={styles.buttonGrid}>
+                                  EN SAVOIR PLUS
+                                </button>
+                              </a>
+                            </Popup>
+                          </Marker>
+                        );
+                      }
+                    })}
+                </MarkerClusterGroup>
+              </Map>
+            </Grid>
+          )}
+          {!listMode && (
+            <Grid item  sm={10} xs={12} justify="center">
+              {typeof data !== 'undefined' && <Actors data={data} />}
+            </Grid>
+          )}
         </Grid>
-        
-
       </AppLayout>
     );
   }
-  return (
-    <div />
-  );
+  return <div />;
 };
 export default withApollo()(carto);

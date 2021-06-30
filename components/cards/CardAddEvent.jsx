@@ -1,11 +1,11 @@
-import React, { useCallback } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import React, {useCallback} from 'react';
+import {makeStyles} from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
-import { useCookies } from 'react-cookie';
-import { useRouter } from 'next/router';
+import {useCookies} from 'react-cookie';
+import {useRouter} from 'next/router';
 import Link from '../Link';
 
 const useStyles = makeStyles({
@@ -19,7 +19,6 @@ const useStyles = makeStyles({
     '&:hover': {
       cursor: 'pointer',
     },
-
   },
   bullet: {
     display: 'inline-block',
@@ -38,10 +37,9 @@ const useStyles = makeStyles({
     display: 'block',
     marginLeft: 'auto',
     marginRight: 'auto',
-
   },
   image: {
-    backgroundImage: 'url(\'/cardPicture.jpg\')',
+    backgroundImage: "url('/cardPicture.jpg')",
     backgroundPosition: 'center center',
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'over',
@@ -50,7 +48,7 @@ const useStyles = makeStyles({
   },
   title: {
     textAlign: 'left',
-    color: '#2a9076',
+    color: '#2C367E',
     width: '100%',
   },
   content: {
@@ -58,14 +56,12 @@ const useStyles = makeStyles({
   },
   date: {
     textAlign: 'right',
-    color: '#2a9076',
+    color: '#2C367E',
   },
   titleDiv: {
     display: 'flex',
     alignItems: 'center',
-
   },
-
 });
 
 export default function SimpleCard({ actor }) {
@@ -80,16 +76,13 @@ export default function SimpleCard({ actor }) {
 
   return (
     <Link href={`/addevent/${actor.id}`} onClick={clickHandler}>
-
       <Card className={classes.root}>
         <CardContent>
           <AddCircleIcon />
           <Typography variant="h6" component="h2" className={classes.title}>
             Ajouter un nouvel événement
           </Typography>
-
         </CardContent>
-
       </Card>
     </Link>
   );
