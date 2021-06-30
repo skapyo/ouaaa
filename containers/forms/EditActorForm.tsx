@@ -1204,7 +1204,7 @@ const EditActorForm = (props) => {
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    label="Contact <i>OUAAA!</i>"
+                    label="Contact OUAAA!"
                     variant="outlined"
                     placeholder="Tapez les 3 premières lettres"
                   />
