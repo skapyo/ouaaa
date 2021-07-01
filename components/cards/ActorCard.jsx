@@ -1,9 +1,9 @@
-import React, {useState} from 'react';
-import {makeStyles} from '@material-ui/core/styles';
+import React, { useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded';
 import FavoriteRoundedIcon from '@material-ui/icons/FavoriteRounded';
 import Link from '../Link';
-import {getImageUrl} from '../../utils/utils';
+import { getImageUrl } from '../../utils/utils';
 
 const useStyles = makeStyles((theme, props) => ({
   card: (props) => ({
@@ -100,7 +100,7 @@ const ActorCard = ({ actor }) => {
   return (
     <div className={classes.card}>
       <div className={classes.content}>
-        <Link href={`/actor/${actor.id}`}>
+        <a href={`/actor/${actor.id}`} target="_blank" rel="noreferrer">
           <div className={classes.leftContent}>
             <div className={classes.image}>
               {actor.pictures.length >= 1 && (
@@ -109,9 +109,9 @@ const ActorCard = ({ actor }) => {
                     actor.pictures.length >= 1
                       ? getImageUrl(
                         actor.pictures.sort((a, b) =>
-                        (a.logo ? -1 : 1)-(b.logo ? -1 : 1),
-                      )[0].croppedPicturePath,
-                        )
+                          (a.logo ? -1 : 1) - (b.logo ? -1 : 1),
+                        )[0].croppedPicturePath,
+                      )
                       : ''
                   }
                 />
@@ -128,7 +128,7 @@ const ActorCard = ({ actor }) => {
               </div>
             </div>
           </div>
-        </Link>
+        </a>
         <div className={classes.category}>
           <span className={classes.opacity} />
           <span className={classes.categoryIcon} />

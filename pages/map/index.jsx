@@ -220,7 +220,7 @@ const categories = {
 const otherCategories = {
   "Territoire d'actions": [],
   "Statut d'acteur": [],
-  'Public principal visé': [],
+  'Public visé': [],
   'Collectif & réseaux': [],
 };
 
@@ -517,7 +517,7 @@ const carto = () => {
                               </div>
                             </Tooltip>
                             <Popup>
-                            <div
+                              <div
                                 className={styles.image}
                                 style={{
                                   backgroundImage:
@@ -591,7 +591,7 @@ const carto = () => {
             </Grid>
           )}
           {!listMode && (
-            <Grid item  sm={10} xs={12} justify="center">
+            <Grid item sm={10} xs={12} justify="center">
               {typeof data !== 'undefined' && <Actors data={data} />}
             </Grid>
           )}

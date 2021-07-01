@@ -29,14 +29,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const WEEKDAYS = [
-  { id: 1, day: 'L', selected: false },
-  { id: 2, day: 'M', selected: false },
-  { id: 3, day: 'M', selected: false },
-  { id: 4, day: 'J', selected: false },
-  { id: 5, day: 'V', selected: false },
-  { id: 6, day: 'S', selected: false },
-  { id: 7, day: 'D', selected: false },
+let WEEKDAYS = [
+  { id: '1', day: 'L', selected: false },
+  { id: '2', day: 'M', selected: false },
+  { id: '3', day: 'M', selected: false },
+  { id: '4', day: 'J', selected: false },
+  { id: '5', day: 'V', selected: false },
+  { id: '6', day: 'S', selected: false },
+  { id: '7', day: 'D', selected: false },
 ];
 
 const SchedulerContainer = (props) => {
@@ -47,17 +47,18 @@ const SchedulerContainer = (props) => {
   } = props;
   const classes = useStyles();
 
-  const [timeContainerList, setTimeContainerList] = useState([WEEKDAYS]);
+  const [timeContainerList, setTimeContainerList] = useState([initData !== undefined ? initData[0][0] : WEEKDAYS]);
   const [availableDays, setAvailableDays] = useState(WEEKDAYS);
-  const [timeFrames, setTimesFrames] = useState(initData !== undefined ? initData : []);
+  const [timeFrames, setTimesFrames] = useState([]);
   const [showPlace, setShowPlace] = useState(true);
   const [places, setPlaces] = useState([]);
 
-  /* useEffect(() => {
+  /*useEffect(() => {
     debugger;
-    setTimeContainerList([initData !== undefined ? initData[0][0] : [WEEKDAYS]]);
+    WEEKDAYS = initData !== undefined ? initData[0][0] : WEEKDAYS;
+
   }, [initData]);
-  */
+*/
   const addTimeContainer = () => {
     const newTimeContainerList = [...timeContainerList, availableDays];
     setTimeContainerList(newTimeContainerList);
@@ -69,7 +70,7 @@ const SchedulerContainer = (props) => {
 
   const updateTimeFrames = (timeFrame, index) => {
     // console.log('follow up timeFrames', index, timeFrames.length);
-
+    debugger;
     if (index + 1 > timeFrames.length) {
       setTimesFrames([...timeFrames, timeFrame]);
       // console.log('new timeframe added');
@@ -121,6 +122,7 @@ const SchedulerContainer = (props) => {
       openingHour.place = timeFrames[2];
       return openingHour;
     });
+    debugger;
     console.log('openingHourss', openingHours);
     onChange(openingHours);
 

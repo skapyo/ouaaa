@@ -94,7 +94,7 @@ const TimeContainer = (props) => {
 
   const selectDays = (e) => {
     const dayId = e.currentTarget.dataset.id;
-    const selectedDays = [...weekdays].map((day) => (day.id === +dayId ? { ...day, selected: !day.selected } : day));
+    const selectedDays = [...weekdays].map((day) => (day.id === dayId ? { ...day, selected: !day.selected } : day));
 
     setWeekDays(selectedDays);
   };
@@ -120,11 +120,11 @@ const TimeContainer = (props) => {
   };
 
   useEffect(() => {
-      const newTimeFrame = [weekdays, hours, location];
-
-      if (hours.length > 0) {
-        updateTimeFrames(newTimeFrame, indexTimeContainer);
-      }
+    const newTimeFrame = [weekdays, hours, location];
+    debugger;
+    if (hours.length > 0) {
+      updateTimeFrames(newTimeFrame, indexTimeContainer);
+    }
   }, [weekdays, hours, location]);
 
   return (

@@ -929,7 +929,6 @@ const EditActorForm = (props) => {
         timeFrames[2] = openingHour.place;
         return timeFrames;
       });
-      console.log('opening ', openingHours);
       return openingHours;
     };
 
