@@ -50,7 +50,7 @@ const SchedulerContainer = (props) => {
   const [timeContainerList, setTimeContainerList] = useState([initData !== undefined ? initData[0][0] : WEEKDAYS]);
   const [availableDays, setAvailableDays] = useState(WEEKDAYS);
   const [timeFrames, setTimesFrames] = useState([]);
-  const [showPlace, setShowPlace] = useState(true);
+  const [showPlace, setShowPlace] = useState(false);
   const [places, setPlaces] = useState([]);
 
   /*useEffect(() => {
@@ -141,7 +141,7 @@ const SchedulerContainer = (props) => {
                 name="Unique Place"
               />
             }
-            label={showPlace ? 'Cacher les lieux' : 'Afficher les lieux'}
+            label={showPlace ? 'Cacher les emplacements' : 'Indiquer des emplacements'}
           />
         </div>
 

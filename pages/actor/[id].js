@@ -272,6 +272,8 @@ const Actor = () => {
           croppedZoom
           croppedRotation
           position
+          logo
+          main
         }
         openingHours {
           days {
@@ -541,7 +543,7 @@ const Actor = () => {
                 backgroundImage:
                   data.actor.pictures.length >= 1
                     ? `url(${getImageUrl(
-                      data.actor.pictures.sort((a, b) => (a.position > b.position ? 1 : -1))[0].croppedPicturePath,
+                      data.actor.pictures.sort((a, b) => (a.main ? -1 : 1) - (b.main ? -1 : 1))[0].croppedPicturePath,
                     )})`
                     : '',
               }}

@@ -917,11 +917,13 @@ const AddActorForm = () => {
             );
           })
         }
+        <br />
         <Typography variant="body1" color="primary" className={styles.label}>
           Jour et heure d'ouverture
         </Typography>
         <SchedulerContainer onChange={setOpeningHours} />
         <p />
+        <br />
         <Typography variant="body1" color="primary" className={styles.label}>
           CONTACT PRIVE pour les échanges avec <i>OUAAA!</i>
         </Typography>
