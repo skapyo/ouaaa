@@ -47,7 +47,7 @@ const SchedulerContainer = (props) => {
   } = props;
   const classes = useStyles();
 
-  const [timeContainerList, setTimeContainerList] = useState([initData !== undefined ? initData[0][0] : WEEKDAYS]);
+  const [timeContainerList, setTimeContainerList] = useState([initData !== undefined &&  initData[0]? initData[0][0] : WEEKDAYS]);
   const [availableDays, setAvailableDays] = useState(WEEKDAYS);
   const [timeFrames, setTimesFrames] = useState([]);
   const [showPlace, setShowPlace] = useState(false);
