@@ -121,7 +121,6 @@ const TimeContainer = (props) => {
 
   useEffect(() => {
     const newTimeFrame = [weekdays, hours, location];
-    debugger;
     if (hours.length > 0) {
       updateTimeFrames(newTimeFrame, indexTimeContainer);
     }

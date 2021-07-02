@@ -70,7 +70,6 @@ const SchedulerContainer = (props) => {
 
   const updateTimeFrames = (timeFrame, index) => {
     // console.log('follow up timeFrames', index, timeFrames.length);
-    debugger;
     if (index + 1 > timeFrames.length) {
       setTimesFrames([...timeFrames, timeFrame]);
       // console.log('new timeframe added');
@@ -111,11 +110,17 @@ const SchedulerContainer = (props) => {
   };
 
   useEffect(() => {
+    let hasOpeningHour = false;
+
     const openingHours = timeFrames.map((timeFrames) => {
+      
       const openingHour = {};
       openingHour.days = timeFrames[0];
       openingHour.days.map((day) => {
         delete day.__typename;
+        if(day.selected){
+          hasOpeningHour=true;
+        }
         return 'ok';
       });
       openingHour.hours = timeFrames[1];
@@ -123,8 +128,13 @@ const SchedulerContainer = (props) => {
       return openingHour;
     });
     debugger;
-    console.log('openingHourss', openingHours);
-    onChange(openingHours);
+    if(hasOpeningHour){
+      onChange(openingHours);
+    }else{
+      onChange();
+    }
+  
+   
 
     // call to API
   }, [timeFrames]);

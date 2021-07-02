@@ -771,7 +771,7 @@ const Actor = () => {
                       </Grid>
                     </Grid>
                   )}
-                  {data && data.actor.openingHours && (
+                  {data && data.actor.openingHours.length !== 0 && (
                     <Grid container className={[styles.item]}>
                       <Grid item xs={3} className={[styles.alignRight]}>
                         <Schedule className={[styles.icon]} />
