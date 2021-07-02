@@ -131,7 +131,7 @@ const SchedulerContainer = (props) => {
     if(hasOpeningHour){
       onChange(openingHours);
     }else{
-      onChange();
+      onChange([]);
     }
   
    
