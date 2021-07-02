@@ -37,7 +37,7 @@ export default function TimePicker(props) {
   };
 
   useEffect(() => {
-    //console.log(indexTimer);
+    // console.log(indexTimer);
     selectHours(selectedStartDate, selectedEndDate, indexTimer);
   }, [selectedStartDate, selectedEndDate]);
 
@@ -63,7 +63,7 @@ export default function TimePicker(props) {
         id="time-picker"
         label="jusqu'à"
         value={selectedEndDate}
-        onChange={handleStartDateChange}
+        onChange={handleEndDateChange}
         KeyboardButtonProps={{
           'aria-label': 'change time',
         }}
