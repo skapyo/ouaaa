@@ -141,7 +141,10 @@ const ImageCropper = ({
                   step={0.1}
                   aria-labelledby="Zoom"
                   classes={{ container: styles.slider }}
-                  onChange={(e, zoom) => {setShouldVisualise(true); setZoom(zoom);}}
+                  onChange={(e, zoom) => {
+                    setShouldVisualise(true);
+                    setZoom(zoom);
+                  }}
                 />
               </div>
             </Grid>
@@ -160,7 +163,10 @@ const ImageCropper = ({
                   step={1}
                   aria-labelledby="Rotation"
                   classes={{ container: styles.slider }}
-                  onChange={(e, rotation) => {setShouldVisualise(true); setRotation(rotation);}}
+                  onChange={(e, rotation) => {
+                    setShouldVisualise(true);
+                    setRotation(rotation);
+                  }}
                 />
               </div>
             </Grid>

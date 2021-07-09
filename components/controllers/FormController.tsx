@@ -1,11 +1,17 @@
-import React, {ChangeEvent, useCallback, useEffect, useMemo, useState,} from 'react';
-import {useMutation} from '@apollo/client';
-import {useSnackbar} from 'notistack';
+import React, {
+  ChangeEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+import { useMutation } from '@apollo/client';
+import { useSnackbar } from 'notistack';
 import omitTypename from 'utils/omitTypename';
 import validateEmailFormat from 'utils/validateEmailFormat';
 import validatePasswordFormat from 'utils/validatePasswordFormat';
-import {DocumentNode} from 'graphql';
-import {useSessionState} from '../../context/session/session';
+import { DocumentNode } from 'graphql';
+import { useSessionState } from '../../context/session/session';
 
 type FormValues = { [key: string]: string };
 
@@ -125,13 +131,15 @@ const withMutation = (FormComponent: RenderCallback) => (
     let next = false;
     if (queryOptions.mutationResultControl == 'builtin') {
       if (
-        data?.[queryOptions.resultLabel]
-        && typeof error === 'undefined'
-        && !error
-      ) next = true;
+        data?.[queryOptions.resultLabel] &&
+        typeof error === 'undefined' &&
+        !error
+      ) {
+        next = true;
+      }
     } else {
-      queryOptions.mutationResultControl
-        && queryOptions.mutationResultControl(formValues, data, error);
+      queryOptions.mutationResultControl &&
+        queryOptions.mutationResultControl(formValues, data, error);
     }
 
     if (next) {
@@ -195,18 +203,16 @@ const FormController = (props: FormControllerProps, ...otherprops: any[]) => {
         let existingEntryInformation;
         let index = 0;
 
-        entriesWithInformationArray.map(
-          (linkDescription) => {
-            if (existingEntryInformation === undefined) {
-              if (linkDescription.entryId === e.target.entryId) {
-                existingEntryInformation = linkDescription;
-              } else {
-                index += 1;
-              }
-              return '';
+        entriesWithInformationArray.map((linkDescription) => {
+          if (existingEntryInformation === undefined) {
+            if (linkDescription.entryId === e.target.entryId) {
+              existingEntryInformation = linkDescription;
+            } else {
+              index += 1;
             }
-          },
-        );
+            return '';
+          }
+        });
         let categoriesArray;
         if (formValues.entries != undefined) {
           categoriesArray = formValues.entries;
@@ -235,7 +241,11 @@ const FormController = (props: FormControllerProps, ...otherprops: any[]) => {
           };
           entriesWithInformationArray.push(data);
         }
-        setFormValue({ ...formValues, entriesWithInformation: entriesWithInformationArray, entries: categoriesArray });
+        setFormValue({
+          ...formValues,
+          entriesWithInformation: entriesWithInformationArray,
+          entries: categoriesArray,
+        });
       } else if (rule?.rule === ValidationRuleType.only) {
         if (rule.type === 'number') {
           const isnum = /^\d+$/.test(e.target.value);
@@ -273,35 +283,34 @@ const FormController = (props: FormControllerProps, ...otherprops: any[]) => {
           entriesWithInformationArray = [];
         }
         if (e.target.oldValueToRemove !== '') {
-
           if (entriesWithInformationArray !== undefined) {
             let existingEntryInformation;
             let index = 0;
-            entriesWithInformationArray.map(
-              (linkDescription) => {
-                if (existingEntryInformation === undefined) {
-                  if (linkDescription.entryId === e.target.oldValueToRemove) {
-                    existingEntryInformation = linkDescription;
-                  } else {
-                    index += 1;
-                  }
-                  return '';
+            entriesWithInformationArray.map((linkDescription) => {
+              if (existingEntryInformation === undefined) {
+                if (linkDescription.entryId === e.target.oldValueToRemove) {
+                  existingEntryInformation = linkDescription;
+                } else {
+                  index += 1;
                 }
-              },
-            );
+                return '';
+              }
+            });
             if (existingEntryInformation !== undefined) {
               entriesWithInformationArray.splice(index, 1);
-              //console.log(entriesWithInformationArray+ " " + index);
             }
           }
           const index = categoriesArray.indexOf(e.target.oldValueToRemove);
           if (index > -1) {
             categoriesArray.splice(index, 1);
-            //console.log(categoriesArray+ " " + index);
           }
         }
 
-        setFormValue({ ...formValues, entriesWithInformation: entriesWithInformationArray,  [e.target.name]: categoriesArray  });
+        setFormValue({
+          ...formValues,
+          entriesWithInformation: entriesWithInformationArray,
+          [e.target.name]: categoriesArray,
+        });
       } else {
         setFormValue({ ...formValues, [e.target.name]: e.target.value });
       }

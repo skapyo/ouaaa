@@ -82,13 +82,13 @@ function StyledTreeItem(props) {
   if (entriesContext !== undefined) {
     isThisEntryNotInTopSEO =
       entriesContext.getList().indexOf(parseInt(other.nodeId, 10)) >= 3;
-   /* console.log(
+    /* console.log(
       !isThisEntryNotInTopSEO +
         ' ' +
         entriesContext.getList() +
         ' ' +
         parseInt(other.nodeId, 10),
-    );*/
+    ); */
   }
 
   const handleCheckboxChange = (event) => {
@@ -125,7 +125,7 @@ function StyledTreeItem(props) {
     categoryChange(event);
   };
   //
-  console.log(checked + ' ' + other.nodeId);
+  console.log(`${checked} ${other.nodeId}`);
   return (
     <TreeItem
       label={
