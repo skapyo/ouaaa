@@ -4,6 +4,11 @@ import TextField from '@material-ui/core/TextField';
 import { KeyboardTimePicker } from '@material-ui/pickers';
 import moment from 'moment';
 
+const defaultTimeRange = {
+  start: moment().set('minute', 0).set('hour', 8).add(1, 'day').toDate(),
+  end: moment().set('minute', 0).set('hour', 18).add(1, 'day').toDate(),
+};
+
 const useStyles = makeStyles((theme) => ({
   container: {
     display: 'flex',
@@ -20,13 +25,12 @@ const useStyles = makeStyles((theme) => ({
 export default function TimePicker(props) {
   const classes = useStyles();
 
-  const { selectHours, indexTimer } = props;
-
+  const { selectHours, indexTimer, timeRange } = props;
   const [selectedStartDate, setSelectedStartDate] = React.useState(
-    moment().set('minute', 0).set('hour', 8).add(1, 'day').toDate(),
+    timeRange !== undefined ? timeRange[0] : defaultTimeRange[0],
   );
   const [selectedEndDate, setSelectedEndDate] = React.useState(
-    moment().set('minute', 0).set('hour', 18).add(1, 'day').toDate(),
+    timeRange !== undefined ? timeRange[1] : defaultTimeRange[1],
   );
 
   const handleStartDateChange = (date) => {
@@ -37,7 +41,7 @@ export default function TimePicker(props) {
   };
 
   useEffect(() => {
-    // console.log(indexTimer);
+    // ''
     selectHours(selectedStartDate, selectedEndDate, indexTimer);
   }, [selectedStartDate, selectedEndDate]);
 

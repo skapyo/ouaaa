@@ -1,9 +1,8 @@
-import React, {
-  useState, useContext, useEffect, useRef,
-} from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import DeleteIcon from '@material-ui/icons/Delete';
+import moment from 'moment';
 
 import ButtonDay from './ButtonDay';
 import TimePicker from './TimePicker';
@@ -69,6 +68,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// '2021-07-07T04:00:27.879Z',
+// '2021-07-07T14:00:27.877Z',
+export const defaultTimeRange = [
+  moment().set('minute', 0).set('hour', 8).add(1, 'day').toDate(),
+  moment().set('minute', 0).set('hour', 18).add(1, 'day').toDate(),
+];
+
 const TimeContainer = (props) => {
   const classes = useStyles();
 
@@ -81,12 +87,19 @@ const TimeContainer = (props) => {
     updatePlaces,
     showPlace,
     initData,
+    places,
   } = props;
 
-  const [hours, setHours] = useState([]);
+  const [hours, setHours] = useState(initData !== undefined ? initData : []);
   const [weekdays, setWeekDays] = useState(availableDays);
-  const [timeRangeList, setTimeRangeList] = useState([1]);
-  const [location, setLocation] = React.useState('');
+  const [timeRangeList, setTimeRangeList] = useState(
+    initData !== undefined ? initData : defaultTimeRange,
+  );
+
+  console.log('initData', initData);
+  const [location, setLocation] = React.useState(
+    places !== undefined ? places : '',
+  );
 
   const addTimeRange = () => {
     setTimeRangeList([...timeRangeList, 1]);
@@ -94,7 +107,9 @@ const TimeContainer = (props) => {
 
   const selectDays = (e) => {
     const dayId = e.currentTarget.dataset.id;
-    const selectedDays = [...weekdays].map((day) => (day.id === dayId ? { ...day, selected: !day.selected } : day));
+    const selectedDays = [...weekdays].map((day) =>
+      day.id === dayId ? { ...day, selected: !day.selected } : day,
+    );
 
     setWeekDays(selectedDays);
   };
@@ -134,6 +149,9 @@ const TimeContainer = (props) => {
             <div className={classes.daysplaces}>
               <div className={classes.days}>
                 {weekdays.map((day) => {
+                  console.log('here');
+                  // debugger;
+
                   return (
                     <div className="day">
                       <ButtonDay
@@ -155,14 +173,14 @@ const TimeContainer = (props) => {
               </div>
             </div>
             <div className={classes.timepicker}>
-              {' '}
               <div className={classes.timerange}>
-                {timeRangeList.length > 0
-                  && timeRangeList.map((e, index) => {
+                {timeRangeList.length > 0 &&
+                  timeRangeList.map((timeRange, index) => {
                     return (
                       <TimePicker
                         selectHours={selectHours}
                         indexTimer={index}
+                        timeRange={timeRange}
                       />
                     );
                   })}

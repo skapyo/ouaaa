@@ -8,6 +8,9 @@ import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 
 import TimeContainer from './TimeContainer';
 
+console.log('debugger');
+// debugger;
+
 const useStyles = makeStyles((theme) => ({
   main: {
     display: 'flex',
@@ -29,31 +32,69 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-let WEEKDAYS = [
-  { id: '1', day: 'L', selected: false },
-  { id: '2', day: 'M', selected: false },
-  { id: '3', day: 'M', selected: false },
-  { id: '4', day: 'J', selected: false },
-  { id: '5', day: 'V', selected: false },
-  { id: '6', day: 'S', selected: false },
-  { id: '7', day: 'D', selected: false },
-];
+const WEEKDAYS = {
+  days: [
+    {
+      id: '1',
+      day: 'L',
+      selected: false,
+    },
+    {
+      id: '2',
+      day: 'M',
+      selected: false,
+    },
+    {
+      id: '3',
+      day: 'M',
+      selected: false,
+    },
+    {
+      id: '4',
+      day: 'J',
+      selected: false,
+    },
+    {
+      id: '5',
+      day: 'V',
+      selected: false,
+    },
+    {
+      id: '6',
+      day: 'S',
+      selected: false,
+    },
+    {
+      id: '7',
+      day: 'D',
+      selected: false,
+    },
+  ],
+  hours: [['2021-07-16T15:00:00', '2021-07-07T14:00:01.006Z']],
+  place: '',
+  __typename: 'OpeningHour',
+};
 
 const SchedulerContainer = (props) => {
-  const {
-    onChange,
-    initData,
-    ...other
-  } = props;
+  const { onChange, initData, ...other } = props;
   const classes = useStyles();
 
-  const [timeContainerList, setTimeContainerList] = useState([initData !== undefined &&  initData[0]? initData[0][0] : WEEKDAYS]);
+  // console.log('here jojo', initData);
+
+  // console.log('timeContainerList 1', timeContainerList);
+
   const [availableDays, setAvailableDays] = useState(WEEKDAYS);
   const [timeFrames, setTimesFrames] = useState([]);
   const [showPlace, setShowPlace] = useState(false);
-  const [places, setPlaces] = useState([]);
+  const [places, setPlaces] = useState([]); // TODO: not working yet
 
-  /*useEffect(() => {
+  const [timeContainerList, setTimeContainerList] = useState(
+    // initData !== undefined ? initData[0]?.[0] : WEEKDAYS,
+    initData !== undefined ? initData : WEEKDAYS,
+  );
+
+  // console.log('timeContainerList 2', timeContainerList);
+  /* useEffect(() => {
     debugger;
     WEEKDAYS = initData !== undefined ? initData[0][0] : WEEKDAYS;
 
@@ -61,6 +102,11 @@ const SchedulerContainer = (props) => {
 */
   const addTimeContainer = () => {
     const newTimeContainerList = [...timeContainerList, availableDays];
+
+    // LIMIT the number of TimeContainer while it is still buggy
+    // if (newTimeContainerList.length > 1) return;
+
+    // console.log('newTimeContainerList', newTimeContainerList);
     setTimeContainerList(newTimeContainerList);
   };
 
@@ -69,20 +115,15 @@ const SchedulerContainer = (props) => {
   };
 
   const updateTimeFrames = (timeFrame, index) => {
-    // console.log('follow up timeFrames', index, timeFrames.length);
     if (index + 1 > timeFrames.length) {
       setTimesFrames([...timeFrames, timeFrame]);
-      // console.log('new timeframe added');
     } else {
       const newTimeFramesList = [...timeFrames].map((currentTimeFrame, ind) => {
         return index == ind ? timeFrame : currentTimeFrame;
       });
 
       setTimesFrames(newTimeFramesList);
-      // console.log('old timeframe updated');
     }
-
-    //  console.log('list of timeFrames', timeFrames);
   };
 
   const deleteTimeContainer = (e, index) => {
@@ -98,28 +139,24 @@ const SchedulerContainer = (props) => {
       },
     );
 
-    //   console.log('newTimeFramesList', newTimeFramesList);
-
     setTimesFrames(newTimeFramesList);
     setTimeContainerList(newTimeContainerList);
   };
 
   const updatePlaces = (newPlaces) => {
     setPlaces(newPlaces);
-    //  console.log(places);
   };
 
   useEffect(() => {
     let hasOpeningHour = false;
 
     const openingHours = timeFrames.map((timeFrames) => {
-      
       const openingHour = {};
       openingHour.days = timeFrames[0];
       openingHour.days.map((day) => {
         delete day.__typename;
-        if(day.selected){
-          hasOpeningHour=true;
+        if (day.selected) {
+          hasOpeningHour = true;
         }
         return 'ok';
       });
@@ -127,14 +164,12 @@ const SchedulerContainer = (props) => {
       openingHour.place = timeFrames[2];
       return openingHour;
     });
-    debugger;
-    if(hasOpeningHour){
+    if (hasOpeningHour) {
+      console.table('openingHours before sent to GRAPHQL', openingHours);
       onChange(openingHours);
-    }else{
+    } else {
       onChange([]);
     }
-  
-   
 
     // call to API
   }, [timeFrames]);
@@ -151,12 +186,16 @@ const SchedulerContainer = (props) => {
                 name="Unique Place"
               />
             }
-            label={showPlace ? 'Cacher les emplacements' : 'Indiquer des emplacements'}
+            label={
+              showPlace
+                ? 'Cacher les emplacements'
+                : 'Indiquer des emplacements'
+            }
           />
         </div>
 
-        {timeContainerList.length > 0
-          && timeContainerList.map((days, index) => {
+        {timeContainerList.length > 0 &&
+          timeContainerList.map(({ days, hours, placesInput }, index) => {
             return (
               <div className={classes.timeContainer}>
                 <TimeContainer
@@ -165,10 +204,10 @@ const SchedulerContainer = (props) => {
                   availableDays={days}
                   indexTimeContainer={index}
                   deleteTimeContainer={deleteTimeContainer}
-                  places={places}
+                  places={placesInput}
                   showPlace={showPlace}
-                  updatePlaces={updatePlaces}
-                  initData={initData}
+                  updatePlaces={updatePlaces} // FIXME: place not updated
+                  initData={hours}
                 />
               </div>
             );
