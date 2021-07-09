@@ -1,15 +1,17 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import AppLayout from 'containers/layouts/AppLayout';
-import {Box,
+import {
+  Box,
   Container,
   Grid,
   makeStyles,
   RootRef,
-  Typography,} from '@material-ui/core';
-import {withApollo} from 'hoc/withApollo.jsx';
-import {useRouter} from 'next/router';
+  Typography,
+} from '@material-ui/core';
+import { withApollo } from 'hoc/withApollo.jsx';
+import { useRouter } from 'next/router';
 import gql from 'graphql-tag';
-import {useMutation, useQuery} from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import Place from '@material-ui/icons/Place';
 import Schedule from '@material-ui/icons/Schedule';
 import Slider from 'react-slick/lib';
@@ -19,15 +21,15 @@ import Euro from '@material-ui/icons/Euro';
 import LocalOffer from '@material-ui/icons/LocalOffer';
 
 import Moment from 'react-moment';
-import {useCookies} from 'react-cookie';
-import {useSnackbar} from 'notistack';
+import { useCookies } from 'react-cookie';
+import { useSnackbar } from 'notistack';
 import Head from 'next/head';
 import Parser from 'html-react-parser';
 import Fab from '@material-ui/core/Fab';
 import EditIcon from '@material-ui/icons/Edit';
 import Link from 'components/Link';
-import {getImageUrl} from '../../utils/utils';
-import {useSessionState} from '../../context/session/session';
+import { getImageUrl } from '../../utils/utils';
+import { useSessionState } from '../../context/session/session';
 import Newsletter from '../../containers/layouts/Newsletter';
 
 const useStyles = makeStyles((theme) => ({
@@ -272,9 +274,7 @@ const Event = () => {
       removeEventParticipate(eventId: $eventId, userId: $userId)
     }
   `;
-  const {
-    data, loading, error, refetch,
-  } = useQuery(GET_EVENT, {
+  const { data, loading, error, refetch } = useQuery(GET_EVENT, {
     variables: {
       id,
     },
@@ -417,9 +417,9 @@ const Event = () => {
     let text = '';
     entries.forEach((entry) => {
       if (
-        entry.parentEntry
-        && entry.parentEntry.collection
-        && entry.parentEntry.collection.code === 'category'
+        entry.parentEntry &&
+        entry.parentEntry.collection &&
+        entry.parentEntry.collection.code === 'category'
       ) {
         text += `${entry.parentEntry.label} : ${entry.label}  `;
       }
@@ -431,13 +431,9 @@ const Event = () => {
       <Head>
         <title>
           {/* @ts-ignore */}
-          {data && data.event.label}
-          -
-          {/* @ts-ignore */}
+          {data && data.event.label}-{/* @ts-ignore */}
           {data && data.event.city}
-          {/* @ts-ignore */}
-          -
-          {/* @ts-ignore */}
+          {/* @ts-ignore */}-{/* @ts-ignore */}
           {data && showCategory(data.event.entries)}
         </title>
       </Head>
@@ -450,8 +446,10 @@ const Event = () => {
                 backgroundImage:
                   data && data.event && data.event.pictures.length >= 1
                     ? `url(${getImageUrl(
-                      data.event.pictures.sort((a, b) => (a.position > b.position ? 1 : -1))[0].croppedPicturePath,
-                    )})`
+                        data.event.pictures.sort((a, b) =>
+                          a.position > b.position ? 1 : -1,
+                        )[0].croppedPicturePath,
+                      )})`
                     : '',
               }}
             />
@@ -463,10 +461,11 @@ const Event = () => {
                   <Typography variant="h5" className={styles.cardTitle}>
                     {data && data.event.label}
                   </Typography>
-                  {data
-                    && data.event.entries.map(
-                      (entry) => entry.parentEntry
-                        && entry.parentEntry.collection.code === 'category' && (
+                  {data &&
+                    data.event.entries.map(
+                      (entry) =>
+                        entry.parentEntry &&
+                        entry.parentEntry.collection.code === 'category' && (
                           <div>
                             <Typography
                               variant="h7"
@@ -476,14 +475,12 @@ const Event = () => {
                               {` ${
                                 entry.parentEntry && entry.parentEntry.label
                               } `}
-                              {/* @ts-ignore */}
-                              :
-                              {/* @ts-ignore */}
+                              {/* @ts-ignore */}:{/* @ts-ignore */}
                               {` ${entry && entry.label}`}
                               {/* @ts-ignore */}
                             </Typography>
                           </div>
-                      ),
+                        ),
                     )}
                 </div>
                 <p>{data && Parser(data.event.description)}</p>
@@ -508,22 +505,25 @@ const Event = () => {
                     <Grid item xs={8} className={[styles.alignLeft]}>
                       <div className={[styles.infoLabel]}>TYPE</div>
                       <span className={[styles.infoValue]}>
-                        {data
-                          && data.event.entries.map(
-                            (entry) => entry
-                              && entry.parentEntry
-                              && entry.parentEntry.collection
-                              && entry.parentEntry.collection.code
-                                === 'event_type' && (
+                        {data &&
+                          data.event.entries.map(
+                            (entry) =>
+                              entry &&
+                              entry.parentEntry &&
+                              entry.parentEntry.collection &&
+                              entry.parentEntry.collection.code ===
+                                'event_type' && (
                                 <div>
                                   <Typography
                                     variant="h7"
                                     className={styles.cardTitleCategories}
                                   >
-                                    {`${entry && entry.parentEntry.label} : ${entry && entry.label}`}
+                                    {`${entry && entry.parentEntry.label} : ${
+                                      entry && entry.label
+                                    }`}
                                   </Typography>
                                 </div>
-                            ),
+                              ),
                           )}
                       </span>
                     </Grid>
@@ -533,15 +533,15 @@ const Event = () => {
                       <SupervisedUserCircle className={[styles.icon]} />
                     </Grid>
                     <Grid item xs={8} className={[styles.alignLeft]}>
-                      <div className={[styles.infoLabel]}>
-                        Public cible
-                      </div>
+                      <div className={[styles.infoLabel]}>Public cible</div>
                       <span className={[styles.infoValue]}>
-                        {data
-                          && data.event.entries.map(
-                            (entry) => entry
-                              && entry.collection
-                              && entry.collection.code === 'event_public_target' && (
+                        {data &&
+                          data.event.entries.map(
+                            (entry) =>
+                              entry &&
+                              entry.collection &&
+                              entry.collection.code ===
+                                'event_public_target' && (
                                 <div>
                                   <Typography
                                     variant="h7"
@@ -550,7 +550,7 @@ const Event = () => {
                                     {` ${entry && entry.label}`}
                                   </Typography>
                                 </div>
-                            ),
+                              ),
                           )}
                       </span>
                     </Grid>
@@ -575,9 +575,7 @@ const Event = () => {
                         {data && data.event.address && data.event.city && (
                           <span>
                             {/* @ts-ignore */}
-                            {data && data.event.address}
-                            ,
-                            {/* @ts-ignore */}
+                            {data && data.event.address},{/* @ts-ignore */}
                             {data.event.city}
                           </span>
                         )}
@@ -586,14 +584,20 @@ const Event = () => {
                   </Grid>
                   <Grid container className={[styles.item]}>
                     <Grid item xs={3} className={[styles.alignRight]}>
-                        <FacebookIcon className={styles.icons} fontSize="large" />
-                      </Grid>
+                      <FacebookIcon className={styles.icons} fontSize="large" />
+                    </Grid>
                     <Grid item xs={8} className={[styles.alignLeft]}>
-                          <span className={[styles.infoValue]}>
-                              <a href={data && data.event.facebookUrl} target="_blank" className={[styles.infoLabel]}>Lien facebook</a>
-                            </span>
+                      <span className={[styles.infoValue]}>
+                        <a
+                          href={data && data.event.facebookUrl}
+                          target="_blank"
+                          className={[styles.infoLabel]}
+                        >
+                          Lien facebook
+                        </a>
+                      </span>
                     </Grid>
-                    </Grid>
+                  </Grid>
                   <Grid container className={[styles.item]}>
                     <Grid item xs={3} className={[styles.alignRight]}>
                       <Schedule className={[styles.icon]} />
@@ -618,15 +622,14 @@ const Event = () => {
                       <Euro className={[styles.icon]} />
                     </Grid>
                     <Grid item xs={8} className={[styles.alignLeft]}>
-                      <div className={[styles.infoLabel]}>
-                        Tarif
-                      </div>
+                      <div className={[styles.infoLabel]}>Tarif</div>
                       <span className={[styles.infoValue]}>
-                        {data
-                          && data.event.entries.map(
-                            (entry) => entry
-                              && entry.collection
-                              && entry.collection.code === 'event_price' && (
+                        {data &&
+                          data.event.entries.map(
+                            (entry) =>
+                              entry &&
+                              entry.collection &&
+                              entry.collection.code === 'event_price' && (
                                 <div>
                                   <Typography
                                     variant="h7"
@@ -635,7 +638,7 @@ const Event = () => {
                                     {` ${entry && entry.label}`}
                                   </Typography>
                                 </div>
-                            ),
+                              ),
                           )}
                       </span>
                     </Grid>
@@ -670,9 +673,9 @@ const Event = () => {
               </div>
             )}
             <Slider {...settingsSliderImage}>
-              {data
-                && data.event.pictures
-                && data.event.pictures
+              {data &&
+                data.event.pictures &&
+                data.event.pictures
                   .sort((a, b) => (a.position > b.position ? 1 : -1))
                   .map((picture) => (
                     <img
@@ -681,18 +684,18 @@ const Event = () => {
                     />
                   ))}
             </Slider>
-            { data && data.event.practicalInfo && (
-            <div>
+            {data && data.event.practicalInfo && (
               <div>
-                <Typography
-                  variant="h5"
-                  className={[styles.cardTitle, styles.align]}
-                >
-                  INFO PRATIQUES COMPLEMENTS
-                </Typography>
+                <div>
+                  <Typography
+                    variant="h5"
+                    className={[styles.cardTitle, styles.align]}
+                  >
+                    INFO PRATIQUES COMPLEMENTS
+                  </Typography>
+                </div>
+                <p>{data && Parser(data.event.practicalInfo)}</p>
               </div>
-              <p>{data && Parser(data.event.practicalInfo)}</p>
-            </div>
             )}
             <div>
               <Typography
@@ -706,15 +709,15 @@ const Event = () => {
               {...settingsSliderevent}
               className={[styles.articleCarroussel]}
             >
-              {data
-                && data.event.actors.map((actor) => {
+              {data &&
+                data.event.actors.map((actor) => {
                   return <CardSliderActor key={actor.id} actor={actor} />;
                 })}
             </Slider>
           </Container>
           <Newsletter />
-          {((data && containUser(data.event.referents))
-            || (user && user.role === 'admin')) && (
+          {((data && containUser(data.event.referents)) ||
+            (user && user.role === 'admin')) && (
             <Link href={`/actorAdmin/event/${id}`}>
               <Fab className={styles.fab} aria-label="edit">
                 <EditIcon />
@@ -730,7 +733,7 @@ const Event = () => {
 // export default withListener(Actor)
 export default withApollo()(Event);
 // export async function getServerSideProps(context) {
-//     console.log(context.req.headers.cookie)
+//     ''
 //     return {
 //       props: {}, // will be passed to the page component as props
 //     }

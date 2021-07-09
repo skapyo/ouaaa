@@ -277,8 +277,8 @@ const Actor = () => {
         }
         openingHours {
           days {
-            id,
-            day,
+            id
+            day
             selected
           }
           hours
@@ -430,8 +430,8 @@ const Actor = () => {
   const nbSlidetoshow = data && data.actor.events && data.actor.events.length > 5
     ? 5
     : data
-    && data.actor.events
-    && data.actor.events.length + (containUser(data.actor.referents) ? 1 : 0);
+        && data.actor.events
+        && data.actor.events.length + (containUser(data.actor.referents) ? 1 : 0);
 
   const settingsSliderevent = {
     infinite: true,
@@ -472,7 +472,8 @@ const Actor = () => {
       if (
         entry.parentEntry
         && entry.parentEntry.collection
-        && entry.parentEntry.collection.code === 'category' && nbEntry <= nbEntryToShow
+        && entry.parentEntry.collection.code === 'category'
+        && nbEntry <= nbEntryToShow
       ) {
         text += `${entry.parentEntry.label} : ${entry.label}  `;
         nbEntry += 1;
@@ -487,7 +488,8 @@ const Actor = () => {
       if (
         entry
         && entry.collection
-        && entry.collection.code === 'larochelle_quarter') {
+        && entry.collection.code === 'larochelle_quarter'
+      ) {
         text += `, ${entry.label}`;
       }
     });
@@ -497,7 +499,6 @@ const Actor = () => {
     <AppLayout>
       <Head>
         <title>
-
           {/* @ts-ignore */}
           {data && data.actor.name}
           -
@@ -543,7 +544,9 @@ const Actor = () => {
                 backgroundImage:
                   data.actor.pictures.length >= 1
                     ? `url(${getImageUrl(
-                      data.actor.pictures.sort((a, b) => (a.main ? -1 : 1) - (b.main ? -1 : 1))[0].croppedPicturePath,
+                      data.actor.pictures.sort(
+                        (a, b) => (a.main ? -1 : 1) - (b.main ? -1 : 1),
+                      )[0].croppedPicturePath,
                     )})`
                     : '',
               }}
@@ -566,8 +569,9 @@ const Actor = () => {
                               className={styles.cardTitleCategories}
                             >
                               {/* @ts-ignore */}
-                              {` ${entry.parentEntry && entry.parentEntry.label
-                                } `}
+                              {` ${
+                                entry.parentEntry && entry.parentEntry.label
+                              } `}
                               {/* @ts-ignore */}
                               :
                               {/* @ts-ignore */}
@@ -575,7 +579,7 @@ const Actor = () => {
                               {/* @ts-ignore */}
                             </Typography>
                           </div>
-                        ),
+                      ),
                     )}
                 </div>
                 <p>{data && Parser(data.actor.description)}</p>
@@ -612,97 +616,112 @@ const Actor = () => {
                         {data && data.actor.address && data.actor.city && (
                           <span>
                             {/* @ts-ignore */}
-                            {`${data && data.actor.address} ${data && data.actor.city}`}
+                            {`${data && data.actor.address} ${
+                              data && data.actor.city
+                            }`}
                           </span>
                         )}
                       </span>
-                      {data && entriesHasElementWithCode(data.actor.entries, 'actor_location_action') && (
-                        <div className={[styles.infoDiv]}>
-                          <div className={[styles.infoLabel]}>
-                            TERRITOIRE D'ACTION
-                          </div>
-                          <span className={[styles.infoValue]}>
-                            {data
-                              && data.actor.entries.map(
-                                (entry) => entry
-                                  && entry.collection
-                                  && entry.collection.code
-                                  === 'actor_location_action' && (
-                                    <div>
-                                      <Typography
-                                        variant="h7"
-                                        className={styles.cardTitleCategories}
-                                      >
-                                        {` ${entry && entry.label}`}
-                                      </Typography>
-                                    </div>
+                      {data
+                        && entriesHasElementWithCode(
+                          data.actor.entries,
+                          'actor_location_action',
+                        ) && (
+                          <div className={[styles.infoDiv]}>
+                            <div className={[styles.infoLabel]}>
+                              TERRITOIRE D'ACTION
+                            </div>
+                            <span className={[styles.infoValue]}>
+                              {data
+                                && data.actor.entries.map(
+                                  (entry) => entry
+                                    && entry.collection
+                                    && entry.collection.code
+                                      === 'actor_location_action' && (
+                                      <div>
+                                        <Typography
+                                          variant="h7"
+                                          className={styles.cardTitleCategories}
+                                        >
+                                          {` ${entry && entry.label}`}
+                                        </Typography>
+                                      </div>
                                   ),
-
-                              )}
-                          </span>
-                        </div>
+                                )}
+                            </span>
+                          </div>
                       )}
                     </Grid>
                   </Grid>
-                  {data && entriesHasElementWithCode(data.actor.entries, 'public_target') && (
-                    <div className={[styles.infoDiv]}>
-                      <Grid container className={[styles.item]}>
-                        <Grid item xs={3} className={[styles.alignRight]}>
-                          <SupervisedUserCircle className={[styles.icon]} />
-                        </Grid>
-                        <Grid item xs={8} className={[styles.alignLeft]}>
-                          <div className={[styles.infoLabel]}>
-                            Public principal visé
-                          </div>
-                          <span className={[styles.infoValue]}>
-                            {data
-                              && data.actor.entries.map(
-                                (entry) => entry
-                                  && entry.collection
-                                  && entry.collection.code === 'public_target' && (
-                                    <div>
-                                      <Typography
-                                        variant="h7"
-                                        className={styles.cardTitleCategories}
-                                      >
-                                        {` ${entry && entry.label}`}
-                                      </Typography>
-                                    </div>
+                  {data
+                    && entriesHasElementWithCode(
+                      data.actor.entries,
+                      'public_target',
+                    ) && (
+                      <div className={[styles.infoDiv]}>
+                        <Grid container className={[styles.item]}>
+                          <Grid item xs={3} className={[styles.alignRight]}>
+                            <SupervisedUserCircle className={[styles.icon]} />
+                          </Grid>
+                          <Grid item xs={8} className={[styles.alignLeft]}>
+                            <div className={[styles.infoLabel]}>
+                              Public principal visé
+                            </div>
+                            <span className={[styles.infoValue]}>
+                              {data
+                                && data.actor.entries.map(
+                                  (entry) => entry
+                                    && entry.collection
+                                    && entry.collection.code
+                                      === 'public_target' && (
+                                      <div>
+                                        <Typography
+                                          variant="h7"
+                                          className={styles.cardTitleCategories}
+                                        >
+                                          {` ${entry && entry.label}`}
+                                        </Typography>
+                                      </div>
                                   ),
-                              )}
-                          </span>
+                                )}
+                            </span>
+                          </Grid>
                         </Grid>
-                      </Grid>
-                    </div>
+                      </div>
                   )}
-                  {data && entriesHasElementWithCode(data.actor.entries, 'public_target') && (
-                    <div className={[styles.infoDiv]}>
-                      <Grid container className={[styles.item]}>
-                        <Grid item xs={3} className={[styles.alignRight]}>
-                          <Gavel className={[styles.icon]} />
-                        </Grid>
-                        <Grid item xs={8} className={[styles.alignLeft]}>
-                          <div className={[styles.infoLabel]}>Statut</div>
-                          <span className={[styles.infoValue]}>
-                            {data
-                              && data.actor.entries.map(
-                                (entry) => entry
-                                  && entry.collection
-                                  && entry.collection.code === 'actor_status' && (
-                                    <div>
-                                      <Typography
-                                        variant="h7"
-                                        className={styles.cardTitleCategories}
-                                      >
-                                        {` ${entry && entry.label}`}
-                                      </Typography>
-                                    </div>
+                  {data
+                    && entriesHasElementWithCode(
+                      data.actor.entries,
+                      'public_target',
+                    ) && (
+                      <div className={[styles.infoDiv]}>
+                        <Grid container className={[styles.item]}>
+                          <Grid item xs={3} className={[styles.alignRight]}>
+                            <Gavel className={[styles.icon]} />
+                          </Grid>
+                          <Grid item xs={8} className={[styles.alignLeft]}>
+                            <div className={[styles.infoLabel]}>Statut</div>
+                            <span className={[styles.infoValue]}>
+                              {data
+                                && data.actor.entries.map(
+                                  (entry) => entry
+                                    && entry.collection
+                                    && entry.collection.code
+                                      === 'actor_status' && (
+                                      <div>
+                                        <Typography
+                                          variant="h7"
+                                          className={styles.cardTitleCategories}
+                                        >
+                                          {` ${entry && entry.label}`}
+                                        </Typography>
+                                      </div>
                                   ),
-                              )}
-                          </span>
+                                )}
+                            </span>
+                          </Grid>
                         </Grid>
-                      </Grid>
-                    </div>
+                      </div>
                   )}
                   {data && data.actor.phone && (
                     <div className={[styles.infoDiv]}>
@@ -741,9 +760,15 @@ const Actor = () => {
                           <Language className={[styles.icon]} />
                         </Grid>
                         <Grid item xs={8} className={[styles.alignLeft]}>
-                          <div className={[styles.infoLabel]}>Site internet</div>
+                          <div className={[styles.infoLabel]}>
+                            Site internet
+                          </div>
                           <span className={[styles.infoValue]}>
-                            <a href={data && data.actor.website} target="_blank" rel="noreferrer">
+                            <a
+                              href={data && data.actor.website}
+                              target="_blank"
+                              rel="noreferrer"
+                            >
                               {data && data.actor.website}
                             </a>
                             {/* @ts-ignore */}
@@ -778,72 +803,73 @@ const Actor = () => {
                       </Grid>
                       <Grid item xs={8} className={[styles.alignLeft]}>
                         <div className={[styles.infoLabel]}>Horaire</div>
-                        {data && data.actor.openingHours.map((openingHour) => {
-                          return (
-                            <span className={[styles.infoValue]}>
-                              {openingHour.days.map((day, index) => {
-                                return (
-                                  <>
-                                    {day.selected && getDay(day.id)}
-                                  </>
-                                );
-                              })}
-                              {openingHour.hours.map((hourtab) => {
-                                return (
-                                  <>
-                                    {hourtab.map((hour, index) => {
-                                      return (
-                                        <>
-                                          {moment(hour).format('HH')}
-                                          h
-                                          {moment(hour).format('mm')}
-                                          {index === 0 && ' - '}
-                                        </>
-                                      );
-                                    })}
-                                  </>
-                                );
-                              })}
-                              <br />
-
-                            </span>
-                          );
-                        })}
+                        {data
+                          && data.actor.openingHours.map((openingHour) => {
+                            console.log('hereee i stopped');
+                            // debugger;
+                            return (
+                              <span className={[styles.infoValue]}>
+                                {openingHour.days.map((day, index) => {
+                                  return <>{day.selected && getDay(day.id)}</>;
+                                })}
+                                {openingHour.hours.map((hourtab) => {
+                                  return (
+                                    <>
+                                      {hourtab.map((hour, index) => {
+                                        return (
+                                          <>
+                                            {moment(hour).format('HH')}
+                                            h
+                                            {moment(hour).format('mm')}
+                                            {index === 0 && ' - '}
+                                          </>
+                                        );
+                                      })}
+                                    </>
+                                  );
+                                })}
+                                <br />
+                              </span>
+                            );
+                          })}
                       </Grid>
                     </Grid>
-
                   )}
                 </Grid>
-                {data && entriesHasElementWithCode(data.actor.entries, 'collectif') && (
-                  <div className={[styles.infoDiv]}>
-                    <Grid container className={[styles.item]}>
-                      <Grid item xs={3} className={[styles.alignRight]}>
-                        <People className={[styles.icon]} />
-                      </Grid>
-                      <Grid item xs={8} className={[styles.alignLeft]}>
-                        <div className={[styles.infoLabel]}>
-                          Collectif & réseaux
-                        </div>
-                        <span className={[styles.infoValue]}>
-                          {data
-                            && data.actor.entries.map(
-                              (entry) => entry
-                                && entry.collection
-                                && entry.collection.code === 'collectif' && (
-                                  <div>
-                                    <Typography
-                                      variant="h7"
-                                      className={styles.cardTitleCategories}
-                                    >
-                                      {` ${entry && entry.label}`}
-                                    </Typography>
-                                  </div>
+                {data
+                  && entriesHasElementWithCode(
+                    data.actor.entries,
+                    'collectif',
+                  ) && (
+                    <div className={[styles.infoDiv]}>
+                      <Grid container className={[styles.item]}>
+                        <Grid item xs={3} className={[styles.alignRight]}>
+                          <People className={[styles.icon]} />
+                        </Grid>
+                        <Grid item xs={8} className={[styles.alignLeft]}>
+                          <div className={[styles.infoLabel]}>
+                            Collectif & réseaux
+                          </div>
+                          <span className={[styles.infoValue]}>
+                            {data
+                              && data.actor.entries.map(
+                                (entry) => entry
+                                  && entry.collection
+                                  && entry.collection.code === 'collectif' && (
+                                    <div>
+                                      <Typography
+                                        variant="h7"
+                                        className={styles.cardTitleCategories}
+                                      >
+                                        {` ${entry && entry.label}`}
+                                      </Typography>
+                                    </div>
                                 ),
-                            )}
-                        </span>
+                              )}
+                          </span>
+                        </Grid>
                       </Grid>
-                    </Grid>
-                  </div>
+                    </div>
                 )}
               </Grid>
             </Grid>
@@ -908,7 +934,7 @@ const Actor = () => {
                     {data && data.actor.name}
                   </Typography>
                 </div>
-              )}
+            )}
             <Slider
               {...settingsSliderevent}
               className={[styles.articleCarroussel]}
@@ -927,12 +953,13 @@ const Actor = () => {
           <Newsletter />
           {((data && containUser(data.actor.referents))
             || (user && user.role === 'admin')) && (
-              <Link href={`/actorAdmin/actor/${id}`}>
-                <Fab className={styles.fab} aria-label="edit">
-                  <EditIcon />
-                </Fab>
-              </Link>
-            )}
+            <Link href={`/actorAdmin/actor/${id}`}>
+              {/* debugger; */}
+              <Fab className={styles.fab} aria-label="edit">
+                <EditIcon />
+              </Fab>
+            </Link>
+          )}
         </Box>
       </RootRef>
     </AppLayout>
@@ -942,7 +969,7 @@ const Actor = () => {
 // export default withListener(Actor)
 export default withApollo()(Actor);
 // export async function getServerSideProps(context) {
-//     console.log(context.req.headers.cookie)
+//     ''
 //     return {
 //       props: {}, // will be passed to the page component as props
 //     }
