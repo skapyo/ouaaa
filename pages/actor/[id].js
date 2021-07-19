@@ -52,25 +52,37 @@ const useStyles = makeStyles((theme) => ({
     'text-align': 'center',
   },
   cardInfo: {
-    padding: '5em',
+    
     backgroundColor: 'white',
-    backgroundImage: "url('/icons/planet.svg')",
+    //backgroundImage: "url('/icons/planet.svg')",
     backgroundPosition: 'right',
     backgroundRepeat: 'no-repeat',
     backgroundOpacity: ' 0.5',
     //  backgroundImage:`url('./fond.png')`,
     borderRadius: '0.5em',
-    width: '80%',
+    [theme.breakpoints.up('sm')]: {
+      width: '80%',
+      padding: '5em',
+    },
     justify: 'center',
     alignItems: 'center',
     'max-width': '755px',
     'margin-top': '-53px',
     'box-shadow': '0px 0px 38px -14px rgba(0, 0, 0, 0.46)',
   },
+  description: {
+    [theme.breakpoints.up('sm')]: {
+      paddingLeft: '2em',
+    },
+  },
   cardTitle: {
     color: theme.typography.h5.color,
     fontFamily: theme.typography.h5.fontFamily,
     textTransform: 'uppercase',
+    fontWeight: '400',
+  },
+  actorName: {
+    width: '100%',
   },
   cardTitleCategories: {
     color: theme.typography.h5.color,
@@ -85,10 +97,23 @@ const useStyles = makeStyles((theme) => ({
   },
   infoPratiqueGrid: {
     textAlign: 'center',
+    backgroundColor: '#ededf5',
+  },
+  image: {
+    height: '72px',
+    width: '72px',
+    margin: '0 auto',
+    '& img': {
+      height: '100%',
+      width: '100%',
+      objectFit: 'contain',
+      borderRadius: '50%',
+    },
   },
   infoPratiqueTitle: {
-    backgroundColor: '#2C367E',
-    color: 'white',
+
+    fontWeight: '900',
+    color: '#2C367E',
     width: '100%',
     padding: '1em',
   },
@@ -103,6 +128,7 @@ const useStyles = makeStyles((theme) => ({
   },
   item: {
     border: '1px solid #2C367E',
+    borderWidth: ' 1px 0px 1px 0px ',
     borderStyle: 'dashed',
   },
   infoDiv: {
@@ -554,49 +580,25 @@ const Actor = () => {
           )}
           <Container className={styles.cardInfo}>
             <Grid container>
-              <Grid item md={7} sm={10} className={styles.threePointGrid}>
-                <div>
-                  <Typography variant="h2" className={styles.cardTitle}>
-                    {data && data.actor.name}
-                  </Typography>
-                  {data
-                    && data.actor.entries.map(
-                      (entry) => entry.parentEntry
-                        && entry.parentEntry.collection.code === 'category' && (
-                          <div>
-                            <Typography
-                              variant="h7"
-                              className={styles.cardTitleCategories}
-                            >
-                              {/* @ts-ignore */}
-                              {` ${
-                                entry.parentEntry && entry.parentEntry.label
-                              } `}
-                              {/* @ts-ignore */}
-                              :
-                              {/* @ts-ignore */}
-                              {` ${entry && entry.label}`}
-                              {/* @ts-ignore */}
-                            </Typography>
-                          </div>
-                      ),
-                    )}
-                </div>
-                <p>{data && Parser(data.actor.description)}</p>
-                <div />
-              </Grid>
-
               <Grid item md={5} sm={10} className={[styles.align]}>
                 <Grid container className={[styles.infoPratiqueGrid]}>
-                  <Typography
-                    variant="h7"
-                    className={[
-                      styles.infoPratiqueTitle,
-                      styles.infoPratiqueItem,
-                    ]}
-                  >
-                    INFOS PRATIQUES
+                  <div className={styles.image}>
+                    {data && data.actor.pictures.length >= 1 && (
+                    <img
+                      src={
+                        data.actor.pictures.length >= 1
+                          ? getImageUrl(
+                            data.actor.pictures.sort((a, b) => (a.logo ? -1 : 1) - (b.logo ? -1 : 1))[0].croppedPicturePath,
+                          )
+                          : ''
+                      }
+                    />
+                    )}
+                  </div>
+                  <Typography variant="h2" className={styles.cardTitle, styles.actorName}>
+                    {data && data.actor.name}
                   </Typography>
+
                   <Grid container className={[styles.item]}>
                     <Grid item xs={3} className={[styles.alignRight]}>
                       <Place className={[styles.icon]} />
@@ -605,21 +607,21 @@ const Actor = () => {
                       <div className={[styles.infoLabel]}>LOCALISATION </div>
                       <span className={[styles.infoValue]}>
                         {data && !data.actor.city && (
-                          <span> Adresse manquante</span>
+                        <span> Adresse manquante</span>
                         )}
                         {data && !data.actor.address && data.actor.city && (
-                          <span>
-                            {/* @ts-ignore */}
-                            {data && data.actor.city}
-                          </span>
+                        <span>
+                          {/* @ts-ignore */}
+                          {data && data.actor.city}
+                        </span>
                         )}
                         {data && data.actor.address && data.actor.city && (
-                          <span>
-                            {/* @ts-ignore */}
-                            {`${data && data.actor.address} ${
-                              data && data.actor.city
-                            }`}
-                          </span>
+                        <span>
+                          {/* @ts-ignore */}
+                          {`${data && data.actor.address} ${
+                            data && data.actor.city
+                          }`}
+                        </span>
                         )}
                       </span>
                       {data
@@ -724,86 +726,86 @@ const Actor = () => {
                       </div>
                   )}
                   {data && data.actor.phone && (
-                    <div className={[styles.infoDiv]}>
-                      <Grid container className={[styles.item]}>
-                        <Grid item xs={3} className={[styles.alignRight]}>
-                          <Phone className={[styles.icon]} />
-                        </Grid>
-                        <Grid item xs={8} className={[styles.alignLeft]}>
-                          <div className={[styles.infoLabel]}>TELEPHONE</div>
-                          <span className={[styles.infoValue]}>
-                            {data && data.actor.phone}
-                          </span>
-                        </Grid>
-                      </Grid>
-                    </div>
-                  )}
-                  {data && data.actor.email && (
-                    <div className={[styles.infoDiv]}>
-                      <Grid container className={[styles.item]}>
-                        <Grid item xs={3} className={[styles.alignRight]}>
-                          <AlternateEmail className={[styles.icon]} />
-                        </Grid>
-                        <Grid item xs={8} className={[styles.alignLeft]}>
-                          <div className={[styles.infoLabel]}>Email</div>
-                          <span className={[styles.infoValue]}>
-                            {data && data.actor.email}
-                          </span>
-                        </Grid>
-                      </Grid>
-                    </div>
-                  )}
-                  {data && data.actor.website && (
-                    <div className={[styles.infoDiv]}>
-                      <Grid container className={[styles.item]}>
-                        <Grid item xs={3} className={[styles.alignRight]}>
-                          <Language className={[styles.icon]} />
-                        </Grid>
-                        <Grid item xs={8} className={[styles.alignLeft]}>
-                          <div className={[styles.infoLabel]}>
-                            Site internet
-                          </div>
-                          <span className={[styles.infoValue]}>
-                            <a
-                              href={data && data.actor.website}
-                              target="_blank"
-                              rel="noreferrer"
-                            >
-                              {data && data.actor.website}
-                            </a>
-                            {/* @ts-ignore */}
-                          </span>
-                        </Grid>
-                      </Grid>
-                    </div>
-                  )}
-                  {data && data.actor.socialNetwork && (
+                  <div className={[styles.infoDiv]}>
                     <Grid container className={[styles.item]}>
                       <Grid item xs={3} className={[styles.alignRight]}>
-                        <Share className={[styles.icon]} />
+                        <Phone className={[styles.icon]} />
                       </Grid>
                       <Grid item xs={8} className={[styles.alignLeft]}>
-                        <div className={[styles.infoLabel]}>Réseau social</div>
+                        <div className={[styles.infoLabel]}>TELEPHONE</div>
+                        <span className={[styles.infoValue]}>
+                          {data && data.actor.phone}
+                        </span>
+                      </Grid>
+                    </Grid>
+                  </div>
+                  )}
+                  {data && data.actor.email && (
+                  <div className={[styles.infoDiv]}>
+                    <Grid container className={[styles.item]}>
+                      <Grid item xs={3} className={[styles.alignRight]}>
+                        <AlternateEmail className={[styles.icon]} />
+                      </Grid>
+                      <Grid item xs={8} className={[styles.alignLeft]}>
+                        <div className={[styles.infoLabel]}>Email</div>
+                        <span className={[styles.infoValue]}>
+                          {data && data.actor.email}
+                        </span>
+                      </Grid>
+                    </Grid>
+                  </div>
+                  )}
+                  {data && data.actor.website && (
+                  <div className={[styles.infoDiv]}>
+                    <Grid container className={[styles.item]}>
+                      <Grid item xs={3} className={[styles.alignRight]}>
+                        <Language className={[styles.icon]} />
+                      </Grid>
+                      <Grid item xs={8} className={[styles.alignLeft]}>
+                        <div className={[styles.infoLabel]}>
+                          Site internet
+                        </div>
                         <span className={[styles.infoValue]}>
                           <a
-                            href={data && data.actor.socialNetwork}
+                            href={data && data.actor.website}
                             target="_blank"
+                            rel="noreferrer"
                           >
-                            {data && data.actor.socialNetwork}
+                            {data && data.actor.website}
                           </a>
                           {/* @ts-ignore */}
                         </span>
                       </Grid>
                     </Grid>
+                  </div>
+                  )}
+                  {data && data.actor.socialNetwork && (
+                  <Grid container className={[styles.item]}>
+                    <Grid item xs={3} className={[styles.alignRight]}>
+                      <Share className={[styles.icon]} />
+                    </Grid>
+                    <Grid item xs={8} className={[styles.alignLeft]}>
+                      <div className={[styles.infoLabel]}>Réseau social</div>
+                      <span className={[styles.infoValue]}>
+                        <a
+                          href={data && data.actor.socialNetwork}
+                          target="_blank"
+                        >
+                          {data && data.actor.socialNetwork}
+                        </a>
+                        {/* @ts-ignore */}
+                      </span>
+                    </Grid>
+                  </Grid>
                   )}
                   {data && data.actor.openingHours.length !== 0 && (
-                    <Grid container className={[styles.item]}>
-                      <Grid item xs={3} className={[styles.alignRight]}>
-                        <Schedule className={[styles.icon]} />
-                      </Grid>
-                      <Grid item xs={8} className={[styles.alignLeft]}>
-                        <div className={[styles.infoLabel]}>Horaire</div>
-                        {data
+                  <Grid container className={[styles.item]}>
+                    <Grid item xs={3} className={[styles.alignRight]}>
+                      <Schedule className={[styles.icon]} />
+                    </Grid>
+                    <Grid item xs={8} className={[styles.alignLeft]}>
+                      <div className={[styles.infoLabel]}>Horaire</div>
+                      {data
                           && data.actor.openingHours.map((openingHour) => {
                             console.log('hereee i stopped');
                             // debugger;
@@ -832,8 +834,8 @@ const Actor = () => {
                               </span>
                             );
                           })}
-                      </Grid>
                     </Grid>
+                  </Grid>
                   )}
                 </Grid>
                 {data
@@ -872,6 +874,36 @@ const Actor = () => {
                     </div>
                 )}
               </Grid>
+              <Grid item md={7} sm={10} className={styles.description}>
+                <div>
+
+                  {data
+                    && data.actor.entries.map(
+                      (entry) => entry.parentEntry
+                        && entry.parentEntry.collection.code === 'category' && (
+                          <div>
+                            <Typography
+                              variant="h7"
+                              className={styles.cardTitleCategories}
+                            >
+                              {/* @ts-ignore */}
+                              {` ${
+                                entry.parentEntry && entry.parentEntry.label
+                              } `}
+                              {/* @ts-ignore */}
+                              :
+                              {/* @ts-ignore */}
+                              {` ${entry && entry.label}`}
+                              {/* @ts-ignore */}
+                            </Typography>
+                          </div>
+                      ),
+                    )}
+                </div>
+                <p>{data && Parser(data.actor.description)}</p>
+                <div />
+              </Grid>
+
             </Grid>
 
             {data && data.actor.volunteerDescription && (

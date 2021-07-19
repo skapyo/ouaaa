@@ -149,7 +149,7 @@ const NavBar = () => {
                       CARTE DES ACTEURS
                     </MenuItem>
                   </Grid>
-                  {/*<Grid item>
+                 <Grid item>
                     <MenuItem
                       button
                       component={Link}
@@ -159,6 +159,7 @@ const NavBar = () => {
                       AGENDA DES ACTIONS
                     </MenuItem>
                   </Grid>
+                   {/*
                   <Grid item>
                     <MenuItem
                       button
@@ -297,7 +298,6 @@ const NavBar = () => {
                       CARTE DES ACTEURS
                     </MenuItem>
                   </Grid>
-                  {/*
                   <Grid item>
                     <MenuItem
                       button
@@ -308,6 +308,7 @@ const NavBar = () => {
                       AGENDA DES ACTIONS
                     </MenuItem>
                   </Grid>
+                   {/*
                   <Grid item>
                     <MenuItem
                       button
