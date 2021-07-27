@@ -379,7 +379,7 @@ const EditActorForm = (props) => {
     data: actorData,
   } = useQuery(GET_ACTOR, {
     variables: { id: props.id.toString() },
-    fetchPolicy: 'network-only',
+    fetchPolicy: 'no-cache',
   });
 
   function IsTree(collection) {
@@ -864,13 +864,6 @@ const EditActorForm = (props) => {
         });
       }
 
-
-
-      // console.log(
-      //   'in EditActorForm jojo',
-      //   JSON.stringify(openingHours[0], null, 4),
-      //   JSON.stringify(openingHours[1], null, 4),
-      // );
       edit({
         variables: {
           formValues,
@@ -905,6 +898,8 @@ const EditActorForm = (props) => {
         });
         router.push(`/actor/${actorData.actor.id}`);
       }
+
+      console.log('actorData', actorData);
     }, [editLoading, editError]);
 
     const getObjectLongName = (results, name) => {
@@ -1187,10 +1182,7 @@ const EditActorForm = (props) => {
         </Typography>
         <SchedulerContainer
           onChange={setOpeningHours}
-          // initData={
-          //   actorData && getTimeFramesFromData(actorData.actor.openingHours)
-          // }
-          initData={actorData?.actor?.openingHours}
+          initData={actorData && actorData?.actor?.openingHours}
         />
         <p />
         <Typography variant="body1" color="primary" className={styles.label}>
