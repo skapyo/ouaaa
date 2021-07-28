@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import AppLayout from 'containers/layouts/AppLayout';
 import {
   Box,
@@ -36,6 +36,14 @@ import Newsletter from '../../containers/layouts/Newsletter';
 import { useSessionState } from '../../context/session/session';
 import CardAddEvent from '../../components/cards/CardAddEvent';
 import { getImageUrl, entriesHasElementWithCode } from '../../utils/utils';
+
+if (typeof window !== 'undefined') {
+  var L = require('leaflet');
+  var Map = require('react-leaflet').Map;
+  var TileLayer = require('react-leaflet').TileLayer;
+  var Marker = require('react-leaflet').Marker;
+  var Popup = require('react-leaflet').Popup;
+}
 
 const useStyles = makeStyles((theme) => ({
   titleContainer: {
@@ -80,6 +88,10 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: theme.typography.h5.fontFamily,
     textTransform: 'uppercase',
     fontWeight: '400',
+  },
+  map: {
+    height: "30em",
+    width: "30em",
   },
   actorName: {
     width: '100%',
@@ -231,6 +243,8 @@ const useStyles = makeStyles((theme) => ({
 
 const Actor = () => {
   const router = useRouter();
+  const mapRef = useRef();
+
   const { id } = router.query;
   const [eventToRender, setEventToRender] = useState(null);
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
@@ -451,6 +465,8 @@ const Actor = () => {
         return '';
     }
   };
+
+
 
   const WEEKDAYS = [
     { id: 1, day: 'L', selected: false },
@@ -749,7 +765,7 @@ const Actor = () => {
                       </Grid>
                     </Grid>
                   )}
-                  {data && data.actor.openingHours.length !== 0 && (
+                  {data && data.actor.openingHours && data.actor.openingHours.length !== 0 && (
                     <Grid container className={[styles.item]}>
                       <Grid item xs={3} className={[styles.alignRight]}>
                         <Schedule className={[styles.icon]} />
@@ -825,6 +841,7 @@ const Actor = () => {
                         ),
                     )}
                 </div>
+                <br />
                 {data
                   && entriesHasElementWithCode(
                     data.actor.entries,
@@ -916,6 +933,45 @@ const Actor = () => {
                     </div>
                   )}
                 <div />
+                <br />
+                <Typography variant="h3" className={styles.cardTitle}>
+                  ACCES
+                </Typography>
+                <div className={styles.border} />
+                <br />
+
+                {data && (
+                  <Map ref={mapRef} center={[data.actor.lat, data.actor.lng]} zoom={11} className={styles.map}  >
+                    <TileLayer
+                      attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    />
+                    <Marker
+                      position={[data.actor.lat, data.actor.lng]}
+                      icon={new L.Icon({
+                        iconUrl: '/icons/location.svg',
+                        iconAnchor: [13, 34], // point of the icon which will correspond to marker's location
+                        iconSize: [25],
+                        popupAnchor: [1, -25],
+                        html: `<span style="background-color: red" />`,
+                      })}
+                    >    <Popup>
+                        {data.actor.name} - {data && !data.actor.address && data.actor.city && (
+                          <span>
+                            {/* @ts-ignore */}
+                            {data && data.actor.city}
+                          </span>
+                        )} 
+                        {data && data.actor.address && data.actor.city && (
+                          <span>
+                            {/* @ts-ignore */}
+                            {`${data && data.actor.address} ${data && data.actor.city
+                              }`}
+                          </span>
+                        )}
+                      </Popup></Marker>
+                  </Map>
+                )}
               </Grid>
 
             </Grid>
@@ -967,7 +1023,7 @@ const Actor = () => {
             </Slider>
 
             {data
-              && data.actor.pictures
+              && data.actor.events
               && (data.actor.events.length > 0
                 || containUser(data.actor.referents)) && (
                 <div>
