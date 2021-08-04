@@ -76,10 +76,11 @@ const WEEKDAYS = {
 };
 
 const SchedulerContainer = (props) => {
+
   const { onChange, initData, ...other } = props;
   const classes = useStyles();
 
-  // console.log('here jojo', initData);
+   console.log('here jojo', initData);
 
   // console.log('timeContainerList 1', timeContainerList);
 

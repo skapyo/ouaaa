@@ -77,7 +77,7 @@ export const defaultTimeRange = [
 
 const TimeContainer = (props) => {
   const classes = useStyles();
-
+  console.log('initData', initData);
   const {
     updateWeekDays,
     updateTimeFrames,
@@ -96,7 +96,7 @@ const TimeContainer = (props) => {
     initData !== undefined ? initData : defaultTimeRange,
   );
 
-  console.log('initData', initData);
+  
   const [location, setLocation] = React.useState(
     places !== undefined ? places : '',
   );

@@ -22,6 +22,7 @@ import Share from '@material-ui/icons/Share';
 import Schedule from '@material-ui/icons/Schedule';
 import People from '@material-ui/icons/People';
 
+
 import Slider from 'react-slick/lib';
 import { useSnackbar } from 'notistack';
 import { useCookies } from 'react-cookie';
@@ -170,6 +171,7 @@ const useStyles = makeStyles((theme) => ({
   },
   icon: {
     color: '#bd0b3d',
+    width: '20px',
   },
   img: {
     padding: '1em',
@@ -639,7 +641,7 @@ const Actor = () => {
 
                   <Grid container className={[styles.item]}>
                     <Grid item xs={3} className={[styles.alignRight]}>
-                      <Place className={[styles.icon]} />
+                    <img src={"/icons/location.svg"} alt="Localisation" className={[styles.icon]} />
                     </Grid>
                     <Grid item xs={8} className={[styles.alignLeft]}>
                       <div className={[styles.infoLabel]}>LOCALISATION </div>
@@ -696,7 +698,7 @@ const Actor = () => {
                     <div className={[styles.infoDiv]}>
                       <Grid container className={[styles.item]}>
                         <Grid item xs={3} className={[styles.alignRight]}>
-                          <Phone className={[styles.icon]} />
+                        <img src={"/icons/phone.svg"} alt="Téléphone" className={[styles.icon]} />
                         </Grid>
                         <Grid item xs={8} className={[styles.alignLeft]}>
                           <div className={[styles.infoLabel]}>TELEPHONE</div>
@@ -711,7 +713,7 @@ const Actor = () => {
                     <div className={[styles.infoDiv]}>
                       <Grid container className={[styles.item]}>
                         <Grid item xs={3} className={[styles.alignRight]}>
-                          <AlternateEmail className={[styles.icon]} />
+                        <img src={"/icons/email.svg"} alt="Email" className={[styles.icon]} />
                         </Grid>
                         <Grid item xs={8} className={[styles.alignLeft]}>
                           <div className={[styles.infoLabel]}>Email</div>
@@ -726,7 +728,7 @@ const Actor = () => {
                     <div className={[styles.infoDiv]}>
                       <Grid container className={[styles.item]}>
                         <Grid item xs={3} className={[styles.alignRight]}>
-                          <Language className={[styles.icon]} />
+                        <img src={"/icons/web_site.svg"} alt="Réseau social" className={[styles.icon]} />
                         </Grid>
                         <Grid item xs={8} className={[styles.alignLeft]}>
                           <div className={[styles.infoLabel]}>
@@ -749,7 +751,7 @@ const Actor = () => {
                   {data && data.actor.socialNetwork && (
                     <Grid container className={[styles.item]}>
                       <Grid item xs={3} className={[styles.alignRight]}>
-                        <Share className={[styles.icon]} />
+                      <img src={"/icons/social.svg"} alt="Réseau social" className={[styles.icon]} />
                       </Grid>
                       <Grid item xs={8} className={[styles.alignLeft]}>
                         <div className={[styles.infoLabel]}>Réseau social</div>
@@ -848,9 +850,7 @@ const Actor = () => {
                     'public_target',
                   ) && (
                     <div className={[styles.descriptionInfoDiv]}>
-
-                      <Gavel className={[styles.icon]} />
-
+                      <img src={"/icons/status.svg"} alt="Collectif & réseau" className={[styles.icon]} />
                       <div className={[styles.descriptionInfoLabel]}> Statut :</div>
                       <span className={[styles.descriptionInfoValue]}>
                         {data
@@ -879,7 +879,7 @@ const Actor = () => {
                   ) && (
                     <div className={[styles.descriptionInfoDiv]}>
 
-                      <SupervisedUserCircle className={[styles.icon]} />
+                      <img src={"/icons/public.svg"} alt="Collectif & réseau" className={[styles.icon]} />
                       <div className={[styles.descriptionInfoLabel]}>
                         Public principal visé
                       </div>
@@ -909,7 +909,7 @@ const Actor = () => {
                     'collectif',
                   ) && (
                     <div className={[styles.descriptionInfoDiv]}>
-                      <People className={[styles.icon]} />
+                      <img src={"/icons/network.svg"} alt="Collectif & réseau" className={[styles.icon]} />
                       <div className={[styles.descriptionInfoLabel]}>
                         Collectif & réseaux
                       </div>

@@ -379,7 +379,7 @@ const EditActorForm = (props) => {
     data: actorData,
   } = useQuery(GET_ACTOR, {
     variables: { id: props.id.toString() },
-    fetchPolicy: 'network-only',
+    fetchPolicy: 'no-cache',
   });
 
   function IsTree(collection) {
@@ -1185,13 +1185,14 @@ const EditActorForm = (props) => {
         <Typography variant="body1" color="primary" className={styles.label}>
           Jour et heure d'ouverture
         </Typography>
-        <SchedulerContainer
+        {/* <SchedulerContainer
           onChange={setOpeningHours}
           // initData={
           //   actorData && getTimeFramesFromData(actorData.actor.openingHours)
           // }
-          initData={actorData?.actor?.openingHours}
-        />
+          initData={actorData && actorData.actor.openingHours}
+        /> */}
+        {actorData && console.log(actorData.actor.openingHours)}
         <p />
         <Typography variant="body1" color="primary" className={styles.label}>
           CONTACT PRIVE pour les échanges avec <i>OUAAA!</i>
