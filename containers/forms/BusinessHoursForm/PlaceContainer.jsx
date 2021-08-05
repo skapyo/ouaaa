@@ -7,22 +7,25 @@ import Place from './Place';
 import PlaceForm from './PlaceForm';
 
 const PlaceContainer = (props) => {
-  const { updatePlaces, showPlace, selectLocation } = props;
+  const { updatePlaces, showPlace, place } = props;
 
-  const [places, setPlaces] = useState([]);
+  const [places, setPlaces] = useState(place !== undefined ? place : '');
   const [currentPlace, setCurrentPlace] = useState(null);
-  const [getLocation, setGetLocation] = useState(true);
 
   const addPlace = (place) => {
     const newPlaces = [...places, { place }];
     setPlaces(newPlaces);
-    selectLocation(place);
     setCurrentPlace(place);
   };
 
   const removePlace = (index) => {
+    console.log('removed place', newPlaces);
+
     const newPlaces = [...places];
     newPlaces.splice(index, 1);
+
+    console.log('removed place', newPlaces);
+
     setPlaces(newPlaces);
   };
 
@@ -32,19 +35,12 @@ const PlaceContainer = (props) => {
 
   return (
     <div>
-      {showPlace && !getLocation && (
-        <Button onClick={() => setGetLocation(!getLocation)}>
-          Ajouter un lieu
-        </Button>
-      )}
       <div className="places">
         {currentPlace !== null && showPlace && (
           <Place place={currentPlace} removePlace={removePlace} />
         )}
       </div>
-      {showPlace && getLocation && currentPlace === null && (
-        <PlaceForm addPlace={addPlace} />
-      )}
+      {showPlace && currentPlace === null && <PlaceForm addPlace={addPlace} />}
     </div>
   );
 };

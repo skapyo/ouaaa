@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const WEEKDAYS = {
+const BLANK_BUSINESS_HOURS = {
   days: [
     {
       id: '1',
@@ -76,7 +76,7 @@ const SchedulerContainer = (props) => {
   const { onChange, initData, ...other } = props;
   const classes = useStyles();
 
-  const [availableDays, setAvailableDays] = useState(WEEKDAYS);
+  const [availableDays, setAvailableDays] = useState(BLANK_BUSINESS_HOURS);
   const [timeFrames, setTimeFrames] = useState(
     initData !== undefined
       ? initData.map((data) => {
@@ -85,18 +85,23 @@ const SchedulerContainer = (props) => {
       : [],
   );
   const [showPlace, setShowPlace] = useState(false);
-  const [places, setPlaces] = useState([]); // TODO: not working yet
+  // TODO: not working yet
+  const [places, setPlaces] = useState(
+    initData !== undefined
+      ? initData.map((data) => {
+          return data.place;
+        })
+      : [],
+  );
 
   const [timeContainerList, setTimeContainerList] = useState(
-    initData !== undefined ? initData : [WEEKDAYS],
+    initData !== undefined ? initData : [BLANK_BUSINESS_HOURS],
   );
 
   const firstUpdate = useRef(true);
 
   const addTimeContainer = () => {
-    console.log('hello', timeContainerList);
     const newTimeContainerList = [...timeContainerList, availableDays];
-
     setTimeContainerList(newTimeContainerList);
   };
 
@@ -108,7 +113,6 @@ const SchedulerContainer = (props) => {
     if (timeFrames !== undefined && timeFrames.length !== 0) {
       // update timeFrames with initData
       let newTimeFramesList = [...timeFrames];
-      debugger;
       // if it adds a new timeframe
       if (index + 1 > newTimeFramesList.length) {
         newTimeFramesList.push(timeFrame);
@@ -153,6 +157,7 @@ const SchedulerContainer = (props) => {
       const updatedTimeFrames = initData.map((timeFrame) => timeFrame.days);
     }
 
+    // avoid execution of first render
     if (firstUpdate.current) {
       firstUpdate.current = false;
       return;
@@ -206,7 +211,8 @@ const SchedulerContainer = (props) => {
         </div>
 
         {timeContainerList.length > 0 &&
-          timeContainerList.map(({ days, hours, placesInput }, index) => {
+          timeContainerList.map(({ days, hours, place }, index) => {
+            console.log('place', place);
             return (
               <div className={classes.timeContainer}>
                 <TimeContainer
@@ -215,7 +221,7 @@ const SchedulerContainer = (props) => {
                   availableDays={days}
                   indexTimeContainer={index}
                   deleteTimeContainer={deleteTimeContainer}
-                  places={placesInput}
+                  places={place}
                   showPlace={showPlace}
                   updatePlaces={updatePlaces} // FIXME: place not updated
                   initData={hours}

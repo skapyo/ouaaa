@@ -87,7 +87,7 @@ const TimeContainer = (props) => {
     updatePlaces,
     showPlace,
     initData,
-    places,
+    place,
   } = props;
 
   const [hours, setHours] = useState(initData !== undefined ? initData : []);
@@ -97,7 +97,7 @@ const TimeContainer = (props) => {
   );
 
   const [location, setLocation] = React.useState(
-    places !== undefined ? places : '',
+    place !== undefined ? place : '',
   );
   const renderCount = useRef(0);
 
@@ -135,6 +135,7 @@ const TimeContainer = (props) => {
   };
 
   useEffect(() => {
+    // TODO: workaround to execute the further code , needs to find a solution to limit rendering count
     if (renderCount.current < 2) {
       renderCount.current++;
       return;
