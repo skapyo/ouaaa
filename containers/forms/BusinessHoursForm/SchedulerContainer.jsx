@@ -88,12 +88,13 @@ const SchedulerContainer = (props) => {
   const [places, setPlaces] = useState([]); // TODO: not working yet
 
   const [timeContainerList, setTimeContainerList] = useState(
-    initData !== undefined ? initData : WEEKDAYS,
+    initData !== undefined ? initData : [WEEKDAYS],
   );
 
   const firstUpdate = useRef(true);
 
   const addTimeContainer = () => {
+    console.log('hello', timeContainerList);
     const newTimeContainerList = [...timeContainerList, availableDays];
 
     setTimeContainerList(newTimeContainerList);
