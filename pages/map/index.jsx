@@ -257,8 +257,8 @@ const carto = () => {
       headerDisplay: 'static',
     });
     const GET_ACTORS = gql`
-      query actors($entries: [[String]], $postCode: String) {
-        actors(entries: $entries, postCode: $postCode) {
+      query actors($entries: [[String]], $postCode: String,$isValidated: Boolean) {
+        actors(entries: $entries, postCode: $postCode,isValidated: $isValidated) {
           id
           name
           address
@@ -294,6 +294,8 @@ const carto = () => {
     const { data, loading, error, refetch } = useQuery(GET_ACTORS, {
       variables: {
         entries: [categoriesChecked],
+        isValidated: true,
+
       },
     });
 

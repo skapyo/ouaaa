@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import AppLayout from 'containers/layouts/AppLayout';
 import {
   Box,
@@ -37,6 +37,14 @@ import { useSessionState } from '../../context/session/session';
 import CardAddEvent from '../../components/cards/CardAddEvent';
 import { getImageUrl, entriesHasElementWithCode } from '../../utils/utils';
 
+if (typeof window !== 'undefined') {
+  const L = require('leaflet');
+  const { Map } = require('react-leaflet');
+  const { TileLayer } = require('react-leaflet');
+  const { Marker } = require('react-leaflet');
+  const { Popup } = require('react-leaflet');
+}
+
 const useStyles = makeStyles((theme) => ({
   titleContainer: {
     marginTop: theme.spacing(2),
@@ -52,25 +60,40 @@ const useStyles = makeStyles((theme) => ({
     'text-align': 'center',
   },
   cardInfo: {
-    padding: '5em',
     backgroundColor: 'white',
-    backgroundImage: "url('/icons/planet.svg')",
+    // backgroundImage: "url('/icons/planet.svg')",
     backgroundPosition: 'right',
     backgroundRepeat: 'no-repeat',
     backgroundOpacity: ' 0.5',
     //  backgroundImage:`url('./fond.png')`,
     borderRadius: '0.5em',
-    width: '80%',
+    [theme.breakpoints.up('sm')]: {
+      width: '80%',
+      padding: '5em',
+    },
     justify: 'center',
     alignItems: 'center',
     'max-width': '755px',
     'margin-top': '-53px',
     'box-shadow': '0px 0px 38px -14px rgba(0, 0, 0, 0.46)',
   },
+  description: {
+    [theme.breakpoints.up('sm')]: {
+      paddingLeft: '2em',
+    },
+  },
   cardTitle: {
     color: theme.typography.h5.color,
     fontFamily: theme.typography.h5.fontFamily,
     textTransform: 'uppercase',
+    fontWeight: '400',
+  },
+  map: {
+    height: '30em',
+    width: '30em',
+  },
+  actorName: {
+    width: '100%',
   },
   cardTitleCategories: {
     color: theme.typography.h5.color,
@@ -83,12 +106,45 @@ const useStyles = makeStyles((theme) => ({
   infoLabel: {
     color: theme.typography.h5.color,
   },
+
+  border: {
+    width: '3em',
+    borderColor: '#2C367E',
+    borderBottom: 'solid',
+    borderBottomColor: '#2C367E',
+    color: '#2C367E',
+    height: '1em',
+  },
+  descriptionInfoLabel: {
+    display: 'inline-block',
+    fontWeight: 700,
+    margin: '0.5em',
+  },
+  descriptionInfoValue: {
+    display: 'inline-block',
+  },
+  descriptionInfoDiv: {
+    display: 'inline-block',
+    margin: '0em 1em 0em 1em',
+  },
   infoPratiqueGrid: {
     textAlign: 'center',
+    backgroundColor: '#ededf5',
+  },
+  image: {
+    height: '72px',
+    width: '72px',
+    margin: '0 auto',
+    '& img': {
+      height: '100%',
+      width: '100%',
+      objectFit: 'contain',
+      borderRadius: '50%',
+    },
   },
   infoPratiqueTitle: {
-    backgroundColor: '#2C367E',
-    color: 'white',
+    fontWeight: '900',
+    color: '#2C367E',
     width: '100%',
     padding: '1em',
   },
@@ -103,6 +159,7 @@ const useStyles = makeStyles((theme) => ({
   },
   item: {
     border: '1px solid #2C367E',
+    borderWidth: ' 1px 0px 1px 0px ',
     borderStyle: 'dashed',
   },
   infoDiv: {
@@ -110,6 +167,7 @@ const useStyles = makeStyles((theme) => ({
   },
   icon: {
     color: '#bd0b3d',
+    width: '20px',
   },
   img: {
     padding: '1em',
@@ -183,6 +241,8 @@ const useStyles = makeStyles((theme) => ({
 
 const Actor = () => {
   const router = useRouter();
+  const mapRef = useRef();
+
   const { id } = router.query;
   const [eventToRender, setEventToRender] = useState(null);
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
@@ -576,18 +636,36 @@ const Actor = () => {
 
               <Grid item md={5} sm={10} className={[styles.align]}>
                 <Grid container className={[styles.infoPratiqueGrid]}>
+                  <div className={styles.image}>
+                    {data && data.actor.pictures.length >= 1 && (
+                      <img
+                        src={
+                          data.actor.pictures.length >= 1
+                            ? getImageUrl(
+                                data.actor.pictures.sort(
+                                  (a, b) =>
+                                    (a.logo ? -1 : 1) - (b.logo ? -1 : 1),
+                                )[0].croppedPicturePath,
+                              )
+                            : ''
+                        }
+                      />
+                    )}
+                  </div>
                   <Typography
-                    variant="h7"
-                    className={[
-                      styles.infoPratiqueTitle,
-                      styles.infoPratiqueItem,
-                    ]}
+                    variant="h2"
+                    className={(styles.cardTitle, styles.actorName)}
                   >
-                    INFOS PRATIQUES
+                    {data && data.actor.name}
                   </Typography>
+
                   <Grid container className={[styles.item]}>
                     <Grid item xs={3} className={[styles.alignRight]}>
-                      <Place className={[styles.icon]} />
+                      <img
+                        src="/icons/location.svg"
+                        alt="Localisation"
+                        className={[styles.icon]}
+                      />
                     </Grid>
                     <Grid item xs={8} className={[styles.alignLeft]}>
                       <div className={[styles.infoLabel]}>LOCALISATION </div>
@@ -718,7 +796,11 @@ const Actor = () => {
                     <div className={[styles.infoDiv]}>
                       <Grid container className={[styles.item]}>
                         <Grid item xs={3} className={[styles.alignRight]}>
-                          <Phone className={[styles.icon]} />
+                          <img
+                            src="/icons/phone.svg"
+                            alt="Téléphone"
+                            className={[styles.icon]}
+                          />
                         </Grid>
                         <Grid item xs={8} className={[styles.alignLeft]}>
                           <div className={[styles.infoLabel]}>TELEPHONE</div>
@@ -733,7 +815,11 @@ const Actor = () => {
                     <div className={[styles.infoDiv]}>
                       <Grid container className={[styles.item]}>
                         <Grid item xs={3} className={[styles.alignRight]}>
-                          <AlternateEmail className={[styles.icon]} />
+                          <img
+                            src="/icons/email.svg"
+                            alt="Email"
+                            className={[styles.icon]}
+                          />
                         </Grid>
                         <Grid item xs={8} className={[styles.alignLeft]}>
                           <div className={[styles.infoLabel]}>Email</div>
@@ -748,7 +834,11 @@ const Actor = () => {
                     <div className={[styles.infoDiv]}>
                       <Grid container className={[styles.item]}>
                         <Grid item xs={3} className={[styles.alignRight]}>
-                          <Language className={[styles.icon]} />
+                          <img
+                            src="/icons/web_site.svg"
+                            alt="Réseau social"
+                            className={[styles.icon]}
+                          />
                         </Grid>
                         <Grid item xs={8} className={[styles.alignLeft]}>
                           <div className={[styles.infoLabel]}>
@@ -771,7 +861,11 @@ const Actor = () => {
                   {data && data.actor.socialNetwork && (
                     <Grid container className={[styles.item]}>
                       <Grid item xs={3} className={[styles.alignRight]}>
-                        <Share className={[styles.icon]} />
+                        <img
+                          src="/icons/social.svg"
+                          alt="Réseau social"
+                          className={[styles.icon]}
+                        />
                       </Grid>
                       <Grid item xs={8} className={[styles.alignLeft]}>
                         <div className={[styles.infoLabel]}>Réseau social</div>
@@ -788,44 +882,48 @@ const Actor = () => {
                       </Grid>
                     </Grid>
                   )}
-                  {data && data.actor.openingHours.length !== 0 && (
-                    <Grid container className={[styles.item]}>
-                      <Grid item xs={3} className={[styles.alignRight]}>
-                        <Schedule className={[styles.icon]} />
+                  {data &&
+                    data.actor.openingHours &&
+                    data.actor.openingHours.length !== 0 && (
+                      <Grid container className={[styles.item]}>
+                        <Grid item xs={3} className={[styles.alignRight]}>
+                          <Schedule className={[styles.icon]} />
+                        </Grid>
+                        <Grid item xs={8} className={[styles.alignLeft]}>
+                          <div className={[styles.infoLabel]}>Horaire</div>
+                          {data &&
+                            data.actor.openingHours.map((openingHour) => {
+                              console.log('hereee i stopped');
+                              // debugger;
+                              return (
+                                <span className={[styles.infoValue]}>
+                                  {openingHour.days.map((day, index) => {
+                                    return (
+                                      <>{day.selected && getDay(day.id)}</>
+                                    );
+                                  })}
+                                  {openingHour.hours.map((hourtab) => {
+                                    return (
+                                      <>
+                                        {hourtab.map((hour, index) => {
+                                          return (
+                                            <>
+                                              {moment(hour).format('HH')}h
+                                              {moment(hour).format('mm')}
+                                              {index === 0 && ' - '}
+                                            </>
+                                          );
+                                        })}
+                                      </>
+                                    );
+                                  })}
+                                  <br />
+                                </span>
+                              );
+                            })}
+                        </Grid>
                       </Grid>
-                      <Grid item xs={8} className={[styles.alignLeft]}>
-                        <div className={[styles.infoLabel]}>Horaire</div>
-                        {data &&
-                          data.actor.openingHours.map((openingHour) => {
-                            console.log('hereee i stopped');
-                            // debugger;
-                            return (
-                              <span className={[styles.infoValue]}>
-                                {openingHour.days.map((day, index) => {
-                                  return <>{day.selected && getDay(day.id)}</>;
-                                })}
-                                {openingHour.hours.map((hourtab) => {
-                                  return (
-                                    <>
-                                      {hourtab.map((hour, index) => {
-                                        return (
-                                          <>
-                                            {moment(hour).format('HH')}h
-                                            {moment(hour).format('mm')}
-                                            {index === 0 && ' - '}
-                                          </>
-                                        );
-                                      })}
-                                    </>
-                                  );
-                                })}
-                                <br />
-                              </span>
-                            );
-                          })}
-                      </Grid>
-                    </Grid>
-                  )}
+                    )}
                 </Grid>
                 {data &&
                   entriesHasElementWithCode(

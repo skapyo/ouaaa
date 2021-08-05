@@ -77,7 +77,7 @@ export const defaultTimeRange = [
 
 const TimeContainer = (props) => {
   const classes = useStyles();
-
+  console.log('initData', initData);
   const {
     updateWeekDays,
     updateTimeFrames,
