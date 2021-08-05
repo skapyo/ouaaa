@@ -864,6 +864,8 @@ const EditActorForm = (props) => {
         });
       }
 
+      console.log('opening hours', openingHours);
+
       edit({
         variables: {
           formValues,

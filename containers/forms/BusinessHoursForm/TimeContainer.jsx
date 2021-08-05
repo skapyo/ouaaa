@@ -96,10 +96,10 @@ const TimeContainer = (props) => {
     initData !== undefined ? initData : defaultTimeRange,
   );
 
-  console.log('initData', initData);
   const [location, setLocation] = React.useState(
     places !== undefined ? places : '',
   );
+  const renderCount = useRef(0);
 
   const addTimeRange = () => {
     setTimeRangeList([...timeRangeList, 1]);
@@ -135,7 +135,13 @@ const TimeContainer = (props) => {
   };
 
   useEffect(() => {
+    if (renderCount.current < 2) {
+      renderCount.current++;
+      return;
+    }
+
     const newTimeFrame = [weekdays, hours, location];
+    console.log('been there');
     if (hours.length > 0) {
       updateTimeFrames(newTimeFrame, indexTimeContainer);
     }
@@ -149,9 +155,6 @@ const TimeContainer = (props) => {
             <div className={classes.daysplaces}>
               <div className={classes.days}>
                 {weekdays.map((day) => {
-                  console.log('here');
-                  // debugger;
-
                   return (
                     <div className="day">
                       <ButtonDay

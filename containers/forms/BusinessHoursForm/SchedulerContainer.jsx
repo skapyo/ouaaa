@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-wrap-multilines */
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
@@ -7,9 +7,6 @@ import Button from '@material-ui/core/Button';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 
 import TimeContainer from './TimeContainer';
-
-console.log('debugger');
-// debugger;
 
 const useStyles = makeStyles((theme) => ({
   main: {
@@ -79,34 +76,26 @@ const SchedulerContainer = (props) => {
   const { onChange, initData, ...other } = props;
   const classes = useStyles();
 
-  // console.log('here jojo', initData);
-
-  // console.log('timeContainerList 1', timeContainerList);
-
   const [availableDays, setAvailableDays] = useState(WEEKDAYS);
-  const [timeFrames, setTimesFrames] = useState([]);
+  const [timeFrames, setTimeFrames] = useState(
+    initData !== undefined
+      ? initData.map((data) => {
+          return [data.days, data.hours, data.place];
+        })
+      : [],
+  );
   const [showPlace, setShowPlace] = useState(false);
   const [places, setPlaces] = useState([]); // TODO: not working yet
 
   const [timeContainerList, setTimeContainerList] = useState(
-    // initData !== undefined ? initData[0]?.[0] : WEEKDAYS,
     initData !== undefined ? initData : WEEKDAYS,
   );
 
-  // console.log('timeContainerList 2', timeContainerList);
-  /* useEffect(() => {
-    debugger;
-    WEEKDAYS = initData !== undefined ? initData[0][0] : WEEKDAYS;
+  const firstUpdate = useRef(true);
 
-  }, [initData]);
-*/
   const addTimeContainer = () => {
     const newTimeContainerList = [...timeContainerList, availableDays];
 
-    // LIMIT the number of TimeContainer while it is still buggy
-    // if (newTimeContainerList.length > 1) return;
-
-    // console.log('newTimeContainerList', newTimeContainerList);
     setTimeContainerList(newTimeContainerList);
   };
 
@@ -115,14 +104,25 @@ const SchedulerContainer = (props) => {
   };
 
   const updateTimeFrames = (timeFrame, index) => {
-    if (index + 1 > timeFrames.length) {
-      setTimesFrames([...timeFrames, timeFrame]);
-    } else {
-      const newTimeFramesList = [...timeFrames].map((currentTimeFrame, ind) => {
-        return index == ind ? timeFrame : currentTimeFrame;
-      });
+    if (timeFrames !== undefined && timeFrames.length !== 0) {
+      // update timeFrames with initData
+      let newTimeFramesList = [...timeFrames];
+      debugger;
+      // if it adds a new timeframe
+      if (index + 1 > newTimeFramesList.length) {
+        newTimeFramesList.push(timeFrame);
+      } else {
+        // modify the current timeframe
+        newTimeFramesList = [...newTimeFramesList].map(
+          (currentTimeFrame, ind) => {
+            return index == ind ? timeFrame : currentTimeFrame;
+          },
+        );
+      }
 
-      setTimesFrames(newTimeFramesList);
+      setTimeFrames(newTimeFramesList);
+    } else {
+      setTimeFrames([timeFrame]);
     }
   };
 
@@ -138,8 +138,7 @@ const SchedulerContainer = (props) => {
         return index !== ind;
       },
     );
-
-    setTimesFrames(newTimeFramesList);
+    setTimeFrames(newTimeFramesList);
     setTimeContainerList(newTimeContainerList);
   };
 
@@ -148,11 +147,21 @@ const SchedulerContainer = (props) => {
   };
 
   useEffect(() => {
+    // initialize the timeFrames from initData
+    if (initData !== undefined) {
+      const updatedTimeFrames = initData.map((timeFrame) => timeFrame.days);
+    }
+
+    if (firstUpdate.current) {
+      firstUpdate.current = false;
+      return;
+    }
+
     let hasOpeningHour = false;
 
-    const openingHours = timeFrames.map((timeFrames) => {
+    const openingHours = timeFrames.map((timeFrame) => {
       const openingHour = {};
-      openingHour.days = timeFrames[0];
+      openingHour.days = timeFrame[0];
       openingHour.days.map((day) => {
         delete day.__typename;
         if (day.selected) {
@@ -160,10 +169,11 @@ const SchedulerContainer = (props) => {
         }
         return 'ok';
       });
-      openingHour.hours = timeFrames[1];
-      openingHour.place = timeFrames[2];
+      openingHour.hours = timeFrame[1];
+      openingHour.place = timeFrame[2];
       return openingHour;
     });
+
     if (hasOpeningHour) {
       console.table('openingHours before sent to GRAPHQL', openingHours);
       onChange(openingHours);
