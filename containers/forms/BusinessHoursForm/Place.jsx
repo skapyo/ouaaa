@@ -5,15 +5,16 @@ import { makeStyles } from '@material-ui/core/styles';
 import Chip from '@material-ui/core/Chip';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 
-const Place = ({ place, index, removePlace }) => {
+const Place = ({ place, removePlace }) => {
   return (
-    <Chip
-      size="small"
-      icon={<LocationOnIcon />}
-      label={place}
-//      onClick={() => }
-      onDelete={() => removePlace(index)}
-    />
+    place && (
+      <Chip
+        size="small"
+        icon={<LocationOnIcon />}
+        label={place}
+        onDelete={() => removePlace()}
+      />
+    )
   );
 };
 

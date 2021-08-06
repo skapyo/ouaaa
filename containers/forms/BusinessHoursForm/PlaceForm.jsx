@@ -19,6 +19,7 @@ function PlaceForm({ addPlace }) {
         type="text"
         className="input"
         value={value}
+        placeHolder="entrez une adresse"
         onChange={(e) => setValue(e.target.value)}
       />
     </form>

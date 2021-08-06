@@ -7,40 +7,32 @@ import Place from './Place';
 import PlaceForm from './PlaceForm';
 
 const PlaceContainer = (props) => {
-  const { updatePlaces, showPlace, place } = props;
+  const { updatePlace, showPlace, place } = props;
 
-  const [places, setPlaces] = useState(place !== undefined ? place : '');
-  const [currentPlace, setCurrentPlace] = useState(null);
+  const [currentPlace, setCurrentPlace] = useState(
+    place !== null ? place : null,
+  );
 
-  const addPlace = (place) => {
-    const newPlaces = [...places, { place }];
-    setPlaces(newPlaces);
-    setCurrentPlace(place);
+  const addPlace = (input) => {
+    setCurrentPlace(input);
   };
 
-  const removePlace = (index) => {
-    console.log('removed place', newPlaces);
-
-    const newPlaces = [...places];
-    newPlaces.splice(index, 1);
-
-    console.log('removed place', newPlaces);
-
-    setPlaces(newPlaces);
+  const removePlace = () => {
+    setCurrentPlace(null);
   };
 
   useEffect(() => {
-    updatePlaces(places);
-  }, [places]);
+    updatePlace(currentPlace);
+  }, [currentPlace]);
 
   return (
     <div>
       <div className="places">
-        {currentPlace !== null && showPlace && (
+        {showPlace && currentPlace !== null && (
           <Place place={currentPlace} removePlace={removePlace} />
         )}
+        {showPlace && <PlaceForm addPlace={addPlace} />}
       </div>
-      {showPlace && currentPlace === null && <PlaceForm addPlace={addPlace} />}
     </div>
   );
 };

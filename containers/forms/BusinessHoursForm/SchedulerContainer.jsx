@@ -85,14 +85,6 @@ const SchedulerContainer = (props) => {
       : [],
   );
   const [showPlace, setShowPlace] = useState(false);
-  // TODO: not working yet
-  const [places, setPlaces] = useState(
-    initData !== undefined
-      ? initData.map((data) => {
-          return data.place;
-        })
-      : [],
-  );
 
   const [timeContainerList, setTimeContainerList] = useState(
     initData !== undefined ? initData : [BLANK_BUSINESS_HOURS],
@@ -145,10 +137,6 @@ const SchedulerContainer = (props) => {
     );
     setTimeFrames(newTimeFramesList);
     setTimeContainerList(newTimeContainerList);
-  };
-
-  const updatePlaces = (newPlaces) => {
-    setPlaces(newPlaces);
   };
 
   useEffect(() => {
@@ -221,9 +209,8 @@ const SchedulerContainer = (props) => {
                   availableDays={days}
                   indexTimeContainer={index}
                   deleteTimeContainer={deleteTimeContainer}
-                  places={place}
+                  inputPlace={place}
                   showPlace={showPlace}
-                  updatePlaces={updatePlaces} // FIXME: place not updated
                   initData={hours}
                 />
               </div>
