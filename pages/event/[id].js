@@ -75,10 +75,11 @@ const useStyles = makeStyles((theme) => ({
   },
   infoPratiqueGrid: {
     textAlign: 'center',
+    backgroundColor: '#ededf5',
   },
   infoPratiqueTitle: {
-    backgroundColor: '#2C367E',
-    color: 'white',
+    fontWeight: '900',
+    color: '#2C367E',
     width: '100%',
     padding: '1em',
   },
@@ -97,6 +98,7 @@ const useStyles = makeStyles((theme) => ({
   },
   icon: {
     color: '#bd0b3d',
+    width: '20px',
   },
   img: {
     padding: '1em',
@@ -455,8 +457,174 @@ const Event = () => {
             />
           )}
           <Container className={styles.cardInfo}>
-            <Grid container spacing={3}>
-              <Grid item md={8} sm={10} className={styles.threePointGrid}>
+            <Grid container>
+              <Grid item md={5} sm={10} className={[styles.align]}>
+                <Grid container className={[styles.infoPratiqueGrid]}>
+                <div className={styles.image}>
+                    {data && data.event.pictures.length >= 1 && (
+                      <img
+                        src={
+                          data.event.pictures.length >= 1
+                            ? getImageUrl(
+                              data.event.pictures.sort((a, b) => (a.logo ? -1 : 1) - (b.logo ? -1 : 1))[0].croppedPicturePath,
+                            )
+                            : ''
+                        }
+                      />
+                    )}
+                  </div>
+                  <Typography variant="h2" className={styles.cardTitle, styles.actorName}>
+                    {data && data.event.name}
+                  </Typography>
+                    <Grid container className={[styles.item]}>
+                      <Grid item xs={3} className={[styles.alignRight]}>
+                        <LocalOffer className={[styles.icon]} />
+                      </Grid>
+                      <Grid item xs={8} className={[styles.alignLeft]}>
+                        <div className={[styles.infoLabel]}>TYPE</div>
+                        <span className={[styles.infoValue]}>
+                          {data &&
+                            data.event.entries.map(
+                              (entry) =>
+                                entry &&
+                                entry.parentEntry &&
+                                entry.parentEntry.collection &&
+                                entry.parentEntry.collection.code ===
+                                  'event_type' && (
+                                  <div>
+                                    <Typography
+                                      variant="h7"
+                                      className={styles.cardTitleCategories}
+                                    >
+                                      {`${entry && entry.parentEntry.label} : ${
+                                        entry && entry.label
+                                      }`}
+                                    </Typography>
+                                  </div>
+                                ),
+                            )}
+                        </span>
+                      </Grid>
+                    </Grid>
+                    <Grid container className={[styles.item]}>
+                      <Grid item xs={3} className={[styles.alignRight]}>
+                        <img src={"/icons/public.svg"} alt="Collectif & réseau" className={[styles.icon]} />
+                      </Grid>
+                      <Grid item xs={8} className={[styles.alignLeft]}>
+                        <div className={[styles.infoLabel]}>Public cible</div>
+                        <span className={[styles.infoValue]}>
+                          {data &&
+                            data.event.entries.map(
+                              (entry) =>
+                                entry &&
+                                entry.collection &&
+                                entry.collection.code ===
+                                  'event_public_target' && (
+                                  <div>
+                                    <Typography
+                                      variant="h7"
+                                      className={styles.cardTitleCategories}
+                                    >
+                                      {` ${entry && entry.label}`}
+                                    </Typography>
+                                  </div>
+                                ),
+                            )}
+                        </span>
+                      </Grid>
+                    </Grid>
+
+                    <Grid container className={[styles.item]}>
+                      <Grid item xs={3} className={[styles.alignRight]}>
+                      <img src={"/icons/location.svg"} alt="Localisation" className={[styles.icon]} />
+                      </Grid>
+                      <Grid item xs={8} className={[styles.alignLeft]}>
+                        <div className={[styles.infoLabel]}>LOCALISATION</div>
+                        <span className={[styles.infoValue]}>
+                          {data && !data.event.city && (
+                            <span> Adresse manquante</span>
+                          )}
+                          {data && !data.event.address && data.event.city && (
+                            <span>
+                              {/* @ts-ignore */}
+                              {data && data.event.city}
+                            </span>
+                          )}
+                          {data && data.event.address && data.event.city && (
+                            <span>
+                              {/* @ts-ignore */}
+                              {data && data.event.address},{/* @ts-ignore */}
+                              {data.event.city}
+                            </span>
+                          )}
+                        </span>
+                      </Grid>
+                    </Grid>
+                    <Grid container className={[styles.item]}>
+                      <Grid item xs={3} className={[styles.alignRight]}>
+                        <img src={"/icons/social.svg"} alt="Réseau social" className={[styles.icon]} />
+                      </Grid>
+                      <Grid item xs={8} className={[styles.alignLeft]}>
+                        <span className={[styles.infoValue]}>
+                          <a
+                            href={data && data.event.facebookUrl}
+                            target="_blank"
+                            className={[styles.infoLabel]}
+                          >
+                            Réseau social
+                          </a>
+                        </span>
+                      </Grid>
+                    </Grid>
+                    <Grid container className={[styles.item]}>
+                      <Grid item xs={3} className={[styles.alignRight]}>
+                      <img src={"/icons/clock.svg"} alt="Horaire" className={[styles.icon]} />
+                      </Grid>
+                      <Grid item xs={8} className={[styles.alignLeft]}>
+                        <div className={[styles.infoLabel]}>Date de début</div>
+                        <span className={[styles.infoValue]}>
+                          <Moment format=" DD/MM HH:mm" unix>
+                            {data && data.event.startedAt / 1000}
+                          </Moment>
+                        </span>
+                        <div className={[styles.infoLabel]}>Date de fin</div>
+                        <span className={[styles.infoValue]}>
+                          <Moment format=" DD/MM HH:mm" unix>
+                            {data && data.event.endedAt / 1000}
+                          </Moment>
+                        </span>
+                      </Grid>
+                    </Grid>
+                    <Grid container className={[styles.item]}>
+                      <Grid item xs={3} className={[styles.alignRight]}>
+                        <Euro className={[styles.icon]} />
+                      </Grid>
+                      <Grid item xs={8} className={[styles.alignLeft]}>
+                        <div className={[styles.infoLabel]}>Tarif</div>
+                        <span className={[styles.infoValue]}>
+                          {data &&
+                            data.event.entries.map(
+                              (entry) =>
+                                entry &&
+                                entry.collection &&
+                                entry.collection.code === 'event_price' && (
+                                  <div>
+                                    <Typography
+                                      variant="h7"
+                                      className={styles.cardTitleCategories}
+                                    >
+                                      {` ${entry && entry.label}`}
+                                    </Typography>
+                                  </div>
+                                ),
+                            )}
+                        </span>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid item md={7} sm={10}  className={styles.threePointGrid}>
                 <div>
                   <Typography variant="h5" className={styles.cardTitle}>
                     {data && data.event.label}
@@ -487,165 +655,7 @@ const Event = () => {
                 <div />
               </Grid>
 
-              <Grid md={4} sm={10} className={[styles.align]}>
-                <Grid container className={[styles.infoPratiqueGrid]}>
-                  <Typography
-                    variant="h7"
-                    className={[
-                      styles.infoPratiqueTitle,
-                      styles.infoPratiqueItem,
-                    ]}
-                  >
-                    INFOS PRATIQUES
-                  </Typography>
-                  <Grid container className={[styles.item]}>
-                    <Grid item xs={3} className={[styles.alignRight]}>
-                      <LocalOffer className={[styles.icon]} />
-                    </Grid>
-                    <Grid item xs={8} className={[styles.alignLeft]}>
-                      <div className={[styles.infoLabel]}>TYPE</div>
-                      <span className={[styles.infoValue]}>
-                        {data &&
-                          data.event.entries.map(
-                            (entry) =>
-                              entry &&
-                              entry.parentEntry &&
-                              entry.parentEntry.collection &&
-                              entry.parentEntry.collection.code ===
-                                'event_type' && (
-                                <div>
-                                  <Typography
-                                    variant="h7"
-                                    className={styles.cardTitleCategories}
-                                  >
-                                    {`${entry && entry.parentEntry.label} : ${
-                                      entry && entry.label
-                                    }`}
-                                  </Typography>
-                                </div>
-                              ),
-                          )}
-                      </span>
-                    </Grid>
-                  </Grid>
-                  <Grid container className={[styles.item]}>
-                    <Grid item xs={3} className={[styles.alignRight]}>
-                      <SupervisedUserCircle className={[styles.icon]} />
-                    </Grid>
-                    <Grid item xs={8} className={[styles.alignLeft]}>
-                      <div className={[styles.infoLabel]}>Public cible</div>
-                      <span className={[styles.infoValue]}>
-                        {data &&
-                          data.event.entries.map(
-                            (entry) =>
-                              entry &&
-                              entry.collection &&
-                              entry.collection.code ===
-                                'event_public_target' && (
-                                <div>
-                                  <Typography
-                                    variant="h7"
-                                    className={styles.cardTitleCategories}
-                                  >
-                                    {` ${entry && entry.label}`}
-                                  </Typography>
-                                </div>
-                              ),
-                          )}
-                      </span>
-                    </Grid>
-                  </Grid>
-
-                  <Grid container className={[styles.item]}>
-                    <Grid item xs={3} className={[styles.alignRight]}>
-                      <Place className={[styles.icon]} />
-                    </Grid>
-                    <Grid item xs={8} className={[styles.alignLeft]}>
-                      <div className={[styles.infoLabel]}>LOCALISATION</div>
-                      <span className={[styles.infoValue]}>
-                        {data && !data.event.city && (
-                          <span> Adresse manquante</span>
-                        )}
-                        {data && !data.event.address && data.event.city && (
-                          <span>
-                            {/* @ts-ignore */}
-                            {data && data.event.city}
-                          </span>
-                        )}
-                        {data && data.event.address && data.event.city && (
-                          <span>
-                            {/* @ts-ignore */}
-                            {data && data.event.address},{/* @ts-ignore */}
-                            {data.event.city}
-                          </span>
-                        )}
-                      </span>
-                    </Grid>
-                  </Grid>
-                  <Grid container className={[styles.item]}>
-                    <Grid item xs={3} className={[styles.alignRight]}>
-                      <FacebookIcon className={styles.icons} fontSize="large" />
-                    </Grid>
-                    <Grid item xs={8} className={[styles.alignLeft]}>
-                      <span className={[styles.infoValue]}>
-                        <a
-                          href={data && data.event.facebookUrl}
-                          target="_blank"
-                          className={[styles.infoLabel]}
-                        >
-                          Lien facebook
-                        </a>
-                      </span>
-                    </Grid>
-                  </Grid>
-                  <Grid container className={[styles.item]}>
-                    <Grid item xs={3} className={[styles.alignRight]}>
-                      <Schedule className={[styles.icon]} />
-                    </Grid>
-                    <Grid item xs={8} className={[styles.alignLeft]}>
-                      <div className={[styles.infoLabel]}>Date de début</div>
-                      <span className={[styles.infoValue]}>
-                        <Moment format=" DD/MM HH:mm" unix>
-                          {data && data.event.startedAt / 1000}
-                        </Moment>
-                      </span>
-                      <div className={[styles.infoLabel]}>Date de fin</div>
-                      <span className={[styles.infoValue]}>
-                        <Moment format=" DD/MM HH:mm" unix>
-                          {data && data.event.endedAt / 1000}
-                        </Moment>
-                      </span>
-                    </Grid>
-                  </Grid>
-                  <Grid container className={[styles.item]}>
-                    <Grid item xs={3} className={[styles.alignRight]}>
-                      <Euro className={[styles.icon]} />
-                    </Grid>
-                    <Grid item xs={8} className={[styles.alignLeft]}>
-                      <div className={[styles.infoLabel]}>Tarif</div>
-                      <span className={[styles.infoValue]}>
-                        {data &&
-                          data.event.entries.map(
-                            (entry) =>
-                              entry &&
-                              entry.collection &&
-                              entry.collection.code === 'event_price' && (
-                                <div>
-                                  <Typography
-                                    variant="h7"
-                                    className={styles.cardTitleCategories}
-                                  >
-                                    {` ${entry && entry.label}`}
-                                  </Typography>
-                                </div>
-                              ),
-                          )}
-                      </span>
-                    </Grid>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
+  
 
             <div className={styles.buttonParticipate}>
               {data && containUser(data.event.participants) && (
