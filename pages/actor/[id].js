@@ -22,7 +22,6 @@ import Share from '@material-ui/icons/Share';
 import Schedule from '@material-ui/icons/Schedule';
 import People from '@material-ui/icons/People';
 
-
 import Slider from 'react-slick/lib';
 import { useSnackbar } from 'notistack';
 import { useCookies } from 'react-cookie';
@@ -39,11 +38,11 @@ import CardAddEvent from '../../components/cards/CardAddEvent';
 import { getImageUrl, entriesHasElementWithCode } from '../../utils/utils';
 
 if (typeof window !== 'undefined') {
-  var L = require('leaflet');
-  var Map = require('react-leaflet').Map;
-  var TileLayer = require('react-leaflet').TileLayer;
-  var Marker = require('react-leaflet').Marker;
-  var Popup = require('react-leaflet').Popup;
+  const L = require('leaflet');
+  const { Map } = require('react-leaflet');
+  const { TileLayer } = require('react-leaflet');
+  const { Marker } = require('react-leaflet');
+  const { Popup } = require('react-leaflet');
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -61,9 +60,8 @@ const useStyles = makeStyles((theme) => ({
     'text-align': 'center',
   },
   cardInfo: {
-
     backgroundColor: 'white',
-    //backgroundImage: "url('/icons/planet.svg')",
+    // backgroundImage: "url('/icons/planet.svg')",
     backgroundPosition: 'right',
     backgroundRepeat: 'no-repeat',
     backgroundOpacity: ' 0.5',
@@ -91,8 +89,8 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: '400',
   },
   map: {
-    height: "30em",
-    width: "30em",
+    height: '30em',
+    width: '30em',
   },
   actorName: {
     width: '100%',
@@ -124,7 +122,6 @@ const useStyles = makeStyles((theme) => ({
   },
   descriptionInfoValue: {
     display: 'inline-block',
-
   },
   descriptionInfoDiv: {
     display: 'inline-block',
@@ -146,7 +143,6 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   infoPratiqueTitle: {
-
     fontWeight: '900',
     color: '#2C367E',
     width: '100%',
@@ -413,9 +409,7 @@ const Actor = () => {
     return isContained;
   }
 
-  const {
-    data, loading, error, refetch,
-  } = useQuery(GET_ACTOR, {
+  const { data, loading, error, refetch } = useQuery(GET_ACTOR, {
     variables: {
       id,
     },
@@ -468,8 +462,6 @@ const Actor = () => {
     }
   };
 
-
-
   const WEEKDAYS = [
     { id: 1, day: 'L', selected: false },
     { id: 2, day: 'M', selected: false },
@@ -493,11 +485,12 @@ const Actor = () => {
     nextArrow: <SampleNextArrow />,
     prevArrow: <SamplePrevArrow />,
   };
-  const nbSlidetoshow = data && data.actor.events && data.actor.events.length > 5
-    ? 5
-    : data
-    && data.actor.events
-    && data.actor.events.length + (containUser(data.actor.referents) ? 1 : 0);
+  const nbSlidetoshow =
+    data && data.actor.events && data.actor.events.length > 5
+      ? 5
+      : data &&
+        data.actor.events &&
+        data.actor.events.length + (containUser(data.actor.referents) ? 1 : 0);
 
   const settingsSliderevent = {
     infinite: true,
@@ -536,10 +529,10 @@ const Actor = () => {
     let nbEntry = 0;
     entries.forEach((entry) => {
       if (
-        entry.parentEntry
-        && entry.parentEntry.collection
-        && entry.parentEntry.collection.code === 'category'
-        && nbEntry <= nbEntryToShow
+        entry.parentEntry &&
+        entry.parentEntry.collection &&
+        entry.parentEntry.collection.code === 'category' &&
+        nbEntry <= nbEntryToShow
       ) {
         text += `${entry.parentEntry.label} : ${entry.label}  `;
         nbEntry += 1;
@@ -552,9 +545,9 @@ const Actor = () => {
     let text = '';
     entries.forEach((entry) => {
       if (
-        entry
-        && entry.collection
-        && entry.collection.code === 'larochelle_quarter'
+        entry &&
+        entry.collection &&
+        entry.collection.code === 'larochelle_quarter'
       ) {
         text += `, ${entry.label}`;
       }
@@ -566,19 +559,13 @@ const Actor = () => {
       <Head>
         <title>
           {/* @ts-ignore */}
-          {data && data.actor.name}
-          -
-          {/* @ts-ignore */}
+          {data && data.actor.name}-{/* @ts-ignore */}
           {data && data.actor.activity}
-          {/* @ts-ignore */}
-          -
-          {/* @ts-ignore */}
+          {/* @ts-ignore */}-{/* @ts-ignore */}
           {data && data.actor.city}
           {/* @ts-ignore */}
           {data && showLaRochelleQuarter(data.actor.entries)}
-          {/* @ts-ignore */}
-          -
-          {/* @ts-ignore */}
+          {/* @ts-ignore */}-{/* @ts-ignore */}
           {data && showCategory(data.actor.entries)}
         </title>
       </Head>
@@ -591,15 +578,11 @@ const Actor = () => {
           -
           {/* @ts-ignore */}
             {data && data.actor.activity}
-            {/* @ts-ignore */}
-            -
-            {/* @ts-ignore */}
+            {/* @ts-ignore */}-{/* @ts-ignore */}
             {data && data.actor.city}
             {/* @ts-ignore */}
             {data && showLaRochelleQuarter(data.actor.entries)}
-            {/* @ts-ignore */}
-            -
-            {/* @ts-ignore */}
+            {/* @ts-ignore */}-{/* @ts-ignore */}
             {data && showCategory(data.actor.entries)}
           </Typography>
 
@@ -628,20 +611,30 @@ const Actor = () => {
                         src={
                           data.actor.pictures.length >= 1
                             ? getImageUrl(
-                              data.actor.pictures.sort((a, b) => (a.logo ? -1 : 1) - (b.logo ? -1 : 1))[0].croppedPicturePath,
-                            )
+                                data.actor.pictures.sort(
+                                  (a, b) =>
+                                    (a.logo ? -1 : 1) - (b.logo ? -1 : 1),
+                                )[0].croppedPicturePath,
+                              )
                             : ''
                         }
                       />
                     )}
                   </div>
-                  <Typography variant="h2" className={styles.cardTitle, styles.actorName}>
+                  <Typography
+                    variant="h2"
+                    className={(styles.cardTitle, styles.actorName)}
+                  >
                     {data && data.actor.name}
                   </Typography>
 
                   <Grid container className={[styles.item]}>
                     <Grid item xs={3} className={[styles.alignRight]}>
-                    <img src={"/icons/location.svg"} alt="Localisation" className={[styles.icon]} />
+                      <img
+                        src="/icons/location.svg"
+                        alt="Localisation"
+                        className={[styles.icon]}
+                      />
                     </Grid>
                     <Grid item xs={8} className={[styles.alignLeft]}>
                       <div className={[styles.infoLabel]}>LOCALISATION </div>
@@ -658,13 +651,14 @@ const Actor = () => {
                         {data && data.actor.address && data.actor.city && (
                           <span>
                             {/* @ts-ignore */}
-                            {`${data && data.actor.address} ${data && data.actor.city
-                              }`}
+                            {`${data && data.actor.address} ${
+                              data && data.actor.city
+                            }`}
                           </span>
                         )}
                       </span>
-                      {data
-                        && entriesHasElementWithCode(
+                      {data &&
+                        entriesHasElementWithCode(
                           data.actor.entries,
                           'actor_location_action',
                         ) && (
@@ -698,7 +692,11 @@ const Actor = () => {
                     <div className={[styles.infoDiv]}>
                       <Grid container className={[styles.item]}>
                         <Grid item xs={3} className={[styles.alignRight]}>
-                        <img src={"/icons/phone.svg"} alt="Téléphone" className={[styles.icon]} />
+                          <img
+                            src="/icons/phone.svg"
+                            alt="Téléphone"
+                            className={[styles.icon]}
+                          />
                         </Grid>
                         <Grid item xs={8} className={[styles.alignLeft]}>
                           <div className={[styles.infoLabel]}>TELEPHONE</div>
@@ -713,7 +711,11 @@ const Actor = () => {
                     <div className={[styles.infoDiv]}>
                       <Grid container className={[styles.item]}>
                         <Grid item xs={3} className={[styles.alignRight]}>
-                          <img src={"/icons/email.svg"} alt="Email" className={[styles.icon]} />
+                          <img
+                            src="/icons/email.svg"
+                            alt="Email"
+                            className={[styles.icon]}
+                          />
                         </Grid>
                         <Grid item xs={8} className={[styles.alignLeft]}>
                           <div className={[styles.infoLabel]}>Email</div>
@@ -728,7 +730,11 @@ const Actor = () => {
                     <div className={[styles.infoDiv]}>
                       <Grid container className={[styles.item]}>
                         <Grid item xs={3} className={[styles.alignRight]}>
-                          <img src={"/icons/web_site.svg"} alt="Site Web" className={[styles.icon]} />
+                          <img
+                            src="/icons/web_site.svg"
+                            alt="Site Web"
+                            className={[styles.icon]}
+                          />
                         </Grid>
                         <Grid item xs={8} className={[styles.alignLeft]}>
                           <div className={[styles.infoLabel]}>
@@ -751,7 +757,11 @@ const Actor = () => {
                   {data && data.actor.socialNetwork && (
                     <Grid container className={[styles.item]}>
                       <Grid item xs={3} className={[styles.alignRight]}>
-                        <img src={"/icons/social.svg"} alt="Réseau social" className={[styles.icon]} />
+                        <img
+                          src="/icons/social.svg"
+                          alt="Réseau social"
+                          className={[styles.icon]}
+                        />
                       </Grid>
                       <Grid item xs={8} className={[styles.alignLeft]}>
                         <div className={[styles.infoLabel]}>Réseau social</div>
@@ -759,6 +769,7 @@ const Actor = () => {
                           <a
                             href={data && data.actor.socialNetwork}
                             target="_blank"
+                            rel="noreferrer"
                           >
                             {data && data.actor.socialNetwork}
                           </a>
@@ -771,41 +782,42 @@ const Actor = () => {
                     <Grid container className={[styles.item]}>
                       <Grid item xs={3} className={[styles.alignRight]}>
                       <img src={"/icons/clock.svg"} alt="Horaire" className={[styles.icon]} />
+                        </Grid>
+                        <Grid item xs={8} className={[styles.alignLeft]}>
+                          <div className={[styles.infoLabel]}>Horaire</div>
+                          {data &&
+                            data.actor.openingHours.map((openingHour) => {
+                              console.log('hereee i stopped');
+                              // debugger;
+                              return (
+                                <span className={[styles.infoValue]}>
+                                  {openingHour.days.map((day, index) => {
+                                    return (
+                                      <>{day.selected && getDay(day.id)}</>
+                                    );
+                                  })}
+                                  {openingHour.hours.map((hourtab) => {
+                                    return (
+                                      <>
+                                        {hourtab.map((hour, index) => {
+                                          return (
+                                            <>
+                                              {moment(hour).format('HH')}h
+                                              {moment(hour).format('mm')}
+                                              {index === 0 && ' - '}
+                                            </>
+                                          );
+                                        })}
+                                      </>
+                                    );
+                                  })}
+                                  <br />
+                                </span>
+                              );
+                            })}
+                        </Grid>
                       </Grid>
-                      <Grid item xs={8} className={[styles.alignLeft]}>
-                        <div className={[styles.infoLabel]}>Horaire</div>
-                        {data
-                          && data.actor.openingHours.map((openingHour) => {
-                            console.log('hereee i stopped');
-                            // debugger;
-                            return (
-                              <span className={[styles.infoValue]}>
-                                {openingHour.days.map((day, index) => {
-                                  return <>{day.selected && getDay(day.id)}</>;
-                                })}
-                                {openingHour.hours.map((hourtab) => {
-                                  return (
-                                    <>
-                                      {hourtab.map((hour, index) => {
-                                        return (
-                                          <>
-                                            {moment(hour).format('HH')}
-                                            h
-                                            {moment(hour).format('mm')}
-                                            {index === 0 && ' - '}
-                                          </>
-                                        );
-                                      })}
-                                    </>
-                                  );
-                                })}
-                                <br />
-                              </span>
-                            );
-                          })}
-                      </Grid>
-                    </Grid>
-                  )}
+                    )}
                 </Grid>
               </Grid>
               <Grid item md={7} sm={10} className={styles.description}>
@@ -847,10 +859,10 @@ const Actor = () => {
                 {data
                   && entriesHasElementWithCode(
                     data.actor.entries,
-                    'actor_status',
+                    'public_target',
                   ) && (
                     <div className={[styles.descriptionInfoDiv]}>
-                      <img src={"/icons/status.svg"} alt="Statut" className={[styles.icon]} />
+                      <img src={"/icons/status.svg"} alt="Collectif & réseau" className={[styles.icon]} />
                       <div className={[styles.descriptionInfoLabel]}> Statut :</div>
                       <span className={[styles.descriptionInfoValue]}>
                         {data
@@ -932,48 +944,7 @@ const Actor = () => {
                       </span>
                     </div>
                   )}
-                <div />
-                <br />
-                <Typography variant="h3" className={styles.cardTitle}>
-                  ACCES
-                </Typography>
-                <div className={styles.border} />
-                <br />
-
-                {data && (
-                  <Map ref={mapRef} center={[data.actor.lat, data.actor.lng]} zoom={11} className={styles.map}  >
-                    <TileLayer
-                      attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    />
-                    <Marker
-                      position={[data.actor.lat, data.actor.lng]}
-                      icon={new L.Icon({
-                        iconUrl: '/icons/location.svg',
-                        iconAnchor: [13, 34], // point of the icon which will correspond to marker's location
-                        iconSize: [25],
-                        popupAnchor: [1, -25],
-                        html: `<span style="background-color: red" />`,
-                      })}
-                    >    <Popup>
-                        {data.actor.name} - {data && !data.actor.address && data.actor.city && (
-                          <span>
-                            {/* @ts-ignore */}
-                            {data && data.actor.city}
-                          </span>
-                        )} 
-                        {data && data.actor.address && data.actor.city && (
-                          <span>
-                            {/* @ts-ignore */}
-                            {`${data && data.actor.address} ${data && data.actor.city
-                              }`}
-                          </span>
-                        )}
-                      </Popup></Marker>
-                  </Map>
-                )}
               </Grid>
-
             </Grid>
 
             {data && data.actor.volunteerDescription && (
@@ -1010,9 +981,9 @@ const Actor = () => {
               </div>
             )}
             <Slider {...settingsSliderImage}>
-              {data
-                && data.actor.pictures
-                && data.actor.pictures
+              {data &&
+                data.actor.pictures &&
+                data.actor.pictures
                   .sort((a, b) => (a.position > b.position ? 1 : -1))
                   .map((picture) => (
                     <img
@@ -1022,18 +993,16 @@ const Actor = () => {
                   ))}
             </Slider>
 
-            {data
-              && data.actor.events
-              && (data.actor.events.length > 0
-                || containUser(data.actor.referents)) && (
+            {data &&
+              data.actor.events &&
+              (data.actor.events.length > 0 ||
+                containUser(data.actor.referents)) && (
                 <div>
                   <Typography
                     variant="h5"
                     className={[styles.cardTitle, styles.align]}
                   >
-                    LES ÉVÉNEMENTS DE :
-                    {' '}
-                    {data && data.actor.name}
+                    LES ÉVÉNEMENTS DE : {data && data.actor.name}
                   </Typography>
                 </div>
               )}
@@ -1045,26 +1014,25 @@ const Actor = () => {
                 <CardAddEvent actor={data.actor} />
               )}
 
-              {data
-                && data.actor.events
-                && data.actor.events.map((event) => (
+              {data &&
+                data.actor.events &&
+                data.actor.events.map((event) => (
                   <CardSliderEvent key={event.id} event={event} />
                 ))}
             </Slider>
           </Container>
           <Newsletter />
-          {((data && containUser(data.actor.referents))
-            || (user && user.role === 'admin')) && (
-              <Link href={`/actorAdmin/actor/${id}`}>
-                {/* debugger; */}
-                <Fab className={styles.fab} aria-label="edit">
-                  <EditIcon />
-                </Fab>
-              </Link>
-            )}
+          {((data && containUser(data.actor.referents)) ||
+            (user && user.role === 'admin')) && (
+            <Link href={`/actorAdmin/actor/${id}`}>
+              <Fab className={styles.fab} aria-label="edit">
+                <EditIcon />
+              </Fab>
+            </Link>
+          )}
         </Box>
       </RootRef>
-    </AppLayout >
+    </AppLayout>
   );
 };
 

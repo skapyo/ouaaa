@@ -84,10 +84,9 @@ const TimeContainer = (props) => {
     availableDays,
     indexTimeContainer,
     deleteTimeContainer,
-    updatePlaces,
     showPlace,
     initData,
-    places,
+    inputPlace,
   } = props;
 
   const [hours, setHours] = useState(initData !== undefined ? initData : []);
@@ -96,10 +95,10 @@ const TimeContainer = (props) => {
     initData !== undefined ? initData : defaultTimeRange,
   );
 
-  
-  const [location, setLocation] = React.useState(
-    places !== undefined ? places : '',
+  const [place, setPlace] = React.useState(
+    inputPlace !== undefined ? inputPlace : '',
   );
+  const renderCount = useRef(0);
 
   const addTimeRange = () => {
     setTimeRangeList([...timeRangeList, 1]);
@@ -130,16 +129,23 @@ const TimeContainer = (props) => {
     }
   };
 
-  const selectLocation = (location) => {
-    setLocation(location);
+  const updatePlace = (place) => {
+    setPlace(place);
   };
 
   useEffect(() => {
-    const newTimeFrame = [weekdays, hours, location];
+    // TODO: workaround to execute the further code , needs to find a solution to limit rendering count
+    if (renderCount.current < 2) {
+      renderCount.current++;
+      return;
+    }
+
+    const newTimeFrame = [weekdays, hours, place];
+    console.log('been there');
     if (hours.length > 0) {
       updateTimeFrames(newTimeFrame, indexTimeContainer);
     }
-  }, [weekdays, hours, location]);
+  }, [weekdays, hours, place]);
 
   return (
     <div className={classes.container}>
@@ -149,9 +155,6 @@ const TimeContainer = (props) => {
             <div className={classes.daysplaces}>
               <div className={classes.days}>
                 {weekdays.map((day) => {
-                  console.log('here');
-                  // debugger;
-
                   return (
                     <div className="day">
                       <ButtonDay
@@ -166,9 +169,9 @@ const TimeContainer = (props) => {
               </div>
               <div className={classes.places}>
                 <PlaceContainer
-                  updatePlaces={updatePlaces}
+                  updatePlace={updatePlace}
                   showPlace={showPlace}
-                  selectLocation={selectLocation}
+                  place={place}
                 />
               </div>
             </div>

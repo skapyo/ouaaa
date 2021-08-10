@@ -41,7 +41,6 @@ export default function TimePicker(props) {
   };
 
   useEffect(() => {
-    // ''
     selectHours(selectedStartDate, selectedEndDate, indexTimer);
   }, [selectedStartDate, selectedEndDate]);
 

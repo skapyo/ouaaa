@@ -864,13 +864,8 @@ const EditActorForm = (props) => {
         });
       }
 
+      console.log('opening hours', openingHours);
 
-
-      // console.log(
-      //   'in EditActorForm jojo',
-      //   JSON.stringify(openingHours[0], null, 4),
-      //   JSON.stringify(openingHours[1], null, 4),
-      // );
       edit({
         variables: {
           formValues,
@@ -905,6 +900,8 @@ const EditActorForm = (props) => {
         });
         router.push(`/actor/${actorData.actor.id}`);
       }
+
+      console.log('actorData', actorData);
     }, [editLoading, editError]);
 
     const getObjectLongName = (results, name) => {
@@ -1185,14 +1182,10 @@ const EditActorForm = (props) => {
         <Typography variant="body1" color="primary" className={styles.label}>
           Jour et heure d'ouverture
         </Typography>
-        {/* <SchedulerContainer
+        <SchedulerContainer
           onChange={setOpeningHours}
-          // initData={
-          //   actorData && getTimeFramesFromData(actorData.actor.openingHours)
-          // }
-          initData={actorData && actorData.actor.openingHours}
-        /> */}
-        {actorData && console.log(actorData.actor.openingHours)}
+          initData={actorData && actorData?.actor?.openingHours}
+        />
         <p />
         <Typography variant="body1" color="primary" className={styles.label}>
           CONTACT PRIVE pour les échanges avec <i>OUAAA!</i>

@@ -125,7 +125,7 @@ function StyledTreeItem(props) {
     categoryChange(event);
   };
   //
-  console.log(`${checked} ${other.nodeId}`);
+  // console.log(`${checked} ${other.nodeId}`);
   return (
     <TreeItem
       label={
