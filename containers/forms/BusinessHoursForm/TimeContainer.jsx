@@ -137,7 +137,11 @@ const TimeContainer = (props) => {
     const tempTimeRangeList = [...timeRangeList];
     tempTimeRangeList.pop();
 
+    const tempHours = [...hours];
+    tempHours.pop();
+
     setTimeRangeList(tempTimeRangeList);
+    setHours(tempHours);
 
     if (tempTimeRangeList.length === 0) {
       deleteTimeContainer(e, index);
@@ -152,11 +156,12 @@ const TimeContainer = (props) => {
     }
 
     const newTimeFrame = [weekdays, hours, place];
+    console.log('newTimeFrame', newTimeFrame);
     console.log('been there');
     if (hours.length > 0) {
       updateTimeFrames(newTimeFrame, indexTimeContainer);
     }
-  }, [weekdays, hours, place]);
+  }, [weekdays, hours, place, timeRangeList]);
 
   return (
     <div className={classes.container}>
