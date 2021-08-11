@@ -77,7 +77,6 @@ export const defaultTimeRange = [
 
 const TimeContainer = (props) => {
   const classes = useStyles();
-  console.log('initData', initData);
   const {
     updateWeekDays,
     updateTimeFrames,
@@ -91,9 +90,6 @@ const TimeContainer = (props) => {
 
   const [hours, setHours] = useState(initData !== undefined ? initData : []);
   const [weekdays, setWeekDays] = useState(availableDays);
-  const [timeRangeList, setTimeRangeList] = useState(
-    initData !== undefined ? initData : defaultTimeRange,
-  );
 
   const [place, setPlace] = React.useState(
     inputPlace !== undefined ? inputPlace : '',
@@ -101,7 +97,7 @@ const TimeContainer = (props) => {
   const renderCount = useRef(0);
 
   const addTimeRange = () => {
-    setTimeRangeList([...timeRangeList, 1]);
+    setHours([...hours, [null, null]]);
   };
 
   const selectDays = (e) => {
@@ -134,16 +130,12 @@ const TimeContainer = (props) => {
   };
 
   const deleteTimePicker = (e, index) => {
-    const tempTimeRangeList = [...timeRangeList];
-    tempTimeRangeList.pop();
-
     const tempHours = [...hours];
     tempHours.pop();
 
-    setTimeRangeList(tempTimeRangeList);
     setHours(tempHours);
 
-    if (tempTimeRangeList.length === 0) {
+    if (tempHours.length === 0) {
       deleteTimeContainer(e, index);
     }
   };
@@ -155,13 +147,20 @@ const TimeContainer = (props) => {
       return;
     }
 
-    const newTimeFrame = [weekdays, hours, place];
-    console.log('newTimeFrame', newTimeFrame);
-    console.log('been there');
-    if (hours.length > 0) {
+    // remove unexpected unfill hours timeRanges
+    const cleanedHours = [...hours].filter(
+      (timeRange) => !timeRange.includes(null),
+    );
+
+    const newTimeFrame = [weekdays, cleanedHours, place];
+    if (
+      // update or add timeFrame only if filled
+      hours.length > 0 &&
+      [].concat(...weekdays).filter((day) => day.selected).length
+    ) {
       updateTimeFrames(newTimeFrame, indexTimeContainer);
     }
-  }, [weekdays, hours, place, timeRangeList]);
+  }, [weekdays, hours, place]);
 
   return (
     <div className={classes.container}>
@@ -193,8 +192,8 @@ const TimeContainer = (props) => {
             </div>
             <div className={classes.timepicker}>
               <div className={classes.timerange}>
-                {timeRangeList.length > 0 &&
-                  timeRangeList.map((timeRange, index) => {
+                {hours.length > 0 &&
+                  hours.map((timeRange, index) => {
                     return (
                       <TimePicker
                         selectHours={selectHours}
