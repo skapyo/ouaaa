@@ -593,47 +593,16 @@ const Actor = () => {
                 backgroundImage:
                   data.actor.pictures.length >= 1
                     ? `url(${getImageUrl(
-                        data.actor.pictures.sort(
-                          (a, b) => (a.main ? -1 : 1) - (b.main ? -1 : 1),
-                        )[0].croppedPicturePath,
-                      )})`
+                      data.actor.pictures.sort(
+                        (a, b) => (a.main ? -1 : 1) - (b.main ? -1 : 1),
+                      )[0].croppedPicturePath,
+                    )})`
                     : '',
               }}
             />
           )}
           <Container className={styles.cardInfo}>
             <Grid container>
-              <Grid item md={7} sm={10} className={styles.threePointGrid}>
-                <div>
-                  <Typography variant="h2" className={styles.cardTitle}>
-                    {data && data.actor.name}
-                  </Typography>
-                  {data &&
-                    data.actor.entries.map(
-                      (entry) =>
-                        entry.parentEntry &&
-                        entry.parentEntry.collection.code === 'category' && (
-                          <div>
-                            <Typography
-                              variant="h7"
-                              className={styles.cardTitleCategories}
-                            >
-                              {/* @ts-ignore */}
-                              {` ${
-                                entry.parentEntry && entry.parentEntry.label
-                              } `}
-                              {/* @ts-ignore */}:{/* @ts-ignore */}
-                              {` ${entry && entry.label}`}
-                              {/* @ts-ignore */}
-                            </Typography>
-                          </div>
-                        ),
-                    )}
-                </div>
-                <p>{data && Parser(data.actor.description)}</p>
-                <div />
-              </Grid>
-
               <Grid item md={5} sm={10} className={[styles.align]}>
                 <Grid container className={[styles.infoPratiqueGrid]}>
                   <div className={styles.image}>
@@ -698,13 +667,12 @@ const Actor = () => {
                               TERRITOIRE D'ACTION
                             </div>
                             <span className={[styles.infoValue]}>
-                              {data &&
-                                data.actor.entries.map(
-                                  (entry) =>
-                                    entry &&
-                                    entry.collection &&
-                                    entry.collection.code ===
-                                      'actor_location_action' && (
+                              {data
+                                && data.actor.entries.map(
+                                  (entry) => entry
+                                    && entry.collection
+                                    && entry.collection.code
+                                    === 'actor_location_action' && (
                                       <div>
                                         <Typography
                                           variant="h7"
@@ -720,78 +688,6 @@ const Actor = () => {
                         )}
                     </Grid>
                   </Grid>
-                  {data &&
-                    entriesHasElementWithCode(
-                      data.actor.entries,
-                      'public_target',
-                    ) && (
-                      <div className={[styles.infoDiv]}>
-                        <Grid container className={[styles.item]}>
-                          <Grid item xs={3} className={[styles.alignRight]}>
-                            <SupervisedUserCircle className={[styles.icon]} />
-                          </Grid>
-                          <Grid item xs={8} className={[styles.alignLeft]}>
-                            <div className={[styles.infoLabel]}>
-                              Public principal visé
-                            </div>
-                            <span className={[styles.infoValue]}>
-                              {data &&
-                                data.actor.entries.map(
-                                  (entry) =>
-                                    entry &&
-                                    entry.collection &&
-                                    entry.collection.code ===
-                                      'public_target' && (
-                                      <div>
-                                        <Typography
-                                          variant="h7"
-                                          className={styles.cardTitleCategories}
-                                        >
-                                          {` ${entry && entry.label}`}
-                                        </Typography>
-                                      </div>
-                                    ),
-                                )}
-                            </span>
-                          </Grid>
-                        </Grid>
-                      </div>
-                    )}
-                  {data &&
-                    entriesHasElementWithCode(
-                      data.actor.entries,
-                      'public_target',
-                    ) && (
-                      <div className={[styles.infoDiv]}>
-                        <Grid container className={[styles.item]}>
-                          <Grid item xs={3} className={[styles.alignRight]}>
-                            <Gavel className={[styles.icon]} />
-                          </Grid>
-                          <Grid item xs={8} className={[styles.alignLeft]}>
-                            <div className={[styles.infoLabel]}>Statut</div>
-                            <span className={[styles.infoValue]}>
-                              {data &&
-                                data.actor.entries.map(
-                                  (entry) =>
-                                    entry &&
-                                    entry.collection &&
-                                    entry.collection.code ===
-                                      'actor_status' && (
-                                      <div>
-                                        <Typography
-                                          variant="h7"
-                                          className={styles.cardTitleCategories}
-                                        >
-                                          {` ${entry && entry.label}`}
-                                        </Typography>
-                                      </div>
-                                    ),
-                                )}
-                            </span>
-                          </Grid>
-                        </Grid>
-                      </div>
-                    )}
                   {data && data.actor.phone && (
                     <div className={[styles.infoDiv]}>
                       <Grid container className={[styles.item]}>
@@ -836,7 +732,7 @@ const Actor = () => {
                         <Grid item xs={3} className={[styles.alignRight]}>
                           <img
                             src="/icons/web_site.svg"
-                            alt="Réseau social"
+                            alt="Site Web"
                             className={[styles.icon]}
                           />
                         </Grid>
@@ -882,12 +778,10 @@ const Actor = () => {
                       </Grid>
                     </Grid>
                   )}
-                  {data &&
-                    data.actor.openingHours &&
-                    data.actor.openingHours.length !== 0 && (
-                      <Grid container className={[styles.item]}>
-                        <Grid item xs={3} className={[styles.alignRight]}>
-                          <Schedule className={[styles.icon]} />
+                  {data && data.actor.openingHours && data.actor.openingHours.length !== 0 && (
+                    <Grid container className={[styles.item]}>
+                      <Grid item xs={3} className={[styles.alignRight]}>
+                      <img src={"/icons/clock.svg"} alt="Horaire" className={[styles.icon]} />
                         </Grid>
                         <Grid item xs={8} className={[styles.alignLeft]}>
                           <div className={[styles.infoLabel]}>Horaire</div>
@@ -925,40 +819,129 @@ const Actor = () => {
                       </Grid>
                     )}
                 </Grid>
-                {data &&
-                  entriesHasElementWithCode(
+              </Grid>
+              <Grid item md={7} sm={10} className={styles.description}>
+                <Typography variant="h3" className={styles.cardTitle}>
+                  DESCRIPTION
+                </Typography>
+                <div className={styles.border} />
+                <br />
+                <br />
+                <Typography variant="h2" >
+                  {data && data.actor.name}
+                </Typography>
+                <br />
+                <p>{data && Parser(data.actor.description)}</p>
+                <div>
+                  {data
+                    && data.actor.entries.map(
+                      (entry) => entry.parentEntry
+                        && entry.parentEntry.collection.code === 'category' && (
+                          <div>
+                            <Typography
+                              variant="h7"
+                              className={styles.cardTitleCategories}
+                            >
+                              {/* @ts-ignore */}
+                              {` ${entry.parentEntry && entry.parentEntry.label
+                                } `}
+                              {/* @ts-ignore */}
+                              :
+                              {/* @ts-ignore */}
+                              {` ${entry && entry.label}`}
+                              {/* @ts-ignore */}
+                            </Typography>
+                          </div>
+                        ),
+                    )}
+                </div>
+                <br />
+                {data
+                  && entriesHasElementWithCode(
+                    data.actor.entries,
+                    'public_target',
+                  ) && (
+                    <div className={[styles.descriptionInfoDiv]}>
+                      <img src={"/icons/status.svg"} alt="Collectif & réseau" className={[styles.icon]} />
+                      <div className={[styles.descriptionInfoLabel]}> Statut :</div>
+                      <span className={[styles.descriptionInfoValue]}>
+                        {data
+                          && data.actor.entries.map(
+                            (entry) => entry
+                              && entry.collection
+                              && entry.collection.code
+                              === 'actor_status' && (
+                                <div>
+                                  <Typography
+                                    variant="h7"
+                                    className={styles.cardTitleCategories}
+                                  >
+                                    {`  ${entry && entry.label}`}
+                                  </Typography>
+                                </div>
+                              ),
+                          )}
+                      </span>
+                    </div>
+                  )}
+                {data
+                  && entriesHasElementWithCode(
+                    data.actor.entries,
+                    'public_target',
+                  ) && (
+                    <div className={[styles.descriptionInfoDiv]}>
+
+                      <img src={"/icons/public.svg"} alt="Collectif & réseau" className={[styles.icon]} />
+                      <div className={[styles.descriptionInfoLabel]}>
+                        Public principal visé
+                      </div>
+                      <span className={[styles.descriptionInfoValue]}>
+                        {data
+                          && data.actor.entries.map(
+                            (entry) => entry
+                              && entry.collection
+                              && entry.collection.code
+                              === 'public_target' && (
+                                <div>
+                                  <Typography
+                                    variant="h7"
+                                    className={styles.cardTitleCategories}
+                                  >
+                                    {` ${entry && entry.label}`}
+                                  </Typography>
+                                </div>
+                              ),
+                          )}
+                      </span>
+                    </div>
+                  )}
+                {data
+                  && entriesHasElementWithCode(
                     data.actor.entries,
                     'collectif',
                   ) && (
-                    <div className={[styles.infoDiv]}>
-                      <Grid container className={[styles.item]}>
-                        <Grid item xs={3} className={[styles.alignRight]}>
-                          <People className={[styles.icon]} />
-                        </Grid>
-                        <Grid item xs={8} className={[styles.alignLeft]}>
-                          <div className={[styles.infoLabel]}>
-                            Collectif & réseaux
-                          </div>
-                          <span className={[styles.infoValue]}>
-                            {data &&
-                              data.actor.entries.map(
-                                (entry) =>
-                                  entry &&
-                                  entry.collection &&
-                                  entry.collection.code === 'collectif' && (
-                                    <div>
-                                      <Typography
-                                        variant="h7"
-                                        className={styles.cardTitleCategories}
-                                      >
-                                        {` ${entry && entry.label}`}
-                                      </Typography>
-                                    </div>
-                                  ),
-                              )}
-                          </span>
-                        </Grid>
-                      </Grid>
+                    <div className={[styles.descriptionInfoDiv]}>
+                      <img src={"/icons/network.svg"} alt="Collectif & réseau" className={[styles.icon]} />
+                      <div className={[styles.descriptionInfoLabel]}>
+                        Collectif & réseaux
+                      </div>
+                      <span className={[styles.descriptionInfoValue]}>
+                        {data
+                          && data.actor.entries.map(
+                            (entry) => entry
+                              && entry.collection
+                              && entry.collection.code === 'collectif' && (
+                                <div>
+                                  <Typography
+                                    variant="h7"
+                                    className={styles.cardTitleCategories}
+                                  >
+                                    {` ${entry && entry.label}`}
+                                  </Typography>
+                                </div>
+                              ),
+                          )}
+                      </span>
                     </div>
                   )}
               </Grid>
@@ -1011,7 +994,7 @@ const Actor = () => {
             </Slider>
 
             {data &&
-              data.actor.pictures &&
+              data.actor.events &&
               (data.actor.events.length > 0 ||
                 containUser(data.actor.referents)) && (
                 <div>
