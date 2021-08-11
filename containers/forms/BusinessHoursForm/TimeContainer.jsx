@@ -133,6 +133,17 @@ const TimeContainer = (props) => {
     setPlace(place);
   };
 
+  const deleteTimePicker = (e, index) => {
+    const tempTimeRangeList = [...timeRangeList];
+    tempTimeRangeList.pop();
+
+    setTimeRangeList(tempTimeRangeList);
+
+    if (tempTimeRangeList.length === 0) {
+      deleteTimeContainer(e, index);
+    }
+  };
+
   useEffect(() => {
     // TODO: workaround to execute the further code , needs to find a solution to limit rendering count
     if (renderCount.current < 2) {
@@ -202,7 +213,7 @@ const TimeContainer = (props) => {
       <Button
         aria-label="delete"
         className={classes.buttonDelete}
-        onClick={(e) => deleteTimeContainer(e, indexTimeContainer)}
+        onClick={(e) => deleteTimePicker(e, indexTimeContainer)}
       >
         <DeleteIcon fontSize="small" />
       </Button>
