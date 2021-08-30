@@ -1,4 +1,6 @@
-import { Avatar, Grid, makeStyles, Typography } from '@material-ui/core';
+import {
+  Avatar, Grid, makeStyles, Typography,
+} from '@material-ui/core';
 import UserInfosForm from 'containers/forms/UserInfosForm';
 import AccountPageLayout from 'containers/layouts/accountPage/AccountPageLayout';
 import React from 'react';
@@ -41,7 +43,7 @@ const AccountPage = () => {
             alignItems="center"
             direction="column"
           >
-            <Typography
+            {/*  <Typography
               color="secondary"
               variant="h6"
               className={styles.userInfosTitle}
@@ -49,6 +51,7 @@ const AccountPage = () => {
               Ma photo
             </Typography>
             <Avatar className={styles.avatar} />
+            */}
           </Grid>
         </Grid>
       </Grid>

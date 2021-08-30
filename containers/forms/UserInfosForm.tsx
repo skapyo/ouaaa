@@ -6,6 +6,7 @@ import ClassicButton from 'components/buttons/ClassicButton';
 import { withApollo } from 'hoc/withApollo';
 import { useSessionDispatch, useSessionState } from 'context/session/session';
 import gql from 'graphql-tag';
+import { useSnackbar } from 'notistack';
 import FormController, {
   RenderCallback,
 } from 'components/controllers/FormController';
@@ -45,6 +46,7 @@ type FormItemProps = {
 };
 
 const FormItem = (props: FormItemProps) => {
+  
   const styles = useStyles();
   const { label, inputName, formChangeHandler, value } = props;
   return (
@@ -72,7 +74,7 @@ const FormItem = (props: FormItemProps) => {
 const UserInfosForm = () => {
   const user = useSessionState();
   const sessionDispatch = useSessionDispatch();
-
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const styles = useStyles();
 
   const Form: RenderCallback = ({
@@ -140,10 +142,13 @@ const UserInfosForm = () => {
   );
 
   const afterUpdate = useCallback(
-    (formValues) => {
+    (data, error) => {
       sessionDispatch({
         type: 'login',
-        payload: formValues,
+        payload: data,
+      });
+      enqueueSnackbar('Modifications effectuées.', {
+        preventDuplicate: true,
       });
     },
     [sessionDispatch],
@@ -153,7 +158,8 @@ const UserInfosForm = () => {
     return {
       query: UPDATE_USER_INFOS,
       resultLabel,
-      afterUpdate,
+      mutationResultControl: 'builtin',
+      afterResultControlCallback: afterUpdate,
     };
   }, [afterUpdate]);
 

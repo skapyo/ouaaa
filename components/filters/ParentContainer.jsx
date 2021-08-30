@@ -60,6 +60,7 @@ function ParentContainer(props) {
     const parentCheckboxState = {
       id: entry.id,
       label: entry.label,
+      icon: entry.icon,
       checked: false,
     };
 
@@ -71,10 +72,12 @@ function ParentContainer(props) {
       return a.position > b.position;
     };
 
-    entry.subEntries.sort(compare).map(({ id, label, actorEntries }) => {
+    entry.subEntries.sort(compare).map(({ id, label, icon, description, actorEntries }) => {
       newCheckboxesState.push({
         id,
         label,
+        icon,
+        description,
         checked: false,
       });
       newNodesArray.push(id);
@@ -194,6 +197,9 @@ function ParentContainer(props) {
               key={parentCheckbox.id}
               nodeId={parentCheckbox.id}
               labelText={parentCheckbox.label}
+              color={parentCheckbox.color}
+              description={parentCheckbox.description}
+              icon={parentCheckbox.icon}
               categoryChange={categoryChange}
               parentCategoryChange={parentCategoryChange}
               isParent
@@ -209,6 +215,8 @@ function ParentContainer(props) {
                     labelText={subEntry.label}
                     categoryChange={categoryChange}
                     checked={subEntry.checked}
+                    description={subEntry.description}
+                    icon={subEntry.icon}
                   />
                 );
               })}

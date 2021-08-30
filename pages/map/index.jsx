@@ -272,6 +272,9 @@ const carto = () => {
           }
           entries {
             label
+            icon
+            color
+            description
           }
           pictures {
             id

@@ -58,6 +58,10 @@ const useTreeItemStyles = makeStyles((theme) => ({
     padding: '1px',
     margin: '0px 0px 0px 3px',
   },
+  icon: {
+    height: '20px',
+    marginRight: '1em',
+  },
 }));
 
 function StyledTreeItem(props) {
@@ -73,6 +77,8 @@ function StyledTreeItem(props) {
     id,
     isParent,
     isForm,
+    icon,
+    description,
     ...other
   } = props;
 
@@ -80,8 +86,7 @@ function StyledTreeItem(props) {
   const entriesContext = useContext(EntriesContext);
   let isThisEntryNotInTopSEO = false;
   if (entriesContext !== undefined) {
-    isThisEntryNotInTopSEO =
-      entriesContext.getList().indexOf(parseInt(other.nodeId, 10)) >= 3;
+    isThisEntryNotInTopSEO = entriesContext.getList().indexOf(parseInt(other.nodeId, 10)) >= 3;
     /* console.log(
       !isThisEntryNotInTopSEO +
         ' ' +
@@ -128,14 +133,22 @@ function StyledTreeItem(props) {
   // console.log(`${checked} ${other.nodeId}`);
   return (
     <TreeItem
-      label={
+      label={(
         <div>
           <div className={classes.labelRoot}>
+            { icon && (
+            <img src={icon} alt="icon" className={classes.icon} />
+            )}
             <Typography variant="body2" className={classes.labelText}>
               {labelText}
             </Typography>
             {isForm && isThisEntryNotInTopSEO && (
               <Tooltip title="Seuls les 3 premiers sujets seront utilsés pour le référencement">
+                <InfoIcon />
+              </Tooltip>
+            )}
+            { description && (
+              <Tooltip title={description}>
                 <InfoIcon />
               </Tooltip>
             )}
@@ -166,7 +179,7 @@ function StyledTreeItem(props) {
             />
           )}
         </div>
-      }
+      )}
       style={{
         '--tree-view-color': color,
         '--tree-view-bg-color': bgColor,
@@ -195,6 +208,8 @@ StyledTreeItem.propTypes = {
   isParent: PropTypes.boolean,
   id: PropTypes.string,
   isForm: PropTypes.boolean,
+  icon: PropTypes.string,
+  description: PropTypes.string,
 };
 
 export default StyledTreeItem;

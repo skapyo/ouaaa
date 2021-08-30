@@ -263,7 +263,7 @@ const NavBar = () => {
                         >
                           Espace Acteur
                         </MenuItem>
-                        {user && user.role == 'admin' && (
+                        {user && false && user.role == 'admin' && (
                           <MenuItem
                             button
                             component={Link}
