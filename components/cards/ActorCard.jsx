@@ -90,8 +90,9 @@ const useStyles = makeStyles((theme, props) => ({
 }));
 
 const ActorCard = ({ actor }) => {
-  const color = actor.categories[0] ? actor.categories[0].color : '#AD2740';
-  const icon = actor.categories[0] ? actor.categories[0].icon : 'fruit';
+  debugger;
+  const color = actor.entries[0].parentEntry ? actor.entries[0].parentEntry.color : '#AD2740';
+  const icon = actor.entries[0] ? actor.entries[0].icon : 'fruit';
   const actorName = actor.name;
 
   const classes = useStyles({ color, icon });

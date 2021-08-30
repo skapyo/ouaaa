@@ -117,9 +117,13 @@ const GET_COLLECTIONS = gql`
       entries {
         id
         label
+        icon
+        description
         subEntries {
           id
           label
+          icon
+          description
         }
       }
     }
@@ -1222,6 +1226,8 @@ const AddActorForm = () => {
                                 nodeId={entry.id}
                                 labelText={entry.label}
                                 hideCheckBox
+                                description={entry.description}
+                                icon={entry.icon}
                                 isForm
                                 bgColor="grey"
                                 className={classes.treeParent}
@@ -1235,6 +1241,8 @@ const AddActorForm = () => {
                                         nodeId={subEntry.id}
                                         labelText={subEntry.label}
                                         categoryChange={formChangeHandler}
+                                        description={subEntry.description}
+                                        icon={subEntry.icon}
                                         isForm
                                         checked={
                                           formValues

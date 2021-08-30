@@ -189,6 +189,8 @@ const GET_ACTOR = gql`
       entries {
         id
         label
+        icon
+        description
         actorEntries {
           linkDescription
           topSEO
@@ -203,6 +205,8 @@ const GET_ACTOR = gql`
           id
           code
           label
+          icon
+          description
           actorEntries {
             linkDescription
             topSEO
@@ -241,9 +245,13 @@ const GET_COLLECTIONS = gql`
       entries {
         id
         label
+        icon
+        description
         subEntries {
           id
           label
+          icon
+          description
         }
       }
     }
@@ -1477,6 +1485,8 @@ const EditActorForm = (props) => {
                                   key={entry.id}
                                   nodeId={entry.id}
                                   labelText={entry.label}
+                                  description={entry.description}
+                                  icon={entry.icon}
                                   hideCheckBox
                                   isForm
                                   className={styles.treeParent}
@@ -1489,6 +1499,8 @@ const EditActorForm = (props) => {
                                           // @ts-ignore
                                           nodeId={subEntry.id}
                                           labelText={subEntry.label}
+                                          description={subEntry.description}
+                                          icon={subEntry.icon}
                                           formValues={updateFormValues}
                                           categoryChange={formChangeHandler}
                                           linkDescription={

@@ -132,7 +132,6 @@ const useStyles = makeStyles((theme) => ({
   categorie: {
     backgroundColor: 'white',
     borderRadius: '0.3em',
-    color: '#f0a300',
     width: 'max-content',
     padding: '0 5px 0 5px',
     display: 'block',
@@ -275,6 +274,11 @@ const carto = () => {
             icon
             color
             description
+            parentEntry {
+              code
+              label
+              color
+            }
           }
           pictures {
             id
@@ -453,15 +457,15 @@ const carto = () => {
                       let color;
                       if (actor.lat != null && actor.lng != null) {
                         if (
-                          actor.categories &&
-                          actor.categories.length > 0 &&
-                          actor.categories[0].icon
+                          actor.entries &&
+                          actor.entries.length > 0 &&
+                          actor.entries[0].icon
                         ) {
-                          icone = `/icons/${actor.categories[0].icon}.svg`;
-                          color = actor.categories[0].color;
+                          icone = actor.entries[0].icon;
+                          color = actor.entries[0].color;
                         } else {
                           icone = '/icons/' + 'place' + '.svg';
-                          color = 'black';
+                          color = 'ref';
                         }
                         const markerHtmlStyles = 'background-color: red';
                         const suitcasePoint = new L.Icon({
@@ -494,14 +498,19 @@ const carto = () => {
                                       : '',
                                 }}
                               >
-                                <div className={styles.categorie}>
+                                <div className={styles.categorie}
+                                >
                                   <Typography
                                     className={styles.categorie}
+                                    style={{ color : actor?.entries[0]?.parentEntry?.color}}
                                     gutterBottom
                                   >
                                     {actor.entries &&
                                       actor.entries.length > 0 &&
                                       actor.entries[0].label}
+
+
+
                                   </Typography>
                                 </div>
                               </div>
@@ -533,9 +542,10 @@ const carto = () => {
                                       : '',
                                 }}
                               >
-                                <div className={styles.categorie}>
+                                <div className={styles.categorie} >
                                   <Typography
                                     className={styles.categorie}
+                                    style={{ color :  actor?.entries[0]?.parentEntry?.color}}
                                     gutterBottom
                                   >
                                     {actor.entries &&
