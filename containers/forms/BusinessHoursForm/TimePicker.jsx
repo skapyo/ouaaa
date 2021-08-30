@@ -4,9 +4,14 @@ import TextField from '@material-ui/core/TextField';
 import { KeyboardTimePicker } from '@material-ui/pickers';
 import moment from 'moment';
 
+// const defaultTimeRange = {
+//   start: moment().set('minute', 0).set('hour', 8).add(1, 'day').toDate(),
+//   end: moment().set('minute', 0).set('hour', 18).add(1, 'day').toDate(),
+// };
+
 const defaultTimeRange = {
-  start: moment().set('minute', 0).set('hour', 8).add(1, 'day').toDate(),
-  end: moment().set('minute', 0).set('hour', 18).add(1, 'day').toDate(),
+  start: null,
+  end: null,
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -27,10 +32,10 @@ export default function TimePicker(props) {
 
   const { selectHours, indexTimer, timeRange } = props;
   const [selectedStartDate, setSelectedStartDate] = React.useState(
-    timeRange !== undefined ? timeRange[0] : defaultTimeRange[0],
+    timeRange !== undefined ? timeRange[0] : defaultTimeRange.start,
   );
   const [selectedEndDate, setSelectedEndDate] = React.useState(
-    timeRange !== undefined ? timeRange[1] : defaultTimeRange[1],
+    timeRange !== undefined ? timeRange[1] : defaultTimeRange.end,
   );
 
   const handleStartDateChange = (date) => {
@@ -59,7 +64,7 @@ export default function TimePicker(props) {
         timeIcon={false}
         ampm={false}
         minutesStep={5}
-        error={!!selectedStartDate && moment(selectedStartDate) <= moment()}
+        error={!selectedStartDate}
       />
       <KeyboardTimePicker
         margin="normal"
@@ -72,7 +77,7 @@ export default function TimePicker(props) {
         }}
         ampm={false}
         minutesStep={5}
-        error={!!selectedStartDate && moment(selectedStartDate) <= moment()}
+        error={!selectedEndDate}
       />
     </form>
   );

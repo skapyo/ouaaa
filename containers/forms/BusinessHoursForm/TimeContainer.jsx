@@ -77,7 +77,6 @@ export const defaultTimeRange = [
 
 const TimeContainer = (props) => {
   const classes = useStyles();
-  console.log('initData', initData);
   const {
     updateWeekDays,
     updateTimeFrames,
@@ -91,9 +90,6 @@ const TimeContainer = (props) => {
 
   const [hours, setHours] = useState(initData !== undefined ? initData : []);
   const [weekdays, setWeekDays] = useState(availableDays);
-  const [timeRangeList, setTimeRangeList] = useState(
-    initData !== undefined ? initData : defaultTimeRange,
-  );
 
   const [place, setPlace] = React.useState(
     inputPlace !== undefined ? inputPlace : '',
@@ -101,7 +97,7 @@ const TimeContainer = (props) => {
   const renderCount = useRef(0);
 
   const addTimeRange = () => {
-    setTimeRangeList([...timeRangeList, 1]);
+    setHours([...hours, [null, null]]);
   };
 
   const selectDays = (e) => {
@@ -133,6 +129,17 @@ const TimeContainer = (props) => {
     setPlace(place);
   };
 
+  const deleteTimePicker = (e, index) => {
+    const tempHours = [...hours];
+    tempHours.pop();
+
+    setHours(tempHours);
+
+    if (tempHours.length === 0) {
+      deleteTimeContainer(e, index);
+    }
+  };
+
   useEffect(() => {
     // TODO: workaround to execute the further code , needs to find a solution to limit rendering count
     if (renderCount.current < 2) {
@@ -140,9 +147,17 @@ const TimeContainer = (props) => {
       return;
     }
 
-    const newTimeFrame = [weekdays, hours, place];
-    console.log('been there');
-    if (hours.length > 0) {
+    // remove unexpected unfill hours timeRanges
+    const cleanedHours = [...hours].filter(
+      (timeRange) => !timeRange.includes(null),
+    );
+
+    const newTimeFrame = [weekdays, cleanedHours, place];
+    if (
+      // update or add timeFrame only if filled
+      hours.length > 0 &&
+      [].concat(...weekdays).filter((day) => day.selected).length
+    ) {
       updateTimeFrames(newTimeFrame, indexTimeContainer);
     }
   }, [weekdays, hours, place]);
@@ -177,8 +192,8 @@ const TimeContainer = (props) => {
             </div>
             <div className={classes.timepicker}>
               <div className={classes.timerange}>
-                {timeRangeList.length > 0 &&
-                  timeRangeList.map((timeRange, index) => {
+                {hours.length > 0 &&
+                  hours.map((timeRange, index) => {
                     return (
                       <TimePicker
                         selectHours={selectHours}
@@ -202,7 +217,7 @@ const TimeContainer = (props) => {
       <Button
         aria-label="delete"
         className={classes.buttonDelete}
-        onClick={(e) => deleteTimeContainer(e, indexTimeContainer)}
+        onClick={(e) => deleteTimePicker(e, indexTimeContainer)}
       >
         <DeleteIcon fontSize="small" />
       </Button>
