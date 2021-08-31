@@ -87,6 +87,10 @@ const useStyles = makeStyles((theme, props) => ({
     fontStyle: 'italic',
     color: '#A3A3A3',
   },
+  icon: {
+    color: '#bd0b3d',
+    width: '20px',
+  },
 }));
 
 const ActorCard = ({ actor }) => {
@@ -126,6 +130,22 @@ const ActorCard = ({ actor }) => {
                   {actor.shortDescription}
                 </span>
               </div>
+              <div className={classes.label}>
+                {!actor.address && actor.city && (
+                  <span>
+                    {/* @ts-ignore */}
+                    <img src={"/icons/location.svg"} alt="Localisation" className={[classes.icon]} /> {actor.city}
+                  </span>
+                )}
+                {actor.address && actor.city && (
+                  <span>
+                    {/* @ts-ignore */}
+                    <img src={"/icons/location.svg"} alt="Localisation" className={[classes.icon]} /> {`${actor.address} ${
+                      actor.city
+                    }`}
+                  </span>
+                )}
+                </div>
             </div>
           </div>
         </a>
