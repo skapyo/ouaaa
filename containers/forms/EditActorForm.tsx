@@ -6,58 +6,57 @@ import React, {
   useRef,
   useState,
 } from 'react';
+import { gql, useMutation, useQuery } from '@apollo/client';
+import GooglePlacesAutocomplete, {
+  geocodeByAddress,
+  getLatLng,
+} from 'react-google-places-autocomplete';
+import graphqlTag from 'graphql-tag';
+import { useSnackbar } from 'notistack';
+import { useRouter, withRouter } from 'next/router';
+import classnames from 'classnames';
+
 import {
-  Button,
-  Card,
   Container,
   Grid,
   makeStyles,
   Typography,
 } from '@material-ui/core';
-import TextField from 'components/form/TextField';
-import CustomRadioGroup from 'components/form/CustomRadioGroup';
-import ClassicButton from 'components/buttons/ClassicButton';
-import { withApollo } from 'hoc/withApollo';
-import { useRouter, withRouter } from 'next/router';
-import { gql, useMutation, useQuery } from '@apollo/client';
-import graphqlTag from 'graphql-tag';
-import FormController, {
-  RenderCallback,
-} from 'components/controllers/FormController';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import Icon from '@material-ui/core/Icon';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import IconButton from '@material-ui/core/IconButton';
 import Checkbox from '@material-ui/core/Checkbox';
-import GooglePlacesAutocomplete, {
-  geocodeByAddress,
-  getLatLng,
-} from 'react-google-places-autocomplete';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
-import Collapse from '@material-ui/core/Collapse';
-import { useCookies } from 'react-cookie';
-import { useSnackbar } from 'notistack';
 import RadioGroup from '@material-ui/core/RadioGroup';
-import { getImageUrl } from 'utils/utils';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import TreeView from '@material-ui/lab/TreeView';
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
-import ArrowRightIcon from '@material-ui/icons/ArrowRight';
-import ImagesDropZone from 'components/ImageCropper/ImagesDropZone';
-import ImagesDisplay from 'components/ImageCropper/ImagesDisplay';
 import FormControl from '@material-ui/core/FormControl';
 import Radio from '@material-ui/core/Radio';
-import { Autocomplete } from '@material-ui/lab';
 import Tooltip from '@material-ui/core/Tooltip';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Avatar from '@material-ui/core/Avatar';
+import TreeView from '@material-ui/lab/TreeView';
+import { Autocomplete } from '@material-ui/lab';
+
 import InfoIcon from '@material-ui/icons/Info';
-import { useSessionDispatch, useSessionState } from 'context/session/session';
-import Hidden from '@material-ui/core/Hidden';
-import { LensTwoTone } from '@material-ui/icons';
+import AddCircleOutline from '@material-ui/icons/AddCircleOutline';
+import ArrowRightIcon from '@material-ui/icons/ArrowRight';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import DeleteIcon from '@material-ui/icons/Delete';
+
+import TextField from 'components/form/TextField';
+import CustomRadioGroup from 'components/form/CustomRadioGroup';
+import ClassicButton from 'components/buttons/ClassicButton';
+import { withApollo } from 'hoc/withApollo';
+import FormController, {
+  RenderCallback,
+} from 'components/controllers/FormController';
+import { getImageUrl } from 'utils/utils';
+import ImagesDropZone from 'components/ImageCropper/ImagesDropZone';
+import ImagesDisplay from 'components/ImageCropper/ImagesDisplay';
+import { useSessionState } from 'context/session/session';
 import useImageReader from '../../hooks/useImageReader';
 import useDnDStateManager from '../../hooks/useDnDStateManager';
-import useCookieRedirection from '../../hooks/useCookieRedirection';
 import {
   ValidationRules,
   ValidationRuleType,
@@ -66,7 +65,6 @@ import withDndProvider from '../../hoc/withDnDProvider';
 import StyledTreeItem from '../../components/filters/StyledTreeItem';
 import Entries from './Entries';
 import RadioGroupForContext from './RadioGroupForContext';
-import UserInfosForm from './UserInfosForm';
 import SchedulerContainer from './BusinessHoursForm/SchedulerContainer';
 
 const EDIT_ACTOR = gql`
@@ -108,6 +106,7 @@ const EDIT_ACTOR = gql`
     }
   }
 `;
+
 const GET_CATEGORIES = graphqlTag`
   {
     categories {
@@ -131,18 +130,19 @@ const GET_CATEGORIES = graphqlTag`
     }
   }
 `;
+
 const GET_USERS = graphqlTag`
-
   query users
-  { users
-  {   id,
-    surname,
-    lastname,
-
+  {
+    users
+    {
+      id,
+      surname,
+      lastname,
+    }
   }
-}
-
 `;
+
 const GET_ACTOR = gql`
   query actor($id: String!) {
     actor(id: $id) {
@@ -225,6 +225,11 @@ const GET_ACTOR = gql`
         hours
         place
       }
+      referents {
+        id,
+        surname,
+        lastname
+      }
     }
   }
 `;
@@ -249,12 +254,20 @@ const GET_COLLECTIONS = gql`
     }
   }
 `;
+
 const useStyles = makeStyles((theme) => ({
   gridContainer: {
     marginTop: theme.spacing(5),
   },
   label: {
     fontWeight: 600,
+  },
+  labelDefault: {
+    marginRight: 5
+  },
+  titleContainer: {
+    marginTop: 15,
+    marginBottom: 10
   },
   field: {
     marginBottom: theme.spacing(3),
@@ -317,6 +330,10 @@ const useStyles = makeStyles((theme) => ({
     color: 'rgba(0, 0, 0, 0.54)',
     textAlign: 'justify',
   },
+
+  referentList: {
+    flex: 1
+  }
 }));
 
 type FormItemProps = {
@@ -336,7 +353,6 @@ const FormItem = (props: FormItemProps) => {
   const {
     label,
     inputName,
-
     formChangeHandler,
     value,
     required,
@@ -358,6 +374,31 @@ const FormItem = (props: FormItemProps) => {
       error={errorBool}
       helperText={errorBool ? errorText : helperText}
     />
+  );
+};
+
+type TitleWithTooltipProps = {
+  title: string | any;
+  tooltipTitle?: string;
+  collection?: boolean;
+}
+
+const TitleWithTooltip = (props: TitleWithTooltipProps) => {
+  const { title, tooltipTitle, collection = false } = props;
+  const styles = useStyles();
+
+  return (
+    <Grid container justifyContent="center" alignItems="center" className={styles.titleContainer}>
+      <Typography color="primary" className={classnames(collection ? styles.collectionLabel : styles.label, styles.labelDefault)}>
+        {title}
+      </Typography>
+      {
+        !!tooltipTitle &&
+        <Tooltip title={tooltipTitle} color="primary">
+          <InfoIcon />
+        </Tooltip>
+      }
+    </Grid>
   );
 };
 
@@ -409,6 +450,7 @@ const EditActorForm = (props) => {
 
   if (actorLoading) return null;
   if (actorError) return `Error! ${actorError.message}`;
+
   const imgInit = [];
   if (
     actorData &&
@@ -617,6 +659,22 @@ const EditActorForm = (props) => {
     formValues,
     validationResult,
   }) => {
+    const [editorLoaded, setEditorLoaded] = useState(false);
+    const [showOtherContact, setShowOtherContact] = useState(
+      formValues.contactId !== actorData.actor.id
+    );
+    const [showOtherContactList, setShowOtherContactList] = useState(false);
+    const [descriptionEditor, setDescriptionEditor] = useState();
+    const [volunteerEditor, setVolunteerEditor] = useState();
+    const [estlarochelle, setEstlarochelle] = useState(false);
+    const [firstRender, setFirstRender] = useState(true);
+    const [
+      initentriesWithInformation,
+      setInitentriesWithInformation,
+    ] = useState([]);
+    const [showAddReferent, setShowAddReferent] = useState(false);
+    const [openAddReferentlist, setOpenAddReferentlist] = useState(false);
+
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
     const [
       edit,
@@ -634,12 +692,6 @@ const EditActorForm = (props) => {
     const [setImagesList, loading, result, imagesListState] = useImageReader();
     const editorRef = useRef();
 
-    const [editorLoaded, setEditorLoaded] = useState(false);
-
-    const [showOtherContact, setShowOtherContact] = useState(
-      formValues.contactId !== actorData.actor.id,
-    );
-    const [showOtherContactList, setShowOtherContactList] = useState(false);
     // @ts-ignore
     const { CKEditor, ClassicEditor } = editorRef.current || {};
 
@@ -652,9 +704,6 @@ const EditActorForm = (props) => {
       setEditorLoaded(true);
     }, []);
 
-    const [descriptionEditor, setDescriptionEditor] = useState();
-    const [volunteerEditor, setVolunteerEditor] = useState();
-    const [estlarochelle, setEstlarochelle] = useState(false);
     const [
       setImagesLogoList,
       loadingLogo,
@@ -662,21 +711,42 @@ const EditActorForm = (props) => {
       imagesLogoListState,
     ] = useImageReader();
 
-    const inputChangeHandler = (event, value) => {
+    const inputChangeHandler = useCallback(event => {
       if (event.target.value) {
         if (event.target.value.length < 3) {
-          setShowOtherContactList(false);
+          if (event.target.name === 'referents') {
+            setOpenAddReferentlist(false);
+          } else {
+            setShowOtherContactList(false);
+          }
         } else {
-          setShowOtherContactList(true);
+          if (event.target.name === 'referents') {
+            setOpenAddReferentlist(true);
+          } else {
+            setShowOtherContactList(true);
+          }
         }
       }
-    };
+    }, []);
+
     const autocompleteHandler = (event, value) => {
       if (value) {
         formValues.contactId = value.id;
       }
       setShowOtherContactList(false);
     };
+
+    const handleChangeReferent = useCallback((event, value) => {
+      if (value) {
+        // @ts-ignore
+        let currentReferents: string[] = formValues.referents || [];
+        currentReferents.push(value);
+        // @ts-ignore
+        formValues.referents = currentReferents;
+      }
+      setShowAddReferent(false);
+      setOpenAddReferentlist(false);
+    }, [formValues]);
 
     const {
       objectsList: objectsListLogo,
@@ -864,11 +934,13 @@ const EditActorForm = (props) => {
         });
       }
 
-      console.log('opening hours', openingHours);
-
       edit({
         variables: {
-          formValues,
+          formValues: {
+            ...formValues,
+            // @ts-ignore
+            referents: formValues.referents.map(item => item.id)
+          },
           // eslint-disable-next-line radix
           actorId: parseInt(actorData.actor.id),
           pictures: files,
@@ -955,12 +1027,6 @@ const EditActorForm = (props) => {
       }
     };
 
-    const [firstRender, setFirstRender] = useState(true);
-    const [
-      initentriesWithInformation,
-      setInitentriesWithInformation,
-    ] = useState([]);
-
     const updateFormValues = () => {
       formValues.name = actorData.actor.name;
       formValues.email = actorData.actor.email;
@@ -976,6 +1042,7 @@ const EditActorForm = (props) => {
       formValues.activity = actorData.actor.activity;
       formValues.volunteerDescription = actorData.actor.volunteerDescription;
       formValues.shortDescription = actorData.actor.shortDescription;
+      formValues.referents = actorData.actor.referents;
       const categories = [];
       actorData.actor.categories.forEach((actorcategory) => {
         // @ts-ignore
@@ -1002,8 +1069,11 @@ const EditActorForm = (props) => {
       actorData.actor.entries.forEach((actorentry) => {
         // @ts-ignore
         entriesWithInformation.push({
+          // @ts-ignore
           entryId: actorentry.id,
+          // @ts-ignore
           linkDescription: actorentry.actorEntries.linkDescription,
+          // @ts-ignore
           topSEO: actorentry.actorEntries.topSEO,
         });
 
@@ -1059,8 +1129,24 @@ const EditActorForm = (props) => {
       updateFormValues();
       setFirstRender(false);
     }
-    // @ts-ignore
-    // @ts-ignore
+
+    const handleClickAddReferent = useCallback(() => {
+      setShowAddReferent(!showAddReferent);
+    }, [showAddReferent]);
+
+    const handleClickDeleteReferent = useCallback(referent => {
+      // @ts-ignore
+      let currentReferents = [...formValues.referents];
+      // @ts-ignore
+      currentReferents = currentReferents.filter(item => item.id !== referent.id);
+      formChangeHandler({
+        target: {
+          // @ts-ignore
+          value: currentReferents,
+          name: 'referents'
+        }
+      })
+    }, [formValues]);
 
     return (
       <Container component="main" maxWidth="sm">
@@ -1123,10 +1209,10 @@ const EditActorForm = (props) => {
               initialValue={
                 formValues.address
                   ? formValues.address
-                      .concat(' ')
-                      .concat(formValues.postCode)
-                      .concat(' ')
-                      .concat(formValues.city)
+                    .concat(' ')
+                    .concat(formValues.postCode)
+                    .concat(' ')
+                    .concat(formValues.city)
                   : formValues.city && formValues.city
               }
               onSelect={({ description }) =>
@@ -1146,50 +1232,54 @@ const EditActorForm = (props) => {
         {
           /* @ts-ignore */
           dataCollections.collections &&
-            /* @ts-ignore */
-            dataCollections.collections.map((collection) => {
-              if (collection.code !== 'larochelle_quarter' || !estlarochelle) {
-                return '';
-              }
-              if (!collection.actor) return '';
+          /* @ts-ignore */
+          dataCollections.collections.map((collection) => {
+            if (collection.code !== 'larochelle_quarter' || !estlarochelle) {
+              return '';
+            }
+            if (!collection.actor) return '';
 
-              //    const [display, setDisplay] = useState(false);
-              return (
-                <div>
-                  <br />
-                  <Typography className={styles.collectionLabel}>
-                    {collection.label}
-                  </Typography>
-                  <RadioGroupForContext
-                    initValue={getEntryPresentInCollection(
+            return (
+              <div>
+                <TitleWithTooltip
+                  title={collection.label}
+                  collection
+                />
+                <RadioGroupForContext
+                  initValue={getEntryPresentInCollection(
+                    formValues.entries,
+                    collection,
+                  )}
+                >
+                  <CustomRadioGroup
+                    formChangeHandler={formChangeHandler}
+                    entries={collection.entries}
+                    defaultValue={getEntryPresentInCollection(
                       formValues.entries,
                       collection,
                     )}
-                  >
-                    <CustomRadioGroup
-                      formChangeHandler={formChangeHandler}
-                      entries={collection.entries}
-                      defaultValue={getEntryPresentInCollection(
-                        formValues.entries,
-                        collection,
-                      )}
-                    />
-                  </RadioGroupForContext>
-                </div>
-              );
-            })
+                  />
+                </RadioGroupForContext>
+              </div>
+            );
+          })
         }
-        <Typography variant="body1" color="primary" className={styles.label}>
-          Jour et heure d'ouverture
-        </Typography>
+
+        <TitleWithTooltip
+          title="Jour et heure d'ouverture"
+        />
+
         <SchedulerContainer
           onChange={setOpeningHours}
           initData={actorData && actorData?.actor?.openingHours}
         />
-        <p />
-        <Typography variant="body1" color="primary" className={styles.label}>
-          CONTACT PRIVE pour les échanges avec <i>OUAAA!</i>
-        </Typography>
+
+        <TitleWithTooltip
+          title={
+            <p>CONTACT PRIVE pour les échanges avec <i>OUAAA!</i></p>
+          }
+        />
+
         <FormControl component="fieldset">
           <RadioGroup
             row
@@ -1257,9 +1347,11 @@ const EditActorForm = (props) => {
           errorText=""
           helperText="Indiquez ici votre métier ou activité principale. Cette info servira à mieux référencer votre page dans les moteurs de recherche. Ex : boulanger bio"
         />
-        <Typography variant="body1" color="primary" className={styles.label}>
-          Votre logo
-        </Typography>
+
+        <TitleWithTooltip
+          title="Votre logo"
+        />
+
         {objectsListLogo ? (
           <ImagesDisplay
             cards={objectsListLogo}
@@ -1274,12 +1366,11 @@ const EditActorForm = (props) => {
           text="Déposez ici votre logo au format jpg et de poids inférieur à 4Mo"
         />
 
-        <Typography variant="body1" color="primary" className={styles.label}>
-          Photo principale &nbsp;
-          <Tooltip title="Une seule photo principale est possible, vous pouvez supprimer celle affichée via la poubelle puis en télécharger une nouvelle. Seul le format JPG est accepté. Veuillez à ce que le fichier n’excède pas 4Mo">
-            <InfoIcon />
-          </Tooltip>
-        </Typography>
+        <TitleWithTooltip
+          title="Photo principale"
+          tooltipTitle="Une seule photo principale est possible, vous pouvez supprimer celle affichée via la poubelle puis en télécharger une nouvelle. Seul le format JPG est accepté. Veuillez à ce que le fichier n’excède pas 4Mo"
+        />
+
         {objectsListMain ? (
           <ImagesDisplay
             cards={objectsListMain}
@@ -1294,12 +1385,11 @@ const EditActorForm = (props) => {
           text="Déposez ici votre photo principale au  et de poids inférieur à 4Mo"
         />
 
-        <Typography variant="body1" color="primary" className={styles.label}>
-          Autres photos &nbsp;
-          <Tooltip title="Vous pouvez supprimer l'image affichée via la poubelle puis en télécharger une nouvelle. Seul le format JPG est accepté. Veuillez à ce que chaque fichier n’excède pas 4Mo">
-            <InfoIcon />
-          </Tooltip>
-        </Typography>
+        <TitleWithTooltip
+          title="Autres photos"
+          tooltipTitle="Vous pouvez supprimer l'image affichée via la poubelle puis en télécharger une nouvelle. Seul le format JPG est accepté. Veuillez à ce que chaque fichier n’excède pas 4Mo"
+        />
+
         {objectsList ? (
           <ImagesDisplay
             cards={objectsList}
@@ -1313,7 +1403,9 @@ const EditActorForm = (props) => {
           onDropHandler={onDropHandler}
           text="Déposez ici votre autres photos au format jpg et de poids inférieur à 4Mo"
         />
+
         <p />
+
         <FormItem
           label="Description courte générale"
           inputName="shortDescription"
@@ -1328,10 +1420,10 @@ const EditActorForm = (props) => {
           helperText="Cette description courte s’affichera en vue liste et dans les blocs de survol/clic de la carte. Merci de synthétiser vos objectifs en quelques mots."
         />
 
-        <Typography variant="body1" color="primary" className={styles.label}>
-          Description
-        </Typography>
-        <br />
+        <TitleWithTooltip
+          title="Description"
+        />
+
         <Typography className={styles.helperText}>
           Cette description longue est intégrée à votre page acteur. Elle se
           veut la plus explicite et détaillée possible. Un langage simple, des
@@ -1346,6 +1438,7 @@ const EditActorForm = (props) => {
           réutilisation, matière, matériaux, économie circulaire, upcycling,
           nouvelle vie, objet, dépôt, vente, réinsertion….
         </Typography>
+
         <br />
 
         {editorLoaded ? (
@@ -1365,17 +1458,14 @@ const EditActorForm = (props) => {
           <div>Editor loading</div>
         )}
         <p />
-        <Typography variant="body1" color="primary" className={styles.label}>
-          Nos recherches en bénévolat :{' '}
-          <Tooltip
-            title="
-          Décrivez ici les missions de bénévolat générales chez vous ou sur un de
-          vos projets spécifiques afin de donner envie aux visiteurs de cliquer sur «je deviens
-          bénévole» de votre page."
-          >
-            <InfoIcon />
-          </Tooltip>
-        </Typography>
+
+        <TitleWithTooltip
+          title="Nos recherches en bénévolat :"
+          tooltipTitle="Décrivez ici les missions de bénévolat générales chez vous ou sur un de
+            vos projets spécifiques afin de donner envie aux visiteurs de cliquer sur «je deviens
+            bénévole» de votre page."
+        />
+
         <p />
         {editorLoaded ? (
           <>
@@ -1397,177 +1487,237 @@ const EditActorForm = (props) => {
         {
           /* @ts-ignore */
           dataCollections.collections &&
-            /* @ts-ignore */
-            dataCollections.collections.map((collection) => {
-              if (!collection.actor) return '';
-              if (collection.code === 'larochelle_quarter') return '';
-              //    const [display, setDisplay] = useState(false);
-              let { label } = collection;
-              let helperText = '';
-              if (collection.code === 'category') {
-                label =
-                  'Choisissez les sous-sujets dans lesquels vous souhaitez apparaître (en priorité)';
-                helperText =
-                  'Vous avez la possibilité d’ajouter un texte libre pour expliquer votre lien au sujet choisi. Vous pouvez sélectionner autant de sujets que nécessaire, les 3 premiers que vous cocherez serviront à référencer votre page dans les moteurs de recherche. le 1er coché indiquera votre sujet principal.';
-              } else if (collection.code === 'actor_status') {
-                label = 'Quel est votre statut juridique ?';
-                helperText =
-                  'service public : toutes les collectivités, mairies, cda, cdc participant directement ou via des projets à la transition / ex : la rochelle territoire zéro carbone entreprise : tous les acteurs économiques de la transition, de l’economie sociale et solidaire... association & ONG  : toutes les structures à but non lucratif';
-              } else if (collection.code === 'public_target') {
-                label =
-                  'Quel public visez vous principalement dans vos actions ?';
-                helperText =
-                  'Ici nous vous proposons de choisir votre public principal. Bien sûr à chaque action (événement, campagne…) que vous créerez vous pourrez indiquer des publics différents. de votre public principal. Tout public = familles ; Jeunes adultes = 15-25 ans, étudiants ; précaires = SDF, familles en difficulté, etc. ; discriminés = femmes, LGBTQIA+, migrants, etc';
-              } else if (collection.code === 'collectif') {
-                label =
-                  'En tant qu’acteur, je fais partie des collectifs & réseaux suivants :';
-                helperText =
-                  'Sont référencés ici des collectifs et réseaux du territoire. Les groupes locaux de réseaux nationaux (ex Greenpeace) ne sont pas inclus dans cette liste';
-              } else if (collection.code === 'actor_location_action') {
-                label = "Territoire d'action (1 seul choix) *";
-                helperText =
-                  'Si vous êtes une antenne, le territoire d’action est celui qui concerne votre structure chapeau (ex : Greenpeace, choisir « International »)';
-              }
-              let defaultValue = '';
-              if (
-                !IsTree(collection) &&
-                !collection.multipleSelection &&
-                formValues &&
-                formValues.entries
-              ) {
-                // @ts-ignore
-                formValues.entries.map((entry) => {
-                  let isPresent = false;
-                  if (collection.entries) {
-                    collection.entries.map((entryCollection) => {
-                      if (entryCollection.id === entry) isPresent = true;
-                      return isPresent;
-                    });
-                  }
-                  if (isPresent) defaultValue = entry;
-                });
-              }
-              return (
-                <div>
-                  <Typography className={styles.collectionLabel}>
-                    {label}{' '}
-                    {helperText !== '' && (
-                      <Tooltip title={helperText}>
-                        <InfoIcon />
-                      </Tooltip>
-                    )}
-                  </Typography>
-                  <br />
-                  {
-                    // display &&
-                    IsTree(collection) && (
-                      // @ts-ignore
-                      <Entries initValues={initentriesWithInformation}>
-                        <TreeView
-                          className={styles.rootTree}
-                          defaultCollapseIcon={<ArrowDropDownIcon />}
-                          defaultExpandIcon={<ArrowRightIcon />}
-                          defaultEndIcon={<div style={{ width: 24 }} />}
-                        >
-                          {collection.entries &&
-                            collection.entries.map((entry) => {
-                              return (
-                                // @ts-ignore
-                                <StyledTreeItem
-                                  key={entry.id}
-                                  nodeId={entry.id}
-                                  labelText={entry.label}
-                                  hideCheckBox
-                                  isForm
-                                  className={styles.treeParent}
-                                >
-                                  {entry.subEntries &&
-                                    entry.subEntries.map((subEntry) => {
-                                      return (
-                                        <StyledTreeItem
-                                          key={subEntry.id}
-                                          // @ts-ignore
-                                          nodeId={subEntry.id}
-                                          labelText={subEntry.label}
-                                          formValues={updateFormValues}
-                                          categoryChange={formChangeHandler}
-                                          linkDescription={
-                                            isEntriesWithInformationContains(
-                                              formValues.entriesWithInformation,
-                                              subEntry.id,
-                                            ) !== null
-                                              ? isEntriesWithInformationContains(
-                                                  formValues.entriesWithInformation,
-                                                  subEntry.id,
-                                                ).linkDescription
-                                              : ''
-                                          }
-                                          isForm
-                                          checked={
-                                            formValues &&
-                                            formValues.entriesWithInformation &&
-                                            isEntriesWithInformationContains(
-                                              formValues.entriesWithInformation,
-                                              subEntry.id,
-                                            ) !== null
-                                          }
-                                        />
-                                      );
-                                    })}
-                                </StyledTreeItem>
-                              );
-                            })}
-                        </TreeView>
-                      </Entries>
-                    )
-                  }
-                  {
-                    // display &&
-                    !IsTree(collection) && collection.multipleSelection && (
-                      <List>
+          /* @ts-ignore */
+          dataCollections.collections.map((collection) => {
+            if (!collection.actor) return '';
+            if (collection.code === 'larochelle_quarter') return '';
+            //    const [display, setDisplay] = useState(false);
+            let { label } = collection;
+            let helperText;
+            if (collection.code === 'category') {
+              label =
+                'Choisissez les sous-sujets dans lesquels vous souhaitez apparaître (en priorité)';
+              helperText =
+                'Vous avez la possibilité d’ajouter un texte libre pour expliquer votre lien au sujet choisi. Vous pouvez sélectionner autant de sujets que nécessaire, les 3 premiers que vous cocherez serviront à référencer votre page dans les moteurs de recherche. le 1er coché indiquera votre sujet principal.';
+            } else if (collection.code === 'actor_status') {
+              label = 'Quel est votre statut juridique ?';
+              helperText =
+                'service public : toutes les collectivités, mairies, cda, cdc participant directement ou via des projets à la transition / ex : la rochelle territoire zéro carbone entreprise : tous les acteurs économiques de la transition, de l’economie sociale et solidaire... association & ONG  : toutes les structures à but non lucratif';
+            } else if (collection.code === 'public_target') {
+              label =
+                'Quel public visez vous principalement dans vos actions ?';
+              helperText =
+                'Ici nous vous proposons de choisir votre public principal. Bien sûr à chaque action (événement, campagne…) que vous créerez vous pourrez indiquer des publics différents. de votre public principal. Tout public = familles ; Jeunes adultes = 15-25 ans, étudiants ; précaires = SDF, familles en difficulté, etc. ; discriminés = femmes, LGBTQIA+, migrants, etc';
+            } else if (collection.code === 'collectif') {
+              label =
+                'En tant qu’acteur, je fais partie des collectifs & réseaux suivants :';
+              helperText =
+                'Sont référencés ici des collectifs et réseaux du territoire. Les groupes locaux de réseaux nationaux (ex Greenpeace) ne sont pas inclus dans cette liste';
+            } else if (collection.code === 'actor_location_action') {
+              label = "Territoire d'action (1 seul choix) *";
+              helperText =
+                'Si vous êtes une antenne, le territoire d’action est celui qui concerne votre structure chapeau (ex : Greenpeace, choisir « International »)';
+            }
+            let defaultValue = '';
+            if (
+              !IsTree(collection) &&
+              !collection.multipleSelection &&
+              formValues &&
+              formValues.entries
+            ) {
+              // @ts-ignore
+              formValues.entries.map((entry) => {
+                let isPresent = false;
+                if (collection.entries) {
+                  collection.entries.map((entryCollection) => {
+                    if (entryCollection.id === entry) isPresent = true;
+                    return isPresent;
+                  });
+                }
+                if (isPresent) defaultValue = entry;
+              });
+            }
+            return (
+              <div>
+                <TitleWithTooltip
+                  title={label}
+                  tooltipTitle={helperText}
+                  collection
+                />
+                {
+                  // display &&
+                  IsTree(collection) && (
+                    // @ts-ignore
+                    <Entries initValues={initentriesWithInformation}>
+                      <TreeView
+                        className={styles.rootTree}
+                        defaultCollapseIcon={<ArrowDropDownIcon />}
+                        defaultExpandIcon={<ArrowRightIcon />}
+                        defaultEndIcon={<div style={{ width: 24 }} />}
+                      >
                         {collection.entries &&
                           collection.entries.map((entry) => {
                             return (
-                              <ListItem key={entry.id} role={undefined} dense>
-                                {/* @ts-ignore */}
-                                <ListItemText primary={entry.label} />
-                                <Checkbox
-                                  edge="start"
-                                  tabIndex={-1}
-                                  disableRipple
-                                  onChange={formChangeHandler}
-                                  name="entries"
-                                  value={entry.id}
-                                  // @ts-ignore
-                                  checked={
-                                    formValues &&
-                                    formValues.entries &&
-                                    formValues.entries.includes(entry.id)
-                                  }
-                                  onClick={(e) => e.stopPropagation()}
-                                />
-                              </ListItem>
+                              // @ts-ignore
+                              <StyledTreeItem
+                                key={entry.id}
+                                nodeId={entry.id}
+                                labelText={entry.label}
+                                hideCheckBox
+                                isForm
+                                className={styles.treeParent}
+                              >
+                                {entry.subEntries &&
+                                  entry.subEntries.map((subEntry) => {
+                                    return (
+                                      <StyledTreeItem
+                                        key={subEntry.id}
+                                        // @ts-ignore
+                                        nodeId={subEntry.id}
+                                        labelText={subEntry.label}
+                                        formValues={updateFormValues}
+                                        categoryChange={formChangeHandler}
+                                        linkDescription={
+                                          isEntriesWithInformationContains(
+                                            formValues.entriesWithInformation,
+                                            subEntry.id,
+                                          ) !== null
+                                            ? isEntriesWithInformationContains(
+                                              formValues.entriesWithInformation,
+                                              subEntry.id,
+                                            ).linkDescription
+                                            : ''
+                                        }
+                                        isForm
+                                        checked={
+                                          formValues &&
+                                          formValues.entriesWithInformation &&
+                                          isEntriesWithInformationContains(
+                                            formValues.entriesWithInformation,
+                                            subEntry.id,
+                                          ) !== null
+                                        }
+                                      />
+                                    );
+                                  })}
+                              </StyledTreeItem>
                             );
                           })}
-                      </List>
-                    )
-                  }
-                  {
-                    // display &&
-                    !IsTree(collection) && !collection.multipleSelection && (
-                      <RadioGroupForContext initValue={defaultValue}>
-                        <CustomRadioGroup
-                          formChangeHandler={formChangeHandler}
-                          entries={collection.entries}
-                          defaultValue={defaultValue}
-                        />
-                      </RadioGroupForContext>
-                    )
-                  }
-                </div>
-              );
-            })
+                      </TreeView>
+                    </Entries>
+                  )
+                }
+                {
+                  // display &&
+                  !IsTree(collection) && collection.multipleSelection && (
+                    <List>
+                      {collection.entries &&
+                        collection.entries.map((entry) => {
+                          return (
+                            <ListItem key={entry.id} role={undefined} dense>
+                              {/* @ts-ignore */}
+                              <ListItemText primary={entry.label} />
+                              <Checkbox
+                                edge="start"
+                                tabIndex={-1}
+                                disableRipple
+                                onChange={formChangeHandler}
+                                name="entries"
+                                value={entry.id}
+                                // @ts-ignore
+                                checked={
+                                  formValues &&
+                                  formValues.entries &&
+                                  formValues.entries.includes(entry.id)
+                                }
+                                onClick={(e) => e.stopPropagation()}
+                              />
+                            </ListItem>
+                          );
+                        })}
+                    </List>
+                  )
+                }
+                {
+                  // display &&
+                  !IsTree(collection) && !collection.multipleSelection && (
+                    <RadioGroupForContext initValue={defaultValue}>
+                      <CustomRadioGroup
+                        formChangeHandler={formChangeHandler}
+                        entries={collection.entries}
+                        defaultValue={defaultValue}
+                      />
+                    </RadioGroupForContext>
+                  )
+                }
+              </div>
+            );
+          })
         }
+
+        <TitleWithTooltip
+          title="Référent(s) associé(s) à l’acteur"
+          tooltipTitle="Permet d’ajouter d’autres référents pour un acteur"
+        />
+
+        <Grid container>
+          <List className={styles.referentList}>
+            {
+              // @ts-ignore
+              (formValues?.referents || []).map(referent => {
+                return (
+                  <ListItem>
+                    <ListItemIcon>
+                      <Avatar>
+                        {referent.lastname[0] + referent.surname[0]}
+                      </Avatar>
+                    </ListItemIcon>
+                    <ListItemText
+                      id={"referent-list-" + referent.id}
+                      primary={`${referent.lastname} ${referent.surname}`}
+                    />
+                    <ListItemSecondaryAction>
+                      <IconButton onClick={() => handleClickDeleteReferent(referent)}>
+                        <DeleteIcon />
+                      </IconButton>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                )
+              })
+            }
+          </List>
+        </Grid>
+
+        <Grid container direction="row">
+          <IconButton key="close" aria-label="Close" color="inherit" onClick={handleClickAddReferent}>
+            <AddCircleOutline />
+          </IconButton>
+
+          {showAddReferent && (
+            <Autocomplete
+              id="combo-box-add-referent"
+              options={dataUsers.users}
+              // @ts-ignore
+              getOptionLabel={(option) => `${option.surname} ${option.lastname}`}
+              onChange={handleChangeReferent}
+              open={openAddReferentlist}
+              style={{ width: 300 }}
+              // @ts-ignore
+              onInput={inputChangeHandler}
+              // eslint-disable-next-line react/jsx-props-no-spreading
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Référents"
+                  variant="outlined"
+                  name="referents"
+                />
+              )}
+            />
+          )}
+        </Grid>
+
+        <br />
 
         <Grid item xs={12}>
           <ClassicButton
@@ -1583,7 +1733,10 @@ const EditActorForm = (props) => {
 
   return (
     <div>
-      <FormController render={Form} validationRules={validationRules} />
+      <FormController
+        render={Form}
+        validationRules={validationRules}
+      />
     </div>
   );
 };
