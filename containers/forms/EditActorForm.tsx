@@ -92,6 +92,7 @@ const EDIT_ACTOR = gql`
       volunteerDescription: $volunteerDescription
       openingHours: $openingHours
     ) {
+     
       id
       name
       email
@@ -101,10 +102,80 @@ const EDIT_ACTOR = gql`
       city
       website
       socialNetwork
-      shortDescription
       description
       lat
       lng
+      activity
+      shortDescription
+      volunteerDescription
+      pictures {
+        id
+        label
+        originalPicturePath
+        originalPictureFilename
+        croppedPicturePath
+        croppedPictureFilename
+        croppedX
+        croppedY
+        croppedZoom
+        croppedRotation
+        position
+        logo
+        main
+      }
+      categories {
+        id
+        label
+        parentCategory {
+          label
+        }
+        subCategories {
+          label
+        }
+      }
+      entries {
+        id
+        label
+        icon
+        description
+        actorEntries {
+          linkDescription
+          topSEO
+          id
+        }
+        parentEntry {
+          id
+          code
+          label
+        }
+        subEntries {
+          id
+          code
+          label
+          icon
+          description
+          actorEntries {
+            linkDescription
+            topSEO
+            id
+          }
+        }
+        collection {
+          id
+          code
+          label
+        }
+      }
+      contact_id
+      openingHours {
+        days {
+          id
+          day
+          selected
+        }
+        hours
+        place
+      }
     }
   }
 `;

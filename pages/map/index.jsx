@@ -96,6 +96,10 @@ const useStyles = makeStyles((theme) => ({
   stickyFirstLine: {
     marginBottom: theme.spacing(2),
   },
+  icon: {
+    color: '#bd0b3d',
+    width: '20px',
+  },
   datePicker: {
     border: '0.5px solid',
     borderRadius: '10px',
@@ -261,6 +265,7 @@ const carto = () => {
           id
           name
           address
+          city
           shortDescription
           lat
           lng
@@ -461,7 +466,7 @@ const carto = () => {
                           actor.entries.length > 0 &&
                           actor.entries[0].icon
                         ) {
-                          icone = actor.entries[0].icon;
+                          icone = '/icons/marker/marker_' + actor.entries[0].icon+'.svg';
                           color = actor.entries[0].color;
                         } else {
                           icone = '/icons/' + 'place' + '.svg';
@@ -473,7 +478,7 @@ const carto = () => {
                           color,
                           fillColor: color,
                           iconAnchor: [13, 34], // point of the icon which will correspond to marker's location
-                          iconSize: [25],
+                          iconSize: [60],
                           popupAnchor: [1, -25],
                           html: `<span style="${markerHtmlStyles}" />`,
                         });
@@ -525,9 +530,26 @@ const carto = () => {
                                     {actor && actor.name}
                                   </Typography>
                                 </div>
-                                <p className={styles.shortDescription} >
+                                <p className={styles.shortDescription}>
+                                  {!actor.address && actor.city && (
+                                    <span>
+                                      {/* @ts-ignore */}
+                                      <img src={"/icons/location.svg"} alt="Localisation" className={[styles.icon]} /> {actor.city}
+                                    </span>
+                                  )}
+                                  {actor.address && actor.city && (
+                                    <span>
+                                      {/* @ts-ignore */}
+                                      <img src={"/icons/location.svg"} alt="Localisation" className={[styles.icon]} /> {`${actor.address} ${
+                                        actor.city
+                                      }`}
+                                    </span>
+                                  )}
+                                </p>
+                                <p className={styles.shortDescription}>
                                   {actor && Parser(splitWord(actor.shortDescription, 300))}
                                 </p>
+                             
                               </div>
                             </Tooltip>
                             <Popup>
@@ -545,7 +567,7 @@ const carto = () => {
                                 <div className={styles.categorie} >
                                   <Typography
                                     className={styles.categorie}
-                                    style={{ color :  actor?.entries[0]?.parentEntry?.color}}
+                                    style={{ color: actor?.entries[0]?.parentEntry?.color}}
                                     gutterBottom
                                   >
                                     {actor.entries &&
@@ -566,6 +588,22 @@ const carto = () => {
                                         {actor && actor.name}
                                       </Typography>
                                     </div>
+                                    <p className={styles.shortDescription}>
+                                      {!actor.address && actor.city && (
+                                        <span>
+                                          {/* @ts-ignore */}
+                                          <img src={"/icons/location.svg"} alt="Localisation" className={[styles.icon]} /> {actor.city}
+                                        </span>
+                                      )}
+                                      {actor.address && actor.city && (
+                                        <span>
+                                          {/* @ts-ignore */}
+                                          <img src={"/icons/location.svg"} alt="Localisation" className={[styles.icon]} /> {`${actor.address} ${
+                                            actor.city
+                                          }`}
+                                        </span>
+                                      )}
+                                    </p>
                                   </Grid>
 
                                   <Grid item xs={2}>
