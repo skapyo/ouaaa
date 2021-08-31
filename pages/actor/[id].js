@@ -38,11 +38,11 @@ import CardAddEvent from '../../components/cards/CardAddEvent';
 import { getImageUrl, entriesHasElementWithCode } from '../../utils/utils';
 
 if (typeof window !== 'undefined') {
-  const L = require('leaflet');
-  const { Map } = require('react-leaflet');
-  const { TileLayer } = require('react-leaflet');
-  const { Marker } = require('react-leaflet');
-  const { Popup } = require('react-leaflet');
+  var L = require('leaflet');
+  var Map = require('react-leaflet').Map;
+  var TileLayer = require('react-leaflet').TileLayer;
+  var Marker = require('react-leaflet').Marker;
+  var Popup = require('react-leaflet').Popup;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -183,54 +183,49 @@ const useStyles = makeStyles((theme) => ({
   hide: {
     display: 'none',
   },
-  button: {
-    margin: '2.5em 0 2.5em 0 ',
-    color: 'white',
-    'background-color': '#2C367E',
-    border: 'none',
 
+
+  buttonVolunteer: {
+    fontSize: 'inherit',
+    margin: '0.5em 0 0.5em 0 ',
+    color: 'white',
+    'background-color': 'transparent',
+    border: '2px solid white',
     borderRadius: '1.5em',
     padding: '0 3em 0 3em',
-    height: '2.5em',
+    minHeight: '2.5em',
     '&:hover': {
       cursor: 'pointer',
       color: '#2C367E',
       'background-color': 'white',
       border: '2px solid #2C367E',
+      backgroundImage: "url('/arrow-hover.svg')",
     },
-    backgroundImage: "url('./arrow.svg')",
+    backgroundImage: "url('/arrow.svg')",
     backgroundRepeat: 'no-repeat',
     'background-position-x': '5px',
-    'background-position-y': '1px',
-    'background-size': '11%',
-    fontSize: '1em',
-  },
-  buttonInverse: {
-    margin: '2.5em 0 2.5em 0 ',
-    color: '#2C367E',
-    'background-color': 'white',
-    border: '2px solid #2C367E',
-
-    borderRadius: '1.5em',
-    padding: '0 3em 0 3em',
-    height: '2.5em',
-    '&:hover': {
-      cursor: 'pointer',
-      textDecoration: 'line-through',
-      color: 'white',
-      'background-color': '#2C367E',
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '0.8em',
     },
-    fontSize: '1em',
-    backgroundImage: "url('./arrow.svg')",
-    backgroundRepeat: 'no-repeat',
-    'background-position-x': '5px',
-    'background-position-y': '1px',
-    'background-size': '11%',
-  },
-  buttonVolunteer: {
-    paddingTop: '1em',
+    textAlign: 'center',
+  }, 
+  volunteerSection: {
+    backgroundColor: '#2b3483',
     paddingBottom: '1em',
     textAlign: 'center',
+    borderRadius: '1em',
+    marginTop: '1em',
+  },
+  volunteerTitle: {
+    fontWeight: '500',
+    color: 'white',
+    textTransform: 'uppercase',
+    fontSize: '1.8em',
+    paddingTop: '2em',
+  },
+  volunteerDescription: {
+    color: 'white',
+    fontSize: '1.2em',
   },
   fab: {
     position: 'fixed',
@@ -386,23 +381,6 @@ const Actor = () => {
     },
   ] = useMutation(REMOVE_ACTOR_VOLUNTEER);
 
-  useEffect(() => {
-    if (volunteerData !== undefined) {
-      enqueueSnackbar('Demande de bénévole prise en compte', {
-        preventDuplicate: true,
-      });
-      refetch();
-    }
-  }, [volunteerData]);
-
-  useEffect(() => {
-    if (removevolunteerData !== undefined) {
-      enqueueSnackbar('Suppression de la demande de bénévole', {
-        preventDuplicate: true,
-      });
-      refetch();
-    }
-  }, [removevolunteerData]);
 
   const user = useSessionState();
   function containUser(list) {
@@ -423,8 +401,26 @@ const Actor = () => {
     variables: {
       id,
     },
-    fetchPolicy: user && user.role === 'admin' ? 'no-cache' : 'cache-first',
+    fetchPolicy: 'cache-first',
   });
+  useEffect(() => {
+    if (volunteerData !== undefined) {
+      enqueueSnackbar('Demande de bénévole prise en compte', {
+        preventDuplicate: true,
+      });
+      refetch();
+    }
+  }, [volunteerData]);
+
+  useEffect(() => {
+    if (removevolunteerData !== undefined) {
+      enqueueSnackbar('Suppression de la demande de bénévole', {
+        preventDuplicate: true,
+      });
+      refetch();
+    }
+  }, [removevolunteerData]);
+
   const addVolunteerHandler = () => {
     if (user == null) {
       setCookie('redirect_url', router.asPath, {
@@ -840,6 +836,7 @@ const Actor = () => {
                   )}
                 </Grid>
               </Grid>
+              <br />
               <Grid item md={7} sm={10} className={styles.description}>
                 <Typography variant="h3" className={styles.cardTitle}>
                   DESCRIPTION
@@ -882,7 +879,7 @@ const Actor = () => {
                 {data
                   && entriesHasElementWithCode(
                     data.actor.entries,
-                    'public_target',
+                    'actor_status',
                   ) && (
                     <div className={[styles.descriptionInfoDiv]}>
                       <img src="/icons/status.svg" alt="Collectif & réseau" className={[styles.icon]} />
@@ -967,32 +964,84 @@ const Actor = () => {
                       </span>
                     </div>
                 )}
-              </Grid>
-            </Grid>
+              
+              <div />
+              <br />
+              <Typography variant="h3" className={styles.cardTitle}>
+                ACCES
+              </Typography>
+              <div className={styles.border} />
+              <br />
 
+              {data && (
+                <Map ref={mapRef} center={[data.actor.lat, data.actor.lng]} zoom={11} className={styles.map}  >
+                  <TileLayer
+                    attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  />
+                  <Marker
+                    position={[data.actor.lat, data.actor.lng]}
+                    icon={new L.Icon({
+                      iconUrl: '/icons/location.svg',
+                      iconAnchor: [13, 34], // point of the icon which will correspond to marker's location
+                      iconSize: [25],
+                      popupAnchor: [1, -25],
+                      html: `<span style="background-color: red" />`,
+                    })}
+                  >
+                    <Popup>
+                      {data.actor.name} - {data && !data.actor.address && data.actor.city && (
+                        <span>
+                          {/* @ts-ignore */}
+                          {data && data.actor.city}
+                        </span>
+                      )} 
+                      {data && data.actor.address && data.actor.city && (
+                        <span>
+                          {/* @ts-ignore */}
+                          {`${data && data.actor.address} ${data && data.actor.city
+                            }`}
+                        </span>
+                      )}
+                      </Popup>
+                    </Marker>
+                </Map>
+              )}
+            </Grid>
+            </Grid>
+            <br />
             {data && data.actor.volunteerDescription && (
               <div>
-                <Typography variant="h5" className={styles.cardTitle}>
+                <br />
+                <Typography variant="h3" className={styles.cardTitle}>
                   Recherche de bénévoles
                 </Typography>
-                <p>{data && Parser(data.actor.volunteerDescription)}</p>
-                <div className={styles.buttonVolunteer}>
-                  {data && containUser(data.actor.volunteers) && (
-                    <button
-                      className={styles.buttonInverse}
-                      onClick={removeVolunteerHandler}
-                    >
-                      Je ne souhaite plus être bénévole
-                    </button>
-                  )}
-                  {!(data && containUser(data.actor.volunteers)) && (
-                    <button
-                      className={styles.button}
-                      onClick={addVolunteerHandler}
-                    >
-                      Devenir bénévole
-                    </button>
-                  )}
+                <div className={styles.border} />
+                <br />
+                <div className={styles.volunteerSection}>
+                <Typography  className={styles.volunteerTitle}>
+                  {data && data.actor.name} recherche des bénévoles
+                </Typography>
+                  <br />
+                  <div  className={styles.volunteerDescription}>{data && Parser(data.actor.volunteerDescription)}</div>
+                  <div >
+                    {data && containUser(data.actor.volunteers) && (
+                      <button
+                        className={styles.buttonVolunteer}
+                        onClick={removeVolunteerHandler}
+                      >
+                        Je ne souhaite plus être bénévole
+                      </button>
+                    )}
+                    {!(data && containUser(data.actor.volunteers)) && (
+                      <button
+                       className={styles.buttonVolunteer}
+                        onClick={addVolunteerHandler}
+                      >
+                        Devenir bénévole
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
             )}
@@ -1000,8 +1049,10 @@ const Actor = () => {
             {data && data.actor.pictures && data.actor.pictures.length > 0 && (
               <div>
                 <Typography variant="h5" className={styles.cardTitle}>
-                  PHOTOS ET VIDEOS
+                  PHOTOS
                 </Typography>
+                <div className={styles.border} />
+                <br />
               </div>
             )}
             <Slider {...settingsSliderImage}>

@@ -36,7 +36,6 @@ const useStyles = makeStyles((theme) => ({
     color: 'white',
     'background-color': 'transparent',
     border: '2px solid white',
-    
     borderRadius: '1.5em',
     padding: '0.2em 3em 0.2em 3em',
     minHeight: '2.5em',
@@ -50,7 +49,6 @@ const useStyles = makeStyles((theme) => ({
     backgroundImage: "url('./arrow.svg')",
     backgroundRepeat: 'no-repeat',
     'background-position-x': '5px',
-    'background-position-y': '1px',
     [theme.breakpoints.down('sm')]: {
       fontSize: '0.8em',
     },
