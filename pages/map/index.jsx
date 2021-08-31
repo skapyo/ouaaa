@@ -461,7 +461,7 @@ const carto = () => {
                           actor.entries.length > 0 &&
                           actor.entries[0].icon
                         ) {
-                          icone = actor.entries[0].icon;
+                          icone = '/icons/marker/marker_' + actor.entries[0].icon+'.svg';
                           color = actor.entries[0].color;
                         } else {
                           icone = '/icons/' + 'place' + '.svg';
@@ -473,7 +473,7 @@ const carto = () => {
                           color,
                           fillColor: color,
                           iconAnchor: [13, 34], // point of the icon which will correspond to marker's location
-                          iconSize: [25],
+                          iconSize: [60],
                           popupAnchor: [1, -25],
                           html: `<span style="${markerHtmlStyles}" />`,
                         });

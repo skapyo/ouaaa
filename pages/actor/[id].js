@@ -868,7 +868,7 @@ const Actor = () => {
                               {/* @ts-ignore */}
                               :
                               { entry.icon && (
-                              <img src={entry.icon} alt="icon" className={styles.iconEntry} />
+                              <img src={`/icons/${entry.icon}.svg`} alt="icon" className={styles.iconEntry} />
                               )}
                               {/* @ts-ignore */}
                               {` ${entry && entry.label}`}
