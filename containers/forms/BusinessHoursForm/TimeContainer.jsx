@@ -129,14 +129,17 @@ const TimeContainer = (props) => {
     setPlace(place);
   };
 
+  // FIXME: BUG HERE when delete 1 top line with 1 hour, it deletes the following line and the top line looses hours too
+  // when it s saved , it is actually only the 1st line with hours that was deleted, so it is a display mislalignment
+  // Maybe refactor with ID (UUID) to exactly target the Hours and Array to delete
   const deleteTimePicker = (e, index) => {
     const tempHours = [...hours];
-    tempHours.pop();
-
-    setHours(tempHours);
-
     if (tempHours.length === 0) {
       deleteTimeContainer(e, index);
+    } else {
+      tempHours.pop();
+
+      setHours(tempHours);
     }
   };
 
@@ -158,6 +161,7 @@ const TimeContainer = (props) => {
       hours.length > 0 &&
       [].concat(...weekdays).filter((day) => day.selected).length
     ) {
+      // debugger;
       updateTimeFrames(newTimeFrame, indexTimeContainer);
     }
   }, [weekdays, hours, place]);
@@ -217,7 +221,10 @@ const TimeContainer = (props) => {
       <Button
         aria-label="delete"
         className={classes.buttonDelete}
-        onClick={(e) => deleteTimePicker(e, indexTimeContainer)}
+        onClick={(e) => {
+          deleteTimePicker(e, indexTimeContainer);
+          // debugger;
+        }}
       >
         <DeleteIcon fontSize="small" />
       </Button>
