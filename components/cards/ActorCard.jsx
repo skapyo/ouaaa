@@ -91,8 +91,10 @@ const useStyles = makeStyles((theme, props) => ({
 
 const ActorCard = ({ actor }) => {
   debugger;
-  const color = actor.entries[0].parentEntry ? actor.entries[0].parentEntry.color : '#AD2740';
-  const icon = actor.entries[0] ? actor.entries[0].icon : 'fruit';
+  const color = actor.entries[0]?.parentEntry
+    ? actor.entries[0].parentEntry.color
+    : '#AD2740';
+  const icon = actor.entries[0] ? actor.entries[0]?.icon : 'fruit';
   const actorName = actor.name;
 
   const classes = useStyles({ color, icon });
@@ -109,10 +111,10 @@ const ActorCard = ({ actor }) => {
                   src={
                     actor.pictures.length >= 1
                       ? getImageUrl(
-                        actor.pictures.sort((a, b) =>
-                          (a.logo ? -1 : 1) - (b.logo ? -1 : 1),
-                        )[0].croppedPicturePath,
-                      )
+                          actor.pictures.sort(
+                            (a, b) => (a.logo ? -1 : 1) - (b.logo ? -1 : 1),
+                          )[0].croppedPicturePath,
+                        )
                       : ''
                   }
                 />
