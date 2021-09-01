@@ -1051,8 +1051,6 @@ const EditActorForm = (props) => {
         });
         router.push(`/actor/${actorData.actor.id}`);
       }
-
-      console.log('actorData', actorData);
     }, [editLoading, editError]);
 
     const getObjectLongName = (results, name) => {
@@ -1319,7 +1317,7 @@ const EditActorForm = (props) => {
             if (!collection.actor) return '';
 
             return (
-              <div>
+              <div key={collection.id}>
                 <TitleWithTooltip
                   title={collection.label}
                   collection
@@ -1566,174 +1564,174 @@ const EditActorForm = (props) => {
         {
           /* @ts-ignore */
           dataCollections.collections &&
-            /* @ts-ignore */
-            dataCollections.collections.map((collection) => {
-              if (!collection.actor) return '';
-              if (collection.code === 'larochelle_quarter') return '';
-              //    const [display, setDisplay] = useState(false);
-              let { label } = collection;
-              let helperText ;
-              if (collection.code === 'category') {
-                label =
-                  'Choisissez les sous-sujets dans lesquels vous souhaitez apparaître (en priorité)';
-                helperText =
-                  'Vous avez la possibilité d’ajouter un texte libre pour expliquer votre lien au sujet choisi. Vous pouvez sélectionner autant de sujets que nécessaire, les 3 premiers que vous cocherez serviront à référencer votre page dans les moteurs de recherche. le 1er coché indiquera votre sujet principal.';
-              } else if (collection.code === 'actor_status') {
-                label = 'Quel est votre statut juridique ?';
-                helperText =
-                  'service public : toutes les collectivités, mairies, cda, cdc participant directement ou via des projets à la transition / ex : la rochelle territoire zéro carbone entreprise : tous les acteurs économiques de la transition, de l’economie sociale et solidaire... association & ONG  : toutes les structures à but non lucratif';
-              } else if (collection.code === 'public_target') {
-                label =
-                  'Quel public visez vous principalement dans vos actions ?';
-                helperText =
-                  'Ici nous vous proposons de choisir votre public principal. Bien sûr à chaque action (événement, campagne…) que vous créerez vous pourrez indiquer des publics différents. de votre public principal. Tout public = familles ; Jeunes adultes = 15-25 ans, étudiants ; précaires = SDF, familles en difficulté, etc. ; discriminés = femmes, LGBTQIA+, migrants, etc';
-              } else if (collection.code === 'collectif') {
-                label =
-                  'En tant qu’acteur, je fais partie des collectifs & réseaux suivants :';
-                helperText =
-                  'Sont référencés ici des collectifs et réseaux du territoire. Les groupes locaux de réseaux nationaux (ex Greenpeace) ne sont pas inclus dans cette liste';
-              } else if (collection.code === 'actor_location_action') {
-                label = "Territoire d'action (1 seul choix) *";
-                helperText =
-                  'Si vous êtes une antenne, le territoire d’action est celui qui concerne votre structure chapeau (ex : Greenpeace, choisir « International »)';
-              }
-              let defaultValue = '';
-              if (
-                !IsTree(collection) &&
-                !collection.multipleSelection &&
-                formValues &&
-                formValues.entries
-              ) {
-                // @ts-ignore
-                formValues.entries.map((entry) => {
-                  let isPresent = false;
-                  if (collection.entries) {
-                    collection.entries.map((entryCollection) => {
-                      if (entryCollection.id === entry) isPresent = true;
-                      return isPresent;
-                    });
-                  }
-                  if (isPresent) defaultValue = entry;
-                });
-              }
-              return (
-                <div>
-                  <TitleWithTooltip
-                    title={label}
-                    tooltipTitle={helperText}
-                        collection
-                       />
-                  {
-                    // display &&
-                    IsTree(collection) && (
-                      // @ts-ignore
-                      <Entries initValues={initentriesWithInformation}>
-                        <TreeView
-                          className={styles.rootTree}
-                          defaultCollapseIcon={<ArrowDropDownIcon />}
-                          defaultExpandIcon={<ArrowRightIcon />}
-                          defaultEndIcon={<div style={{ width: 24 }} />}
-                        >
-                          {collection.entries &&
-                            collection.entries.map((entry) => {
-                              return (
-                                // @ts-ignore
-                                <StyledTreeItem
-                                  key={entry.id}
-                                  nodeId={entry.id}
-                                  labelText={entry.label}
-                                  description={entry.description}
-                                  icon={entry.icon}hideCheckBox
-                                  isForm
-                                  className={styles.treeParent}
-                                >
-                                  {entry.subEntries &&
-                                    entry.subEntries.map((subEntry) => {
-                                      return (
-                                        <StyledTreeItem
-                                          key={subEntry.id}
-                                          // @ts-ignore
-                                          nodeId={subEntry.id}
-                                          labelText={subEntry.label}description={subEntry.description}
-                                          icon={subEntry.icon}
-                                          formValues={updateFormValues}
-                                          categoryChange={formChangeHandler}
-                                          linkDescription={
-                                            isEntriesWithInformationContains(
-                                              formValues.entriesWithInformation,
-                                              subEntry.id,
-                                            ) !== null
-                                              ? isEntriesWithInformationContains(
-                                                  formValues.entriesWithInformation,
-                                                  subEntry.id,
-                                                ).linkDescription
-                                              : ''
-                                          }
-                                          isForm
-                                          checked={
-                                            formValues &&
-                                            formValues.entriesWithInformation &&
-                                            isEntriesWithInformationContains(
-                                              formValues.entriesWithInformation,
-                                              subEntry.id,
-                                            ) !== null
-                                          }
-                                        />
-                                      );
-                                    })}
-                                </StyledTreeItem>
-                              );
-                            })}
-                        </TreeView>
-                      </Entries>
-                    )
-                  }
-                  {
-                    // display &&
-                    !IsTree(collection) && collection.multipleSelection && (
-                      <List>
+          /* @ts-ignore */
+          dataCollections.collections.map((collection) => {
+            if (!collection.actor) return '';
+            if (collection.code === 'larochelle_quarter') return '';
+            //    const [display, setDisplay] = useState(false);
+            let { label } = collection;
+            let helperText;
+            if (collection.code === 'category') {
+              label =
+                'Choisissez les sous-sujets dans lesquels vous souhaitez apparaître (en priorité)';
+              helperText =
+                'Vous avez la possibilité d’ajouter un texte libre pour expliquer votre lien au sujet choisi. Vous pouvez sélectionner autant de sujets que nécessaire, les 3 premiers que vous cocherez serviront à référencer votre page dans les moteurs de recherche. le 1er coché indiquera votre sujet principal.';
+            } else if (collection.code === 'actor_status') {
+              label = 'Quel est votre statut juridique ?';
+              helperText =
+                'service public : toutes les collectivités, mairies, cda, cdc participant directement ou via des projets à la transition / ex : la rochelle territoire zéro carbone entreprise : tous les acteurs économiques de la transition, de l’economie sociale et solidaire... association & ONG  : toutes les structures à but non lucratif';
+            } else if (collection.code === 'public_target') {
+              label =
+                'Quel public visez vous principalement dans vos actions ?';
+              helperText =
+                'Ici nous vous proposons de choisir votre public principal. Bien sûr à chaque action (événement, campagne…) que vous créerez vous pourrez indiquer des publics différents. de votre public principal. Tout public = familles ; Jeunes adultes = 15-25 ans, étudiants ; précaires = SDF, familles en difficulté, etc. ; discriminés = femmes, LGBTQIA+, migrants, etc';
+            } else if (collection.code === 'collectif') {
+              label =
+                'En tant qu’acteur, je fais partie des collectifs & réseaux suivants :';
+              helperText =
+                'Sont référencés ici des collectifs et réseaux du territoire. Les groupes locaux de réseaux nationaux (ex Greenpeace) ne sont pas inclus dans cette liste';
+            } else if (collection.code === 'actor_location_action') {
+              label = "Territoire d'action (1 seul choix) *";
+              helperText =
+                'Si vous êtes une antenne, le territoire d’action est celui qui concerne votre structure chapeau (ex : Greenpeace, choisir « International »)';
+            }
+            let defaultValue = '';
+            if (
+              !IsTree(collection) &&
+              !collection.multipleSelection &&
+              formValues &&
+              formValues.entries
+            ) {
+              // @ts-ignore
+              formValues.entries.map((entry) => {
+                let isPresent = false;
+                if (collection.entries) {
+                  collection.entries.map((entryCollection) => {
+                    if (entryCollection.id === entry) isPresent = true;
+                    return isPresent;
+                  });
+                }
+                if (isPresent) defaultValue = entry;
+              });
+            }
+            return (
+              <div key={collection.code}>
+                <TitleWithTooltip
+                  title={label}
+                  tooltipTitle={helperText}
+                  collection
+                />
+                {
+                  // display &&
+                  IsTree(collection) && (
+                    // @ts-ignore
+                    <Entries initValues={initentriesWithInformation}>
+                      <TreeView
+                        className={styles.rootTree}
+                        defaultCollapseIcon={<ArrowDropDownIcon />}
+                        defaultExpandIcon={<ArrowRightIcon />}
+                        defaultEndIcon={<div style={{ width: 24 }} />}
+                      >
                         {collection.entries &&
                           collection.entries.map((entry) => {
                             return (
-                              <ListItem key={entry.id} role={undefined} dense>
-                                {/* @ts-ignore */}
-                                <ListItemText primary={entry.label} />
-                                <Checkbox
-                                  edge="start"
-                                  tabIndex={-1}
-                                  disableRipple
-                                  onChange={formChangeHandler}
-                                  name="entries"
-                                  value={entry.id}
-                                  // @ts-ignore
-                                  checked={
-                                    formValues &&
-                                    formValues.entries &&
-                                    formValues.entries.includes(entry.id)
-                                  }
-                                  onClick={(e) => e.stopPropagation()}
-                                />
-                              </ListItem>
+                              // @ts-ignore
+                              <StyledTreeItem
+                                key={entry.id}
+                                nodeId={entry.id}
+                                labelText={entry.label}
+                                description={entry.description}
+                                icon={entry.icon} hideCheckBox
+                                isForm
+                                className={styles.treeParent}
+                              >
+                                {entry.subEntries &&
+                                  entry.subEntries.map((subEntry) => {
+                                    return (
+                                      <StyledTreeItem
+                                        key={subEntry.id}
+                                        // @ts-ignore
+                                        nodeId={subEntry.id}
+                                        labelText={subEntry.label} description={subEntry.description}
+                                        icon={subEntry.icon}
+                                        formValues={updateFormValues}
+                                        categoryChange={formChangeHandler}
+                                        linkDescription={
+                                          isEntriesWithInformationContains(
+                                            formValues.entriesWithInformation,
+                                            subEntry.id,
+                                          ) !== null
+                                            ? isEntriesWithInformationContains(
+                                              formValues.entriesWithInformation,
+                                              subEntry.id,
+                                            ).linkDescription
+                                            : ''
+                                        }
+                                        isForm
+                                        checked={
+                                          formValues &&
+                                          formValues.entriesWithInformation &&
+                                          isEntriesWithInformationContains(
+                                            formValues.entriesWithInformation,
+                                            subEntry.id,
+                                          ) !== null
+                                        }
+                                      />
+                                    );
+                                  })}
+                              </StyledTreeItem>
                             );
                           })}
-                      </List>
-                    )
-                  }
-                  {
-                    // display &&
-                    !IsTree(collection) && !collection.multipleSelection && (
-                      <RadioGroupForContext initValue={defaultValue}>
-                        <CustomRadioGroup
-                          formChangeHandler={formChangeHandler}
-                          entries={collection.entries}
-                          defaultValue={defaultValue}
-                        />
-                      </RadioGroupForContext>
-                    )
-                  }
-                </div>
-              );
-            })
+                      </TreeView>
+                    </Entries>
+                  )
+                }
+                {
+                  // display &&
+                  !IsTree(collection) && collection.multipleSelection && (
+                    <List>
+                      {collection.entries &&
+                        collection.entries.map((entry) => {
+                          return (
+                            <ListItem key={entry.id} role={undefined} dense>
+                              {/* @ts-ignore */}
+                              <ListItemText primary={entry.label} />
+                              <Checkbox
+                                edge="start"
+                                tabIndex={-1}
+                                disableRipple
+                                onChange={formChangeHandler}
+                                name="entries"
+                                value={entry.id}
+                                // @ts-ignore
+                                checked={
+                                  formValues &&
+                                  formValues.entries &&
+                                  formValues.entries.includes(entry.id)
+                                }
+                                onClick={(e) => e.stopPropagation()}
+                              />
+                            </ListItem>
+                          );
+                        })}
+                    </List>
+                  )
+                }
+                {
+                  // display &&
+                  !IsTree(collection) && !collection.multipleSelection && (
+                    <RadioGroupForContext initValue={defaultValue}>
+                      <CustomRadioGroup
+                        formChangeHandler={formChangeHandler}
+                        entries={collection.entries}
+                        defaultValue={defaultValue}
+                      />
+                    </RadioGroupForContext>
+                  )
+                }
+              </div>
+            );
+          })
         }
 
         <TitleWithTooltip
@@ -1747,7 +1745,7 @@ const EditActorForm = (props) => {
               // @ts-ignore
               (formValues?.referents || []).map(referent => {
                 return (
-                  <ListItem>
+                  <ListItem key={referent.id}>
                     <ListItemIcon>
                       <Avatar>
                         {referent.lastname[0] + referent.surname[0]}
