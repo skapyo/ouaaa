@@ -137,7 +137,7 @@ function StyledTreeItem(props) {
         <div>
           <div className={classes.labelRoot}>
             {icon && (
-              <img src={`/icons/${entry.icon}.svg`} alt="icon" className={classes.icon} />
+              <img src={`/icons/${icon}.svg`} alt="icon" className={classes.icon} />
             )}
             <Typography variant="body2" className={classes.labelText}>
               {labelText}
