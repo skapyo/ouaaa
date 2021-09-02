@@ -330,7 +330,7 @@ const carto = () => {
             return;
           }
         }
-        refetch({ entries: newEntries, postCode });
+        refetch({ entries: newEntries, postCode, isValidated: true });
       };
       filterChange();
     }, [categoriesChecked, otherCategoriesChecked, postCode]);
