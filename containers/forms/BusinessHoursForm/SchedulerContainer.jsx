@@ -169,7 +169,6 @@ const SchedulerContainer = (props) => {
     });
 
     if (hasOpeningHour) {
-      console.table('openingHours before sent to GRAPHQL', openingHours);
       onChange(openingHours);
     } else {
       onChange([]);
@@ -200,9 +199,8 @@ const SchedulerContainer = (props) => {
 
         {timeContainerList.length > 0 &&
           timeContainerList.map(({ days, hours, place }, index) => {
-            console.log('place', place);
             return (
-              <div className={classes.timeContainer}>
+              <div className={classes.timeContainer} key={index}>
                 <TimeContainer
                   updateWeekDays={updateWeekDays}
                   updateTimeFrames={updateTimeFrames}

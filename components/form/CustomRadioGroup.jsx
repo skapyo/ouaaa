@@ -38,6 +38,7 @@ function CustomRadioGroup(props) {
           && entries.map((entry) => {
             return (
               <FormControlLabel
+                key={entry.id}
                 value={entry.id}
                 control={<Radio />}
                 label={entry.label}

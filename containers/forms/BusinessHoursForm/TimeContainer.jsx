@@ -175,7 +175,7 @@ const TimeContainer = (props) => {
               <div className={classes.days}>
                 {weekdays.map((day) => {
                   return (
-                    <div className="day">
+                    <div className="day" key={day.id}>
                       <ButtonDay
                         dayId={day.id}
                         text={day.day}
@@ -209,7 +209,7 @@ const TimeContainer = (props) => {
               </div>
               <Button
                 className={classes.buttonAdd}
-                color="blue"
+                color="primary"
                 onClick={addTimeRange}
               >
                 Ajouter des horaires
