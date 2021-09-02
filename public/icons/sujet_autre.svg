@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 25.4.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Mode_Isolation" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
+	 y="0px" viewBox="0 0 500 500" style="enable-background:new 0 0 500 500;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#2A377C;}
+	.st1{fill:#2B387D;}
+	.st2{fill:none;stroke:#2A377C;stroke-width:30;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st3{clip-path:url(#SVGID_00000144326421578647280850000003140765647480895904_);}
+	.st4{fill:#2B387D;stroke:#2B387D;stroke-width:2;stroke-miterlimit:10;}
+	.st5{fill:#2B387D;stroke:#2B387D;stroke-width:5;stroke-miterlimit:10;}
+	.st6{fill-rule:evenodd;clip-rule:evenodd;fill:#2B387D;}
+	.st7{fill:#67B5A9;}
+	.st8{fill:#D96552;}
+	.st9{fill:#FCC104;}
+	.st10{fill:#FFFFFF;}
+	.st11{clip-path:url(#SVGID_00000029020202325284343240000004420915535324525468_);}
+	.st12{fill-rule:evenodd;clip-rule:evenodd;fill:#FFFFFF;}
+</style>
+<path class="st0" d="M404.01,175.52C404.01,281.58,250,489.19,250,489.19S95.99,281.58,95.99,175.52
+	c0-85.06,68.95-154.01,154.01-154.01S404.01,90.46,404.01,175.52z"/>
+<g>
+	<path class="st10" d="M169.33,204.56c-17.21,0-31.2-14-31.2-31.2s14-31.2,31.2-31.2s31.2,14,31.2,31.2S186.54,204.56,169.33,204.56
+		z M169.33,156.32c-9.4,0-17.04,7.64-17.04,17.04c0,9.4,7.64,17.04,17.04,17.04c9.4,0,17.04-7.64,17.04-17.04
+		C186.37,163.96,178.73,156.32,169.33,156.32z"/>
+</g>
+<g>
+	<path class="st10" d="M250,204.56c-17.21,0-31.2-14-31.2-31.2s14-31.2,31.2-31.2c17.21,0,31.2,14,31.2,31.2
+		S267.21,204.56,250,204.56z M250,156.32c-9.4,0-17.04,7.64-17.04,17.04c0,9.4,7.64,17.04,17.04,17.04c9.4,0,17.04-7.64,17.04-17.04
+		C267.04,163.96,259.4,156.32,250,156.32z"/>
+</g>
+<g>
+	<path class="st10" d="M330.67,204.56c-17.21,0-31.2-14-31.2-31.2s14-31.2,31.2-31.2s31.2,14,31.2,31.2S347.87,204.56,330.67,204.56
+		z M330.67,156.32c-9.4,0-17.04,7.64-17.04,17.04c0,9.4,7.64,17.04,17.04,17.04c9.4,0,17.04-7.64,17.04-17.04
+		C347.71,163.96,340.06,156.32,330.67,156.32z"/>
+</g>
+</svg>
