@@ -136,8 +136,8 @@ function StyledTreeItem(props) {
       label={(
         <div>
           <div className={classes.labelRoot}>
-            { icon && (
-            <img src={icon} alt="icon" className={classes.icon} />
+            {icon && (
+              <img src={`/icons/${entry.icon}.svg`} alt="icon" className={classes.icon} />
             )}
             <Typography variant="body2" className={classes.labelText}>
               {labelText}
@@ -147,7 +147,7 @@ function StyledTreeItem(props) {
                 <InfoIcon />
               </Tooltip>
             )}
-            { description && (
+            {description && (
               <Tooltip title={description}>
                 <InfoIcon />
               </Tooltip>
