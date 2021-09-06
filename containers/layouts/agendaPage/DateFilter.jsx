@@ -1,26 +1,24 @@
-import 'date-fns';
-import React from 'react';
-import Grid from '@material-ui/core/Grid';
+import React, { useCallback, useState } from 'react';
+import PropTypes from 'prop-types';
+import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import { fr } from 'date-fns/locale';
-import {
-  KeyboardDatePicker,
-  MuiPickersUtilsProvider,
-} from '@material-ui/pickers';
+import { format } from 'date-fns';
+import Grid from '@material-ui/core/Grid';
 
-const DateFilter = (refetch) => {
-  const [selectedDate, setSelectedDate] = React.useState(Date.now());
+const DateFilter = (props) => {
+  const { onDateChange } = props;
+  const [selectedDate, setSelectedDate] = useState(Date.now());
 
-  const handleDateChange = (date) => {
+  const handleDateChange = useCallback(date => {
     setSelectedDate(date);
-
-    refetch.refetch.refetch({ startingDate: date });
-  };
+    onDateChange(date);
+  }, [onDateChange]);
 
   return (
     <MuiPickersUtilsProvider locale={fr} utils={DateFnsUtils}>
       <Grid container justify="space-around">
-        <KeyboardDatePicker
+        <DatePicker
           autoOk
           disablePast
           disableToolbar
@@ -33,6 +31,14 @@ const DateFilter = (refetch) => {
       </Grid>
     </MuiPickersUtilsProvider>
   );
+};
+
+DateFilter.propTypes = {
+  onDateChange: PropTypes.func
+};
+
+DateFilter.defaultProps = {
+  onDateChange: () => { }
 };
 
 export default DateFilter;

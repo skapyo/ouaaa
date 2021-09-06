@@ -2,17 +2,20 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Grid, Typography } from '@material-ui/core';
 import { withApollo } from 'hoc/withApollo';
 import Events from 'containers/layouts/agendaPage/Events';
-import Filters from 'containers/layouts/agendaPage/Filters';
+// import Filters from 'containers/layouts/agendaPage/Filters';
+import Filters from '../../../components/filters';
 import Newsletter from 'containers/layouts/Newsletter';
 import { Container, makeStyles } from '@material-ui/core';
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/client';
 import Fab from '@material-ui/core/Fab';
 import { getImageUrl } from '../../../utils/utils';
-import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded';
-import FavoriteRoundedIcon from '@material-ui/icons/FavoriteRounded';
 import Link from '../../../components/Link';
 import Moment from 'react-moment';
+
+import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded';
+import FavoriteRoundedIcon from '@material-ui/icons/FavoriteRounded';
+
 if (typeof window !== 'undefined') {
   var L = require('leaflet');
   var Map = require('react-leaflet').Map;
@@ -22,6 +25,7 @@ if (typeof window !== 'undefined') {
   var Tooltip = require('react-leaflet').Tooltip;
   var MarkerClusterGroup = require('react-leaflet-markercluster').default;
 }
+
 const useStyles = makeStyles({
   main: {
     padding: '0',
@@ -35,9 +39,12 @@ const useStyles = makeStyles({
     margin: '0',
     width: '100%',
     maxWidth: 'none',
+    position: 'relative'
   },
   listButton: {
-    marginBottom: '-4em',
+    position: 'fixed',
+    right: 15,
+    top: 115,
     zIndex: '10000',
     color: '#fff',
     backgroundColor: '#2C367E',
@@ -74,7 +81,6 @@ const useStyles = makeStyles({
     color: 'white',
     'background-color': '#2C367E',
     border: 'none',
-    
     borderRadius: '1.5em',
     padding: '0 3em 0 3em',
     height: '2.5em',
@@ -103,6 +109,17 @@ const useStyles = makeStyles({
     color: '#AD2740',
   },
 });
+
+const categories = {
+  Sujets: [],
+};
+
+const otherCategories = {
+  "Territoire d'actions": [],
+  "Statut d'acteur": [],
+  'Public visé': [],
+  'Collectif & réseaux': [],
+};
 
 const AgendaPageLayout = () => {
   const GET_EVENTS = gql`
@@ -142,56 +159,143 @@ const AgendaPageLayout = () => {
         }
       }
     }
-  `;
+    `;
+
+  const classes = useStyles();
+  const mapRef = useRef();
+  const [isListMode, setIsListMode] = useState(true);
+  const [favorite, setFavorite] = useState(false);
+  const [categoriesChecked, setCategoriesChecked] = useState(categories.Sujets);
+  const [otherCategoriesChecked, setOtherCategoriesChecked] = useState(
+    otherCategories
+  );
+  const [postCode, setPostCode] = useState(null);
+  const [filters, setFilters] = useState(null);
 
   const date = new Date();
-
-  const mapRef = useRef();
-
-  const [listMode, setListMode] = useState(true);
-
   const position = [46.1085193, -0.9864794];
 
-  const [favorite, setFavorite] = useState(false);
-
   const switchMode = useCallback(() => {
-    setListMode(!listMode);
-  }, [listMode]);
+    setIsListMode(!isListMode);
+  }, [isListMode]);
 
   date.setHours(0, 0, 0, 0);
 
-  const classes = useStyles();
   const { data: eventData, loading, error, refetch } = useQuery(GET_EVENTS, {
     variables: {
       startingDate: date.toISOString(),
     },
   });
+
   if (typeof window !== 'undefined') {
     L.Icon.Default.mergeOptions({
       iconUrl: null,
     });
   }
+
+  const parentCategoryChange = useCallback((arr) => {
+    const tempCategories = [...categoriesChecked];
+    const tempCategoriesChecked = [];
+    const tempCategoriesUnchecked = [];
+    arr.forEach((checkbox) => {
+      const { checked, id } = checkbox;
+      if (checked) {
+        tempCategoriesChecked.push(id);
+      }
+      if (!checked) {
+        tempCategoriesUnchecked.push(id);
+      }
+    });
+
+    // delete the unchecked boxes
+    tempCategoriesUnchecked.forEach((value) => {
+      const currentIndex = tempCategories.indexOf(value);
+      if (currentIndex !== -1) {
+        tempCategories.splice(currentIndex, 1);
+      }
+    });
+
+    // add the recent checkedboxes
+    const newCategoriesChecked = [
+      ...new Set([...tempCategories, ...tempCategoriesChecked]),
+    ];
+
+    setCategoriesChecked(newCategoriesChecked);
+  });
+
+  const categoryChange = useCallback((e) => {
+    const tempCategories = [...categoriesChecked];
+
+    const categoryId = e.target.value;
+
+    const currentIndex = tempCategories.indexOf(categoryId);
+
+    if (currentIndex === -1) {
+      tempCategories.push(categoryId);
+    } else {
+      tempCategories.splice(currentIndex, 1);
+    }
+
+    setCategoriesChecked(tempCategories);
+  });
+
+  const postCodeChange = (e) => {
+    if (e.target.value == '') {
+      setPostCode(null);
+    } else {
+      setPostCode(e.target.value);
+    }
+  };
+
+  const otherCategoryChange = useCallback((e, collectionLabel) => {
+    const newOtherCategories = { ...otherCategoriesChecked };
+
+    const otherCategoryId = e.target.value;
+    const tempCollection = newOtherCategories[collectionLabel];
+
+    const currentIndex = tempCollection.indexOf(otherCategoryId);
+
+    if (currentIndex === -1) {
+      tempCollection.push(otherCategoryId);
+    } else {
+      tempCollection.splice(currentIndex, 1);
+    }
+
+    setOtherCategoriesChecked(newOtherCategories);
+  });
+
+  const handleFiltersChange = useCallback(newFilters => {
+    setFilters(newFilters);
+    refetch({ ...newFilters });
+  }, []);
+
   return (
     <Container className={classes.main}>
-      <Grid container justify="center">
+      <Container className={classes.layout}>
         <Fab
           variant="extended"
-          size="medium"
+          size="large"
           aria-label="add"
           className={classes.listButton}
           onClick={switchMode}
         >
-          {!listMode && <span>Liste</span>} {listMode && <span>Carte</span>}
+          <span>{isListMode ? 'Carte' : 'Liste'}</span>
         </Fab>
-      </Grid>
-      <Container className={classes.layout}>
-        <Filters refetch={refetch} />
 
-        {listMode && eventData && eventData.events && (
+        <Filters
+          parentCategoryChange={parentCategoryChange}
+          categoryChange={categoryChange}
+          otherCategoryChange={otherCategoryChange}
+          postCodeChange={postCodeChange}
+          isEventList
+          onFiltersChange={handleFiltersChange}
+        />
+
+        {isListMode && eventData && eventData.events && (
           <Events data={eventData} />
         )}
 
-        {!listMode && (
+        {!isListMode && (
           <Grid item xs={10}>
             <Map ref={mapRef} center={position} zoom={11}>
               <TileLayer
@@ -238,10 +342,10 @@ const AgendaPageLayout = () => {
                                 backgroundImage:
                                   event.pictures.length >= 1
                                     ? `url(${getImageUrl(
-                                        event.pictures.sort((a, b) =>
-                                          a.position > b.position ? 1 : -1,
-                                        )[0].croppedPicturePath,
-                                      )})`
+                                      event.pictures.sort((a, b) =>
+                                        a.position > b.position ? 1 : -1,
+                                      )[0].croppedPicturePath,
+                                    )})`
                                     : '',
                               }}
                             >
@@ -305,10 +409,10 @@ const AgendaPageLayout = () => {
                                 backgroundImage:
                                   event.pictures.length >= 1
                                     ? `url(${getImageUrl(
-                                        event.pictures.sort((a, b) =>
-                                          a.position > b.position ? 1 : -1,
-                                        )[0].croppedPicturePath,
-                                      )})`
+                                      event.pictures.sort((a, b) =>
+                                        a.position > b.position ? 1 : -1,
+                                      )[0].croppedPicturePath,
+                                    )})`
                                     : '',
                               }}
                             >

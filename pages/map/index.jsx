@@ -388,6 +388,7 @@ const carto = () => {
         setPostCode(e.target.value);
       }
     };
+
     function splitWord(word, number) {
       if (word != null) {
         var indexMax = Math.round(word.length / number);
@@ -407,8 +408,6 @@ const carto = () => {
         return '';
       }
     };
-
-
 
     const otherCategoryChange = useCallback((e, collectionLabel) => {
       const newOtherCategories = { ...otherCategoriesChecked };
@@ -446,6 +445,7 @@ const carto = () => {
             categoryChange={categoryChange}
             otherCategoryChange={otherCategoryChange}
             postCodeChange={postCodeChange}
+            isActorList
           />
 
           {listMode && (
@@ -466,7 +466,7 @@ const carto = () => {
                           actor.entries.length > 0 &&
                           actor.entries[0].icon
                         ) {
-                          icone = '/icons/marker/marker_' + actor.entries[0].icon+'.svg';
+                          icone = '/icons/marker/marker_' + actor.entries[0].icon + '.svg';
                           color = actor.entries[0].color;
                         } else {
                           icone = '/icons/' + 'place' + '.svg';
@@ -507,7 +507,7 @@ const carto = () => {
                                 >
                                   <Typography
                                     className={styles.categorie}
-                                    style={{ color : actor?.entries[0]?.parentEntry?.color}}
+                                    style={{ color: actor?.entries[0]?.parentEntry?.color }}
                                     gutterBottom
                                   >
                                     {actor.entries &&
@@ -540,16 +540,15 @@ const carto = () => {
                                   {actor.address && actor.city && (
                                     <span>
                                       {/* @ts-ignore */}
-                                      <img src={"/icons/location.svg"} alt="Localisation" className={[styles.icon]} /> {`${actor.address} ${
-                                        actor.city
-                                      }`}
+                                      <img src={"/icons/location.svg"} alt="Localisation" className={[styles.icon]} /> {`${actor.address} ${actor.city
+                                        }`}
                                     </span>
                                   )}
                                 </p>
                                 <p className={styles.shortDescription}>
                                   {actor && Parser(splitWord(actor.shortDescription, 300))}
                                 </p>
-                             
+
                               </div>
                             </Tooltip>
                             <Popup>
@@ -567,7 +566,7 @@ const carto = () => {
                                 <div className={styles.categorie} >
                                   <Typography
                                     className={styles.categorie}
-                                    style={{ color: actor?.entries[0]?.parentEntry?.color}}
+                                    style={{ color: actor?.entries[0]?.parentEntry?.color }}
                                     gutterBottom
                                   >
                                     {actor.entries &&
@@ -598,9 +597,8 @@ const carto = () => {
                                       {actor.address && actor.city && (
                                         <span>
                                           {/* @ts-ignore */}
-                                          <img src={"/icons/location.svg"} alt="Localisation" className={[styles.icon]} /> {`${actor.address} ${
-                                            actor.city
-                                          }`}
+                                          <img src={"/icons/location.svg"} alt="Localisation" className={[styles.icon]} /> {`${actor.address} ${actor.city
+                                            }`}
                                         </span>
                                       )}
                                     </p>

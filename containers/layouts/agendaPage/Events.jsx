@@ -11,7 +11,7 @@ const useStyles = makeStyles({
   },
   title: {
     color: '#2C367E',
-    
+
     fontSize: '2.3em',
   },
   date: {
@@ -73,8 +73,8 @@ const Events = (data) => {
     <Container className={classes.events}>
       <h1 className={classes.title}>ÉVÉNEMENTS À VENIR</h1>
       {events &&
-        events.sort(compare).map((event) => (
-          <div key={event.id}>
+        events.sort(compare).map((event, index) => (
+          <div key={event.id + index}>
             {(!lastDate || !sameDay(lastDate, event.startedAt)) && (
               <Moment
                 locale="fr"

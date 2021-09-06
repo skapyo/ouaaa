@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import {
   Grid,
@@ -8,14 +8,12 @@ import {
   Typography,
   Checkbox,
   TextField,
-  Input,
-  FormControl,
-  InputLabel,
-  FormHelperText,
   ExpansionPanel,
   ExpansionPanelSummary,
   ExpansionPanelDetails,
 } from '@material-ui/core';
+
+import { DatePicker } from '@material-ui/pickers';
 
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
@@ -24,6 +22,7 @@ import { useQuery } from '@apollo/client';
 import { makeStyles } from '@material-ui/core/styles';
 import Entries from 'containers/forms/Entries';
 import ParentContainer from './ParentContainer';
+import DateFilter from '../../containers/layouts/agendaPage/DateFilter';
 
 const useStyles = makeStyles({
   root: {
@@ -67,6 +66,9 @@ const useStyles = makeStyles({
   expansionPanelSummary: {
     padding: '0px 5px 0px 5px!important',
   },
+  expansionPanelDetails: {
+    flexDirection: 'column'
+  },
   entriesCheckbox: {
     padding: '1px',
   },
@@ -76,12 +78,53 @@ const useStyles = makeStyles({
   },
 });
 
+const compare = (a, b) => {
+  return a.position > b.position;
+};
+
+const IsTree = (collection) => {
+  let isTree = false;
+  if (collection.entries) {
+    collection.entries.map((entry) => {
+      if (entry.subEntries) {
+        entry.subEntries.map(() => {
+          isTree = true;
+          return isTree;
+        });
+      }
+    });
+  }
+  return isTree;
+};
+
+const FilterItem = props => {
+  const { collection, categoryChange, parentCategoryChange } = props;
+  const classes = useStyles();
+
+  return (
+    <Entries className={classes.entries} initValues={[]}>
+      {
+        (collection?.entries || []).sort(compare).map((entry) => {
+          return (
+            <ParentContainer
+              key={entry.id}
+              entry={entry}
+              subEntries={entry.subEntries}
+              categoryChange={categoryChange}
+              parentCategoryChange={parentCategoryChange}
+              isForm={false}
+            />
+          );
+        })
+      }
+    </Entries>
+  )
+}
+
 function Filters(props) {
   const {
-    categoryChange,
-    parentCategoryChange,
-    postCodeChange,
-    otherCategoryChange,
+    isEventList,
+    onFiltersChange
   } = props;
   const classes = useStyles();
 
@@ -110,40 +153,56 @@ function Filters(props) {
         }
         filter
         actor
+        event
       }
     }
   `;
-  function IsTree(collection) {
-    let isTree = false;
-    if (collection.entries) {
-      collection.entries.map((entry) => {
-        if (entry.subEntries) {
-          entry.subEntries.map(() => {
-            isTree = true;
-            return isTree;
-          });
-        }
-      });
-    }
-    return isTree;
-  }
+
   const [dataCollections, setDataCollections] = useState({});
   const [errorPostCode, setErrorPostCode] = useState(false);
-  const postCodeChangeHandler = useCallback(
-    (e) => {
-      const regex = /[0-9]{5}/g;
-      if (
-        e.target.value.length === 0
-        || (e.target.value.length === 5 && e.target.value.match(regex))
-      ) {
-        postCodeChange(e);
-        setErrorPostCode(false);
+  const [filters, setFilters] = useState({});
+
+  const handleFilterChange = useCallback((name, value) => {
+    let currentFilters = filters || {};
+    currentFilters[name] = value;
+    setFilters(currentFilters);
+    onFiltersChange(currentFilters);
+  }, [filters, onFiltersChange]);
+
+  const handleDateChange = useCallback(date => {
+    handleFilterChange('startingDate', date);
+  }, [handleFilterChange]);
+
+  const handleChangePostCode = useCallback((e) => {
+    const regex = /[0-9]{5}/g;
+    if (
+      e.target.value.length === 0
+      || (e.target.value.length === 5 && e.target.value.match(regex))
+    ) {
+      handleFilterChange('postCode', e.target.value);
+      setErrorPostCode(false);
+    } else {
+      setErrorPostCode(true);
+    }
+  }, [setErrorPostCode]);
+
+  const handleParentCategoryChange = useCallback((categories) => {
+    let currentCategories = [...filters.categories || []];
+    categories.forEach(newCategory => {
+      const alreadyChecked = currentCategories.find(id => id === newCategory.id);
+      if (alreadyChecked) {
+        if (!newCategory.checked) {
+          currentCategories = currentCategories.filter(id => id !== newCategory.id);
+        }
       } else {
-        setErrorPostCode(true);
+        if (newCategory.checked) {
+          currentCategories.push(newCategory.id);
+        }
       }
-    },
-    [setErrorPostCode],
-  );
+    });
+
+    handleFilterChange('categories', currentCategories);
+  }, [filters, handleFilterChange]);
 
   const { loading: loadingCollections, error: errorCollections } = useQuery(
     GET_COLLECTIONS,
@@ -154,6 +213,16 @@ function Filters(props) {
       },
     },
   );
+
+  const filterCollections = useMemo(() => {
+    if (dataCollections && dataCollections.collections && dataCollections.collections.length > 0) {
+      return dataCollections.collections.filter(collection => {
+        return collection.filter && (isEventList ? collection.event : collection.actor)
+      });
+    }
+    return [];
+  }, [dataCollections, isEventList]);
+
   if (loadingCollections) return 'Loading...';
   if (errorCollections) return `Error! ${errorCollections.message}`;
 
@@ -164,93 +233,59 @@ function Filters(props) {
 
   return (
     <Grid item xm={12} sm={2} alignItems="center">
+
+      <DateFilter
+        onDateChange={handleDateChange}
+      />
+
       <TextField
         variant="outlined"
         label="Code Postal"
         name="postCode"
-        onChange={postCodeChangeHandler}
+        onChange={handleChangePostCode}
         error={errorPostCode}
         className={classes.postCode}
         helperText={
-          errorPostCode ? 'Le code postal doit être oomposé de 5 chiffres' : ''
+          errorPostCode ? 'Le code postal doit être composé de 5 chiffres' : ''
         }
       />
 
-      {dataCollections.collections
-        && dataCollections.collections.map((collection) => {
-          if (!(collection.filter && collection.actor)) return '';
-          const compare = (a, b) => {
-            return a.position > b.position;
-          };
-          return (
-            <ExpansionPanel defaultExpanded={ IsTree(collection) ? true : false}  className={classes.expansionPanel}>
-              <ExpansionPanelSummary className={classes.expansionPanelSummary} expandIcon={<ExpandMoreIcon />}>
-                <Typography
-                  className={classes.collectionLabel}
-                  //       onClick={setDisplay(!display)}
-                >
-                  {collection.label}
-                </Typography>
-              </ExpansionPanelSummary>
-              <Entries className={classes.entries} initValues={[]}>
-                {
-                  // display &&
-                  IsTree(collection)
-                    && collection.entries
-                    && collection.entries.sort(compare).map((entry) => {
-                      return (
-                        <ParentContainer
-                          key={entry.id}
-                          entry={entry}
-                          subEntries={entry.subEntries}
-                          categoryChange={categoryChange}
-                          parentCategoryChange={parentCategoryChange}
-                          isForm={false}
-                        />
-                      );
-                    })
-                }
-              </Entries>
-              <ExpansionPanelDetails className={classes.entriesExpend}>
-                {!IsTree(collection) && (
-                  <List className={classes.listEntries}>
-                    {collection.entries
-                      && collection.entries.map((entry) => {
-                        return (
-                          <ListItem
-                            key={entry.id}
-                            role={undefined}
-                            className={classes.entries}
-                          >
-                            <ListItemText primary={entry.label}  className={classes.listItemText}/>
-                            <Checkbox
-                              edge="start"
-                              tabIndex={-1}
-                              disableRipple
-                              onChange={(e) => otherCategoryChange(e, collection.label)}
-                              name="{categoryChange.id}"
-                              className={classes.entriesCheckbox}
-                              value={entry.id}
-                              onClick={(e) => e.stopPropagation()}
-                            />
-                          </ListItem>
-                        );
-                      })}
-                  </List>
-                )}
-              </ExpansionPanelDetails>
-            </ExpansionPanel>
-          );
-        })}
+      {filterCollections.map((collection) => {
+        return (
+          <ExpansionPanel
+            key={collection.id}
+            defaultExpanded={IsTree(collection)}
+            className={classes.expansionPanel}
+          >
+            <ExpansionPanelSummary className={classes.expansionPanelSummary} expandIcon={<ExpandMoreIcon />}>
+              <Typography className={classes.collectionLabel}>
+                {collection.label}
+              </Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails className={classes.expansionPanelDetails}>
+              <FilterItem
+                collection={collection}
+                parentCategoryChange={handleParentCategoryChange}
+                categoryChange={() => { }}
+              />
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
+        );
+      })}
     </Grid>
   );
 }
 
 Filters.propTypes = {
-  categoryChange: PropTypes.func.isRequired,
-  parentCategoryChange: PropTypes.func.isRequired,
-  otherCategoryChange: PropTypes.func.isRequired,
-  postCodeChange: PropTypes.func.isRequired,
+  isEventList: PropTypes.bool,
+  isActorList: PropTypes.bool,
+  onFiltersChange: PropTypes.func
 };
+
+Filters.defaultProps = {
+  isEventList: false,
+  isActorList: false,
+  onFiltersChange: () => { }
+}
 
 export default Filters;
