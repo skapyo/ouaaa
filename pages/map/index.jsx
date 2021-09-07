@@ -269,11 +269,6 @@ const carto = () => {
           shortDescription
           lat
           lng
-          categories {
-            label
-            icon
-            color
-          }
           entries {
             label
             icon

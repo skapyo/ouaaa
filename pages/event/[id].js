@@ -193,15 +193,6 @@ const Event = () => {
         endedAt
         registerLink
         practicalInfo
-        categories {
-          label
-          parentCategory {
-            label
-          }
-          subCategories {
-            label
-          }
-        }
         entries {
           label
           collection {

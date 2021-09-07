@@ -59,10 +59,9 @@ const LastActor = () => {
         address
         lat
         lng
-        categories {
+        entries {
           label
         }
-
         pictures {
           id
           label

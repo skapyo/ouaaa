@@ -265,15 +265,6 @@ const Actor = () => {
         socialNetwork
         volunteerDescription
         activity
-        categories {
-          label
-          parentCategory {
-            label
-          }
-          subCategories {
-            label
-          }
-        }
         entries {
           label
           icon

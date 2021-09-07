@@ -121,20 +121,11 @@ const EDIT_ACTOR = gql`
         logo
         main
       }
-      categories {
-        id
-        label
-        parentCategory {
-          label
-        }
-        subCategories {
-          label
-        }
-      }
       entries {
         id
         label
         icon
+        color
         description
         actorEntries {
           linkDescription
@@ -178,29 +169,7 @@ const EDIT_ACTOR = gql`
   }
 `;
 
-const GET_CATEGORIES = graphqlTag`
-  {
-    categories {
-      id,
-      label
-      icon
-      subCategories {
-        id
-        label
-        icon
-          subCategories {
-          id
-          label
-          icon
-          subCategories {
-            label
-            icon
-          }
-        }
-      }
-    }
-  }
-`;
+
 
 const GET_USERS = graphqlTag`
   query users
@@ -246,16 +215,6 @@ const GET_ACTOR = gql`
         position
         logo
         main
-      }
-      categories {
-        id
-        label
-        parentCategory {
-          label
-        }
-        subCategories {
-          label
-        }
       }
       entries {
         id
@@ -322,6 +281,7 @@ const GET_COLLECTIONS = gql`
         id
         label
         icon
+        color
         description
         subEntries {
           id
@@ -488,9 +448,7 @@ const EditActorForm = (props) => {
   const [openingHours, setOpeningHours] = useState();
 
   const { data: dataUsers } = useQuery(GET_USERS, {});
-  const { data } = useQuery(GET_CATEGORIES, {
-    fetchPolicy: 'network-only',
-  });
+
   const [open] = React.useState([false]);
   const router = useRouter();
   const {
@@ -1120,19 +1078,13 @@ const EditActorForm = (props) => {
       formValues.volunteerDescription = actorData.actor.volunteerDescription;
       formValues.shortDescription = actorData.actor.shortDescription;
       formValues.referents = actorData.actor.referents;
-      const categories = [];
-      actorData.actor.categories.forEach((actorcategory) => {
-        // @ts-ignore
-        categories.push(actorcategory.id);
-      });
+   
       if (formValues.postCode === '17000') {
         setEstlarochelle(true);
       } else {
         setEstlarochelle(false);
       }
-      // @ts-ignore
-      formValues.categories = categories;
-
+  
       const entries = [];
       actorData.actor.entries.forEach((actorentry) => {
         // @ts-ignore
@@ -1641,7 +1593,8 @@ const EditActorForm = (props) => {
                                 nodeId={entry.id}
                                 labelText={entry.label}
                                 description={entry.description}
-                                icon={entry.icon} hideCheckBox
+                                icon={entry.icon} 
+                                hideCheckBox
                                 isForm
                                 className={styles.treeParent}
                               >
@@ -1654,6 +1607,7 @@ const EditActorForm = (props) => {
                                         nodeId={subEntry.id}
                                         labelText={subEntry.label} description={subEntry.description}
                                         icon={subEntry.icon}
+                                        color={entry.color}
                                         formValues={updateFormValues}
                                         categoryChange={formChangeHandler}
                                         linkDescription={

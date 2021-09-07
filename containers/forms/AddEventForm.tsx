@@ -189,20 +189,7 @@ const ADDEVENT = gql`
   }
 `;
 
-const GET_CATEGORIES = gql`
-  query categories {
-    categories {
-      id
-      label
-      activated
-      subCategories {
-        id
-        label
-        icon
-      }
-    }
-  }
-`;
+
 
 const GET_ACTORS = gql`
 query actors {
@@ -360,11 +347,6 @@ const AddEventForm = ({ actorId }) => {
   }) => {
     // const { formChangeHandler, formValues, validationResult } = props;
     const [addEvent, { data, error }] = useMutation(ADDEVENT);
-    const {
-      data: categoryData,
-      loading: categoryLoading,
-      error: categoryError,
-    } = useQuery(GET_CATEGORIES);
 
     const {
       data: actorsData,
@@ -682,7 +664,6 @@ const AddEventForm = ({ actorId }) => {
             postCode: formValues.postCode,
             city,
             registerLink: formValues.registerLink,
-            categories: formValues.categories,
             actors: formValues.actors,
           },
           actorId: parseInt(actorId),

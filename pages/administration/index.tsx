@@ -75,20 +75,7 @@ const useStyles2 = makeStyles({
 
 const Administration = () => {
   const user = useSessionState();
-  const GET_CATEGORIES = gql`
-    query categories {
-      categories {
-        id
-        label
-        activated
-        subCategories {
-          id
-          label
-          icon
-        }
-      }
-    }
-  `;
+
   const SAVE_CATEGORIES = gql`
     mutation saveCategories($actorId: Int!, $userId: Int!) {
       validateActor(actorId: $actorId, userId: $userId) {
@@ -96,21 +83,8 @@ const Administration = () => {
       }
     }
   `;
-  const { data, loading, error, refetch } = useQuery(GET_CATEGORIES, {});
   const classes = useStyles2();
 
-  const [state, setState] = React.useState({});
-
-  const [saveCategories, { data: saveCategoriesData }] = useMutation(
-    SAVE_CATEGORIES,
-    {},
-  );
-
-  useEffect(() => {
-    if (saveCategoriesData) {
-      refetch();
-    }
-  }, [saveCategoriesData]);
   const styles = useStyles();
 
   return (
@@ -120,7 +94,7 @@ const Administration = () => {
         variant="h6"
         className={styles.userInfosTitle}
       >
-        Listes des catégories
+        TODO administrer Listes des catégories
       </Typography>
     </AdministrationLayout>
   );
