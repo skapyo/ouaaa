@@ -201,7 +201,7 @@ function Filters(props) {
       }
     });
 
-    handleFilterChange('categories', currentCategories);
+    handleFilterChange('entries', currentCategories);
   }, [filters, handleFilterChange]);
 
   const { loading: loadingCollections, error: errorCollections } = useQuery(

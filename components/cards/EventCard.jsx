@@ -1,10 +1,10 @@
-import React, {useState} from 'react';
-import {makeStyles} from '@material-ui/core/styles';
+import React, { useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded';
 import FavoriteRoundedIcon from '@material-ui/icons/FavoriteRounded';
 import Moment from 'react-moment';
 import Link from '../Link';
-import {getImageUrl} from '../../utils/utils';
+import { getImageUrl } from '../../utils/utils';
 
 const useStyles = makeStyles((theme, props) => ({
   card: (props) => ({
@@ -91,8 +91,8 @@ const useStyles = makeStyles((theme, props) => ({
 }));
 
 const EventCard = ({ event }) => {
-  const color = event.categories[0] ? event.categories[0].color : '#AD2740';
-  const icon = event.categories[0] ? event.categories[0].icon : 'fruit';
+  const color = event.entries[0] ? event.entries[0].color : '#AD2740';
+  const icon = event.entries[0] ? event.entries[0].icon : 'fruit';
   const actorName = event.actors[0]
     ? event.actors[0].name
     : 'Potager de la Jarne';
@@ -111,10 +111,10 @@ const EventCard = ({ event }) => {
                   src={
                     event.pictures.length >= 1
                       ? getImageUrl(
-                          event.pictures.sort((a, b) =>
-                            a.position > b.position ? 1 : -1,
-                          )[0].croppedPicturePath,
-                        )
+                        event.pictures.sort((a, b) =>
+                          a.position > b.position ? 1 : -1,
+                        )[0].croppedPicturePath,
+                      )
                       : ''
                   }
                 />
