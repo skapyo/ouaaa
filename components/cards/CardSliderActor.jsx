@@ -84,9 +84,9 @@ export default function SimpleCard({ actor }) {
           >
             <div className={classes.categorie}>
               <Typography className={classes.categorie} gutterBottom>
-                {actor.categories &&
-                  actor.categories.length > 0 &&
-                  actor.categories[0].label}
+                {actor.entries &&
+                  actor.entries.length > 0 &&
+                  actor.entries[0].label}
               </Typography>
             </div>
           </div>

@@ -190,9 +190,6 @@ const ActorAdminPage = () => {
         city
         lat
         lng
-        categories {
-          label
-        }
         referents {
           surname
           lastname

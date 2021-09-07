@@ -118,6 +118,7 @@ const GET_COLLECTIONS = gql`
         id
         label
         icon
+        color
         description
         subEntries {
           id
@@ -147,9 +148,6 @@ const GET_ACTORS = graphqlTag`
     lng,
     contact{
       id
-    }
-    categories{
-      label
     }
     referents{
       surname,
@@ -1243,6 +1241,7 @@ const AddActorForm = () => {
                                         categoryChange={formChangeHandler}
                                         description={subEntry.description}
                                         icon={subEntry.icon}
+                                        color={entry.color}
                                         isForm
                                         checked={
                                           formValues

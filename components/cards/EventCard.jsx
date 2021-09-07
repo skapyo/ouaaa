@@ -91,8 +91,8 @@ const useStyles = makeStyles((theme, props) => ({
 }));
 
 const EventCard = ({ event }) => {
-  const color = event.categories[0] ? event.categories[0].color : '#AD2740';
-  const icon = event.categories[0] ? event.categories[0].icon : 'fruit';
+  const color = event.entries && event.entries[0] ? event.entries[0].color : '#AD2740';
+  const icon = event.entries && event.entries[0] ? event.entries[0].icon : 'fruit';
   const actorName = event.actors[0]
     ? event.actors[0].name
     : 'Potager de la Jarne';

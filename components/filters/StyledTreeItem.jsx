@@ -69,7 +69,7 @@ const useTreeItemStyles = makeStyles((theme) => ({
     maskPosition: 'center center',
     maskRepeat: 'no-repeat',
     maskSize: '22px',
-  }
+  },
 }));
 
 function StyledTreeItem(props) {
@@ -146,7 +146,7 @@ function StyledTreeItem(props) {
           <div className={classes.labelRoot}>
             {icon && (
               <>
-                < span className={classes.entriesIcon} style={{ background: `${color}`, mask: `url('/icons/${icon}.svg') center center  22px no-repeat;` }} />
+                <span className={classes.entriesIcon} style={{'-webkit-mask': `url('/icons/${icon}.svg') center center / 28px no-repeat`, backgroundColor: `${color}`}} />
               </>
             )}
             <Typography variant="body2" className={classes.labelText}>

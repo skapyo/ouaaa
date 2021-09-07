@@ -106,8 +106,8 @@ const useStyles = makeStyles({
 
 const AgendaPageLayout = () => {
   const GET_EVENTS = gql`
-    query events($startingDate: String, $categories: [String]) {
-      events(startingDate: $startingDate, categories: $categories) {
+    query events($startingDate: String, $entries: [String]) {
+      events(startingDate: $startingDate, entries: $entries) {
         id
         label
         startedAt
@@ -117,7 +117,7 @@ const AgendaPageLayout = () => {
         lng
         address
         city
-        categories {
+        entries {
           id
           label
           icon
