@@ -214,9 +214,6 @@ const Event = () => {
           address
           lat
           lng
-          categories {
-            label
-          }
           pictures {
             id
             label

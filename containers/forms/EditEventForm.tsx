@@ -221,20 +221,6 @@ const EDIT_EVENT = gql`
   }
 `;
 
-const GET_CATEGORIES = gql`
-  query categories {
-    categories {
-      id
-      label
-      activated
-      subCategories {
-        id
-        label
-        icon
-      }
-    }
-  }
-`;
 
 const GET_EVENT = gql`
   query event($id: String!) {
@@ -649,11 +635,6 @@ const EditEventForm = (props) => {
   }) => {
     // const { formChangeHandler, formValues, validationResult } = props;
     const [editEvent, { data, error }] = useMutation(EDIT_EVENT);
-    const {
-      data: categoryData,
-      loading: categoryLoading,
-      error: categoryError,
-    } = useQuery(GET_CATEGORIES);
     useGraphQLErrorDisplay(error);
     const styles = useStyles();
     const redirect = useCookieRedirection();
