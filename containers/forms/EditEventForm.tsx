@@ -249,10 +249,6 @@ const GET_EVENT = gql`
       endedAt
       published
       registerLink
-      categories {
-        id
-        label
-      }
       lat
       lng
       address
@@ -272,16 +268,6 @@ const GET_EVENT = gql`
         position
         main
         logo
-      }
-      categories {
-        id
-        label
-        parentCategory {
-          label
-        }
-        subCategories {
-          label
-        }
       }
       entries {
         id
@@ -1126,36 +1112,36 @@ const EditEventForm = (props) => {
                             formChangeHandler={formChangeHandler}
                           >
                             {collection.entries
-                            && collection.entries.map((entry) => {
-                              return (
-                                // @ts-ignore
-                                <StyledTreeItem
-                                  key={entry.id}
-                                  nodeId={entry.id}
-                                  labelText={entry.label}
-                                  hideCheckBox
-                                  isForm
-                                  className={styles.treeParent}
-                                >
+                              && collection.entries.map((entry) => {
+                                return (
+                                  // @ts-ignore
+                                  <StyledTreeItem
+                                    key={entry.id}
+                                    nodeId={entry.id}
+                                    labelText={entry.label}
+                                    hideCheckBox
+                                    isForm
+                                    className={styles.treeParent}
+                                  >
 
-                                  {entry.subEntries
-                                          && entry.subEntries.map((entry) => {
-                                            return (
-                                              <FormControlLabel
-                                                value={entry.id}
-                                                control={<Radio />}
-                                                label={entry.label}
-                                                 // @ts-ignore
-                                                checked={
-                                                  formValues.entries
-                                                  && formValues.entries.includes(entry.id)
-                                                }
-                                              />
-                                            );
-                                          })}
-                                </StyledTreeItem>
-                              );
-                            })}
+                                    {entry.subEntries
+                                      && entry.subEntries.map((entry) => {
+                                        return (
+                                          <FormControlLabel
+                                            value={entry.id}
+                                            control={<Radio />}
+                                            label={entry.label}
+                                            // @ts-ignore
+                                            checked={
+                                              formValues.entries
+                                              && formValues.entries.includes(entry.id)
+                                            }
+                                          />
+                                        );
+                                      })}
+                                  </StyledTreeItem>
+                                );
+                              })}
                           </CustomRadioGroupForm>
                         </TreeView>
                       </RadioGroupForContext>
@@ -1178,12 +1164,12 @@ const EditEventForm = (props) => {
                                 name="entries"
                                 value={entry.id}
                                 onClick={(e) => e.stopPropagation()}
-                                  // @ts-ignore
+                                // @ts-ignore
                                 checked={
-                                    formValues
-                                    && formValues.entries
-                                    && formValues.entries.includes(entry.id)
-                                  }
+                                  formValues
+                                  && formValues.entries
+                                  && formValues.entries.includes(entry.id)
+                                }
                               />
                             </ListItem>
                           );
@@ -1254,8 +1240,8 @@ const EditEventForm = (props) => {
                 }
                 helperText={
                   dateChange
-                  && selectedStartDate
-                  && moment(selectedStartDate) <= moment(Date.now())
+                    && selectedStartDate
+                    && moment(selectedStartDate) <= moment(Date.now())
                     ? 'La date de début ne peut être dans le passé.'
                     : ''
                 }
@@ -1297,9 +1283,9 @@ const EditEventForm = (props) => {
                 }
                 helperText={
                   dateChange
-                  && selectedStartDate
-                  && selectedEndDate
-                  && selectedStartDate >= selectedEndDate
+                    && selectedStartDate
+                    && selectedEndDate
+                    && selectedStartDate >= selectedEndDate
                     ? 'La date de fin doit être après la date de début.'
                     : ''
                 }
@@ -1394,7 +1380,7 @@ const EditEventForm = (props) => {
         <br />
 
         <Grid container>
-          { actors && actors.map((actor) => (
+          {actors && actors.map((actor) => (
             <div>
               {/* @ts-ignore */}
               <Tooltip title={actor.name}>
@@ -1412,11 +1398,11 @@ const EditEventForm = (props) => {
           <Autocomplete
             id="combo-box-demo"
             options={actorsData.actors}
-                // @ts-ignore
+            // @ts-ignore
             getOptionLabel={(option) => `${option.name} `}
             onChange={autocompleteHandler}
             style={{ width: 300 }}
-                // eslint-disable-next-line react/jsx-props-no-spreading
+            // eslint-disable-next-line react/jsx-props-no-spreading
             renderInput={(params) => (
               <TextField
                 {...params}
@@ -1526,7 +1512,7 @@ const EditEventForm = (props) => {
             && !!validationResult?.result.shortDescription
           }
           errorText={`Maximum 90 caractères. ${formValues.shortDescription?.length - 90
-          } caractères en trop.`}
+            } caractères en trop.`}
         />
         <Typography variant="body1" color="primary" className={styles.label}>
           Description :
