@@ -217,6 +217,54 @@ const EDIT_EVENT = gql`
       published
       lat
       lng
+      pictures {
+        id
+        label
+        originalPicturePath
+        originalPictureFilename
+        croppedPicturePath
+        croppedPictureFilename
+        croppedX
+        croppedY
+        croppedZoom
+        croppedRotation
+        position
+        logo
+        main
+      }
+      entries {
+        id
+        label
+        icon
+        description
+        actorEntries {
+          linkDescription
+          topSEO
+          id
+        }
+        parentEntry {
+          id
+          code
+          label
+        }
+        subEntries {
+          id
+          code
+          label
+          icon
+          description
+          actorEntries {
+            linkDescription
+            topSEO
+            id
+          }
+        }
+        collection {
+          id
+          code
+          label
+        }
+      }
     }
   }
 `;
@@ -312,9 +360,14 @@ const GET_COLLECTIONS = gql`
       entries {
         id
         label
+        icon
+        color
+        description
         subEntries {
           id
           label
+          icon
+          description
         }
       }
     }
@@ -1062,6 +1115,8 @@ const EditEventForm = (props) => {
                                         // @ts-ignore
                                         nodeId={subEntry.id}
                                         labelText={subEntry.label}
+                                        icon={subEntry.icon}
+                                        color={entry.color}
                                         categoryChange={formChangeHandler}
                                         checked={
                                           formValues

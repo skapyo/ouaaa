@@ -6,6 +6,7 @@ export const getImageUrl = (url) => {
 
 export const entriesHasElementWithCode = (entries, code) => {
   let hasEntry = false;
+  debugger;
   entries.map(
     (entry) => {
       if (entry

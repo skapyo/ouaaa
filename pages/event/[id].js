@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import AppLayout from 'containers/layouts/AppLayout';
 import {
   Box,
@@ -28,9 +28,18 @@ import Parser from 'html-react-parser';
 import Fab from '@material-ui/core/Fab';
 import EditIcon from '@material-ui/icons/Edit';
 import Link from 'components/Link';
-import { getImageUrl } from '../../utils/utils';
+import { getImageUrl, entriesHasElementWithCode } from '../../utils/utils';
+
 import { useSessionState } from '../../context/session/session';
 import Newsletter from '../../containers/layouts/Newsletter';
+
+if (typeof window !== 'undefined') {
+  var L = require('leaflet');
+  var Map = require('react-leaflet').Map;
+  var TileLayer = require('react-leaflet').TileLayer;
+  var Marker = require('react-leaflet').Marker;
+  var Popup = require('react-leaflet').Popup;
+}
 
 const useStyles = makeStyles((theme) => ({
   titleContainer: {
@@ -66,9 +75,19 @@ const useStyles = makeStyles((theme) => ({
     color: theme.typography.h5.color,
     fontFamily: theme.typography.h5.fontFamily,
     textTransform: 'uppercase',
+    fontWeight: '400',
   },
   description: {
-    wordBreak: 'break-all',
+    [theme.breakpoints.up('sm')]: {
+      paddingLeft: '2em',
+    },
+  },
+  map: {
+    height: '30em',
+    width: '30em',
+  },
+  actorName: {
+    width: '100%',
   },
   cardTitleCategories: {
     color: theme.typography.h5.color,
@@ -92,8 +111,23 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'right',
     padding: '1em',
   },
+  border: {
+    width: '3em',
+    borderColor: '#2C367E',
+    borderBottom: 'solid',
+    borderBottomColor: '#2C367E',
+    color: '#2C367E',
+    height: '1em',
+  },
+  iconEntry: {
+    height: '20px',
+    marginRight: '0.5em',
+    marginLeft: '0.5em',
+  },
+
   item: {
     border: '1px solid #2C367E',
+    borderWidth: ' 1px 0px 1px 0px ',
     borderStyle: 'dashed',
   },
   icon: {
@@ -105,6 +139,17 @@ const useStyles = makeStyles((theme) => ({
     maxHeight: '200px',
     width: 'inherit!important',
   },
+  image: {
+    height: '72px',
+    width: '72px',
+    margin: '0 auto',
+    '& img': {
+      height: '100%',
+      width: '100%',
+      objectFit: 'contain',
+      borderRadius: '50%',
+    },
+  },
   infoValue: {
     color: theme.typography.h5.color,
     fontWeight: 700,
@@ -112,7 +157,14 @@ const useStyles = makeStyles((theme) => ({
   infoLabel: {
     color: theme.typography.h5.color,
   },
-
+  descriptionInfoLabel: {
+    display: 'inline-block',
+    fontWeight: 700,
+    margin: '0.5em',
+  },
+  descriptionInfoValue: {
+    display: 'inline-block',
+  },
   button: {
     margin: '2.5em 0 2.5em 0 ',
     color: 'white',
@@ -177,6 +229,8 @@ const useStyles = makeStyles((theme) => ({
 
 const Event = () => {
   const router = useRouter();
+  const mapRef = useRef();
+
   const { id } = router.query;
 
   const GET_EVENT = gql`
@@ -195,6 +249,7 @@ const Event = () => {
         practicalInfo
         entries {
           label
+          icon
           collection {
             code
             label
@@ -202,6 +257,7 @@ const Event = () => {
           parentEntry {
             code
             label
+            color
             collection {
               code
               label
@@ -268,6 +324,7 @@ const Event = () => {
     variables: {
       id,
     },
+    fetchPolicy: 'cache-first',
   });
 
   const [stylesProps, setStylesProps] = useState({
@@ -464,6 +521,11 @@ const Event = () => {
                   <Typography variant="h2" className={styles.cardTitle, styles.actorName}>
                     {data && data.event.name}
                   </Typography>
+                  {data
+                /*  &&  entriesHasElementWithCode(
+                    data.event.entries,
+                    'event_type',) */
+                  && (
                     <Grid container className={[styles.item]}>
                       <Grid item xs={3} className={[styles.alignRight]}>
                         <LocalOffer className={[styles.icon]} />
@@ -494,6 +556,12 @@ const Event = () => {
                         </span>
                       </Grid>
                     </Grid>
+                  )}
+                  {data
+                  && entriesHasElementWithCode(
+                    data.event.entries,
+                    'event_public_target',
+                  ) && (
                     <Grid container className={[styles.item]}>
                       <Grid item xs={3} className={[styles.alignRight]}>
                         <img src={"/icons/public.svg"} alt="Collectif & réseau" className={[styles.icon]} />
@@ -521,8 +589,8 @@ const Event = () => {
                         </span>
                       </Grid>
                     </Grid>
-
-                    <Grid container className={[styles.item]}>
+                  )}
+                  <Grid container className={[styles.item]}>
                       <Grid item xs={3} className={[styles.alignRight]}>
                       <img src={"/icons/location.svg"} alt="Localisation" className={[styles.icon]} />
                       </Grid>
@@ -548,6 +616,7 @@ const Event = () => {
                         </span>
                       </Grid>
                     </Grid>
+                  {data && data.event.socialNetwork && (
                     <Grid container className={[styles.item]}>
                       <Grid item xs={3} className={[styles.alignRight]}>
                         <img src={"/icons/social.svg"} alt="Réseau social" className={[styles.icon]} />
@@ -564,6 +633,8 @@ const Event = () => {
                         </span>
                       </Grid>
                     </Grid>
+                  )}
+                  {data && data.event.openingHours && data.event.openingHours.length !== 0 && (
                     <Grid container className={[styles.item]}>
                       <Grid item xs={3} className={[styles.alignRight]}>
                       <img src={"/icons/clock.svg"} alt="Horaire" className={[styles.icon]} />
@@ -583,7 +654,13 @@ const Event = () => {
                         </span>
                       </Grid>
                     </Grid>
-                    <Grid container className={[styles.item]}>
+                  )}
+                  {data
+                  && entriesHasElementWithCode(
+                    data.event.entries,
+                    'event_price',
+                  ) && (
+                  <Grid container className={[styles.item]}>
                       <Grid item xs={3} className={[styles.alignRight]}>
                         <Euro className={[styles.icon]} />
                       </Grid>
@@ -609,41 +686,183 @@ const Event = () => {
                         </span>
                       </Grid>
                     </Grid>
+                  )}
                   </Grid>
+                  
                 </Grid>
-              </Grid>
-              <Grid item md={7} sm={10}  className={styles.threePointGrid}>
+              <br />
+              <Grid item md={7} sm={10} className={styles.description}>
+                <Typography variant="h3" className={styles.cardTitle}>
+                  DESCRIPTION
+                </Typography>
+                <div className={styles.border} />
+                <br />
+                <br />
+                <Typography variant="h2">
+                  {data && data.event.name}
+                </Typography>
+                <br />
+                <p>{data && Parser(data.event.description)}</p>
                 <div>
-                  <Typography variant="h5" className={styles.cardTitle}>
-                    {data && data.event.label}
-                  </Typography>
-                  {data &&
-                    data.event.entries.map(
-                      (entry) =>
-                        entry.parentEntry &&
-                        entry.parentEntry.collection.code === 'category' && (
+                  {data
+                    && data.event.entries.map(
+                      (entry) => entry.parentEntry
+                        && entry.parentEntry.collection.code === 'category' && (
                           <div>
                             <Typography
                               variant="h7"
                               className={styles.cardTitleCategories}
                             >
                               {/* @ts-ignore */}
-                              {` ${
-                                entry.parentEntry && entry.parentEntry.label
+                              {` ${entry.parentEntry && entry.parentEntry.label
                               } `}
-                              {/* @ts-ignore */}:{/* @ts-ignore */}
+                              {/* @ts-ignore */}
+                              :
+                              { entry.icon && (
+                              <img src={`/icons/${entry.icon}.svg`} alt="icon" className={styles.iconEntry} />
+                              )}
+                              {/* @ts-ignore */}
                               {` ${entry && entry.label}`}
                               {/* @ts-ignore */}
                             </Typography>
                           </div>
-                        ),
+                      ),
                     )}
                 </div>
-                <p>{data && Parser(data.event.description)}</p>
-                <div />
-              </Grid>
+                <br />
+                {data
+                  && entriesHasElementWithCode(
+                    data.event.entries,
+                    'actor_status',
+                  ) && (
+                    <div className={[styles.descriptionInfoDiv]}>
+                      <img src="/icons/status.svg" alt="Collectif & réseau" className={[styles.icon]} />
+                      <div className={[styles.descriptionInfoLabel]}> Statut :</div>
+                      <span className={[styles.descriptionInfoValue]}>
+                        {data
+                          && data.event.entries.map(
+                            (entry) => entry
+                              && entry.collection
+                              && entry.collection.code
+                              === 'actor_status' && (
+                                <div>
+                                  <Typography
+                                    variant="h7"
+                                    className={styles.cardTitleCategories}
+                                  >
+                                    {`  ${entry && entry.label}`}
+                                  </Typography>
+                                </div>
+                            ),
+                          )}
+                      </span>
+                    </div>
+                )}
+                {data
+                  && entriesHasElementWithCode(
+                    data.event.entries,
+                    'public_target',
+                  ) && (
+                    <div className={[styles.descriptionInfoDiv]}>
 
-  
+                      <img src="/icons/public.svg" alt="Collectif & réseau" className={[styles.icon]} />
+                      <div className={[styles.descriptionInfoLabel]}>
+                        Public principal visé
+                      </div>
+                      <span className={[styles.descriptionInfoValue]}>
+                        {data
+                          && data.event.entries.map(
+                            (entry) => entry
+                              && entry.collection
+                              && entry.collection.code
+                              === 'public_target' && (
+                                <div>
+                                  <Typography
+                                    variant="h7"
+                                    className={styles.cardTitleCategories}
+                                  >
+                                    {` ${entry && entry.label}`}
+                                  </Typography>
+                                </div>
+                            ),
+                          )}
+                      </span>
+                    </div>
+                )}
+                {data
+                  && entriesHasElementWithCode(
+                    data.event.entries,
+                    'collectif',
+                  ) && (
+                    <div className={[styles.descriptionInfoDiv]}>
+                      <img src="/icons/network.svg" alt="Collectif & réseau" className={[styles.icon]} />
+                      <div className={[styles.descriptionInfoLabel]}>
+                        Collectif & réseaux
+                      </div>
+                      <span className={[styles.descriptionInfoValue]}>
+                        {data
+                          && data.event.entries.map(
+                            (entry) => entry
+                              && entry.collection
+                              && entry.collection.code === 'collectif' && (
+                                <div>
+                                  <Typography
+                                    variant="h7"
+                                    className={styles.cardTitleCategories}
+                                  >
+                                    {` ${entry && entry.label}`}
+                                  </Typography>
+                                </div>
+                            ),
+                          )}
+                      </span>
+                    </div>
+                )}
+              
+              <div />
+              <br />
+              <Typography variant="h3" className={styles.cardTitle}>
+                ACCES
+              </Typography>
+              <div className={styles.border} />
+              <br />
+
+              {data && (
+                <Map ref={mapRef} center={[data.event.lat, data.event.lng]} zoom={11} className={styles.map}  >
+                  <TileLayer
+                    attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  />
+                  <Marker
+                    position={[data.event.lat, data.event.lng]}
+                    icon={new L.Icon({
+                      iconUrl: '/icons/location.svg',
+                      iconAnchor: [13, 34], // point of the icon which will correspond to marker's location
+                      iconSize: [25],
+                      popupAnchor: [1, -25],
+                      html: `<span style="background-color: red" />`,
+                    })}
+                  >
+                    <Popup>
+                      {data.event.name} - {data && !data.event.address && data.event.city && (
+                        <span>
+                          {/* @ts-ignore */}
+                          {data && data.event.city}
+                        </span>
+                      )} 
+                      {data && data.event.address && data.event.city && (
+                        <span>
+                          {/* @ts-ignore */}
+                          {`${data && data.event.address} ${data && data.event.city
+                            }`}
+                        </span>
+                      )}
+                      </Popup>
+                    </Marker>
+                </Map>
+              )}
+            </Grid>
+            </Grid>       
 
             <div className={styles.buttonParticipate}>
               {data && containUser(data.event.participants) && (
