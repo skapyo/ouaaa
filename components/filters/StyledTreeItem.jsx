@@ -146,7 +146,7 @@ function StyledTreeItem(props) {
           <div className={classes.labelRoot}>
             {icon && (
               <>
-                < span className={classes.entriesIcon} style={{ background: `${color}`, mask: `url('/icons/${icon}.svg')` }} />
+                < span className={classes.entriesIcon} style={{ background: `${color}`, mask: `url('/icons/${icon}.svg') center center  22px no-repeat;` }} />
               </>
             )}
             <Typography variant="body2" className={classes.labelText}>
