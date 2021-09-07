@@ -62,6 +62,14 @@ const useTreeItemStyles = makeStyles((theme) => ({
     height: '20px',
     marginRight: '1em',
   },
+  entriesIcon: {
+    width: '30px',
+    height: '30px',
+    marginRight: '10px',
+    maskPosition: 'center center',
+    maskRepeat: 'no-repeat',
+    maskSize: '22px',
+  }
 }));
 
 function StyledTreeItem(props) {
@@ -137,7 +145,9 @@ function StyledTreeItem(props) {
         <div>
           <div className={classes.labelRoot}>
             {icon && (
-              <img src={`/icons/${icon}.svg`} alt="icon" className={classes.icon} />
+              <>
+                < span className={classes.entriesIcon} style={{ background: `${color}`, mask: `url('/icons/${icon}.svg')` }} />
+              </>
             )}
             <Typography variant="body2" className={classes.labelText}>
               {labelText}

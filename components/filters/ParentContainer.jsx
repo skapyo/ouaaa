@@ -57,10 +57,12 @@ function ParentContainer(props) {
   /* update the checkboxes children */
   useEffect(() => {
     // setup parent checkbox
+
     const parentCheckboxState = {
       id: entry.id,
       label: entry.label,
       icon: entry.icon,
+      color: entry.color,
       checked: false,
     };
 
@@ -72,14 +74,16 @@ function ParentContainer(props) {
       return a.position > b.position;
     };
 
-    entry.subEntries.sort(compare).map(({ id, label, icon, description, actorEntries }) => {
+    entry.subEntries.sort(compare).map(({ id, label, icon, description, color, actorEntries }) => {
       newCheckboxesState.push({
         id,
         label,
         icon,
+        color: parentCheckboxState.color,
         description,
         checked: false,
       });
+
       newNodesArray.push(id);
     });
 
@@ -215,6 +219,7 @@ function ParentContainer(props) {
                     labelText={subEntry.label}
                     categoryChange={categoryChange}
                     checked={subEntry.checked}
+                    color={subEntry.color}
                     description={subEntry.description}
                     icon={subEntry.icon}
                   />
