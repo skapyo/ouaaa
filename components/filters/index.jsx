@@ -2,18 +2,12 @@ import React, { useState, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import {
   Grid,
-  List,
-  ListItem,
-  ListItemText,
   Typography,
-  Checkbox,
   TextField,
   ExpansionPanel,
   ExpansionPanelSummary,
   ExpansionPanelDetails,
 } from '@material-ui/core';
-
-import { DatePicker } from '@material-ui/pickers';
 
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
@@ -78,9 +72,7 @@ const useStyles = makeStyles({
   },
 });
 
-const compare = (a, b) => {
-  return a.position > b.position;
-};
+const compare = (a, b) => a.position > b.position;
 
 const IsTree = (collection) => {
   let isTree = false;
@@ -98,7 +90,7 @@ const IsTree = (collection) => {
 };
 
 const FilterItem = props => {
-  const { collection, categoryChange, parentCategoryChange } = props;
+  const { collection, categoryChange, onCategoryChange } = props;
   const classes = useStyles();
 
   return (
@@ -111,7 +103,7 @@ const FilterItem = props => {
               entry={entry}
               subEntries={entry.subEntries}
               categoryChange={categoryChange}
-              parentCategoryChange={parentCategoryChange}
+              onCategoryChange={onCategoryChange}
               isForm={false}
             />
           );
@@ -186,7 +178,7 @@ function Filters(props) {
     }
   }, [setErrorPostCode]);
 
-  const handleParentCategoryChange = useCallback((categories) => {
+  const handleCategoryChange = useCallback((categories) => {
     let currentCategories = [...filters.categories || []];
     categories.forEach(newCategory => {
       const alreadyChecked = currentCategories.find(id => id === newCategory.id);
@@ -226,17 +218,16 @@ function Filters(props) {
   if (loadingCollections) return 'Loading...';
   if (errorCollections) return `Error! ${errorCollections.message}`;
 
-  // TODO: not working
-  const displayEntries = (id) => {
-    expanded[id] = true;
-  };
-
   return (
     <Grid item xm={12} sm={2} alignItems="center">
 
-      <DateFilter
-        onDateChange={handleDateChange}
-      />
+      {
+        isEventList && (
+          <DateFilter
+            onDateChange={handleDateChange}
+          />
+        )
+      }
 
       <TextField
         variant="outlined"
@@ -265,8 +256,7 @@ function Filters(props) {
             <ExpansionPanelDetails className={classes.expansionPanelDetails}>
               <FilterItem
                 collection={collection}
-                parentCategoryChange={handleParentCategoryChange}
-                categoryChange={() => { }}
+                onCategoryChange={handleCategoryChange}
               />
             </ExpansionPanelDetails>
           </ExpansionPanel>

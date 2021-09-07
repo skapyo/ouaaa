@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import Badge from '@material-ui/core/Badge';
-
 import TreeView from '@material-ui/lab/TreeView';
 import { makeStyles } from '@material-ui/core/styles';
+
 import ParentFilterContext from './ParentFilterContext';
 import StyledTreeItem from './StyledTreeItem';
 
@@ -32,91 +32,46 @@ const useStyles = makeStyles({
   },
 });
 
+const compare = (a, b) => a.position > b.position;
+
 function ParentContainer(props) {
   const classes = useStyles();
-  const {
-    labelText,
-    color,
-    bgColor,
-    checked,
-    entry,
-    categoryChange,
-    parentCategoryChange,
-    isForm,
-    ...other
-  } = props;
+  const { entry, onCategoryChange, isForm } = props;
 
   const [parentCheckboxChecked, setParentCheckboxChecked] = useState(false);
   const [checkboxes, setCheckboxes] = useState([]);
-  const [parentCheckbox, setParentCheckbox] = useState(null);
   const [expanded, setExpanded] = useState([]);
   const [nodesArray, setNodesArray] = useState([]);
-  const [numberChecked, setNumberChecked] = useState(0);
   const isFirstRef = useRef(true);
 
   /* update the checkboxes children */
   useEffect(() => {
-    // setup parent checkbox
-
-    const parentCheckboxState = {
-      id: entry.id,
-      label: entry.label,
-      icon: entry.icon,
-      color: entry.color,
-      checked: false,
-    };
-
     // setup children checkboxes and NodeIds
     const newCheckboxesState = [];
-    const newNodesArray = [parentCheckboxState.id];
+    const newNodesArray = [entry.id];
 
-    const compare = (a, b) => {
-      return a.position > b.position;
-    };
-
-    entry.subEntries.sort(compare).map(({ id, label, icon, description, color, actorEntries }) => {
+    entry.subEntries.sort(compare).map(({ id, label, icon, description, actorEntries }) => {
       newCheckboxesState.push({
         id,
         label,
         icon,
-        color: parentCheckboxState.color,
         description,
         checked: false,
       });
-
       newNodesArray.push(id);
     });
 
     setNodesArray(newNodesArray);
-    setParentCheckbox(parentCheckboxState);
     setCheckboxes(newCheckboxesState);
   }, []);
 
-  const updateParentWithChildren = () => {
-    //
-    let allChecked = false;
-    for (let i = 0; i < checkboxes.length; i += 1) {
-      if (checkboxes[i].checked) {
-        allChecked = true;
-      } else {
-        allChecked = false;
-        break;
-      }
+  const updateParentWithChildren = useCallback(() => {
+    if (entry.subEntries && entry.subEntries.length > 0) {
+      const allChecked = checkboxes.filter(({ checked }) => checked).length === checkboxes.length;
+
+      setParentCheckboxChecked(allChecked);
     }
-    //
-
-    setParentCheckboxChecked(allChecked);
-  };
-
-  const updateNumberChecked = () => {
-    let newNumberChecked = 0;
-    checkboxes.map((checkboxe) => {
-      if (checkboxe.checked === true) {
-        newNumberChecked += 1;
-      }
-    });
-    return newNumberChecked;
-  };
+  }, [entry.subEntries, checkboxes]);
 
   useEffect(() => {
     // avoid first rendering
@@ -126,49 +81,57 @@ function ParentContainer(props) {
     }
 
     updateParentWithChildren();
-    parentCategoryChange(checkboxes);
-    // // update the badge
-    setNumberChecked(updateNumberChecked());
-  }, [parentCheckboxChecked, checkboxes]);
+  }, [checkboxes]);
 
-  const handleToggle = () => {
+  const handleToggle = useCallback(() => {
     setExpanded((oldExpanded) => (oldExpanded.length === 0 ? nodesArray : []));
-  };
+  }, [nodesArray]);
 
-  /*
-  tree will not collapse if already expanded
-  when you check the parent checkbox
-  */
-  const checkHandleToggle = () => {
-    if (expanded.length > 0) {
-      return;
+  /**
+    * tree will not collapse if already expanded
+    * when you check the parent checkbox
+    */
+  const checkHandleToggle = useCallback(() => {
+    if (expanded.length === 0) {
+      handleToggle();
     }
-    handleToggle();
-  };
+  }, [expanded, handleToggle]);
 
-  const handleCheckboxgroupChange = (updatedUsecaseCBState) => {
-    setCheckboxes(updatedUsecaseCBState);
-  };
+  const handleParentCheckboxChange = useCallback((isChecked) => {
+    if (entry.subEntries && entry.subEntries.length > 0) {
+      const newChildrenCheckState = [...checkboxes].map((aCheckbox) => ({
+        ...aCheckbox,
+        checked: isChecked,
+      }));
 
-  const handleParentCheckboxChange = (isChecked) => {
-    const newChildrenCheckState = checkboxes.map((aCheckbox) => ({
-      ...aCheckbox,
-      checked: isChecked,
-    }));
+      setCheckboxes(newChildrenCheckState);
+      onCategoryChange(newChildrenCheckState)
+    } else {
+      onCategoryChange([
+        {
+          ...entry,
+          checked: isChecked
+        }
+      ]);
+    }
 
     setParentCheckboxChecked(isChecked);
-    handleCheckboxgroupChange(newChildrenCheckState);
-  };
+  }, [checkboxes]);
 
-  const handleChildCheckboxChange = (isChecked, index) => {
+  const handleChildCheckboxChange = useCallback((isChecked, index) => {
     const newCheckState = checkboxes.map((aCheckbox) => {
       return index == aCheckbox.id
         ? { ...aCheckbox, checked: isChecked }
         : aCheckbox;
     });
 
-    handleCheckboxgroupChange(newCheckState);
-  };
+    setCheckboxes(newCheckState);
+    onCategoryChange(newCheckState);
+  }, [onCategoryChange, checkboxes]);
+
+  const numberChecked = useMemo(() => {
+    return checkboxes.filter(({ checked }) => checked).length;
+  }, [checkboxes]);
 
   return (
     <ParentFilterContext.Provider
@@ -179,57 +142,53 @@ function ParentContainer(props) {
         checkHandleToggle,
       }}
     >
-      {parentCheckbox && (
-        <Badge
-          badgeContent={numberChecked}
-          showZero={false}
+      <Badge
+        badgeContent={numberChecked}
+        showZero={false}
+        className={classes.root}
+        classes={{ badge: classes.customBadge }}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      >
+        <TreeView
           className={classes.root}
-          classes={{ badge: classes.customBadge }}
-          anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+          aria-label="controlled"
+          expanded={expanded}
+          onNodeToggle={handleToggle}
+          defaultCollapseIcon={<ArrowDropDownIcon />}
+          defaultExpandIcon={<ArrowRightIcon />}
+          defaultEndIcon={<div style={{ width: 24 }} />}
+          disableSelection
         >
-          <TreeView
-            className={classes.root}
-            aria-label="controlled"
-            expanded={expanded}
-            onNodeToggle={handleToggle}
-            defaultCollapseIcon={<ArrowDropDownIcon />}
-            defaultExpandIcon={<ArrowRightIcon />}
-            defaultEndIcon={<div style={{ width: 24 }} />}
-
+          <StyledTreeItem
+            key={entry.id}
+            nodeId={entry.id}
+            labelText={entry.label}
+            color={entry.color}
+            description={entry.description}
+            icon={entry.icon}
+            isParent
+            hasSubEntries={entry.subEntries && entry.subEntries.length > 0}
+            checked={parentCheckboxChecked}
+            isForm={isForm}
           >
-            <StyledTreeItem
-              key={parentCheckbox.id}
-              nodeId={parentCheckbox.id}
-              labelText={parentCheckbox.label}
-              color={parentCheckbox.color}
-              description={parentCheckbox.description}
-              icon={parentCheckbox.icon}
-              categoryChange={categoryChange}
-              parentCategoryChange={parentCategoryChange}
-              isParent
-              checked={parentCheckboxChecked}
-              isForm={isForm}
-            >
-              {checkboxes.map((subEntry) => {
-                return (
-                  <StyledTreeItem
-                    key={subEntry.id}
-                    nodeId={subEntry.id}
-                    id={subEntry.id}
-                    labelText={subEntry.label}
-                    categoryChange={categoryChange}
-                    checked={subEntry.checked}
-                    color={subEntry.color}
-                    description={subEntry.description}
-                    icon={subEntry.icon}
-                  />
-                );
-              })}
-            </StyledTreeItem>
-          </TreeView>
-        </Badge>
-      )}
+            {checkboxes.map((subEntry) => {
+              return (
+                <StyledTreeItem
+                  key={subEntry.id}
+                  nodeId={subEntry.id}
+                  id={subEntry.id}
+                  labelText={subEntry.label}
+                  checked={subEntry.checked}
+                  description={subEntry.description}
+                  icon={subEntry.icon}
+                />
+              );
+            })}
+          </StyledTreeItem>
+        </TreeView>
+      </Badge>
     </ParentFilterContext.Provider>
   );
 }
+
 export default ParentContainer;

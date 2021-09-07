@@ -43,8 +43,8 @@ const useStyles = makeStyles({
   },
   listButton: {
     position: 'fixed',
-    right: 15,
-    top: 115,
+    right: 25,
+    bottom: 25,
     zIndex: '10000',
     color: '#fff',
     backgroundColor: '#2C367E',
@@ -194,81 +194,10 @@ const AgendaPageLayout = () => {
     });
   }
 
-  const parentCategoryChange = useCallback((arr) => {
-    const tempCategories = [...categoriesChecked];
-    const tempCategoriesChecked = [];
-    const tempCategoriesUnchecked = [];
-    arr.forEach((checkbox) => {
-      const { checked, id } = checkbox;
-      if (checked) {
-        tempCategoriesChecked.push(id);
-      }
-      if (!checked) {
-        tempCategoriesUnchecked.push(id);
-      }
-    });
-
-    // delete the unchecked boxes
-    tempCategoriesUnchecked.forEach((value) => {
-      const currentIndex = tempCategories.indexOf(value);
-      if (currentIndex !== -1) {
-        tempCategories.splice(currentIndex, 1);
-      }
-    });
-
-    // add the recent checkedboxes
-    const newCategoriesChecked = [
-      ...new Set([...tempCategories, ...tempCategoriesChecked]),
-    ];
-
-    setCategoriesChecked(newCategoriesChecked);
-  });
-
-  const categoryChange = useCallback((e) => {
-    const tempCategories = [...categoriesChecked];
-
-    const categoryId = e.target.value;
-
-    const currentIndex = tempCategories.indexOf(categoryId);
-
-    if (currentIndex === -1) {
-      tempCategories.push(categoryId);
-    } else {
-      tempCategories.splice(currentIndex, 1);
-    }
-
-    setCategoriesChecked(tempCategories);
-  });
-
-  const postCodeChange = (e) => {
-    if (e.target.value == '') {
-      setPostCode(null);
-    } else {
-      setPostCode(e.target.value);
-    }
-  };
-
-  const otherCategoryChange = useCallback((e, collectionLabel) => {
-    const newOtherCategories = { ...otherCategoriesChecked };
-
-    const otherCategoryId = e.target.value;
-    const tempCollection = newOtherCategories[collectionLabel];
-
-    const currentIndex = tempCollection.indexOf(otherCategoryId);
-
-    if (currentIndex === -1) {
-      tempCollection.push(otherCategoryId);
-    } else {
-      tempCollection.splice(currentIndex, 1);
-    }
-
-    setOtherCategoriesChecked(newOtherCategories);
-  });
-
   const handleFiltersChange = useCallback(newFilters => {
     setFilters(newFilters);
     refetch({ ...newFilters });
-  }, []);
+  }, [refetch]);
 
   return (
     <Container className={classes.main}>
@@ -284,10 +213,6 @@ const AgendaPageLayout = () => {
         </Fab>
 
         <Filters
-          parentCategoryChange={parentCategoryChange}
-          categoryChange={categoryChange}
-          otherCategoryChange={otherCategoryChange}
-          postCodeChange={postCodeChange}
           isEventList
           onFiltersChange={handleFiltersChange}
         />

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 
 import PropTypes from 'prop-types';
 import { Checkbox, TextField } from '@material-ui/core';
@@ -78,7 +78,6 @@ function StyledTreeItem(props) {
     labelText,
     color,
     bgColor,
-    categoryChange,
     handleChildCheckboxChange,
     hideCheckBox,
     checked,
@@ -87,6 +86,7 @@ function StyledTreeItem(props) {
     isForm,
     icon,
     description,
+    hasSubEntries,
     ...other
   } = props;
 
@@ -124,29 +124,33 @@ function StyledTreeItem(props) {
         eventEntry.target.entryId = other.nodeId;
         eventEntry.target.topSEO = isTopSEO;
       }
-      categoryChange(eventEntry);
       if (typeof context.handleChildCheckboxChange !== 'undefined') {
         context.handleChildCheckboxChange(checkStatus, index);
       }
     }
   };
+
+  const handleClickItem = useCallback(evt => {
+    if (!isParent || !hasSubEntries) {
+      evt.stopPropagation();
+      handleCheckboxChange({ target: { checked: !checked } });
+    }
+  }, [checked, handleCheckboxChange, isParent]);
+
   const handleDescriptionChange = (event) => {
     const eventEntry = event;
     eventEntry.target.entryId = other.nodeId;
-    // eventEntry.target.topSEO = !isThisEntryNotInTopSEO;
     eventEntry.target.linkDescription = event.target.value;
-    categoryChange(event);
   };
-  //
-  // console.log(`${checked} ${other.nodeId}`);
+
   return (
     <TreeItem
       label={(
         <div>
-          <div className={classes.labelRoot}>
+          <div className={classes.labelRoot} onClick={handleClickItem}>
             {icon && (
               <>
-                <span className={classes.entriesIcon} style={{'-webkit-mask': `url('/icons/${icon}.svg') center center / 28px no-repeat`, backgroundColor: `${color}`}} />
+                <span className={classes.entriesIcon} style={{ '-webkit-mask': `url('/icons/${icon}.svg') center center / 28px no-repeat`, backgroundColor: `${color}` }} />
               </>
             )}
             <Typography variant="body2" className={classes.labelText}>
@@ -172,7 +176,7 @@ function StyledTreeItem(props) {
                 className={classes.checkbox}
                 style={{ color: '#2C367E' }}
                 checked={checked}
-                onChange={(e) => handleCheckboxChange(e)}
+                onChange={handleCheckboxChange}
                 onClick={(e) => e.stopPropagation()}
               />
             )}
@@ -212,12 +216,12 @@ StyledTreeItem.propTypes = {
   color: PropTypes.string,
   checked: PropTypes.boolean,
   labelText: PropTypes.string.isRequired,
-  categoryChange: PropTypes.func,
   handleChildCheckboxChange: PropTypes.func,
   hideCheckBox: PropTypes.boolean,
   isParent: PropTypes.boolean,
   id: PropTypes.string,
   isForm: PropTypes.boolean,
+  hasSubEntries: PropTypes.boolean,
   icon: PropTypes.string,
   description: PropTypes.string,
 };
