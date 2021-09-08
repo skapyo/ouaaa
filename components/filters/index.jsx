@@ -7,21 +7,49 @@ import {
   ExpansionPanel,
   ExpansionPanelSummary,
   ExpansionPanelDetails,
+  useMediaQuery,
+  Button
 } from '@material-ui/core';
 
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/client';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Entries from 'containers/forms/Entries';
 import ParentContainer from './ParentContainer';
 import DateFilter from '../../containers/layouts/agendaPage/DateFilter';
 
-const useStyles = makeStyles({
-  root: {
+const useStyles = makeStyles(theme => ({
+  root: (props) => ({
     flexGrow: 1,
     maxWidth: 400,
+    overflowY: 'auto',
+    overflowX: 'hidden',
+    justifyContent: 'center',
+    '& > *': {
+      width: '100%',
+      backgroundColor: 'white'
+    },
+    '& > *:not(:first-child)': {
+      [theme.breakpoints.down('sm')]: {
+        display: props.openFilters ? 'block' : 'none'
+      }
+    },
+    '& > *:nth-child(2),& > *:nth-child(3)': {
+      [theme.breakpoints.down('sm')]: {
+        display: props.openFilters ? 'flex' : 'none'
+      }
+    }
+  }),
+  filterButtonContainer: {
+    display: 'none',
+    [theme.breakpoints.down('sm')]: {
+      display: 'flex'
+    },
+    '& > *': {
+      flex: 1
+    }
   },
   collectionLabel: {
     textAlign: 'center',
@@ -51,7 +79,6 @@ const useStyles = makeStyles({
   },
   entries: {
     padding: '0px 5px 0px 5px!important',
-
   },
   expansionPanel: {
     margin: 'inherit!important',
@@ -70,7 +97,7 @@ const useStyles = makeStyles({
     marginTop: '0px',
     marginBottom: '0px',
   },
-});
+}));
 
 const compare = (a, b) => a.position > b.position;
 
@@ -118,11 +145,11 @@ function Filters(props) {
     isEventList,
     onFiltersChange
   } = props;
-  const classes = useStyles();
+  const theme = useTheme();
 
   const GET_COLLECTIONS = gql`
-    {
-      collections {
+  {
+    collections {
         id
         label
         multipleSelection
@@ -153,6 +180,9 @@ function Filters(props) {
   const [dataCollections, setDataCollections] = useState({});
   const [errorPostCode, setErrorPostCode] = useState(false);
   const [filters, setFilters] = useState({});
+  const [openFilters, setOpenFilters] = useState(false);
+
+  const classes = useStyles({ openFilters });
 
   const handleFilterChange = useCallback((name, value) => {
     let currentFilters = filters || {};
@@ -219,7 +249,17 @@ function Filters(props) {
   if (errorCollections) return `Error! ${errorCollections.message}`;
 
   return (
-    <Grid item xm={12} sm={2} alignItems="center">
+    <Grid
+      container
+      direction="column"
+      alignItems="center"
+      justifyContent="flex-start"
+      wrap="nowrap"
+      className={classes.root}
+    >
+      <Grid container justifyContent="center" className={classes.filterButtonContainer}>
+        <Button variant="contained" onClick={() => setOpenFilters(!openFilters)}>Filters</Button>
+      </Grid>
 
       {
         isEventList && (

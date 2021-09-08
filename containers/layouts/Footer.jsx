@@ -8,7 +8,7 @@ const useStyles = makeStyles({
     color: 'white',
     backgroundColor: '#2C367E',
     border: 'none',
-    height: '29em',
+    height: '26em',
     textAlign: 'center',
     paddingTop: '3em',
   },
@@ -16,7 +16,7 @@ const useStyles = makeStyles({
     color: 'white',
     align: 'center',
     fontWeight: 700,
-    
+
     fontSize: '2.5em',
     marginTop: '1em',
   },

@@ -5,7 +5,7 @@ import Events from 'containers/layouts/agendaPage/Events';
 // import Filters from 'containers/layouts/agendaPage/Filters';
 import Filters from '../../../components/filters';
 import Newsletter from 'containers/layouts/Newsletter';
-import { Container, makeStyles } from '@material-ui/core';
+import { Container, makeStyles, useMediaQuery, useTheme } from '@material-ui/core';
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/client';
 import Fab from '@material-ui/core/Fab';
@@ -15,6 +15,8 @@ import Moment from 'react-moment';
 
 import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded';
 import FavoriteRoundedIcon from '@material-ui/icons/FavoriteRounded';
+import ViewListIcon from '@material-ui/icons/ViewList';
+import RoomIcon from '@material-ui/icons/Room';
 
 if (typeof window !== 'undefined') {
   var L = require('leaflet');
@@ -26,32 +28,41 @@ if (typeof window !== 'undefined') {
   var MarkerClusterGroup = require('react-leaflet-markercluster').default;
 }
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   main: {
     padding: '0',
     margin: '0',
   },
   layout: {
     display: 'flex',
-    justifyContent: 'space-evenly',
+    justifyContent: 'center',
     backgroundColor: '#F6F6F6',
-    padding: '50px 0',
+    padding: '0',
     margin: '0',
     width: '100%',
     maxWidth: 'none',
-    position: 'relative'
+    position: 'relative',
+    overflow: 'hidden',
+    height: '88vh',
+    [theme.breakpoints.down('sm')]: {
+      flexDirection: 'column',
+      alignItems: 'center',
+      height: 'auto'
+    }
   },
   listButton: {
-    position: 'fixed',
-    right: 25,
-    bottom: 25,
-    zIndex: '10000',
+    position: 'absolute',
+    bottom: 10,
+    zIndex: 10000,
     color: '#fff',
     backgroundColor: '#2C367E',
     '&:hover': {
       color: '#2C367E',
       backgroundColor: '#fff',
-    },
+    }
+  },
+  listButtonIcon: {
+    marginRight: 10
   },
   image: {
     backgroundPosition: 'center center',
@@ -108,7 +119,13 @@ const useStyles = makeStyles({
   favoriteIcon: {
     color: '#AD2740',
   },
-});
+  mapContainer: {
+    height: '88vh',
+    [theme.breakpoints.down('sm')]: {
+      height: '80vh'
+    }
+  }
+}));
 
 const categories = {
   Sujets: [],
@@ -173,6 +190,9 @@ const AgendaPageLayout = () => {
   const [postCode, setPostCode] = useState(null);
   const [filters, setFilters] = useState(null);
 
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up('md'));
+
   const date = new Date();
   const position = [46.1085193, -0.9864794];
 
@@ -182,7 +202,7 @@ const AgendaPageLayout = () => {
 
   date.setHours(0, 0, 0, 0);
 
-  const { data: eventData, loading, error, refetch } = useQuery(GET_EVENTS, {
+  const { data: eventData, loading: loadingEvents, error, refetch } = useQuery(GET_EVENTS, {
     variables: {
       startingDate: date.toISOString(),
     },
@@ -209,7 +229,12 @@ const AgendaPageLayout = () => {
           className={classes.listButton}
           onClick={switchMode}
         >
-          <span>{isListMode ? 'Carte' : 'Liste'}</span>
+          {
+            isListMode ?
+              <RoomIcon className={classes.listButtonIcon} /> :
+              <ViewListIcon className={classes.listButtonIcon} />
+          }
+          <span>{isListMode ? 'Voir la Carte' : 'Voir la Liste'}</span>
         </Fab>
 
         <Filters
@@ -217,13 +242,13 @@ const AgendaPageLayout = () => {
           onFiltersChange={handleFiltersChange}
         />
 
-        {isListMode && eventData && eventData.events && (
-          <Events data={eventData} />
+        {isListMode && (
+          <Events data={eventData} loading={loadingEvents} />
         )}
 
         {!isListMode && (
           <Grid item xs={10}>
-            <Map ref={mapRef} center={position} zoom={11}>
+            <Map ref={mapRef} center={position} zoom={11} className={classes.mapContainer}>
               <TileLayer
                 attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

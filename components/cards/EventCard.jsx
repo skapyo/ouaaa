@@ -41,6 +41,7 @@ const useStyles = makeStyles((theme, props) => ({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    position: 'relative'
   },
   opacity: (props) => ({
     width: '40px',

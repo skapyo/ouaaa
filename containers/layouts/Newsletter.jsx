@@ -6,17 +6,25 @@ import { withApollo } from 'hoc/withApollo';
 import FormController, {
   ValidationRuleType,
 } from 'components/controllers/FormController';
-import { Container, TextField, Typography } from '@material-ui/core';
+import { Grid, TextField, Typography, Button } from '@material-ui/core';
 import ClassicButton from 'components/buttons/ClassicButton';
 import SearchIcon from '@material-ui/icons/Search';
+import TrendingFlatIcon from '@material-ui/icons/TrendingFlat';
 import { useSessionState } from 'context/session/session';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   newsletter: {
-    paddingTop: '5em',
-    paddingBottom: '5em',
+    padding: '2em 0',
     textAlign: 'center',
-    height: '32em',
+    height: '24em',
+    [theme.breakpoints.down('md')]: {
+      padding: '1em 0',
+      height: '18em',
+    },
+    [theme.breakpoints.down('md')]: {
+      padding: '1em 0',
+      height: '14em',
+    }
   },
   align: {
     'text-align': 'center',
@@ -82,37 +90,33 @@ const useStyles = makeStyles((theme) => ({
   },
   cardTitle: {
     align: 'center',
-
     fontSize: '2.2em',
     color: '#2C367E',
     letterSpacing: '2px',
-    marginBottom: '3em',
     [theme.breakpoints.down('sm')]: {
-      fontSize: '1.5em',
+      fontSize: '1.3em',
     },
   },
   buttonGrid: {
     color: 'white',
-    'background-color': '#2C367E',
+    backgroundColor: '#2C367E',
     border: 'none',
-
-    fontSize: '18px',
+    fontSize: 16,
     borderRadius: '1.5em',
-    padding: '0 3em 0 3em',
-    height: '52px',
-    '&:hover': {
-      cursor: 'pointer',
-      color: '#2C367E',
-      'background-color': 'white',
-      border: '2px solid #2C367E',
-      backgroundImage: "url('./arrow-hover.svg')",
-    },
-    backgroundImage: "url('./arrow.svg')",
-    backgroundRepeat: 'no-repeat',
-    'background-position-x': '5px',
-    'background-position-y': '1px',
-    'background-size': '11%',
+    padding: '0 2em',
+    height: 52,
+    [theme.breakpoints.down('md')]: {
+      height: 42,
+      padding: '0 1.5em',
+      fontSize: 15,
+    }
   },
+  buttonGridIcon: {
+    marginRight: 15,
+    '& > svg': {
+      fontSize: '30px !important'
+    }
+  }
 }));
 
 const ADD_NEWSLETTER_EMAIL = gql`
@@ -181,7 +185,7 @@ const Newsletter = () => {
     ]);
 
     return (
-      <Container className={[styles.newsletter]}>
+      <Grid container direction="column" alignItems="center" justifyContent="space-around" className={styles.newsletter}>
         <Typography variant="h2" className={[styles.cardTitle, styles.align]}>
           POUR NE RIEN RATER DE <i>OUAAA!</i>
           <br />
@@ -213,16 +217,22 @@ const Newsletter = () => {
           </div>
         )}
         {!subscribed && user && (
-          <button className={styles.buttonGrid} onClick={subscription}>
+          <Button
+            className={styles.buttonGrid}
+            classes={{ startIcon: styles.buttonGridIcon }}
+            variant="contained"
+            onClick={subscription}
+            startIcon={<TrendingFlatIcon />}
+          >
             M'abonner à la newsletter
-          </button>
+          </Button>
         )}
         {subscribed && (
           <Typography variant="h5">
             Inscription à la newsletter bien effectuée.
           </Typography>
         )}
-      </Container>
+      </Grid>
     );
   };
 
