@@ -283,6 +283,11 @@ const Event = () => {
             croppedRotation
             position
           }
+          referents {
+            id
+            surname
+            lastname
+          }
         }
         participants {
           id
@@ -378,6 +383,19 @@ const Event = () => {
         if (element.id == user.id) {
           isContained = true;
         }
+      });
+    }
+    return isContained;
+  }
+  function containUserActorsReferent(actors) {
+    let isContained = false;
+    if (user !== null) {
+      actors.forEach((actor) => {
+        actor.referents.forEach((element) => {
+          if (element.id == user.id) {
+            isContained = true;
+          }
+        });
       });
     }
     return isContained;
@@ -873,7 +891,8 @@ const Event = () => {
                   Je ne participe plus
                 </button>
               )}
-              {!(data && containUser(data.event.participants)) && (
+              {!(data && containUser(data.event.participants)) && !(data &&  data.event.registerLink && data.event.registerLink.length>1) && (
+                
                 <button
                   className={styles.button}
                   onClick={addParticipateHandler}
@@ -881,12 +900,21 @@ const Event = () => {
                   Je participe
                 </button>
               )}
+              {!(data && containUser(data.event.participants)) && (data &&  data.event.registerLink && data.event.registerLink.length>1) && (
+                <a href={data && data.event.registerLink} target="blank"
+                  className={styles.button}
+                >
+                  Je participe
+                </a>
+                )}
             </div>
             {data && data.event.pictures && data.event.pictures.length > 0 && (
               <div>
                 <Typography variant="h5" className={styles.cardTitle}>
-                  PHOTOS ET VIDEOS
+                  PHOTOS
                 </Typography>
+                <div className={styles.border} />
+                <br />
               </div>
             )}
             <Slider {...settingsSliderImage}>
@@ -904,24 +932,24 @@ const Event = () => {
             {data && data.event.practicalInfo && (
               <div>
                 <div>
-                  <Typography
-                    variant="h5"
-                    className={[styles.cardTitle, styles.align]}
-                  >
-                    INFO PRATIQUES COMPLEMENTS
+                  <Typography variant="h5" className={styles.cardTitle}>
+                  INFO PRATIQUES COMPLEMENTS
                   </Typography>
+                  <div className={styles.border} />
+                  <br />
                 </div>
                 <p>{data && Parser(data.event.practicalInfo)}</p>
               </div>
             )}
+            {data && data.event.actors && data.event.actors.length > 0 && (
             <div>
-              <Typography
-                variant="h5"
-                className={[styles.cardTitle, styles.align]}
-              >
+              <Typography variant="h5" className={styles.cardTitle}>
                 LES ACTEURS PARTICIPANTS
               </Typography>
+              <div className={styles.border} />
+              <br />
             </div>
+           )}
             <Slider
               {...settingsSliderevent}
               className={[styles.articleCarroussel]}
@@ -933,7 +961,7 @@ const Event = () => {
             </Slider>
           </Container>
           <Newsletter />
-          {((data && containUser(data.event.referents)) ||
+          {((data && ( containUser(data.event.referents) || containUserActorsReferent(data.event.actors))) ||
             (user && user.role === 'admin')) && (
             <Link href={`/actorAdmin/event/${id}`}>
               <Fab className={styles.fab} aria-label="edit">

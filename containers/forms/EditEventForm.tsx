@@ -28,6 +28,7 @@ import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import useGraphQLErrorDisplay from 'hooks/useGraphQLErrorDisplay';
 import Checkbox from '@material-ui/core/Checkbox';
+import Avatar from '@material-ui/core/Avatar';
 import useCookieRedirection from 'hooks/useCookieRedirection';
 import { useSnackbar } from 'notistack';
 import GooglePlacesAutocomplete, {
@@ -35,6 +36,7 @@ import GooglePlacesAutocomplete, {
   getLatLng,
 } from 'react-google-places-autocomplete';
 import { useRouter, withRouter } from 'next/router';
+import classnames from 'classnames';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon/ListItemIcon';
@@ -75,6 +77,7 @@ import CustomRadioGroup from 'components/form/CustomRadioGroup';
 import CustomRadioGroupForm from 'components/form/CustomRadioGroupForm';
 import ImagesDisplay from 'components/ImageCropper/ImagesDisplay';
 import ImagesDropZone from 'components/ImageCropper/ImagesDropZone';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import IconButton from '@material-ui/core/IconButton';
 import { FlashOnTwoTone } from '@material-ui/icons';
 import RadioGroupForContext from './RadioGroupForContext';
@@ -200,18 +203,21 @@ const EDIT_EVENT = gql`
     $eventId: Int!
     $pictures: [InputPictureType]
     $description: String!
+    $practicalInfo: String
   ) {
     editEvent(
       eventInfos: $eventInfos
       eventId: $eventId
       pictures: $pictures
       description: $description
+      practicalInfo: $practicalInfo
     ) {
       id
       label
       shortDescription
       facebookUrl
       description
+      practicalInfo
       startedAt
       endedAt
       published
@@ -265,10 +271,13 @@ const EDIT_EVENT = gql`
           label
         }
       }
+      actors{
+        id
+        name
+      }
     }
   }
 `;
-
 
 const GET_EVENT = gql`
   query event($id: String!) {
@@ -331,6 +340,10 @@ const GET_EVENT = gql`
           code
           label
         }
+      }
+      actors{
+        id
+        name
       }
     }
   }
@@ -445,6 +458,31 @@ const FormItemTextareaAutosize = (props: FormItemProps) => {
       error={errorBool}
       helperText={errorBool ? errorText : ''}
     />
+  );
+};
+
+type TitleWithTooltipProps = {
+  title: string | any;
+  tooltipTitle?: string;
+  collection?: boolean;
+}
+
+const TitleWithTooltip = (props: TitleWithTooltipProps) => {
+  const { title, tooltipTitle, collection = false } = props;
+  const styles = useStyles();
+
+  return (
+    <Grid container justifyContent="center" alignItems="center" className={styles.titleContainer}>
+      <Typography color="primary" className={classnames(collection ? styles.collectionLabel : styles.label, styles.labelDefault)}>
+        {title}
+      </Typography>
+      {
+        !!tooltipTitle &&
+        <Tooltip title={tooltipTitle} color="primary">
+          <InfoIcon />
+        </Tooltip>
+      }
+    </Grid>
   );
 };
 
@@ -644,6 +682,8 @@ const EditEventForm = (props) => {
       });
   }
   const router = useRouter();
+  const { data: dataActors } = useQuery(GET_ACTORS, {});
+
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const [
     deleteEvent,
@@ -699,9 +739,7 @@ const EditEventForm = (props) => {
     const [dateChange, setDateChange] = useState(false);
     const [showOtherActors, setShowOtherActors] = useState(false);
     const [showRegisterLink, setShowRegisterLink] = useState(false);
-
-    const [actors] = useState([]);
-    const [actorsId] = useState([]);
+    ;
     const [
       selectedStartDate,
       setSelectedStartDate,
@@ -784,6 +822,9 @@ const EditEventForm = (props) => {
     }, [data]);
 
     const [firstRender, setFirstRender] = useState(true);
+    const [showAddActor, setShowAddActor] = useState(false);
+    const [openAddActorlist, setOpenAddActorlist] = useState(false);
+
     const initFormValues = () => {
       formValues.label = '';
       formValues.facebookUrl = '';
@@ -807,6 +848,7 @@ const EditEventForm = (props) => {
       formValues.lat = eventData.event.lat;
       formValues.lng = eventData.event.lng;
       formValues.registerLink = eventData.event.registerLink;
+      formValues.actors = eventData.event.actors;
       setShowRegisterLink(formValues.registerLink !== undefined && formValues.registerLink !== '');
 
       setAddress(eventData.event.address);
@@ -828,12 +870,24 @@ const EditEventForm = (props) => {
       updateFormValues();
       setFirstRender(false);
     }
+    const handleClickAddActor = useCallback(() => {
+      setShowAddActor(!showAddActor);
+    }, [showAddActor]);
 
-    const {
-      data: actorsData,
-      loading: actorsLoading,
-      error: actorsError,
-    } = useQuery(GET_ACTORS);
+    const handleClickDeleteActor = useCallback(actor => {
+      // @ts-ignore
+      let currentActors = [...formValues.actors];
+      // @ts-ignore
+      currentActors = currentActors.filter(item => item.id !== actor.id);
+      formChangeHandler({
+        target: {
+          // @ts-ignore
+          value: currentActors,
+          name: 'actors'
+        }
+      })
+    }, [formValues]);
+
 
     const [
       setImagesLogoList,
@@ -841,6 +895,24 @@ const EditEventForm = (props) => {
       resultLogo,
       imagesLogoListState,
     ] = useImageReader();
+
+    const inputChangeHandler = useCallback(event => {
+      if (event.target.value) {
+        if (event.target.value.length < 3) {
+          if (event.target.name === 'actors') {
+            setOpenAddActorlist(false);
+          } else {
+            setShowOtherContactList(false);
+          }
+        } else {
+          if (event.target.name === 'actors') {
+            setOpenAddActorlist(true);
+          } else {
+            setShowOtherContactList(true);
+          }
+        }
+      }
+    }, []);
 
     const onDropLogoHandler = useCallback(
       (files) => {
@@ -852,6 +924,19 @@ const EditEventForm = (props) => {
     const autocompleteHandler = (event, value) => {
       formValues.contactId = value.id;
     };
+
+    const handleChangeActor = useCallback((event, value) => {
+      if (value) {
+        // @ts-ignore
+        let currentActors: string[] = formValues.actors || [];
+        currentActors.push(value);
+        // @ts-ignore
+        formValues.actors = currentActors;
+      }
+      setShowAddActor(false);
+      setOpenAddActorlist(false);
+    }, [formValues]);
+
     const {
       objectsList: objectsListLogo,
       moveObject: moveObjectLogo,
@@ -1019,6 +1104,8 @@ const EditEventForm = (props) => {
             address,
             postCode: formValues.postCode,
             city,
+             // @ts-ignore
+             actors: formValues.actors.map(item => item.id)
           },
           eventId: parseInt(eventData.event.id),
           logoPictures,
@@ -1406,50 +1493,75 @@ const EditEventForm = (props) => {
           })
         }
 
-        <Typography className={styles.collectionLabel}>
-          Acteur(s) associé(s) à l’action
-          {' '}
-          <Tooltip title="Permet d’ajouter d’autres acteurs pour une action co-réalisée">
-            <InfoIcon />
-          </Tooltip>
-        </Typography>
-        <br />
+
+
+        <TitleWithTooltip
+          title="Acteur(s) associé(s) à l’action"
+          tooltipTitle="Permet d’ajouter d’autres acteurs pour une action co-réalisée"
+        />
 
         <Grid container>
-          {actors && actors.map((actor) => (
-            <div>
-              {/* @ts-ignore */}
-              <Tooltip title={actor.name}>
-                {/* @ts-ignore */}
-                <Avatar alt={actor.name} src={getLogo(actor.pictures)} />
-              </Tooltip>
-            </div>
-          ))}
-          <IconButton key="close" aria-label="Close" color="inherit" onClick={handleAddActor}>
-            <AddCircleOutline />
-          </IconButton>
+          <List className={styles.actorList}>
+            {
+              // @ts-ignore
+              (formValues?.actors || []).map(actor => {
+                return (
+                  <ListItem key={actor.id}>
+                    <ListItemIcon>
+                      <Avatar>
+                        {actor.name.split(' ').length > 1 && (
+                          <>{actor.name.split(' ')[0][0]}{actor.name.split(' ')[1][0]}</>
+                        )}
+                        {actor.name.split(' ').length <= 1 && (
+                          <>{actor.name}</>
+                        )}
+                      </Avatar>
+                    </ListItemIcon>
+                    <ListItemText
+                      id={"actor-list-" + actor.id}
+                      primary={`${actor.name}`}
+                    />
+                    <ListItemSecondaryAction>
+                      <IconButton onClick={() => handleClickDeleteActor(actor)}>
+                        <DeleteIcon />
+                      </IconButton>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                )
+              })
+            }
+          </List>
         </Grid>
 
-        {showOtherActors ? (
-          <Autocomplete
-            id="combo-box-demo"
-            options={actorsData.actors}
-            // @ts-ignore
-            getOptionLabel={(option) => `${option.name} `}
-            onChange={autocompleteHandler}
-            style={{ width: 300 }}
-            // eslint-disable-next-line react/jsx-props-no-spreading
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="Acteurs"
-                variant="outlined"
-              />
-            )}
-          />
-        ) : (
-          ''
-        )}
+        <Grid container direction="row">
+          <IconButton key="close" aria-label="Close" color="inherit" onClick={handleClickAddActor}>
+            <AddCircleOutline />
+          </IconButton>
+
+          {showAddActor && (
+            <Autocomplete
+              id="combo-box-add-actor"
+              options={dataActors.actors}
+              // @ts-ignore
+              getOptionLabel={(option) => `${option.name}`}
+              onChange={handleChangeActor}
+              open={openAddActorlist}
+              style={{ width: 300 }}
+              // @ts-ignore
+              onInput={inputChangeHandler}
+              // eslint-disable-next-line react/jsx-props-no-spreading
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Acteurs"
+                  variant="outlined"
+                  name="actors"
+                />
+              )}
+            />
+          )}
+        </Grid>
+
         <br />
 
         <Typography variant="body1" color="primary" className={styles.label}>
