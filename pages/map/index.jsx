@@ -22,6 +22,9 @@ import Actors from 'containers/layouts/mapPage/actors';
 import Filters from '../../components/filters';
 import Parser from 'html-react-parser';
 
+import ViewListIcon from '@material-ui/icons/ViewList';
+import RoomIcon from '@material-ui/icons/Room';
+
 if (typeof window !== 'undefined') {
   var L = require('leaflet');
   var Map = require('react-leaflet').Map;
@@ -33,8 +36,42 @@ if (typeof window !== 'undefined') {
 }
 
 const useStyles = makeStyles((theme) => ({
+  // layout: {
+  //   backgroundColor: '#F6F6F6',
+  // },
   layout: {
+    display: 'flex',
+    justifyContent: 'center',
     backgroundColor: '#F6F6F6',
+    padding: '0',
+    margin: '0',
+    width: '100%',
+    maxWidth: 'none',
+    position: 'relative',
+    overflow: 'hidden',
+    height: '88vh',
+    flexDirection: 'row',
+    flexWrap: 'nowrap',
+    alignItems: 'start',
+    [theme.breakpoints.down('sm')]: {
+      flexDirection: 'column',
+      alignItems: 'center',
+      height: 'auto'
+    }
+  },
+  listButton: {
+    position: 'absolute',
+    bottom: 10,
+    zIndex: 10000,
+    color: '#fff',
+    backgroundColor: '#2C367E',
+    '&:hover': {
+      color: '#2C367E',
+      backgroundColor: '#fff',
+    }
+  },
+  listButtonIcon: {
+    marginRight: 10
   },
   leftTitle: {
     fontWeight: theme.typography.fontWeightBold,
@@ -199,16 +236,6 @@ const useStyles = makeStyles((theme) => ({
   },
   favoriteIcon: {
     color: '#AD2740',
-  },
-  listButton: {
-    marginBottom: '-4em',
-    zIndex: '10000',
-    color: '#fff',
-    backgroundColor: '#2C367E',
-    '&:hover': {
-      color: '#2C367E',
-      backgroundColor: '#fff',
-    },
   },
   shortDescription: {
     wordBreak: 'break-all',
@@ -424,17 +451,21 @@ const carto = () => {
     return (
       <AppLayout>
         <Grid container className={styles.layout}>
-          <Grid container justify="center">
-            <Fab
-              variant="extended"
-              size="medium"
-              aria-label="add"
-              className={styles.listButton}
-              onClick={switchMode}
-            >
-              {listMode && <span>Liste</span>} {!listMode && <span>Carte</span>}
-            </Fab>
-          </Grid>
+          <Fab
+            variant="extended"
+            size="large"
+            aria-label="add"
+            className={styles.listButton}
+            onClick={switchMode}
+          >
+            {
+              !listMode ?
+                <RoomIcon className={styles.listButtonIcon} /> :
+                <ViewListIcon className={styles.listButtonIcon} />
+            }
+            <span>{!listMode ? 'Voir la Carte' : 'Voir la Liste'}</span>
+          </Fab>
+
           <Filters
             parentCategoryChange={parentCategoryChange}
             categoryChange={categoryChange}
