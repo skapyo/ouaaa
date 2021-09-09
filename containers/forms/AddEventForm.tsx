@@ -25,10 +25,14 @@ import GooglePlacesAutocomplete, {
   geocodeByAddress,
   getLatLng,
 } from 'react-google-places-autocomplete';
+import classnames from 'classnames';
 import { useRouter } from 'next/router';
 import List from '@material-ui/core/List';
+import DeleteIcon from '@material-ui/icons/Delete';
 import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText/ListItemText';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import DateFnsUtils from '@date-io/date-fns';
 import Tooltip from '@material-ui/core/Tooltip';
 import InfoIcon from '@material-ui/icons/Info';
@@ -216,9 +220,14 @@ const GET_COLLECTIONS = gql`
       entries {
         id
         label
+        icon
+        color
+        description
         subEntries {
           id
           label
+          icon
+          description
         }
       }
     }
@@ -316,6 +325,25 @@ const FormItemTextareaAutosize = (props: FormItemProps) => {
   );
 };
 
+const TitleWithTooltip = (props: TitleWithTooltipProps) => {
+  const { title, tooltipTitle, collection = false } = props;
+  const styles = useStyles();
+
+  return (
+    <Grid container justifyContent="center" alignItems="center" className={styles.titleContainer}>
+      <Typography color="primary" className={classnames(collection ? styles.collectionLabel : styles.label, styles.labelDefault)}>
+        {title}
+      </Typography>
+      {
+        !!tooltipTitle &&
+        <Tooltip title={tooltipTitle} color="primary">
+          <InfoIcon />
+        </Tooltip>
+      }
+    </Grid>
+  );
+};
+
 const AddEventForm = ({ actorId }) => {
   const validationRules: ValidationRules = {
     label: {
@@ -348,11 +376,8 @@ const AddEventForm = ({ actorId }) => {
     // const { formChangeHandler, formValues, validationResult } = props;
     const [addEvent, { data, error }] = useMutation(ADDEVENT);
 
-    const {
-      data: actorsData,
-      loading: actorsLoading,
-      error: actorsError,
-    } = useQuery(GET_ACTORS);
+   
+    const { data: dataActors } = useQuery(GET_ACTORS, {});
 
     useGraphQLErrorDisplay(error);
     const styles = useStyles();
@@ -366,7 +391,7 @@ const AddEventForm = ({ actorId }) => {
     const [validated, setValidated] = useState(false);
     const [showOtherActors, setShowOtherActors] = useState(false);
     const [showRegisterLink, setShowRegisterLink] = useState(false);
-
+    const [showAddActor, setShowAddActor] = useState(false);
     const [actors] = useState([]);
     const [actorsId] = useState([]);
     const {
@@ -376,6 +401,23 @@ const AddEventForm = ({ actorId }) => {
     } = useQuery(GET_ACTOR, {
       variables: { id: actorId },
     });
+    const handleClickAddActor = useCallback(() => {
+      setShowAddActor(!showAddActor);
+    }, [showAddActor]);
+
+    const handleClickDeleteActor = useCallback(actor => {
+      // @ts-ignore
+      let currentActors = [...formValues.actors];
+      // @ts-ignore
+      currentActors = currentActors.filter(item => item.id !== actor.id);
+      formChangeHandler({
+        target: {
+          // @ts-ignore
+          value: currentActors,
+          name: 'actors'
+        }
+      })
+    }, [formValues]);
 
     const [
       setImagesLogoList,
@@ -383,6 +425,24 @@ const AddEventForm = ({ actorId }) => {
       resultLogo,
       imagesLogoListState,
     ] = useImageReader();
+
+    const inputChangeHandler = useCallback(event => {
+      if (event.target.value) {
+        if (event.target.value.length < 3) {
+          if (event.target.name === 'actors') {
+            setOpenAddActorlist(false);
+          } else {
+            setShowOtherContactList(false);
+          }
+        } else {
+          if (event.target.name === 'actors') {
+            setOpenAddActorlist(true);
+          } else {
+            setShowOtherContactList(true);
+          }
+        }
+      }
+    }, []);
 
     const onDropLogoHandler = useCallback(
       (files) => {
@@ -409,6 +469,17 @@ const AddEventForm = ({ actorId }) => {
       // @ts-ignore
     }, resultLogo);
 
+    useEffect(() => {
+      if (actorData && formValues) {
+        formValues.actors=[];
+        formValues.actors.push(actorData.actor);
+      }
+      // @ts-ignore
+    }, [formValues,actorData]);
+
+
+
+    
     const [
       setImagesMainList,
       loadingMain,
@@ -514,7 +585,8 @@ const AddEventForm = ({ actorId }) => {
     const [descriptionEditor, setDescriptionEditor] = useState();
     const [practicalInfoEditor, setPracticalInfoEditor] = useState();
 
-    
+     const [openAddActorlist, setOpenAddActorlist] = useState(false);
+
     const getObjectLongName = (results, name) => {
       if (!results || !results[0] || !results[0].address_components) {
         return '';
@@ -647,6 +719,7 @@ const AddEventForm = ({ actorId }) => {
           categoriesArray.push(parseInt(key));
         }
       });
+      debugger;
       addEvent({
         variables: {
           eventInfos: {
@@ -664,7 +737,8 @@ const AddEventForm = ({ actorId }) => {
             postCode: formValues.postCode,
             city,
             registerLink: formValues.registerLink,
-            actors: formValues.actors,
+            // @ts-ignore
+            actors: formValues.actors.map(item => item.id)
           },
           actorId: parseInt(actorId),
           userId: parseInt(user.id),
@@ -691,9 +765,19 @@ const AddEventForm = ({ actorId }) => {
       formChangeHandler(eventModified);
       setShowOtherActors(false);
     };
-    const handleAddActor = () => {
-      setShowOtherActors(true);
-    };
+
+
+     const handleChangeActor = useCallback((event, value) => {
+      if (value) {
+        // @ts-ignore
+        let currentActors: string[] = formValues.actors || [];
+        currentActors.push(value);
+        // @ts-ignore
+        formValues.actors = currentActors;
+      }
+      setShowAddActor(false);
+      setOpenAddActorlist(false);
+    }, [formValues]);
 
     return (
       <Container component="main" maxWidth="sm" className={styles.container}>
@@ -774,6 +858,8 @@ const AddEventForm = ({ actorId }) => {
                                         nodeId={subEntry.id}
                                         labelText={subEntry.label}
                                         categoryChange={formChangeHandler}
+                                        icon={subEntry.icon}
+                                        color={entry.color}
                                         checked={
                                           formValues
                                           && formValues.entriesWithInformation
@@ -1056,56 +1142,73 @@ const AddEventForm = ({ actorId }) => {
           })
         }
         <br />
-        <Typography className={styles.collectionLabel}>
-          Acteur(s) associé(s) à l’action
-          {' '}
-          <Tooltip title="Permet d’ajouter d’autres acteurs pour une action co-réalisée">
-            <InfoIcon />
-          </Tooltip>
-        </Typography>
-        <br />
+        <TitleWithTooltip
+          title="Acteur(s) associé(s) à l’action"
+          tooltipTitle="Permet d’ajouter d’autres acteurs pour une action co-réalisée"
+        />
 
         <Grid container>
-          { actorData && (
-          <Tooltip title={actorData.actor.name}>
-            <Avatar alt={actorData.actor.name} src={getLogo(actorData.actor.pictures)} />
-          </Tooltip>
-          )}
-          { actors && actors.map((actor) => (
-            <div>
-              {/* @ts-ignore */}
-              <Tooltip title={actor.name}>
-                {/* @ts-ignore */}
-                <Avatar alt={actor.name} src={getLogo(actor.pictures)} />
-              </Tooltip>
-            </div>
-          ))}
-          <IconButton key="close" aria-label="Close" color="inherit" onClick={handleAddActor}>
-            <AddCircleOutline />
-          </IconButton>
+          <List className={styles.actorList}>
+            {
+              // @ts-ignore
+              (formValues?.actors || []).map(actor => {
+                return (
+                  <ListItem key={actor.id}>
+                    <ListItemIcon>
+                      <Avatar>
+                        {actor && actor.name.split(' ').length > 1 && (
+                          <>{actor.name.split(' ')[0][0]}{actor.name.split(' ')[1][0]}</>
+                        )}
+                        {actor && actor.name.split(' ').length <= 1 && (
+                          <>{actor.name}</>
+                        )}
+                        {actor.name}
+                      </Avatar>
+                    </ListItemIcon>
+                    <ListItemText
+                      id={"actor-list-" + actor.id}
+                      primary={`${actor.name}`}
+                    />
+                    <ListItemSecondaryAction>
+                      <IconButton onClick={() => handleClickDeleteActor(actor)}>
+                        <DeleteIcon />
+                      </IconButton>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                )
+              })
+            }
+          </List>
         </Grid>
 
-        {showOtherActors ? (
-          <Autocomplete
-            id="combo-box-demo"
-            options={actorsData.actors}
-                // @ts-ignore
-            getOptionLabel={(option) => `${option.name} `}
-            onChange={autocompleteHandler}
-            style={{ width: 300 }}
-                // eslint-disable-next-line react/jsx-props-no-spreading
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="Acteurs"
-                variant="outlined"
-              />
-            )}
-          />
-        ) : (
-          ''
-        )}
-        <br />
+        <Grid container direction="row">
+          <IconButton key="close" aria-label="Close" color="inherit" onClick={handleClickAddActor}>
+            <AddCircleOutline />
+          </IconButton>
+
+          {showAddActor && (
+            <Autocomplete
+              id="combo-box-add-actor"
+              options={dataActors.actors}
+              // @ts-ignore
+              getOptionLabel={(option) => `${option.name}`}
+              onChange={handleChangeActor}
+              open={openAddActorlist}
+              style={{ width: 300 }}
+              // @ts-ignore
+              onInput={inputChangeHandler}
+              // eslint-disable-next-line react/jsx-props-no-spreading
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Acteurs"
+                  variant="outlined"
+                  name="actors"
+                />
+              )}
+            />
+          )}
+        </Grid>
 
 
         <Typography variant="body1" color="primary" className={styles.label}>
@@ -1164,7 +1267,7 @@ const AddEventForm = ({ actorId }) => {
               value="withLink"
               control={<Radio />}
               className={styles.justify}
-              label="'Je participe à l’action'  envoie vers un Lien externe de l'événement valable si vous avez un formulaire plus précis que les fichier <i>OUAAA!</i> (ex : stage, formation) ou billeterie en ligne"
+              label="'Je participe à l’action'  envoie vers un Lien externe de l'événement valable si vous avez un formulaire plus précis que les fichier ouaaa (ex : stage, formation) ou billeterie en ligne"
               onChange={() => setShowRegisterLink(true)}
             />
             {showRegisterLink && (
