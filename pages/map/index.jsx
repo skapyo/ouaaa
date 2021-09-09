@@ -56,7 +56,8 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('sm')]: {
       flexDirection: 'column',
       alignItems: 'center',
-      height: 'auto'
+      height: 'auto',
+      width: '100%'
     }
   },
   listButton: {
@@ -428,7 +429,7 @@ const carto = () => {
           />
 
           {listMode && (
-            <Grid item sm={10} xs={12}>
+            <Grid item sm={10} xs={12} style={{ width: '100%' }}>
               <Map ref={mapRef} center={position} zoom={11}>
                 <TileLayer
                   attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'

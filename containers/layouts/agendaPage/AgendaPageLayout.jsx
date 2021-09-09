@@ -247,7 +247,7 @@ const AgendaPageLayout = () => {
         )}
 
         {!isListMode && (
-          <Grid item xs={10}>
+          <Grid item xs={10} style={{ width: '100%' }}>
             <Map ref={mapRef} center={position} zoom={11} className={classes.mapContainer}>
               <TileLayer
                 attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
