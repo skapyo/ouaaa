@@ -40,6 +40,7 @@ const useStyles = makeStyles((theme, props) => ({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    position: 'relative'
   },
   opacity: (props) => ({
     width: '40px',
@@ -115,10 +116,10 @@ const ActorCard = ({ actor }) => {
                   src={
                     actor.pictures.length >= 1
                       ? getImageUrl(
-                          actor.pictures.sort(
-                            (a, b) => (a.logo ? -1 : 1) - (b.logo ? -1 : 1),
-                          )[0].croppedPicturePath,
-                        )
+                        actor.pictures.sort(
+                          (a, b) => (a.logo ? -1 : 1) - (b.logo ? -1 : 1),
+                        )[0].croppedPicturePath,
+                      )
                       : ''
                   }
                 />

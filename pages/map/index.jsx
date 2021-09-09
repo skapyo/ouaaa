@@ -5,15 +5,6 @@ import gql from 'graphql-tag';
 import { useQuery } from '@apollo/client';
 import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded';
 import FavoriteRoundedIcon from '@material-ui/icons/FavoriteRounded';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText/ListItemText';
-import Collapse from '@material-ui/core/Collapse/Collapse';
-import Checkbox from '@material-ui/core/Checkbox/Checkbox';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
-import Link from '../../components/Link';
 import { withApollo } from '../../hoc/withApollo';
 import AppLayout from '../../containers/layouts/AppLayout';
 import { getImageUrl } from '../../utils/utils';
@@ -36,9 +27,6 @@ if (typeof window !== 'undefined') {
 }
 
 const useStyles = makeStyles((theme) => ({
-  // layout: {
-  //   backgroundColor: '#F6F6F6',
-  // },
   layout: {
     display: 'flex',
     justifyContent: 'center',
@@ -52,7 +40,6 @@ const useStyles = makeStyles((theme) => ({
     height: '88vh',
     flexDirection: 'row',
     flexWrap: 'nowrap',
-    alignItems: 'start',
     [theme.breakpoints.down('sm')]: {
       flexDirection: 'column',
       alignItems: 'center',
@@ -73,6 +60,9 @@ const useStyles = makeStyles((theme) => ({
   },
   listButtonIcon: {
     marginRight: 10
+  },
+  gridList: {
+    overflow: 'hidden auto'
   },
   leftTitle: {
     fontWeight: theme.typography.fontWeightBold,
@@ -242,6 +232,12 @@ const useStyles = makeStyles((theme) => ({
     wordBreak: 'break-all',
     width: '100%',
   },
+  mapContainer: {
+    height: '88vh',
+    [theme.breakpoints.down('sm')]: {
+      height: '80vh'
+    }
+  }
 }));
 
 const categories = {
@@ -430,7 +426,7 @@ const carto = () => {
 
           {listMode && (
             <Grid item sm={10} xs={12} style={{ width: '100%' }}>
-              <Map ref={mapRef} center={position} zoom={11}>
+              <Map ref={mapRef} center={position} zoom={11} className={styles.mapContainer}>
                 <TileLayer
                   attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                   url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -622,7 +618,7 @@ const carto = () => {
             </Grid>
           )}
           {!listMode && (
-            <Grid item sm={10} xs={12} justify="center">
+            <Grid item sm={10} xs={12} justify="center" className={styles.gridList}>
               {typeof data !== 'undefined' && <Actors data={data} />}
             </Grid>
           )}

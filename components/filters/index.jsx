@@ -7,7 +7,6 @@ import {
   ExpansionPanel,
   ExpansionPanelSummary,
   ExpansionPanelDetails,
-  useMediaQuery,
   Button
 } from '@material-ui/core';
 
@@ -26,19 +25,21 @@ const useStyles = makeStyles(theme => ({
     maxWidth: 400,
     overflowY: 'auto',
     overflowX: 'hidden',
-    justifyContent: 'center',
+    [theme.breakpoints.down('sm')]: {
+      maxWidth: 'none'
+    },
     '& > *': {
       width: '100%',
       backgroundColor: 'white'
     },
     '& > *:not(:first-child)': {
       [theme.breakpoints.down('sm')]: {
-        display: props.openFilters ? 'block' : 'none'
-      }
-    },
-    '& > *:nth-child(2),& > *:nth-child(3)': {
-      [theme.breakpoints.down('sm')]: {
         display: props.openFilters ? 'flex' : 'none'
+      },
+      '&.MuiPaper-root': {
+        [theme.breakpoints.down('sm')]: {
+          display: props.openFilters ? 'block' : 'none'
+        }
       }
     }
   }),
@@ -48,7 +49,8 @@ const useStyles = makeStyles(theme => ({
       display: 'flex'
     },
     '& > *': {
-      flex: 1
+      flex: 1,
+      borderRadius: 0
     }
   },
   collectionLabel: {
@@ -60,6 +62,9 @@ const useStyles = makeStyles(theme => ({
       boxShadow: 'initial!important',
     },
     width: '100%',
+    '& .MuiInputBase-root': {
+      borderRadius: 0
+    }
   },
   listItem: {
     paddingTop: '0px',
@@ -258,7 +263,7 @@ function Filters(props) {
       className={classes.root}
     >
       <Grid container justifyContent="center" className={classes.filterButtonContainer}>
-        <Button variant="contained" onClick={() => setOpenFilters(!openFilters)}>Filters</Button>
+        <Button variant="contained" onClick={() => setOpenFilters(!openFilters)}>Filtres</Button>
       </Grid>
 
       {
