@@ -59,6 +59,11 @@ const useStyles = makeStyles(theme => ({
     '&:hover': {
       color: '#2C367E',
       backgroundColor: '#fff',
+    },
+    [theme.breakpoints.down('sm')]: {
+      position: 'initial',
+      marginTop: 25,
+      width: '75%'
     }
   },
   listButtonIcon: {
@@ -222,6 +227,11 @@ const AgendaPageLayout = () => {
   return (
     <Container className={classes.main}>
       <Container className={classes.layout}>
+        <Filters
+          isEventList
+          onFiltersChange={handleFiltersChange}
+        />
+
         <Fab
           variant="extended"
           size="large"
@@ -237,17 +247,12 @@ const AgendaPageLayout = () => {
           <span>{isListMode ? 'Voir la Carte' : 'Voir la Liste'}</span>
         </Fab>
 
-        <Filters
-          isEventList
-          onFiltersChange={handleFiltersChange}
-        />
-
         {isListMode && (
           <Events data={eventData} loading={loadingEvents} />
         )}
 
         {!isListMode && (
-          <Grid item xs={10} style={{ width: '100%' }}>
+          <Grid style={{ width: '100%' }}>
             <Map ref={mapRef} center={position} zoom={11} className={classes.mapContainer}>
               <TileLayer
                 attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
