@@ -78,6 +78,7 @@ function StyledTreeItem(props) {
     labelText,
     color,
     bgColor,
+    categoryChange,
     handleChildCheckboxChange,
     hideCheckBox,
     checked,
@@ -124,6 +125,9 @@ function StyledTreeItem(props) {
         eventEntry.target.entryId = other.nodeId;
         eventEntry.target.topSEO = isTopSEO;
       }
+      if (typeof categoryChange !== 'undefined') {
+        categoryChange(eventEntry);
+      }
       if (typeof context.handleChildCheckboxChange !== 'undefined') {
         context.handleChildCheckboxChange(checkStatus, index);
       }
@@ -141,6 +145,7 @@ function StyledTreeItem(props) {
     const eventEntry = event;
     eventEntry.target.entryId = other.nodeId;
     eventEntry.target.linkDescription = event.target.value;
+    categoryChange(event);
   };
 
   return (
@@ -216,6 +221,7 @@ StyledTreeItem.propTypes = {
   color: PropTypes.string,
   checked: PropTypes.boolean,
   labelText: PropTypes.string.isRequired,
+  categoryChange: PropTypes.func,
   handleChildCheckboxChange: PropTypes.func,
   hideCheckBox: PropTypes.boolean,
   isParent: PropTypes.boolean,

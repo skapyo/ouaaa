@@ -1104,8 +1104,8 @@ const EditEventForm = (props) => {
             address,
             postCode: formValues.postCode,
             city,
-             // @ts-ignore
-             actors: formValues.actors.map(item => item.id)
+            // @ts-ignore
+            actors: formValues.actors.map(item => item.id)
           },
           eventId: parseInt(eventData.event.id),
           logoPictures,
@@ -1192,6 +1192,8 @@ const EditEventForm = (props) => {
                                 labelText={entry.label}
                                 hideCheckBox
                                 isForm
+                                isParent
+                                hasSubEntries={entry.subEntries && entry.subEntries.length > 0}
                                 className={styles.treeParent}
                               >
                                 {entry.subEntries
@@ -1244,6 +1246,8 @@ const EditEventForm = (props) => {
                                     labelText={entry.label}
                                     hideCheckBox
                                     isForm
+                                    hasSubEntries={entry.subEntries && entry.subEntries.length > 0}
+                                    isParent
                                     className={styles.treeParent}
                                   >
 

@@ -1228,6 +1228,8 @@ const AddActorForm = () => {
                                 icon={entry.icon}
                                 isForm
                                 bgColor="grey"
+                                isParent
+                                hasSubEntries={entry.subEntries && entry.subEntries.length > 0}
                                 className={classes.treeParent}
                               >
                                 {entry.subEntries

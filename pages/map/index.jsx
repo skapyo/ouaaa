@@ -263,6 +263,7 @@ const carto = () => {
   const [favorite, setFavorite] = useState(false);
   const [listMode, setListMode] = useState(true);
   const [postCode, setPostCode] = useState(null);
+  const [filters, setFilters] = useState(null);
   const isFirstRef = useRef(true);
 
   useEffect(() => {
@@ -357,59 +358,14 @@ const carto = () => {
       filterChange();
     }, [categoriesChecked, otherCategoriesChecked, postCode]);
 
-    const parentCategoryChange = useCallback((arr) => {
-      const tempCategories = [...categoriesChecked];
-      const tempCategoriesChecked = [];
-      const tempCategoriesUnchecked = [];
-      arr.forEach((checkbox) => {
-        const { checked, id } = checkbox;
-        if (checked) {
-          tempCategoriesChecked.push(id);
-        }
-        if (!checked) {
-          tempCategoriesUnchecked.push(id);
-        }
-      });
 
-      // delete the unchecked boxes
-      tempCategoriesUnchecked.forEach((value) => {
-        const currentIndex = tempCategories.indexOf(value);
-        if (currentIndex !== -1) {
-          tempCategories.splice(currentIndex, 1);
-        }
-      });
 
-      // add the recent checkedboxes
-      const newCategoriesChecked = [
-        ...new Set([...tempCategories, ...tempCategoriesChecked]),
-      ];
+    const handleFiltersChange = useCallback(newFilters => {
+      setFilters(newFilters);
+      refetch({ ...newFilters });
+    }, [refetch]);
 
-      setCategoriesChecked(newCategoriesChecked);
-    });
 
-    const categoryChange = useCallback((e) => {
-      const tempCategories = [...categoriesChecked];
-
-      const categoryId = e.target.value;
-
-      const currentIndex = tempCategories.indexOf(categoryId);
-
-      if (currentIndex === -1) {
-        tempCategories.push(categoryId);
-      } else {
-        tempCategories.splice(currentIndex, 1);
-      }
-
-      setCategoriesChecked(tempCategories);
-    });
-
-    const postCodeChange = (e) => {
-      if (e.target.value == '') {
-        setPostCode(null);
-      } else {
-        setPostCode(e.target.value);
-      }
-    };
 
     function splitWord(word, number) {
       if (word != null) {
@@ -467,10 +423,7 @@ const carto = () => {
           </Fab>
 
           <Filters
-            parentCategoryChange={parentCategoryChange}
-            categoryChange={categoryChange}
-            otherCategoryChange={otherCategoryChange}
-            postCodeChange={postCodeChange}
+            onFiltersChange={handleFiltersChange}
             isActorList
           />
 

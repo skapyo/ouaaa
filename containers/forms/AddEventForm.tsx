@@ -376,7 +376,7 @@ const AddEventForm = ({ actorId }) => {
     // const { formChangeHandler, formValues, validationResult } = props;
     const [addEvent, { data, error }] = useMutation(ADDEVENT);
 
-   
+
     const { data: dataActors } = useQuery(GET_ACTORS, {});
 
     useGraphQLErrorDisplay(error);
@@ -471,15 +471,15 @@ const AddEventForm = ({ actorId }) => {
 
     useEffect(() => {
       if (actorData && formValues) {
-        formValues.actors=[];
+        formValues.actors = [];
         formValues.actors.push(actorData.actor);
       }
       // @ts-ignore
-    }, [formValues,actorData]);
+    }, [formValues, actorData]);
 
 
 
-    
+
     const [
       setImagesMainList,
       loadingMain,
@@ -585,7 +585,7 @@ const AddEventForm = ({ actorId }) => {
     const [descriptionEditor, setDescriptionEditor] = useState();
     const [practicalInfoEditor, setPracticalInfoEditor] = useState();
 
-     const [openAddActorlist, setOpenAddActorlist] = useState(false);
+    const [openAddActorlist, setOpenAddActorlist] = useState(false);
 
     const getObjectLongName = (results, name) => {
       if (!results || !results[0] || !results[0].address_components) {
@@ -719,7 +719,6 @@ const AddEventForm = ({ actorId }) => {
           categoriesArray.push(parseInt(key));
         }
       });
-      debugger;
       addEvent({
         variables: {
           eventInfos: {
@@ -755,7 +754,7 @@ const AddEventForm = ({ actorId }) => {
 
     const autocompleteHandler = (event, valueActor) => {
       let eventModified = event;
-      
+
       /* @ts-ignore */
       actors.push(valueActor);
       /* @ts-ignore */
@@ -767,7 +766,7 @@ const AddEventForm = ({ actorId }) => {
     };
 
 
-     const handleChangeActor = useCallback((event, value) => {
+    const handleChangeActor = useCallback((event, value) => {
       if (value) {
         // @ts-ignore
         let currentActors: string[] = formValues.actors || [];
@@ -847,6 +846,8 @@ const AddEventForm = ({ actorId }) => {
                                 labelText={entry.label}
                                 hideCheckBox
                                 isForm
+                                isParent
+                                hasSubEntries={entry.subEntries && entry.subEntries.length > 0}
                                 className={styles.treeParent}
                               >
                                 {entry.subEntries
@@ -890,31 +891,33 @@ const AddEventForm = ({ actorId }) => {
                             formChangeHandler={formChangeHandler}
                           >
                             {collection.entries
-                            && collection.entries.map((entry) => {
-                              return (
-                                // @ts-ignore
-                                <StyledTreeItem
-                                  key={entry.id}
-                                  nodeId={entry.id}
-                                  labelText={entry.label}
-                                  hideCheckBox
-                                  isForm
-                                  className={styles.treeParent}
-                                >
+                              && collection.entries.map((entry) => {
+                                return (
+                                  // @ts-ignore
+                                  <StyledTreeItem
+                                    key={entry.id}
+                                    nodeId={entry.id}
+                                    labelText={entry.label}
+                                    hideCheckBox
+                                    isForm
+                                    hasSubEntries={entry.subEntries && entry.subEntries.length > 0}
+                                    isParent
+                                    className={styles.treeParent}
+                                  >
 
-                                  {entry.subEntries
-                                          && entry.subEntries.map((entry) => {
-                                            return (
-                                              <FormControlLabel
-                                                value={entry.id}
-                                                control={<Radio />}
-                                                label={entry.label}
-                                              />
-                                            );
-                                          })}
-                                </StyledTreeItem>
-                              );
-                            })}
+                                    {entry.subEntries
+                                      && entry.subEntries.map((entry) => {
+                                        return (
+                                          <FormControlLabel
+                                            value={entry.id}
+                                            control={<Radio />}
+                                            label={entry.label}
+                                          />
+                                        );
+                                      })}
+                                  </StyledTreeItem>
+                                );
+                              })}
                           </CustomRadioGroupForm>
                         </TreeView>
                       </RadioGroupForContext>
@@ -951,7 +954,7 @@ const AddEventForm = ({ actorId }) => {
                       <CustomRadioGroup
                         formChangeHandler={formChangeHandler}
                         entries={collection.entries}
-                      
+
                       />
                     </RadioGroupForContext>
 
@@ -1304,7 +1307,7 @@ const AddEventForm = ({ actorId }) => {
             && !!validationResult?.result.shortDescription
           }
           errorText={`Maximum 90 caractères. ${formValues.shortDescription?.length - 90
-          } caractères en trop.`}
+            } caractères en trop.`}
         />
         <Typography variant="body1" color="primary" className={styles.label}>
           Description :

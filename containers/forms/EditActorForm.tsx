@@ -1078,13 +1078,13 @@ const EditActorForm = (props) => {
       formValues.volunteerDescription = actorData.actor.volunteerDescription;
       formValues.shortDescription = actorData.actor.shortDescription;
       formValues.referents = actorData.actor.referents;
-   
+
       if (formValues.postCode === '17000') {
         setEstlarochelle(true);
       } else {
         setEstlarochelle(false);
       }
-  
+
       const entries = [];
       actorData.actor.entries.forEach((actorentry) => {
         // @ts-ignore
@@ -1593,9 +1593,11 @@ const EditActorForm = (props) => {
                                 nodeId={entry.id}
                                 labelText={entry.label}
                                 description={entry.description}
-                                icon={entry.icon} 
+                                icon={entry.icon}
                                 hideCheckBox
                                 isForm
+                                isParent
+                                hasSubEntries={entry.subEntries && entry.subEntries.length > 0}
                                 className={styles.treeParent}
                               >
                                 {entry.subEntries &&
