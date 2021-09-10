@@ -55,6 +55,7 @@ function ParentContainer(props) {
         id,
         label,
         icon,
+        color: entry.color,
         description,
         checked: false,
       });
@@ -180,6 +181,7 @@ function ParentContainer(props) {
                   labelText={subEntry.label}
                   checked={subEntry.checked}
                   description={subEntry.description}
+                  color={entry.color}
                   icon={subEntry.icon}
                 />
               );
