@@ -43,7 +43,12 @@ import AddCircleOutline from '@material-ui/icons/AddCircleOutline';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import DeleteIcon from '@material-ui/icons/Delete';
-
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Dialog from '@material-ui/core/Dialog';
+import Button from '@material-ui/core/Button';
 import TextField from 'components/form/TextField';
 import CustomRadioGroup from 'components/form/CustomRadioGroup';
 import ClassicButton from 'components/buttons/ClassicButton';
@@ -293,7 +298,11 @@ const GET_COLLECTIONS = gql`
     }
   }
 `;
-
+const DELETE_ACTOR = gql`
+  mutation deleteActor($actorId: Int!) {
+    deleteActor(actorId: $actorId)
+  }
+`;
 const useStyles = makeStyles((theme) => ({
   gridContainer: {
     marginTop: theme.spacing(5),
@@ -312,7 +321,15 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(3),
     width: '100%!important',
   },
-
+  delete: {
+    background: 'none',
+    color: theme.palette.warning.main,
+    border: '1px solid',
+    borderColor: theme.palette.warning.main,
+    '&:hover': {
+      background: 'none',
+    },
+  },
   location: {
     margin: '1em 0',
     '& input': {
@@ -759,6 +776,44 @@ const EditActorForm = (props) => {
 
     // @ts-ignore
     const { CKEditor, ClassicEditor } = editorRef.current || {};
+
+    
+  const [
+    deleteActor,
+    { data: deleteData, error: deleteError, loading: deleteLoading },
+  ] = useMutation(DELETE_ACTOR);
+  const [openDeletePopup, setOpenDeletePopup] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpenDeletePopup(true);
+  };
+
+  const handleClose = () => {
+    setOpenDeletePopup(false);
+  };
+
+  const submitDeleteActor = () => {
+    deleteActor({
+      variables: {
+        acorId: parseInt(props.id),
+      },
+    });
+    setOpenDeletePopup(false);
+  };
+
+  useEffect(() => {
+    if (!deleteLoading && deleteData?.deleteActor) {
+      enqueueSnackbar('Acteur et ses événements supprimés avec succès.', {
+        preventDuplicate: true,
+      });
+      router.push('/');
+    } else if (deleteError) {
+      enqueueSnackbar("La suppression de l'événement a échoué.", {
+        preventDuplicate: true,
+      });
+    }
+  }, [deleteData, deleteError, deleteLoading]);
+
 
     useEffect(() => {
       // @ts-ignore
@@ -1785,11 +1840,46 @@ const EditActorForm = (props) => {
         <Grid item xs={12}>
           <ClassicButton
             onClick={submitHandler}
+            fullWidth
             disabled={!validationResult?.global || user == null}
           >
-            Sauvegarder les modifications
+            Mettre à jour cet acteur
           </ClassicButton>
+          <ClassicButton
+          fullWidth
+          variant="contained"
+          className={styles.delete}
+          onClick={handleClickOpen}
+        >
+          Supprimer cet acteur
+        </ClassicButton>
+        <Dialog
+          open={openDeletePopup}
+          onClose={handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">
+            Êtes-vous sûr(e) de vouloir supprimer cet acteur ainsi que les événement associés ?
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              Une fois supprimé, cet acteur et ses événements seront définitivement supprimés. Il
+              ne sera plus visible sur notre plateforme, ni pour vous, ni pour
+              les visiteurs.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} color="primary">
+              Annuler
+            </Button>
+            <Button onClick={submitDeleteActor} color="primary" autoFocus>
+              Supprimer
+            </Button>
+          </DialogActions>
+        </Dialog>
         </Grid>
+
       </Container>
     );
   };
