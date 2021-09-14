@@ -223,6 +223,11 @@ const EDIT_EVENT = gql`
       published
       lat
       lng
+      referents {
+            id
+            surname
+            lastname
+          }
       pictures {
         id
         label
@@ -274,6 +279,11 @@ const EDIT_EVENT = gql`
       actors{
         id
         name
+        referents {
+            id
+            surname
+            lastname
+          }
       }
     }
   }
@@ -312,6 +322,11 @@ const GET_EVENT = gql`
         main
         logo
       }
+      referents {
+        id
+        surname
+        lastname
+      }
       entries {
         id
         label
@@ -344,6 +359,11 @@ const GET_EVENT = gql`
       actors{
         id
         name
+        referents {
+          id
+          surname
+          lastname
+        }
       }
     }
   }
@@ -521,12 +541,61 @@ const EditEventForm = (props) => {
       },
     },
   );
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const router = useRouter();
+  const user = useSessionState();
+
+  function containUserActorsReferent(actors) {
+    debugger;
+    let isContained = false;
+    if (user !== null) {
+      actors.forEach((actor) => {
+        actor.referents.forEach((element) => {
+          if (element.id == user.id) {
+            isContained = true;
+          }
+        });
+      });
+    }
+    return isContained;
+  }
+  function containUser(list) {
+    debugger;
+    let isContained = false;
+    if (user !== null) {
+      list.forEach((element) => {
+        if (element.id == user.id) {
+          isContained = true;
+        }
+      });
+    }
+    return isContained;
+  }
   const {
     loading: eventLoading,
     error: eventError,
     data: eventData,
   } = useQuery(GET_EVENT, {
     variables: { id: props.id.toString() },
+    onCompleted: (data) => {
+      if (user === undefined || user == null) {
+        enqueueSnackbar(
+          'Veuillez vous connecter pour effectuer des modifications.',
+          {
+            preventDuplicate: true,
+          },
+        );
+        router.push('/');
+      } else if (!(containUser(data.event.referents) || containUserActorsReferent(data.event.actors) || user.role === 'admin')) {
+        enqueueSnackbar(
+          "Vous n'avez pas les droits d'éditer cet événenement",
+          {
+            preventDuplicate: true,
+          },
+        );
+        router.push('/');
+      }
+    },
   });
 
   const imgInit = [];
@@ -681,10 +750,10 @@ const EditEventForm = (props) => {
         }
       });
   }
-  const router = useRouter();
+  
   const { data: dataActors } = useQuery(GET_ACTORS, {});
 
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  
   const [
     deleteEvent,
     { data: deleteData, error: deleteError, loading: deleteLoading },
@@ -731,7 +800,7 @@ const EditEventForm = (props) => {
     useGraphQLErrorDisplay(error);
     const styles = useStyles();
     const redirect = useCookieRedirection();
-    const user = useSessionState();
+    
     const [state, setState] = React.useState({});
     const [address, setAddress] = useState('');
     const [city, setCity] = useState('');

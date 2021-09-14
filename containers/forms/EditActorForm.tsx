@@ -422,6 +422,7 @@ type TitleWithTooltipProps = {
   collection?: boolean;
 }
 
+
 const TitleWithTooltip = (props: TitleWithTooltipProps) => {
   const { title, tooltipTitle, collection = false } = props;
   const styles = useStyles();
@@ -444,6 +445,8 @@ const TitleWithTooltip = (props: TitleWithTooltipProps) => {
 const EditActorForm = (props) => {
   const styles = useStyles();
   const user = useSessionState();
+
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const [checked, setChecked] = useState([0]);
   const [openingHours, setOpeningHours] = useState();
 
@@ -451,6 +454,18 @@ const EditActorForm = (props) => {
 
   const [open] = React.useState([false]);
   const router = useRouter();
+
+  function containUser(list) {
+    let isContained = false;
+    if (user !== null) {
+      list.forEach((element) => {
+        if (element.id == user.id) {
+          isContained = true;
+        }
+      });
+    }
+    return isContained;
+  }
   const {
     loading: actorLoading,
     error: actorError,
@@ -458,7 +473,29 @@ const EditActorForm = (props) => {
   } = useQuery(GET_ACTOR, {
     variables: { id: props.id.toString() },
     fetchPolicy: 'no-cache',
+    onCompleted: (data) => {
+      if (user === undefined || user == null) {
+        enqueueSnackbar(
+          'Veuillez vous connecter pour effectuer des modifications.',
+          {
+            preventDuplicate: true,
+          },
+        );
+        router.push('/');
+      }
+      else if (!(containUser(data.actor.referents) || user.role === 'admin')) {
+        enqueueSnackbar(
+          "Vous n'avez pas les droits d'éditer cet acteur",
+          {
+            preventDuplicate: true,
+          },
+        );
+        router.push('/');
+      }
+    },
   });
+
+
 
   function IsTree(collection) {
     let isTree = false;
@@ -711,21 +748,12 @@ const EditActorForm = (props) => {
     ] = useState([]);
     const [showAddReferent, setShowAddReferent] = useState(false);
     const [openAddReferentlist, setOpenAddReferentlist] = useState(false);
-
-    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
     const [
       edit,
       { data: editData, loading: editLoading, error: editError },
     ] = useMutation(EDIT_ACTOR);
 
-    if (user === undefined || user == null) {
-      enqueueSnackbar(
-        'Veuillez vous connecter pour effectuer des modifications.',
-        {
-          preventDuplicate: true,
-        },
-      );
-    }
+   
     const [setImagesList, loading, result, imagesListState] = useImageReader();
     const editorRef = useRef();
 
