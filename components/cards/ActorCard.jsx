@@ -111,14 +111,12 @@ const ActorCard = ({ actor }) => {
         <a href={`/actor/${actor.id}`} target="_blank" rel="noreferrer">
           <div className={classes.leftContent}>
             <div className={classes.image}>
-              {actor.pictures.length >= 1 && (
+              {actor.pictures.length >= 1 && actor.pictures.filter(picture => picture.logo).length >= 1 && (
                 <img
                   src={
-                    actor.pictures.length >= 1
+                    actor.pictures.filter(picture => picture.logo).length >= 1
                       ? getImageUrl(
-                        actor.pictures.sort(
-                          (a, b) => (a.logo ? -1 : 1) - (b.logo ? -1 : 1),
-                        )[0].croppedPicturePath,
+                        actor.pictures.filter(picture => picture.logo)[0].croppedPicturePath,
                       )
                       : ''
                   }

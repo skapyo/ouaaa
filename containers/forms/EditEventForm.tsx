@@ -202,6 +202,8 @@ const EDIT_EVENT = gql`
     $eventInfos: EventInfos
     $eventId: Int!
     $pictures: [InputPictureType]
+    $logoPictures: [InputPictureType]
+    $mainPictures: [InputPictureType]
     $description: String!
     $practicalInfo: String
   ) {
@@ -209,6 +211,8 @@ const EDIT_EVENT = gql`
       eventInfos: $eventInfos
       eventId: $eventId
       pictures: $pictures
+      mainPictures: $mainPictures
+      logoPictures: $logoPictures
       description: $description
       practicalInfo: $practicalInfo
     ) {

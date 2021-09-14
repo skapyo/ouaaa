@@ -179,6 +179,8 @@ const AgendaPageLayout = () => {
           croppedZoom
           croppedRotation
           position
+          logo
+          main
         }
       }
     }

@@ -598,12 +598,9 @@ const Actor = () => {
               className={styles.titleContainer}
               style={{
                 backgroundImage:
-                  data.actor.pictures.length >= 1
+                  data.actor.pictures.length >= 1 &&  data.actor.pictures.filter(picture => picture.main).length >= 1
                     ? `url(${getImageUrl(
-                      data.actor.pictures.sort(
-                        (a, b) => (a.main ? -1 : 1) - (b.main ? -1 : 1),
-                      )[0].croppedPicturePath,
-                    )})`
+                      data.actor.pictures.filter(picture => picture.main)[0].originalPicturePath)})`
                     : '',
               }}
             />
@@ -613,15 +610,12 @@ const Actor = () => {
               <Grid item md={5} sm={10} className={[styles.align]}>
                 <Grid container className={[styles.infoPratiqueGrid]}>
                   <div className={styles.image}>
-                    {data && data.actor.pictures.length >= 1 && (
+                    {data && data.actor.pictures.length >= 1 &&  data.actor.pictures.filter(picture => picture.logo).length >= 1 &&  (
                       <img
                         src={
                           data.actor.pictures.length >= 1
                             ? getImageUrl(
-                              data.actor.pictures.sort(
-                                (a, b) => (a.logo ? -1 : 1) - (b.logo ? -1 : 1),
-                              )[0].croppedPicturePath,
-                            )
+                              data.actor.pictures.filter(picture => picture.logo)[0].croppedPicturePath)
                             : ''
                         }
                       />

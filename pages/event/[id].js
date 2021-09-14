@@ -311,6 +311,8 @@ const Event = () => {
           croppedZoom
           croppedRotation
           position
+          logo
+          main
         }
       }
     }
@@ -509,13 +511,10 @@ const Event = () => {
               className={styles.titleContainer}
               style={{
                 backgroundImage:
-                  data && data.event && data.event.pictures.length >= 1
-                    ? `url(${getImageUrl(
-                        data.event.pictures.sort((a, b) =>
-                          a.position > b.position ? 1 : -1,
-                        )[0].croppedPicturePath,
-                      )})`
-                    : '',
+                  data && data.event && data.event.pictures.length >= 1  &&  data.event.pictures.filter(picture => picture.main).length >= 1
+                  ? `url(${getImageUrl(
+                    data.event.pictures.filter(picture => picture.main)[0].croppedPicturePath)})`
+                  : '',
               }}
             />
           )}
@@ -524,14 +523,13 @@ const Event = () => {
               <Grid item md={5} sm={10} className={[styles.align]}>
                 <Grid container className={[styles.infoPratiqueGrid]}>
                 <div className={styles.image}>
-                    {data && data.event.pictures.length >= 1 && (
+                    {data && data.event.pictures.length >= 1 &&  data.event.pictures.filter(picture => picture.logo).length >= 1 &&  (
                       <img
                         src={
                           data.event.pictures.length >= 1
-                            ? getImageUrl(
-                              data.event.pictures.sort((a, b) => (a.logo ? -1 : 1) - (b.logo ? -1 : 1))[0].croppedPicturePath,
-                            )
-                            : ''
+                          ? getImageUrl(
+                            data.event.pictures.filter(picture => picture.logo)[0].croppedPicturePath)
+                          : ''
                         }
                       />
                     )}
