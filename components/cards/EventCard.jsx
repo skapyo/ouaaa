@@ -154,6 +154,9 @@ const EventCard = ({ event }) => {
                   </span>
                 )}
               </div>
+              {event.duration && event.duration && (
+                  <div className={classes.label}>{event.duration}</div>
+                )}
             </div>
           </div>
         </Link>

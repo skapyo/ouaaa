@@ -550,7 +550,6 @@ const EditEventForm = (props) => {
   const user = useSessionState();
 
   function containUserActorsReferent(actors) {
-    debugger;
     let isContained = false;
     if (user !== null) {
       actors.forEach((actor) => {
@@ -564,7 +563,6 @@ const EditEventForm = (props) => {
     return isContained;
   }
   function containUser(list) {
-    debugger;
     let isContained = false;
     if (user !== null) {
       list.forEach((element) => {

@@ -57,15 +57,18 @@ const Events = (props) => {
           moment(new Date(parseInt(event.startedAt))),
           'days',
         );
-        for (let i = 1; i <= nbDayEvent; i++) {
+        if(nbDayEvent >=1 ){
           const newEventForOtherDay = { ...event };
+          event.duration=`Durée de l'événement : ${nbDayEvent+1} jours`
+          newEventForOtherDay.duration=`Durée de l'événement : ${nbDayEvent+1} jours`
           newEventForOtherDay.startedAt = moment(
             new Date(parseInt(event.startedAt)),
           )
-            .add(i, 'days')
+            .add(nbDayEvent, 'days')
             .toDate();
           localEvents.push(newEventForOtherDay);
         }
+       
       }
     });
     return localEvents.sort(compare);

@@ -650,7 +650,7 @@ const Event = () => {
                       </Grid>
                     </Grid>
                   )}
-                  {data && data.event.openingHours && data.event.openingHours.length !== 0 && (
+                  {data && (
                     <Grid container className={[styles.item]}>
                       <Grid item xs={3} className={[styles.alignRight]}>
                       <img src={"/icons/clock.svg"} alt="Horaire" className={[styles.icon]} />
