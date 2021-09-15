@@ -795,7 +795,7 @@ const EditActorForm = (props) => {
   const submitDeleteActor = () => {
     deleteActor({
       variables: {
-        acorId: parseInt(props.id),
+        actorId: parseInt(props.id),
       },
     });
     setOpenDeletePopup(false);
@@ -803,12 +803,12 @@ const EditActorForm = (props) => {
 
   useEffect(() => {
     if (!deleteLoading && deleteData?.deleteActor) {
-      enqueueSnackbar('Acteur et ses événements supprimés avec succès.', {
+      enqueueSnackbar('Acteur supprimé avec succès.', {
         preventDuplicate: true,
       });
       router.push('/');
     } else if (deleteError) {
-      enqueueSnackbar("La suppression de l'événement a échoué.", {
+      enqueueSnackbar("La suppression de l'acteur a échoué.", {
         preventDuplicate: true,
       });
     }
@@ -1860,13 +1860,13 @@ const EditActorForm = (props) => {
           aria-describedby="alert-dialog-description"
         >
           <DialogTitle id="alert-dialog-title">
-            Êtes-vous sûr(e) de vouloir supprimer cet acteur ainsi que les événement associés ?
+            Êtes-vous sûr(e) de vouloir supprimer cet acteur ?
           </DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              Une fois supprimé, cet acteur et ses événements seront définitivement supprimés. Il
+              Une fois supprimé, cet acteur sera définitivement supprimé. Il
               ne sera plus visible sur notre plateforme, ni pour vous, ni pour
-              les visiteurs.
+              les visiteurs. Pensez à supprimer vos anciens événements avant de supprimer votre page acteur.
             </DialogContentText>
           </DialogContent>
           <DialogActions>
