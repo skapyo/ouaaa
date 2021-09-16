@@ -385,7 +385,6 @@ const FormController = (props: FormControllerProps, ...otherprops: any[]) => {
         if (field.rule === ValidationRuleType.required) {
           /* test if there is a value in the formValues array */
           const result = formValues[key]?.length === 0 || typeof formValues[key] === 'undefined';
-          debugger;
           /* if the test result is true, update the result for the concerned field */
           if (result) {
             const newKeyValue = validationResultTemp.result[key]

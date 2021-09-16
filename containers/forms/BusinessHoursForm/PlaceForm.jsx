@@ -21,6 +21,7 @@ function PlaceForm({ addPlace }) {
         value={value}
         placeHolder="entrez une adresse"
         onChange={(e) => setValue(e.target.value)}
+        onBlur={handleSubmit}
       />
     </form>
   );

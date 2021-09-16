@@ -71,7 +71,17 @@ const BLANK_BUSINESS_HOURS = {
   place: '',
   __typename: 'OpeningHour',
 };
-
+function hasPlace(initData) {
+  let hasPlace = false;
+  if (initData !== null) {
+    initData.forEach((data) => {
+      if (data.place !== '') {
+        hasPlace = true;
+      }
+    });
+  }
+  return hasPlace;
+}
 const SchedulerContainer = (props) => {
   const { onChange, initData, ...other } = props;
   const classes = useStyles();
@@ -84,7 +94,7 @@ const SchedulerContainer = (props) => {
         })
       : [],
   );
-  const [showPlace, setShowPlace] = useState(false);
+  const [showPlace, setShowPlace] = useState(initData !== undefined && hasPlace(initData));
 
   const [timeContainerList, setTimeContainerList] = useState(
     initData !== undefined ? initData : [BLANK_BUSINESS_HOURS],
