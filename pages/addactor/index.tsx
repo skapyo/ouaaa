@@ -6,14 +6,14 @@ import {
   Typography,
 } from '@material-ui/core';
 import { withApollo } from 'hoc/withApollo';
-
 import ClassicButton from 'components/buttons/ClassicButton';
 import AddActorForm from 'containers/forms/AddActorForm';
+import CharterForm from 'containers/forms/CharterForm';
 import AddActorPageLayout from 'containers/layouts/addActorPage/AddActorPageLayout';
 import graphqlTag from 'graphql-tag';
 import TreeItem, { TreeItemProps } from '@material-ui/lab/TreeItem';
 import { useQuery } from '@apollo/client';
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import Icon from '@material-ui/core/Icon';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
@@ -37,65 +37,65 @@ type StyledTreeItemProps = TreeItemProps & {
   labelInfo?: string;
   labelText: string;
 };
-const useTreeItemStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      color: theme.palette.text.secondary,
-      '&:hover > $content': {
-        backgroundColor: theme.palette.action.hover,
-      },
-      '&:focus > $content, &$selected > $content': {
-        backgroundColor: `var(--tree-view-bg-color, ${theme.palette.grey[400]})`,
-        color: 'var(--tree-view-color)',
-      },
-      '&:focus > $content $label, &:hover > $content $label, &$selected > $content $label': {
-        backgroundColor: 'transparent',
-      },
+const useTreeItemStyles = makeStyles((theme: Theme) => createStyles({
+  root: {
+    color: theme.palette.text.secondary,
+    '&:hover > $content': {
+      backgroundColor: theme.palette.action.hover,
     },
-    content: {
-      color: theme.palette.text.secondary,
-      borderTopRightRadius: theme.spacing(2),
-      borderBottomRightRadius: theme.spacing(2),
-      paddingRight: theme.spacing(1),
-      fontWeight: theme.typography.fontWeightMedium,
-      '$expanded > &': {
-        fontWeight: theme.typography.fontWeightRegular,
-      },
+    '&:focus > $content, &$selected > $content': {
+      backgroundColor: `var(--tree-view-bg-color, ${theme.palette.grey[400]})`,
+      color: 'var(--tree-view-color)',
     },
-    group: {
-      marginLeft: 0,
-      '& $content': {
-        paddingLeft: theme.spacing(2),
-      },
+    '&:focus > $content $label, &:hover > $content $label, &$selected > $content $label': {
+      backgroundColor: 'transparent',
     },
-    expanded: {},
-    selected: {},
-    label: {
-      fontWeight: 'inherit',
-      color: 'inherit',
+  },
+  content: {
+    color: theme.palette.text.secondary,
+    borderTopRightRadius: theme.spacing(2),
+    borderBottomRightRadius: theme.spacing(2),
+    paddingRight: theme.spacing(1),
+    fontWeight: theme.typography.fontWeightMedium,
+    '$expanded > &': {
+      fontWeight: theme.typography.fontWeightRegular,
     },
-    labelRoot: {
-      display: 'flex',
-      alignItems: 'center',
-      padding: theme.spacing(0.5, 0),
+  },
+  group: {
+    marginLeft: 0,
+    '& $content': {
+      paddingLeft: theme.spacing(2),
     },
-    labelIcon: {
-      marginRight: theme.spacing(1),
-    },
-    labelText: {
-      fontWeight: 'inherit',
-      flexGrow: 1,
-    },
-  }),
-);
+  },
+  expanded: {},
+  selected: {},
+  label: {
+    fontWeight: 'inherit',
+    color: 'inherit',
+  },
+  labelRoot: {
+    display: 'flex',
+    alignItems: 'center',
+    padding: theme.spacing(0.5, 0),
+  },
+  labelIcon: {
+    marginRight: theme.spacing(1),
+  },
+  labelText: {
+    fontWeight: 'inherit',
+    flexGrow: 1,
+  },
+}));
 
 function StyledTreeItem(props: StyledTreeItemProps) {
   const classes = useTreeItemStyles();
-  const { labelText, labelIcon, labelInfo, color, bgColor, ...other } = props;
+  const {
+    labelText, labelIcon, labelInfo, color, bgColor, ...other
+  } = props;
 
   return (
     <TreeItem
-      label={
+      label={(
         <div className={classes.labelRoot}>
           <Icon>{labelIcon}</Icon>
           <Typography variant="body2" className={classes.labelText}>
@@ -105,7 +105,7 @@ function StyledTreeItem(props: StyledTreeItemProps) {
             {labelInfo}
           </Typography>
         </div>
-      }
+      )}
       style={{
         // @ts-ignore
         '--tree-view-color': color,
@@ -181,7 +181,7 @@ const AccountPage = () => {
 
   const steps = getSteps();
   function getSteps() {
-    return ['Authentifiez vous', "Ajoutez vos informations d'acteur"];
+    return ['Authentifiez vous', 'Acceptez la charte de OUAAA', "Ajoutez vos informations d'acteur"];
   }
   const user = useSessionState();
 
@@ -189,13 +189,22 @@ const AccountPage = () => {
     setCookie('redirect_url', router.asPath, { path: '/' });
   }, [setCookie, router.asPath]);
 
+  const [charterAccepted, setCharterAccepted] = React.useState(false);
   let initalValue;
   if (!user) {
     initalValue = 0;
   } else {
     initalValue = 1;
-  }
+  } 
   const [activeStep, setActiveStep] = React.useState(initalValue);
+
+  const handleChangeCharter = (results, name) => {
+    setActiveStep(3);
+    setCharterAccepted(!charterAccepted);
+  };
+
+
+ 
 
   return (
     <AddActorPageLayout>
@@ -219,7 +228,8 @@ const AccountPage = () => {
           })}
         </Stepper>
       </Container>
-      {user && <AddActorForm />}
+      {user && !charterAccepted && <CharterForm handleChangeCharter={handleChangeCharter} />}
+      {user && charterAccepted && <AddActorForm />}
       {!user && (
         <div className={styles.registerInfo}>
           <div>

@@ -242,13 +242,13 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       backgroundColor: '#2C367E',
       color: 'white',
-      cursor: "default"
+      cursor: 'default',
     },
   },
   editIcon: {
-    width: "15px",
-    height: "15px"
-  }
+    width: '15px',
+    height: '15px',
+  },
 }));
 
 type FormItemProps = {
@@ -680,7 +680,7 @@ const AddActorForm = () => {
       descriptionEditor,
       objectsListLogo,
       objectsList,
-      objectsListMain, openingHours
+      objectsListMain, openingHours,
     ]);
     useEffect(() => {
       if (!createError && !createLoading && createData) {
@@ -710,10 +710,6 @@ const AddActorForm = () => {
         setShowOtherContact(false);
       }
     };
-    const handleChangeCharter = (results, name) => {
-      setCharterAccepted(!charterAccepted);
-    };
-
 
     const getAddressDetails = (results) => {
       formValues.address = `${getObjectLongName(
@@ -733,147 +729,132 @@ const AddActorForm = () => {
       <Container component="main" maxWidth="sm">
         <br />
         <Typography className={styles.introduction}>
-          Félicitations, vous avez un compte <i>OUAAA!</i> personnel et vous vous apprêtez à créer une page Acteur.
-          {' '}
-          <br />
           Voici quelques informations : avec votre compte, vous  pouvez créer plusieurs pages Acteurs,
           mais chacune d’elles doit être créée via ce formulaire.
           Vous deviendrez alors l’administrateur principal de chacune d’entre elles.
           <br />
           Un acteur de la transition peut avoir n’importe quel statut juridique,
           les collectifs et particuliers peuvent donc aussi être référencés
-          sur <i>OUAAA!</i>.
-          <br />
-          <br />
-
-          Nous vous invitons à lire notre
+          sur
           {' '}
-          <a href="/charter">charte</a>
-          {' '}
-          afin de savoir si vous
-          adhérez aux valeurs de <i>OUAAA!</i>.
+          <i>OUAAA!</i>
         </Typography>
-        <FormControlLabel
-          control={
-            <Checkbox
-              onChange={handleChangeCharter}
-              name="checkedB"
-              color="primary"
-            />
-          }
-          label="Je respecte et j'adhère à la charte pour poursuivre l'inscription"
-        />
-        {charterAccepted ? (
-          <>
-            <Typography className={styles.introduction}>
-              Pour soumettre votre inscription, nous vous
-              invitons à remplir à minima les champs marqués d’une « * ».
-              {' '}
-              <br />
-              {' '}
-              Une fois votre
-              inscription validée par notre équipe, votre page acteur sera visible
-              de tous les visiteurs de <i>OUAAA!</i>
-              <br />
-              <br />
-              Vous pourrez actualiser les infos de votre/vos page(s) Acteurs dès que nécessaire
-              via votre espace acteur (rubrique « administrer mes pages acteurs »)
-              via  <Fab size="small" className={styles.fab} aria-label="edit">
-                <EditIcon className={styles.editIcon} />
-              </Fab>  accessible directement depuis votre page acteur.
-            </Typography>
-            <br />
-            <br />
-            {dataAdminActors && dataAdminActors.actorsAdmin.length > 0 && (
+ 
+        <Typography className={styles.introduction}>
+          Pour soumettre votre inscription, nous vous
+          invitons à remplir à minima les champs marqués d’une « * ».
+          {' '}
+          <br />
+          {' '}
+          Une fois votre
+          inscription validée par notre équipe, votre page acteur sera visible
+          de tous les visiteurs de
+          {' '}
+          <i>OUAAA!</i>
+          <br />
+          <br />
+          Vous pourrez actualiser les infos de votre/vos page(s) Acteurs dès que nécessaire
+          via votre espace acteur (rubrique « administrer mes pages acteurs »)
+          via
+          {' '}
+          <Fab size="small" className={styles.fab} aria-label="edit">
+            <EditIcon className={styles.editIcon} />
+          </Fab>
+          {' '}
+          accessible directement depuis votre page acteur.
+        </Typography>
+        <br />
+        <br />
+        {dataAdminActors && dataAdminActors.actorsAdmin.length > 0 && (
+        <Typography>
+          Bravo. Vous avez déjà créé des pages acteurs.
+          {' '}
+          <br />
+          Cliquez sur leurs noms pour éditer la page :
+          {dataAdminActors.actorsAdmin.map((actor) => {
+            {
+              /* @ts-ignore */
+            }
+            return (
               <Typography>
-                Bravo. Vous avez déjà créé des pages acteurs.
+                {/* @ts-ignore */}
+                <Link href={`/actorAdmin/actor/${actor.id}`}>
+                  {actor.name}
+                </Link>
                 {' '}
-                <br />
-                Cliquez sur leurs noms pour éditer la page :
-                {dataAdminActors.actorsAdmin.map((actor) => {
-                  {
-                    /* @ts-ignore */
-                  }
-                  return (
-                    <Typography>
-                      {/* @ts-ignore */}
-                      <Link href={`/actorAdmin/actor/${actor.id}`}>
-                        {actor.name}
-                      </Link>
-                      {' '}
-                    </Typography>
-                  );
-                })}
-                <br />
-                Vous pouvez créer un autre acteur en remplissant le formulaire ci
-                dessous :
-                <br />
-                <br />
               </Typography>
-            )}
-            <Typography variant="h2" color="primary" className={styles.label}>
-              {' '}
-              Coordonnées
-              {' '}
-            </Typography>
-            <FormItem
-              label="Nom de l'acteur"
-              inputName="name"
-              formChangeHandler={formChangeHandler}
-              value={formValues.name}
-              required
-              errorBool={
+            );
+          })}
+          <br />
+          Vous pouvez créer un autre acteur en remplissant le formulaire ci
+          dessous :
+          <br />
+          <br />
+        </Typography>
+        )}
+        <Typography variant="h2" color="primary" className={styles.label}>
+          {' '}
+          Coordonnées
+          {' '}
+        </Typography>
+        <FormItem
+          label="Nom de l'acteur"
+          inputName="name"
+          formChangeHandler={formChangeHandler}
+          value={formValues.name}
+          required
+          errorBool={
                 !validationResult?.global && !!validationResult?.result.name
               }
-              errorText="Nom de l'acteur requis."
-            />
-            <FormItem
-              label="Email"
-              inputName="email"
-              formChangeHandler={formChangeHandler}
-              value={formValues.email}
-              required
-              errorBool={
+          errorText="Nom de l'acteur requis."
+        />
+        <FormItem
+          label="Email"
+          inputName="email"
+          formChangeHandler={formChangeHandler}
+          value={formValues.email}
+          required
+          errorBool={
                 !!formValues.email
                 && !validationResult?.global
                 && !!validationResult?.result.email
               }
-              errorText="Format de l'email invalide."
-            />
-            <FormItem
-              label="Téléphone"
-              inputName="phone"
-              formChangeHandler={formChangeHandler}
-              value={formValues.phone}
-              required={false}
-              errorBool={
+          errorText="Format de l'email invalide."
+        />
+        <FormItem
+          label="Téléphone"
+          inputName="phone"
+          formChangeHandler={formChangeHandler}
+          value={formValues.phone}
+          required={false}
+          errorBool={
                 !validationResult?.global && !!validationResult?.result.phone
               }
-              errorText="Format du téléphone invalide. Maximum 10 chiffres."
-            />
-            <FormItem
-              label="Réseau social"
-              inputName="socialNetwork"
-              formChangeHandler={formChangeHandler}
-              value={formValues.socialNetwork}
-              required={false}
-              errorBool={false}
-              errorText=""
-            />
-            <FormItem
-              label="Site Internet"
-              inputName="website"
-              formChangeHandler={formChangeHandler}
-              value={formValues.website}
-              required={false}
-              errorBool={false}
-              errorText=""
-            />
-            <div className={styles.field}>
-              <Grid className={styles.location}>
-                <GooglePlacesAutocomplete
-                  placeholder="Taper et sélectionner la localisation *"
-                  initialValue={
+          errorText="Format du téléphone invalide. Maximum 10 chiffres."
+        />
+        <FormItem
+          label="Réseau social"
+          inputName="socialNetwork"
+          formChangeHandler={formChangeHandler}
+          value={formValues.socialNetwork}
+          required={false}
+          errorBool={false}
+          errorText=""
+        />
+        <FormItem
+          label="Site Internet"
+          inputName="website"
+          formChangeHandler={formChangeHandler}
+          value={formValues.website}
+          required={false}
+          errorBool={false}
+          errorText=""
+        />
+        <div className={styles.field}>
+          <Grid className={styles.location}>
+            <GooglePlacesAutocomplete
+              placeholder="Taper et sélectionner la localisation *"
+              initialValue={
                     formValues.address
                       ? formValues.address
                         .concat(' ')
@@ -882,19 +863,19 @@ const AddActorForm = () => {
                         .concat(formValues.city)
                       : formValues.city && formValues.city
                   }
-                  onSelect={({ description }) => geocodeByAddress(description).then((results) => {
-                    getLatLng(results[0])
-                      .then((value) => {
-                        formValues.lat = `${value.lat}`;
-                        formValues.lng = `${value.lng}`;
-                      })
-                      .catch((error) => console.error(error));
-                    getAddressDetails(results);
-                  })}
-                />
-              </Grid>
-            </div>
-            {
+              onSelect={({ description }) => geocodeByAddress(description).then((results) => {
+                getLatLng(results[0])
+                  .then((value) => {
+                    formValues.lat = `${value.lat}`;
+                    formValues.lng = `${value.lng}`;
+                  })
+                  .catch((error) => console.error(error));
+                getAddressDetails(results);
+              })}
+            />
+          </Grid>
+        </div>
+        {
               /* @ts-ignore */
               dataCollections.collections
               /* @ts-ignore */
@@ -939,252 +920,257 @@ const AddActorForm = () => {
                 );
               })
             }
-            <br />
-            <Typography variant="body1" color="primary" className={styles.label}>
-              Jour et heure d'ouverture
-            </Typography>
-            <SchedulerContainer onChange={setOpeningHours} />
-            <p />
-            <br />
-            <Typography variant="body1" color="primary" className={styles.label}>
-              CONTACT PRIVE pour les échanges avec <i>OUAAA!</i>
-            </Typography>
-            <FormControl component="fieldset">
-              <RadioGroup
-                row
-                aria-label="gender"
-                name="contact"
-                onChange={radioChangeHandler}
-              >
-                <FormControlLabel
-                  value="me"
-                  control={<Radio />}
-                  label="C'est moi "
-                />
-                <FormControlLabel
-                  value="other"
-                  control={<Radio />}
-                  label={
-                    <>
-                      c’est un autre (avec un compte <i>OUAAA!</i> existant)
-                    </>
-                  }
-                />
+        <br />
+        <Typography variant="body1" color="primary" className={styles.label}>
+          Jour et heure d'ouverture
+        </Typography>
+        <SchedulerContainer onChange={setOpeningHours} />
+        <p />
+        <br />
+        <Typography variant="body1" color="primary" className={styles.label}>
+          CONTACT PRIVE pour les échanges avec
+          {' '}
+          <i>OUAAA!</i>
+        </Typography>
+        <FormControl component="fieldset">
+          <RadioGroup
+            row
+            aria-label="gender"
+            name="contact"
+            onChange={radioChangeHandler}
+          >
+            <FormControlLabel
+              value="me"
+              control={<Radio />}
+              label="C'est moi "
+            />
+            <FormControlLabel
+              value="other"
+              control={<Radio />}
+              label={(
+                <>
+                  c’est un autre (avec un compte
+                  {' '}
+                  <i>OUAAA!</i>
+                  {' '}
+                  existant)
+                </>
+                  )}
+            />
 
-              </RadioGroup>
-              <p>
-                {showOtherContact ? (
-                  <Autocomplete
-                    id="combo-box-demo"
-                    options={dataUsers.users}
+          </RadioGroup>
+          <p>
+            {showOtherContact ? (
+              <Autocomplete
+                id="combo-box-demo"
+                options={dataUsers.users}
                     // @ts-ignore
-                    getOptionLabel={(option) => `${option.surname} ${option.lastname}`}
-                    onChange={autocompleteHandler}
+                getOptionLabel={(option) => `${option.surname} ${option.lastname}`}
+                onChange={autocompleteHandler}
                     // @ts-ignore
-                    onInput={inputChangeHandler}
-                    open={showOtherContactList}
-                    style={{ width: 300 }}
+                onInput={inputChangeHandler}
+                open={showOtherContactList}
+                style={{ width: 300 }}
 
                     // eslint-disable-next-line react/jsx-props-no-spreading
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        label="Contact OUAAA!"
-                        variant="outlined"
-                        placeholder="Tapez les 3 premières lettre du contact"
-                      />
-                    )}
-                    noOptionsText="Pas de compte associé"
-                    clearText="Effacer"
-                    closeText="Fermer"
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Contact OUAAA!"
+                    variant="outlined"
+                    placeholder="Tapez les 3 premières lettre du contact"
                   />
-                ) : (
-                  ''
                 )}
-              </p>
-            </FormControl>
-
-            <FormItem
-              label="Métier / Activité principale"
-              inputName="activity"
-              formChangeHandler={formChangeHandler}
-              value={formValues.activity}
-              required={false}
-              errorBool={false}
-              errorText=""
-              helperText="Indiquez ici votre métier ou activité principale. Cette info servira à mieux référencer votre page dans les moteurs de recherche. Ex : boulanger bio"
-            />
-
-            <Typography variant="body1" color="primary" className={styles.label}>
-              Votre logo &nbsp;
-              <Tooltip title="Une seule photo de logo possible, vous pouvez supprimer celle affichée via la poubelle puis en télécharger une nouvelle. Seul le format JPG est accepté. Veuillez à ce que le fichier n’excède pas 4Mo">
-                <InfoIcon />
-              </Tooltip>
-            </Typography>
-            {objectsListLogo ? (
-              <ImagesDisplay
-                cards={objectsListLogo}
-                moveCard={moveObjectLogo}
-                findCard={findObjectLogo}
-                updateDeletedIndicator={updateDeletedIndicatorLogo}
-                updateKeyIndicator={updateKeyIndicatorLogo}
+                noOptionsText="Pas de compte associé"
+                clearText="Effacer"
+                closeText="Fermer"
               />
-            ) : null}
-            <ImagesDropZone
-              onDropHandler={onDropLogoHandler}
-              text="Déposez ici votre logo au format jpg et de poids inférieur à 4Mo"
-            />
+            ) : (
+              ''
+            )}
+          </p>
+        </FormControl>
 
-            <Typography variant="body1" color="primary" className={styles.label}>
-              Photo principale &nbsp;
-              <Tooltip title="Une seule photo principale est possible, vous pouvez supprimer celle affichée via la poubelle puis en télécharger une nouvelle. Seul le format JPG est accepté. Veuillez à ce que le fichier n’excède pas 4Mo">
-                <InfoIcon />
-              </Tooltip>
-            </Typography>
-            {objectsListMain ? (
-              <ImagesDisplay
-                cards={objectsListMain}
-                moveCard={moveObjectMain}
-                findCard={findObjectMain}
-                updateDeletedIndicator={updateDeletedIndicatorMain}
-                updateKeyIndicator={updateKeyIndicatorMain}
-              />
-            ) : null}
-            <ImagesDropZone
-              onDropHandler={onDropMainHandler}
-              text="Déposez ici votre photo principale au format jpg et de poids inférieur à 4Mo"
-            />
+        <FormItem
+          label="Métier / Activité principale"
+          inputName="activity"
+          formChangeHandler={formChangeHandler}
+          value={formValues.activity}
+          required={false}
+          errorBool={false}
+          errorText=""
+          helperText="Indiquez ici votre métier ou activité principale. Cette info servira à mieux référencer votre page dans les moteurs de recherche. Ex : boulanger bio"
+        />
 
-            <Typography variant="body1" color="primary" className={styles.label}>
-              Autres photos &nbsp;
-              <Tooltip title="Vous pouvez supprimer l'image affichée via la poubelle puis en télécharger une nouvelle. Seul le format JPG est accepté. Veuillez à ce que chaque fichier n’excède pas 4Mo">
-                <InfoIcon />
-              </Tooltip>
-            </Typography>
-            {objectsList ? (
-              <ImagesDisplay
-                cards={objectsList}
-                moveCard={moveObject}
-                findCard={findObject}
-                updateDeletedIndicator={updateDeletedIndicator}
-                updateKeyIndicator={updateKeyIndicator}
-              />
-            ) : null}
-            <ImagesDropZone
-              onDropHandler={onDropHandler}
-              text="Déposez ici votre autres photos au format jpg et de poids inférieur à 4Mo"
-            />
+        <Typography variant="body1" color="primary" className={styles.label}>
+          Votre logo &nbsp;
+          <Tooltip title="Une seule photo de logo possible, vous pouvez supprimer celle affichée via la poubelle puis en télécharger une nouvelle. Seul le format JPG est accepté. Veuillez à ce que le fichier n’excède pas 4Mo">
+            <InfoIcon />
+          </Tooltip>
+        </Typography>
+        {objectsListLogo ? (
+          <ImagesDisplay
+            cards={objectsListLogo}
+            moveCard={moveObjectLogo}
+            findCard={findObjectLogo}
+            updateDeletedIndicator={updateDeletedIndicatorLogo}
+            updateKeyIndicator={updateKeyIndicatorLogo}
+          />
+        ) : null}
+        <ImagesDropZone
+          onDropHandler={onDropLogoHandler}
+          text="Déposez ici votre logo au format jpg et de poids inférieur à 4Mo"
+        />
 
-            <p />
-            <FormItem
-              label="Description courte générale"
-              inputName="shortDescription"
-              formChangeHandler={formChangeHandler}
-              value={formValues.shortDescription}
-              required={false}
-              errorBool={
+        <Typography variant="body1" color="primary" className={styles.label}>
+          Photo principale &nbsp;
+          <Tooltip title="Une seule photo principale est possible, vous pouvez supprimer celle affichée via la poubelle puis en télécharger une nouvelle. Seul le format JPG est accepté. Veuillez à ce que le fichier n’excède pas 4Mo">
+            <InfoIcon />
+          </Tooltip>
+        </Typography>
+        {objectsListMain ? (
+          <ImagesDisplay
+            cards={objectsListMain}
+            moveCard={moveObjectMain}
+            findCard={findObjectMain}
+            updateDeletedIndicator={updateDeletedIndicatorMain}
+            updateKeyIndicator={updateKeyIndicatorMain}
+          />
+        ) : null}
+        <ImagesDropZone
+          onDropHandler={onDropMainHandler}
+          text="Déposez ici votre photo principale au format jpg et de poids inférieur à 4Mo"
+        />
+
+        <Typography variant="body1" color="primary" className={styles.label}>
+          Autres photos &nbsp;
+          <Tooltip title="Vous pouvez supprimer l'image affichée via la poubelle puis en télécharger une nouvelle. Seul le format JPG est accepté. Veuillez à ce que chaque fichier n’excède pas 4Mo">
+            <InfoIcon />
+          </Tooltip>
+        </Typography>
+        {objectsList ? (
+          <ImagesDisplay
+            cards={objectsList}
+            moveCard={moveObject}
+            findCard={findObject}
+            updateDeletedIndicator={updateDeletedIndicator}
+            updateKeyIndicator={updateKeyIndicator}
+          />
+        ) : null}
+        <ImagesDropZone
+          onDropHandler={onDropHandler}
+          text="Déposez ici votre autres photos au format jpg et de poids inférieur à 4Mo"
+        />
+
+        <p />
+        <FormItem
+          label="Description courte générale"
+          inputName="shortDescription"
+          formChangeHandler={formChangeHandler}
+          value={formValues.shortDescription}
+          required={false}
+          errorBool={
                 !validationResult?.global
                 && !!validationResult?.result.shortDescription
               }
-              errorText="90 caractères maximum"
-              helperText="Cette description courte s’affichera en vue liste et dans les blocs de survol/clic de la carte. Merci de synthétiser vos objectifs en quelques mots."
+          errorText="90 caractères maximum"
+          helperText="Cette description courte s’affichera en vue liste et dans les blocs de survol/clic de la carte. Merci de synthétiser vos objectifs en quelques mots."
+        />
 
-            />
-
-            <Typography variant="body1" color="primary" className={styles.label}>
-              Description
-            </Typography>
-            <br />
-            <Typography className={styles.helperText}>
-              Cette description longue est intégrée à votre page acteur. Elle se
-              veut la plus explicite et détaillée possible. Un langage simple,
-              des mots compréhensibles de tous, vous permettront d’expliquer
-              de manière didactique vos liens avec les questions de transition,
-              vos missions/actions, votre organisation, etc. Au delà de l’accès
-              à une information claire pour tous les internautes (y compris en
-              situation de handicap) utilisant OUAAA !, ce texte permettra
-              un meilleur référencement de votre page dans le moteur de
-              recherche interne. Pour cela, pensez à utiliser des mots clé du
-              champ sémantique de votre activité. Ex : vous êtes une
-              asso de recyclerie : zéro déchet, réutilisation, matière,
-              matériaux, économie circulaire, upcycling, nouvelle vie, objet,
-              dépôt, vente, réinsertion….
-            </Typography>
-            <br />
-            {editorLoaded ? (
-              <>
-                <Hidden mdDown>
-                  <CKEditor
-                    config={{
-                      toolbar: ['bold', 'italic'],
-                    }}
-                    editor={ClassicEditor}
-                    data={formValues.description}
-                    onReady={(editor) => {
-                      setDescriptionEditor(editor);
-                    }}
-                  />
-                </Hidden>
-                <Hidden lgUp>
-                  <CKEditor
-                    config={{
-                      toolbar: ['bold', 'italic'],
-                    }}
-                    editor={ClassicEditor}
-                    data={formValues.description}
-                    onReady={(editor) => {
-                      setDescriptionEditor(editor);
-                    }}
-                  />
-                </Hidden>
-              </>
-            ) : (
-              <div>Editor loading</div>
-            )}
-            <Typography variant="body1" color="primary" className={styles.label}>
-              Nos recherches en bénévolat :
-              {' '}
-              <Tooltip title="
+        <Typography variant="body1" color="primary" className={styles.label}>
+          Description
+        </Typography>
+        <br />
+        <Typography className={styles.helperText}>
+          Cette description longue est intégrée à votre page acteur. Elle se
+          veut la plus explicite et détaillée possible. Un langage simple,
+          des mots compréhensibles de tous, vous permettront d’expliquer
+          de manière didactique vos liens avec les questions de transition,
+          vos missions/actions, votre organisation, etc. Au delà de l’accès
+          à une information claire pour tous les internautes (y compris en
+          situation de handicap) utilisant OUAAA !, ce texte permettra
+          un meilleur référencement de votre page dans le moteur de
+          recherche interne. Pour cela, pensez à utiliser des mots clé du
+          champ sémantique de votre activité. Ex : vous êtes une
+          asso de recyclerie : zéro déchet, réutilisation, matière,
+          matériaux, économie circulaire, upcycling, nouvelle vie, objet,
+          dépôt, vente, réinsertion….
+        </Typography>
+        <br />
+        {editorLoaded ? (
+          <>
+            <Hidden mdDown>
+              <CKEditor
+                config={{
+                  toolbar: ['bold', 'italic'],
+                }}
+                editor={ClassicEditor}
+                data={formValues.description}
+                onReady={(editor) => {
+                  setDescriptionEditor(editor);
+                }}
+              />
+            </Hidden>
+            <Hidden lgUp>
+              <CKEditor
+                config={{
+                  toolbar: ['bold', 'italic'],
+                }}
+                editor={ClassicEditor}
+                data={formValues.description}
+                onReady={(editor) => {
+                  setDescriptionEditor(editor);
+                }}
+              />
+            </Hidden>
+          </>
+        ) : (
+          <div>Editor loading</div>
+        )}
+        <Typography variant="body1" color="primary" className={styles.label}>
+          Nos recherches en bénévolat :
+          {' '}
+          <Tooltip title="
           Décrivez ici les missions de bénévolat générales chez vous ou sur un de
           vos projets spécifiques afin de donner envie aux visiteurs de cliquer sur «je deviens
           bénévole» de votre page."
-              >
-                <InfoIcon />
-              </Tooltip>
-            </Typography>
-            <p />
+          >
+            <InfoIcon />
+          </Tooltip>
+        </Typography>
+        <p />
 
-            {editorLoaded ? (
-              <>
-                <Hidden mdDown>
-                  <CKEditor
-                    config={{
-                      toolbar: ['bold', 'italic'],
-                    }}
-                    editor={ClassicEditor}
-                    data={formValues.volunteerDescription}
-                    onReady={(editor) => {
-                      setVolunteerEditor(editor);
-                    }}
-                  />
-                </Hidden>
-                <Hidden lgUp>
-                  <CKEditor
-                    config={{
-                      toolbar: ['bold', 'italic'],
-                    }}
-                    editor={ClassicEditor}
-                    data={formValues.volunteerDescription}
-                    onReady={(editor) => {
-                      setVolunteerEditor(editor);
-                    }}
-                  />
-                </Hidden>
-              </>
-            ) : (
-              <div>Editor loading</div>
-            )}
-            {
+        {editorLoaded ? (
+          <>
+            <Hidden mdDown>
+              <CKEditor
+                config={{
+                  toolbar: ['bold', 'italic'],
+                }}
+                editor={ClassicEditor}
+                data={formValues.volunteerDescription}
+                onReady={(editor) => {
+                  setVolunteerEditor(editor);
+                }}
+              />
+            </Hidden>
+            <Hidden lgUp>
+              <CKEditor
+                config={{
+                  toolbar: ['bold', 'italic'],
+                }}
+                editor={ClassicEditor}
+                data={formValues.volunteerDescription}
+                onReady={(editor) => {
+                  setVolunteerEditor(editor);
+                }}
+              />
+            </Hidden>
+          </>
+        ) : (
+          <div>Editor loading</div>
+        )}
+        {
               /* @ts-ignore */
               dataCollections.collections
               /* @ts-ignore */
@@ -1325,24 +1311,20 @@ const AddActorForm = () => {
                 );
               })
             }
-            <br />
-            <div>
-              Une fois créé, vous pourrez modifier les informations et ajouter des
-              photos dans votre espace acteur
-            </div>
-            <p />
-            <Grid item xs={12}>
-              <ClassicButton
-                onClick={submitHandler}
-                disabled={!validationResult?.global}
-              >
-                Créer le nouvel acteur
-              </ClassicButton>
-            </Grid>
-          </>)
-          : (
-            ''
-          )}
+        <br />
+        <div>
+          Une fois créé, vous pourrez modifier les informations et ajouter des
+          photos dans votre espace acteur
+        </div>
+        <p />
+        <Grid item xs={12}>
+          <ClassicButton
+            onClick={submitHandler}
+            disabled={!validationResult?.global}
+          >
+            Créer le nouvel acteur
+          </ClassicButton>
+        </Grid>
       </Container>
     );
   };
