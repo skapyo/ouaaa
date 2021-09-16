@@ -18,6 +18,7 @@ import '@brainhubeu/react-carousel/lib/style.css';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import 'react-leaflet-markercluster/dist/styles.min.css';
+import 'moment/locale/fr';
 
 const theme = createMuiTheme({
   palette: {
@@ -50,22 +51,22 @@ const theme = createMuiTheme({
     },
     h5: {
       color: '#2C367E',
-      
+
     },
     h1: {
       fontSize: '4rem',
       color: '#2C367E',
-      
+
     },
     h2: {
       fontSize: '1.5rem',
       color: '#2C367E',
-      
+
     },
     h3: {
       fontSize: '1.5rem',
       color: '#2C367E',
-      
+
     },
   },
 });
