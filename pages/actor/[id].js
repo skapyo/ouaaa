@@ -102,6 +102,7 @@ const useStyles = makeStyles((theme) => ({
     color: theme.typography.h5.color,
     fontWeight: 700,
     whiteSpace: 'break-spaces',
+    overflowWrap: 'break-word',
   },
   infoLabel: {
     color: theme.typography.h5.color,
