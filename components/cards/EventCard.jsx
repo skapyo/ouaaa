@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import React, { useState, useMemo } from 'react';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded';
 import FavoriteRoundedIcon from '@material-ui/icons/FavoriteRounded';
 import Moment from 'react-moment';
 import Link from '../Link';
 import { getImageUrl } from '../../utils/utils';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import classnames from 'classnames';
 
-const useStyles = makeStyles((theme, props) => ({
+const useStyles = makeStyles((theme) => ({
   card: (props) => ({
     backgroundColor: 'white',
     borderRadius: '10px',
@@ -20,28 +22,34 @@ const useStyles = makeStyles((theme, props) => ({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    margin: '0 24px',
+    '& a': {
+      overflow: 'hidden'
+    }
   },
   favorite: (props) => ({
-    width: '100px',
+    width: '10%',
     borderLeft: `dashed 2px ${props.color}`,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     '&:hover': {
       cursor: 'pointer',
-    },
+    }
   }),
   favoriteIcon: (props) => ({
     color: props.color,
   }),
   category: {
-    width: '40px',
-    height: '40px',
+    width: 40,
+    height: 40,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    position: 'relative'
+    position: 'relative',
+    marginRight: 16,
+    [theme.breakpoints.down('sm')]: {
+      marginRight: 8
+    }
   },
   opacity: (props) => ({
     width: '40px',
@@ -64,30 +72,49 @@ const useStyles = makeStyles((theme, props) => ({
     display: 'flex',
     alignItems: 'center',
   },
-  image: {
-    height: '72px',
-    width: '72px',
-    margin: '0 24px 0 0',
-    '& img': {
-      height: '100%',
-      width: '100%',
-      objectFit: 'cover',
-      borderRadius: '50%',
-    },
+  logo: {
+    minHeight: 72,
+    minWidth: 72,
+    marginLeft: 12,
+    backgroundPosition: 'center',
+    backgroundSize: 'cover',
+    backgroundRepeat: 'no-repeat',
+    borderRadius: '50%',
+    [theme.breakpoints.down('sm')]: {
+      minHeight: 60,
+      minWidth: 60,
+      marginLeft: 8
+    }
   },
-  text: {},
+  contentText: {
+    overflow: 'hidden',
+    marginLeft: 12,
+    [theme.breakpoints.down('sm')]: {
+      marginLeft: 8
+    }
+  },
   actor: (props) => ({
     textTransform: 'uppercase',
     color: props.color,
     fontWeight: 'bold',
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis',
+    overflow: 'hidden'
   }),
   label: {
     color: 'black',
     fontWeight: 'bold',
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis',
+    overflow: 'hidden'
   },
   eventDetails: {
     fontStyle: 'italic',
     color: '#A3A3A3',
+    display: '-webkit-box',
+    '-webkit-line-clamp': 2,
+    '-webkit-box-orient': 'vertical',
+    overflow: 'hidden'
   },
 }));
 
@@ -101,62 +128,51 @@ const EventCard = ({ event }) => {
   const classes = useStyles({ color, icon });
   const [favorite, setFavorite] = useState(false);
 
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up('sm'));
+
+  const startDateFormat = matches ? '[De ]HH[h]mm' : 'HH[h]mm';
+  const endDateFormat = matches ? '[ à ]HH[h]mm' : '[-]HH[h]mm';
+
+  const logoPath = useMemo(() => {
+    const logoPaths = (event?.pictures || []).filter(picture => picture.logo);
+    if (logoPaths.length > 0) {
+      return getImageUrl(logoPaths[0].croppedPicturePath);
+    }
+    return null;
+  }, [event, getImageUrl]);
+
+  const FavoriteIconComponent = useMemo(() => {
+    return favorite ? FavoriteRoundedIcon : FavoriteBorderRoundedIcon;
+  }, [favorite]);
+
+  const addressCity = useMemo(() => {
+    if (!event.city) return ' - Adresse manquante';
+    const list = [event.address, event.city];
+    return ' - ' + list.join(', ');
+  }, [event.address, event.city]);
+
   return (
     <div className={classes.card}>
       <div className={classes.content}>
         <Link href={`/event/${event.id}`}>
           <div className={classes.leftContent}>
-            <div className={classes.image}>
-            {event.pictures.length >= 1 && event.pictures.filter(picture => picture.logo).length >= 1 && (
-                <img
-                  src={
-                    event.pictures.filter(picture => picture.logo).length >= 1
-                      ? getImageUrl(
-                        event.pictures.filter(picture => picture.logo)[0].croppedPicturePath,
-                      )
-                      : ''
-                  }
-                />
-              )}
-            </div>
-            <div className={classes.text}>
+            {logoPath && <div className={classes.logo} style={{ backgroundImage: `url(${logoPath})` }} />}
+            <div className={classes.contentText}>
               <div className={classes.actor}>{actorName}</div>
               <div className={classes.label}>{event.label}</div>
               <div className={classes.eventDetails}>
-                De
-                <Moment format=" HH" unix>
+                <Moment format={startDateFormat} unix>
                   {event.startedAt / 1000}
                 </Moment>
-                h
-                <Moment format="mm " unix>
-                  {event.startedAt / 1000}
-                </Moment>
-                à
-                <Moment format=" HH" unix>
+                <Moment format={endDateFormat} unix>
                   {event.endedAt / 1000}
                 </Moment>
-                h
-                <Moment format="mm " unix>
-                  {event.endedAt / 1000}
-                </Moment>
-                -{!event.city && <span> Adresse manquante</span>}
-                {!event.address && event.city && (
-                  <span>
-                    {/* @ts-ignore */}
-                    {event.city}
-                  </span>
-                )}
-                {event.address && event.city && (
-                  <span>
-                    {/* @ts-ignore */}
-                    {event.address},{/* @ts-ignore */}
-                    {event.city}
-                  </span>
-                )}
+                <span>{addressCity}</span>
               </div>
-              {event.duration && event.duration && (
-                  <div className={classes.label}>{event.duration}</div>
-                )}
+              {event.duration && (
+                <div className={classes.label}>{event.duration}</div>
+              )}
             </div>
           </div>
         </Link>
@@ -165,12 +181,13 @@ const EventCard = ({ event }) => {
           <span className={classes.categoryIcon} />
         </div>
       </div>
-      <div className={classes.favorite} onClick={() => setFavorite(!favorite)}>
-        {!favorite && (
-          <FavoriteBorderRoundedIcon className={classes.favoriteIcon} />
-        )}
-        {favorite && <FavoriteRoundedIcon className={classes.favoriteIcon} />}
-      </div>
+      {
+        matches && (
+          <div className={classes.favorite} onClick={() => setFavorite(!favorite)}>
+            <FavoriteIconComponent className={classes.favoriteIcon} />
+          </div>
+        )
+      }
     </div>
   );
 };
