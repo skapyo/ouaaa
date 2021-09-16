@@ -6,7 +6,6 @@ import Moment from 'react-moment';
 import Link from '../Link';
 import { getImageUrl } from '../../utils/utils';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import classnames from 'classnames';
 
 const useStyles = makeStyles((theme) => ({
   card: (props) => ({
