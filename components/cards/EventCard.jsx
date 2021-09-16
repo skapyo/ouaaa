@@ -118,7 +118,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const EventCard = ({ event }) => {
-  const color = event.entries && event.entries[0] ? event.entries[0].color : '#AD2740';
+  const color =
+  event.entries.length > 0 && event.entries[0].parentEntry
+    ? event.entries[0].parentEntry.color
+    : '#AD2740';
   const icon = event.entries && event.entries[0] ? event.entries[0].icon : 'fruit';
   const actorName = event.actors[0]
     ? event.actors[0].name
@@ -181,7 +184,7 @@ const EventCard = ({ event }) => {
         </div>
       </div>
       {
-        matches && (
+        false && matches && (
           <div className={classes.favorite} onClick={() => setFavorite(!favorite)}>
             <FavoriteIconComponent className={classes.favoriteIcon} />
           </div>

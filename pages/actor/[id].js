@@ -787,18 +787,19 @@ const Actor = () => {
                         <div className={[styles.infoLabel]}>Horaire</div>
                         {data
                             && data.actor.openingHours.map((openingHour) => {
-                              console.log('hereee i stopped');
                               // debugger;
                               return (
                                 <span className={[styles.infoValue]}>
+                                    {openingHour.place}{openingHour.place && '   '}
                                   {openingHour.days.map((day, index) => {
                                     return (
                                       <>{day.selected && getDay(day.id)}</>
                                     );
                                   })}
-                                  {openingHour.hours.map((hourtab) => {
+                                  {openingHour.hours.map((hourtab, indexhourtab) => {
                                     return (
                                       <>
+                                        {indexhourtab !== 0 && ' ; '}
                                         {hourtab.map((hour, index) => {
                                           return (
                                             <>
@@ -809,9 +810,11 @@ const Actor = () => {
                                             </>
                                           );
                                         })}
+                                      
                                       </>
                                     );
                                   })}
+                                 
                                   <br />
                                 </span>
                               );
