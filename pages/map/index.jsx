@@ -56,6 +56,11 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       color: '#2C367E',
       backgroundColor: '#fff',
+    },
+    [theme.breakpoints.down('sm')]: {
+      position: 'initial',
+      marginTop: 25,
+      width: '75%'
     }
   },
   listButtonIcon: {
@@ -404,6 +409,12 @@ const carto = () => {
     return (
       <AppLayout>
         <Grid container className={styles.layout}>
+       
+
+          <Filters
+            onFiltersChange={handleFiltersChange}
+            isActorList
+          />
           <Fab
             variant="extended"
             size="large"
@@ -418,12 +429,6 @@ const carto = () => {
             }
             <span>{!listMode ? 'Voir la Carte' : 'Voir la Liste'}</span>
           </Fab>
-
-          <Filters
-            onFiltersChange={handleFiltersChange}
-            isActorList
-          />
-
           {listMode && (
             <Grid item sm={10} xs={12} style={{ width: '100%' }}>
               <Map ref={mapRef} center={position} zoom={11} className={styles.mapContainer}>

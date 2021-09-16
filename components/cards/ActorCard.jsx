@@ -164,12 +164,13 @@ const ActorCard = ({ actor }) => {
           <span className={classes.categoryIcon} />
         </div>
       </div>
-      <div className={classes.favorite} onClick={() => setFavorite(!favorite)}>
-        {!favorite && (
-          <FavoriteBorderRoundedIcon className={classes.favoriteIcon} />
-        )}
-        {favorite && <FavoriteRoundedIcon className={classes.favoriteIcon} />}
-      </div>
+      {
+        false && (
+          <div className={classes.favorite} onClick={() => setFavorite(!favorite)}>
+            <FavoriteIconComponent className={classes.favoriteIcon} />
+          </div>
+        )
+      }
     </div>
   );
 };
