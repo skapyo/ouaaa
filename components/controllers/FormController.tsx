@@ -19,8 +19,8 @@ export type QueryOptions = {
   query: DocumentNode;
   resultLabel: string;
   mutationResultControl?:
-    | ((formValues: FormValues, data: any, error: any) => boolean)
-    | 'builtin';
+  | ((formValues: FormValues, data: any, error: any) => boolean)
+  | 'builtin';
   clearFormvaluesAfterControl?: boolean;
   afterResultControlCallback?: (
     formValues: FormValues,
@@ -42,30 +42,30 @@ export enum ValidationRuleType {
 
 type Rule =
   | {
-      rule: ValidationRuleType.password;
-    }
+    rule: ValidationRuleType.password;
+  }
   | {
-      rule: ValidationRuleType.equalTo;
-      field: string;
-    }
+    rule: ValidationRuleType.equalTo;
+    field: string;
+  }
   | {
-      rule: ValidationRuleType.required;
-    }
+    rule: ValidationRuleType.required;
+  }
   | {
-      rule: ValidationRuleType.email;
-    }
+    rule: ValidationRuleType.email;
+  }
   | {
-      rule: ValidationRuleType.only;
-      type: 'number' | 'string';
-    }
+    rule: ValidationRuleType.only;
+    type: 'number' | 'string';
+  }
   | {
-      rule: ValidationRuleType.minLength;
-      minLimit: number;
-    }
+    rule: ValidationRuleType.minLength;
+    minLimit: number;
+  }
   | {
-      rule: ValidationRuleType.maxLength;
-      maxLimit: number;
-    };
+    rule: ValidationRuleType.maxLength;
+    maxLimit: number;
+  };
 
 export type ValidationRules = { [key: string]: Rule };
 
@@ -380,11 +380,12 @@ const FormController = (props: FormControllerProps, ...otherprops: any[]) => {
           }
         }
 
+
         /* required rule handler */
         if (field.rule === ValidationRuleType.required) {
           /* test if there is a value in the formValues array */
-          const result = formValues[key]?.length === 0;
-
+          const result = formValues[key]?.length === 0 || typeof formValues[key] === 'undefined';
+          debugger;
           /* if the test result is true, update the result for the concerned field */
           if (result) {
             const newKeyValue = validationResultTemp.result[key]

@@ -149,9 +149,9 @@ const UserInfosForm = () => {
             <Typography
               color={
                 checkPssdValidation('newPassword1', 'min') &&
-                checkPssdValidation('newPassword1', 'max')
-                  ? 'secondary'
-                  : 'primary'
+                  checkPssdValidation('newPassword1', 'max')
+                  ? 'primary'
+                  : 'error'
               }
             >
               Doit contenir entre 8 et 15 caractères
@@ -159,8 +159,8 @@ const UserInfosForm = () => {
             <Typography
               color={
                 checkPssdValidation('newPassword1', 'uppercase')
-                  ? 'secondary'
-                  : 'primary'
+                  ? 'primary'
+                  : 'error'
               }
             >
               Doit posséder au moins une majuscule
@@ -168,8 +168,8 @@ const UserInfosForm = () => {
             <Typography
               color={
                 checkPssdValidation('newPassword1', 'lowercase')
-                  ? 'secondary'
-                  : 'primary'
+                  ? 'primary'
+                  : 'error'
               }
             >
               Doit posséder au moins une minuscule
@@ -177,8 +177,8 @@ const UserInfosForm = () => {
             <Typography
               color={
                 checkPssdValidation('newPassword1', 'digits')
-                  ? 'secondary'
-                  : 'primary'
+                  ? 'primary'
+                  : 'error'
               }
             >
               Doit posséder au moins un chiffre
@@ -186,8 +186,8 @@ const UserInfosForm = () => {
             <Typography
               color={
                 checkPssdValidation('newPassword1', 'symbols')
-                  ? 'secondary'
-                  : 'primary'
+                  ? 'primary'
+                  : 'error'
               }
             >
               Doit posséder au moins caractère spécial
@@ -195,8 +195,8 @@ const UserInfosForm = () => {
             <Typography
               color={
                 checkPssdValidation('newPassword1', 'spaces')
-                  ? 'secondary'
-                  : 'primary'
+                  ? 'primary'
+                  : 'error'
               }
             >
               Ne doit contenir aucun espace
@@ -207,9 +207,9 @@ const UserInfosForm = () => {
             <Typography
               color={
                 checkPssdValidation('newPassword2', 'equalTo') &&
-                formValues?.newPassword1?.length > 0
-                  ? 'secondary'
-                  : 'primary'
+                  formValues?.newPassword1?.length > 0
+                  ? 'primary'
+                  : 'error'
               }
             >
               Les deux mots de passe renseignés doivent être identiques

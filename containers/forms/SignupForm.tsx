@@ -25,6 +25,8 @@ import useGraphQLErrorDisplay from 'hooks/useGraphQLErrorDisplay';
 import useCookieRedirection from 'hooks/useCookieRedirection';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -77,6 +79,9 @@ const validationRules: ValidationRules = {
   password2: {
     rule: ValidationRuleType.required && ValidationRuleType.equalTo,
     field: 'password',
+  },
+  rgpd: {
+    rule: ValidationRuleType.required,
   },
 };
 
@@ -237,6 +242,17 @@ const SignupForm = () => {
             onChange={formChangeHandler}
             disabled={clicked}
           />
+          <FormControlLabel
+            control={
+              <Checkbox
+                name="rgpd"
+                color="primary"
+                required
+                onChange={formChangeHandler}
+              />
+            }
+            label={<label>J'accepte que les données saisies soient utilisées par OUAAA pour vous contacter conformément à <a href="/legalmention">nos mentions légales </a>*</label>}
+          />
           <ClassicButton
             fullWidth
             variant="contained"
@@ -250,6 +266,7 @@ const SignupForm = () => {
             <Grid item>
               {/* @ts-ignore */}
               Déjà inscrit ?{/* @ts-ignore */}
+              {' '}
               <Link href="/signin">Me connecter</Link>
             </Grid>
           </Grid>
@@ -261,9 +278,9 @@ const SignupForm = () => {
             <Typography
               color={
                 checkPssdValidation('password', 'min') &&
-                checkPssdValidation('password', 'max')
-                  ? 'secondary'
-                  : 'primary'
+                  checkPssdValidation('password', 'max')
+                  ? 'primary'
+                  : 'error'
               }
             >
               Doit contenir au moins 8 caractères
@@ -271,8 +288,8 @@ const SignupForm = () => {
             <Typography
               color={
                 checkPssdValidation('password', 'uppercase')
-                  ? 'secondary'
-                  : 'primary'
+                  ? 'primary'
+                  : 'error'
               }
             >
               Doit posséder au moins une majuscule
@@ -280,8 +297,8 @@ const SignupForm = () => {
             <Typography
               color={
                 checkPssdValidation('password', 'lowercase')
-                  ? 'secondary'
-                  : 'primary'
+                  ? 'primary'
+                  : 'error'
               }
             >
               Doit posséder au moins une minuscule
@@ -289,8 +306,8 @@ const SignupForm = () => {
             <Typography
               color={
                 checkPssdValidation('password', 'digits')
-                  ? 'secondary'
-                  : 'primary'
+                  ? 'primary'
+                  : 'error'
               }
             >
               Doit posséder au moins un chiffre
@@ -298,8 +315,8 @@ const SignupForm = () => {
             <Typography
               color={
                 checkPssdValidation('password', 'symbols')
-                  ? 'secondary'
-                  : 'primary'
+                  ? 'primary'
+                  : 'error'
               }
             >
               Doit posséder au moins caractère spécial
@@ -307,8 +324,8 @@ const SignupForm = () => {
             <Typography
               color={
                 checkPssdValidation('password', 'spaces')
-                  ? 'secondary'
-                  : 'primary'
+                  ? 'primary'
+                  : 'error'
               }
             >
               Ne doit contenir aucun espace
@@ -316,9 +333,9 @@ const SignupForm = () => {
             <Typography
               color={
                 checkPssdValidation('password2', 'equalTo') &&
-                formValues?.password?.length > 0
-                  ? 'secondary'
-                  : 'primary'
+                  formValues?.password?.length > 0
+                  ? 'primary'
+                  : 'error'
               }
             >
               Les deux mots de passe renseignés doivent être identiques

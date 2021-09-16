@@ -6,12 +6,17 @@ import {
   makeStyles,
   RootRef,
   Typography,
+  Grid,
 } from '@material-ui/core';
 import Newsletter from '../../containers/layouts/Newsletter';
 
 const useStyles = makeStyles((theme) => ({
   align: {
     'text-align': 'center',
+  },
+  main: {
+    paddingTop: '5em',
+
   },
 }));
 const Charter = () => {
@@ -21,14 +26,22 @@ const Charter = () => {
     <AppLayout>
       <RootRef>
         <Box>
-          <Container className={styles.align}>
-            <Typography variant="h1">Mentions Légales</Typography>
-            <Typography variant="h4">En cours de construction</Typography>
+          <Container component="main" maxWidth="md" className={styles.main} >
+            <Typography className={styles.align} variant="h1" >Mentions Légales</Typography>
+            <br />
+            <br />
+            <br />
+            <Typography variant="body1"> - Nom de l'éditeur : Aunis en transition  31 rue Eugene Decout 17000 Rochelle</Typography>
+            <Typography variant="body1"> - Hébergeur :  OVH</Typography>
+            <Typography variant="body1"> - gestion des données personnelles: </Typography>
+            <Typography variant="body1">Conformément à l'article 34 de la loi Informatique et Liberté du 6 janvier 1978, vous disposez d'un droit d'accès, de modification, de rectification et de suppression des données vous concernant. Pour l'exercer, adressez-vous à contact @acteursdelatransition.fr en précisant le message que vous avez reçu." </Typography>
+            <br />
+            <br />
           </Container>
           <Newsletter />
         </Box>
       </RootRef>
-    </AppLayout>
+    </AppLayout >
   );
 };
 
