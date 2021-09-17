@@ -162,6 +162,7 @@ const EDIT_ACTOR = gql`
       }
       contact_id
       openingHours {
+        id
         days {
           id
           day
