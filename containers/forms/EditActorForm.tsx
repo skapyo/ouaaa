@@ -257,6 +257,7 @@ const GET_ACTOR = gql`
       }
       contact_id
       openingHours {
+        id
         days {
           id
           day
