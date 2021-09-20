@@ -171,8 +171,6 @@ const Appointment = props => {
     router.push('/event/' + data.id);
   }, [router, data]);
 
-  console.log(data)
-
   return <Appointments.Appointment {...props} style={{ backgroundColor: data?.backgroundColor }} onClick={handleClick} />
 };
 
