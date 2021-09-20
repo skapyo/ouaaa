@@ -281,7 +281,7 @@ const AgendaPageLayout = () => {
 
   const classes = useStyles();
   const mapRef = useRef();
-  const [viewMode, setViewMode] = useState(VIEW_STATE.CALENDAR);
+  const [viewMode, setViewMode] = useState(VIEW_STATE.LIST);
   const [openFAB, setOpenFAB] = useState(false);
   const [favorite, setFavorite] = useState(false);
   const [filters, setFilters] = useState(null);
