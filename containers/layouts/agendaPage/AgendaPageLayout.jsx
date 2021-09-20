@@ -1,22 +1,34 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { Grid, Typography } from '@material-ui/core';
 import { withApollo } from 'hoc/withApollo';
 import Events from 'containers/layouts/agendaPage/Events';
-// import Filters from 'containers/layouts/agendaPage/Filters';
 import Filters from '../../../components/filters';
 import Newsletter from 'containers/layouts/Newsletter';
-import { Container, makeStyles, useMediaQuery, useTheme } from '@material-ui/core';
+import { Container, makeStyles } from '@material-ui/core';
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/client';
-import Fab from '@material-ui/core/Fab';
 import { getImageUrl } from '../../../utils/utils';
 import Link from '../../../components/Link';
 import Moment from 'react-moment';
+import moment from 'moment';
+import { SpeedDial, SpeedDialIcon, SpeedDialAction } from '@material-ui/lab';
+import { useRouter } from 'next/router'
 
 import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded';
 import FavoriteRoundedIcon from '@material-ui/icons/FavoriteRounded';
 import ViewListIcon from '@material-ui/icons/ViewList';
 import RoomIcon from '@material-ui/icons/Room';
+import TodayIcon from '@material-ui/icons/Today';
+
+import { ViewState } from '@devexpress/dx-react-scheduler';
+import {
+  Scheduler,
+  MonthView,
+  Toolbar,
+  DateNavigator,
+  Appointments,
+  TodayButton
+} from '@devexpress/dx-react-scheduler-material-ui';
 
 if (typeof window !== 'undefined') {
   var L = require('leaflet');
@@ -27,6 +39,10 @@ if (typeof window !== 'undefined') {
   var Tooltip = require('react-leaflet').Tooltip;
   var MarkerClusterGroup = require('react-leaflet-markercluster').default;
 }
+
+const currentDate = new Date();
+
+currentDate.setMonth(9);
 
 const useStyles = makeStyles(theme => ({
   main: {
@@ -50,20 +66,13 @@ const useStyles = makeStyles(theme => ({
       height: 'auto'
     }
   },
-  listButton: {
+  fab: {
     position: 'absolute',
-    bottom: 10,
-    zIndex: 10000,
-    color: '#fff',
-    backgroundColor: '#2C367E',
-    '&:hover': {
-      color: '#2C367E',
-      backgroundColor: '#fff',
-    },
+    bottom: 15,
+    right: 15,
     [theme.breakpoints.down('sm')]: {
-      position: 'initial',
-      marginTop: 25,
-      width: '75%'
+      bottom: 10,
+      right: 10
     }
   },
   listButtonIcon: {
@@ -132,15 +141,99 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const categories = {
-  Sujets: [],
+const useCalendarStyles = makeStyles(theme => ({
+  layout: {
+    height: '100%',
+    '& > *:only-child': {
+      height: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      '& > *:last-child': {
+        flex: 1,
+        '& table': {
+          height: '100%'
+        }
+      }
+    }
+  }
+}));
+
+const MonthLayout = props => {
+  const classes = useCalendarStyles();
+  return <MonthView.Layout {...props} className={classes.layout} />
 };
 
-const otherCategories = {
-  "Territoire d'actions": [],
-  "Statut d'acteur": [],
-  'Public visé': [],
-  'Collectif & réseaux': [],
+const Appointment = props => {
+  const { data } = props;
+  const router = useRouter();
+
+  const handleClick = useCallback(() => {
+    router.push('/event/' + data.id);
+  }, [router, data]);
+
+  console.log(data)
+
+  return <Appointments.Appointment {...props} style={{ backgroundColor: data?.backgroundColor }} onClick={handleClick} />
+};
+
+const CalendarView = props => {
+  const { data } = props;
+
+  const events = useMemo(() => {
+    return (data?.events || []).map(evt => {
+      const startDate = moment(parseInt(evt.startedAt));
+      const endDate = moment(parseInt(evt.endedAt));
+
+      let recurrentOptions = null;
+      const duration = Math.ceil(moment.duration(endDate.diff(startDate)).asDays());
+
+      if (duration > 2) {
+        recurrentOptions = {
+          endDate: startDate.endOf('day'),
+          rRule: `FREQ=DAILY;COUNT=${duration}`
+        };
+      }
+
+      return {
+        startDate: new Date(parseInt(evt.startedAt)),
+        endDate: new Date(parseInt(evt.endedAt)),
+        title: evt.label,
+        id: evt.id,
+        backgroundColor: evt.entries && evt.entries.length > 0 ? evt.entries[0].color : 'blue',
+        ...recurrentOptions
+      }
+    });
+  }, [data]);
+
+  return (
+    <Scheduler
+      firstDayOfWeek={1}
+      locale="fr-FR"
+      RootProps={{
+        height: 'auto'
+      }}
+      data={events}
+    >
+      <ViewState
+        defaultCurrentDate={currentDate}
+      />
+      <Toolbar />
+      <DateNavigator />
+      <TodayButton messages={{ today: "Aujourd'hui" }} />
+      <MonthView
+        layoutComponent={MonthLayout}
+      />
+      <Appointments
+        appointmentComponent={Appointment}
+      />
+    </Scheduler>
+  );
+};
+
+const VIEW_STATE = {
+  LIST: 'LIST',
+  MAP: 'MAP',
+  CALENDAR: 'CALENDAR'
 };
 
 const AgendaPageLayout = () => {
@@ -188,28 +281,17 @@ const AgendaPageLayout = () => {
 
   const classes = useStyles();
   const mapRef = useRef();
-  const [isListMode, setIsListMode] = useState(true);
+  const [viewMode, setViewMode] = useState(VIEW_STATE.CALENDAR);
+  const [openFAB, setOpenFAB] = useState(false);
   const [favorite, setFavorite] = useState(false);
-  const [categoriesChecked, setCategoriesChecked] = useState(categories.Sujets);
-  const [otherCategoriesChecked, setOtherCategoriesChecked] = useState(
-    otherCategories
-  );
-  const [postCode, setPostCode] = useState(null);
   const [filters, setFilters] = useState(null);
-
-  const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.up('md'));
 
   const date = new Date();
   const position = [46.1085193, -0.9864794];
 
-  const switchMode = useCallback(() => {
-    setIsListMode(!isListMode);
-  }, [isListMode]);
-
   date.setHours(0, 0, 0, 0);
 
-  const { data: eventData, loading: loadingEvents, error, refetch } = useQuery(GET_EVENTS, {
+  const { data: eventData, loading: loadingEvents, refetch } = useQuery(GET_EVENTS, {
     variables: {
       startingDate: date.toISOString(),
     },
@@ -226,34 +308,55 @@ const AgendaPageLayout = () => {
     refetch({ ...newFilters });
   }, [refetch]);
 
+  const fabActions = useMemo(() => {
+    return [
+      { name: 'list', label: 'Liste', icon: <ViewListIcon />, onClick: () => setViewMode(VIEW_STATE.LIST) },
+      { name: 'map', label: 'Carte', icon: <RoomIcon />, onClick: () => setViewMode(VIEW_STATE.MAP) },
+      { name: 'calendar', label: 'Calendrier', icon: <TodayIcon />, onClick: () => setViewMode(VIEW_STATE.CALENDAR) }
+    ]
+  }, []);
+
+  const isListMode = useMemo(() => viewMode === VIEW_STATE.LIST, [viewMode, VIEW_STATE]);
+  const isMapMode = useMemo(() => viewMode === VIEW_STATE.MAP, [viewMode, VIEW_STATE]);
+  const isCalendarMode = useMemo(() => viewMode === VIEW_STATE.CALENDAR, [viewMode, VIEW_STATE]);
+
   return (
     <Container className={classes.main}>
       <Container className={classes.layout}>
         <Filters
           isEventList
           onFiltersChange={handleFiltersChange}
+          isCalendarMode={isCalendarMode}
         />
 
-        <Fab
-          variant="extended"
-          size="large"
-          aria-label="add"
-          className={classes.listButton}
-          onClick={switchMode}
+        <SpeedDial
+          ariaLabel="fab-actions"
+          className={classes.fab}
+          icon={<SpeedDialIcon />}
+          onClose={() => setOpenFAB(false)}
+          onOpen={() => setOpenFAB(true)}
+          open={openFAB}
+          direction="up"
         >
-          {
-            isListMode ?
-              <RoomIcon className={classes.listButtonIcon} /> :
-              <ViewListIcon className={classes.listButtonIcon} />
-          }
-          <span>{isListMode ? 'Voir la Carte' : 'Voir la Liste'}</span>
-        </Fab>
+          {fabActions.map((action) => (
+            <SpeedDialAction
+              key={action.name}
+              icon={action.icon}
+              tooltipTitle={action.label}
+              onClick={action.onClick}
+            />
+          ))}
+        </SpeedDial>
 
         {isListMode && (
           <Events data={eventData} loading={loadingEvents} />
         )}
 
-        {!isListMode && (
+        {isCalendarMode && (
+          <CalendarView data={eventData} />
+        )}
+
+        {isMapMode && (
           <Grid style={{ width: '100%' }}>
             <Map ref={mapRef} center={position} zoom={11} className={classes.mapContainer}>
               <TileLayer
