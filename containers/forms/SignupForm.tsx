@@ -140,7 +140,7 @@ const SignupForm = () => {
             <p style={{ textAlign: 'center' }}>
               Veuillez confirmer votre compte.
               <br />
-              Un email de validation a été envoyé à :{/* @ts-ignore */}
+              Un email de validation a été envoyé à : {/* @ts-ignore */}
               <b>{email}</b>
             </p>
           )}

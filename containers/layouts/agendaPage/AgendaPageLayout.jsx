@@ -197,7 +197,7 @@ const CalendarView = props => {
         endDate: new Date(parseInt(evt.endedAt)),
         title: evt.label,
         id: evt.id,
-        backgroundColor: evt.entries && evt.entries.length > 0 ? evt.entries[0].color : 'blue',
+        backgroundColor: evt.entries && evt.entries.length > 0 && evt.entries[0].parentEntry ? evt.entries[0].parentEntry.color : 'blue',
         ...recurrentOptions
       }
     });
@@ -248,11 +248,21 @@ const AgendaPageLayout = () => {
         address
         city
         entries {
-          id
-          code
           label
-          color
           icon
+          collection {
+            code
+            label
+          }
+          parentEntry {
+            code
+            label
+            color
+            collection {
+              code
+              label
+            }
+          }
         }
         actors {
           id
@@ -368,12 +378,12 @@ const AgendaPageLayout = () => {
                     let color;
                     if (event.lat != null && event.lng != null) {
                       if (
-                        event.categories &&
-                        event.categories.length > 0 &&
-                        event.categories[0].icon
+                        event.entries &&
+                        event.entries.length > 0 &&
+                        event.entries[0].icon
                       ) {
-                        icone = `/icons/${event.categories[0].icon}.svg`;
-                        color = event.categories[0].color;
+                        icone = '/icons/marker/marker_' + event.entries[0].icon + '.svg';
+                        color = event.entries[0].color;
                       } else {
                         icone = '/icons/' + 'place' + '.svg';
                         color = 'black';
@@ -384,7 +394,7 @@ const AgendaPageLayout = () => {
                         color,
                         fillColor: color,
                         iconAnchor: [13, 34], // point of the icon which will correspond to marker's location
-                        iconSize: [25],
+                        iconSize: [60],
                         popupAnchor: [1, -25],
                         html: `<span style="${markerHtmlStyles}" />`,
                       });
