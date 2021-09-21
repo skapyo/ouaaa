@@ -95,6 +95,10 @@ const MyApp = (props) => {
           type="text/javascript"
           src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDvUKXlWS1470oj8C-vD6s62Bs9Y8XQf00&language=fr&region=FR&libraries=places"
         />
+        <script
+          type="text/javascript"
+          src="/analytics/piwik-pro.js"
+        />
       </Head>
       <MuiPickersUtilsProvider utils={MomentUtils}>
         <ThemeProvider theme={theme}>
