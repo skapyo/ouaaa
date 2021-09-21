@@ -12,8 +12,8 @@ import Link from '../../../components/Link';
 import Moment from 'react-moment';
 import moment from 'moment';
 import { SpeedDial, SpeedDialIcon, SpeedDialAction } from '@material-ui/lab';
-import { useRouter } from 'next/router'
-
+import { useRouter } from 'next/router';
+import classNames from 'clsx';
 import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded';
 import FavoriteRoundedIcon from '@material-ui/icons/FavoriteRounded';
 import ViewListIcon from '@material-ui/icons/ViewList';
@@ -24,10 +24,12 @@ import { ViewState } from '@devexpress/dx-react-scheduler';
 import {
   Scheduler,
   MonthView,
+  DayView,
   Toolbar,
   DateNavigator,
   Appointments,
-  TodayButton
+  TodayButton,
+  ViewSwitcher,
 } from '@devexpress/dx-react-scheduler-material-ui';
 
 if (typeof window !== 'undefined') {
@@ -155,7 +157,20 @@ const useCalendarStyles = makeStyles(theme => ({
         }
       }
     }
-  }
+  },
+  text: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  content: {
+    opacity: 0.7,
+  },
+  container: {
+    width: '100%',
+    lineHeight: 1.2,
+    height: '100%',
+  },
 }));
 
 const MonthLayout = props => {
@@ -166,12 +181,21 @@ const MonthLayout = props => {
 const Appointment = props => {
   const { data } = props;
   const router = useRouter();
-
+  const classes = useCalendarStyles();
   const handleClick = useCallback(() => {
     router.push('/event/' + data.id);
   }, [router, data]);
 
-  return <Appointments.Appointment {...props} style={{ backgroundColor: data?.backgroundColor }} onClick={handleClick} />
+  return (<Appointments.AppointmentContent {...props} style={{ backgroundColor: data?.backgroundColor,padding: '1px 2px',cursor: 'pointer' }} onClick={handleClick} >
+      <div className={classes.container}>
+        <div className={classes.text}>
+          {data.title}
+        </div>
+        <div className={classNames(classes.text, classes.content)}>
+          {`Lieu: ${data.location}`}
+        </div>
+      </div>
+      </Appointments.AppointmentContent>)
 };
 
 const CalendarView = props => {
@@ -192,11 +216,13 @@ const CalendarView = props => {
         };
       }
 
+
       return {
         startDate: new Date(parseInt(evt.startedAt)),
         endDate: new Date(parseInt(evt.endedAt)),
         title: evt.label,
         id: evt.id,
+        location : evt.city?[evt.address, evt.city].join(', '):'',
         backgroundColor: evt.entries && evt.entries.length > 0 && evt.entries[0].parentEntry ? evt.entries[0].parentEntry.color : 'blue',
         ...recurrentOptions
       }
@@ -218,12 +244,22 @@ const CalendarView = props => {
       <Toolbar />
       <DateNavigator />
       <TodayButton messages={{ today: "Aujourd'hui" }} />
+      
       <MonthView
         layoutComponent={MonthLayout}
+      />
+      <DayView
+        displayName={'3 jours'}
+        startDayHour={9}
+        endDayHour={17}
+        intervalCount={3}
       />
       <Appointments
         appointmentComponent={Appointment}
       />
+
+      <ViewSwitcher/>
+
     </Scheduler>
   );
 };
