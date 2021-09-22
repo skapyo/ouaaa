@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useMemo, useCallback } from 'react';
 import AppLayout from 'containers/layouts/AppLayout';
 import {
   Box,
@@ -36,6 +36,7 @@ import Newsletter from '../../containers/layouts/Newsletter';
 import { useSessionState } from '../../context/session/session';
 import CardAddEvent from '../../components/cards/CardAddEvent';
 import { getImageUrl, entriesHasElementWithCode } from '../../utils/utils';
+import Calendar from '../../components/Calendar';
 
 if (typeof window !== 'undefined') {
   var L = require('leaflet');
@@ -209,7 +210,7 @@ const useStyles = makeStyles((theme) => ({
       fontSize: '0.8em',
     },
     textAlign: 'center',
-  }, 
+  },
   volunteerSection: {
     backgroundColor: '#2b3483',
     paddingBottom: '1em',
@@ -486,8 +487,8 @@ const Actor = () => {
   const nbSlidetoshow = data && data.actor.events && data.actor.events.length > 5
     ? 5
     : data
-        && data.actor.events
-        && data.actor.events.length + (containUser(data.actor.referents) ? 1 : 0);
+    && data.actor.events
+    && data.actor.events.length + (containUser(data.actor.referents) ? 1 : 0);
 
   const settingsSliderevent = {
     infinite: true,
@@ -552,6 +553,34 @@ const Actor = () => {
     });
     return text;
   }
+
+  const events = useMemo(() => {
+    return (data?.actor?.events || []).map(evt => {
+      const startDate = moment(parseInt(evt.startedAt));
+      const endDate = moment(parseInt(evt.endedAt));
+
+      let recurrentOptions = null;
+      const duration = Math.ceil(moment.duration(endDate.diff(startDate)).asDays());
+
+      if (duration > 2) {
+        recurrentOptions = {
+          endDate: startDate.endOf('day'),
+          rRule: `FREQ=DAILY;COUNT=${duration}`
+        };
+      }
+
+      return {
+        startDate: new Date(parseInt(evt.startedAt)),
+        endDate: new Date(parseInt(evt.endedAt)),
+        title: evt.label,
+        id: evt.id,
+        location: evt.city ? [evt.address, evt.city].join(', ') : '',
+        backgroundColor: evt.entries && evt.entries.length > 0 && evt.entries[0].parentEntry ? evt.entries[0].parentEntry.color : 'blue',
+        ...recurrentOptions
+      }
+    })
+  }, [data]);
+
   return (
     <AppLayout>
       <Head>
@@ -599,7 +628,7 @@ const Actor = () => {
               className={styles.titleContainer}
               style={{
                 backgroundImage:
-                  data.actor.pictures.length >= 1 &&  data.actor.pictures.filter(picture => picture.main).length >= 1
+                  data.actor.pictures.length >= 1 && data.actor.pictures.filter(picture => picture.main).length >= 1
                     ? `url(${getImageUrl(
                       data.actor.pictures.filter(picture => picture.main)[0].originalPicturePath)})`
                     : '',
@@ -611,7 +640,7 @@ const Actor = () => {
               <Grid item md={5} sm={10} className={[styles.align]}>
                 <Grid container className={[styles.infoPratiqueGrid]}>
                   <div className={styles.image}>
-                    {data && data.actor.pictures.length >= 1 &&  data.actor.pictures.filter(picture => picture.logo).length >= 1 &&  (
+                    {data && data.actor.pictures.length >= 1 && data.actor.pictures.filter(picture => picture.logo).length >= 1 && (
                       <img
                         src={
                           data.actor.pictures.length >= 1
@@ -652,9 +681,8 @@ const Actor = () => {
                         {data && data.actor.address && data.actor.city && (
                           <span>
                             {/* @ts-ignore */}
-                            {`${data && data.actor.address} ${
-                              data && data.actor.city
-                            }`}
+                            {`${data && data.actor.address} ${data && data.actor.city
+                              }`}
                           </span>
                         )}
                       </span>
@@ -682,11 +710,11 @@ const Actor = () => {
                                           {` ${entry && entry.label}`}
                                         </Typography>
                                       </div>
-                                  ),
+                                    ),
                                 )}
                             </span>
                           </div>
-                      )}
+                        )}
                     </Grid>
                   </Grid>
                   {data && data.actor.phone && (
@@ -787,39 +815,39 @@ const Actor = () => {
                       <Grid item xs={8} className={[styles.alignLeft]}>
                         <div className={[styles.infoLabel]}>Horaire</div>
                         {data
-                            && data.actor.openingHours.map((openingHour) => {
-                              // debugger;
-                              return (
-                                <span className={[styles.infoValue]}>
-                                    {openingHour.place}{openingHour.place && '   '}
-                                  {openingHour.days.map((day, index) => {
-                                    return (
-                                      <>{day.selected && getDay(day.id)}</>
-                                    );
-                                  })}
-                                  {openingHour.hours.map((hourtab, indexhourtab) => {
-                                    return (
-                                      <>
-                                        {indexhourtab !== 0 && ' ; '}
-                                        {hourtab.map((hour, index) => {
-                                          return (
-                                            <>
-                                              {moment(hour).format('HH')}
-                                              h
-                                              {moment(hour).format('mm')}
-                                              {index === 0 && ' - '}
-                                            </>
-                                          );
-                                        })}
-                                      
-                                      </>
-                                    );
-                                  })}
-                                 
-                                  <br />
-                                </span>
-                              );
-                            })}
+                          && data.actor.openingHours.map((openingHour) => {
+                            // debugger;
+                            return (
+                              <span className={[styles.infoValue]}>
+                                {openingHour.place}{openingHour.place && '   '}
+                                {openingHour.days.map((day, index) => {
+                                  return (
+                                    <>{day.selected && getDay(day.id)}</>
+                                  );
+                                })}
+                                {openingHour.hours.map((hourtab, indexhourtab) => {
+                                  return (
+                                    <>
+                                      {indexhourtab !== 0 && ' ; '}
+                                      {hourtab.map((hour, index) => {
+                                        return (
+                                          <>
+                                            {moment(hour).format('HH')}
+                                            h
+                                            {moment(hour).format('mm')}
+                                            {index === 0 && ' - '}
+                                          </>
+                                        );
+                                      })}
+
+                                    </>
+                                  );
+                                })}
+
+                                <br />
+                              </span>
+                            );
+                          })}
                       </Grid>
                     </Grid>
                   )}
@@ -850,18 +878,18 @@ const Actor = () => {
                             >
                               {/* @ts-ignore */}
                               {` ${entry.parentEntry && entry.parentEntry.label
-                              } `}
+                                } `}
                               {/* @ts-ignore */}
                               :
-                              { entry.icon && (
-                              <img src={`/icons/${entry.icon}.svg`} alt="icon" className={styles.iconEntry} />
+                              {entry.icon && (
+                                <img src={`/icons/${entry.icon}.svg`} alt="icon" className={styles.iconEntry} />
                               )}
                               {/* @ts-ignore */}
                               {` ${entry && entry.label}`}
                               {/* @ts-ignore */}
                             </Typography>
                           </div>
-                      ),
+                        ),
                     )}
                 </div>
                 <br />
@@ -888,11 +916,11 @@ const Actor = () => {
                                     {`  ${entry && entry.label}`}
                                   </Typography>
                                 </div>
-                            ),
+                              ),
                           )}
                       </span>
                     </div>
-                )}
+                  )}
                 {data
                   && entriesHasElementWithCode(
                     data.actor.entries,
@@ -919,11 +947,11 @@ const Actor = () => {
                                     {` ${entry && entry.label}`}
                                   </Typography>
                                 </div>
-                            ),
+                              ),
                           )}
                       </span>
                     </div>
-                )}
+                  )}
                 {data
                   && entriesHasElementWithCode(
                     data.actor.entries,
@@ -948,55 +976,55 @@ const Actor = () => {
                                     {` ${entry && entry.label}`}
                                   </Typography>
                                 </div>
-                            ),
+                              ),
                           )}
                       </span>
                     </div>
-                )}
-              
-              <div />
-              <br />
-              <Typography variant="h3" className={styles.cardTitle}>
-                ACCES
-              </Typography>
-              <div className={styles.border} />
-              <br />
+                  )}
 
-              {data && (
-                <Map ref={mapRef} center={[data.actor.lat, data.actor.lng]} zoom={11} className={styles.map}  >
-                  <TileLayer
-                    attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                  />
-                  <Marker
-                    position={[data.actor.lat, data.actor.lng]}
-                    icon={new L.Icon({
-                      iconUrl: '/icons/location.svg',
-                      iconAnchor: [13, 34], // point of the icon which will correspond to marker's location
-                      iconSize: [25],
-                      popupAnchor: [1, -25],
-                      html: `<span style="background-color: red" />`,
-                    })}
-                  >
-                    <Popup>
-                      {data.actor.name} - {data && !data.actor.address && data.actor.city && (
-                        <span>
-                          {/* @ts-ignore */}
-                          {data && data.actor.city}
-                        </span>
-                      )} 
-                      {data && data.actor.address && data.actor.city && (
-                        <span>
-                          {/* @ts-ignore */}
-                          {`${data && data.actor.address} ${data && data.actor.city
-                            }`}
-                        </span>
-                      )}
+                <div />
+                <br />
+                <Typography variant="h3" className={styles.cardTitle}>
+                  ACCES
+                </Typography>
+                <div className={styles.border} />
+                <br />
+
+                {data && (
+                  <Map ref={mapRef} center={[data.actor.lat, data.actor.lng]} zoom={11} className={styles.map}  >
+                    <TileLayer
+                      attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    />
+                    <Marker
+                      position={[data.actor.lat, data.actor.lng]}
+                      icon={new L.Icon({
+                        iconUrl: '/icons/location.svg',
+                        iconAnchor: [13, 34], // point of the icon which will correspond to marker's location
+                        iconSize: [25],
+                        popupAnchor: [1, -25],
+                        html: `<span style="background-color: red" />`,
+                      })}
+                    >
+                      <Popup>
+                        {data.actor.name} - {data && !data.actor.address && data.actor.city && (
+                          <span>
+                            {/* @ts-ignore */}
+                            {data && data.actor.city}
+                          </span>
+                        )}
+                        {data && data.actor.address && data.actor.city && (
+                          <span>
+                            {/* @ts-ignore */}
+                            {`${data && data.actor.address} ${data && data.actor.city
+                              }`}
+                          </span>
+                        )}
                       </Popup>
                     </Marker>
-                </Map>
-              )}
-            </Grid>
+                  </Map>
+                )}
+              </Grid>
             </Grid>
             <br />
             {data && data.actor.volunteerDescription && (
@@ -1008,11 +1036,11 @@ const Actor = () => {
                 <div className={styles.border} />
                 <br />
                 <div className={styles.volunteerSection}>
-                <Typography  className={styles.volunteerTitle}>
-                  {data && data.actor.name} recherche des bénévoles
-                </Typography>
+                  <Typography className={styles.volunteerTitle}>
+                    {data && data.actor.name} recherche des bénévoles
+                  </Typography>
                   <br />
-                  <div  className={styles.volunteerDescription}>{data && Parser(data.actor.volunteerDescription)}</div>
+                  <div className={styles.volunteerDescription}>{data && Parser(data.actor.volunteerDescription)}</div>
                   <div >
                     {data && containUser(data.actor.volunteers) && (
                       <button
@@ -1024,7 +1052,7 @@ const Actor = () => {
                     )}
                     {!(data && containUser(data.actor.volunteers)) && (
                       <button
-                       className={styles.buttonVolunteer}
+                        className={styles.buttonVolunteer}
                         onClick={addVolunteerHandler}
                       >
                         Devenir bénévole
@@ -1071,31 +1099,22 @@ const Actor = () => {
                     {data && data.actor.name}
                   </Typography>
                 </div>
-            )}
-            <Slider
-              {...settingsSliderevent}
-              className={[styles.articleCarroussel]}
-            >
-              {data && containUser(data.actor.referents) && (
-                <CardAddEvent actor={data.actor} />
               )}
-
-              {data
-                && data.actor.events
-                && data.actor.events.map((event) => (
-                  <CardSliderEvent key={event.id} event={event} />
-                ))}
-            </Slider>
+            <Calendar
+              events={events}
+              withViewSwitcher={false}
+              withAddEvent
+            />
           </Container>
           <Newsletter />
           {((data && containUser(data.actor.referents))
             || (user && user.role === 'admin')) && (
-            <Link href={`/actorAdmin/actor/${id}`}>
-              <Fab className={styles.fab} aria-label="edit">
-                <EditIcon />
-              </Fab>
-            </Link>
-          )}
+              <Link href={`/actorAdmin/actor/${id}`}>
+                <Fab className={styles.fab} aria-label="edit">
+                  <EditIcon />
+                </Fab>
+              </Link>
+            )}
         </Box>
       </RootRef>
     </AppLayout>
