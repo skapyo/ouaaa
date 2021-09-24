@@ -305,6 +305,25 @@ const Actor = () => {
             croppedRotation
             position
           }
+          address
+          city
+          entries {
+            label
+            icon
+            collection {
+              code
+              label
+            }
+            parentEntry {
+              code
+              label
+              color
+              collection {
+                code
+                label
+              }
+            }
+          }
         }
         volunteers {
           id
