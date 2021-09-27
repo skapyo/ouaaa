@@ -352,7 +352,7 @@ const Actor = () => {
         }
         openingHours {
           days {
-            id
+            identifier
             day
             selected
           }
@@ -413,7 +413,6 @@ const Actor = () => {
     variables: {
       id,
     },
-    fetchPolicy: 'cache-first',
   });
   useEffect(() => {
     if (volunteerData !== undefined) {
@@ -480,15 +479,6 @@ const Actor = () => {
     }
   };
 
-  const WEEKDAYS = [
-    { id: 1, day: 'L', selected: false },
-    { id: 2, day: 'M', selected: false },
-    { id: 3, day: 'M', selected: false },
-    { id: 4, day: 'J', selected: false },
-    { id: 5, day: 'V', selected: false },
-    { id: 6, day: 'S', selected: false },
-    { id: 7, day: 'D', selected: false },
-  ];
   const headerRef = React.useRef();
   const settingsSliderImage = {
     infinite: true,
@@ -841,7 +831,7 @@ const Actor = () => {
                                 {openingHour.place}{openingHour.place && '   '}
                                 {openingHour.days.map((day, index) => {
                                   return (
-                                    <>{day.selected && getDay(day.id)}</>
+                                    <>{day.selected && getDay(day.identifier)}</>
                                   );
                                 })}
                                 {openingHour.hours.map((hourtab, indexhourtab) => {
@@ -1122,7 +1112,8 @@ const Actor = () => {
             <Calendar
               events={events}
               withViewSwitcher={false}
-              withAddEvent
+              withAddEvent={((data && containUser(data.actor.referents))
+                || (user && user.role === 'admin'))}
             />
           </Container>
           <Newsletter />

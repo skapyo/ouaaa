@@ -167,6 +167,7 @@ const EDIT_ACTOR = gql`
           id
           day
           selected
+          identifier
         }
         hours
         place
@@ -262,6 +263,7 @@ const GET_ACTOR = gql`
           id
           day
           selected
+          identifier
         }
         hours
         place
