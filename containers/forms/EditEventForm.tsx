@@ -762,7 +762,7 @@ const EditEventForm = (props) => {
   ] = useMutation(DELETE_EVENT);
   const [open, setOpen] = React.useState(false);
 
-  const handleClickOpen = () => {
+  const handleClickOpenDeleteDialog = () => {
     setOpen(true);
   };
 
@@ -1815,7 +1815,7 @@ const EditEventForm = (props) => {
           fullWidth
           variant="contained"
           className={styles.delete}
-          onClick={handleClickOpen}
+          onClick={handleClickOpenDeleteDialog}
         >
           Supprimer cet événement
         </ClassicButton>
