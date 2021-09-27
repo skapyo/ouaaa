@@ -461,19 +461,19 @@ const Actor = () => {
   const getDay = (dayNumber) => {
     switch (dayNumber) {
       case '1':
-        return 'Lu ';
+        return 'Lundi ';
       case '2':
-        return 'Ma ';
+        return 'Mardi ';
       case '3':
-        return 'Mer ';
+        return 'Mercredi ';
       case '4':
-        return 'Jeu ';
+        return 'Jeudi ';
       case '5':
-        return 'Ven ';
+        return 'Vendredi ';
       case '6':
-        return 'Sam ';
+        return 'Samedi ';
       case '7':
-        return 'Dim ';
+        return 'Dimanche ';
       default:
         return '';
     }
@@ -828,10 +828,10 @@ const Actor = () => {
                             // debugger;
                             return (
                               <span className={[styles.infoValue]}>
-                                {openingHour.place}{openingHour.place && '   '}
-                                {openingHour.days.map((day, index) => {
+                                {openingHour.place}{openingHour.place && ' , '}
+                                {openingHour.days.filter(day => day.selected).map((day, index) => {
                                   return (
-                                    <>{day.selected && getDay(day.identifier)}</>
+                                    <>{index != 0 && 'et '}{ getDay(day.identifier)}</>
                                   );
                                 })}
                                 {openingHour.hours.map((hourtab, indexhourtab) => {

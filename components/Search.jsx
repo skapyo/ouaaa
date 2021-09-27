@@ -48,7 +48,7 @@ export default function Search() {
         <SearchIcon />
       </div>
       <InputBase
-        placeholder="Rechercher un acteur, un événement, un article"
+        placeholder="Rechercher un acteur, une action, un article"
         classes={{
           root: styles.inputRoot,
           input: styles.inputInput,

@@ -151,6 +151,7 @@ const useStyles = makeStyles((theme) => ({
   collectionLabel: {
     textAlign: 'center',
     color: '#2C367E',
+    fontWeight: 600,
   },
   justify: {
     textAlign: 'justify',
@@ -1198,10 +1199,10 @@ const EditEventForm = (props) => {
     return (
       <Container component="main" maxWidth="sm" className={styles.main}>
         <Typography className={styles.field} color="secondary" variant="h6">
-          Éditer un événement
+          Éditer une action
         </Typography>
         <FormItem
-          label="Nom de l'événement"
+          label="Nom de l'action"
           inputName="label"
           formChangeHandler={formChangeHandler}
           value={formValues.label}
@@ -1209,7 +1210,7 @@ const EditEventForm = (props) => {
           errorBool={
             !validationResult?.global && !!validationResult?.result.label
           }
-          errorText="Nom de l'événement requis."
+          errorText="Nom de l'action requis."
         />
         {
           /* @ts-ignore */
@@ -1261,6 +1262,7 @@ const EditEventForm = (props) => {
                                 key={entry.id}
                                 nodeId={entry.id}
                                 labelText={entry.label}
+                                description={entry.description}
                                 hideCheckBox
                                 isForm
                                 isParent
@@ -1275,6 +1277,7 @@ const EditEventForm = (props) => {
                                         // @ts-ignore
                                         nodeId={subEntry.id}
                                         labelText={subEntry.label}
+                                        description={subEntry.description}
                                         icon={subEntry.icon}
                                         color={entry.color}
                                         categoryChange={formChangeHandler}
@@ -1393,7 +1396,7 @@ const EditEventForm = (props) => {
           })
         }
         <Grid className={styles.location}>
-          <Typography>Adresse complète de l’événement *</Typography>
+          <Typography className={styles.collectionLabel}>Adresse complète de l’événement *</Typography>
           <GooglePlacesAutocomplete
             placeholder="Taper et sélectionner l'adresse*"
             initialValue={
@@ -1809,7 +1812,7 @@ const EditEventForm = (props) => {
           onClick={submitHandler}
           disabled={!validationResult?.global || !validated}
         >
-          Mettre à jour cet événement
+          Mettre à jour cette action
         </ClassicButton>
         <ClassicButton
           fullWidth
@@ -1817,7 +1820,7 @@ const EditEventForm = (props) => {
           className={styles.delete}
           onClick={handleClickOpenDeleteDialog}
         >
-          Supprimer cet événement
+          Supprimer cette action
         </ClassicButton>
         <Dialog
           open={open}
@@ -1830,7 +1833,7 @@ const EditEventForm = (props) => {
           </DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              Une fois supprimé, cet événement sera définitivement supprimé. Il
+              Une fois supprimé, cette action sera définitivement supprimé. Il
               ne sera plus visible sur notre plateforme, ni pour vous, ni pour
               les visiteurs.
             </DialogContentText>

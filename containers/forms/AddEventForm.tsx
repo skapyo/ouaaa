@@ -111,6 +111,7 @@ const useStyles = makeStyles((theme) => ({
   collectionLabel: {
     textAlign: 'center',
     color: '#2C367E',
+    fontWeight: 600,
   },
   justify: {
     textAlign: 'justify',
@@ -781,10 +782,10 @@ const AddEventForm = ({ actorId }) => {
     return (
       <Container component="main" maxWidth="sm" className={styles.container}>
         <Typography className={styles.field} color="secondary" variant="h6">
-          Ajouter un événement
+          Ajouter une action
         </Typography>
         <FormItem
-          label="Nom de l'événement"
+          label="Nom de l'action"
           inputName="label"
           formChangeHandler={formChangeHandler}
           value={formValues.label}
@@ -792,7 +793,7 @@ const AddEventForm = ({ actorId }) => {
           errorBool={
             !validationResult?.global && !!validationResult?.result.label
           }
-          errorText="Nom de l'événement requis."
+          errorText="Nom de l'action requis."
         />
         {
           /* @ts-ignore */
@@ -844,6 +845,7 @@ const AddEventForm = ({ actorId }) => {
                                 key={entry.id}
                                 nodeId={entry.id}
                                 labelText={entry.label}
+                                description={entry.description}
                                 hideCheckBox
                                 isForm
                                 isParent
@@ -858,6 +860,7 @@ const AddEventForm = ({ actorId }) => {
                                         // @ts-ignore
                                         nodeId={subEntry.id}
                                         labelText={subEntry.label}
+                                        description={subEntry.description}
                                         categoryChange={formChangeHandler}
                                         icon={subEntry.icon}
                                         color={entry.color}
@@ -966,7 +969,7 @@ const AddEventForm = ({ actorId }) => {
           })
         }
         <Grid className={styles.location}>
-          <Typography>Adresse complète de l’événement *</Typography>
+          <Typography className={styles.collectionLabel}>Adresse complète de l’événement *</Typography>
           <GooglePlacesAutocomplete
             placeholder="Taper et sélectionner l'adresse*"
             initialValue={
@@ -1288,7 +1291,7 @@ const AddEventForm = ({ actorId }) => {
         </FormControl>
         <p />
         <FormItem
-          label="Lien externe de l'événement (Facebook ou site)"
+          label="Lien externe de l'action (Facebook ou site)"
           inputName="facebookUrl"
           formChangeHandler={formChangeHandler}
           value={formValues.facebookUrl}
@@ -1383,7 +1386,7 @@ const AddEventForm = ({ actorId }) => {
           onClick={submitHandler}
           disabled={!validationResult?.global || !validated}
         >
-          Créer cet événement
+          Créer cet action
         </ClassicButton>
       </Container>
     );

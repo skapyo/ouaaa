@@ -209,6 +209,7 @@ const useStyles = makeStyles((theme) => ({
   collectionLabel: {
     textAlign: 'center',
     color: '#2C367E',
+    fontWeight: 600,
   },
   rootTree: {
     color: theme.palette.text.secondary,

@@ -408,7 +408,7 @@ const Event = () => {
       setCookie('redirect_url', router.asPath, {
         path: `/event/${data.event.id}`,
       });
-      enqueueSnackbar("Veuillez vous connecter pour participer à l'événement", {
+      enqueueSnackbar("Veuillez vous connecter pour participer à l'action", {
         preventDuplicate: true,
       });
     } else {
@@ -544,7 +544,7 @@ const Event = () => {
                   && (
                     <Grid container className={[styles.item]}>
                       <Grid item xs={3} className={[styles.alignRight]}>
-                        <LocalOffer className={[styles.icon]} />
+                        <img src={"/icons/types.svg"} alt="Collectif & réseau" className={[styles.icon]} />
                       </Grid>
                       <Grid item xs={8} className={[styles.alignLeft]}>
                         <div className={[styles.infoLabel]}>TYPE</div>
@@ -677,31 +677,31 @@ const Event = () => {
                     'event_price',
                   ) && (
                   <Grid container className={[styles.item]}>
-                      <Grid item xs={3} className={[styles.alignRight]}>
-                        <Euro className={[styles.icon]} />
-                      </Grid>
-                      <Grid item xs={8} className={[styles.alignLeft]}>
-                        <div className={[styles.infoLabel]}>Tarif</div>
-                        <span className={[styles.infoValue]}>
-                          {data &&
-                            data.event.entries.map(
-                              (entry) =>
-                                entry &&
-                                entry.collection &&
-                                entry.collection.code === 'event_price' && (
-                                  <div>
-                                    <Typography
-                                      variant="h7"
-                                      className={styles.cardTitleCategories}
-                                    >
-                                      {` ${entry && entry.label}`}
-                                    </Typography>
-                                  </div>
-                                ),
-                            )}
-                        </span>
-                      </Grid>
+                    <Grid item xs={3} className={[styles.alignRight]}>
+                      <img src={"/icons/tarifs.svg"} alt="Tarif" className={[styles.icon]} />
                     </Grid>
+                    <Grid item xs={8} className={[styles.alignLeft]}>
+                      <div className={[styles.infoLabel]}>Tarif</div>
+                      <span className={[styles.infoValue]}>
+                        {data &&
+                          data.event.entries.map(
+                            (entry) =>
+                              entry &&
+                              entry.collection &&
+                              entry.collection.code === 'event_price' && (
+                                <div>
+                                  <Typography
+                                    variant="h7"
+                                    className={styles.cardTitleCategories}
+                                  >
+                                    {` ${entry && entry.label}`}
+                                  </Typography>
+                                </div>
+                              ),
+                          )}
+                      </span>
+                    </Grid>
+                  </Grid>
                   )}
                   </Grid>
                   

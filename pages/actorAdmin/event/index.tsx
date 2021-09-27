@@ -193,7 +193,7 @@ const EventAdminPage = () => {
         variant="h6"
         className={styles.userInfosTitle}
       >
-        Listes des événements dont vous êtes administrateur
+        Listes des actions dont vous êtes administrateur
       </Typography>
       {typeof dataAdminEvent !== 'undefined' && (
         <TableContainer component={Paper}>
