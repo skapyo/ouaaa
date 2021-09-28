@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
     color: 'white',
     'background-color': '#2C367E',
     border: 'none',
-    
+
     borderRadius: '1.5em',
     padding: '0.2em 3em 0.2em 3em',
     minHeight: '2.5em',
@@ -56,10 +56,23 @@ const Participate = () => {
                 JE DEVIENS UN ACTEUR
               </button>
             </Link>
+            <Typography>
+              <div>
 
+                Tu veux changer le monde ? Vas-y fonce :
+              </div>
+              <br/>
+              <div>
+                Ouaaa est un site collaboratif, ce qui veut dire qu'il est fait par et pour ses contributeurs :  Sa gouvernance est assurée par les citoyens et organisations, acteurs de la transition que l'on peut trouver dans ses pages. Son administration suppose un gros travail de gestion de données, de coordination, de relation publique et de communication assuré en grande partie bénévolement.
+                Nous sommes donc toujours à la recherche de personnes motivées qui souhaitent mettre de leur temps, leurs savoir faire, et leur énergie au service de la promotion de la transition écologique, sociale et citoyenne en Aunis !
+              </div>
+              <br/>
+            </Typography>
             <Typography variant="h4">
-              <a href="mailto:contact@acteursdelatransition.fr">
-                Rejoins l'équipe du <i>OUAAA!</i>
+              <a href="mailto:contact@acteursdelatransition.fr?subject=Offre de bénévolat">
+              Je Participe et je rejoins l'équipe du 
+                {' '}
+                <i>Ouaaa</i>
               </a>
               {/* @ts-ignore */}
             </Typography>

@@ -22,7 +22,10 @@ const Contact = () => {
         <Box>
           <Container className={styles.align}>
             <Typography variant="h1">Contact</Typography>
-            <Typography variant="h4">En cours de construction</Typography>
+            <br/>
+            <br/>
+            <Typography variant="h3">Coordonnées association porteuse :
+contact[@]acteursdelatransition.fr</Typography>
           </Container>
           <Newsletter />
         </Box>

@@ -12,7 +12,7 @@ import Fab from '@material-ui/core/Fab';
 import Actors from 'containers/layouts/mapPage/actors';
 import Filters from '../../components/filters';
 import Parser from 'html-react-parser';
-
+import Head from 'next/head';
 import ViewListIcon from '@material-ui/icons/ViewList';
 import RoomIcon from '@material-ui/icons/Room';
 
@@ -408,9 +408,11 @@ const carto = () => {
 
     return (
       <AppLayout>
+        <Head>
+          <title>Les acteurs de la transition citoyenne et écologique autour de la Rochelle, Aunis, Charente-Maritime</title>
+          <meta name="description" content="Viens découvrir les acteurs agissant pour :  l'éducation, la culture, la santé, l'alimentation, la justice, l'économie, la citoyenneté, l'agriculture, l'industrie, l'habitat, la mobilité, l'énergie, le recyclage, la réduction des déchets, le climat, la qualité de l'air, la biodiversité, la gestion de l'eau, l'aménagement du territoire et d'autres sujets sur la transition citoyenne et écologique" />
+        </Head>
         <Grid container className={styles.layout}>
-       
-
           <Filters
             onFiltersChange={handleFiltersChange}
             isActorList
