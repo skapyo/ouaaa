@@ -94,7 +94,9 @@ const SchedulerContainer = (props) => {
         })
       : [],
   );
-  const [showPlace, setShowPlace] = useState(initData !== undefined && hasPlace(initData));
+  const [showPlace, setShowPlace] = useState(
+    initData !== undefined && hasPlace(initData),
+  );
 
   const [timeContainerList, setTimeContainerList] = useState(
     initData !== undefined ? initData : [BLANK_BUSINESS_HOURS],
@@ -134,17 +136,16 @@ const SchedulerContainer = (props) => {
   };
 
   const deleteTimeContainer = (e, index) => {
-    const newTimeFramesList = [...timeFrames].filter(
-      (currentTimeFrame, ind) => {
-        return index !== ind;
+    const newTimeFramesList = [...timeFrames].filter((currentTimeFrame) => {
+      return index !== currentTimeFrame.id;
+    });
+
+    const newTimeContainerList = [...timeContainerList].filter(
+      (currentTimeFrame) => {
+        return index !== currentTimeFrame.id;
       },
     );
 
-    const newTimeContainerList = [...timeContainerList].filter(
-      (currentTimeFrame, ind) => {
-        return index !== ind;
-      },
-    );
     setTimeFrames(newTimeFramesList);
     setTimeContainerList(newTimeContainerList);
   };
@@ -208,14 +209,15 @@ const SchedulerContainer = (props) => {
         </div>
 
         {timeContainerList.length > 0 &&
-          timeContainerList.map(({ days, hours, place }, index) => {
+          timeContainerList.map(({ days, hours, place, id }) => {
+            console.log('this is new ID', id);
             return (
-              <div className={classes.timeContainer} key={index}>
+              <div className={classes.timeContainer} key={id}>
                 <TimeContainer
                   updateWeekDays={updateWeekDays}
                   updateTimeFrames={updateTimeFrames}
                   availableDays={days}
-                  indexTimeContainer={index}
+                  indexTimeContainer={id}
                   deleteTimeContainer={deleteTimeContainer}
                   inputPlace={place}
                   showPlace={showPlace}
