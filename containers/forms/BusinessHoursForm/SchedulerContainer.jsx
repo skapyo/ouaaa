@@ -217,7 +217,6 @@ const SchedulerContainer = (props) => {
 
         {timeContainerList.length > 0 &&
           timeContainerList.map(({ days, hours, place, id }) => {
-            console.log('this is new ID', id);
             return (
               <div className={classes.timeContainer} key={id}>
                 <TimeContainer
