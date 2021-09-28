@@ -219,7 +219,7 @@ const ActorAdminPage = () => {
     data, loading, error, refetch,
   } = useQuery(GET_ACTORS, {
     variables: {
-      userId: user && user.id,
+      userId: user &&`${user.id}`,
     },
   });
   const classes = useStyles2();
@@ -325,6 +325,7 @@ const ActorAdminPage = () => {
                 <TableCell style={{ width: 160 }} align="left">
                   Editer la page
                 </TableCell>
+                
                 {user && user.role == 'admin' && (
                   <>
                     <TableCell style={{ width: 160 }} align="left">
@@ -336,11 +337,12 @@ const ActorAdminPage = () => {
                     <TableCell style={{ width: 160 }} align="left">
                       Personne ayant validé
                     </TableCell>
-                    <TableCell style={{ width: 160 }} align="left">
-                      Ajouter un événement
-                    </TableCell>
+                   
                   </>
                 )}
+                 <TableCell style={{ width: 160 }} align="left">
+                      Ajouter une nouvelle action
+                    </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -418,15 +420,14 @@ const ActorAdminPage = () => {
                           {' '}
                           {actor.userValidated && actor.userValidated.lastname}
                         </TableCell>
-                        <TableCell style={{ width: 160 }} align="center">
-                          {/* @ts-ignore */}
-                          <Link href={`/addevent/${actor.id}`}>
-                            <AddCircleOutline />
-                          </Link>
-                        </TableCell>
-                        
                       </>
                     )}
+                    <TableCell style={{ width: 160 }} align="center">
+                        {/* @ts-ignore */}
+                        <Link href={`/addevent/${actor.id}`}>
+                          <AddCircleOutline />
+                        </Link>
+                      </TableCell>
                   </TableRow>
                 ))}
 

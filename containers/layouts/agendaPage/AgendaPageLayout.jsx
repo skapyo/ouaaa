@@ -11,26 +11,13 @@ import { getImageUrl } from '../../../utils/utils';
 import Link from '../../../components/Link';
 import Moment from 'react-moment';
 import moment from 'moment';
-import { SpeedDial, SpeedDialIcon, SpeedDialAction } from '@material-ui/lab';
-import { useRouter } from 'next/router';
-import classNames from 'clsx';
 import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded';
 import FavoriteRoundedIcon from '@material-ui/icons/FavoriteRounded';
 import ViewListIcon from '@material-ui/icons/ViewList';
 import RoomIcon from '@material-ui/icons/Room';
 import TodayIcon from '@material-ui/icons/Today';
-
-import { ViewState } from '@devexpress/dx-react-scheduler';
-import {
-  Scheduler,
-  MonthView,
-  DayView,
-  Toolbar,
-  DateNavigator,
-  Appointments,
-  TodayButton,
-  ViewSwitcher,
-} from '@devexpress/dx-react-scheduler-material-ui';
+import FloatingActionButton from '../../../components/buttons/FloatingActionButton';
+import Calendar from '../../../components/Calendar';
 
 if (typeof window !== 'undefined') {
   var L = require('leaflet');
@@ -66,15 +53,6 @@ const useStyles = makeStyles(theme => ({
       flexDirection: 'column',
       alignItems: 'center',
       height: 'auto'
-    }
-  },
-  fab: {
-    position: 'absolute',
-    bottom: 15,
-    right: 15,
-    [theme.breakpoints.down('sm')]: {
-      bottom: 10,
-      right: 10
     }
   },
   listButtonIcon: {
@@ -143,127 +121,6 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const useCalendarStyles = makeStyles(theme => ({
-  layout: {
-    height: '100%',
-    '& > *:only-child': {
-      height: '100%',
-      display: 'flex',
-      flexDirection: 'column',
-      '& > *:last-child': {
-        flex: 1,
-        '& table': {
-          height: '100%'
-        }
-      }
-    }
-  },
-  text: {
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap',
-  },
-  content: {
-    opacity: 0.7,
-  },
-  container: {
-    width: '100%',
-    lineHeight: 1.2,
-    height: '100%',
-  },
-}));
-
-const MonthLayout = props => {
-  const classes = useCalendarStyles();
-  return <MonthView.Layout {...props} className={classes.layout} />
-};
-
-const Appointment = props => {
-  const { data } = props;
-  const router = useRouter();
-  const classes = useCalendarStyles();
-  const handleClick = useCallback(() => {
-    router.push('/event/' + data.id);
-  }, [router, data]);
-
-  return (<Appointments.AppointmentContent {...props} style={{ backgroundColor: data?.backgroundColor,padding: '1px 2px',cursor: 'pointer' }} onClick={handleClick} >
-      <div className={classes.container}>
-        <div className={classes.text}>
-          {data.title}
-        </div>
-        <div className={classNames(classes.text, classes.content)}>
-          {`Lieu: ${data.location}`}
-        </div>
-      </div>
-      </Appointments.AppointmentContent>)
-};
-
-const CalendarView = props => {
-  const { data } = props;
-
-  const events = useMemo(() => {
-    return (data?.events || []).map(evt => {
-      const startDate = moment(parseInt(evt.startedAt));
-      const endDate = moment(parseInt(evt.endedAt));
-
-      let recurrentOptions = null;
-      const duration = Math.ceil(moment.duration(endDate.diff(startDate)).asDays());
-
-      if (duration > 2) {
-        recurrentOptions = {
-          endDate: startDate.endOf('day'),
-          rRule: `FREQ=DAILY;COUNT=${duration}`
-        };
-      }
-
-
-      return {
-        startDate: new Date(parseInt(evt.startedAt)),
-        endDate: new Date(parseInt(evt.endedAt)),
-        title: evt.label,
-        id: evt.id,
-        location : evt.city?[evt.address, evt.city].join(', '):'',
-        backgroundColor: evt.entries && evt.entries.length > 0 && evt.entries[0].parentEntry ? evt.entries[0].parentEntry.color : 'blue',
-        ...recurrentOptions
-      }
-    });
-  }, [data]);
-
-  return (
-    <Scheduler
-      firstDayOfWeek={1}
-      locale="fr-FR"
-      RootProps={{
-        height: 'auto'
-      }}
-      data={events}
-    >
-      <ViewState
-        defaultCurrentDate={currentDate}
-      />
-      <Toolbar />
-      <DateNavigator />
-      <TodayButton messages={{ today: "Aujourd'hui" }} />
-      
-      <MonthView
-        layoutComponent={MonthLayout}
-      />
-      <DayView
-        displayName={'3 jours'}
-        startDayHour={9}
-        endDayHour={17}
-        intervalCount={3}
-      />
-      <Appointments
-        appointmentComponent={Appointment}
-      />
-
-      <ViewSwitcher/>
-
-    </Scheduler>
-  );
-};
-
 const VIEW_STATE = {
   LIST: 'LIST',
   MAP: 'MAP',
@@ -326,7 +183,6 @@ const AgendaPageLayout = () => {
   const classes = useStyles();
   const mapRef = useRef();
   const [viewMode, setViewMode] = useState(VIEW_STATE.LIST);
-  const [openFAB, setOpenFAB] = useState(false);
   const [favorite, setFavorite] = useState(false);
   const [filters, setFilters] = useState(null);
 
@@ -364,6 +220,33 @@ const AgendaPageLayout = () => {
   const isMapMode = useMemo(() => viewMode === VIEW_STATE.MAP, [viewMode, VIEW_STATE]);
   const isCalendarMode = useMemo(() => viewMode === VIEW_STATE.CALENDAR, [viewMode, VIEW_STATE]);
 
+  const events = useMemo(() => {
+    return (eventData?.events || []).map(evt => {
+      const startDate = moment(parseInt(evt.startedAt));
+      const endDate = moment(parseInt(evt.endedAt));
+
+      let recurrentOptions = null;
+      const duration = Math.ceil(moment.duration(endDate.diff(startDate)).asDays());
+
+      if (duration > 2) {
+        recurrentOptions = {
+          endDate: startDate.endOf('day'),
+          rRule: `FREQ=DAILY;COUNT=${duration}`
+        };
+      }
+
+      return {
+        startDate: new Date(parseInt(evt.startedAt)),
+        endDate: new Date(parseInt(evt.endedAt)),
+        title: evt.label,
+        id: evt.id,
+        location: evt.city ? [evt.address, evt.city].join(', ') : '',
+        backgroundColor: evt.entries && evt.entries.length > 0 && evt.entries[0].parentEntry ? evt.entries[0].parentEntry.color : 'blue',
+        ...recurrentOptions
+      }
+    });
+  }, [eventData]);
+
   return (
     <Container className={classes.main}>
       <Container className={classes.layout}>
@@ -373,31 +256,16 @@ const AgendaPageLayout = () => {
           isCalendarMode={isCalendarMode}
         />
 
-        <SpeedDial
-          ariaLabel="fab-actions"
-          className={classes.fab}
-          icon={<SpeedDialIcon />}
-          onClose={() => setOpenFAB(false)}
-          onOpen={() => setOpenFAB(true)}
-          open={openFAB}
-          direction="up"
-        >
-          {fabActions.map((action) => (
-            <SpeedDialAction
-              key={action.name}
-              icon={action.icon}
-              tooltipTitle={action.label}
-              onClick={action.onClick}
-            />
-          ))}
-        </SpeedDial>
+        <FloatingActionButton
+          actions={fabActions}
+        />
 
         {isListMode && (
           <Events data={eventData} loading={loadingEvents} />
         )}
 
         {isCalendarMode && (
-          <CalendarView data={eventData} />
+          <Calendar events={events} />
         )}
 
         {isMapMode && (

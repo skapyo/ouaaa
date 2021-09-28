@@ -1,16 +1,26 @@
 /* eslint react/prop-types: 0 */
-import { ChangeEvent, useCallback, useMemo } from 'react';
+import React, {
+  ChangeEvent,
+  useCallback,
+  useMemo,
+  useState,
+} from 'react';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import { Grid, makeStyles, Typography } from '@material-ui/core';
 import TextField from 'components/form/TextField';
 import ClassicButton from 'components/buttons/ClassicButton';
+import Button from '@material-ui/core/Button';
 import { withApollo } from 'hoc/withApollo';
 import { useSessionDispatch, useSessionState } from 'context/session/session';
-import gql from 'graphql-tag';
 import { useSnackbar } from 'notistack';
 import FormController, {
   RenderCallback,
 } from 'components/controllers/FormController';
-
+import { gql, useMutation, useQuery } from '@apollo/client';
 const UPDATE_USER_INFOS = gql`
   mutation updateUserInfos($formValues: UserInfos, $userId: Int!) {
     updateUserInfos(userInfos: $formValues, userId: $userId) {
@@ -35,6 +45,15 @@ const useStyles = makeStyles((theme) => ({
   },
   label: {
     fontWeight: 600,
+  },
+  delete: {
+    background: 'none',
+    color: theme.palette.warning.main,
+    border: '1px solid',
+    borderColor: theme.palette.warning.main,
+    '&:hover': {
+      background: 'none',
+    },
   },
 }));
 
@@ -70,12 +89,37 @@ const FormItem = (props: FormItemProps) => {
     </>
   );
 };
-
+const DELETE_USER = gql`
+  mutation deleteUser($userId: Int!) {
+    deleteUser(userId: $userId)
+  }
+`;
 const UserInfosForm = () => {
   const user = useSessionState();
   const sessionDispatch = useSessionDispatch();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const styles = useStyles();
+  const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
+
+  const handleClickOpenDeleteDialog = () => {
+    setOpenDeleteDialog(true);
+  };
+
+  const handleCloseDeleteDialog = () => {
+    setOpenDeleteDialog(false);
+  };
+  const [
+    deleteUser,
+    { data: deleteData, error: deleteError, loading: deleteLoading },
+  ] = useMutation(DELETE_USER);
+  const submitDeleteUser = () => {
+    deleteUser({
+      variables: {
+        userId: parseInt(user.id),
+      },
+    });
+    setOpenDeleteDialog(false);
+  };
 
   const Form: RenderCallback = ({
     formChangeHandler,
@@ -136,6 +180,39 @@ const UserInfosForm = () => {
         <ClassicButton onClick={submitHandler} disabled={!isModified}>
           Sauvegarder les modifications
         </ClassicButton>
+        <br/>
+        <ClassicButton
+          variant="contained"
+          className={styles.delete}
+          onClick={handleClickOpenDeleteDialog}
+        >
+          Supprimer votre compte
+        </ClassicButton>
+        <Dialog
+          open={openDeleteDialog}
+          onClose={handleCloseDeleteDialog}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">
+            Êtes-vous sûr(e) de vouloir supprimer votre compte ?
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              Une fois supprimé, votre compte sera définitivement supprimé. Il
+              ne sera plus visible sur notre plateforme, ni pour vous, ni pour
+              les visiteurs. Assurez vous de supprimer les événements ou page acteurs avant de supprimer votre compte.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseDeleteDialog} color="primary">
+              Annuler
+            </Button>
+            <Button onClick={submitDeleteUser} color="primary" autoFocus>
+              Supprimer
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Grid>
     </Grid>
     // )

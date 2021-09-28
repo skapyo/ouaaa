@@ -105,7 +105,7 @@ const TimeContainer = (props) => {
     const selectedDays = [...weekdays].map((day) =>
       day.id === dayId ? { ...day, selected: !day.selected } : day,
     );
-
+debugger;
     setWeekDays(selectedDays);
   };
 

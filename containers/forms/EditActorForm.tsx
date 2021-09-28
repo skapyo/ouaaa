@@ -167,9 +167,15 @@ const EDIT_ACTOR = gql`
           id
           day
           selected
+          identifier
         }
         hours
         place
+      }
+      referents {
+        id,
+        surname,
+        lastname
       }
     }
   }
@@ -262,6 +268,7 @@ const GET_ACTOR = gql`
           id
           day
           selected
+          identifier
         }
         hours
         place
@@ -364,6 +371,7 @@ const useStyles = makeStyles((theme) => ({
   collectionLabel: {
     textAlign: 'center',
     color: '#2C367E',
+    fontWeight: 600,
   },
   rootTree: {
     color: theme.palette.text.secondary,
@@ -1692,7 +1700,8 @@ const EditActorForm = (props) => {
                                         key={subEntry.id}
                                         // @ts-ignore
                                         nodeId={subEntry.id}
-                                        labelText={subEntry.label} description={subEntry.description}
+                                        labelText={subEntry.label}
+                                        description={subEntry.description}
                                         icon={subEntry.icon}
                                         color={entry.color}
                                         formValues={updateFormValues}
@@ -1868,7 +1877,7 @@ const EditActorForm = (props) => {
             <DialogContentText id="alert-dialog-description">
               Une fois supprimé, cet acteur sera définitivement supprimé. Il
               ne sera plus visible sur notre plateforme, ni pour vous, ni pour
-              les visiteurs. Pensez à supprimer vos anciens événements avant de supprimer votre page acteur.
+              les visiteurs. Pensez à supprimer vos anciennes action avant de supprimer votre page acteur.
             </DialogContentText>
           </DialogContent>
           <DialogActions>

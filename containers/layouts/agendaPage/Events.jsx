@@ -59,8 +59,8 @@ const Events = (props) => {
         );
         if(nbDayEvent >=1 ){
           const newEventForOtherDay = { ...event };
-          event.duration=`Durée de l'événement : ${nbDayEvent+1} jours`
-          newEventForOtherDay.duration=`Durée de l'événement : ${nbDayEvent+1} jours`
+          event.duration=`Durée de l'action : ${nbDayEvent+1} jours`
+          newEventForOtherDay.duration=`Durée de l'action : ${nbDayEvent+1} jours`
           newEventForOtherDay.startedAt = moment(
             new Date(parseInt(event.startedAt)),
           )
