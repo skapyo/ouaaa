@@ -131,12 +131,14 @@ const TimeContainer = (props) => {
 
   const deleteTimePicker = (e, index) => {
     const tempHours = [...hours];
+
+    deleteTimeContainer(e, index);
+    tempHours.pop();
+    setHours(tempHours);
+
+    // if no more hours inside the timeContainer, delete timeContainer
     if (tempHours.length === 0) {
       deleteTimeContainer(e, index);
-    } else {
-      tempHours.pop();
-
-      setHours(tempHours);
     }
   };
 
