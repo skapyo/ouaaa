@@ -75,7 +75,7 @@ const BLANK_BUSINESS_HOURS = {
       identifier: '7',
     },
   ],
-  hours: [['2021-07-16T15:00:00', '2021-07-07T14:00:01.006Z']],
+  hours: [[null, null]],
   place: '',
   __typename: 'OpeningHour',
   id: uuidv4(),
