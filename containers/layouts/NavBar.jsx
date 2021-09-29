@@ -159,7 +159,7 @@ const NavBar = () => {
                       AGENDA DES ACTIONS
                     </MenuItem>
                   </Grid>
-                   {/*
+                   {
                   <Grid item>
                     <MenuItem
                       button
@@ -170,6 +170,7 @@ const NavBar = () => {
                       JE PARTICIPE
                     </MenuItem>
                   </Grid>
+                  /*
                   <Grid item>
                     <MenuItem
                       button
@@ -308,7 +309,7 @@ const NavBar = () => {
                       AGENDA DES ACTIONS
                     </MenuItem>
                   </Grid>
-                   {/*
+                   {
                   <Grid item>
                     <MenuItem
                       button
@@ -319,6 +320,7 @@ const NavBar = () => {
                       JE PARTICIPE
                     </MenuItem>
                   </Grid>
+                  /*
                   <Grid item>
                     <MenuItem
                       button

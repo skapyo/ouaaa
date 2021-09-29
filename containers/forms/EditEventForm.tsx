@@ -177,6 +177,9 @@ const useStyles = makeStyles((theme) => ({
   container: {
     textAlign: 'center',
   },
+  tooltip: {
+    marginLeft: '10px',
+  },
 }));
 
 const isEntriesWithInformationContains: Function = (entriesWithInformationArray: Array<Object>, id: number) => {
@@ -503,7 +506,7 @@ const TitleWithTooltip = (props: TitleWithTooltipProps) => {
       </Typography>
       {
         !!tooltipTitle &&
-        <Tooltip title={tooltipTitle} color="primary">
+        <Tooltip title={tooltipTitle} color="primary" className={styles.tooltip}>
           <InfoIcon />
         </Tooltip>
       }
@@ -1228,6 +1231,8 @@ const EditEventForm = (props) => {
             } else if (collection.code === 'category') {
               label = "Catégorie de l'événement";
               helperText = 'un événement peut traiter un sous-sujet non  associé au départ avec la page acteur. Vous pouvez choisir plusieurs sujets à rattacher à votre événement';
+            } else if (collection.code === 'event_public_target') {
+              helperText = 'contrairement à votre page acteur, ici vous pouvez ajouter plusieurs catégories de publics pour un même événement';
             }
 
             if (collection.code === 'event_price') return '';
@@ -1238,7 +1243,7 @@ const EditEventForm = (props) => {
                   {label}
                   {' '}
                   {helperText !== '' && (
-                    <Tooltip title={helperText}>
+                    <Tooltip title={helperText} className={styles.tooltip}>
                       <InfoIcon />
                     </Tooltip>
                   )}
@@ -1397,6 +1402,7 @@ const EditEventForm = (props) => {
         }
         <Grid className={styles.location}>
           <Typography className={styles.collectionLabel}>Adresse complète de l’événement *</Typography>
+          <br/>
           <GooglePlacesAutocomplete
             placeholder="Taper et sélectionner l'adresse*"
             initialValue={
@@ -1418,7 +1424,11 @@ const EditEventForm = (props) => {
             })}
           />
         </Grid>
-
+        <br/>
+        <TitleWithTooltip
+          title="Calendrier "
+          tooltipTitle="Vous pourrez ajouter des infos plus détaillés dans le corps du texte de la déscription ou dans le bloc infos pratiques"
+        />
         <Grid className={styles.datetime}>
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <Grid container justify="space-around">
@@ -1519,14 +1529,8 @@ const EditEventForm = (props) => {
           /* @ts-ignore */
           && dataCollections.collections.map((collection) => {
             if (!collection.event) return '';
-            if (collection.code === 'larochelle_quarter') return '';
-            //    const [display, setDisplay] = useState(false);
             let { label } = collection;
-            let helperText = '';
-            if (collection.code === 'category') {
-              label = 'Choisissez les sous-sujets dans lesquels vous souhaitez apparaître (en priorité)';
-              helperText = 'Vous avez la possibilité d’ajouter un texte libre pour expliquer votre lien au sujet choisi. Vous pouvez sélectionner autant de sujet que nécessaire, les 3 premiers serviront à référencer votre page dans les moteurs de recherches info bulle : expliquant les ensemble et les sujets qu’ils contiennent aisni que les liens avec les sous-sujets et pourquoi pas ODD / transiscope. Ces infos bulles sont aussi visible dans le filtre sur la carte pour aider les usagers de Ouaaa à filtrer leur recherche';
-            }
+            let helperText = 'Vous pourrez ajouter plus de détail dans le bloc infos pratiques ci dessous';
             if (collection.code !== 'event_price') return '';
             let defaultValue = '';
             // @ts-ignore
@@ -1547,7 +1551,7 @@ const EditEventForm = (props) => {
                   {label}
                   {' '}
                   {helperText !== '' && (
-                    <Tooltip title={helperText}>
+                    <Tooltip title={helperText} className={styles.tooltip}>
                       <InfoIcon />
                     </Tooltip>
                   )}
@@ -1572,9 +1576,9 @@ const EditEventForm = (props) => {
         }
 
 
-
+        <br />
         <TitleWithTooltip
-          title="Acteur(s) associé(s) à l’action"
+          title="Acteur(s) associé(s) à l’action "
           tooltipTitle="Permet d’ajouter d’autres acteurs pour une action co-réalisée"
         />
 
@@ -1642,10 +1646,10 @@ const EditEventForm = (props) => {
 
         <br />
 
-        <Typography variant="body1" color="primary" className={styles.label}>
-          Infos pratiques complément :
-          {' '}
-        </Typography>
+        <TitleWithTooltip
+          title="Infos pratiques complément "
+          tooltipTitle="Ici vous pouvez indiquer toutes les infos comme tarifs, parking, moyen d’accès, … elles apparaitront ainsi aux visiteurs de OUAAA dans un bloc dédié plus lisible"
+        />
         <p />
         {editorLoaded ? (
           <>
@@ -1741,7 +1745,7 @@ const EditEventForm = (props) => {
             } caractères en trop.`}
         />
         <Typography variant="body1" color="primary" className={styles.label}>
-          Description :
+          Description
         </Typography>
         <p />
         {editorLoaded ? (
@@ -1755,8 +1759,9 @@ const EditEventForm = (props) => {
         ) : (
           <div>Editor loading</div>
         )}
+        <br/>
         <Typography variant="body1" color="primary" className={styles.label}>
-          Votre logo
+          Logo de l'événement
         </Typography>
         {objectsListLogo ? (
           <ImagesDisplay

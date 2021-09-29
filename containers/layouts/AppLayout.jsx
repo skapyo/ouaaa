@@ -10,11 +10,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const AppLayout = ({ children }) => {
-  if (typeof window !== 'undefined' && process.env.NODE_ENV !== 'development') {
+  /* if (typeof window !== 'undefined' && process.env.NODE_ENV !== 'development') {
     const trackingId = 'UA-179407370-1'; // Replace with your Google Analytics tracking ID
     ReactGA.initialize(trackingId);
     ReactGA.pageview(window.location.pathname + window.location.search);
-  }
+  } */
   const styles = useStyles();
 
   return (
