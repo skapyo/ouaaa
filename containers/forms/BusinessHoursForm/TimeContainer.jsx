@@ -105,7 +105,6 @@ const TimeContainer = (props) => {
     const selectedDays = [...weekdays].map((day) =>
       day.id === dayId ? { ...day, selected: !day.selected } : day,
     );
-debugger;
     setWeekDays(selectedDays);
   };
 
@@ -154,7 +153,7 @@ debugger;
       (timeRange) => !timeRange.includes(null),
     );
 
-    const newTimeFrame = [weekdays, cleanedHours, place];
+    const newTimeFrame = [weekdays, cleanedHours, place, indexTimeContainer];
 
     // update or add timeFrame only if filled
     if (

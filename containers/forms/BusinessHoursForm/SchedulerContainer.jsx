@@ -5,6 +5,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import Button from '@material-ui/core/Button';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+import { v4 as uuidv4 } from 'uuid';
 
 import TimeContainer from './TimeContainer';
 
@@ -77,6 +78,7 @@ const BLANK_BUSINESS_HOURS = {
   hours: [['2021-07-16T15:00:00', '2021-07-07T14:00:01.006Z']],
   place: '',
   __typename: 'OpeningHour',
+  id: uuidv4(),
 };
 function hasPlace(initData) {
   let hasPlace = false;
@@ -97,7 +99,7 @@ const SchedulerContainer = (props) => {
   const [timeFrames, setTimeFrames] = useState(
     initData !== undefined
       ? initData.map((data) => {
-          return [data.days, data.hours, data.place];
+          return [data.days, data.hours, data.place, data.id];
         })
       : [],
   );
@@ -112,6 +114,13 @@ const SchedulerContainer = (props) => {
   const firstUpdate = useRef(true);
 
   const addTimeContainer = () => {
+    const addTimeFrame = ({ days, hours, place, id }) => {
+      const newTimeFrame = [days, hours, place, id];
+      const timeFrameList = [...timeFrames, newTimeFrame];
+      setTimeFrames(timeFrameList);
+    };
+    addTimeFrame(availableDays);
+
     const newTimeContainerList = [...timeContainerList, availableDays];
     setTimeContainerList(newTimeContainerList);
   };
@@ -120,31 +129,31 @@ const SchedulerContainer = (props) => {
     setAvailableDays(daysList);
   };
 
-  const updateTimeFrames = (timeFrame, index) => {
+  const updateTimeFrames = (timeFrame, indexTimeContainer) => {
     if (timeFrames !== undefined && timeFrames.length !== 0) {
       // update timeFrames with initData
       let newTimeFramesList = [...timeFrames];
-      // if it adds a new timeframe
-      if (index + 1 > newTimeFramesList.length) {
-        newTimeFramesList.push(timeFrame);
-      } else {
-        // modify the current timeframe
-        newTimeFramesList = [...newTimeFramesList].map(
-          (currentTimeFrame, ind) => {
-            return index == ind ? timeFrame : currentTimeFrame;
-          },
-        );
-      }
+
+      // modify the current timeframe
+      newTimeFramesList = [...newTimeFramesList].map((currentTimeFrame) => {
+        return indexTimeContainer === currentTimeFrame[3]
+          ? timeFrame
+          : currentTimeFrame;
+      });
 
       setTimeFrames(newTimeFramesList);
-    } else {
-      setTimeFrames([timeFrame]);
     }
+  };
+
+  const addNewTimeFrame = (timeFrame) => {
+    const newTimeFramesList = [...timeFrames];
+    newTimeFramesList.push(timeFrame);
+    setTimeFrames(newTimeFramesList);
   };
 
   const deleteTimeContainer = (e, index) => {
     const newTimeFramesList = [...timeFrames].filter((currentTimeFrame) => {
-      return index !== currentTimeFrame.id;
+      return index !== currentTimeFrame[3];
     });
 
     const newTimeContainerList = [...timeContainerList].filter(
