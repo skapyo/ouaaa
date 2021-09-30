@@ -726,7 +726,12 @@ const AddActorForm = () => {
         setEstlarochelle(false);
       }
     };
-
+    const addLineBreaks = (string) => string.split('\n').map((text, index) => (
+      <React.Fragment key={`${text}-${index}`}>
+        {text}
+        <br />
+      </React.Fragment>
+    ));
     return (
       <Container component="main" maxWidth="sm">
         <br />
@@ -913,7 +918,12 @@ const AddActorForm = () => {
         <br />
         <Typography variant="body1" color="primary" className={styles.label}>
           Jour et heure d'ouverture
-          <Tooltip title="TEXTE A CHANGER">
+          <Tooltip title={addLineBreaks('Pour chaque ligne vous pouvez : \n'
+          + '1. Sélectionner les différents jours où vous êtes ouvert aux mêmes horaires. Le(s) jour(s) sélectionné(s) passe(nt) en bleu foncé.\n'
+          + '2. Indiquer des tranches horaires associés à ce(s) jour(s). Vous pouvez ajouter autant de tranches horaires que nécessaire pour le(s) même(s) jour(s) en cliquant sur la phrase « ajouter des horaires »\n'
+          + '3. Ajouter un lieu à chaque ligne. Vous n’avez pas d’adresse fixe mais êtes mobile de manière récurrentes, en cliquant en haut sur « indiquer des emplacements », c’est possible ! Attention néanmoins, pour les rdv spéciaux qui ne sont pas hebdomadaires ou les marchés… nous vous invitons à créer par la suite des pages événements dédiés à chacune de vos actions. Ces pages événements vous permettront de donner plus d’infos aux visiteurs et d’être visible dans l’agenda. Pour ajouter un lieu, indiquez l’adresse dans l’espace dédié et cliquez n’importe où sur l’écran pour valider. L’adresse s’affichera alors dans un bloc grisé.\n'
+          + '4. une erreur ? un horaire qui n’existe plus ? Tout est modifiable et, si besoin, vous pouvez totalement supprimer la ligne grâce à l\'icone poubelle\n\n'
+      + 'Vous avez rempli votre 1ere ligne mais il vous reste d’autres jours à indiquer ? Cliquez sur le + et ajoutez autant de ligne que nécessaire\n')}>
             <InfoIcon />
           </Tooltip>
         </Typography>

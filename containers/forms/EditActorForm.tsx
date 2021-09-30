@@ -16,7 +16,9 @@ import { useSnackbar } from 'notistack';
 import { useRouter, withRouter } from 'next/router';
 import classnames from 'classnames';
 
-import { Container, Grid, makeStyles, Typography } from '@material-ui/core';
+import {
+  Container, Grid, makeStyles, Typography,
+} from '@material-ui/core';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -551,9 +553,9 @@ const EditActorForm = (props) => {
 
   const imgInit = [];
   if (
-    actorData &&
-    actorData.actor.pictures &&
-    actorData.actor.pictures.length > 0
+    actorData
+    && actorData.actor.pictures
+    && actorData.actor.pictures.length > 0
   ) {
     actorData.actor.pictures
       .sort((a, b) => (a.position > b.position ? 1 : -1))
@@ -602,9 +604,9 @@ const EditActorForm = (props) => {
 
   const imgInitLogo = [];
   if (
-    actorData &&
-    actorData.actor.pictures &&
-    actorData.actor.pictures.length > 0
+    actorData
+    && actorData.actor.pictures
+    && actorData.actor.pictures.length > 0
   ) {
     actorData.actor.pictures
       .sort((a, b) => (a.position > b.position ? 1 : -1))
@@ -653,9 +655,9 @@ const EditActorForm = (props) => {
 
   const imgInitMain = [];
   if (
-    actorData &&
-    actorData.actor.pictures &&
-    actorData.actor.pictures.length > 0
+    actorData
+    && actorData.actor.pictures
+    && actorData.actor.pictures.length > 0
   ) {
     actorData.actor.pictures
       .sort((a, b) => (a.position > b.position ? 1 : -1))
@@ -1149,7 +1151,12 @@ const EditActorForm = (props) => {
         setEstlarochelle(false);
       }
     };
-
+    const addLineBreaks = (string) => string.split('\n').map((text, index) => (
+      <React.Fragment key={`${text}-${index}`}>
+        {text}
+        <br />
+      </React.Fragment>
+    ));
     const updateFormValues = () => {
       formValues.name = actorData.actor.name;
       formValues.email = actorData.actor.email;
@@ -1331,31 +1338,29 @@ const EditActorForm = (props) => {
               initialValue={
                 formValues.address
                   ? formValues.address
-                      .concat(' ')
-                      .concat(formValues.postCode)
-                      .concat(' ')
-                      .concat(formValues.city)
+                    .concat(' ')
+                    .concat(formValues.postCode)
+                    .concat(' ')
+                    .concat(formValues.city)
                   : formValues.city && formValues.city
               }
-              onSelect={({ description }) =>
-                geocodeByAddress(description).then((results) => {
-                  getLatLng(results[0])
-                    .then((value) => {
-                      formValues.lat = `${value.lat}`;
-                      formValues.lng = `${value.lng}`;
-                    })
-                    .catch((error) => console.error(error));
-                  getAddressDetails(results);
-                })
-              }
+              onSelect={({ description }) => geocodeByAddress(description).then((results) => {
+                getLatLng(results[0])
+                  .then((value) => {
+                    formValues.lat = `${value.lat}`;
+                    formValues.lng = `${value.lng}`;
+                  })
+                  .catch((error) => console.error(error));
+                getAddressDetails(results);
+              })}
             />
           </Grid>
         </div>
         {
           /* @ts-ignore */
-          dataCollections.collections &&
+          dataCollections.collections
             /* @ts-ignore */
-            dataCollections.collections.map((collection) => {
+            && dataCollections.collections.map((collection) => {
               if (collection.code !== 'larochelle_quarter' || !estlarochelle) {
                 return '';
               }
@@ -1385,8 +1390,13 @@ const EditActorForm = (props) => {
         }
 
         <TitleWithTooltip
-          title="Jour et heure d'ouverture"
-          tooltipTitle="TEXTE A CHANGER"
+          title={addLineBreaks("Jour et heure d'ouverture")}
+          tooltipTitle={addLineBreaks('Pour chaque ligne vous pouvez : \n'
+          + '1. Sélectionner les différents jours où vous êtes ouvert aux mêmes horaires. Le(s) jour(s) sélectionné(s) passe(nt) en bleu foncé.\n'
+          + '2. Indiquer des tranches horaires associés à ce(s) jour(s). Vous pouvez ajouter autant de tranches horaires que nécessaire pour le(s) même(s) jour(s) en cliquant sur la phrase « ajouter des horaires »\n'
+          + '3. Ajouter un lieu à chaque ligne. Vous n’avez pas d’adresse fixe mais êtes mobile de manière récurrentes, en cliquant en haut sur « indiquer des emplacements », c’est possible ! Attention néanmoins, pour les rdv spéciaux qui ne sont pas hebdomadaires ou les marchés… nous vous invitons à créer par la suite des pages événements dédiés à chacune de vos actions. Ces pages événements vous permettront de donner plus d’infos aux visiteurs et d’être visible dans l’agenda. Pour ajouter un lieu, indiquez l’adresse dans l’espace dédié et cliquez n’importe où sur l’écran pour valider. L’adresse s’affichera alors dans un bloc grisé.\n'
+          + '4. une erreur ? un horaire qui n’existe plus ? Tout est modifiable et, si besoin, vous pouvez totalement supprimer la ligne grâce à l\'icone poubelle\n\n'
+      + 'Vous avez rempli votre 1ere ligne mais il vous reste d’autres jours à indiquer ? Cliquez sur le + et ajoutez autant de ligne que nécessaire\n')}
         />
 
         <SchedulerContainer
@@ -1395,11 +1405,13 @@ const EditActorForm = (props) => {
         />
 
         <TitleWithTooltip
-          title={
+          title={(
             <p>
-              CONTACT PRIVE pour les échanges avec <i>OUAAA!</i>
+              CONTACT PRIVE pour les échanges avec
+              {' '}
+              <i>OUAAA!</i>
             </p>
-          }
+          )}
         />
 
         <FormControl component="fieldset">
@@ -1418,11 +1430,15 @@ const EditActorForm = (props) => {
             <FormControlLabel
               value="other"
               control={<Radio />}
-              label={
+              label={(
                 <>
-                  c’est un autre (avec un compte <i>OUAAA!</i> existant)
+                  c’est un autre (avec un compte
+                  {' '}
+                  <i>OUAAA!</i>
+                  {' '}
+                  existant)
                 </>
-              }
+              )}
             />
           </RadioGroup>
           <p>
@@ -1434,9 +1450,7 @@ const EditActorForm = (props) => {
                 onInput={inputChangeHandler}
                 open={showOtherContactList}
                 // @ts-ignore
-                getOptionLabel={(option) =>
-                  `${option.surname} ${option.lastname}`
-                }
+                getOptionLabel={(option) => `${option.surname} ${option.lastname}`}
                 onChange={autocompleteHandler}
                 defaultValue={getDefaultValueContact()}
                 style={{ width: 300 }}
@@ -1533,8 +1547,8 @@ const EditActorForm = (props) => {
           value={formValues.shortDescription}
           required={false}
           errorBool={
-            !validationResult?.global &&
-            !!validationResult?.result.shortDescription
+            !validationResult?.global
+            && !!validationResult?.result.shortDescription
           }
           errorText="90 caractères maximum"
           helperText="Cette description courte s’affichera en vue liste et dans les blocs de survol/clic de la carte. Merci de synthétiser vos objectifs en quelques mots."
@@ -1549,7 +1563,10 @@ const EditActorForm = (props) => {
           didactique vos liens avec les questions de transition, vos
           missions/actions, votre organisation, etc. Au delà de l’accès à une
           information claire pour tous les internautes (y compris en situation
-          de handicap) utilisant <i>OUAAA!</i>, ce texte permettra un meilleur
+          de handicap) utilisant
+          {' '}
+          <i>OUAAA!</i>
+          , ce texte permettra un meilleur
           référencement de votre page dans le moteur de recherche interne. Pour
           cela, pensez à utiliser des mots clé du champ sémantique de votre
           activité. Ex : vous êtes une asso de recyclerie : zéro déchet,
@@ -1604,44 +1621,36 @@ const EditActorForm = (props) => {
 
         {
           /* @ts-ignore */
-          dataCollections.collections &&
+          dataCollections.collections
             /* @ts-ignore */
-            dataCollections.collections.map((collection) => {
+            && dataCollections.collections.map((collection) => {
               if (!collection.actor) return '';
               if (collection.code === 'larochelle_quarter') return '';
               //    const [display, setDisplay] = useState(false);
               let { label } = collection;
               let helperText;
               if (collection.code === 'category') {
-                label =
-                  'Choisissez les sous-sujets dans lesquels vous souhaitez apparaître (en priorité)';
-                helperText =
-                  'Vous avez la possibilité d’ajouter un texte libre pour expliquer votre lien au sujet choisi. Vous pouvez sélectionner autant de sujets que nécessaire, les 3 premiers que vous cocherez serviront à référencer votre page dans les moteurs de recherche. le 1er coché indiquera votre sujet principal.';
+                label = 'Choisissez les sous-sujets dans lesquels vous souhaitez apparaître (en priorité)';
+                helperText = 'Vous avez la possibilité d’ajouter un texte libre pour expliquer votre lien au sujet choisi. Vous pouvez sélectionner autant de sujets que nécessaire, les 3 premiers que vous cocherez serviront à référencer votre page dans les moteurs de recherche. le 1er coché indiquera votre sujet principal.';
               } else if (collection.code === 'actor_status') {
                 label = 'Quel est votre statut juridique ?';
-                helperText =
-                  'service public : toutes les collectivités, mairies, cda, cdc participant directement ou via des projets à la transition / ex : la rochelle territoire zéro carbone entreprise : tous les acteurs économiques de la transition, de l’economie sociale et solidaire... association & ONG  : toutes les structures à but non lucratif';
+                helperText = 'service public : toutes les collectivités, mairies, cda, cdc participant directement ou via des projets à la transition / ex : la rochelle territoire zéro carbone entreprise : tous les acteurs économiques de la transition, de l’economie sociale et solidaire... association & ONG  : toutes les structures à but non lucratif';
               } else if (collection.code === 'public_target') {
-                label =
-                  'Quel public visez vous principalement dans vos actions ?';
-                helperText =
-                  'Ici nous vous proposons de choisir votre public principal. Bien sûr à chaque action (événement, campagne…) que vous créerez vous pourrez indiquer des publics différents. de votre public principal. Tout public = familles ; Jeunes adultes = 15-25 ans, étudiants ; précaires = SDF, familles en difficulté, etc. ; discriminés = femmes, LGBTQIA+, migrants, etc';
+                label = 'Quel public visez vous principalement dans vos actions ?';
+                helperText = 'Ici nous vous proposons de choisir votre public principal. Bien sûr à chaque action (événement, campagne…) que vous créerez vous pourrez indiquer des publics différents. de votre public principal. Tout public = familles ; Jeunes adultes = 15-25 ans, étudiants ; précaires = SDF, familles en difficulté, etc. ; discriminés = femmes, LGBTQIA+, migrants, etc';
               } else if (collection.code === 'collectif') {
-                label =
-                  'En tant qu’acteur, je fais partie des collectifs & réseaux suivants :';
-                helperText =
-                  'Sont référencés ici des collectifs et réseaux du territoire. Les groupes locaux de réseaux nationaux (ex Greenpeace) ne sont pas inclus dans cette liste';
+                label = 'En tant qu’acteur, je fais partie des collectifs & réseaux suivants :';
+                helperText = 'Sont référencés ici des collectifs et réseaux du territoire. Les groupes locaux de réseaux nationaux (ex Greenpeace) ne sont pas inclus dans cette liste';
               } else if (collection.code === 'actor_location_action') {
                 label = "Territoire d'action (1 seul choix) *";
-                helperText =
-                  'Si vous êtes une antenne, le territoire d’action est celui qui concerne votre structure chapeau (ex : Greenpeace, choisir « International »)';
+                helperText = 'Si vous êtes une antenne, le territoire d’action est celui qui concerne votre structure chapeau (ex : Greenpeace, choisir « International »)';
               }
               let defaultValue = '';
               if (
-                !IsTree(collection) &&
-                !collection.multipleSelection &&
-                formValues &&
-                formValues.entries
+                !IsTree(collection)
+                && !collection.multipleSelection
+                && formValues
+                && formValues.entries
               ) {
                 // @ts-ignore
                 formValues.entries.map((entry) => {
@@ -1673,8 +1682,8 @@ const EditActorForm = (props) => {
                           defaultExpandIcon={<ArrowRightIcon />}
                           defaultEndIcon={<div style={{ width: 24 }} />}
                         >
-                          {collection.entries &&
-                            collection.entries.map((entry) => {
+                          {collection.entries
+                            && collection.entries.map((entry) => {
                               return (
                                 // @ts-ignore
                                 <StyledTreeItem
@@ -1687,13 +1696,13 @@ const EditActorForm = (props) => {
                                   isForm
                                   isParent
                                   hasSubEntries={
-                                    entry.subEntries &&
-                                    entry.subEntries.length > 0
+                                    entry.subEntries
+                                    && entry.subEntries.length > 0
                                   }
                                   className={styles.treeParent}
                                 >
-                                  {entry.subEntries &&
-                                    entry.subEntries.map((subEntry) => {
+                                  {entry.subEntries
+                                    && entry.subEntries.map((subEntry) => {
                                       return (
                                         <StyledTreeItem
                                           key={subEntry.id}
@@ -1711,16 +1720,16 @@ const EditActorForm = (props) => {
                                               subEntry.id,
                                             ) !== null
                                               ? isEntriesWithInformationContains(
-                                                  formValues.entriesWithInformation,
-                                                  subEntry.id,
-                                                ).linkDescription
+                                                formValues.entriesWithInformation,
+                                                subEntry.id,
+                                              ).linkDescription
                                               : ''
                                           }
                                           isForm
                                           checked={
-                                            formValues &&
-                                            formValues.entriesWithInformation &&
-                                            isEntriesWithInformationContains(
+                                            formValues
+                                            && formValues.entriesWithInformation
+                                            && isEntriesWithInformationContains(
                                               formValues.entriesWithInformation,
                                               subEntry.id,
                                             ) !== null
@@ -1739,8 +1748,8 @@ const EditActorForm = (props) => {
                     // display &&
                     !IsTree(collection) && collection.multipleSelection && (
                       <List>
-                        {collection.entries &&
-                          collection.entries.map((entry) => {
+                        {collection.entries
+                          && collection.entries.map((entry) => {
                             return (
                               <ListItem key={entry.id} role={undefined} dense>
                                 {/* @ts-ignore */}
@@ -1754,9 +1763,9 @@ const EditActorForm = (props) => {
                                   value={entry.id}
                                   // @ts-ignore
                                   checked={
-                                    formValues &&
-                                    formValues.entries &&
-                                    formValues.entries.includes(entry.id)
+                                    formValues
+                                    && formValues.entries
+                                    && formValues.entries.includes(entry.id)
                                   }
                                   onClick={(e) => e.stopPropagation()}
                                 />
@@ -1833,9 +1842,7 @@ const EditActorForm = (props) => {
               id="combo-box-add-referent"
               options={dataUsers.users}
               // @ts-ignore
-              getOptionLabel={(option) =>
-                `${option.surname} ${option.lastname}`
-              }
+              getOptionLabel={(option) => `${option.surname} ${option.lastname}`}
               onChange={handleChangeReferent}
               open={openAddReferentlist}
               style={{ width: 300 }}
