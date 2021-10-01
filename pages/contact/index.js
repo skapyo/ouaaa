@@ -4,10 +4,10 @@ import {
   Box,
   Container,
   makeStyles,
-  RootRef,
   Typography,
 } from '@material-ui/core';
 import Newsletter from '../../containers/layouts/Newsletter';
+import ContactForm from '../../containers/forms/ContactForm';
 
 const useStyles = makeStyles((theme) => ({
   align: {
@@ -18,15 +18,13 @@ const Contact = () => {
   const styles = useStyles();
   return (
     <AppLayout>
-      <RootRef>
-        <Box>
-          <Container className={styles.align}>
-            <Typography variant="h1">Contact</Typography>
-            <Typography variant="h4">En cours de construction</Typography>
-          </Container>
-          <Newsletter />
-        </Box>
-      </RootRef>
+      <Box>
+        <Container className={styles.align}>
+          <Typography variant="h1">Contact</Typography>
+          <ContactForm />
+        </Container>
+        <Newsletter />
+      </Box>
     </AppLayout>
   );
 };
