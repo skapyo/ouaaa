@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef,useMemo } from 'react';
 import AppLayout from 'containers/layouts/AppLayout';
 import {
   Box,
@@ -12,14 +12,10 @@ import { withApollo } from 'hoc/withApollo.jsx';
 import { useRouter } from 'next/router';
 import gql from 'graphql-tag';
 import { useMutation, useQuery } from '@apollo/client';
-import Place from '@material-ui/icons/Place';
-import Schedule from '@material-ui/icons/Schedule';
 import Slider from 'react-slick/lib';
 import CardSliderActor from 'components/cards/CardSliderActor';
-import SupervisedUserCircle from '@material-ui/icons/SupervisedUserCircle';
-import Euro from '@material-ui/icons/Euro';
-import LocalOffer from '@material-ui/icons/LocalOffer';
-
+import CardSliderEvent from 'components/cards/CardSliderEvent';
+import moment from 'moment';
 import Moment from 'react-moment';
 import { useCookies } from 'react-cookie';
 import { useSnackbar } from 'notistack';
@@ -29,9 +25,9 @@ import Fab from '@material-ui/core/Fab';
 import EditIcon from '@material-ui/icons/Edit';
 import Link from 'components/Link';
 import { getImageUrl, entriesHasElementWithCode } from '../../utils/utils';
-
 import { useSessionState } from '../../context/session/session';
 import Newsletter from '../../containers/layouts/Newsletter';
+import Calendar from '../../components/Calendar';
 
 if (typeof window !== 'undefined') {
   var L = require('leaflet');
@@ -314,6 +310,38 @@ const Event = () => {
           logo
           main
         }
+        parentEvent {
+          id
+          label
+          startedAt
+          endedAt
+          pictures {
+            id
+            label
+            originalPicturePath
+            originalPictureFilename
+            croppedPicturePath
+            croppedPictureFilename
+            croppedX
+            croppedY
+            croppedZoom
+            croppedRotation
+            position
+            logo
+            main
+          }
+        }
+        subEvents {
+          id
+          label
+          startedAt
+          endedAt
+          description
+          lat
+          lng
+          address
+          city
+        }
       }
     }
   `;
@@ -493,6 +521,34 @@ const Event = () => {
     });
     return text;
   }
+
+  const events = useMemo(() => {
+    return (data?.event?.subEvents || []).map(evt => {
+      const startDate = moment(parseInt(evt.startedAt));
+      const endDate = moment(parseInt(evt.endedAt));
+
+      let recurrentOptions = null;
+      const duration = Math.ceil(moment.duration(endDate.diff(startDate)).asDays());
+
+      if (duration > 2) {
+        recurrentOptions = {
+          endDate: startDate.endOf('day'),
+          rRule: `FREQ=DAILY;COUNT=${duration}`
+        };
+      }
+
+      return {
+        startDate: new Date(parseInt(evt.startedAt)),
+        endDate: new Date(parseInt(evt.endedAt)),
+        title: evt.label,
+        id: evt.id,
+        location: evt.city ? [evt.address, evt.city].join(', ') : '',
+        backgroundColor: evt.entries && evt.entries.length > 0 && evt.entries[0].parentEntry ? evt.entries[0].parentEntry.color : 'blue',
+        ...recurrentOptions
+      }
+    })
+  }, [data]);
+
   return (
     <AppLayout>
       <Head>
@@ -957,6 +1013,38 @@ const Event = () => {
                   return <CardSliderActor key={actor.id} actor={actor} />;
                 })}
             </Slider>
+            <br />
+            <br />
+            {data && data.event.parentEvent && (
+            <div>
+              <Typography variant="h5" className={styles.cardTitle}>
+                FAIS PARTIT DE L'EVENEMENT
+              </Typography>
+              <div className={styles.border} />
+              <br />
+              <Slider
+                {...settingsSliderevent}
+                className={[styles.articleCarroussel]}
+              >
+              <CardSliderEvent key={data.event.parentEvent.id} event={data.event.parentEvent} />
+              </Slider>
+              <br />
+              <br />
+            </div>
+            )}
+             {data && data.event.subEvents &&  data.event.subEvents.length > 0 && (
+            <div>
+              <Typography variant="h5" className={styles.cardTitle}>
+                LES ACTIONS-EVENEMENTS ASSOCIEES 
+              </Typography>
+              <div className={styles.border} />
+              <br />
+              <Calendar
+                events={events}
+                withViewSwitcher={true}
+              />
+            </div>
+            )}
           </Container>
           <Newsletter />
           {((data && ( containUser(data.event.referents) || containUserActorsReferent(data.event.actors))) ||

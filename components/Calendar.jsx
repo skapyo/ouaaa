@@ -68,7 +68,7 @@ const MonthLayout = props => {
 const AppointmentContent = props => {
   const { data } = props;
   const classes = useStyles();
-
+// debugger;
   return (
     <Appointments.AppointmentContent
       className={classes.appointmentContent}
@@ -160,8 +160,7 @@ const Calendar = props => {
       />
       <DayView
         displayName="3 jours"
-        startDayHour={9}
-        endDayHour={17}
+        startDayHour={8}
         intervalCount={3}
       />
 
