@@ -23,3 +23,6 @@ build_image:
    # - docker exec -it acteurs-de-la-transition-server npx sequelize --env production db:migrate
   only:
     - develop
+
+variables:
+  GIT_SSL_NO_VERIFY: "1"
