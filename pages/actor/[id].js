@@ -12,16 +12,14 @@ import { withApollo } from 'hoc/withApollo.jsx';
 import { useRouter } from 'next/router';
 import gql from 'graphql-tag';
 import { useMutation, useQuery } from '@apollo/client';
-import Place from '@material-ui/icons/Place';
-import Phone from '@material-ui/icons/Phone';
-import Gavel from '@material-ui/icons/Gavel';
-import SupervisedUserCircle from '@material-ui/icons/SupervisedUserCircle';
-import AlternateEmail from '@material-ui/icons/AlternateEmail';
-import Language from '@material-ui/icons/Language';
-import Share from '@material-ui/icons/Share';
-import Schedule from '@material-ui/icons/Schedule';
-import People from '@material-ui/icons/People';
+import FacebookIcon from '@material-ui/icons/Facebook';
+import TwitterIcon from '@material-ui/icons/Twitter';
 
+
+import {
+  FacebookShareButton,
+  TwitterShareButton
+} from "react-share"
 import Slider from 'react-slick/lib';
 import { useSnackbar } from 'notistack';
 import { useCookies } from 'react-cookie';
@@ -590,6 +588,11 @@ const Actor = () => {
     })
   }, [data]);
 
+  let url; 
+  if (typeof window !== 'undefined') {
+    url = window.location.href;
+  }
+  
   return (
     <AppLayout>
       <Head>
@@ -644,6 +647,7 @@ const Actor = () => {
               }}
             />
           )}
+            
           <Container className={styles.cardInfo}>
             <Grid container>
               <Grid item md={5} sm={10} className={[styles.align]}>
@@ -675,8 +679,10 @@ const Actor = () => {
                         className={[styles.icon]}
                       />
                     </Grid>
+                   
                     <Grid item xs={8} className={[styles.alignLeft]}>
                       <div className={[styles.infoLabel]}>LOCALISATION </div>
+                     
                       <span className={[styles.infoValue]}>
                         {data && !data.actor.city && (
                           <span> Adresse manquante</span>
@@ -810,12 +816,15 @@ const Actor = () => {
                             rel="noreferrer"
                           >
                             {data && data.actor.socialNetwork}
+
+                          
                           </a>
                           {/* @ts-ignore */}
                         </span>
                       </Grid>
                     </Grid>
                   )}
+                 
                   {data && data.actor.openingHours && data.actor.openingHours.length !== 0 && (
                     <Grid container className={[styles.item]}>
                       <Grid item xs={3} className={[styles.alignRight]}>
@@ -860,6 +869,28 @@ const Actor = () => {
                       </Grid>
                     </Grid>
                   )}
+                    <Grid container className={[styles.item]}>
+                      <Grid item xs={3} className={[styles.alignRight]}>
+                        <img
+                          src="/icons/social.svg"
+                          alt="Réseau social"
+                          className={[styles.icon]}
+                        />
+                      </Grid>
+                      <Grid item xs={8} className={[styles.alignLeft]}>
+                        <div className={[styles.infoLabel]}>Partager la page sur les réseaux</div>
+                        <span className={[styles.infoValue]}>
+                        <FacebookShareButton size={32} round={true} url={`https://ouaaa-transition.fr`+router.asPath} >
+                          <FacebookIcon round size={32} />
+                        </FacebookShareButton>
+                        <TwitterShareButton size={32} round={true} url={`https://ouaaa-transition.fr`+router.asPath} >
+                          <TwitterIcon round size={32} />
+                        </TwitterShareButton>
+                      
+                        </span>
+                      </Grid>
+                    </Grid>
+
                 </Grid>
               </Grid>
               <br />
