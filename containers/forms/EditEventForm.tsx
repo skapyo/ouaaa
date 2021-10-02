@@ -1867,7 +1867,7 @@ const EditEventForm = (props) => {
               onClick={(e) => e.stopPropagation()}
             />
           )}
-          label="fait parti d'un événement existant"
+          label="est affilité à un autre événement existant"
         />
         {hasParentEvent ? (
           <Autocomplete
