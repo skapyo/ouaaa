@@ -1,17 +1,29 @@
 import { useMutation } from "@apollo/client";
-import { Container, TextField } from "@material-ui/core";
+import { Container, makeStyles, TextField } from "@material-ui/core";
+import { styles } from "@material-ui/pickers/views/Calendar/Calendar";
 import ClassicButton from "components/buttons/ClassicButton";
 import FormController, { RenderCallback, ValidationRules, ValidationRuleType } from "components/controllers/FormController";
-import { ProvidedRequiredArgumentsRule } from "graphql";
+import { useSessionState } from "context/session/session";
 import gql from "graphql-tag";
 import { withApollo } from "hoc/withApollo";
 import { useSnackbar } from "notistack";
+import { ChangeEvent, useEffect, useState } from "react";
 
 const SEND_CONTACT_FORM_EMAIL = gql`
   mutation sendContactFormEmail($formValues: ContactFormInfos!) {
     sendContactFormEmail(contactForm: $formValues)
   }
 `
+
+const useStyles = makeStyles((theme) => ({
+  formContainer: {
+    marginTop: theme.spacing(8),
+    marginBottom: theme.spacing(8)
+  },
+  field: {
+    marginBottom: theme.spacing(3)
+  }
+}));
 
 type FormItemProps = {
   label: string;
@@ -23,11 +35,13 @@ type FormItemProps = {
   errorText: string;
   helperText?: string;
   multiline?: boolean;
+  fullWidth?: boolean;
   minRows?: number;
   maxRows?: number;
 };
 
 const FormItem = (props: FormItemProps) => {
+  const styles = useStyles();
   const {
     label,
     inputName,
@@ -38,6 +52,7 @@ const FormItem = (props: FormItemProps) => {
     errorText,
     helperText,
     multiline,
+    fullWidth,
     minRows,
     maxRows
   } = props;
@@ -48,22 +63,34 @@ const FormItem = (props: FormItemProps) => {
       label={label}
       name={inputName}
       onChange={formChangeHandler}
-      fullWidth
+      fullWidth={fullWidth}
       required={required}
       error={errorBool}
       helperText={errorBool ? errorText : helperText}
       multiline={multiline}
       minRows={minRows}
       maxRows={maxRows}
+      className={styles.field}
     />
   );
 };
 
 const ContactForm = () => {
 
+  const styles = useStyles();
+  const user = useSessionState();
+  const [messageSent, setMessageSent] = useState(false);
+
+  const initFormValues = {
+    firstName: user?.surname,
+    lastName: user?.lastname,
+    email: user?.email
+  };
+
   const Form: RenderCallback = (props) => {
     const { formChangeHandler, formValues, validationResult } = props;
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+    
     const [
       sendContactForm,
       { data: sendContactData, error: sendContactError, loading: sendContactLoading },
@@ -75,44 +102,44 @@ const ContactForm = () => {
         name: 'firstName',
         required: true,
         errorText: 'Prénom requis.',
-        value: ''
+        fullWidth: true
       },
       {
         label: 'Nom',
         name: 'lastName',
         required: true,
         errorText: 'Nom requis.',
-        value: ''
+        fullWidth: true
       },
       {
         label: 'Email',
         name: 'email',
         required: true,
         errorText: 'Email requis.',
-        value: ''
+        fullWidth: true
       },
       {
         label: 'Objet',
         name: 'object',
         required: false,
         errorText: '',
-        value: ''
+        fullWidth: true
       },
       {
         label: 'Message',
         name: 'message',
         required: true,
-        errorText: '',
-        value: '',
+        errorText: 'Message requis.',
         multiline: true,
         minRows: 6,
-        maxRows: 10
+        maxRows: 10,
+        fullWidth: true
       }
     ];
 
     const inputError = (name: string) => {
-      return false;
-      return !validationResult?.global && !!validationResult?.result[name]
+      // return false;
+      return !validationResult?.global && !!validationResult?.result[name] && formValues[name] !== undefined
     }
 
     const submitContactForm = () => {
@@ -122,26 +149,19 @@ const ContactForm = () => {
             ...formValues,
             object: formValues.object || 'Pas d\'objet spécifié',
           }
-        },
-        onCompleted: (data) => {
-          if (data) {
-            enqueueSnackbar(
-              'Votre message a bien été envoyé.',
-              {
-                preventDuplicate: true,
-              }
-            );
-          } else {
-            enqueueSnackbar(
-              'Une erreur s\'est produite, merci de bien vouloir réessayer.',
-              {
-                preventDuplicate: true,
-              }
-            );
-          }
         }
       });
-    }
+    };
+
+    useEffect(() => {
+      if (!sendContactLoading && sendContactData) {
+        setMessageSent(true);
+      } else if (sendContactError) {
+        enqueueSnackbar('Une erreur s\'est produite, merci de bien vouloir réessayer.', {
+          preventDuplicate: true,
+        });
+      }
+    }, [sendContactData, sendContactError, sendContactLoading]);
 
     const getFormInputs = (() => {
       return inputs.map((input, i) => {
@@ -156,6 +176,7 @@ const ContactForm = () => {
             errorBool={inputError(input.name)}
             errorText={input.errorText}
             multiline={input.multiline}
+            fullWidth={input.fullWidth}
             minRows={input.minRows}
             maxRows={input.maxRows}
           ></FormItem>
@@ -164,7 +185,7 @@ const ContactForm = () => {
     });
 
     return (
-      <Container component="main" maxWidth="md">
+      <Container component="main" maxWidth="md" className={styles.formContainer}>
         { getFormInputs() }
         <ClassicButton
           fullWidth
@@ -193,7 +214,18 @@ const ContactForm = () => {
     },
   };
 
-  return <FormController render={Form} validationRules={validationRules} />;
+  if (messageSent) {
+    return (
+      <div className={styles.formContainer}>
+        <p>Votre message a bien été envoyé. Merci.</p>
+      </div>
+    )
+  }
+  return <FormController 
+            render={Form} 
+            validationRules={validationRules}
+            initValues={initFormValues} 
+          />;
 };
 
 export default withApollo()(ContactForm);
