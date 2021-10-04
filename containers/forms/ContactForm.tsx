@@ -1,8 +1,11 @@
+import { useMutation } from "@apollo/client";
 import { Container, TextField } from "@material-ui/core";
 import ClassicButton from "components/buttons/ClassicButton";
 import FormController, { RenderCallback, ValidationRules, ValidationRuleType } from "components/controllers/FormController";
+import { ProvidedRequiredArgumentsRule } from "graphql";
 import gql from "graphql-tag";
 import { withApollo } from "hoc/withApollo";
+import { useSnackbar } from "notistack";
 
 const SEND_CONTACT_FORM_EMAIL = gql`
   mutation sendContactFormEmail($formValues: ContactFormInfos!) {
@@ -60,6 +63,11 @@ const ContactForm = () => {
 
   const Form: RenderCallback = (props) => {
     const { formChangeHandler, formValues, validationResult } = props;
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+    const [
+      sendContactForm,
+      { data: sendContactData, error: sendContactError, loading: sendContactLoading },
+    ] = useMutation(SEND_CONTACT_FORM_EMAIL);
 
     const inputs = [
       {
@@ -108,7 +116,31 @@ const ContactForm = () => {
     }
 
     const submitContactForm = () => {
-      console.log('submit contact form');
+      sendContactForm({
+        variables: {
+          formValues: {
+            ...formValues,
+            object: formValues.object || 'Pas d\'objet spécifié',
+          }
+        },
+        onCompleted: (data) => {
+          if (data) {
+            enqueueSnackbar(
+              'Votre message a bien été envoyé.',
+              {
+                preventDuplicate: true,
+              }
+            );
+          } else {
+            enqueueSnackbar(
+              'Une erreur s\'est produite, merci de bien vouloir réessayer.',
+              {
+                preventDuplicate: true,
+              }
+            );
+          }
+        }
+      });
     }
 
     const getFormInputs = (() => {
