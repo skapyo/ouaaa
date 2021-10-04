@@ -13,11 +13,8 @@ import Moment from 'react-moment';
 import moment from 'moment';
 import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded';
 import FavoriteRoundedIcon from '@material-ui/icons/FavoriteRounded';
-import ViewListIcon from '@material-ui/icons/ViewList';
-import RoomIcon from '@material-ui/icons/Room';
-import TodayIcon from '@material-ui/icons/Today';
-import FloatingActionButton from '../../../components/buttons/FloatingActionButton';
 import Calendar from '../../../components/Calendar';
+import ButtonGroupSelected from '../../../components/buttons/ButtonGroupSelected';
 
 if (typeof window !== 'undefined') {
   var L = require('leaflet');
@@ -210,9 +207,9 @@ const AgendaPageLayout = () => {
 
   const fabActions = useMemo(() => {
     return [
-      { name: 'list', label: 'Liste', icon: <ViewListIcon />, onClick: () => setViewMode(VIEW_STATE.LIST) },
-      { name: 'map', label: 'Carte', icon: <RoomIcon />, onClick: () => setViewMode(VIEW_STATE.MAP) },
-      { name: 'calendar', label: 'Calendrier', icon: <TodayIcon />, onClick: () => setViewMode(VIEW_STATE.CALENDAR) }
+      { name: 'list', label: 'Liste', onClick: () => setViewMode(VIEW_STATE.LIST) },
+      { name: 'map', label: 'Carte', onClick: () => setViewMode(VIEW_STATE.MAP) },
+      { name: 'calendar', label: 'Calendrier', onClick: () => setViewMode(VIEW_STATE.CALENDAR) }
     ]
   }, []);
 
@@ -250,15 +247,14 @@ const AgendaPageLayout = () => {
   return (
     <Container className={classes.main}>
       <Container className={classes.layout}>
+        <ButtonGroupSelected buttons={fabActions} />
+
         <Filters
           isEventList
           onFiltersChange={handleFiltersChange}
           isCalendarMode={isCalendarMode}
         />
 
-        <FloatingActionButton
-          actions={fabActions}
-        />
 
         {isListMode && (
           <Events data={eventData} loading={loadingEvents} />
