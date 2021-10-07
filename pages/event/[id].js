@@ -15,6 +15,10 @@ import { useMutation, useQuery } from '@apollo/client';
 import Slider from 'react-slick/lib';
 import CardSliderActor from 'components/cards/CardSliderActor';
 import CardSliderEvent from 'components/cards/CardSliderEvent';
+import FacebookIcon from '@material-ui/icons/Facebook';
+import TwitterIcon from '@material-ui/icons/Twitter';
+import WhatsAppIcon from '@material-ui/icons/WhatsApp';
+import { FacebookShareButton, TwitterShareButton, WhatsappShareButton } from 'react-share';
 import moment from 'moment';
 import Moment from 'react-moment';
 import { useCookies } from 'react-cookie';
@@ -28,14 +32,6 @@ import { getImageUrl, entriesHasElementWithCode } from '../../utils/utils';
 import { useSessionState } from '../../context/session/session';
 import Newsletter from '../../containers/layouts/Newsletter';
 import Calendar from '../../components/Calendar';
-
-if (typeof window !== 'undefined') {
-  var L = require('leaflet');
-  var Map = require('react-leaflet').Map;
-  var TileLayer = require('react-leaflet').TileLayer;
-  var Marker = require('react-leaflet').Marker;
-  var Popup = require('react-leaflet').Popup;
-}
 
 const useStyles = makeStyles((theme) => ({
   titleContainer: {
@@ -77,6 +73,9 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up('sm')]: {
       paddingLeft: '2em',
     },
+  },
+  h1: {
+    fontSize: '3rem',
   },
   map: {
     height: '30em',
@@ -136,14 +135,13 @@ const useStyles = makeStyles((theme) => ({
     width: 'inherit!important',
   },
   image: {
-    height: '72px',
-    width: '72px',
-    margin: '0 auto',
+    height: '200px',
+    width: '200px',
+    margin: '10px auto',
     '& img': {
       height: '100%',
       width: '100%',
       objectFit: 'contain',
-      borderRadius: '50%',
     },
   },
   infoValue: {
@@ -182,6 +180,9 @@ const useStyles = makeStyles((theme) => ({
     'background-position-y': '1px',
     'background-size': '11%',
     fontSize: '1em',
+  },
+  socialNetworkIcon: {
+    marginLeft: '5px',
   },
   buttonInverse: {
     margin: '2.5em 0 2.5em 0 ',
@@ -223,13 +224,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Event = () => {
-  const router = useRouter();
-  const mapRef = useRef();
-
-  const { id } = router.query;
-
-  const GET_EVENT = gql`
+const GET_EVENT = `
     query event($id: String) {
       event(id: $id) {
         id
@@ -345,6 +340,14 @@ const Event = () => {
       }
     }
   `;
+  
+const Event = ({ initialData }) => {
+  const router = useRouter();
+  const mapRef = useRef();
+
+  const { id } = router.query;
+
+  
   const ADD_EVENT_PARTICIPATE = gql`
     mutation addEventParticipate($eventId: Int!, $userId: Int!) {
       addEventParticipate(eventId: $eventId, userId: $userId)
@@ -355,12 +358,9 @@ const Event = () => {
       removeEventParticipate(eventId: $eventId, userId: $userId)
     }
   `;
-  const { data, loading, error, refetch } = useQuery(GET_EVENT, {
-    variables: {
-      id,
-    },
-    fetchPolicy: 'cache-first',
-  });
+  
+
+  const data = initialData.data;
 
   const [stylesProps, setStylesProps] = useState({
     topImageSize: '250px',
@@ -590,12 +590,9 @@ const Event = () => {
                       />
                     )}
                   </div>
-                  <Typography variant="h2" className={styles.cardTitle, styles.actorName}>
-                    {data && data.event.name}
-                  </Typography>
                   {data
                 /*  &&  entriesHasElementWithCode(
-                    data.event.entries,
+                    data.event.entries, 
                     'event_type',) */
                   && (
                     <Grid container className={[styles.item]}>
@@ -759,20 +756,55 @@ const Event = () => {
                     </Grid>
                   </Grid>
                   )}
-                  </Grid>
                   
+                  <Grid container className={[styles.item]}>
+                    <Grid item xs={3} className={[styles.alignRight]}>
+                      <img
+                        src="/icons/social.svg"
+                        alt="Réseau social"
+                        className={[styles.icon]}
+                      />
+                    </Grid>
+                    <Grid item xs={8} className={[styles.alignLeft]}>
+                      <div className={[styles.infoLabel]}>
+                        Partager la page sur les réseaux
+                      </div>
+                      <span className={[styles.infoValue]}>
+                        <FacebookShareButton
+                          size={32}
+                          round
+                          url={`https://recette.ouaaa-transition.fr${router.asPath}`}
+                        >
+                          <FacebookIcon round size={32} className={[styles.socialNetworkIcon]} />
+                        </FacebookShareButton>
+
+                        <TwitterShareButton
+                          size={32}
+                          round
+                          url={`https://recette.ouaaa-transition.fr${router.asPath}`}
+                        >
+                          <TwitterIcon round size={32} className={[styles.socialNetworkIcon]} />
+                        </TwitterShareButton>
+
+                        <WhatsappShareButton
+                          size={32}
+                          round
+                          url={`https://recette.ouaaa-transition.fr${router.asPath}`}
+                        >
+                          <WhatsAppIcon round size={32} className={[styles.socialNetworkIcon]} />
+                        </WhatsappShareButton>
+                      </span>
+                    </Grid>
+                  </Grid>
+                  </Grid>
                 </Grid>
               <br />
               <Grid item md={7} sm={10} className={styles.description}>
-                <Typography variant="h3" className={styles.cardTitle}>
-                  DESCRIPTION
+                <Typography variant="h1" className={styles.cardTitle}>
+                {data && data.event.label}
                 </Typography>
                 <div className={styles.border} />
                 <br />
-                <br />
-                <Typography variant="h2">
-                  {data && data.event.name}
-                </Typography>
                 <br />
                 <p>{data && Parser(data.event.description)}</p>
                 <div>
@@ -893,46 +925,6 @@ const Event = () => {
               
               <div />
               <br />
-              <Typography variant="h3" className={styles.cardTitle}>
-                ACCES
-              </Typography>
-              <div className={styles.border} />
-              <br />
-
-              {data && (
-                <Map ref={mapRef} center={[data.event.lat, data.event.lng]} zoom={11} className={styles.map}  >
-                  <TileLayer
-                    attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                  />
-                  <Marker
-                    position={[data.event.lat, data.event.lng]}
-                    icon={new L.Icon({
-                      iconUrl: '/icons/location.svg',
-                      iconAnchor: [13, 34], // point of the icon which will correspond to marker's location
-                      iconSize: [25],
-                      popupAnchor: [1, -25],
-                      html: `<span style="background-color: red" />`,
-                    })}
-                  >
-                    <Popup>
-                      {data.event.name} - {data && !data.event.address && data.event.city && (
-                        <span>
-                          {/* @ts-ignore */}
-                          {data && data.event.city}
-                        </span>
-                      )} 
-                      {data && data.event.address && data.event.city && (
-                        <span>
-                          {/* @ts-ignore */}
-                          {`${data && data.event.address} ${data && data.event.city
-                            }`}
-                        </span>
-                      )}
-                      </Popup>
-                    </Marker>
-                </Map>
-              )}
             </Grid>
             </Grid>       
 
@@ -1063,9 +1055,26 @@ const Event = () => {
 
 // export default withListener(Actor)
 export default withApollo()(Event);
-// export async function getServerSideProps(context) {
-//     ''
-//     return {
-//       props: {}, // will be passed to the page component as props
-//     }
-//   }
+
+// This function gets called at build time on server-side.
+// It may be called again, on a serverless function, if
+// revalidation is enabled and a new request comes in
+export async function getServerSideProps(ctxt) {
+
+  const res = await fetch(process.env.NEXT_PUBLIC_API_URI, {
+      method: 'POST',
+      body: JSON.stringify({
+        "operationName": "event",
+        "variables": {
+            "id": ctxt.params.id
+        },
+        "query": GET_EVENT,
+        }),
+    });
+    
+  const initialData = await res.json();
+    return {
+      props: { initialData
+            }
+  }
+  }

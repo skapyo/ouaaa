@@ -14,12 +14,8 @@ import gql from 'graphql-tag';
 import { useMutation, useQuery } from '@apollo/client';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import TwitterIcon from '@material-ui/icons/Twitter';
-
-
-import {
-  FacebookShareButton,
-  TwitterShareButton
-} from "react-share"
+import WhatsAppIcon from '@material-ui/icons/WhatsApp';
+import { FacebookShareButton, TwitterShareButton, WhatsappShareButton } from 'react-share';
 import Slider from 'react-slick/lib';
 import { useSnackbar } from 'notistack';
 import { useCookies } from 'react-cookie';
@@ -36,18 +32,10 @@ import CardAddEvent from '../../components/cards/CardAddEvent';
 import { getImageUrl, entriesHasElementWithCode } from '../../utils/utils';
 import Calendar from '../../components/Calendar';
 
-if (typeof window !== 'undefined') {
-  var L = require('leaflet');
-  var Map = require('react-leaflet').Map;
-  var TileLayer = require('react-leaflet').TileLayer;
-  var Marker = require('react-leaflet').Marker;
-  var Popup = require('react-leaflet').Popup;
-}
-
 const useStyles = makeStyles((theme) => ({
   titleContainer: {
     marginTop: theme.spacing(2),
-    backgroundSize: 'cover',
+    backgroundSize: 'cover', 
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
     height: '24em',
@@ -94,6 +82,9 @@ const useStyles = makeStyles((theme) => ({
   actorName: {
     width: '100%',
   },
+  h1: {
+    fontSize: '3rem',
+  },
   cardTitleCategories: {
     color: theme.typography.h5.color,
   },
@@ -138,9 +129,9 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: '#ededf5',
   },
   image: {
-    height: '72px',
-    width: '72px',
-    margin: '0 auto',
+    height: '200px',
+    width: '200px',
+    margin: '10px auto',
     '& img': {
       height: '100%',
       width: '100%',
@@ -183,8 +174,9 @@ const useStyles = makeStyles((theme) => ({
   hide: {
     display: 'none',
   },
-
-
+  socialNetworkIcon: {
+    marginLeft: '5px',
+  },
   buttonVolunteer: {
     fontSize: 'inherit',
     margin: '0.5em 0 0.5em 0 ',
@@ -239,8 +231,119 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-
-const Actor = () => {
+const GET_ACTOR_SSR = `
+query actor($id: String) {
+  actor(id: $id) {
+    id
+    name
+    address
+    lat
+    lng
+    address
+    city
+    email
+    phone
+    website
+    description
+    socialNetwork
+    volunteerDescription
+    activity
+    entries {
+      label
+      icon
+      collection {
+        code
+        label
+      }
+      parentEntry {
+        code
+        label
+        color
+        collection {
+          code
+          label
+        }
+      }
+    }
+    events {
+      id
+      label
+      shortDescription
+      description
+      startedAt
+      endedAt
+      published
+      pictures {
+        id
+        label
+        originalPicturePath
+        originalPictureFilename
+        croppedPicturePath
+        croppedPictureFilename
+        croppedX
+        croppedY
+        croppedZoom
+        croppedRotation
+        position
+      }
+      address
+      city
+      entries {
+        label
+        icon
+        collection {
+          code
+          label
+        }
+        parentEntry {
+          code
+          label
+          color
+          collection {
+            code
+            label
+          }
+        }
+      }
+    }
+    volunteers {
+      id
+      surname
+      lastname
+    }
+    referents {
+      id
+      surname
+      lastname
+    }
+    pictures {
+      id
+      label
+      originalPicturePath
+      originalPictureFilename
+      croppedPicturePath
+      croppedPictureFilename
+      croppedX
+      croppedY
+      croppedZoom
+      croppedRotation
+      position
+      logo
+      main
+    }
+    openingHours {
+      days {
+        identifier
+        day
+        selected
+      }
+      hours
+      place
+    }
+  }
+}
+`;
+const Actor = ({ initialData }) => {
   const router = useRouter();
   const mapRef = useRef();
 
@@ -361,6 +464,8 @@ const Actor = () => {
     }
   `;
 
+
+
   const ADD_ACTOR_VOLUNTEER = gql`
     mutation addActorVolunteer($actorId: Int!, $userId: Int!) {
       addActorVolunteer(actorId: $actorId, userId: $userId)
@@ -405,13 +510,15 @@ const Actor = () => {
     return isContained;
   }
 
-  const {
+  /*const {
     data, loading, error, refetch,
   } = useQuery(GET_ACTOR, {
     variables: {
       id,
     },
-  });
+  });*/
+  const data = initialData.data;
+
   useEffect(() => {
     if (volunteerData !== undefined) {
       enqueueSnackbar('Demande de bénévole prise en compte', {
@@ -664,12 +771,6 @@ const Actor = () => {
                       />
                     )}
                   </div>
-                  <Typography
-                    variant="h2"
-                    className={(styles.cardTitle, styles.actorName)}
-                  >
-                    {data && data.actor.name}
-                  </Typography>
 
                   <Grid container className={[styles.item]}>
                     <Grid item xs={3} className={[styles.alignRight]}>
@@ -824,79 +925,108 @@ const Actor = () => {
                       </Grid>
                     </Grid>
                   )}
-                 
-                  {data && data.actor.openingHours && data.actor.openingHours.length !== 0 && (
-                    <Grid container className={[styles.item]}>
-                      <Grid item xs={3} className={[styles.alignRight]}>
-                        <img src="/icons/clock.svg" alt="Horaire" className={[styles.icon]} />
-                      </Grid>
-                      <Grid item xs={8} className={[styles.alignLeft]}>
-                        <div className={[styles.infoLabel]}>Horaire</div>
-                        {data
-                          && data.actor.openingHours.map((openingHour) => {
-                            // debugger;
-                            return (
-                              <span className={[styles.infoValue]}>
-                                {openingHour.place}{openingHour.place && ' , '}
-                                {openingHour.days.filter(day => day.selected).map((day, index) => {
-                                  return (
-                                    <>{index != 0 && 'et '}{ getDay(day.identifier)}</>
-                                  );
-                                })}
-                                {openingHour.hours.map((hourtab, indexhourtab) => {
-                                  return (
-                                    <>
-                                      {indexhourtab !== 0 && ' ; '}
-                                      {hourtab.map((hour, index) => {
-                                        return (
-                                          <>
-                                            {moment(hour).format('HH')}
-                                            h
-                                            {moment(hour).format('mm')}
-                                            {index === 0 && ' - '}
-                                          </>
-                                        );
-                                      })}
 
-                                    </>
-                                  );
-                                })}
+                  {data &&
+                    data?.actor?.openingHours &&
+                    data?.actor?.openingHours.length !== 0 && (
+                      <Grid container className={[styles.item]}>
+                        <Grid item xs={3} className={[styles.alignRight]}>
+                          <img
+                            src="/icons/clock.svg"
+                            alt="Horaire"
+                            className={[styles.icon]}
+                          />
+                        </Grid>
+                        <Grid item xs={8} className={[styles.alignLeft]}>
+                          <div className={[styles.infoLabel]}>Horaire</div>
+                          {data &&
+                            data?.actor?.openingHours.map((openingHour) => {
+                              // debugger;
+                              return (
+                                <span className={[styles.infoValue]}>
+                                  {openingHour.place}
+                                  {openingHour.place && ' , '}
+                                  {openingHour.days
+                                    .filter((day) => day.selected)
+                                    .map((day, index) => {
+                                      return (
+                                        <>
+                                          {index != 0 && 'et '}
+                                          {getDay(day.identifier)}
+                                        </>
+                                      );
+                                    })}
+                                  {openingHour.hours.map(
+                                    (hourtab, indexhourtab) => {
+                                      return (
+                                        <>
+                                          {indexhourtab !== 0 && ' ; '}
+                                          {hourtab.map((hour, index) => {
+                                            return (
+                                              <>
+                                                {moment(hour).format('HH')}h
+                                                {moment(hour).format('mm')}
+                                                {index === 0 && ' - '}
+                                              </>
+                                            );
+                                          })}
+                                        </>
+                                      );
+                                    },
+                                  )}
 
-                                <br />
-                              </span>
-                            );
-                          })}
+                                  <br />
+                                </span>
+                              );
+                            })}
+                        </Grid>
                       </Grid>
+                    )}
+                  <Grid container className={[styles.item]}>
+                    <Grid item xs={3} className={[styles.alignRight]}>
+                      <img
+                        src="/icons/social.svg"
+                        alt="Réseau social"
+                        className={[styles.icon]}
+                      />
                     </Grid>
-                  )}
-                    <Grid container className={[styles.item]}>
-                      <Grid item xs={3} className={[styles.alignRight]}>
-                        <img
-                          src="/icons/social.svg"
-                          alt="Réseau social"
-                          className={[styles.icon]}
-                        />
-                      </Grid>
-                      <Grid item xs={8} className={[styles.alignLeft]}>
-                        <div className={[styles.infoLabel]}>Partager la page sur les réseaux</div>
-                        <span className={[styles.infoValue]}>
-                        <FacebookShareButton size={32} round={true} url={`https://ouaaa-transition.fr`+router.asPath} >
-                          <FacebookIcon round size={32} />
+                    <Grid item xs={8} className={[styles.alignLeft]}>
+                      <div className={[styles.infoLabel]}>
+                        Partager la page sur les réseaux
+                      </div>
+                      <span className={[styles.infoValue]}>
+                        <FacebookShareButton
+                          size={32}
+                          round
+                          url={`https://recette.ouaaa-transition.fr${router.asPath}`}
+                        >
+                          <FacebookIcon round size={32} className={[styles.socialNetworkIcon]} />
                         </FacebookShareButton>
-                        <TwitterShareButton size={32} round={true} url={`https://ouaaa-transition.fr`+router.asPath} >
-                          <TwitterIcon round size={32} />
-                        </TwitterShareButton>
-                      
-                        </span>
-                      </Grid>
-                    </Grid>
 
+                        <TwitterShareButton
+                          size={32}
+                          round
+                          url={`https://recette.ouaaa-transition.fr${router.asPath}`}
+                        >
+                          <TwitterIcon round size={32} className={[styles.socialNetworkIcon]} />
+                        </TwitterShareButton>
+
+                        <WhatsappShareButton
+                          size={32}
+                          round
+                          url={`https://recette.ouaaa-transition.fr${router.asPath}`}
+                        >
+                          <WhatsAppIcon round size={32} className={[styles.socialNetworkIcon]} />
+                        </WhatsappShareButton>
+                      </span>
+                    </Grid>
+                  </Grid>
                 </Grid>
               </Grid>
               <br />
               <Grid item md={7} sm={10} className={styles.description}>
-                <Typography variant="h3" className={styles.cardTitle}>
-                  DESCRIPTION
+                <Typography variant="h1" className={styles.cardTitle}>
+                {data && data?.actor?.name}
                 </Typography>
                 <div className={styles.border} />
                 <br />
@@ -1024,46 +1154,6 @@ const Actor = () => {
 
                 <div />
                 <br />
-                <Typography variant="h3" className={styles.cardTitle}>
-                  ACCES
-                </Typography>
-                <div className={styles.border} />
-                <br />
-
-                {data && (
-                  <Map ref={mapRef} center={[data.actor.lat, data.actor.lng]} zoom={11} className={styles.map}  >
-                    <TileLayer
-                      attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    />
-                    <Marker
-                      position={[data.actor.lat, data.actor.lng]}
-                      icon={new L.Icon({
-                        iconUrl: '/icons/location.svg',
-                        iconAnchor: [13, 34], // point of the icon which will correspond to marker's location
-                        iconSize: [25],
-                        popupAnchor: [1, -25],
-                        html: `<span style="background-color: red" />`,
-                      })}
-                    >
-                      <Popup>
-                        {data.actor.name} - {data && !data.actor.address && data.actor.city && (
-                          <span>
-                            {/* @ts-ignore */}
-                            {data && data.actor.city}
-                          </span>
-                        )}
-                        {data && data.actor.address && data.actor.city && (
-                          <span>
-                            {/* @ts-ignore */}
-                            {`${data && data.actor.address} ${data && data.actor.city
-                              }`}
-                          </span>
-                        )}
-                      </Popup>
-                    </Marker>
-                  </Map>
-                )}
               </Grid>
             </Grid>
             <br />
@@ -1124,22 +1214,17 @@ const Actor = () => {
                     />
                   ))}
             </Slider>
-
-            {data
-              && data.actor.events
-              && (data.actor.events.length > 0
-                || containUser(data.actor.referents)) && (
-                <div>
-                  <Typography
-                    variant="h5"
-                    className={[styles.cardTitle, styles.align]}
-                  >
-                    LES ÉVÉNEMENTS DE :
-                    {' '}
-                    {data && data.actor.name}
-                  </Typography>
-                </div>
-              )}
+            <br />
+            <div>
+              <Typography
+                variant="h5"
+                className={[styles.cardTitle]}
+              >
+                LES ÉVÉNEMENTS DE : {data && data?.actor?.name}
+              </Typography>
+              <div className={styles.border} />
+            </div>
+            <br />
             <Calendar
               events={events}
               withViewSwitcher={false}
@@ -1164,9 +1249,25 @@ const Actor = () => {
 
 // export default withListener(Actor)
 export default withApollo()(Actor);
-// export async function getServerSideProps(context) {
-//     ''
-//     return {
-//       props: {}, // will be passed to the page component as props
-//     }
-//   }
+// This function gets called at build time on server-side.
+// It may be called again, on a serverless function, if
+// revalidation is enabled and a new request comes in
+export async function getServerSideProps(ctxt) {
+
+  const res = await fetch(process.env.NEXT_PUBLIC_API_URI, {
+      method: 'POST',
+      body: JSON.stringify({
+        "operationName": "actor",
+        "variables": {
+            "id": ctxt.params.id
+        },
+        "query": GET_ACTOR_SSR,
+        }),
+    });
+    
+  const initialData = await res.json();
+    return {
+      props: { initialData
+            }
+  }
+  }

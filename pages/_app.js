@@ -86,7 +86,8 @@ const MyApp = (props) => {
     <>
       <Head>
         <meta charSet="utf-8" />
-        <title>Ouaaa! : Agir pour la Transition Ecologique en Aunis | La Rochelle</title>
+
+        <title>Ouaaa! : agir pour la transition écologique & citoyenne Aunis | La Rochelle</title>
         <meta
           name="viewport"
           content="minimum-scale=1, initial-scale=1, width=device-width"

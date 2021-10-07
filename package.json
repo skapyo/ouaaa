@@ -10,8 +10,8 @@
     "lint:fix": "eslint --fix --ext .js,.jsx ."
   },
   "dependencies": {
-    "@apollo/client": "^3.2.5",
-    "@apollo/react-ssr": "^3.1.5",
+    "@apollo/client": "^3.4.16",
+    "@apollo/react-ssr": "^4.0.0",
     "@brainhubeu/react-carousel": "^1.19.26",
     "@ckeditor/ckeditor5-alignment": "^23.1.0",
     "@ckeditor/ckeditor5-basic-styles": "^23.1.0",
