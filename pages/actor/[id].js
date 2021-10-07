@@ -720,6 +720,15 @@ const Actor = ({ initialData }) => {
           {/* @ts-ignore */}
           {data && showCategory(data.actor.entries)}
         </title>
+        {data && data.actor.pictures.length >= 1 &&  data.actor.pictures.filter(picture => picture.logo).length >= 1 &&  (
+          <meta property="og:image" content={
+              data.actor.pictures.length >= 1
+              ? getImageUrl(
+                data.actor.pictures.filter(picture => picture.logo)[0].croppedPicturePath)
+              : ''
+            }
+          />
+        )}
       </Head>
       <RootRef>
         <Box>

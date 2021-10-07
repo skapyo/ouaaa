@@ -559,6 +559,15 @@ const Event = ({ initialData }) => {
           {/* @ts-ignore */}-{/* @ts-ignore */}
           {data && showCategory(data.event.entries)}
         </title>
+        {data && data.event.pictures.length >= 1 &&  data.event.pictures.filter(picture => picture.logo).length >= 1 &&  (
+          <meta property="og:image" content={
+              data.event.pictures.length >= 1
+              ? getImageUrl(
+                data.event.pictures.filter(picture => picture.logo)[0].croppedPicturePath)
+              : ''
+            }
+          />
+        )}
       </Head>
       <RootRef>
         <Box>
