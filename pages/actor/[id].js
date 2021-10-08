@@ -1040,10 +1040,6 @@ const Actor = ({ initialData }) => {
                 <div className={styles.border} />
                 <br />
                 <br />
-                <Typography variant="h2">
-                  {data && data.actor.name}
-                </Typography>
-                <br />
                 <p>{data && Parser(data.actor.description)}</p>
                 <div>
                   {data
