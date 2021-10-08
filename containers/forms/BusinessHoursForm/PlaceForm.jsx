@@ -18,6 +18,8 @@ function PlaceForm({ addPlace }) {
       <input
         type="text"
         className="input"
+        width="80%"
+        style={{ width: '80%' }}
         value={value}
         placeHolder="entrez une adresse"
         onChange={(e) => setValue(e.target.value)}

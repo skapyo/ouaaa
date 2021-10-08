@@ -6,17 +6,19 @@ export const getImageUrl = (url) => {
 
 export const entriesHasElementWithCode = (entries, code) => {
   let hasEntry = false;
-  entries.map(
-    (entry) => {
-      if (entry
-      && entry.collection
-      && entry.collection.code
-        === code) {
-        hasEntry = true;
-      }
-      return hasEntry;
-    },
-  );
+  if (entries) {
+    entries.map(
+      (entry) => {
+        if (entry
+        && entry.collection
+        && entry.collection.code
+          === code) {
+          hasEntry = true;
+        }
+        return hasEntry;
+      },
+    );
+  }
 
   return hasEntry;
 };

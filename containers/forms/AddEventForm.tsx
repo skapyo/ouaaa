@@ -111,6 +111,7 @@ const useStyles = makeStyles((theme) => ({
   collectionLabel: {
     textAlign: 'center',
     color: '#2C367E',
+    fontWeight: 600,
   },
   justify: {
     textAlign: 'justify',
@@ -135,6 +136,9 @@ const useStyles = makeStyles((theme) => ({
   },
   container: {
     textAlign: 'center',
+  },
+  tooltip: {
+    marginLeft: '10px',
   },
 }));
 
@@ -336,7 +340,7 @@ const TitleWithTooltip = (props: TitleWithTooltipProps) => {
       </Typography>
       {
         !!tooltipTitle &&
-        <Tooltip title={tooltipTitle} color="primary">
+        <Tooltip title={tooltipTitle} color="primary" className={styles.tooltip}>
           <InfoIcon />
         </Tooltip>
       }
@@ -781,10 +785,10 @@ const AddEventForm = ({ actorId }) => {
     return (
       <Container component="main" maxWidth="sm" className={styles.container}>
         <Typography className={styles.field} color="secondary" variant="h6">
-          Ajouter un événement
+          Ajouter une action
         </Typography>
         <FormItem
-          label="Nom de l'événement"
+          label="Nom de l'action"
           inputName="label"
           formChangeHandler={formChangeHandler}
           value={formValues.label}
@@ -792,7 +796,7 @@ const AddEventForm = ({ actorId }) => {
           errorBool={
             !validationResult?.global && !!validationResult?.result.label
           }
-          errorText="Nom de l'événement requis."
+          errorText="Nom de l'action requis."
         />
         {
           /* @ts-ignore */
@@ -810,6 +814,8 @@ const AddEventForm = ({ actorId }) => {
             } else if (collection.code === 'category') {
               label = "Catégorie de l'événement";
               helperText = 'un événement peut traiter un sous-sujet non  associé au départ avec la page acteur. Vous pouvez choisir plusieurs sujets à rattacher à votre événement';
+            } else if (collection.code === 'event_public_target') {
+              helperText = 'contrairement à votre page acteur, ici vous pouvez ajouter plusieurs catégories de publics pour un même événement';
             }
 
             if (collection.code === 'event_price') return '';
@@ -820,7 +826,7 @@ const AddEventForm = ({ actorId }) => {
                   {label}
                   {' '}
                   {helperText !== '' && (
-                    <Tooltip title={helperText}>
+                    <Tooltip title={helperText} className={styles.tooltip}>
                       <InfoIcon />
                     </Tooltip>
                   )}
@@ -844,6 +850,7 @@ const AddEventForm = ({ actorId }) => {
                                 key={entry.id}
                                 nodeId={entry.id}
                                 labelText={entry.label}
+                                description={entry.description}
                                 hideCheckBox
                                 isForm
                                 isParent
@@ -858,6 +865,7 @@ const AddEventForm = ({ actorId }) => {
                                         // @ts-ignore
                                         nodeId={subEntry.id}
                                         labelText={subEntry.label}
+                                        description={subEntry.description}
                                         categoryChange={formChangeHandler}
                                         icon={subEntry.icon}
                                         color={entry.color}
@@ -966,7 +974,8 @@ const AddEventForm = ({ actorId }) => {
           })
         }
         <Grid className={styles.location}>
-          <Typography>Adresse complète de l’événement *</Typography>
+          <Typography className={styles.collectionLabel}>Adresse complète de l’événement *</Typography>
+          <br/>
           <GooglePlacesAutocomplete
             placeholder="Taper et sélectionner l'adresse*"
             initialValue={
@@ -988,6 +997,11 @@ const AddEventForm = ({ actorId }) => {
             })}
           />
         </Grid>
+        <br/>
+        <TitleWithTooltip
+          title="Calendrier "
+          tooltipTitle="Vous pourrez ajouter des infos plus détaillés dans le corps du texte de la déscription ou dans le bloc infos pratiques"
+        />
         <Grid className={styles.datetime}>
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <Grid container justify="space-around">
@@ -1085,10 +1099,8 @@ const AddEventForm = ({ actorId }) => {
             //    const [display, setDisplay] = useState(false);
             let { label } = collection;
             let helperText = '';
-            if (collection.code === 'category') {
-              label = 'Choisissez les sous-sujets dans lesquels vous souhaitez apparaître (en priorité)';
-              helperText = 'Vous avez la possibilité d’ajouter un texte libre pour expliquer votre lien au sujet choisi. Vous pouvez sélectionner autant de sujet que nécessaire, les 3 premiers serviront à référencer votre page dans les moteurs de recherches info bulle : expliquant les ensemble et les sujets qu’ils contiennent aisni que les liens avec les sous-sujets et pourquoi pas ODD / transiscope. Ces infos bulles sont aussi visible dans le filtre sur la carte pour aider les usagers de <i>OUAAA!</i> à filtrer leur recherche';
-            }
+              helperText = 'Vous pourrez ajouter plus de détail dans le bloc infos pratiques ci dessous';
+      
             if (collection.code !== 'event_price') return '';
 
             return (
@@ -1098,7 +1110,7 @@ const AddEventForm = ({ actorId }) => {
                   {label}
                   {' '}
                   {helperText !== '' && (
-                    <Tooltip title={helperText}>
+                    <Tooltip title={helperText} className={styles.tooltip}>
                       <InfoIcon />
                     </Tooltip>
                   )}
@@ -1146,7 +1158,7 @@ const AddEventForm = ({ actorId }) => {
         }
         <br />
         <TitleWithTooltip
-          title="Acteur(s) associé(s) à l’action"
+          title="Acteur(s) associé(s) à l’action "
           tooltipTitle="Permet d’ajouter d’autres acteurs pour une action co-réalisée"
         />
 
@@ -1214,10 +1226,10 @@ const AddEventForm = ({ actorId }) => {
         </Grid>
 
 
-        <Typography variant="body1" color="primary" className={styles.label}>
-          Infos pratiques complément :
-          {' '}
-        </Typography>
+        <TitleWithTooltip
+          title="Infos pratiques complément "
+          tooltipTitle="Ici vous pouvez indiquer toutes les infos comme tarifs, parking, moyen d’accès, … elles apparaitront ainsi aux visiteurs de OUAAA dans un bloc dédié plus lisible"
+        />
         <p />
         {editorLoaded ? (
           <>
@@ -1288,7 +1300,7 @@ const AddEventForm = ({ actorId }) => {
         </FormControl>
         <p />
         <FormItem
-          label="Lien externe de l'événement (Facebook ou site)"
+          label="Lien externe de l'action (Facebook ou site)"
           inputName="facebookUrl"
           formChangeHandler={formChangeHandler}
           value={formValues.facebookUrl}
@@ -1310,7 +1322,7 @@ const AddEventForm = ({ actorId }) => {
             } caractères en trop.`}
         />
         <Typography variant="body1" color="primary" className={styles.label}>
-          Description :
+          Description
         </Typography>
         <p />
         {editorLoaded ? (
@@ -1326,7 +1338,7 @@ const AddEventForm = ({ actorId }) => {
         )}
         <br />
         <Typography variant="body1" color="primary" className={styles.label}>
-          Votre logo
+          Logo de l'événement
         </Typography>
         {objectsListLogo ? (
           <ImagesDisplay
@@ -1383,7 +1395,7 @@ const AddEventForm = ({ actorId }) => {
           onClick={submitHandler}
           disabled={!validationResult?.global || !validated}
         >
-          Créer cet événement
+          Créer cet action
         </ClassicButton>
       </Container>
     );

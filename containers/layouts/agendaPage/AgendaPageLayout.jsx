@@ -1,22 +1,20 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { Grid, Typography } from '@material-ui/core';
 import { withApollo } from 'hoc/withApollo';
 import Events from 'containers/layouts/agendaPage/Events';
-// import Filters from 'containers/layouts/agendaPage/Filters';
 import Filters from '../../../components/filters';
 import Newsletter from 'containers/layouts/Newsletter';
-import { Container, makeStyles, useMediaQuery, useTheme } from '@material-ui/core';
+import { Container, makeStyles } from '@material-ui/core';
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/client';
-import Fab from '@material-ui/core/Fab';
 import { getImageUrl } from '../../../utils/utils';
 import Link from '../../../components/Link';
 import Moment from 'react-moment';
-
+import moment from 'moment';
 import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded';
 import FavoriteRoundedIcon from '@material-ui/icons/FavoriteRounded';
-import ViewListIcon from '@material-ui/icons/ViewList';
-import RoomIcon from '@material-ui/icons/Room';
+import Calendar from '../../../components/Calendar';
+import ButtonGroupSelected from '../../../components/buttons/ButtonGroupSelected';
 
 if (typeof window !== 'undefined') {
   var L = require('leaflet');
@@ -27,6 +25,10 @@ if (typeof window !== 'undefined') {
   var Tooltip = require('react-leaflet').Tooltip;
   var MarkerClusterGroup = require('react-leaflet-markercluster').default;
 }
+
+const currentDate = new Date();
+
+currentDate.setMonth(9);
 
 const useStyles = makeStyles(theme => ({
   main: {
@@ -48,22 +50,6 @@ const useStyles = makeStyles(theme => ({
       flexDirection: 'column',
       alignItems: 'center',
       height: 'auto'
-    }
-  },
-  listButton: {
-    position: 'absolute',
-    bottom: 10,
-    zIndex: 10000,
-    color: '#fff',
-    backgroundColor: '#2C367E',
-    '&:hover': {
-      color: '#2C367E',
-      backgroundColor: '#fff',
-    },
-    [theme.breakpoints.down('sm')]: {
-      position: 'initial',
-      marginTop: 25,
-      width: '75%'
     }
   },
   listButtonIcon: {
@@ -132,15 +118,10 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const categories = {
-  Sujets: [],
-};
-
-const otherCategories = {
-  "Territoire d'actions": [],
-  "Statut d'acteur": [],
-  'Public visé': [],
-  'Collectif & réseaux': [],
+const VIEW_STATE = {
+  LIST: 'LIST',
+  MAP: 'MAP',
+  CALENDAR: 'CALENDAR'
 };
 
 const AgendaPageLayout = () => {
@@ -157,11 +138,21 @@ const AgendaPageLayout = () => {
         address
         city
         entries {
-          id
-          code
           label
-          color
           icon
+          collection {
+            code
+            label
+          }
+          parentEntry {
+            code
+            label
+            color
+            collection {
+              code
+              label
+            }
+          }
         }
         actors {
           id
@@ -188,28 +179,16 @@ const AgendaPageLayout = () => {
 
   const classes = useStyles();
   const mapRef = useRef();
-  const [isListMode, setIsListMode] = useState(true);
+  const [viewMode, setViewMode] = useState(VIEW_STATE.LIST);
   const [favorite, setFavorite] = useState(false);
-  const [categoriesChecked, setCategoriesChecked] = useState(categories.Sujets);
-  const [otherCategoriesChecked, setOtherCategoriesChecked] = useState(
-    otherCategories
-  );
-  const [postCode, setPostCode] = useState(null);
   const [filters, setFilters] = useState(null);
-
-  const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.up('md'));
 
   const date = new Date();
   const position = [46.1085193, -0.9864794];
 
-  const switchMode = useCallback(() => {
-    setIsListMode(!isListMode);
-  }, [isListMode]);
-
   date.setHours(0, 0, 0, 0);
 
-  const { data: eventData, loading: loadingEvents, error, refetch } = useQuery(GET_EVENTS, {
+  const { data: eventData, loading: loadingEvents, refetch } = useQuery(GET_EVENTS, {
     variables: {
       startingDate: date.toISOString(),
     },
@@ -226,34 +205,66 @@ const AgendaPageLayout = () => {
     refetch({ ...newFilters });
   }, [refetch]);
 
+  const fabActions = useMemo(() => {
+    return [
+      { name: 'list', label: 'Liste', onClick: () => setViewMode(VIEW_STATE.LIST) },
+      { name: 'map', label: 'Carte', onClick: () => setViewMode(VIEW_STATE.MAP) },
+      { name: 'calendar', label: 'Calendrier', onClick: () => setViewMode(VIEW_STATE.CALENDAR) }
+    ]
+  }, []);
+
+  const isListMode = useMemo(() => viewMode === VIEW_STATE.LIST, [viewMode, VIEW_STATE]);
+  const isMapMode = useMemo(() => viewMode === VIEW_STATE.MAP, [viewMode, VIEW_STATE]);
+  const isCalendarMode = useMemo(() => viewMode === VIEW_STATE.CALENDAR, [viewMode, VIEW_STATE]);
+
+  const events = useMemo(() => {
+    return (eventData?.events || []).map(evt => {
+      const startDate = moment(parseInt(evt.startedAt));
+      const endDate = moment(parseInt(evt.endedAt));
+
+      let recurrentOptions = null;
+      const duration = Math.ceil(moment.duration(endDate.diff(startDate)).asDays());
+
+      if (duration > 2) {
+        recurrentOptions = {
+          endDate: startDate.endOf('day'),
+          rRule: `FREQ=DAILY;COUNT=${duration}`
+        };
+      }
+
+      return {
+        startDate: new Date(parseInt(evt.startedAt)),
+        endDate: new Date(parseInt(evt.endedAt)),
+        title: evt.label,
+        id: evt.id,
+        location: evt.city ? [evt.address, evt.city].join(', ') : '',
+        backgroundColor: evt.entries && evt.entries.length > 0 && evt.entries[0].parentEntry ? evt.entries[0].parentEntry.color : 'blue',
+        ...recurrentOptions
+      }
+    });
+  }, [eventData]);
+
   return (
     <Container className={classes.main}>
       <Container className={classes.layout}>
+        <ButtonGroupSelected buttons={fabActions} />
+
         <Filters
           isEventList
           onFiltersChange={handleFiltersChange}
+          isCalendarMode={isCalendarMode}
         />
 
-        <Fab
-          variant="extended"
-          size="large"
-          aria-label="add"
-          className={classes.listButton}
-          onClick={switchMode}
-        >
-          {
-            isListMode ?
-              <RoomIcon className={classes.listButtonIcon} /> :
-              <ViewListIcon className={classes.listButtonIcon} />
-          }
-          <span>{isListMode ? 'Voir la Carte' : 'Voir la Liste'}</span>
-        </Fab>
 
         {isListMode && (
           <Events data={eventData} loading={loadingEvents} />
         )}
 
-        {!isListMode && (
+        {isCalendarMode && (
+          <Calendar events={events} />
+        )}
+
+        {isMapMode && (
           <Grid style={{ width: '100%' }}>
             <Map ref={mapRef} center={position} zoom={11} className={classes.mapContainer}>
               <TileLayer
@@ -267,12 +278,12 @@ const AgendaPageLayout = () => {
                     let color;
                     if (event.lat != null && event.lng != null) {
                       if (
-                        event.categories &&
-                        event.categories.length > 0 &&
-                        event.categories[0].icon
+                        event.entries &&
+                        event.entries.length > 0 &&
+                        event.entries[0].icon
                       ) {
-                        icone = `/icons/${event.categories[0].icon}.svg`;
-                        color = event.categories[0].color;
+                        icone = '/icons/marker/marker_' + event.entries[0].icon + '.svg';
+                        color = event.entries[0].color;
                       } else {
                         icone = '/icons/' + 'place' + '.svg';
                         color = 'black';
@@ -283,7 +294,7 @@ const AgendaPageLayout = () => {
                         color,
                         fillColor: color,
                         iconAnchor: [13, 34], // point of the icon which will correspond to marker's location
-                        iconSize: [25],
+                        iconSize: [60],
                         popupAnchor: [1, -25],
                         html: `<span style="${markerHtmlStyles}" />`,
                       });

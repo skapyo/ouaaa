@@ -17,10 +17,7 @@ import { useRouter, withRouter } from 'next/router';
 import classnames from 'classnames';
 
 import {
-  Container,
-  Grid,
-  makeStyles,
-  Typography,
+  Container, Grid, makeStyles, Typography,
 } from '@material-ui/core';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -95,7 +92,6 @@ const EDIT_ACTOR = gql`
       volunteerDescription: $volunteerDescription
       openingHours: $openingHours
     ) {
-     
       id
       name
       email
@@ -167,15 +163,19 @@ const EDIT_ACTOR = gql`
           id
           day
           selected
+          identifier
         }
         hours
         place
       }
+      referents {
+        id
+        surname
+        lastname
+      }
     }
   }
 `;
-
-
 
 const GET_USERS = graphqlTag`
   query users
@@ -262,13 +262,14 @@ const GET_ACTOR = gql`
           id
           day
           selected
+          identifier
         }
         hours
         place
       }
       referents {
-        id,
-        surname,
+        id
+        surname
         lastname
       }
     }
@@ -313,11 +314,11 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 600,
   },
   labelDefault: {
-    marginRight: 5
+    marginRight: 5,
   },
   titleContainer: {
     marginTop: 15,
-    marginBottom: 10
+    marginBottom: 10,
   },
   field: {
     marginBottom: theme.spacing(3),
@@ -364,6 +365,7 @@ const useStyles = makeStyles((theme) => ({
   collectionLabel: {
     textAlign: 'center',
     color: '#2C367E',
+    fontWeight: 600,
   },
   rootTree: {
     color: theme.palette.text.secondary,
@@ -390,8 +392,8 @@ const useStyles = makeStyles((theme) => ({
   },
 
   referentList: {
-    flex: 1
-  }
+    flex: 1,
+  },
 }));
 
 type FormItemProps = {
@@ -439,24 +441,33 @@ type TitleWithTooltipProps = {
   title: string | any;
   tooltipTitle?: string;
   collection?: boolean;
-}
-
+};
 
 const TitleWithTooltip = (props: TitleWithTooltipProps) => {
   const { title, tooltipTitle, collection = false } = props;
   const styles = useStyles();
 
   return (
-    <Grid container justifyContent="center" alignItems="center" className={styles.titleContainer}>
-      <Typography color="primary" className={classnames(collection ? styles.collectionLabel : styles.label, styles.labelDefault)}>
+    <Grid
+      container
+      justifyContent="center"
+      alignItems="center"
+      className={styles.titleContainer}
+    >
+      <Typography
+        color="primary"
+        className={classnames(
+          collection ? styles.collectionLabel : styles.label,
+          styles.labelDefault,
+        )}
+      >
         {title}
       </Typography>
-      {
-        !!tooltipTitle &&
+      {!!tooltipTitle && (
         <Tooltip title={tooltipTitle} color="primary">
           <InfoIcon />
         </Tooltip>
-      }
+      )}
     </Grid>
   );
 };
@@ -501,20 +512,16 @@ const EditActorForm = (props) => {
           },
         );
         router.push('/');
-      }
-      else if (!(containUser(data.actor.referents) || user.role === 'admin')) {
-        enqueueSnackbar(
-          "Vous n'avez pas les droits d'éditer cet acteur",
-          {
-            preventDuplicate: true,
-          },
-        );
+      } else if (
+        !(containUser(data.actor.referents) || user.role === 'admin')
+      ) {
+        enqueueSnackbar("Vous n'avez pas les droits d'éditer cet acteur", {
+          preventDuplicate: true,
+        });
         router.push('/');
       }
     },
   });
-
-
 
   function IsTree(collection) {
     let isTree = false;
@@ -546,9 +553,9 @@ const EditActorForm = (props) => {
 
   const imgInit = [];
   if (
-    actorData &&
-    actorData.actor.pictures &&
-    actorData.actor.pictures.length > 0
+    actorData
+    && actorData.actor.pictures
+    && actorData.actor.pictures.length > 0
   ) {
     actorData.actor.pictures
       .sort((a, b) => (a.position > b.position ? 1 : -1))
@@ -597,9 +604,9 @@ const EditActorForm = (props) => {
 
   const imgInitLogo = [];
   if (
-    actorData &&
-    actorData.actor.pictures &&
-    actorData.actor.pictures.length > 0
+    actorData
+    && actorData.actor.pictures
+    && actorData.actor.pictures.length > 0
   ) {
     actorData.actor.pictures
       .sort((a, b) => (a.position > b.position ? 1 : -1))
@@ -648,9 +655,9 @@ const EditActorForm = (props) => {
 
   const imgInitMain = [];
   if (
-    actorData &&
-    actorData.actor.pictures &&
-    actorData.actor.pictures.length > 0
+    actorData
+    && actorData.actor.pictures
+    && actorData.actor.pictures.length > 0
   ) {
     actorData.actor.pictures
       .sort((a, b) => (a.position > b.position ? 1 : -1))
@@ -754,7 +761,7 @@ const EditActorForm = (props) => {
   }) => {
     const [editorLoaded, setEditorLoaded] = useState(false);
     const [showOtherContact, setShowOtherContact] = useState(
-      formValues.contactId !== actorData.actor.id
+      formValues.contactId !== actorData.actor.id,
     );
     const [showOtherContactList, setShowOtherContactList] = useState(false);
     const [descriptionEditor, setDescriptionEditor] = useState();
@@ -772,50 +779,47 @@ const EditActorForm = (props) => {
       { data: editData, loading: editLoading, error: editError },
     ] = useMutation(EDIT_ACTOR);
 
-   
     const [setImagesList, loading, result, imagesListState] = useImageReader();
     const editorRef = useRef();
 
     // @ts-ignore
     const { CKEditor, ClassicEditor } = editorRef.current || {};
 
-    
-  const [
-    deleteActor,
-    { data: deleteData, error: deleteError, loading: deleteLoading },
-  ] = useMutation(DELETE_ACTOR);
-  const [openDeletePopup, setOpenDeletePopup] = React.useState(false);
+    const [
+      deleteActor,
+      { data: deleteData, error: deleteError, loading: deleteLoading },
+    ] = useMutation(DELETE_ACTOR);
+    const [openDeletePopup, setOpenDeletePopup] = React.useState(false);
 
-  const handleClickOpen = () => {
-    setOpenDeletePopup(true);
-  };
+    const handleClickOpen = () => {
+      setOpenDeletePopup(true);
+    };
 
-  const handleClose = () => {
-    setOpenDeletePopup(false);
-  };
+    const handleClose = () => {
+      setOpenDeletePopup(false);
+    };
 
-  const submitDeleteActor = () => {
-    deleteActor({
-      variables: {
-        actorId: parseInt(props.id),
-      },
-    });
-    setOpenDeletePopup(false);
-  };
-
-  useEffect(() => {
-    if (!deleteLoading && deleteData?.deleteActor) {
-      enqueueSnackbar('Acteur supprimé avec succès.', {
-        preventDuplicate: true,
+    const submitDeleteActor = () => {
+      deleteActor({
+        variables: {
+          actorId: parseInt(props.id),
+        },
       });
-      router.push('/');
-    } else if (deleteError) {
-      enqueueSnackbar("La suppression de l'acteur a échoué.", {
-        preventDuplicate: true,
-      });
-    }
-  }, [deleteData, deleteError, deleteLoading]);
+      setOpenDeletePopup(false);
+    };
 
+    useEffect(() => {
+      if (!deleteLoading && deleteData?.deleteActor) {
+        enqueueSnackbar('Acteur supprimé avec succès.', {
+          preventDuplicate: true,
+        });
+        router.push('/');
+      } else if (deleteError) {
+        enqueueSnackbar("La suppression de l'acteur a échoué.", {
+          preventDuplicate: true,
+        });
+      }
+    }, [deleteData, deleteError, deleteLoading]);
 
     useEffect(() => {
       // @ts-ignore
@@ -833,7 +837,7 @@ const EditActorForm = (props) => {
       imagesLogoListState,
     ] = useImageReader();
 
-    const inputChangeHandler = useCallback(event => {
+    const inputChangeHandler = useCallback((event) => {
       if (event.target.value) {
         if (event.target.value.length < 3) {
           if (event.target.name === 'referents') {
@@ -841,12 +845,10 @@ const EditActorForm = (props) => {
           } else {
             setShowOtherContactList(false);
           }
+        } else if (event.target.name === 'referents') {
+          setOpenAddReferentlist(true);
         } else {
-          if (event.target.name === 'referents') {
-            setOpenAddReferentlist(true);
-          } else {
-            setShowOtherContactList(true);
-          }
+          setShowOtherContactList(true);
         }
       }
     }, []);
@@ -858,17 +860,20 @@ const EditActorForm = (props) => {
       setShowOtherContactList(false);
     };
 
-    const handleChangeReferent = useCallback((event, value) => {
-      if (value) {
-        // @ts-ignore
-        let currentReferents: string[] = formValues.referents || [];
-        currentReferents.push(value);
-        // @ts-ignore
-        formValues.referents = currentReferents;
-      }
-      setShowAddReferent(false);
-      setOpenAddReferentlist(false);
-    }, [formValues]);
+    const handleChangeReferent = useCallback(
+      (event, value) => {
+        if (value) {
+          // @ts-ignore
+          const currentReferents: string[] = formValues.referents || [];
+          currentReferents.push(value);
+          // @ts-ignore
+          formValues.referents = currentReferents;
+        }
+        setShowAddReferent(false);
+        setOpenAddReferentlist(false);
+      },
+      [formValues],
+    );
 
     const {
       objectsList: objectsListLogo,
@@ -1061,7 +1066,7 @@ const EditActorForm = (props) => {
           formValues: {
             ...formValues,
             // @ts-ignore
-            referents: formValues.referents.map(item => item.id)
+            referents: formValues.referents.map((item) => item.id),
           },
           // eslint-disable-next-line radix
           actorId: parseInt(actorData.actor.id),
@@ -1146,7 +1151,12 @@ const EditActorForm = (props) => {
         setEstlarochelle(false);
       }
     };
-
+    const addLineBreaks = (string) => string.split('\n').map((text, index) => (
+      <React.Fragment key={`${text}-${index}`}>
+        {text}
+        <br />
+      </React.Fragment>
+    ));
     const updateFormValues = () => {
       formValues.name = actorData.actor.name;
       formValues.email = actorData.actor.email;
@@ -1248,19 +1258,24 @@ const EditActorForm = (props) => {
       setShowAddReferent(!showAddReferent);
     }, [showAddReferent]);
 
-    const handleClickDeleteReferent = useCallback(referent => {
-      // @ts-ignore
-      let currentReferents = [...formValues.referents];
-      // @ts-ignore
-      currentReferents = currentReferents.filter(item => item.id !== referent.id);
-      formChangeHandler({
-        target: {
-          // @ts-ignore
-          value: currentReferents,
-          name: 'referents'
-        }
-      })
-    }, [formValues]);
+    const handleClickDeleteReferent = useCallback(
+      (referent) => {
+        // @ts-ignore
+        let currentReferents = [...formValues.referents];
+        // @ts-ignore
+        currentReferents = currentReferents.filter(
+          (item) => item.id !== referent.id,
+        );
+        formChangeHandler({
+          target: {
+            // @ts-ignore
+            value: currentReferents,
+            name: 'referents',
+          },
+        });
+      },
+      [formValues],
+    );
 
     return (
       <Container component="main" maxWidth="sm">
@@ -1329,58 +1344,59 @@ const EditActorForm = (props) => {
                     .concat(formValues.city)
                   : formValues.city && formValues.city
               }
-              onSelect={({ description }) =>
-                geocodeByAddress(description).then((results) => {
-                  getLatLng(results[0])
-                    .then((value) => {
-                      formValues.lat = `${value.lat}`;
-                      formValues.lng = `${value.lng}`;
-                    })
-                    .catch((error) => console.error(error));
-                  getAddressDetails(results);
-                })
-              }
+              onSelect={({ description }) => geocodeByAddress(description).then((results) => {
+                getLatLng(results[0])
+                  .then((value) => {
+                    formValues.lat = `${value.lat}`;
+                    formValues.lng = `${value.lng}`;
+                  })
+                  .catch((error) => console.error(error));
+                getAddressDetails(results);
+              })}
             />
           </Grid>
         </div>
         {
           /* @ts-ignore */
-          dataCollections.collections &&
-          /* @ts-ignore */
-          dataCollections.collections.map((collection) => {
-            if (collection.code !== 'larochelle_quarter' || !estlarochelle) {
-              return '';
-            }
-            if (!collection.actor) return '';
+          dataCollections.collections
+            /* @ts-ignore */
+            && dataCollections.collections.map((collection) => {
+              if (collection.code !== 'larochelle_quarter' || !estlarochelle) {
+                return '';
+              }
+              if (!collection.actor) return '';
 
-            return (
-              <div key={collection.id}>
-                <TitleWithTooltip
-                  title={collection.label}
-                  collection
-                />
-                <RadioGroupForContext
-                  initValue={getEntryPresentInCollection(
-                    formValues.entries,
-                    collection,
-                  )}
-                >
-                  <CustomRadioGroup
-                    formChangeHandler={formChangeHandler}
-                    entries={collection.entries}
-                    defaultValue={getEntryPresentInCollection(
+              return (
+                <div key={collection.id}>
+                  <TitleWithTooltip title={collection.label} collection />
+                  <RadioGroupForContext
+                    initValue={getEntryPresentInCollection(
                       formValues.entries,
                       collection,
                     )}
-                  />
-                </RadioGroupForContext>
-              </div>
-            );
-          })
+                  >
+                    <CustomRadioGroup
+                      formChangeHandler={formChangeHandler}
+                      entries={collection.entries}
+                      defaultValue={getEntryPresentInCollection(
+                        formValues.entries,
+                        collection,
+                      )}
+                    />
+                  </RadioGroupForContext>
+                </div>
+              );
+            })
         }
 
         <TitleWithTooltip
-          title="Jour et heure d'ouverture"
+          title={addLineBreaks("Jour et heure d'ouverture")}
+          tooltipTitle={addLineBreaks('Pour chaque ligne vous pouvez : \n'
+          + '1. Sélectionner les différents jours où vous êtes ouvert aux mêmes horaires. Le(s) jour(s) sélectionné(s) passe(nt) en bleu foncé.\n'
+          + '2. Indiquer des tranches horaires associés à ce(s) jour(s). Vous pouvez ajouter autant de tranches horaires que nécessaire pour le(s) même(s) jour(s) en cliquant sur la phrase « ajouter des horaires »\n'
+          + '3. Ajouter un lieu à chaque ligne. Vous n’avez pas d’adresse fixe mais êtes mobile de manière récurrentes, en cliquant en haut sur « indiquer des emplacements », c’est possible ! Attention néanmoins, pour les rdv spéciaux qui ne sont pas hebdomadaires ou les marchés… nous vous invitons à créer par la suite des pages événements dédiés à chacune de vos actions. Ces pages événements vous permettront de donner plus d’infos aux visiteurs et d’être visible dans l’agenda. Pour ajouter un lieu, indiquez l’adresse dans l’espace dédié et cliquez n’importe où sur l’écran pour valider. L’adresse s’affichera alors dans un bloc grisé.\n'
+          + '4. une erreur ? un horaire qui n’existe plus ? Tout est modifiable et, si besoin, vous pouvez totalement supprimer la ligne grâce à l\'icone poubelle\n\n'
+      + 'Vous avez rempli votre 1ere ligne mais il vous reste d’autres jours à indiquer ? Cliquez sur le + et ajoutez autant de ligne que nécessaire\n')}
         />
 
         <SchedulerContainer
@@ -1389,9 +1405,13 @@ const EditActorForm = (props) => {
         />
 
         <TitleWithTooltip
-          title={
-            <p>CONTACT PRIVE pour les échanges avec <i>OUAAA!</i></p>
-          }
+          title={(
+            <p>
+              CONTACT PRIVE pour les échanges avec
+              {' '}
+              <i>OUAAA!</i>
+            </p>
+          )}
         />
 
         <FormControl component="fieldset">
@@ -1410,11 +1430,15 @@ const EditActorForm = (props) => {
             <FormControlLabel
               value="other"
               control={<Radio />}
-              label={
+              label={(
                 <>
-                  c’est un autre (avec un compte <i>OUAAA!</i> existant)
+                  c’est un autre (avec un compte
+                  {' '}
+                  <i>OUAAA!</i>
+                  {' '}
+                  existant)
                 </>
-              }
+              )}
             />
           </RadioGroup>
           <p>
@@ -1426,9 +1450,7 @@ const EditActorForm = (props) => {
                 onInput={inputChangeHandler}
                 open={showOtherContactList}
                 // @ts-ignore
-                getOptionLabel={(option) =>
-                  `${option.surname} ${option.lastname}`
-                }
+                getOptionLabel={(option) => `${option.surname} ${option.lastname}`}
                 onChange={autocompleteHandler}
                 defaultValue={getDefaultValueContact()}
                 style={{ width: 300 }}
@@ -1462,9 +1484,7 @@ const EditActorForm = (props) => {
           helperText="Indiquez ici votre métier ou activité principale. Cette info servira à mieux référencer votre page dans les moteurs de recherche. Ex : boulanger bio"
         />
 
-        <TitleWithTooltip
-          title="Votre logo"
-        />
+        <TitleWithTooltip title="Votre logo" />
 
         {objectsListLogo ? (
           <ImagesDisplay
@@ -1527,16 +1547,14 @@ const EditActorForm = (props) => {
           value={formValues.shortDescription}
           required={false}
           errorBool={
-            !validationResult?.global &&
-            !!validationResult?.result.shortDescription
+            !validationResult?.global
+            && !!validationResult?.result.shortDescription
           }
           errorText="90 caractères maximum"
           helperText="Cette description courte s’affichera en vue liste et dans les blocs de survol/clic de la carte. Merci de synthétiser vos objectifs en quelques mots."
         />
 
-        <TitleWithTooltip
-          title="Description"
-        />
+        <TitleWithTooltip title="Description" />
 
         <Typography className={styles.helperText}>
           Cette description longue est intégrée à votre page acteur. Elle se
@@ -1545,7 +1563,10 @@ const EditActorForm = (props) => {
           didactique vos liens avec les questions de transition, vos
           missions/actions, votre organisation, etc. Au delà de l’accès à une
           information claire pour tous les internautes (y compris en situation
-          de handicap) utilisant <i>OUAAA!</i>, ce texte permettra un meilleur
+          de handicap) utilisant
+          {' '}
+          <i>OUAAA!</i>
+          , ce texte permettra un meilleur
           référencement de votre page dans le moteur de recherche interne. Pour
           cela, pensez à utiliser des mots clé du champ sémantique de votre
           activité. Ex : vous êtes une asso de recyclerie : zéro déchet,
@@ -1600,179 +1621,175 @@ const EditActorForm = (props) => {
 
         {
           /* @ts-ignore */
-          dataCollections.collections &&
-          /* @ts-ignore */
-          dataCollections.collections.map((collection) => {
-            if (!collection.actor) return '';
-            if (collection.code === 'larochelle_quarter') return '';
-            //    const [display, setDisplay] = useState(false);
-            let { label } = collection;
-            let helperText;
-            if (collection.code === 'category') {
-              label =
-                'Choisissez les sous-sujets dans lesquels vous souhaitez apparaître (en priorité)';
-              helperText =
-                'Vous avez la possibilité d’ajouter un texte libre pour expliquer votre lien au sujet choisi. Vous pouvez sélectionner autant de sujets que nécessaire, les 3 premiers que vous cocherez serviront à référencer votre page dans les moteurs de recherche. le 1er coché indiquera votre sujet principal.';
-            } else if (collection.code === 'actor_status') {
-              label = 'Quel est votre statut juridique ?';
-              helperText =
-                'service public : toutes les collectivités, mairies, cda, cdc participant directement ou via des projets à la transition / ex : la rochelle territoire zéro carbone entreprise : tous les acteurs économiques de la transition, de l’economie sociale et solidaire... association & ONG  : toutes les structures à but non lucratif';
-            } else if (collection.code === 'public_target') {
-              label =
-                'Quel public visez vous principalement dans vos actions ?';
-              helperText =
-                'Ici nous vous proposons de choisir votre public principal. Bien sûr à chaque action (événement, campagne…) que vous créerez vous pourrez indiquer des publics différents. de votre public principal. Tout public = familles ; Jeunes adultes = 15-25 ans, étudiants ; précaires = SDF, familles en difficulté, etc. ; discriminés = femmes, LGBTQIA+, migrants, etc';
-            } else if (collection.code === 'collectif') {
-              label =
-                'En tant qu’acteur, je fais partie des collectifs & réseaux suivants :';
-              helperText =
-                'Sont référencés ici des collectifs et réseaux du territoire. Les groupes locaux de réseaux nationaux (ex Greenpeace) ne sont pas inclus dans cette liste';
-            } else if (collection.code === 'actor_location_action') {
-              label = "Territoire d'action (1 seul choix) *";
-              helperText =
-                'Si vous êtes une antenne, le territoire d’action est celui qui concerne votre structure chapeau (ex : Greenpeace, choisir « International »)';
-            }
-            let defaultValue = '';
-            if (
-              !IsTree(collection) &&
-              !collection.multipleSelection &&
-              formValues &&
-              formValues.entries
-            ) {
-              // @ts-ignore
-              formValues.entries.map((entry) => {
-                let isPresent = false;
-                if (collection.entries) {
-                  collection.entries.map((entryCollection) => {
-                    if (entryCollection.id === entry) isPresent = true;
-                    return isPresent;
-                  });
-                }
-                if (isPresent) defaultValue = entry;
-              });
-            }
-            return (
-              <div key={collection.code}>
-                <TitleWithTooltip
-                  title={label}
-                  tooltipTitle={helperText}
-                  collection
-                />
-                {
-                  // display &&
-                  IsTree(collection) && (
-                    // @ts-ignore
-                    <Entries initValues={initentriesWithInformation}>
-                      <TreeView
-                        className={styles.rootTree}
-                        defaultCollapseIcon={<ArrowDropDownIcon />}
-                        defaultExpandIcon={<ArrowRightIcon />}
-                        defaultEndIcon={<div style={{ width: 24 }} />}
-                      >
-                        {collection.entries &&
-                          collection.entries.map((entry) => {
-                            return (
-                              // @ts-ignore
-                              <StyledTreeItem
-                                key={entry.id}
-                                nodeId={entry.id}
-                                labelText={entry.label}
-                                description={entry.description}
-                                icon={entry.icon}
-                                hideCheckBox
-                                isForm
-                                isParent
-                                hasSubEntries={entry.subEntries && entry.subEntries.length > 0}
-                                className={styles.treeParent}
-                              >
-                                {entry.subEntries &&
-                                  entry.subEntries.map((subEntry) => {
-                                    return (
-                                      <StyledTreeItem
-                                        key={subEntry.id}
-                                        // @ts-ignore
-                                        nodeId={subEntry.id}
-                                        labelText={subEntry.label} description={subEntry.description}
-                                        icon={subEntry.icon}
-                                        color={entry.color}
-                                        formValues={updateFormValues}
-                                        categoryChange={formChangeHandler}
-                                        linkDescription={
-                                          isEntriesWithInformationContains(
-                                            formValues.entriesWithInformation,
-                                            subEntry.id,
-                                          ) !== null
-                                            ? isEntriesWithInformationContains(
+          dataCollections.collections
+            /* @ts-ignore */
+            && dataCollections.collections.map((collection) => {
+              if (!collection.actor) return '';
+              if (collection.code === 'larochelle_quarter') return '';
+              //    const [display, setDisplay] = useState(false);
+              let { label } = collection;
+              let helperText;
+              if (collection.code === 'category') {
+                label = 'Choisissez les sous-sujets dans lesquels vous souhaitez apparaître (en priorité)';
+                helperText = 'Vous avez la possibilité d’ajouter un texte libre pour expliquer votre lien au sujet choisi. Vous pouvez sélectionner autant de sujets que nécessaire, les 3 premiers que vous cocherez serviront à référencer votre page dans les moteurs de recherche. le 1er coché indiquera votre sujet principal.';
+              } else if (collection.code === 'actor_status') {
+                label = 'Quel est votre statut juridique ?';
+                helperText = 'service public : toutes les collectivités, mairies, cda, cdc participant directement ou via des projets à la transition / ex : la rochelle territoire zéro carbone entreprise : tous les acteurs économiques de la transition, de l’economie sociale et solidaire... association & ONG  : toutes les structures à but non lucratif';
+              } else if (collection.code === 'public_target') {
+                label = 'Quel public visez vous principalement dans vos actions ?';
+                helperText = 'Ici nous vous proposons de choisir votre public principal. Bien sûr à chaque action (événement, campagne…) que vous créerez vous pourrez indiquer des publics différents. de votre public principal. Tout public = familles ; Jeunes adultes = 15-25 ans, étudiants ; précaires = SDF, familles en difficulté, etc. ; discriminés = femmes, LGBTQIA+, migrants, etc';
+              } else if (collection.code === 'collectif') {
+                label = 'En tant qu’acteur, je fais partie des collectifs & réseaux suivants :';
+                helperText = 'Sont référencés ici des collectifs et réseaux du territoire. Les groupes locaux de réseaux nationaux (ex Greenpeace) ne sont pas inclus dans cette liste';
+              } else if (collection.code === 'actor_location_action') {
+                label = "Territoire d'action (1 seul choix) *";
+                helperText = 'Si vous êtes une antenne, le territoire d’action est celui qui concerne votre structure chapeau (ex : Greenpeace, choisir « International »)';
+              }
+              let defaultValue = '';
+              if (
+                !IsTree(collection)
+                && !collection.multipleSelection
+                && formValues
+                && formValues.entries
+              ) {
+                // @ts-ignore
+                formValues.entries.map((entry) => {
+                  let isPresent = false;
+                  if (collection.entries) {
+                    collection.entries.map((entryCollection) => {
+                      if (entryCollection.id === entry) isPresent = true;
+                      return isPresent;
+                    });
+                  }
+                  if (isPresent) defaultValue = entry;
+                });
+              }
+              return (
+                <div key={collection.code}>
+                  <TitleWithTooltip
+                    title={label}
+                    tooltipTitle={helperText}
+                    collection
+                  />
+                  {
+                    // display &&
+                    IsTree(collection) && (
+                      // @ts-ignore
+                      <Entries initValues={initentriesWithInformation}>
+                        <TreeView
+                          className={styles.rootTree}
+                          defaultCollapseIcon={<ArrowDropDownIcon />}
+                          defaultExpandIcon={<ArrowRightIcon />}
+                          defaultEndIcon={<div style={{ width: 24 }} />}
+                        >
+                          {collection.entries
+                            && collection.entries.map((entry) => {
+                              return (
+                                // @ts-ignore
+                                <StyledTreeItem
+                                  key={entry.id}
+                                  nodeId={entry.id}
+                                  labelText={entry.label}
+                                  description={entry.description}
+                                  icon={entry.icon}
+                                  hideCheckBox
+                                  isForm
+                                  isParent
+                                  hasSubEntries={
+                                    entry.subEntries
+                                    && entry.subEntries.length > 0
+                                  }
+                                  className={styles.treeParent}
+                                >
+                                  {entry.subEntries
+                                    && entry.subEntries.map((subEntry) => {
+                                      return (
+                                        <StyledTreeItem
+                                          key={subEntry.id}
+                                          // @ts-ignore
+                                          nodeId={subEntry.id}
+                                          labelText={subEntry.label}
+                                          description={subEntry.description}
+                                          icon={subEntry.icon}
+                                          color={entry.color}
+                                          formValues={updateFormValues}
+                                          categoryChange={formChangeHandler}
+                                          linkDescription={
+                                            isEntriesWithInformationContains(
                                               formValues.entriesWithInformation,
                                               subEntry.id,
-                                            ).linkDescription
-                                            : ''
-                                        }
-                                        isForm
-                                        checked={
-                                          formValues &&
-                                          formValues.entriesWithInformation &&
-                                          isEntriesWithInformationContains(
-                                            formValues.entriesWithInformation,
-                                            subEntry.id,
-                                          ) !== null
-                                        }
-                                      />
-                                    );
-                                  })}
-                              </StyledTreeItem>
+                                            ) !== null
+                                              ? isEntriesWithInformationContains(
+                                                formValues.entriesWithInformation,
+                                                subEntry.id,
+                                              ).linkDescription
+                                              : ''
+                                          }
+                                          isForm
+                                          checked={
+                                            formValues
+                                            && formValues.entriesWithInformation
+                                            && isEntriesWithInformationContains(
+                                              formValues.entriesWithInformation,
+                                              subEntry.id,
+                                            ) !== null
+                                          }
+                                        />
+                                      );
+                                    })}
+                                </StyledTreeItem>
+                              );
+                            })}
+                        </TreeView>
+                      </Entries>
+                    )
+                  }
+                  {
+                    // display &&
+                    !IsTree(collection) && collection.multipleSelection && (
+                      <List>
+                        {collection.entries
+                          && collection.entries.map((entry) => {
+                            return (
+                              <ListItem key={entry.id} role={undefined} dense>
+                                {/* @ts-ignore */}
+                                <ListItemText primary={entry.label} />
+                                <Checkbox
+                                  edge="start"
+                                  tabIndex={-1}
+                                  disableRipple
+                                  onChange={formChangeHandler}
+                                  name="entries"
+                                  value={entry.id}
+                                  // @ts-ignore
+                                  checked={
+                                    formValues
+                                    && formValues.entries
+                                    && formValues.entries.includes(entry.id)
+                                  }
+                                  onClick={(e) => e.stopPropagation()}
+                                />
+                              </ListItem>
                             );
                           })}
-                      </TreeView>
-                    </Entries>
-                  )
-                }
-                {
-                  // display &&
-                  !IsTree(collection) && collection.multipleSelection && (
-                    <List>
-                      {collection.entries &&
-                        collection.entries.map((entry) => {
-                          return (
-                            <ListItem key={entry.id} role={undefined} dense>
-                              {/* @ts-ignore */}
-                              <ListItemText primary={entry.label} />
-                              <Checkbox
-                                edge="start"
-                                tabIndex={-1}
-                                disableRipple
-                                onChange={formChangeHandler}
-                                name="entries"
-                                value={entry.id}
-                                // @ts-ignore
-                                checked={
-                                  formValues &&
-                                  formValues.entries &&
-                                  formValues.entries.includes(entry.id)
-                                }
-                                onClick={(e) => e.stopPropagation()}
-                              />
-                            </ListItem>
-                          );
-                        })}
-                    </List>
-                  )
-                }
-                {
-                  // display &&
-                  !IsTree(collection) && !collection.multipleSelection && (
-                    <RadioGroupForContext initValue={defaultValue}>
-                      <CustomRadioGroup
-                        formChangeHandler={formChangeHandler}
-                        entries={collection.entries}
-                        defaultValue={defaultValue}
-                      />
-                    </RadioGroupForContext>
-                  )
-                }
-              </div>
-            );
-          })
+                      </List>
+                    )
+                  }
+                  {
+                    // display &&
+                    !IsTree(collection) && !collection.multipleSelection && (
+                      <RadioGroupForContext initValue={defaultValue}>
+                        <CustomRadioGroup
+                          formChangeHandler={formChangeHandler}
+                          entries={collection.entries}
+                          defaultValue={defaultValue}
+                        />
+                      </RadioGroupForContext>
+                    )
+                  }
+                </div>
+              );
+            })
         }
 
         <TitleWithTooltip
@@ -1784,7 +1801,7 @@ const EditActorForm = (props) => {
           <List className={styles.referentList}>
             {
               // @ts-ignore
-              (formValues?.referents || []).map(referent => {
+              (formValues?.referents || []).map((referent) => {
                 return (
                   <ListItem key={referent.id}>
                     <ListItemIcon>
@@ -1793,23 +1810,30 @@ const EditActorForm = (props) => {
                       </Avatar>
                     </ListItemIcon>
                     <ListItemText
-                      id={"referent-list-" + referent.id}
+                      id={`referent-list-${referent.id}`}
                       primary={`${referent.lastname} ${referent.surname}`}
                     />
                     <ListItemSecondaryAction>
-                      <IconButton onClick={() => handleClickDeleteReferent(referent)}>
+                      <IconButton
+                        onClick={() => handleClickDeleteReferent(referent)}
+                      >
                         <DeleteIcon />
                       </IconButton>
                     </ListItemSecondaryAction>
                   </ListItem>
-                )
+                );
               })
             }
           </List>
         </Grid>
 
         <Grid container direction="row">
-          <IconButton key="close" aria-label="Close" color="inherit" onClick={handleClickAddReferent}>
+          <IconButton
+            key="close"
+            aria-label="Close"
+            color="inherit"
+            onClick={handleClickAddReferent}
+          >
             <AddCircleOutline />
           </IconButton>
 
@@ -1848,50 +1872,47 @@ const EditActorForm = (props) => {
             Mettre à jour cet acteur
           </ClassicButton>
           <ClassicButton
-          fullWidth
-          variant="contained"
-          className={styles.delete}
-          onClick={handleClickOpen}
-        >
-          Supprimer cet acteur
-        </ClassicButton>
-        <Dialog
-          open={openDeletePopup}
-          onClose={handleClose}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <DialogTitle id="alert-dialog-title">
-            Êtes-vous sûr(e) de vouloir supprimer cet acteur ?
-          </DialogTitle>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              Une fois supprimé, cet acteur sera définitivement supprimé. Il
-              ne sera plus visible sur notre plateforme, ni pour vous, ni pour
-              les visiteurs. Pensez à supprimer vos anciens événements avant de supprimer votre page acteur.
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose} color="primary">
-              Annuler
-            </Button>
-            <Button onClick={submitDeleteActor} color="primary" autoFocus>
-              Supprimer
-            </Button>
-          </DialogActions>
-        </Dialog>
+            fullWidth
+            variant="contained"
+            className={styles.delete}
+            onClick={handleClickOpen}
+          >
+            Supprimer cet acteur
+          </ClassicButton>
+          <Dialog
+            open={openDeletePopup}
+            onClose={handleClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title">
+              Êtes-vous sûr(e) de vouloir supprimer cet acteur ?
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                Une fois supprimé, cet acteur sera définitivement supprimé. Il
+                ne sera plus visible sur notre plateforme, ni pour vous, ni pour
+                les visiteurs. Pensez à supprimer vos anciennes action avant de
+                supprimer votre page acteur.
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleClose} color="primary">
+                Annuler
+              </Button>
+              <Button onClick={submitDeleteActor} color="primary" autoFocus>
+                Supprimer
+              </Button>
+            </DialogActions>
+          </Dialog>
         </Grid>
-
       </Container>
     );
   };
 
   return (
     <div>
-      <FormController
-        render={Form}
-        validationRules={validationRules}
-      />
+      <FormController render={Form} validationRules={validationRules} />
     </div>
   );
 };
