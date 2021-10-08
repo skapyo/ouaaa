@@ -58,7 +58,7 @@ const Participate = () => {
             </Link>
 
             <Typography variant="h4">
-              <a href="mailto:contact@acteursdelatransition.fr">
+              <a href="mailto:contact@ouaaa-transition.fr">
                 Rejoins l'équipe du <i>OUAAA!</i>
               </a>
               {/* @ts-ignore */}
