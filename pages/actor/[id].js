@@ -351,121 +351,16 @@ const Actor = ({ initialData }) => {
   const [eventToRender, setEventToRender] = useState(null);
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const [cookies, setCookie, removeCookie] = useCookies();
-  const GET_ACTOR = gql`
-    query actor($id: String) {
-      actor(id: $id) {
-        id
-        name
-        address
-        lat
-        lng
-        address
-        city
-        email
-        phone
-        website
-        description
-        socialNetwork
-        volunteerDescription
-        activity
-        entries {
-          label
-          icon
-          collection {
-            code
-            label
-          }
-          parentEntry {
-            code
-            label
-            color
-            collection {
-              code
-              label
-            }
-          }
-        }
-        events {
-          id
-          label
-          shortDescription
-          description
-          startedAt
-          endedAt
-          published
-          pictures {
-            id
-            label
-            originalPicturePath
-            originalPictureFilename
-            croppedPicturePath
-            croppedPictureFilename
-            croppedX
-            croppedY
-            croppedZoom
-            croppedRotation
-            position
-          }
-          address
-          city
-          entries {
-            label
-            icon
-            collection {
-              code
-              label
-            }
-            parentEntry {
-              code
-              label
-              color
-              collection {
-                code
-                label
-              }
-            }
-          }
-        }
-        volunteers {
-          id
-          surname
-          lastname
-        }
-        referents {
-          id
-          surname
-          lastname
-        }
-        pictures {
-          id
-          label
-          originalPicturePath
-          originalPictureFilename
-          croppedPicturePath
-          croppedPictureFilename
-          croppedX
-          croppedY
-          croppedZoom
-          croppedRotation
-          position
-          logo
-          main
-        }
-        openingHours {
-          days {
-            identifier
-            day
-            selected
-          }
-          hours
-          place
-        }
-      }
-    }
-  `;
+  const [hasClickVolunteer, setHasClickVolunteer] = useState(false);
 
-
-
+  if (typeof window !== 'undefined') {
+    var L = require('leaflet');
+    var Map = require('react-leaflet').Map;
+    var TileLayer = require('react-leaflet').TileLayer;
+    var Marker = require('react-leaflet').Marker;
+    var Popup = require('react-leaflet').Popup;
+  }
+  
   const ADD_ACTOR_VOLUNTEER = gql`
     mutation addActorVolunteer($actorId: Int!, $userId: Int!) {
       addActorVolunteer(actorId: $actorId, userId: $userId)
@@ -524,7 +419,7 @@ const Actor = ({ initialData }) => {
       enqueueSnackbar('Demande de bénévole prise en compte', {
         preventDuplicate: true,
       });
-      refetch();
+      setHasClickVolunteer(true);
     }
   }, [volunteerData]);
 
@@ -533,7 +428,7 @@ const Actor = ({ initialData }) => {
       enqueueSnackbar('Suppression de la demande de bénévole', {
         preventDuplicate: true,
       });
-      refetch();
+      setHasClickVolunteer(false);
     }
   }, [removevolunteerData]);
 
@@ -1159,6 +1054,46 @@ const Actor = ({ initialData }) => {
 
                 <div />
                 <br />
+                <Typography variant="h3" className={styles.cardTitle}>
+                  ACCES
+                </Typography>
+                <div className={styles.border} />
+                <br />
+
+                {data && L &&  (
+                  <Map ref={mapRef} center={[data.actor.lat, data.actor.lng]} zoom={11} className={styles.map}  >
+                    <TileLayer
+                      attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    />
+                    <Marker
+                      position={[data.actor.lat, data.actor.lng]}
+                      icon={new L.Icon({
+                        iconUrl: '/icons/location.svg',
+                        iconAnchor: [13, 34], // point of the icon which will correspond to marker's location
+                        iconSize: [25],
+                        popupAnchor: [1, -25],
+                        html: `<span style="background-color: red" />`,
+                      })}
+                    >
+                      <Popup>
+                        {data.actor.name} - {data && !data.actor.address && data.actor.city && (
+                          <span>
+                            {/* @ts-ignore */}
+                            {data && data.actor.city}
+                          </span>
+                        )}
+                        {data && data.actor.address && data.actor.city && (
+                          <span>
+                            {/* @ts-ignore */}
+                            {`${data && data.actor.address} ${data && data.actor.city
+                              }`}
+                          </span>
+                        )}
+                      </Popup>
+                    </Marker>
+                  </Map>
+                )}
               </Grid>
             </Grid>
             <br />
@@ -1177,7 +1112,7 @@ const Actor = ({ initialData }) => {
                   <br />
                   <div className={styles.volunteerDescription}>{data && Parser(data.actor.volunteerDescription)}</div>
                   <div >
-                    {data && containUser(data.actor.volunteers) && (
+                    {data && (containUser(data.actor.volunteers) || hasClickVolunteer ) && (
                       <button
                         className={styles.buttonVolunteer}
                         onClick={removeVolunteerHandler}
@@ -1185,7 +1120,7 @@ const Actor = ({ initialData }) => {
                         Je ne souhaite plus être bénévole
                       </button>
                     )}
-                    {!(data && containUser(data.actor.volunteers)) && (
+                    {(data && (!containUser(data.actor.volunteers) && !hasClickVolunteer )) && (
                       <button
                         className={styles.buttonVolunteer}
                         onClick={addVolunteerHandler}

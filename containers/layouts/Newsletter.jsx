@@ -20,10 +20,6 @@ const useStyles = makeStyles(theme => ({
     [theme.breakpoints.down('md')]: {
       padding: '1em 0',
       height: '18em',
-    },
-    [theme.breakpoints.down('md')]: {
-      padding: '1em 0',
-      height: '14em',
     }
   },
   align: {
@@ -41,7 +37,7 @@ const useStyles = makeStyles(theme => ({
       width: '70%',
     },
     [theme.breakpoints.down('xs')]: {
-      width: '90%',
+      width: '100%',
     },
   },
   searchIcon: {
