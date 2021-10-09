@@ -33,6 +33,7 @@ import { useSessionState } from '../../context/session/session';
 import Newsletter from '../../containers/layouts/Newsletter';
 import Calendar from '../../components/Calendar';
 
+
 const useStyles = makeStyles((theme) => ({
   titleContainer: {
     marginTop: theme.spacing(2),
@@ -358,8 +359,15 @@ const Event = ({ initialData }) => {
       removeEventParticipate(eventId: $eventId, userId: $userId)
     }
   `;
-  
 
+
+if (typeof window !== 'undefined') {
+  var L = require('leaflet');
+  var Map = require('react-leaflet').Map;
+  var TileLayer = require('react-leaflet').TileLayer;
+  var Marker = require('react-leaflet').Marker;
+  var Popup = require('react-leaflet').Popup;
+}
   const data = initialData.data;
 
   const [stylesProps, setStylesProps] = useState({
@@ -934,6 +942,46 @@ const Event = ({ initialData }) => {
               
               <div />
               <br />
+              <Typography variant="h3" className={styles.cardTitle}>
+                ACCES
+              </Typography>
+              <div className={styles.border} />
+              <br />
+
+              {data && L && (
+                <Map ref={mapRef} center={[data.event.lat, data.event.lng]} zoom={11} className={styles.map}  >
+                  <TileLayer
+                    attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  />
+                  <Marker
+                    position={[data.event.lat, data.event.lng]}
+                    icon={new L.Icon({
+                      iconUrl: '/icons/location.svg',
+                      iconAnchor: [13, 34], // point of the icon which will correspond to marker's location
+                      iconSize: [25],
+                      popupAnchor: [1, -25],
+                      html: `<span style="background-color: red" />`,
+                    })}
+                  >
+                    <Popup>
+                      {data.event.name} - {data && !data.event.address && data.event.city && (
+                        <span>
+                          {/* @ts-ignore */}
+                          {data && data.event.city}
+                        </span>
+                      )} 
+                      {data && data.event.address && data.event.city && (
+                        <span>
+                          {/* @ts-ignore */}
+                          {`${data && data.event.address} ${data && data.event.city
+                            }`}
+                        </span>
+                      )}
+                      </Popup>
+                    </Marker>
+                </Map>
+              )}
             </Grid>
             </Grid>       
 
