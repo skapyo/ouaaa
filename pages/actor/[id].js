@@ -1,4 +1,10 @@
-import React, { useEffect, useState, useRef, useMemo, useCallback } from 'react';
+import React, {
+  useEffect,
+  useState,
+  useRef,
+  useMemo,
+  useCallback,
+} from 'react';
 import AppLayout from 'containers/layouts/AppLayout';
 import {
   Box,
@@ -15,7 +21,11 @@ import { useMutation, useQuery } from '@apollo/client';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import TwitterIcon from '@material-ui/icons/Twitter';
 import WhatsAppIcon from '@material-ui/icons/WhatsApp';
-import { FacebookShareButton, TwitterShareButton, WhatsappShareButton } from 'react-share';
+import {
+  FacebookShareButton,
+  TwitterShareButton,
+  WhatsappShareButton,
+} from 'react-share';
 import Slider from 'react-slick/lib';
 import { useSnackbar } from 'notistack';
 import { useCookies } from 'react-cookie';
@@ -35,7 +45,7 @@ import Calendar from '../../components/Calendar';
 const useStyles = makeStyles((theme) => ({
   titleContainer: {
     marginTop: theme.spacing(2),
-    backgroundSize: 'cover', 
+    backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
     height: '24em',
@@ -347,6 +357,15 @@ const Actor = ({ initialData }) => {
   const router = useRouter();
   const mapRef = useRef();
 
+  const [location, setLocation] = useState(null);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setLocation(window?.location);
+      console.log('location', location);
+    }
+  }, []);
+
   const { id } = router.query;
   const [eventToRender, setEventToRender] = useState(null);
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
@@ -360,7 +379,7 @@ const Actor = ({ initialData }) => {
     var Marker = require('react-leaflet').Marker;
     var Popup = require('react-leaflet').Popup;
   }
-  
+
   const ADD_ACTOR_VOLUNTEER = gql`
     mutation addActorVolunteer($actorId: Int!, $userId: Int!) {
       addActorVolunteer(actorId: $actorId, userId: $userId)
@@ -390,7 +409,6 @@ const Actor = ({ initialData }) => {
       error: removevolunteerError,
     },
   ] = useMutation(REMOVE_ACTOR_VOLUNTEER);
-
 
   const user = useSessionState();
   function containUser(list) {
@@ -493,11 +511,12 @@ const Actor = ({ initialData }) => {
     nextArrow: <SampleNextArrow />,
     prevArrow: <SamplePrevArrow />,
   };
-  const nbSlidetoshow = data && data.actor.events && data.actor.events.length > 5
-    ? 5
-    : data
-    && data.actor.events
-    && data.actor.events.length + (containUser(data.actor.referents) ? 1 : 0);
+  const nbSlidetoshow =
+    data && data.actor.events && data.actor.events.length > 5
+      ? 5
+      : data &&
+        data.actor.events &&
+        data.actor.events.length + (containUser(data.actor.referents) ? 1 : 0);
 
   const settingsSliderevent = {
     infinite: true,
@@ -536,10 +555,10 @@ const Actor = ({ initialData }) => {
     let nbEntry = 0;
     entries.forEach((entry) => {
       if (
-        entry.parentEntry
-        && entry.parentEntry.collection
-        && entry.parentEntry.collection.code === 'category'
-        && nbEntry <= nbEntryToShow
+        entry.parentEntry &&
+        entry.parentEntry.collection &&
+        entry.parentEntry.collection.code === 'category' &&
+        nbEntry <= nbEntryToShow
       ) {
         text += `${entry.parentEntry.label} : `;
         text += `${entry.label}  `;
@@ -553,9 +572,9 @@ const Actor = ({ initialData }) => {
     let text = '';
     entries.forEach((entry) => {
       if (
-        entry
-        && entry.collection
-        && entry.collection.code === 'larochelle_quarter'
+        entry &&
+        entry.collection &&
+        entry.collection.code === 'larochelle_quarter'
       ) {
         text += `, ${entry.label}`;
       }
@@ -564,17 +583,19 @@ const Actor = ({ initialData }) => {
   }
 
   const events = useMemo(() => {
-    return (data?.actor?.events || []).map(evt => {
+    return (data?.actor?.events || []).map((evt) => {
       const startDate = moment(parseInt(evt.startedAt));
       const endDate = moment(parseInt(evt.endedAt));
 
       let recurrentOptions = null;
-      const duration = Math.ceil(moment.duration(endDate.diff(startDate)).asDays());
+      const duration = Math.ceil(
+        moment.duration(endDate.diff(startDate)).asDays(),
+      );
 
       if (duration > 2) {
         recurrentOptions = {
           endDate: startDate.endOf('day'),
-          rRule: `FREQ=DAILY;COUNT=${duration}`
+          rRule: `FREQ=DAILY;COUNT=${duration}`,
         };
       }
 
@@ -584,46 +605,49 @@ const Actor = ({ initialData }) => {
         title: evt.label,
         id: evt.id,
         location: evt.city ? [evt.address, evt.city].join(', ') : '',
-        backgroundColor: evt.entries && evt.entries.length > 0 && evt.entries[0].parentEntry ? evt.entries[0].parentEntry.color : 'blue',
-        ...recurrentOptions
-      }
-    })
+        backgroundColor:
+          evt.entries && evt.entries.length > 0 && evt.entries[0].parentEntry
+            ? evt.entries[0].parentEntry.color
+            : 'blue',
+        ...recurrentOptions,
+      };
+    });
   }, [data]);
 
-  let url; 
+  let url;
   if (typeof window !== 'undefined') {
     url = window.location.href;
   }
-  
+
   return (
     <AppLayout>
       <Head>
         <title>
           {/* @ts-ignore */}
-          {data && data.actor.name}
-          -
-          {/* @ts-ignore */}
+          {data && data.actor.name}-{/* @ts-ignore */}
           {data && data.actor.activity}
-          {/* @ts-ignore */}
-          -
-          {/* @ts-ignore */}
+          {/* @ts-ignore */}-{/* @ts-ignore */}
           {data && data.actor.city}
           {/* @ts-ignore */}
           {data && showLaRochelleQuarter(data.actor.entries)}
-          {/* @ts-ignore */}
-          -
-          {/* @ts-ignore */}
+          {/* @ts-ignore */}-{/* @ts-ignore */}
           {data && showCategory(data.actor.entries)}
         </title>
-        {data && data.actor.pictures.length >= 1 &&  data.actor.pictures.filter(picture => picture.logo).length >= 1 &&  (
-          <meta property="og:image" content={
-              data.actor.pictures.length >= 1
-              ? getImageUrl(
-                data.actor.pictures.filter(picture => picture.logo)[0].croppedPicturePath)
-              : ''
-            }
-          />
-        )}
+        {data &&
+          data.actor.pictures.length >= 1 &&
+          data.actor.pictures.filter((picture) => picture.logo).length >= 1 && (
+            <meta
+              property="og:image"
+              content={
+                data.actor.pictures.length >= 1
+                  ? getImageUrl(
+                      data.actor.pictures.filter((picture) => picture.logo)[0]
+                        .croppedPicturePath,
+                    )
+                  : ''
+              }
+            />
+          )}
       </Head>
       <RootRef>
         <Box>
@@ -634,15 +658,11 @@ const Actor = ({ initialData }) => {
           -
           {/* @ts-ignore */}
             {data && data.actor.activity}
-            {/* @ts-ignore */}
-            -
-            {/* @ts-ignore */}
+            {/* @ts-ignore */}-{/* @ts-ignore */}
             {data && data.actor.city}
             {/* @ts-ignore */}
             {data && showLaRochelleQuarter(data.actor.entries)}
-            {/* @ts-ignore */}
-            -
-            {/* @ts-ignore */}
+            {/* @ts-ignore */}-{/* @ts-ignore */}
             {data && showCategory(data.actor.entries)}
           </Typography>
 
@@ -651,29 +671,39 @@ const Actor = ({ initialData }) => {
               className={styles.titleContainer}
               style={{
                 backgroundImage:
-                  data.actor.pictures.length >= 1 && data.actor.pictures.filter(picture => picture.main).length >= 1
+                  data.actor.pictures.length >= 1 &&
+                  data.actor.pictures.filter((picture) => picture.main)
+                    .length >= 1
                     ? `url(${getImageUrl(
-                      data.actor.pictures.filter(picture => picture.main)[0].originalPicturePath)})`
+                        data.actor.pictures.filter((picture) => picture.main)[0]
+                          .originalPicturePath,
+                      )})`
                     : '',
               }}
             />
           )}
-            
+
           <Container className={styles.cardInfo}>
             <Grid container>
               <Grid item md={5} sm={10} className={[styles.align]}>
                 <Grid container className={[styles.infoPratiqueGrid]}>
                   <div className={styles.image}>
-                    {data && data.actor.pictures.length >= 1 && data.actor.pictures.filter(picture => picture.logo).length >= 1 && (
-                      <img
-                        src={
-                          data.actor.pictures.length >= 1
-                            ? getImageUrl(
-                              data.actor.pictures.filter(picture => picture.logo)[0].croppedPicturePath)
-                            : ''
-                        }
-                      />
-                    )}
+                    {data &&
+                      data.actor.pictures.length >= 1 &&
+                      data.actor.pictures.filter((picture) => picture.logo)
+                        .length >= 1 && (
+                        <img
+                          src={
+                            data.actor.pictures.length >= 1
+                              ? getImageUrl(
+                                  data.actor.pictures.filter(
+                                    (picture) => picture.logo,
+                                  )[0].croppedPicturePath,
+                                )
+                              : ''
+                          }
+                        />
+                      )}
                   </div>
 
                   <Grid container className={[styles.item]}>
@@ -684,10 +714,10 @@ const Actor = ({ initialData }) => {
                         className={[styles.icon]}
                       />
                     </Grid>
-                   
+
                     <Grid item xs={8} className={[styles.alignLeft]}>
                       <div className={[styles.infoLabel]}>LOCALISATION </div>
-                     
+
                       <span className={[styles.infoValue]}>
                         {data && !data.actor.city && (
                           <span> Adresse manquante</span>
@@ -701,13 +731,14 @@ const Actor = ({ initialData }) => {
                         {data && data.actor.address && data.actor.city && (
                           <span>
                             {/* @ts-ignore */}
-                            {`${data && data.actor.address} ${data && data.actor.city
-                              }`}
+                            {`${data && data.actor.address} ${
+                              data && data.actor.city
+                            }`}
                           </span>
                         )}
                       </span>
-                      {data
-                        && entriesHasElementWithCode(
+                      {data &&
+                        entriesHasElementWithCode(
                           data.actor.entries,
                           'actor_location_action',
                         ) && (
@@ -716,12 +747,13 @@ const Actor = ({ initialData }) => {
                               TERRITOIRE D'ACTION
                             </div>
                             <span className={[styles.infoValue]}>
-                              {data
-                                && data.actor.entries.map(
-                                  (entry) => entry
-                                    && entry.collection
-                                    && entry.collection.code
-                                    === 'actor_location_action' && (
+                              {data &&
+                                data.actor.entries.map(
+                                  (entry) =>
+                                    entry &&
+                                    entry.collection &&
+                                    entry.collection.code ===
+                                      'actor_location_action' && (
                                       <div>
                                         <Typography
                                           variant="h7"
@@ -821,8 +853,6 @@ const Actor = ({ initialData }) => {
                             rel="noreferrer"
                           >
                             {data && data.actor.socialNetwork}
-
-                          
                           </a>
                           {/* @ts-ignore */}
                         </span>
@@ -902,25 +932,37 @@ const Actor = ({ initialData }) => {
                         <FacebookShareButton
                           size={32}
                           round
-                          url={`https://recette.ouaaa-transition.fr${router.asPath}`}
+                          url={`${location}${router.asPath}`}
                         >
-                          <FacebookIcon round size={32} className={[styles.socialNetworkIcon]} />
+                          <FacebookIcon
+                            round
+                            size={32}
+                            className={[styles.socialNetworkIcon]}
+                          />
                         </FacebookShareButton>
 
                         <TwitterShareButton
                           size={32}
                           round
-                          url={`https://recette.ouaaa-transition.fr${router.asPath}`}
+                          url={`${location}${router.asPath}`}
                         >
-                          <TwitterIcon round size={32} className={[styles.socialNetworkIcon]} />
+                          <TwitterIcon
+                            round
+                            size={32}
+                            className={[styles.socialNetworkIcon]}
+                          />
                         </TwitterShareButton>
 
                         <WhatsappShareButton
                           size={32}
                           round
-                          url={`https://recette.ouaaa-transition.fr${router.asPath}`}
+                          url={`${location}${router.asPath}`}
                         >
-                          <WhatsAppIcon round size={32} className={[styles.socialNetworkIcon]} />
+                          <WhatsAppIcon
+                            round
+                            size={32}
+                            className={[styles.socialNetworkIcon]}
+                          />
                         </WhatsappShareButton>
                       </span>
                     </Grid>
@@ -930,29 +972,34 @@ const Actor = ({ initialData }) => {
               <br />
               <Grid item md={7} sm={10} className={styles.description}>
                 <Typography variant="h1" className={styles.cardTitle}>
-                {data && data?.actor?.name}
+                  {data && data?.actor?.name}
                 </Typography>
                 <div className={styles.border} />
                 <br />
                 <br />
                 <p>{data && Parser(data.actor.description)}</p>
                 <div>
-                  {data
-                    && data.actor.entries.map(
-                      (entry) => entry.parentEntry
-                        && entry.parentEntry.collection.code === 'category' && (
+                  {data &&
+                    data.actor.entries.map(
+                      (entry) =>
+                        entry.parentEntry &&
+                        entry.parentEntry.collection.code === 'category' && (
                           <div>
                             <Typography
                               variant="h7"
                               className={styles.cardTitleCategories}
                             >
                               {/* @ts-ignore */}
-                              {` ${entry.parentEntry && entry.parentEntry.label
-                                } `}
-                              {/* @ts-ignore */}
-                              :
+                              {` ${
+                                entry.parentEntry && entry.parentEntry.label
+                              } `}
+                              {/* @ts-ignore */}:
                               {entry.icon && (
-                                <img src={`/icons/${entry.icon}.svg`} alt="icon" className={styles.iconEntry} />
+                                <img
+                                  src={`/icons/${entry.icon}.svg`}
+                                  alt="icon"
+                                  className={styles.iconEntry}
+                                />
                               )}
                               {/* @ts-ignore */}
                               {` ${entry && entry.label}`}
@@ -963,21 +1010,28 @@ const Actor = ({ initialData }) => {
                     )}
                 </div>
                 <br />
-                {data
-                  && entriesHasElementWithCode(
+                {data &&
+                  entriesHasElementWithCode(
                     data.actor.entries,
                     'actor_status',
                   ) && (
                     <div className={[styles.descriptionInfoDiv]}>
-                      <img src="/icons/status.svg" alt="Collectif & réseau" className={[styles.icon]} />
-                      <div className={[styles.descriptionInfoLabel]}> Statut :</div>
+                      <img
+                        src="/icons/status.svg"
+                        alt="Collectif & réseau"
+                        className={[styles.icon]}
+                      />
+                      <div className={[styles.descriptionInfoLabel]}>
+                        {' '}
+                        Statut :
+                      </div>
                       <span className={[styles.descriptionInfoValue]}>
-                        {data
-                          && data.actor.entries.map(
-                            (entry) => entry
-                              && entry.collection
-                              && entry.collection.code
-                              === 'actor_status' && (
+                        {data &&
+                          data.actor.entries.map(
+                            (entry) =>
+                              entry &&
+                              entry.collection &&
+                              entry.collection.code === 'actor_status' && (
                                 <div>
                                   <Typography
                                     variant="h7"
@@ -991,24 +1045,27 @@ const Actor = ({ initialData }) => {
                       </span>
                     </div>
                   )}
-                {data
-                  && entriesHasElementWithCode(
+                {data &&
+                  entriesHasElementWithCode(
                     data.actor.entries,
                     'public_target',
                   ) && (
                     <div className={[styles.descriptionInfoDiv]}>
-
-                      <img src="/icons/public.svg" alt="Collectif & réseau" className={[styles.icon]} />
+                      <img
+                        src="/icons/public.svg"
+                        alt="Collectif & réseau"
+                        className={[styles.icon]}
+                      />
                       <div className={[styles.descriptionInfoLabel]}>
                         Public principal visé
                       </div>
                       <span className={[styles.descriptionInfoValue]}>
-                        {data
-                          && data.actor.entries.map(
-                            (entry) => entry
-                              && entry.collection
-                              && entry.collection.code
-                              === 'public_target' && (
+                        {data &&
+                          data.actor.entries.map(
+                            (entry) =>
+                              entry &&
+                              entry.collection &&
+                              entry.collection.code === 'public_target' && (
                                 <div>
                                   <Typography
                                     variant="h7"
@@ -1022,22 +1079,27 @@ const Actor = ({ initialData }) => {
                       </span>
                     </div>
                   )}
-                {data
-                  && entriesHasElementWithCode(
+                {data &&
+                  entriesHasElementWithCode(
                     data.actor.entries,
                     'collectif',
                   ) && (
                     <div className={[styles.descriptionInfoDiv]}>
-                      <img src="/icons/network.svg" alt="Collectif & réseau" className={[styles.icon]} />
+                      <img
+                        src="/icons/network.svg"
+                        alt="Collectif & réseau"
+                        className={[styles.icon]}
+                      />
                       <div className={[styles.descriptionInfoLabel]}>
                         Collectif & réseaux
                       </div>
                       <span className={[styles.descriptionInfoValue]}>
-                        {data
-                          && data.actor.entries.map(
-                            (entry) => entry
-                              && entry.collection
-                              && entry.collection.code === 'collectif' && (
+                        {data &&
+                          data.actor.entries.map(
+                            (entry) =>
+                              entry &&
+                              entry.collection &&
+                              entry.collection.code === 'collectif' && (
                                 <div>
                                   <Typography
                                     variant="h7"
@@ -1060,24 +1122,32 @@ const Actor = ({ initialData }) => {
                 <div className={styles.border} />
                 <br />
 
-                {data && L &&  (
-                  <Map ref={mapRef} center={[data.actor.lat, data.actor.lng]} zoom={11} className={styles.map}  >
+                {data && L && (
+                  <Map
+                    ref={mapRef}
+                    center={[data.actor.lat, data.actor.lng]}
+                    zoom={11}
+                    className={styles.map}
+                  >
                     <TileLayer
                       attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
                     <Marker
                       position={[data.actor.lat, data.actor.lng]}
-                      icon={new L.Icon({
-                        iconUrl: '/icons/location.svg',
-                        iconAnchor: [13, 34], // point of the icon which will correspond to marker's location
-                        iconSize: [25],
-                        popupAnchor: [1, -25],
-                        html: `<span style="background-color: red" />`,
-                      })}
+                      icon={
+                        new L.Icon({
+                          iconUrl: '/icons/location.svg',
+                          iconAnchor: [13, 34], // point of the icon which will correspond to marker's location
+                          iconSize: [25],
+                          popupAnchor: [1, -25],
+                          html: `<span style="background-color: red" />`,
+                        })
+                      }
                     >
                       <Popup>
-                        {data.actor.name} - {data && !data.actor.address && data.actor.city && (
+                        {data.actor.name} -{' '}
+                        {data && !data.actor.address && data.actor.city && (
                           <span>
                             {/* @ts-ignore */}
                             {data && data.actor.city}
@@ -1086,8 +1156,9 @@ const Actor = ({ initialData }) => {
                         {data && data.actor.address && data.actor.city && (
                           <span>
                             {/* @ts-ignore */}
-                            {`${data && data.actor.address} ${data && data.actor.city
-                              }`}
+                            {`${data && data.actor.address} ${
+                              data && data.actor.city
+                            }`}
                           </span>
                         )}
                       </Popup>
@@ -1110,24 +1181,30 @@ const Actor = ({ initialData }) => {
                     {data && data.actor.name} recherche des bénévoles
                   </Typography>
                   <br />
-                  <div className={styles.volunteerDescription}>{data && Parser(data.actor.volunteerDescription)}</div>
-                  <div >
-                    {data && (containUser(data.actor.volunteers) || hasClickVolunteer ) && (
-                      <button
-                        className={styles.buttonVolunteer}
-                        onClick={removeVolunteerHandler}
-                      >
-                        Je ne souhaite plus être bénévole
-                      </button>
-                    )}
-                    {(data && (!containUser(data.actor.volunteers) && !hasClickVolunteer )) && (
-                      <button
-                        className={styles.buttonVolunteer}
-                        onClick={addVolunteerHandler}
-                      >
-                        Devenir bénévole
-                      </button>
-                    )}
+                  <div className={styles.volunteerDescription}>
+                    {data && Parser(data.actor.volunteerDescription)}
+                  </div>
+                  <div>
+                    {data &&
+                      (containUser(data.actor.volunteers) ||
+                        hasClickVolunteer) && (
+                        <button
+                          className={styles.buttonVolunteer}
+                          onClick={removeVolunteerHandler}
+                        >
+                          Je ne souhaite plus être bénévole
+                        </button>
+                      )}
+                    {data &&
+                      !containUser(data.actor.volunteers) &&
+                      !hasClickVolunteer && (
+                        <button
+                          className={styles.buttonVolunteer}
+                          onClick={addVolunteerHandler}
+                        >
+                          Devenir bénévole
+                        </button>
+                      )}
                   </div>
                 </div>
               </div>
@@ -1143,9 +1220,9 @@ const Actor = ({ initialData }) => {
               </div>
             )}
             <Slider {...settingsSliderImage}>
-              {data
-                && data.actor.pictures
-                && data.actor.pictures
+              {data &&
+                data.actor.pictures &&
+                data.actor.pictures
                   .sort((a, b) => (a.position > b.position ? 1 : -1))
                   .map((picture) => (
                     <img
@@ -1156,10 +1233,7 @@ const Actor = ({ initialData }) => {
             </Slider>
             <br />
             <div>
-              <Typography
-                variant="h5"
-                className={[styles.cardTitle]}
-              >
+              <Typography variant="h5" className={[styles.cardTitle]}>
                 LES ÉVÉNEMENTS DE : {data && data?.actor?.name}
               </Typography>
               <div className={styles.border} />
@@ -1168,19 +1242,21 @@ const Actor = ({ initialData }) => {
             <Calendar
               events={events}
               withViewSwitcher={false}
-              withAddEvent={((data && containUser(data.actor.referents))
-                || (user && user.role === 'admin'))}
+              withAddEvent={
+                (data && containUser(data.actor.referents)) ||
+                (user && user.role === 'admin')
+              }
             />
           </Container>
           <Newsletter />
-          {((data && containUser(data.actor.referents))
-            || (user && user.role === 'admin')) && (
-              <Link href={`/actorAdmin/actor/${id}`}>
-                <Fab className={styles.fab} aria-label="edit">
-                  <EditIcon />
-                </Fab>
-              </Link>
-            )}
+          {((data && containUser(data.actor.referents)) ||
+            (user && user.role === 'admin')) && (
+            <Link href={`/actorAdmin/actor/${id}`}>
+              <Fab className={styles.fab} aria-label="edit">
+                <EditIcon />
+              </Fab>
+            </Link>
+          )}
         </Box>
       </RootRef>
     </AppLayout>
@@ -1193,21 +1269,19 @@ export default withApollo()(Actor);
 // It may be called again, on a serverless function, if
 // revalidation is enabled and a new request comes in
 export async function getServerSideProps(ctxt) {
-
   const res = await fetch(process.env.NEXT_PUBLIC_API_URI, {
-      method: 'POST',
-      body: JSON.stringify({
-        "operationName": "actor",
-        "variables": {
-            "id": ctxt.params.id
-        },
-        "query": GET_ACTOR_SSR,
-        }),
-    });
-    
+    method: 'POST',
+    body: JSON.stringify({
+      operationName: 'actor',
+      variables: {
+        id: ctxt.params.id,
+      },
+      query: GET_ACTOR_SSR,
+    }),
+  });
+
   const initialData = await res.json();
-    return {
-      props: { initialData
-            }
-  }
-  }
+  return {
+    props: { initialData },
+  };
+}
