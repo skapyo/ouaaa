@@ -250,13 +250,13 @@ const SchedulerContainer = (props) => {
             );
           })}
       </div>
-      <ButtonW
+      <Button
         className={classes.button}
         onClick={addTimeContainer}
         disableRipple
       >
         <AddCircleOutlineIcon fontSize="small" />
-      </ButtonW>
+      </Button>
     </div>
   );
 };
