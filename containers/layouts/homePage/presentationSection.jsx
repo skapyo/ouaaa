@@ -29,6 +29,9 @@ const useStyles = makeStyles((theme) => ({
   align: {
     'text-align': 'center',
   },
+  h1 : {
+    'display' : 'none',
+  },
   buttonGrid: {
 
     fontSize: 'inherit',
@@ -62,10 +65,10 @@ const PresentationSection = () => {
     <Container className={styles.titleContainer}>
 
       <div className={styles.title}>
+      <h1 className={styles.h1}>Agir pour la transition en Aunis</h1>
         <img src="./titre_acceuil.png" alt="Agir pour la transition en Aunis" className={styles.imageTitle} />
-
       </div>
-      <Typography className={styles.align}>
+      <Typography >
         <Link href="/addactor">
           <button className={styles.buttonGrid}>
             JE M'INSCRIS EN TANT QU'ACTEUR DE LA TRANSITION

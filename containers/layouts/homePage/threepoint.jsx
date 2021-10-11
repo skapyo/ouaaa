@@ -219,24 +219,18 @@ const PresentationSection = () => {
           <img className={styles.image} src="./image_accueil.png" />
         </Grid>
       </Grid>
-      {/*
-      <br />
-      <Typography variant="h2" className={[styles.cardTitle, styles.align]}>
-        <i>OUAAA!</i> : Agir pour la transition en Aunis
-      </Typography>
-      <Typography variant="h3" className={[styles.cardTitle, styles.align]}>
-        C'EST POUR QUI ?
-      </Typography>
+
       <br />
       <Grid
         container
         justify="center"
         className={[styles.align, styles.flexColumn]}
       >
+       
         <Grid item md={5} sm={10} className={[styles.gridItem, styles.align]}>
           <img width="20%" src="./people.svg" className={styles.imageGrid} />
           <Typography className={styles.titleGrid}>
-            Vous êtes un citoyen et souhaitez mieux
+            Tu es un citoyen et souhaitez mieux
           </Typography>
           <Typography className={styles.titleGrid}>
             connaire, soutenir, vous engager ?
@@ -247,6 +241,7 @@ const PresentationSection = () => {
             </button>
           </Link>
         </Grid>
+         
         <Grid item md={5} sm={10} className={[styles.gridItem, styles.align]}>
           <img
             width="20%"
@@ -265,7 +260,7 @@ const PresentationSection = () => {
         </Grid>
 
       </Grid>
-        */}
+      
     </Container>
   );
 };
