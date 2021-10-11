@@ -94,6 +94,7 @@ function hasPlace(initData) {
 const SchedulerContainer = (props) => {
   const { onChange, initData, ...other } = props;
   const classes = useStyles();
+  const [currentId, setCurrentId] = useState(null);
 
   const [availableDays, setAvailableDays] = useState(BLANK_BUSINESS_HOURS);
   const [timeFrames, setTimeFrames] = useState(
@@ -114,14 +115,20 @@ const SchedulerContainer = (props) => {
   const firstUpdate = useRef(true);
 
   const addTimeContainer = () => {
+    const newId = uuidv4();
+    const NEW_BLANK_BUSINESS_HOURS = { ...BLANK_BUSINESS_HOURS };
+    NEW_BLANK_BUSINESS_HOURS.id = newId;
     const addTimeFrame = ({ days, hours, place, id }) => {
-      const newTimeFrame = [days, hours, place, id];
+      const newTimeFrame = [days, hours, place, newId];
       const timeFrameList = [...timeFrames, newTimeFrame];
       setTimeFrames(timeFrameList);
     };
-    addTimeFrame(availableDays);
+    addTimeFrame(NEW_BLANK_BUSINESS_HOURS);
 
-    const newTimeContainerList = [...timeContainerList, availableDays];
+    const newTimeContainerList = [
+      ...timeContainerList,
+      NEW_BLANK_BUSINESS_HOURS,
+    ];
     setTimeContainerList(newTimeContainerList);
   };
 
@@ -145,11 +152,11 @@ const SchedulerContainer = (props) => {
     }
   };
 
-  const addNewTimeFrame = (timeFrame) => {
-    const newTimeFramesList = [...timeFrames];
-    newTimeFramesList.push(timeFrame);
-    setTimeFrames(newTimeFramesList);
-  };
+  // const addNewTimeFrame = (timeFrame) => {
+  //   const newTimeFramesList = [...timeFrames];
+  //   newTimeFramesList.push(timeFrame);
+  //   setTimeFrames(newTimeFramesList);
+  // };
 
   const deleteTimeContainer = (e, index) => {
     const newTimeFramesList = [...timeFrames].filter((currentTimeFrame) => {
@@ -226,6 +233,7 @@ const SchedulerContainer = (props) => {
 
         {timeContainerList.length > 0 &&
           timeContainerList.map(({ days, hours, place, id }) => {
+            console.log('id rendered', id);
             return (
               <div className={classes.timeContainer} key={id}>
                 <TimeContainer
