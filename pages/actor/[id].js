@@ -357,12 +357,11 @@ const Actor = ({ initialData }) => {
   const router = useRouter();
   const mapRef = useRef();
 
-  const [location, setLocation] = useState(null);
+  const [currentLocationWindows, setCurrentLocationWindows] = useState(null);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      setLocation(window?.location);
-      console.log('location', location);
+      setCurrentLocationWindows(window?.location);
     }
   }, []);
 
@@ -515,8 +514,8 @@ const Actor = ({ initialData }) => {
     data && data.actor.events && data.actor.events.length > 5
       ? 5
       : data &&
-        data.actor.events &&
-        data.actor.events.length + (containUser(data.actor.referents) ? 1 : 0);
+      data.actor.events &&
+      data.actor.events.length + (containUser(data.actor.referents) ? 1 : 0);
 
   const settingsSliderevent = {
     infinite: true,
@@ -641,9 +640,9 @@ const Actor = ({ initialData }) => {
               content={
                 data.actor.pictures.length >= 1
                   ? getImageUrl(
-                      data.actor.pictures.filter((picture) => picture.logo)[0]
-                        .croppedPicturePath,
-                    )
+                    data.actor.pictures.filter((picture) => picture.logo)[0]
+                      .croppedPicturePath,
+                  )
                   : ''
               }
             />
@@ -672,12 +671,12 @@ const Actor = ({ initialData }) => {
               style={{
                 backgroundImage:
                   data.actor.pictures.length >= 1 &&
-                  data.actor.pictures.filter((picture) => picture.main)
-                    .length >= 1
+                    data.actor.pictures.filter((picture) => picture.main)
+                      .length >= 1
                     ? `url(${getImageUrl(
-                        data.actor.pictures.filter((picture) => picture.main)[0]
-                          .originalPicturePath,
-                      )})`
+                      data.actor.pictures.filter((picture) => picture.main)[0]
+                        .originalPicturePath,
+                    )})`
                     : '',
               }}
             />
@@ -696,10 +695,10 @@ const Actor = ({ initialData }) => {
                           src={
                             data.actor.pictures.length >= 1
                               ? getImageUrl(
-                                  data.actor.pictures.filter(
-                                    (picture) => picture.logo,
-                                  )[0].croppedPicturePath,
-                                )
+                                data.actor.pictures.filter(
+                                  (picture) => picture.logo,
+                                )[0].croppedPicturePath,
+                              )
                               : ''
                           }
                         />
@@ -731,9 +730,8 @@ const Actor = ({ initialData }) => {
                         {data && data.actor.address && data.actor.city && (
                           <span>
                             {/* @ts-ignore */}
-                            {`${data && data.actor.address} ${
-                              data && data.actor.city
-                            }`}
+                            {`${data && data.actor.address} ${data && data.actor.city
+                              }`}
                           </span>
                         )}
                       </span>
@@ -753,7 +751,7 @@ const Actor = ({ initialData }) => {
                                     entry &&
                                     entry.collection &&
                                     entry.collection.code ===
-                                      'actor_location_action' && (
+                                    'actor_location_action' && (
                                       <div>
                                         <Typography
                                           variant="h7"
@@ -932,7 +930,7 @@ const Actor = ({ initialData }) => {
                         <FacebookShareButton
                           size={32}
                           round
-                          url={`${location}${router.asPath}`}
+                          url={`${currentLocationWindows}`}
                         >
                           <FacebookIcon
                             round
@@ -944,7 +942,7 @@ const Actor = ({ initialData }) => {
                         <TwitterShareButton
                           size={32}
                           round
-                          url={`${location}${router.asPath}`}
+                          url={`${currentLocationWindows}`}
                         >
                           <TwitterIcon
                             round
@@ -956,7 +954,7 @@ const Actor = ({ initialData }) => {
                         <WhatsappShareButton
                           size={32}
                           round
-                          url={`${location}${router.asPath}`}
+                          url={`${currentLocationWindows}`}
                         >
                           <WhatsAppIcon
                             round
@@ -990,9 +988,8 @@ const Actor = ({ initialData }) => {
                               className={styles.cardTitleCategories}
                             >
                               {/* @ts-ignore */}
-                              {` ${
-                                entry.parentEntry && entry.parentEntry.label
-                              } `}
+                              {` ${entry.parentEntry && entry.parentEntry.label
+                                } `}
                               {/* @ts-ignore */}:
                               {entry.icon && (
                                 <img
@@ -1156,9 +1153,8 @@ const Actor = ({ initialData }) => {
                         {data && data.actor.address && data.actor.city && (
                           <span>
                             {/* @ts-ignore */}
-                            {`${data && data.actor.address} ${
-                              data && data.actor.city
-                            }`}
+                            {`${data && data.actor.address} ${data && data.actor.city
+                              }`}
                           </span>
                         )}
                       </Popup>
@@ -1251,12 +1247,12 @@ const Actor = ({ initialData }) => {
           <Newsletter />
           {((data && containUser(data.actor.referents)) ||
             (user && user.role === 'admin')) && (
-            <Link href={`/actorAdmin/actor/${id}`}>
-              <Fab className={styles.fab} aria-label="edit">
-                <EditIcon />
-              </Fab>
-            </Link>
-          )}
+              <Link href={`/actorAdmin/actor/${id}`}>
+                <Fab className={styles.fab} aria-label="edit">
+                  <EditIcon />
+                </Fab>
+              </Link>
+            )}
         </Box>
       </RootRef>
     </AppLayout>
@@ -1281,6 +1277,12 @@ export async function getServerSideProps(ctxt) {
   });
 
   const initialData = await res.json();
+
+  const initialData = await res.json();
+  if (initialData.errors) {
+    console.error(" Error fetching actor id " + ctxt.params.id + " error message : " + initialData.errors[0].message + "");
+  }
+
   return {
     props: { initialData },
   };

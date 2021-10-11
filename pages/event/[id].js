@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef,useMemo } from 'react';
+import React, { useEffect, useState, useRef, useMemo } from 'react';
 import AppLayout from 'containers/layouts/AppLayout';
 import {
   Box,
@@ -341,14 +341,21 @@ const GET_EVENT = `
       }
     }
   `;
-  
+
 const Event = ({ initialData }) => {
   const router = useRouter();
   const mapRef = useRef();
 
   const { id } = router.query;
 
-  
+  const [currentLocationWindows, setCurrentLocationWindows] = useState(null);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setCurrentLocationWindows(window?.location);
+    }
+  }, []);
+
   const ADD_EVENT_PARTICIPATE = gql`
     mutation addEventParticipate($eventId: Int!, $userId: Int!) {
       addEventParticipate(eventId: $eventId, userId: $userId)
@@ -361,13 +368,13 @@ const Event = ({ initialData }) => {
   `;
 
 
-if (typeof window !== 'undefined') {
-  var L = require('leaflet');
-  var Map = require('react-leaflet').Map;
-  var TileLayer = require('react-leaflet').TileLayer;
-  var Marker = require('react-leaflet').Marker;
-  var Popup = require('react-leaflet').Popup;
-}
+  if (typeof window !== 'undefined') {
+    var L = require('leaflet');
+    var Map = require('react-leaflet').Map;
+    var TileLayer = require('react-leaflet').TileLayer;
+    var Marker = require('react-leaflet').Marker;
+    var Popup = require('react-leaflet').Popup;
+  }
   const data = initialData.data;
 
   const [stylesProps, setStylesProps] = useState({
@@ -567,13 +574,13 @@ if (typeof window !== 'undefined') {
           {/* @ts-ignore */}-{/* @ts-ignore */}
           {data && showCategory(data.event.entries)}
         </title>
-        {data && data.event.pictures.length >= 1 &&  data.event.pictures.filter(picture => picture.logo).length >= 1 &&  (
+        {data && data.event.pictures.length >= 1 && data.event.pictures.filter(picture => picture.logo).length >= 1 && (
           <meta property="og:image" content={
-              data.event.pictures.length >= 1
+            data.event.pictures.length >= 1
               ? getImageUrl(
                 data.event.pictures.filter(picture => picture.logo)[0].croppedPicturePath)
               : ''
-            }
+          }
           />
         )}
       </Head>
@@ -584,10 +591,10 @@ if (typeof window !== 'undefined') {
               className={styles.titleContainer}
               style={{
                 backgroundImage:
-                  data && data.event && data.event.pictures.length >= 1  &&  data.event.pictures.filter(picture => picture.main).length >= 1
-                  ? `url(${getImageUrl(
-                    data.event.pictures.filter(picture => picture.main)[0].croppedPicturePath)})`
-                  : '',
+                  data && data.event && data.event.pictures.length >= 1 && data.event.pictures.filter(picture => picture.main).length >= 1
+                    ? `url(${getImageUrl(
+                      data.event.pictures.filter(picture => picture.main)[0].croppedPicturePath)})`
+                    : '',
               }}
             />
           )}
@@ -595,113 +602,112 @@ if (typeof window !== 'undefined') {
             <Grid container>
               <Grid item md={5} sm={10} className={[styles.align]}>
                 <Grid container className={[styles.infoPratiqueGrid]}>
-                <div className={styles.image}>
-                    {data && data.event.pictures.length >= 1 &&  data.event.pictures.filter(picture => picture.logo).length >= 1 &&  (
+                  <div className={styles.image}>
+                    {data && data.event.pictures.length >= 1 && data.event.pictures.filter(picture => picture.logo).length >= 1 && (
                       <img
                         src={
                           data.event.pictures.length >= 1
-                          ? getImageUrl(
-                            data.event.pictures.filter(picture => picture.logo)[0].croppedPicturePath)
-                          : ''
+                            ? getImageUrl(
+                              data.event.pictures.filter(picture => picture.logo)[0].croppedPicturePath)
+                            : ''
                         }
                       />
                     )}
                   </div>
                   {data
-                /*  &&  entriesHasElementWithCode(
-                    data.event.entries, 
-                    'event_type',) */
-                  && (
-                    <Grid container className={[styles.item]}>
-                      <Grid item xs={3} className={[styles.alignRight]}>
-                        <img src={"/icons/types.svg"} alt="Collectif & réseau" className={[styles.icon]} />
-                      </Grid>
-                      <Grid item xs={8} className={[styles.alignLeft]}>
-                        <div className={[styles.infoLabel]}>TYPE</div>
-                        <span className={[styles.infoValue]}>
-                          {data &&
-                            data.event.entries.map(
-                              (entry) =>
-                                entry &&
-                                entry.parentEntry &&
-                                entry.parentEntry.collection &&
-                                entry.parentEntry.collection.code ===
+                    /*  &&  entriesHasElementWithCode(
+                        data.event.entries, 
+                        'event_type',) */
+                    && (
+                      <Grid container className={[styles.item]}>
+                        <Grid item xs={3} className={[styles.alignRight]}>
+                          <img src={"/icons/types.svg"} alt="Collectif & réseau" className={[styles.icon]} />
+                        </Grid>
+                        <Grid item xs={8} className={[styles.alignLeft]}>
+                          <div className={[styles.infoLabel]}>TYPE</div>
+                          <span className={[styles.infoValue]}>
+                            {data &&
+                              data.event.entries.map(
+                                (entry) =>
+                                  entry &&
+                                  entry.parentEntry &&
+                                  entry.parentEntry.collection &&
+                                  entry.parentEntry.collection.code ===
                                   'event_type' && (
-                                  <div>
-                                    <Typography
-                                      variant="h7"
-                                      className={styles.cardTitleCategories}
-                                    >
-                                      {`${entry && entry.parentEntry.label} : ${
-                                        entry && entry.label
-                                      }`}
-                                    </Typography>
-                                  </div>
-                                ),
-                            )}
-                        </span>
+                                    <div>
+                                      <Typography
+                                        variant="h7"
+                                        className={styles.cardTitleCategories}
+                                      >
+                                        {`${entry && entry.parentEntry.label} : ${entry && entry.label
+                                          }`}
+                                      </Typography>
+                                    </div>
+                                  ),
+                              )}
+                          </span>
+                        </Grid>
                       </Grid>
-                    </Grid>
-                  )}
+                    )}
                   {data
-                  && entriesHasElementWithCode(
-                    data.event.entries,
-                    'event_public_target',
-                  ) && (
-                    <Grid container className={[styles.item]}>
-                      <Grid item xs={3} className={[styles.alignRight]}>
-                        <img src={"/icons/public.svg"} alt="Collectif & réseau" className={[styles.icon]} />
-                      </Grid>
-                      <Grid item xs={8} className={[styles.alignLeft]}>
-                        <div className={[styles.infoLabel]}>Public cible</div>
-                        <span className={[styles.infoValue]}>
-                          {data &&
-                            data.event.entries.map(
-                              (entry) =>
-                                entry &&
-                                entry.collection &&
-                                entry.collection.code ===
+                    && entriesHasElementWithCode(
+                      data.event.entries,
+                      'event_public_target',
+                    ) && (
+                      <Grid container className={[styles.item]}>
+                        <Grid item xs={3} className={[styles.alignRight]}>
+                          <img src={"/icons/public.svg"} alt="Collectif & réseau" className={[styles.icon]} />
+                        </Grid>
+                        <Grid item xs={8} className={[styles.alignLeft]}>
+                          <div className={[styles.infoLabel]}>Public cible</div>
+                          <span className={[styles.infoValue]}>
+                            {data &&
+                              data.event.entries.map(
+                                (entry) =>
+                                  entry &&
+                                  entry.collection &&
+                                  entry.collection.code ===
                                   'event_public_target' && (
-                                  <div>
-                                    <Typography
-                                      variant="h7"
-                                      className={styles.cardTitleCategories}
-                                    >
-                                      {` ${entry && entry.label}`}
-                                    </Typography>
-                                  </div>
-                                ),
-                            )}
-                        </span>
+                                    <div>
+                                      <Typography
+                                        variant="h7"
+                                        className={styles.cardTitleCategories}
+                                      >
+                                        {` ${entry && entry.label}`}
+                                      </Typography>
+                                    </div>
+                                  ),
+                              )}
+                          </span>
+                        </Grid>
                       </Grid>
-                    </Grid>
-                  )}
+                    )}
                   <Grid container className={[styles.item]}>
-                      <Grid item xs={3} className={[styles.alignRight]}>
+                    <Grid item xs={3} className={[styles.alignRight]}>
                       <img src={"/icons/location.svg"} alt="Localisation" className={[styles.icon]} />
-                      </Grid>
-                      <Grid item xs={8} className={[styles.alignLeft]}>
-                        <div className={[styles.infoLabel]}>LOCALISATION</div>
-                        <span className={[styles.infoValue]}>
-                          {data && !data.event.city && (
-                            <span> Adresse manquante</span>
-                          )}
-                          {data && !data.event.address && data.event.city && (
-                            <span>
-                              {/* @ts-ignore */}
-                              {data && data.event.city}
-                            </span>
-                          )}
-                          {data && data.event.address && data.event.city && (
-                            <span>
-                              {/* @ts-ignore */}
-                              {data && data.event.address},{/* @ts-ignore */}
-                              {data.event.city}
-                            </span>
-                          )}
-                        </span>
-                      </Grid>
                     </Grid>
+                    <Grid item xs={8} className={[styles.alignLeft]}>
+                      <div className={[styles.infoLabel]}>LOCALISATION</div>
+                      <span className={[styles.infoValue]}>
+                        {data && !data.event.city && (
+                          <span> Adresse manquante</span>
+                        )}
+                        {data && !data.event.address && data.event.city && (
+                          <span>
+                            {/* @ts-ignore */}
+                            {data && data.event.city}
+                          </span>
+                        )}
+                        {data && data.event.address && data.event.city && (
+                          <span>
+                            {/* @ts-ignore */}
+                            {data && data.event.address},{/* @ts-ignore */}
+                            {data.event.city}
+                          </span>
+                        )}
+                      </span>
+                    </Grid>
+                  </Grid>
                   {data && data.event.socialNetwork && (
                     <Grid container className={[styles.item]}>
                       <Grid item xs={3} className={[styles.alignRight]}>
@@ -723,7 +729,7 @@ if (typeof window !== 'undefined') {
                   {data && (
                     <Grid container className={[styles.item]}>
                       <Grid item xs={3} className={[styles.alignRight]}>
-                      <img src={"/icons/clock.svg"} alt="Horaire" className={[styles.icon]} />
+                        <img src={"/icons/clock.svg"} alt="Horaire" className={[styles.icon]} />
                       </Grid>
                       <Grid item xs={8} className={[styles.alignLeft]}>
                         <div className={[styles.infoLabel]}>Date de début</div>
@@ -742,38 +748,38 @@ if (typeof window !== 'undefined') {
                     </Grid>
                   )}
                   {data
-                  && entriesHasElementWithCode(
-                    data.event.entries,
-                    'event_price',
-                  ) && (
-                  <Grid container className={[styles.item]}>
-                    <Grid item xs={3} className={[styles.alignRight]}>
-                      <img src={"/icons/tarifs.svg"} alt="Tarif" className={[styles.icon]} />
-                    </Grid>
-                    <Grid item xs={8} className={[styles.alignLeft]}>
-                      <div className={[styles.infoLabel]}>Tarif</div>
-                      <span className={[styles.infoValue]}>
-                        {data &&
-                          data.event.entries.map(
-                            (entry) =>
-                              entry &&
-                              entry.collection &&
-                              entry.collection.code === 'event_price' && (
-                                <div>
-                                  <Typography
-                                    variant="h7"
-                                    className={styles.cardTitleCategories}
-                                  >
-                                    {` ${entry && entry.label}`}
-                                  </Typography>
-                                </div>
-                              ),
-                          )}
-                      </span>
-                    </Grid>
-                  </Grid>
-                  )}
-                  
+                    && entriesHasElementWithCode(
+                      data.event.entries,
+                      'event_price',
+                    ) && (
+                      <Grid container className={[styles.item]}>
+                        <Grid item xs={3} className={[styles.alignRight]}>
+                          <img src={"/icons/tarifs.svg"} alt="Tarif" className={[styles.icon]} />
+                        </Grid>
+                        <Grid item xs={8} className={[styles.alignLeft]}>
+                          <div className={[styles.infoLabel]}>Tarif</div>
+                          <span className={[styles.infoValue]}>
+                            {data &&
+                              data.event.entries.map(
+                                (entry) =>
+                                  entry &&
+                                  entry.collection &&
+                                  entry.collection.code === 'event_price' && (
+                                    <div>
+                                      <Typography
+                                        variant="h7"
+                                        className={styles.cardTitleCategories}
+                                      >
+                                        {` ${entry && entry.label}`}
+                                      </Typography>
+                                    </div>
+                                  ),
+                              )}
+                          </span>
+                        </Grid>
+                      </Grid>
+                    )}
+
                   <Grid container className={[styles.item]}>
                     <Grid item xs={3} className={[styles.alignRight]}>
                       <img
@@ -790,7 +796,7 @@ if (typeof window !== 'undefined') {
                         <FacebookShareButton
                           size={32}
                           round
-                          url={`https://recette.ouaaa-transition.fr${router.asPath}`}
+                          url={`${currentLocationWindows}`}
                         >
                           <FacebookIcon round size={32} className={[styles.socialNetworkIcon]} />
                         </FacebookShareButton>
@@ -798,7 +804,7 @@ if (typeof window !== 'undefined') {
                         <TwitterShareButton
                           size={32}
                           round
-                          url={`https://recette.ouaaa-transition.fr${router.asPath}`}
+                          url={`${currentLocationWindows}`}
                         >
                           <TwitterIcon round size={32} className={[styles.socialNetworkIcon]} />
                         </TwitterShareButton>
@@ -806,19 +812,19 @@ if (typeof window !== 'undefined') {
                         <WhatsappShareButton
                           size={32}
                           round
-                          url={`https://recette.ouaaa-transition.fr${router.asPath}`}
+                          url={`${currentLocationWindows}`}
                         >
                           <WhatsAppIcon round size={32} className={[styles.socialNetworkIcon]} />
                         </WhatsappShareButton>
                       </span>
                     </Grid>
                   </Grid>
-                  </Grid>
                 </Grid>
+              </Grid>
               <br />
               <Grid item md={7} sm={10} className={styles.description}>
                 <Typography variant="h1" className={styles.cardTitle}>
-                {data && data.event.label}
+                  {data && data.event.label}
                 </Typography>
                 <div className={styles.border} />
                 <br />
@@ -836,18 +842,18 @@ if (typeof window !== 'undefined') {
                             >
                               {/* @ts-ignore */}
                               {` ${entry.parentEntry && entry.parentEntry.label
-                              } `}
+                                } `}
                               {/* @ts-ignore */}
                               :
-                              { entry.icon && (
-                              <img src={`/icons/${entry.icon}.svg`} alt="icon" className={styles.iconEntry} />
+                              {entry.icon && (
+                                <img src={`/icons/${entry.icon}.svg`} alt="icon" className={styles.iconEntry} />
                               )}
                               {/* @ts-ignore */}
                               {` ${entry && entry.label}`}
                               {/* @ts-ignore */}
                             </Typography>
                           </div>
-                      ),
+                        ),
                     )}
                 </div>
                 <br />
@@ -874,11 +880,11 @@ if (typeof window !== 'undefined') {
                                     {`  ${entry && entry.label}`}
                                   </Typography>
                                 </div>
-                            ),
+                              ),
                           )}
                       </span>
                     </div>
-                )}
+                  )}
                 {data
                   && entriesHasElementWithCode(
                     data.event.entries,
@@ -905,11 +911,11 @@ if (typeof window !== 'undefined') {
                                     {` ${entry && entry.label}`}
                                   </Typography>
                                 </div>
-                            ),
+                              ),
                           )}
                       </span>
                     </div>
-                )}
+                  )}
                 {data
                   && entriesHasElementWithCode(
                     data.event.entries,
@@ -934,56 +940,56 @@ if (typeof window !== 'undefined') {
                                     {` ${entry && entry.label}`}
                                   </Typography>
                                 </div>
-                            ),
+                              ),
                           )}
                       </span>
                     </div>
-                )}
-              
-              <div />
-              <br />
-              <Typography variant="h3" className={styles.cardTitle}>
-                ACCES
-              </Typography>
-              <div className={styles.border} />
-              <br />
+                  )}
 
-              {data && L && (
-                <Map ref={mapRef} center={[data.event.lat, data.event.lng]} zoom={11} className={styles.map}  >
-                  <TileLayer
-                    attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                  />
-                  <Marker
-                    position={[data.event.lat, data.event.lng]}
-                    icon={new L.Icon({
-                      iconUrl: '/icons/location.svg',
-                      iconAnchor: [13, 34], // point of the icon which will correspond to marker's location
-                      iconSize: [25],
-                      popupAnchor: [1, -25],
-                      html: `<span style="background-color: red" />`,
-                    })}
-                  >
-                    <Popup>
-                      {data.event.name} - {data && !data.event.address && data.event.city && (
-                        <span>
-                          {/* @ts-ignore */}
-                          {data && data.event.city}
-                        </span>
-                      )} 
-                      {data && data.event.address && data.event.city && (
-                        <span>
-                          {/* @ts-ignore */}
-                          {`${data && data.event.address} ${data && data.event.city
-                            }`}
-                        </span>
-                      )}
+                <div />
+                <br />
+                <Typography variant="h3" className={styles.cardTitle}>
+                  ACCES
+                </Typography>
+                <div className={styles.border} />
+                <br />
+
+                {data && L && (
+                  <Map ref={mapRef} center={[data.event.lat, data.event.lng]} zoom={11} className={styles.map}  >
+                    <TileLayer
+                      attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    />
+                    <Marker
+                      position={[data.event.lat, data.event.lng]}
+                      icon={new L.Icon({
+                        iconUrl: '/icons/location.svg',
+                        iconAnchor: [13, 34], // point of the icon which will correspond to marker's location
+                        iconSize: [25],
+                        popupAnchor: [1, -25],
+                        html: `<span style="background-color: red" />`,
+                      })}
+                    >
+                      <Popup>
+                        {data.event.name} - {data && !data.event.address && data.event.city && (
+                          <span>
+                            {/* @ts-ignore */}
+                            {data && data.event.city}
+                          </span>
+                        )}
+                        {data && data.event.address && data.event.city && (
+                          <span>
+                            {/* @ts-ignore */}
+                            {`${data && data.event.address} ${data && data.event.city
+                              }`}
+                          </span>
+                        )}
                       </Popup>
                     </Marker>
-                </Map>
-              )}
+                  </Map>
+                )}
+              </Grid>
             </Grid>
-            </Grid>       
 
             <div className={styles.buttonParticipate}>
               {data && containUser(data.event.participants) && (
@@ -994,8 +1000,8 @@ if (typeof window !== 'undefined') {
                   Je ne participe plus
                 </button>
               )}
-              {!(data && containUser(data.event.participants)) && !(data &&  data.event.registerLink && data.event.registerLink.length>1) && (
-                
+              {!(data && containUser(data.event.participants)) && !(data && data.event.registerLink && data.event.registerLink.length > 1) && (
+
                 <button
                   className={styles.button}
                   onClick={addParticipateHandler}
@@ -1003,13 +1009,13 @@ if (typeof window !== 'undefined') {
                   Je participe
                 </button>
               )}
-              {!(data && containUser(data.event.participants)) && (data &&  data.event.registerLink && data.event.registerLink.length>1) && (
+              {!(data && containUser(data.event.participants)) && (data && data.event.registerLink && data.event.registerLink.length > 1) && (
                 <a href={data && data.event.registerLink} target="blank"
                   className={styles.button}
                 >
                   Je participe
                 </a>
-                )}
+              )}
             </div>
             {data && data.event.pictures && data.event.pictures.length > 0 && (
               <div>
@@ -1036,7 +1042,7 @@ if (typeof window !== 'undefined') {
               <div>
                 <div>
                   <Typography variant="h5" className={styles.cardTitle}>
-                  INFO PRATIQUES COMPLEMENTS
+                    INFO PRATIQUES COMPLEMENTS
                   </Typography>
                   <div className={styles.border} />
                   <br />
@@ -1045,14 +1051,14 @@ if (typeof window !== 'undefined') {
               </div>
             )}
             {data && data.event.actors && data.event.actors.length > 0 && (
-            <div>
-              <Typography variant="h5" className={styles.cardTitle}>
-                LES ACTEURS PARTICIPANTS
-              </Typography>
-              <div className={styles.border} />
-              <br />
-            </div>
-           )}
+              <div>
+                <Typography variant="h5" className={styles.cardTitle}>
+                  LES ACTEURS PARTICIPANTS
+                </Typography>
+                <div className={styles.border} />
+                <br />
+              </div>
+            )}
             <Slider
               {...settingsSliderevent}
               className={[styles.articleCarroussel]}
@@ -1065,45 +1071,45 @@ if (typeof window !== 'undefined') {
             <br />
             <br />
             {data && data.event.parentEvent && (
-            <div>
-              <Typography variant="h5" className={styles.cardTitle}>
-                FAIS PARTIT DE L'EVENEMENT
-              </Typography>
-              <div className={styles.border} />
-              <br />
-              <Slider
-                {...settingsSliderevent}
-                className={[styles.articleCarroussel]}
-              >
-              <CardSliderEvent key={data.event.parentEvent.id} event={data.event.parentEvent} />
-              </Slider>
-              <br />
-              <br />
-            </div>
+              <div>
+                <Typography variant="h5" className={styles.cardTitle}>
+                  FAIS PARTIT DE L'EVENEMENT
+                </Typography>
+                <div className={styles.border} />
+                <br />
+                <Slider
+                  {...settingsSliderevent}
+                  className={[styles.articleCarroussel]}
+                >
+                  <CardSliderEvent key={data.event.parentEvent.id} event={data.event.parentEvent} />
+                </Slider>
+                <br />
+                <br />
+              </div>
             )}
-             {data && data.event.subEvents &&  data.event.subEvents.length > 0 && (
-            <div>
-              <Typography variant="h5" className={styles.cardTitle}>
-                LES ACTIONS-EVENEMENTS ASSOCIEES 
-              </Typography>
-              <div className={styles.border} />
-              <br />
-              <Calendar
-                events={events}
-                withViewSwitcher={true}
-              />
-            </div>
+            {data && data.event.subEvents && data.event.subEvents.length > 0 && (
+              <div>
+                <Typography variant="h5" className={styles.cardTitle}>
+                  LES ACTIONS-EVENEMENTS ASSOCIEES
+                </Typography>
+                <div className={styles.border} />
+                <br />
+                <Calendar
+                  events={events}
+                  withViewSwitcher={true}
+                />
+              </div>
             )}
           </Container>
           <Newsletter />
-          {((data && ( containUser(data.event.referents) || containUserActorsReferent(data.event.actors))) ||
+          {((data && (containUser(data.event.referents) || containUserActorsReferent(data.event.actors))) ||
             (user && user.role === 'admin')) && (
-            <Link href={`/actorAdmin/event/${id}`}>
-              <Fab className={styles.fab} aria-label="edit">
-                <EditIcon />
-              </Fab>
-            </Link>
-          )}
+              <Link href={`/actorAdmin/event/${id}`}>
+                <Fab className={styles.fab} aria-label="edit">
+                  <EditIcon />
+                </Fab>
+              </Link>
+            )}
         </Box>
       </RootRef>
     </AppLayout>
@@ -1119,19 +1125,25 @@ export default withApollo()(Event);
 export async function getServerSideProps(ctxt) {
 
   const res = await fetch(process.env.NEXT_PUBLIC_API_URI, {
-      method: 'POST',
-      body: JSON.stringify({
-        "operationName": "event",
-        "variables": {
-            "id": ctxt.params.id
-        },
-        "query": GET_EVENT,
-        }),
-    });
-    
+    method: 'POST',
+    body: JSON.stringify({
+      "operationName": "event",
+      "variables": {
+        "id": ctxt.params.id
+      },
+      "query": GET_EVENT,
+    }),
+  });
+
+
   const initialData = await res.json();
-    return {
-      props: { initialData
-            }
+  if (initialData.errors) {
+    console.error(" Error fetching event id " + ctxt.params.id + " error message : " + initialData.errors[0].message + "");
   }
+
+  return {
+    props: {
+      initialData
+    }
   }
+}

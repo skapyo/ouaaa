@@ -1395,7 +1395,7 @@ const AddEventForm = ({ actorId }) => {
           onClick={submitHandler}
           disabled={!validationResult?.global || !validated}
         >
-          Créer cet action
+          Créer cette action
         </ClassicButton>
       </Container>
     );
