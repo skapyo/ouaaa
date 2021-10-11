@@ -18,7 +18,16 @@ import CardSliderEvent from 'components/cards/CardSliderEvent';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import TwitterIcon from '@material-ui/icons/Twitter';
 import WhatsAppIcon from '@material-ui/icons/WhatsApp';
-import { FacebookShareButton, TwitterShareButton, WhatsappShareButton } from 'react-share';
+import TelegramIcon from '@material-ui/icons/Telegram';
+import EmailIcon from '@material-ui/icons/Email';
+import {
+  FacebookShareButton,
+  FacebookMessengerShareButton,
+  TwitterShareButton,
+  TelegramShareButton,
+  WhatsappShareButton,
+  EmailShareButton,
+} from 'react-share';
 import moment from 'moment';
 import Moment from 'react-moment';
 import { useCookies } from 'react-cookie';
@@ -793,20 +802,38 @@ const Event = ({ initialData }) => {
                         Partager la page sur les réseaux
                       </div>
                       <span className={[styles.infoValue]}>
+                      <FacebookMessengerShareButton
+                          size={32}
+                          round
+                          url={`${currentLocationWindows}`}
+                        >
+                          <FacebookIcon
+                            round
+                            size={32}
+                            className={[styles.socialNetworkIcon]}
+                          />
+                        </FacebookMessengerShareButton>
                         <FacebookShareButton
                           size={32}
                           round
                           url={`${currentLocationWindows}`}
                         >
-                          <FacebookIcon round size={32} className={[styles.socialNetworkIcon]} />
+                          <img
+                          src="/icons/facebook_messenger_icon.svg"
+                          alt="Téléphone"
+                          className={[styles.socialNetworkIcon]}
+                        />
                         </FacebookShareButton>
-
                         <TwitterShareButton
                           size={32}
                           round
                           url={`${currentLocationWindows}`}
                         >
-                          <TwitterIcon round size={32} className={[styles.socialNetworkIcon]} />
+                          <TwitterIcon
+                            round
+                            size={32}
+                            className={[styles.socialNetworkIcon]}
+                          />
                         </TwitterShareButton>
 
                         <WhatsappShareButton
@@ -814,8 +841,34 @@ const Event = ({ initialData }) => {
                           round
                           url={`${currentLocationWindows}`}
                         >
-                          <WhatsAppIcon round size={32} className={[styles.socialNetworkIcon]} />
+                          <WhatsAppIcon
+                            round
+                            size={32}
+                            className={[styles.socialNetworkIcon]}
+                          />
                         </WhatsappShareButton>
+                        <TelegramShareButton
+                          size={32}
+                          round
+                          url={`${currentLocationWindows}`}
+                        >
+                          <TelegramIcon
+                            round
+                            size={32}
+                            className={[styles.socialNetworkIcon]}
+                          />
+                        </TelegramShareButton>
+                        <EmailShareButton
+                          size={32}
+                          round
+                          url={`${currentLocationWindows}`}
+                        >
+                          <EmailIcon
+                            round
+                            size={32}
+                            className={[styles.socialNetworkIcon]}
+                          />
+                        </EmailShareButton>
                       </span>
                     </Grid>
                   </Grid>

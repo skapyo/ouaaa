@@ -21,10 +21,15 @@ import { useMutation, useQuery } from '@apollo/client';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import TwitterIcon from '@material-ui/icons/Twitter';
 import WhatsAppIcon from '@material-ui/icons/WhatsApp';
+import TelegramIcon from '@material-ui/icons/Telegram';
+import EmailIcon from '@material-ui/icons/Email';
 import {
   FacebookShareButton,
+  FacebookMessengerShareButton,
   TwitterShareButton,
+  TelegramShareButton,
   WhatsappShareButton,
+  EmailShareButton,
 } from 'react-share';
 import Slider from 'react-slick/lib';
 import { useSnackbar } from 'notistack';
@@ -924,7 +929,7 @@ const Actor = ({ initialData }) => {
                         Partager la page sur les réseaux
                       </div>
                       <span className={[styles.infoValue]}>
-                        <FacebookShareButton
+                        <FacebookMessengerShareButton
                           size={32}
                           round
                           url={`${currentLocationWindows}`}
@@ -934,8 +939,18 @@ const Actor = ({ initialData }) => {
                             size={32}
                             className={[styles.socialNetworkIcon]}
                           />
+                        </FacebookMessengerShareButton>
+                        <FacebookShareButton
+                          size={32}
+                          round
+                          url={`${currentLocationWindows}`}
+                        >
+                          <img
+                          src="/icons/facebook_messenger_icon.svg"
+                          alt="Téléphone"
+                          className={[styles.socialNetworkIcon]}
+                        />
                         </FacebookShareButton>
-
                         <TwitterShareButton
                           size={32}
                           round
@@ -959,6 +974,28 @@ const Actor = ({ initialData }) => {
                             className={[styles.socialNetworkIcon]}
                           />
                         </WhatsappShareButton>
+                        <TelegramShareButton
+                          size={32}
+                          round
+                          url={`${currentLocationWindows}`}
+                        >
+                          <TelegramIcon
+                            round
+                            size={32}
+                            className={[styles.socialNetworkIcon]}
+                          />
+                        </TelegramShareButton>
+                        <EmailShareButton
+                          size={32}
+                          round
+                          url={`${currentLocationWindows}`}
+                        >
+                          <EmailIcon
+                            round
+                            size={32}
+                            className={[styles.socialNetworkIcon]}
+                          />
+                        </EmailShareButton>
                       </span>
                     </Grid>
                   </Grid>
