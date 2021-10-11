@@ -15,6 +15,7 @@ import {
   Appointments,
   TodayButton,
   ViewSwitcher,
+  AllDayPanel
 } from '@devexpress/dx-react-scheduler-material-ui';
 
 const useStyles = makeStyles(theme => ({
@@ -133,7 +134,9 @@ const Calendar = props => {
   const toolbarProps = withAddEvent && {
     flexibleSpaceComponent: FlexibleEmptySpaceAddEvent
   };
-
+  const defaultMessages = {
+    allDay: 'Toute la journée',
+  };
   return (
     <Scheduler
       firstDayOfWeek={1}
@@ -163,7 +166,9 @@ const Calendar = props => {
         startDayHour={8}
         intervalCount={3}
       />
-
+      <AllDayPanel
+        messages={defaultMessages}
+      />
       <Appointments
         appointmentComponent={Appointment}
         appointmentContentComponent={AppointmentContent}
