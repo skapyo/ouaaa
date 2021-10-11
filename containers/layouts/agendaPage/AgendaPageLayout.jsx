@@ -480,7 +480,7 @@ const AgendaPageLayout = () => {
                                   </div>
                                 </Grid>
 
-                                <Grid item xs={2}>
+                                {false && (<Grid item xs={2}>
                                   <div
                                     className={classes.favorite}
                                     onClick={() => setFavorite(!favorite)}
@@ -496,7 +496,7 @@ const AgendaPageLayout = () => {
                                       />
                                     )}
                                   </div>
-                                </Grid>
+                                </Grid>)}
                               </Grid>
 
                               <Typography component="p">

@@ -645,7 +645,7 @@ const carto = () => {
                                     </p>
                                   </Grid>
 
-                                  <Grid item xs={2}>
+                                  {false && (<Grid item xs={2}>
                                     <div
                                       className={styles.favorite}
                                       onClick={() => setFavorite(!favorite)}
@@ -661,7 +661,7 @@ const carto = () => {
                                         />
                                       )}
                                     </div>
-                                  </Grid>
+                                  </Grid>)}
                                 </Grid>
 
                                 <Typography component="p">
