@@ -382,7 +382,7 @@ const AgendaPageLayout = () => {
                                   event.pictures.length >= 1
                                     ? `url(${getImageUrl(
                                       event.pictures.sort((a, b) =>
-                                        a.position > b.position ? 1 : -1,
+                                      a.logo ? -1 : 1,
                                       )[0].croppedPicturePath,
                                     )})`
                                     : '',
@@ -449,7 +449,7 @@ const AgendaPageLayout = () => {
                                   event.pictures.length >= 1
                                     ? `url(${getImageUrl(
                                       event.pictures.sort((a, b) =>
-                                        a.position > b.position ? 1 : -1,
+                                      a.logo ? -1 : 1,
                                       )[0].croppedPicturePath,
                                     )})`
                                     : '',

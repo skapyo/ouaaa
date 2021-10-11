@@ -592,7 +592,7 @@ const Actor = ({ initialData }) => {
         moment.duration(endDate.diff(startDate)).asDays(),
       );
 
-      if (duration > 2) {
+      if (false && duration > 2) {
         recurrentOptions = {
           endDate: startDate.endOf('day'),
           rRule: `FREQ=DAILY;COUNT=${duration}`,

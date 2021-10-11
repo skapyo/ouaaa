@@ -554,7 +554,7 @@ const Event = ({ initialData }) => {
       let recurrentOptions = null;
       const duration = Math.ceil(moment.duration(endDate.diff(startDate)).asDays());
 
-      if (duration > 2) {
+      if (false && duration > 2) {
         recurrentOptions = {
           endDate: startDate.endOf('day'),
           rRule: `FREQ=DAILY;COUNT=${duration}`

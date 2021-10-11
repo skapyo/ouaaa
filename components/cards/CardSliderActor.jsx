@@ -76,7 +76,7 @@ export default function SimpleCard({ actor }) {
                 actor.pictures.length >= 1
                   ? `url(${getImageUrl(
                       actor.pictures.sort((a, b) =>
-                        a.position > b.position ? 1 : -1,
+                      a.logo ? -1 : 1,
                       )[0].croppedPicturePath,
                     )})`
                   : '',
