@@ -999,6 +999,18 @@ const Event = ({ initialData }) => {
                     </div>
                   )}
 
+                {data && data.event.practicalInfo && (
+                  <div>
+                    <div>
+                      <Typography variant="h5" className={styles.cardTitle}>
+                        INFO PRATIQUES COMPLEMENTS
+                      </Typography>
+                      <div className={styles.border} />
+                      <br />
+                    </div>
+                    <p>{data && Parser(data.event.practicalInfo)}</p>
+                  </div>
+                )}
                 <div />
                 <br />
                 <Typography variant="h3" className={styles.cardTitle}>
@@ -1091,18 +1103,6 @@ const Event = ({ initialData }) => {
                     />
                   ))}
             </Slider>
-            {data && data.event.practicalInfo && (
-              <div>
-                <div>
-                  <Typography variant="h5" className={styles.cardTitle}>
-                    INFO PRATIQUES COMPLEMENTS
-                  </Typography>
-                  <div className={styles.border} />
-                  <br />
-                </div>
-                <p>{data && Parser(data.event.practicalInfo)}</p>
-              </div>
-            )}
             {data && data.event.actors && data.event.actors.length > 0 && (
               <div>
                 <Typography variant="h5" className={styles.cardTitle}>
