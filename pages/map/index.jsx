@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState, useMemo } from 'react';
-import { Grid, Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { Grid, Typography, useMediaQuery, Button } from '@material-ui/core';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/client';
 import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded';
@@ -13,7 +13,10 @@ import Filters from '../../components/filters';
 import Parser from 'html-react-parser';
 import Head from 'next/head';
 import ButtonGroupSelected from '../../components/buttons/ButtonGroupSelected';
+import Drawer from '@material-ui/core/Drawer';
+import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
 
+var matchesWindow = false;
 if (typeof window !== 'undefined') {
   var L = require('leaflet');
   var Map = require('react-leaflet').Map;
@@ -22,7 +25,10 @@ if (typeof window !== 'undefined') {
   var Popup = require('react-leaflet').Popup;
   var Tooltip = require('react-leaflet').Tooltip;
   var MarkerClusterGroup = require('react-leaflet-markercluster').default;
+  matchesWindow = window.matchMedia("(max-width: 600px)").matches;
 }
+
+const drawerWidth = 310;
 
 const useStyles = makeStyles((theme) => ({
   layout: {
@@ -45,6 +51,38 @@ const useStyles = makeStyles((theme) => ({
       width: '100%'
     }
   },
+  drawer: ({ isMenuOpen, isMapMode }) => ({
+    width: isMenuOpen ? (isMapMode ? 0 : drawerWidth) : 0,
+    flexShrink: 0,
+    transition: isMapMode ? null : theme.transitions.create(['width'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+  }),
+  drawerPaper: {
+    position: 'absolute',
+    width: drawerWidth,
+  },
+  filterButton: ({ isMenuOpen }) => ({
+    position: 'absolute',
+    left: isMenuOpen ? drawerWidth : 20,
+    bottom: 20,
+    zIndex: 1000,
+    borderTopLeftRadius: isMenuOpen ? 0 : 4,
+    borderBottomLeftRadius: isMenuOpen ? 0 : 4,
+    transition: theme.transitions.create(['left'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    [theme.breakpoints.down('sm')]: {
+      position: 'fixed',
+      bottom: 10,
+      left: 10,
+    }
+  }),
+  filterButtonIcon: ({ isMenuOpen }) => ({
+    transform: isMenuOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+  }),
   listButton: {
     position: 'absolute',
     bottom: 10,
@@ -256,6 +294,10 @@ const otherCategories = {
 
 const carto = () => {
   const mapRef = useRef();
+  const isFirstRef = useRef(true);
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.down('sm'));
+
   const [categoriesChecked, setCategoriesChecked] = useState(categories.Sujets);
   const [otherCategoriesChecked, setOtherCategoriesChecked] = useState(
     otherCategories,
@@ -264,13 +306,13 @@ const carto = () => {
   const [listMode, setListMode] = useState(true);
   const [postCode, setPostCode] = useState(null);
   const [filters, setFilters] = useState(null);
-  const isFirstRef = useRef(true);
+  const [isMenuOpen, setIsMenuOpen] = useState(!matchesWindow);
 
   useEffect(() => {
     const { current = {} } = mapRef;
   }, [mapRef]);
 
-  const styles = useStyles();
+  const styles = useStyles({ isMenuOpen });
 
   const position = [46.1085193, -0.9864794];
 
@@ -330,7 +372,6 @@ const carto = () => {
       variables: {
         entries: [categoriesChecked],
         isValidated: true,
-
       },
     });
 
@@ -364,8 +405,6 @@ const carto = () => {
       setFilters(newFilters);
       refetch({ ...newFilters });
     }, [refetch]);
-
-
 
     function splitWord(word, number) {
       if (word != null) {
@@ -419,12 +458,39 @@ const carto = () => {
         </Head>
         <Grid container className={styles.layout}>
           <ButtonGroupSelected buttons={fabActions} />
-          <Filters
-            onFiltersChange={handleFiltersChange}
-            isActorList
-          />
+
+          <Drawer
+            anchor="left"
+            variant={matches ? "temporary" : "persistent"}
+            open={isMenuOpen}
+            className={styles.drawer}
+            classes={{
+              paper: styles.drawerPaper
+            }}
+            onClose={() => setIsMenuOpen(false)}
+          >
+            <Filters
+              onFiltersChange={handleFiltersChange}
+              isActorList
+            />
+          </Drawer>
+
+          {
+            (!matches || !isMenuOpen) && (
+              <Button
+                variant="contained"
+                className={styles.filterButton}
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                startIcon={<DoubleArrowIcon className={styles.filterButtonIcon} />}
+                color="primary"
+              >
+                Filtres
+              </Button>
+            )
+          }
+
           {listMode && (
-            <Grid item sm={10} xs={12} style={{ width: '100%' }}>
+            <Grid item style={{ width: '100%' }}>
               <Map ref={mapRef} center={position} zoom={11} className={styles.mapContainer}>
                 <TileLayer
                   attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'

@@ -1,10 +1,10 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { Grid, Typography } from '@material-ui/core';
+import { Grid, Typography, Button } from '@material-ui/core';
 import { withApollo } from 'hoc/withApollo';
 import Events from 'containers/layouts/agendaPage/Events';
 import Filters from '../../../components/filters';
 import Newsletter from 'containers/layouts/Newsletter';
-import { Container, makeStyles } from '@material-ui/core';
+import { Container, makeStyles, useTheme } from '@material-ui/core';
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/client';
 import { getImageUrl } from '../../../utils/utils';
@@ -15,7 +15,11 @@ import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded'
 import FavoriteRoundedIcon from '@material-ui/icons/FavoriteRounded';
 import Calendar from '../../../components/Calendar';
 import ButtonGroupSelected from '../../../components/buttons/ButtonGroupSelected';
+import Drawer from '@material-ui/core/Drawer';
+import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
+var matchesWindow = false;
 if (typeof window !== 'undefined') {
   var L = require('leaflet');
   var Map = require('react-leaflet').Map;
@@ -24,11 +28,14 @@ if (typeof window !== 'undefined') {
   var Popup = require('react-leaflet').Popup;
   var Tooltip = require('react-leaflet').Tooltip;
   var MarkerClusterGroup = require('react-leaflet-markercluster').default;
+  matchesWindow = window.matchMedia("(max-width: 600px)").matches;
 }
 
 const currentDate = new Date();
 
 currentDate.setMonth(9);
+
+const drawerWidth = 310;
 
 const useStyles = makeStyles(theme => ({
   main: {
@@ -52,6 +59,38 @@ const useStyles = makeStyles(theme => ({
       height: 'auto'
     }
   },
+  drawer: ({ isMenuOpen, isMapMode }) => ({
+    width: isMenuOpen ? (isMapMode ? 0 : drawerWidth) : 0,
+    flexShrink: 0,
+    transition: isMapMode ? null : theme.transitions.create(['width'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+  }),
+  drawerPaper: {
+    position: 'absolute',
+    width: drawerWidth,
+  },
+  filterButton: ({ isMenuOpen }) => ({
+    position: 'absolute',
+    left: isMenuOpen ? drawerWidth : 20,
+    bottom: 20,
+    zIndex: 1000,
+    borderTopLeftRadius: isMenuOpen ? 0 : 4,
+    borderBottomLeftRadius: isMenuOpen ? 0 : 4,
+    transition: theme.transitions.create(['left'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    [theme.breakpoints.down('sm')]: {
+      position: 'fixed',
+      bottom: 10,
+      left: 10,
+    }
+  }),
+  filterButtonIcon: ({ isMenuOpen }) => ({
+    transform: isMenuOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+  }),
   listButtonIcon: {
     marginRight: 10
   },
@@ -118,6 +157,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+
 const VIEW_STATE = {
   LIST: 'LIST',
   MAP: 'MAP',
@@ -177,11 +217,20 @@ const AgendaPageLayout = () => {
     }
     `;
 
-  const classes = useStyles();
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.down('sm'));
+
   const mapRef = useRef();
   const [viewMode, setViewMode] = useState(VIEW_STATE.LIST);
   const [favorite, setFavorite] = useState(false);
   const [filters, setFilters] = useState(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(!matchesWindow);
+
+  const isListMode = useMemo(() => viewMode === VIEW_STATE.LIST, [viewMode, VIEW_STATE]);
+  const isMapMode = useMemo(() => viewMode === VIEW_STATE.MAP, [viewMode, VIEW_STATE]);
+  const isCalendarMode = useMemo(() => viewMode === VIEW_STATE.CALENDAR, [viewMode, VIEW_STATE]);
+
+  const classes = useStyles({ isMenuOpen, isMapMode });
 
   const date = new Date();
   const position = [46.1085193, -0.9864794];
@@ -212,10 +261,6 @@ const AgendaPageLayout = () => {
       { name: 'calendar', label: 'Calendrier', onClick: () => setViewMode(VIEW_STATE.CALENDAR) }
     ]
   }, []);
-
-  const isListMode = useMemo(() => viewMode === VIEW_STATE.LIST, [viewMode, VIEW_STATE]);
-  const isMapMode = useMemo(() => viewMode === VIEW_STATE.MAP, [viewMode, VIEW_STATE]);
-  const isCalendarMode = useMemo(() => viewMode === VIEW_STATE.CALENDAR, [viewMode, VIEW_STATE]);
 
   const events = useMemo(() => {
     return (eventData?.events || []).map(evt => {
@@ -249,11 +294,36 @@ const AgendaPageLayout = () => {
       <Container className={classes.layout}>
         <ButtonGroupSelected buttons={fabActions} />
 
-        <Filters
-          isEventList
-          onFiltersChange={handleFiltersChange}
-          isCalendarMode={isCalendarMode}
-        />
+        <Drawer
+          anchor="left"
+          variant={matches ? "temporary" : "persistent"}
+          open={isMenuOpen}
+          className={classes.drawer}
+          classes={{
+            paper: classes.drawerPaper
+          }}
+          onClose={() => setIsMenuOpen(false)}
+        >
+          <Filters
+            isEventList
+            onFiltersChange={handleFiltersChange}
+            isCalendarMode={isCalendarMode}
+          />
+        </Drawer>
+
+        {
+          (!matches || !isMenuOpen) && (
+            <Button
+              variant="contained"
+              className={classes.filterButton}
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              startIcon={<DoubleArrowIcon className={classes.filterButtonIcon} />}
+              color="primary"
+            >
+              Filtres
+            </Button>
+          )
+        }
 
 
         {isListMode && (
