@@ -1126,16 +1126,11 @@ const Event = ({ initialData }) => {
             {data && data.event.parentEvent && (
               <div>
                 <Typography variant="h5" className={styles.cardTitle}>
-                  FAIS PARTIT DE L'EVENEMENT
+                  FAIT PARTIE DE L'EVENEMENT
                 </Typography>
                 <div className={styles.border} />
                 <br />
-                <Slider
-                  {...settingsSliderevent}
-                  className={[styles.articleCarroussel]}
-                >
                   <CardSliderEvent key={data.event.parentEvent.id} event={data.event.parentEvent} />
-                </Slider>
                 <br />
                 <br />
               </div>
