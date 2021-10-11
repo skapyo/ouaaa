@@ -1277,8 +1277,6 @@ export async function getServerSideProps(ctxt) {
   });
 
   const initialData = await res.json();
-
-  const initialData = await res.json();
   if (initialData.errors) {
     console.error(" Error fetching actor id " + ctxt.params.id + " error message : " + initialData.errors[0].message + "");
   }
