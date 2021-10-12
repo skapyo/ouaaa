@@ -6,7 +6,6 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 const useStyles = makeStyles((theme) => ({
   titleContainer: {
-    marginTop: theme.spacing(2),
     backgroundImage: "url('./OUAAA-pix-022.jpg')",
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
