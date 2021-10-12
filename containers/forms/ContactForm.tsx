@@ -1,5 +1,5 @@
 import { useMutation } from "@apollo/client";
-import { Container, makeStyles, TextField } from "@material-ui/core";
+import { Container, FormControlLabel, makeStyles, Radio, RadioGroup, TextField } from "@material-ui/core";
 import { styles } from "@material-ui/pickers/views/Calendar/Calendar";
 import ClassicButton from "components/buttons/ClassicButton";
 import FormController, { RenderCallback, ValidationRules, ValidationRuleType } from "components/controllers/FormController";
@@ -22,6 +22,10 @@ const useStyles = makeStyles((theme) => ({
   },
   field: {
     marginBottom: theme.spacing(3)
+  },
+  radioGroup: {
+    marginBottom: theme.spacing(3),
+    justifyContent: 'center'
   }
 }));
 
@@ -80,6 +84,7 @@ const ContactForm = () => {
   const styles = useStyles();
   const user = useSessionState();
   const [messageSent, setMessageSent] = useState(false);
+  const [category, setCategory] = useState('message');
 
   const initFormValues = {
     firstName: user?.surname,
@@ -137,8 +142,11 @@ const ContactForm = () => {
       }
     ];
 
+    const radioChangeHandler = (event) => {
+      setCategory(event.target.value);
+    }
+
     const inputError = (name: string) => {
-      // return false;
       return !validationResult?.global && !!validationResult?.result[name] && formValues[name] !== undefined
     }
 
@@ -148,6 +156,7 @@ const ContactForm = () => {
           formValues: {
             ...formValues,
             object: formValues.object || 'Pas d\'objet spécifié',
+            category
           }
         }
       });
@@ -164,24 +173,37 @@ const ContactForm = () => {
     }, [sendContactData, sendContactError, sendContactLoading]);
 
     const getFormInputs = (() => {
-      return inputs.map((input, i) => {
-        return (
-          <FormItem
-            key={i}
-            label={input.label}
-            inputName={input.name}
-            formChangeHandler={formChangeHandler}
-            value={formValues[input.name]}
-            required={input.required}
-            errorBool={inputError(input.name)}
-            errorText={input.errorText}
-            multiline={input.multiline}
-            fullWidth={input.fullWidth}
-            minRows={input.minRows}
-            maxRows={input.maxRows}
-          ></FormItem>
-        )
-      });
+      return (
+        <div>
+          <RadioGroup row aria-label="gender" name="row-radio-buttons-group"
+            className={styles.radioGroup}
+            value={category}
+            onChange={radioChangeHandler}
+          >
+            <FormControlLabel value="message" control={<Radio />} label="Message" />
+            <FormControlLabel value="bug" control={<Radio />} label="Bug" />
+            <FormControlLabel value="improvement" control={<Radio />} label="Amélioration" />
+          </RadioGroup>
+          { inputs && inputs.map((input, i) => {
+            return (
+              <FormItem
+                key={i}
+                label={input.label}
+                inputName={input.name}
+                formChangeHandler={formChangeHandler}
+                value={formValues[input.name]}
+                required={input.required}
+                errorBool={inputError(input.name)}
+                errorText={input.errorText}
+                multiline={input.multiline}
+                fullWidth={input.fullWidth}
+                minRows={input.minRows}
+                maxRows={input.maxRows}
+              ></FormItem>
+            );
+          })}
+        </div>
+      );
     });
 
     return (
