@@ -301,11 +301,13 @@ const GET_COLLECTIONS = gql`
     }
   }
 `;
+
 const DELETE_ACTOR = gql`
   mutation deleteActor($actorId: Int!) {
     deleteActor(actorId: $actorId)
   }
 `;
+
 const useStyles = makeStyles((theme) => ({
   gridContainer: {
     marginTop: theme.spacing(5),
