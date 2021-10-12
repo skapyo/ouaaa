@@ -105,7 +105,6 @@ const TimeContainer = (props) => {
     const selectedDays = [...weekdays].map((day) =>
       day.id === dayId ? { ...day, selected: !day.selected } : day,
     );
-debugger;
     setWeekDays(selectedDays);
   };
 
@@ -129,17 +128,16 @@ debugger;
     setPlace(place);
   };
 
-  // FIXME: BUG HERE when delete 1 top line with 1 hour, it deletes the following line and the top line looses hours too
-  // when it s saved , it is actually only the 1st line with hours that was deleted, so it is a display mislalignment
-  // Maybe refactor with ID (UUID) to exactly target the Hours and Array to delete
   const deleteTimePicker = (e, index) => {
     const tempHours = [...hours];
+
+    deleteTimeContainer(e, index);
+    tempHours.pop();
+    setHours(tempHours);
+
+    // if no more hours inside the timeContainer, delete timeContainer
     if (tempHours.length === 0) {
       deleteTimeContainer(e, index);
-    } else {
-      tempHours.pop();
-
-      setHours(tempHours);
     }
   };
 
@@ -155,13 +153,13 @@ debugger;
       (timeRange) => !timeRange.includes(null),
     );
 
-    const newTimeFrame = [weekdays, cleanedHours, place];
+    const newTimeFrame = [weekdays, cleanedHours, place, indexTimeContainer];
+
+    // update or add timeFrame only if filled
     if (
-      // update or add timeFrame only if filled
       hours.length > 0 &&
       [].concat(...weekdays).filter((day) => day.selected).length
     ) {
-      // debugger;
       updateTimeFrames(newTimeFrame, indexTimeContainer);
     }
   }, [weekdays, hours, place]);
@@ -223,7 +221,6 @@ debugger;
         className={classes.buttonDelete}
         onClick={(e) => {
           deleteTimePicker(e, indexTimeContainer);
-          // debugger;
         }}
       >
         <DeleteIcon fontSize="small" />

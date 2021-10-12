@@ -10,8 +10,8 @@
     "lint:fix": "eslint --fix --ext .js,.jsx ."
   },
   "dependencies": {
-    "@apollo/client": "^3.2.5",
-    "@apollo/react-ssr": "^3.1.5",
+    "@apollo/client": "^3.4.16",
+    "@apollo/react-ssr": "^4.0.0",
     "@brainhubeu/react-carousel": "^1.19.26",
     "@ckeditor/ckeditor5-alignment": "^23.1.0",
     "@ckeditor/ckeditor5-basic-styles": "^23.1.0",
@@ -68,11 +68,13 @@
     "react-leaflet-markercluster": "^2.0.0",
     "react-moment": "^0.9.7",
     "react-router-dom": "^5.2.0",
+    "react-share": "^4.4.0",
     "react-slick": "^0.27.10",
     "react-timestamp": "^5.1.0",
     "react-use": "^15.3.4",
     "slick-carousel": "^1.8.1",
-    "styled-components": "^5.1.1"
+    "styled-components": "^5.1.1",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",

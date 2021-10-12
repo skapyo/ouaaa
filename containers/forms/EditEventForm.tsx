@@ -177,6 +177,9 @@ const useStyles = makeStyles((theme) => ({
   container: {
     textAlign: 'center',
   },
+  tooltip: {
+    marginLeft: '10px',
+  },
 }));
 
 const isEntriesWithInformationContains: Function = (entriesWithInformationArray: Array<Object>, id: number) => {
@@ -385,6 +388,17 @@ query actors {
   }
 }
 `;
+
+const GET_EVENTS = gql`
+query events ($notFinished: Boolean ) {
+  events (notFinished: $notFinished){
+    id
+    label
+    startedAt
+    endedAt
+  }
+}
+`;
 const GET_COLLECTIONS = gql`
   {
     collections {
@@ -502,10 +516,12 @@ const TitleWithTooltip = (props: TitleWithTooltipProps) => {
         {title}
       </Typography>
       {
-        !!tooltipTitle &&
-        <Tooltip title={tooltipTitle} color="primary">
+        !!tooltipTitle
+        && (
+        <Tooltip title={tooltipTitle} color="primary" className={styles.tooltip}>
           <InfoIcon />
         </Tooltip>
+        )
       }
     </Grid>
   );
@@ -753,10 +769,14 @@ const EditEventForm = (props) => {
         }
       });
   }
-  
-  const { data: dataActors } = useQuery(GET_ACTORS, {});
 
-  
+  const { data: dataActors } = useQuery(GET_ACTORS, {});
+  const { data: dataEvents } = useQuery(GET_EVENTS, {
+    variables: {
+      notFinished: true,
+    },
+  });
+
   const [
     deleteEvent,
     { data: deleteData, error: deleteError, loading: deleteLoading },
@@ -803,15 +823,48 @@ const EditEventForm = (props) => {
     useGraphQLErrorDisplay(error);
     const styles = useStyles();
     const redirect = useCookieRedirection();
-    
     const [state, setState] = React.useState({});
     const [address, setAddress] = useState('');
     const [city, setCity] = useState('');
     const [validated, setValidated] = useState(false);
     const [dateChange, setDateChange] = useState(false);
-    const [showOtherActors, setShowOtherActors] = useState(false);
     const [showRegisterLink, setShowRegisterLink] = useState(false);
-    ;
+    const [hasParentEvent, setHasParentEvent] = useState(
+      !!formValues.parentEvent,
+    );
+    const hasParentChangeHandler = (result) => {
+      setHasParentEvent(!hasParentEvent);
+    };
+    const [showOtherEventList, setShowOtherEventList] = useState(false);
+
+    const inputHasParentChangeHandler = (event, value) => {
+      if (event.target.value) {
+        if (event.target.value.length < 3) {
+          setShowOtherEventList(false);
+        } else {
+          setShowOtherEventList(true);
+        }
+      }
+    };
+    const autocompleteHasParentHandler = (event, value) => {
+      if (value) {
+        formValues.parentEventId = value.id;
+      }
+      setShowOtherEventList(false);
+    };
+
+    const getDefaultValueParentEvent = () => {
+      let defaultEvent;
+      if (dataEvents && dataEvents.events !== null) {
+        dataEvents.events.map((event) => {
+          if (event.id === eventData.event.event_id) {
+            defaultEvent = event;
+          }
+        });
+      }
+      return defaultEvent;
+    };
+
     const [
       selectedStartDate,
       setSelectedStartDate,
@@ -946,20 +999,19 @@ const EditEventForm = (props) => {
       setShowAddActor(!showAddActor);
     }, [showAddActor]);
 
-    const handleClickDeleteActor = useCallback(actor => {
+    const handleClickDeleteActor = useCallback((actor) => {
       // @ts-ignore
       let currentActors = [...formValues.actors];
       // @ts-ignore
-      currentActors = currentActors.filter(item => item.id !== actor.id);
+      currentActors = currentActors.filter((item) => item.id !== actor.id);
       formChangeHandler({
         target: {
           // @ts-ignore
           value: currentActors,
-          name: 'actors'
-        }
-      })
+          name: 'actors',
+        },
+      });
     }, [formValues]);
-
 
     const [
       setImagesLogoList,
@@ -968,7 +1020,7 @@ const EditEventForm = (props) => {
       imagesLogoListState,
     ] = useImageReader();
 
-    const inputChangeHandler = useCallback(event => {
+    const inputChangeHandler = useCallback((event) => {
       if (event.target.value) {
         if (event.target.value.length < 3) {
           if (event.target.name === 'actors') {
@@ -976,12 +1028,10 @@ const EditEventForm = (props) => {
           } else {
             setShowOtherContactList(false);
           }
+        } else if (event.target.name === 'actors') {
+          setOpenAddActorlist(true);
         } else {
-          if (event.target.name === 'actors') {
-            setOpenAddActorlist(true);
-          } else {
-            setShowOtherContactList(true);
-          }
+          setShowOtherContactList(true);
         }
       }
     }, []);
@@ -1000,7 +1050,7 @@ const EditEventForm = (props) => {
     const handleChangeActor = useCallback((event, value) => {
       if (value) {
         // @ts-ignore
-        let currentActors: string[] = formValues.actors || [];
+        const currentActors: string[] = formValues.actors || [];
         currentActors.push(value);
         // @ts-ignore
         formValues.actors = currentActors;
@@ -1056,10 +1106,6 @@ const EditEventForm = (props) => {
     }, resultMain);
 
     const [setImagesList, loading, result, imagesListState] = useImageReader();
-
-    const handleAddActor = () => {
-      setShowOtherActors(true);
-    };
 
     const onDropHandler = useCallback(
       (files) => {
@@ -1175,9 +1221,10 @@ const EditEventForm = (props) => {
             lng: parseFloat(formValues.lng),
             address,
             postCode: formValues.postCode,
+            parentEventId: formValues.parentEventId,
             city,
             // @ts-ignore
-            actors: formValues.actors.map(item => item.id)
+            actors: formValues.actors.map((item) => item.id),
           },
           eventId: parseInt(eventData.event.id),
           logoPictures,
@@ -1228,6 +1275,8 @@ const EditEventForm = (props) => {
             } else if (collection.code === 'category') {
               label = "Catégorie de l'événement";
               helperText = 'un événement peut traiter un sous-sujet non  associé au départ avec la page acteur. Vous pouvez choisir plusieurs sujets à rattacher à votre événement';
+            } else if (collection.code === 'event_public_target') {
+              helperText = 'contrairement à votre page acteur, ici vous pouvez ajouter plusieurs catégories de publics pour un même événement';
             }
 
             if (collection.code === 'event_price') return '';
@@ -1238,7 +1287,7 @@ const EditEventForm = (props) => {
                   {label}
                   {' '}
                   {helperText !== '' && (
-                    <Tooltip title={helperText}>
+                    <Tooltip title={helperText} className={styles.tooltip}>
                       <InfoIcon />
                     </Tooltip>
                   )}
@@ -1397,6 +1446,7 @@ const EditEventForm = (props) => {
         }
         <Grid className={styles.location}>
           <Typography className={styles.collectionLabel}>Adresse complète de l’événement *</Typography>
+          <br />
           <GooglePlacesAutocomplete
             placeholder="Taper et sélectionner l'adresse*"
             initialValue={
@@ -1418,7 +1468,11 @@ const EditEventForm = (props) => {
             })}
           />
         </Grid>
-
+        <br />
+        <TitleWithTooltip
+          title="Calendrier "
+          tooltipTitle="Vous pourrez ajouter des infos plus détaillés dans le corps du texte de la déscription ou dans le bloc infos pratiques"
+        />
         <Grid className={styles.datetime}>
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <Grid container justify="space-around">
@@ -1519,14 +1573,8 @@ const EditEventForm = (props) => {
           /* @ts-ignore */
           && dataCollections.collections.map((collection) => {
             if (!collection.event) return '';
-            if (collection.code === 'larochelle_quarter') return '';
-            //    const [display, setDisplay] = useState(false);
-            let { label } = collection;
-            let helperText = '';
-            if (collection.code === 'category') {
-              label = 'Choisissez les sous-sujets dans lesquels vous souhaitez apparaître (en priorité)';
-              helperText = 'Vous avez la possibilité d’ajouter un texte libre pour expliquer votre lien au sujet choisi. Vous pouvez sélectionner autant de sujet que nécessaire, les 3 premiers serviront à référencer votre page dans les moteurs de recherches info bulle : expliquant les ensemble et les sujets qu’ils contiennent aisni que les liens avec les sous-sujets et pourquoi pas ODD / transiscope. Ces infos bulles sont aussi visible dans le filtre sur la carte pour aider les usagers de Ouaaa à filtrer leur recherche';
-            }
+            const { label } = collection;
+            const helperText = 'Vous pourrez ajouter plus de détail dans le bloc infos pratiques ci dessous';
             if (collection.code !== 'event_price') return '';
             let defaultValue = '';
             // @ts-ignore
@@ -1547,7 +1595,7 @@ const EditEventForm = (props) => {
                   {label}
                   {' '}
                   {helperText !== '' && (
-                    <Tooltip title={helperText}>
+                    <Tooltip title={helperText} className={styles.tooltip}>
                       <InfoIcon />
                     </Tooltip>
                   )}
@@ -1571,10 +1619,9 @@ const EditEventForm = (props) => {
           })
         }
 
-
-
+        <br />
         <TitleWithTooltip
-          title="Acteur(s) associé(s) à l’action"
+          title="Acteur(s) associé(s) à l’action "
           tooltipTitle="Permet d’ajouter d’autres acteurs pour une action co-réalisée"
         />
 
@@ -1582,13 +1629,16 @@ const EditEventForm = (props) => {
           <List className={styles.actorList}>
             {
               // @ts-ignore
-              (formValues?.actors || []).map(actor => {
+              (formValues?.actors || []).map((actor) => {
                 return (
                   <ListItem key={actor.id}>
                     <ListItemIcon>
                       <Avatar>
                         {actor.name.split(' ').length > 1 && (
-                          <>{actor.name.split(' ')[0][0]}{actor.name.split(' ')[1][0]}</>
+                          <>
+                            {actor.name.split(' ')[0][0]}
+                            {actor.name.split(' ')[1][0]}
+                          </>
                         )}
                         {actor.name.split(' ').length <= 1 && (
                           <>{actor.name}</>
@@ -1596,7 +1646,7 @@ const EditEventForm = (props) => {
                       </Avatar>
                     </ListItemIcon>
                     <ListItemText
-                      id={"actor-list-" + actor.id}
+                      id={`actor-list-${actor.id}`}
                       primary={`${actor.name}`}
                     />
                     <ListItemSecondaryAction>
@@ -1605,7 +1655,7 @@ const EditEventForm = (props) => {
                       </IconButton>
                     </ListItemSecondaryAction>
                   </ListItem>
-                )
+                );
               })
             }
           </List>
@@ -1642,10 +1692,10 @@ const EditEventForm = (props) => {
 
         <br />
 
-        <Typography variant="body1" color="primary" className={styles.label}>
-          Infos pratiques complément :
-          {' '}
-        </Typography>
+        <TitleWithTooltip
+          title="Infos pratiques complément "
+          tooltipTitle="Ici vous pouvez indiquer toutes les infos comme tarifs, parking, moyen d’accès, … elles apparaitront ainsi aux visiteurs de OUAAA dans un bloc dédié plus lisible"
+        />
         <p />
         {editorLoaded ? (
           <>
@@ -1738,10 +1788,10 @@ const EditEventForm = (props) => {
             && !!validationResult?.result.shortDescription
           }
           errorText={`Maximum 90 caractères. ${formValues.shortDescription?.length - 90
-            } caractères en trop.`}
+          } caractères en trop.`}
         />
         <Typography variant="body1" color="primary" className={styles.label}>
-          Description :
+          Description
         </Typography>
         <p />
         {editorLoaded ? (
@@ -1755,8 +1805,9 @@ const EditEventForm = (props) => {
         ) : (
           <div>Editor loading</div>
         )}
+        <br />
         <Typography variant="body1" color="primary" className={styles.label}>
-          Votre logo
+          Logo de l'événement
         </Typography>
         {objectsListLogo ? (
           <ImagesDisplay
@@ -1805,6 +1856,47 @@ const EditEventForm = (props) => {
           onDropHandler={onDropHandler}
           text="Déposez ici votre autres photos au format jpg et de poids inférieur à 4Mo"
         />
+        <FormControlLabel
+          control={(
+            <Checkbox
+              edge="start"
+              tabIndex={-1}
+              disableRipple
+              onChange={hasParentChangeHandler}
+              name="hasParent"
+              onClick={(e) => e.stopPropagation()}
+            />
+          )}
+          label="est affilité à un autre événement existant"
+        />
+        {hasParentEvent ? (
+          <Autocomplete
+            id="combo-box-parentEvent"
+            options={dataEvents && dataEvents.events}
+                // @ts-ignore
+            onInput={inputHasParentChangeHandler}
+            open={showOtherEventList}
+                // @ts-ignore
+            getOptionLabel={(option) => `${option.label} du ${moment(parseInt(option.startedAt)).format('DD/MM/YYYY HH:mm')} au ${moment(parseInt(option.endedAt)).format('DD/MM/YYYY HH:mm')} `}
+            onChange={autocompleteHasParentHandler}
+           // defaultValue={getDefaultValueParentEvent()}
+            style={{ width: 300 }}
+                // eslint-disable-next-line react/jsx-props-no-spreading
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Evénement parent"
+                variant="outlined"
+                placeholder="Tapez les 3 premières lettres"
+              />
+            )}
+            noOptionsText="Pas d'événement trouvé'"
+            clearText="Effacer"
+            closeText="Fermer"
+          />
+        ) : (
+          ''
+        )}
         <ClassicButton
           fullWidth
           variant="contained"

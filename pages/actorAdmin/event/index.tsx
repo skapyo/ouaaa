@@ -8,6 +8,8 @@ import {
 import { withApollo } from 'hoc/withApollo';
 import ActorAdminPageLayout from 'containers/layouts/actorAdminPage/ActorAdminPageLayout';
 import { useQuery } from '@apollo/client';
+import { useRouter, withRouter } from 'next/router';
+import { useSnackbar } from 'notistack';
 import React from 'react';
 import gql from 'graphql-tag';
 import TableContainer from '@material-ui/core/TableContainer';
@@ -28,6 +30,7 @@ import FirstPageIcon from '@material-ui/icons/FirstPage';
 import IconButton from '@material-ui/core/IconButton';
 import { useSessionState } from '../../../context/session/session';
 import Link from '../../../components/Link';
+
 
 const useStyles = makeStyles((theme) => ({
   avatar: {
@@ -59,6 +62,7 @@ interface TablePaginationActionsProps {
 }
 
 function TablePaginationActions(props: TablePaginationActionsProps) {
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const classes = useStyles1();
   const theme = useTheme();
   const { count, page, rowsPerPage, onChangePage } = props;
@@ -151,7 +155,18 @@ const EventAdminPage = () => {
   `;
   const { data: dataAdminEvent } = useQuery(GET_EVENTS, {
     variables: {
-      userId: user.id,
+      userId: user && user.id,
+    },
+    onCompleted: (data) => {
+      if (user === undefined || user == null) {
+        enqueueSnackbar(
+          'Veuillez vous connecter pour effectuer des modifications.',
+          {
+            preventDuplicate: true,
+          },
+        );
+        router.push('/');
+      }
     },
   });
   const [state, setState] = React.useState({});

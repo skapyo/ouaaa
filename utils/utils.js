@@ -6,17 +6,22 @@ export const getImageUrl = (url) => {
 
 export const entriesHasElementWithCode = (entries, code) => {
   let hasEntry = false;
-  entries.map(
-    (entry) => {
-      if (entry
-      && entry.collection
-      && entry.collection.code
-        === code) {
+  if (entries) {
+    entries.map((entry) => {
+      if (entry && entry.collection && entry.collection.code === code) {
         hasEntry = true;
       }
       return hasEntry;
-    },
-  );
+    });
+  }
 
   return hasEntry;
+};
+
+/* parse Text and find the URL to show as hyperlink */
+export const linkify = (text) => {
+  var urlRegex = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gi;
+  return text.replace(urlRegex, function (url) {
+    return '<a href="' + url + '">' + url + '</a>';
+  });
 };

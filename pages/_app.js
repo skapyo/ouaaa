@@ -86,11 +86,13 @@ const MyApp = (props) => {
     <>
       <Head>
         <meta charSet="utf-8" />
-        <title>OUAAA! : Agir pour la transition en Aunis</title>
+
+        <title>OUAAA! : Agir pour la Transition Ecologie & Sociale en Aunis | La Rochelle</title>
         <meta
           name="viewport"
           content="minimum-scale=1, initial-scale=1, width=device-width"
         />
+        <meta name="description" content="Plateforme d’information & d'initiative des acteurs de la transition vers une société plus humaine & écologique sur le territoire de l'Aunis  !" />
         <script
           type="text/javascript"
           src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDvUKXlWS1470oj8C-vD6s62Bs9Y8XQf00&language=fr&region=FR&libraries=places"

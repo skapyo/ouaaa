@@ -5,6 +5,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import Button from '@material-ui/core/Button';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+import { v4 as uuidv4 } from 'uuid';
 
 import TimeContainer from './TimeContainer';
 
@@ -74,9 +75,10 @@ const BLANK_BUSINESS_HOURS = {
       identifier: '7',
     },
   ],
-  hours: [['2021-07-16T15:00:00', '2021-07-07T14:00:01.006Z']],
+  hours: [[null, null]],
   place: '',
   __typename: 'OpeningHour',
+  id: uuidv4(),
 };
 function hasPlace(initData) {
   let hasPlace = false;
@@ -92,16 +94,19 @@ function hasPlace(initData) {
 const SchedulerContainer = (props) => {
   const { onChange, initData, ...other } = props;
   const classes = useStyles();
+  const [currentId, setCurrentId] = useState(null);
 
   const [availableDays, setAvailableDays] = useState(BLANK_BUSINESS_HOURS);
   const [timeFrames, setTimeFrames] = useState(
     initData !== undefined
       ? initData.map((data) => {
-          return [data.days, data.hours, data.place];
+          return [data.days, data.hours, data.place, data.id];
         })
       : [],
   );
-  const [showPlace, setShowPlace] = useState(initData !== undefined && hasPlace(initData));
+  const [showPlace, setShowPlace] = useState(
+    initData !== undefined && hasPlace(initData),
+  );
 
   const [timeContainerList, setTimeContainerList] = useState(
     initData !== undefined ? initData : [BLANK_BUSINESS_HOURS],
@@ -110,7 +115,20 @@ const SchedulerContainer = (props) => {
   const firstUpdate = useRef(true);
 
   const addTimeContainer = () => {
-    const newTimeContainerList = [...timeContainerList, availableDays];
+    const newId = uuidv4();
+    const NEW_BLANK_BUSINESS_HOURS = { ...BLANK_BUSINESS_HOURS };
+    NEW_BLANK_BUSINESS_HOURS.id = newId;
+    const addTimeFrame = ({ days, hours, place, id }) => {
+      const newTimeFrame = [days, hours, place, newId];
+      const timeFrameList = [...timeFrames, newTimeFrame];
+      setTimeFrames(timeFrameList);
+    };
+    addTimeFrame(NEW_BLANK_BUSINESS_HOURS);
+
+    const newTimeContainerList = [
+      ...timeContainerList,
+      NEW_BLANK_BUSINESS_HOURS,
+    ];
     setTimeContainerList(newTimeContainerList);
   };
 
@@ -118,40 +136,39 @@ const SchedulerContainer = (props) => {
     setAvailableDays(daysList);
   };
 
-  const updateTimeFrames = (timeFrame, index) => {
+  const updateTimeFrames = (timeFrame, indexTimeContainer) => {
     if (timeFrames !== undefined && timeFrames.length !== 0) {
       // update timeFrames with initData
       let newTimeFramesList = [...timeFrames];
-      // if it adds a new timeframe
-      if (index + 1 > newTimeFramesList.length) {
-        newTimeFramesList.push(timeFrame);
-      } else {
-        // modify the current timeframe
-        newTimeFramesList = [...newTimeFramesList].map(
-          (currentTimeFrame, ind) => {
-            return index == ind ? timeFrame : currentTimeFrame;
-          },
-        );
-      }
+
+      // modify the current timeframe
+      newTimeFramesList = [...newTimeFramesList].map((currentTimeFrame) => {
+        return indexTimeContainer === currentTimeFrame[3]
+          ? timeFrame
+          : currentTimeFrame;
+      });
 
       setTimeFrames(newTimeFramesList);
-    } else {
-      setTimeFrames([timeFrame]);
     }
   };
 
+  // const addNewTimeFrame = (timeFrame) => {
+  //   const newTimeFramesList = [...timeFrames];
+  //   newTimeFramesList.push(timeFrame);
+  //   setTimeFrames(newTimeFramesList);
+  // };
+
   const deleteTimeContainer = (e, index) => {
-    const newTimeFramesList = [...timeFrames].filter(
-      (currentTimeFrame, ind) => {
-        return index !== ind;
+    const newTimeFramesList = [...timeFrames].filter((currentTimeFrame) => {
+      return index !== currentTimeFrame[3];
+    });
+
+    const newTimeContainerList = [...timeContainerList].filter(
+      (currentTimeFrame) => {
+        return index !== currentTimeFrame.id;
       },
     );
 
-    const newTimeContainerList = [...timeContainerList].filter(
-      (currentTimeFrame, ind) => {
-        return index !== ind;
-      },
-    );
     setTimeFrames(newTimeFramesList);
     setTimeContainerList(newTimeContainerList);
   };
@@ -215,14 +232,15 @@ const SchedulerContainer = (props) => {
         </div>
 
         {timeContainerList.length > 0 &&
-          timeContainerList.map(({ days, hours, place }, index) => {
+          timeContainerList.map(({ days, hours, place, id }) => {
+            console.log('id rendered', id);
             return (
-              <div className={classes.timeContainer} key={index}>
+              <div className={classes.timeContainer} key={id}>
                 <TimeContainer
                   updateWeekDays={updateWeekDays}
                   updateTimeFrames={updateTimeFrames}
                   availableDays={days}
-                  indexTimeContainer={index}
+                  indexTimeContainer={id}
                   deleteTimeContainer={deleteTimeContainer}
                   inputPlace={place}
                   showPlace={showPlace}

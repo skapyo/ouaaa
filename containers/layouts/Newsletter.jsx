@@ -20,10 +20,6 @@ const useStyles = makeStyles(theme => ({
     [theme.breakpoints.down('md')]: {
       padding: '1em 0',
       height: '18em',
-    },
-    [theme.breakpoints.down('md')]: {
-      padding: '1em 0',
-      height: '14em',
     }
   },
   align: {
@@ -41,7 +37,7 @@ const useStyles = makeStyles(theme => ({
       width: '70%',
     },
     [theme.breakpoints.down('xs')]: {
-      width: '90%',
+      width: '100%',
     },
   },
   searchIcon: {
@@ -183,6 +179,9 @@ const Newsletter = () => {
       errorUser,
       user,
     ]);
+
+    /* TODO Hide until 1.1 */
+  return (<></>);
 
     return (
       <Grid container direction="column" alignItems="center" justifyContent="space-around" className={styles.newsletter}>

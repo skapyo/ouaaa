@@ -31,28 +31,8 @@ const useStyles = makeStyles(theme => ({
     '& > *': {
       width: '100%',
       backgroundColor: 'white'
-    },
-    '& > *:not(:first-child)': {
-      [theme.breakpoints.down('sm')]: {
-        display: props.openFilters ? 'flex' : 'none'
-      },
-      '&.MuiPaper-root': {
-        [theme.breakpoints.down('sm')]: {
-          display: props.openFilters ? 'block' : 'none'
-        }
-      }
     }
   }),
-  filterButtonContainer: {
-    display: 'none',
-    [theme.breakpoints.down('sm')]: {
-      display: 'flex'
-    },
-    '& > *': {
-      flex: 1,
-      borderRadius: 0
-    }
-  },
   collectionLabel: {
     textAlign: 'center',
     color: '#2C367E',
@@ -150,7 +130,6 @@ function Filters(props) {
     isEventList,
     onFiltersChange
   } = props;
-  const theme = useTheme();
 
   const GET_COLLECTIONS = gql`
   {
@@ -182,7 +161,7 @@ function Filters(props) {
     }
   `;
 
-  const [dataCollections, setDataCollections] = useState({});
+  const [dataCollections, setDataCollections] = useState(null);
   const [errorPostCode, setErrorPostCode] = useState(false);
   const [filters, setFilters] = useState({});
   const [openFilters, setOpenFilters] = useState(false);
@@ -250,7 +229,7 @@ function Filters(props) {
     return [];
   }, [dataCollections, isEventList]);
 
-  if (loadingCollections) return 'Loading...';
+  if (loadingCollections && !dataCollections) return 'Loading...';
   if (errorCollections) return `Error! ${errorCollections.message}`;
 
   return (
@@ -262,10 +241,6 @@ function Filters(props) {
       wrap="nowrap"
       className={classes.root}
     >
-      <Grid container justifyContent="center" className={classes.filterButtonContainer}>
-        <Button variant="contained" onClick={() => setOpenFilters(!openFilters)}>Filtres</Button>
-      </Grid>
-
       {
         isEventList && (
           <DateFilter
