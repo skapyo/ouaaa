@@ -37,11 +37,14 @@ import Parser from 'html-react-parser';
 import Fab from '@material-ui/core/Fab';
 import EditIcon from '@material-ui/icons/Edit';
 import Link from 'components/Link';
-import { getImageUrl, entriesHasElementWithCode } from '../../utils/utils';
+import {
+  getImageUrl,
+  entriesHasElementWithCode,
+  linkify,
+} from '../../utils/utils';
 import { useSessionState } from '../../context/session/session';
 import Newsletter from '../../containers/layouts/Newsletter';
 import Calendar from '../../components/Calendar';
-
 
 const useStyles = makeStyles((theme) => ({
   titleContainer: {
@@ -376,7 +379,6 @@ const Event = ({ initialData }) => {
     }
   `;
 
-
   if (typeof window !== 'undefined') {
     var L = require('leaflet');
     var Map = require('react-leaflet').Map;
@@ -547,17 +549,19 @@ const Event = ({ initialData }) => {
   }
 
   const events = useMemo(() => {
-    return (data?.event?.subEvents || []).map(evt => {
+    return (data?.event?.subEvents || []).map((evt) => {
       const startDate = moment(parseInt(evt.startedAt));
       const endDate = moment(parseInt(evt.endedAt));
 
       let recurrentOptions = null;
-      const duration = Math.ceil(moment.duration(endDate.diff(startDate)).asDays());
+      const duration = Math.ceil(
+        moment.duration(endDate.diff(startDate)).asDays(),
+      );
 
       if (false && duration > 2) {
         recurrentOptions = {
           endDate: startDate.endOf('day'),
-          rRule: `FREQ=DAILY;COUNT=${duration}`
+          rRule: `FREQ=DAILY;COUNT=${duration}`,
         };
       }
 
@@ -567,10 +571,13 @@ const Event = ({ initialData }) => {
         title: evt.label,
         id: evt.id,
         location: evt.city ? [evt.address, evt.city].join(', ') : '',
-        backgroundColor: evt.entries && evt.entries.length > 0 && evt.entries[0].parentEntry ? evt.entries[0].parentEntry.color : 'blue',
-        ...recurrentOptions
-      }
-    })
+        backgroundColor:
+          evt.entries && evt.entries.length > 0 && evt.entries[0].parentEntry
+            ? evt.entries[0].parentEntry.color
+            : 'blue',
+        ...recurrentOptions,
+      };
+    });
   }, [data]);
 
   return (
@@ -583,15 +590,21 @@ const Event = ({ initialData }) => {
           {/* @ts-ignore */}-{/* @ts-ignore */}
           {data && showCategory(data.event.entries)}
         </title>
-        {data && data.event.pictures.length >= 1 && data.event.pictures.filter(picture => picture.logo).length >= 1 && (
-          <meta property="og:image" content={
-            data.event.pictures.length >= 1
-              ? getImageUrl(
-                data.event.pictures.filter(picture => picture.logo)[0].croppedPicturePath)
-              : ''
-          }
-          />
-        )}
+        {data &&
+          data.event.pictures.length >= 1 &&
+          data.event.pictures.filter((picture) => picture.logo).length >= 1 && (
+            <meta
+              property="og:image"
+              content={
+                data.event.pictures.length >= 1
+                  ? getImageUrl(
+                      data.event.pictures.filter((picture) => picture.logo)[0]
+                        .croppedPicturePath,
+                    )
+                  : ''
+              }
+            />
+          )}
       </Head>
       <RootRef>
         <Box>
@@ -600,9 +613,15 @@ const Event = ({ initialData }) => {
               className={styles.titleContainer}
               style={{
                 backgroundImage:
-                  data && data.event && data.event.pictures.length >= 1 && data.event.pictures.filter(picture => picture.main).length >= 1
+                  data &&
+                  data.event &&
+                  data.event.pictures.length >= 1 &&
+                  data.event.pictures.filter((picture) => picture.main)
+                    .length >= 1
                     ? `url(${getImageUrl(
-                      data.event.pictures.filter(picture => picture.main)[0].croppedPicturePath)})`
+                        data.event.pictures.filter((picture) => picture.main)[0]
+                          .croppedPicturePath,
+                      )})`
                     : '',
               }}
             />
@@ -612,60 +631,74 @@ const Event = ({ initialData }) => {
               <Grid item md={5} sm={10} className={[styles.align]}>
                 <Grid container className={[styles.infoPratiqueGrid]}>
                   <div className={styles.image}>
-                    {data && data.event.pictures.length >= 1 && data.event.pictures.filter(picture => picture.logo).length >= 1 && (
-                      <img
-                        src={
-                          data.event.pictures.length >= 1
-                            ? getImageUrl(
-                              data.event.pictures.filter(picture => picture.logo)[0].croppedPicturePath)
-                            : ''
-                        }
-                      />
-                    )}
+                    {data &&
+                      data.event.pictures.length >= 1 &&
+                      data.event.pictures.filter((picture) => picture.logo)
+                        .length >= 1 && (
+                        <img
+                          src={
+                            data.event.pictures.length >= 1
+                              ? getImageUrl(
+                                  data.event.pictures.filter(
+                                    (picture) => picture.logo,
+                                  )[0].croppedPicturePath,
+                                )
+                              : ''
+                          }
+                        />
+                      )}
                   </div>
-                  {data
+                  {data && (
                     /*  &&  entriesHasElementWithCode(
-                        data.event.entries, 
+                        data.event.entries,
                         'event_type',) */
-                    && (
-                      <Grid container className={[styles.item]}>
-                        <Grid item xs={3} className={[styles.alignRight]}>
-                          <img src={"/icons/types.svg"} alt="Collectif & réseau" className={[styles.icon]} />
-                        </Grid>
-                        <Grid item xs={8} className={[styles.alignLeft]}>
-                          <div className={[styles.infoLabel]}>TYPE</div>
-                          <span className={[styles.infoValue]}>
-                            {data &&
-                              data.event.entries.map(
-                                (entry) =>
-                                  entry &&
-                                  entry.parentEntry &&
-                                  entry.parentEntry.collection &&
-                                  entry.parentEntry.collection.code ===
-                                  'event_type' && (
-                                    <div>
-                                      <Typography
-                                        variant="h7"
-                                        className={styles.cardTitleCategories}
-                                      >
-                                        {`${entry && entry.parentEntry.label} : ${entry && entry.label
-                                          }`}
-                                      </Typography>
-                                    </div>
-                                  ),
-                              )}
-                          </span>
-                        </Grid>
+                    <Grid container className={[styles.item]}>
+                      <Grid item xs={3} className={[styles.alignRight]}>
+                        <img
+                          src={'/icons/types.svg'}
+                          alt="Collectif & réseau"
+                          className={[styles.icon]}
+                        />
                       </Grid>
-                    )}
-                  {data
-                    && entriesHasElementWithCode(
+                      <Grid item xs={8} className={[styles.alignLeft]}>
+                        <div className={[styles.infoLabel]}>TYPE</div>
+                        <span className={[styles.infoValue]}>
+                          {data &&
+                            data.event.entries.map(
+                              (entry) =>
+                                entry &&
+                                entry.parentEntry &&
+                                entry.parentEntry.collection &&
+                                entry.parentEntry.collection.code ===
+                                  'event_type' && (
+                                  <div>
+                                    <Typography
+                                      variant="h7"
+                                      className={styles.cardTitleCategories}
+                                    >
+                                      {`${entry && entry.parentEntry.label} : ${
+                                        entry && entry.label
+                                      }`}
+                                    </Typography>
+                                  </div>
+                                ),
+                            )}
+                        </span>
+                      </Grid>
+                    </Grid>
+                  )}
+                  {data &&
+                    entriesHasElementWithCode(
                       data.event.entries,
                       'event_public_target',
                     ) && (
                       <Grid container className={[styles.item]}>
                         <Grid item xs={3} className={[styles.alignRight]}>
-                          <img src={"/icons/public.svg"} alt="Collectif & réseau" className={[styles.icon]} />
+                          <img
+                            src={'/icons/public.svg'}
+                            alt="Collectif & réseau"
+                            className={[styles.icon]}
+                          />
                         </Grid>
                         <Grid item xs={8} className={[styles.alignLeft]}>
                           <div className={[styles.infoLabel]}>Public cible</div>
@@ -676,7 +709,7 @@ const Event = ({ initialData }) => {
                                   entry &&
                                   entry.collection &&
                                   entry.collection.code ===
-                                  'event_public_target' && (
+                                    'event_public_target' && (
                                     <div>
                                       <Typography
                                         variant="h7"
@@ -693,7 +726,11 @@ const Event = ({ initialData }) => {
                     )}
                   <Grid container className={[styles.item]}>
                     <Grid item xs={3} className={[styles.alignRight]}>
-                      <img src={"/icons/location.svg"} alt="Localisation" className={[styles.icon]} />
+                      <img
+                        src={'/icons/location.svg'}
+                        alt="Localisation"
+                        className={[styles.icon]}
+                      />
                     </Grid>
                     <Grid item xs={8} className={[styles.alignLeft]}>
                       <div className={[styles.infoLabel]}>LOCALISATION</div>
@@ -720,7 +757,11 @@ const Event = ({ initialData }) => {
                   {data && data.event.socialNetwork && (
                     <Grid container className={[styles.item]}>
                       <Grid item xs={3} className={[styles.alignRight]}>
-                        <img src={"/icons/social.svg"} alt="Réseau social" className={[styles.icon]} />
+                        <img
+                          src={'/icons/social.svg'}
+                          alt="Réseau social"
+                          className={[styles.icon]}
+                        />
                       </Grid>
                       <Grid item xs={8} className={[styles.alignLeft]}>
                         <span className={[styles.infoValue]}>
@@ -738,7 +779,11 @@ const Event = ({ initialData }) => {
                   {data && (
                     <Grid container className={[styles.item]}>
                       <Grid item xs={3} className={[styles.alignRight]}>
-                        <img src={"/icons/clock.svg"} alt="Horaire" className={[styles.icon]} />
+                        <img
+                          src={'/icons/clock.svg'}
+                          alt="Horaire"
+                          className={[styles.icon]}
+                        />
                       </Grid>
                       <Grid item xs={8} className={[styles.alignLeft]}>
                         <div className={[styles.infoLabel]}>Date de début</div>
@@ -756,14 +801,18 @@ const Event = ({ initialData }) => {
                       </Grid>
                     </Grid>
                   )}
-                  {data
-                    && entriesHasElementWithCode(
+                  {data &&
+                    entriesHasElementWithCode(
                       data.event.entries,
                       'event_price',
                     ) && (
                       <Grid container className={[styles.item]}>
                         <Grid item xs={3} className={[styles.alignRight]}>
-                          <img src={"/icons/tarifs.svg"} alt="Tarif" className={[styles.icon]} />
+                          <img
+                            src={'/icons/tarifs.svg'}
+                            alt="Tarif"
+                            className={[styles.icon]}
+                          />
                         </Grid>
                         <Grid item xs={8} className={[styles.alignLeft]}>
                           <div className={[styles.infoLabel]}>Tarif</div>
@@ -802,7 +851,7 @@ const Event = ({ initialData }) => {
                         Partager la page sur les réseaux
                       </div>
                       <span className={[styles.infoValue]}>
-                      <FacebookMessengerShareButton
+                        <FacebookMessengerShareButton
                           size={32}
                           round
                           url={`${currentLocationWindows}`}
@@ -819,10 +868,10 @@ const Event = ({ initialData }) => {
                           url={`${currentLocationWindows}`}
                         >
                           <img
-                          src="/icons/facebook_messenger_icon.svg"
-                          alt="Téléphone"
-                          className={[styles.socialNetworkIcon]}
-                        />
+                            src="/icons/facebook_messenger_icon.svg"
+                            alt="Téléphone"
+                            className={[styles.socialNetworkIcon]}
+                          />
                         </FacebookShareButton>
                         <TwitterShareButton
                           size={32}
@@ -882,24 +931,29 @@ const Event = ({ initialData }) => {
                 <div className={styles.border} />
                 <br />
                 <br />
-                <p>{data && Parser(data.event.description)}</p>
+                <p>{data && Parser(linkify(data.event.description))}</p>
                 <div>
-                  {data
-                    && data.event.entries.map(
-                      (entry) => entry.parentEntry
-                        && entry.parentEntry.collection.code === 'category' && (
+                  {data &&
+                    data.event.entries.map(
+                      (entry) =>
+                        entry.parentEntry &&
+                        entry.parentEntry.collection.code === 'category' && (
                           <div>
                             <Typography
                               variant="h7"
                               className={styles.cardTitleCategories}
                             >
                               {/* @ts-ignore */}
-                              {` ${entry.parentEntry && entry.parentEntry.label
-                                } `}
-                              {/* @ts-ignore */}
-                              :
+                              {` ${
+                                entry.parentEntry && entry.parentEntry.label
+                              } `}
+                              {/* @ts-ignore */}:
                               {entry.icon && (
-                                <img src={`/icons/${entry.icon}.svg`} alt="icon" className={styles.iconEntry} />
+                                <img
+                                  src={`/icons/${entry.icon}.svg`}
+                                  alt="icon"
+                                  className={styles.iconEntry}
+                                />
                               )}
                               {/* @ts-ignore */}
                               {` ${entry && entry.label}`}
@@ -910,21 +964,28 @@ const Event = ({ initialData }) => {
                     )}
                 </div>
                 <br />
-                {data
-                  && entriesHasElementWithCode(
+                {data &&
+                  entriesHasElementWithCode(
                     data.event.entries,
                     'actor_status',
                   ) && (
                     <div className={[styles.descriptionInfoDiv]}>
-                      <img src="/icons/status.svg" alt="Collectif & réseau" className={[styles.icon]} />
-                      <div className={[styles.descriptionInfoLabel]}> Statut :</div>
+                      <img
+                        src="/icons/status.svg"
+                        alt="Collectif & réseau"
+                        className={[styles.icon]}
+                      />
+                      <div className={[styles.descriptionInfoLabel]}>
+                        {' '}
+                        Statut :
+                      </div>
                       <span className={[styles.descriptionInfoValue]}>
-                        {data
-                          && data.event.entries.map(
-                            (entry) => entry
-                              && entry.collection
-                              && entry.collection.code
-                              === 'actor_status' && (
+                        {data &&
+                          data.event.entries.map(
+                            (entry) =>
+                              entry &&
+                              entry.collection &&
+                              entry.collection.code === 'actor_status' && (
                                 <div>
                                   <Typography
                                     variant="h7"
@@ -938,24 +999,27 @@ const Event = ({ initialData }) => {
                       </span>
                     </div>
                   )}
-                {data
-                  && entriesHasElementWithCode(
+                {data &&
+                  entriesHasElementWithCode(
                     data.event.entries,
                     'public_target',
                   ) && (
                     <div className={[styles.descriptionInfoDiv]}>
-
-                      <img src="/icons/public.svg" alt="Collectif & réseau" className={[styles.icon]} />
+                      <img
+                        src="/icons/public.svg"
+                        alt="Collectif & réseau"
+                        className={[styles.icon]}
+                      />
                       <div className={[styles.descriptionInfoLabel]}>
                         Public principal visé
                       </div>
                       <span className={[styles.descriptionInfoValue]}>
-                        {data
-                          && data.event.entries.map(
-                            (entry) => entry
-                              && entry.collection
-                              && entry.collection.code
-                              === 'public_target' && (
+                        {data &&
+                          data.event.entries.map(
+                            (entry) =>
+                              entry &&
+                              entry.collection &&
+                              entry.collection.code === 'public_target' && (
                                 <div>
                                   <Typography
                                     variant="h7"
@@ -969,22 +1033,27 @@ const Event = ({ initialData }) => {
                       </span>
                     </div>
                   )}
-                {data
-                  && entriesHasElementWithCode(
+                {data &&
+                  entriesHasElementWithCode(
                     data.event.entries,
                     'collectif',
                   ) && (
                     <div className={[styles.descriptionInfoDiv]}>
-                      <img src="/icons/network.svg" alt="Collectif & réseau" className={[styles.icon]} />
+                      <img
+                        src="/icons/network.svg"
+                        alt="Collectif & réseau"
+                        className={[styles.icon]}
+                      />
                       <div className={[styles.descriptionInfoLabel]}>
                         Collectif & réseaux
                       </div>
                       <span className={[styles.descriptionInfoValue]}>
-                        {data
-                          && data.event.entries.map(
-                            (entry) => entry
-                              && entry.collection
-                              && entry.collection.code === 'collectif' && (
+                        {data &&
+                          data.event.entries.map(
+                            (entry) =>
+                              entry &&
+                              entry.collection &&
+                              entry.collection.code === 'collectif' && (
                                 <div>
                                   <Typography
                                     variant="h7"
@@ -1008,7 +1077,7 @@ const Event = ({ initialData }) => {
                       <div className={styles.border} />
                       <br />
                     </div>
-                    <p>{data && Parser(data.event.practicalInfo)}</p>
+                    <p>{data && Parser(linkify(data.event.practicalInfo))}</p>
                   </div>
                 )}
                 <div />
@@ -1020,23 +1089,31 @@ const Event = ({ initialData }) => {
                 <br />
 
                 {data && L && (
-                  <Map ref={mapRef} center={[data.event.lat, data.event.lng]} zoom={11} className={styles.map}  >
+                  <Map
+                    ref={mapRef}
+                    center={[data.event.lat, data.event.lng]}
+                    zoom={11}
+                    className={styles.map}
+                  >
                     <TileLayer
                       attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
                     <Marker
                       position={[data.event.lat, data.event.lng]}
-                      icon={new L.Icon({
-                        iconUrl: '/icons/location.svg',
-                        iconAnchor: [13, 34], // point of the icon which will correspond to marker's location
-                        iconSize: [25],
-                        popupAnchor: [1, -25],
-                        html: `<span style="background-color: red" />`,
-                      })}
+                      icon={
+                        new L.Icon({
+                          iconUrl: '/icons/location.svg',
+                          iconAnchor: [13, 34], // point of the icon which will correspond to marker's location
+                          iconSize: [25],
+                          popupAnchor: [1, -25],
+                          html: `<span style="background-color: red" />`,
+                        })
+                      }
                     >
                       <Popup>
-                        {data.event.name} - {data && !data.event.address && data.event.city && (
+                        {data.event.name} -{' '}
+                        {data && !data.event.address && data.event.city && (
                           <span>
                             {/* @ts-ignore */}
                             {data && data.event.city}
@@ -1045,8 +1122,9 @@ const Event = ({ initialData }) => {
                         {data && data.event.address && data.event.city && (
                           <span>
                             {/* @ts-ignore */}
-                            {`${data && data.event.address} ${data && data.event.city
-                              }`}
+                            {`${data && data.event.address} ${
+                              data && data.event.city
+                            }`}
                           </span>
                         )}
                       </Popup>
@@ -1065,22 +1143,31 @@ const Event = ({ initialData }) => {
                   Je ne participe plus
                 </button>
               )}
-              {!(data && containUser(data.event.participants)) && !(data && data.event.registerLink && data.event.registerLink.length > 1) && (
-
-                <button
-                  className={styles.button}
-                  onClick={addParticipateHandler}
-                >
-                  Je participe
-                </button>
-              )}
-              {!(data && containUser(data.event.participants)) && (data && data.event.registerLink && data.event.registerLink.length > 1) && (
-                <a href={data && data.event.registerLink} target="blank"
-                  className={styles.button}
-                >
-                  Je participe
-                </a>
-              )}
+              {!(data && containUser(data.event.participants)) &&
+                !(
+                  data &&
+                  data.event.registerLink &&
+                  data.event.registerLink.length > 1
+                ) && (
+                  <button
+                    className={styles.button}
+                    onClick={addParticipateHandler}
+                  >
+                    Je participe
+                  </button>
+                )}
+              {!(data && containUser(data.event.participants)) &&
+                data &&
+                data.event.registerLink &&
+                data.event.registerLink.length > 1 && (
+                  <a
+                    href={data && data.event.registerLink}
+                    target="blank"
+                    className={styles.button}
+                  >
+                    Je participe
+                  </a>
+                )}
             </div>
             {data && data.event.pictures && data.event.pictures.length > 0 && (
               <div>
@@ -1130,7 +1217,10 @@ const Event = ({ initialData }) => {
                 </Typography>
                 <div className={styles.border} />
                 <br />
-                  <CardSliderEvent key={data.event.parentEvent.id} event={data.event.parentEvent} />
+                <CardSliderEvent
+                  key={data.event.parentEvent.id}
+                  event={data.event.parentEvent}
+                />
                 <br />
                 <br />
               </div>
@@ -1142,22 +1232,21 @@ const Event = ({ initialData }) => {
                 </Typography>
                 <div className={styles.border} />
                 <br />
-                <Calendar
-                  events={events}
-                  withViewSwitcher={true}
-                />
+                <Calendar events={events} withViewSwitcher={true} />
               </div>
             )}
           </Container>
           <Newsletter />
-          {((data && (containUser(data.event.referents) || containUserActorsReferent(data.event.actors))) ||
+          {((data &&
+            (containUser(data.event.referents) ||
+              containUserActorsReferent(data.event.actors))) ||
             (user && user.role === 'admin')) && (
-              <Link href={`/actorAdmin/event/${id}`}>
-                <Fab className={styles.fab} aria-label="edit">
-                  <EditIcon />
-                </Fab>
-              </Link>
-            )}
+            <Link href={`/actorAdmin/event/${id}`}>
+              <Fab className={styles.fab} aria-label="edit">
+                <EditIcon />
+              </Fab>
+            </Link>
+          )}
         </Box>
       </RootRef>
     </AppLayout>
@@ -1171,27 +1260,31 @@ export default withApollo()(Event);
 // It may be called again, on a serverless function, if
 // revalidation is enabled and a new request comes in
 export async function getServerSideProps(ctxt) {
-
   const res = await fetch(process.env.NEXT_PUBLIC_API_URI, {
     method: 'POST',
     body: JSON.stringify({
-      "operationName": "event",
-      "variables": {
-        "id": ctxt.params.id
+      operationName: 'event',
+      variables: {
+        id: ctxt.params.id,
       },
-      "query": GET_EVENT,
+      query: GET_EVENT,
     }),
   });
 
-
   const initialData = await res.json();
   if (initialData.errors) {
-    console.error(" Error fetching event id " + ctxt.params.id + " error message : " + initialData.errors[0].message + "");
+    console.error(
+      ' Error fetching event id ' +
+        ctxt.params.id +
+        ' error message : ' +
+        initialData.errors[0].message +
+        '',
+    );
   }
 
   return {
     props: {
-      initialData
-    }
-  }
+      initialData,
+    },
+  };
 }
