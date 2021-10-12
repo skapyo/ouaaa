@@ -12,10 +12,16 @@ import Newsletter from '../../containers/layouts/Newsletter';
 const useStyles = makeStyles((theme) => ({
   align: {
     'text-align': 'center',
-    width: '80%',
+    width: '90%',
+    [theme.breakpoints.down('md')]: {
+      paddingTop: '5em',
+    },
   },
   space: {
     margin: '4em 0 4em 0',
+  },
+  justify: {
+    'text-align': 'justify',
   },
 }));
 const About = () => {
@@ -28,7 +34,7 @@ const About = () => {
             <Typography variant="h1">A propos</Typography>
             <div className={styles.space}> </div>
 
-            <Typography>
+            <Typography className={styles.justify}>
               <div>
               Il nous manquait depuis longtemps un site Internet regroupant et présentant les acteurs de la transition en Aunis ( nord Charente ) avec un annuaire, une carte, un agenda des évènements pour favoriser les échanges et synergies.
               </div>
@@ -61,6 +67,8 @@ et au fait Ouaaa ça veux dire quoi ? et bien en fait ça veux dire : Outil des 
               </a>
               {/* @ts-ignore */}
             </Typography>
+            <br />
+            <br />
           </Container>
           <Newsletter />
         </Box>

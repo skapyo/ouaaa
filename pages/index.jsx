@@ -110,9 +110,6 @@ const Index = () => {
   return (
   
     <AppLayout>
-      <Head>
-       
-      </Head>
       <RootRef>
         <Box>
         

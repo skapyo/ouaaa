@@ -934,7 +934,7 @@ const Actor = ({ initialData }) => {
                         Partager la page sur les réseaux
                       </div>
                       <span className={[styles.infoValue]}>
-                        <FacebookMessengerShareButton
+                        <FacebookShareButton
                           size={32}
                           round
                           url={`${currentLocationWindows}`}
@@ -944,8 +944,8 @@ const Actor = ({ initialData }) => {
                             size={32}
                             className={[styles.socialNetworkIcon]}
                           />
-                        </FacebookMessengerShareButton>
-                        <FacebookShareButton
+                        </FacebookShareButton>
+                        <FacebookMessengerShareButton
                           size={32}
                           round
                           url={`${currentLocationWindows}`}
@@ -955,7 +955,7 @@ const Actor = ({ initialData }) => {
                           alt="Téléphone"
                           className={[styles.socialNetworkIcon]}
                         />
-                        </FacebookShareButton>
+                        </FacebookMessengerShareButton>
                         <TwitterShareButton
                           size={32}
                           round
@@ -1159,7 +1159,7 @@ const Actor = ({ initialData }) => {
                 <div className={styles.border} />
                 <br />
 
-                {data && L && (
+                {data && L && data.actor &&(
                   <Map
                     ref={mapRef}
                     center={[data.actor.lat, data.actor.lng]}

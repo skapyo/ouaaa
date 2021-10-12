@@ -1,16 +1,22 @@
-import { Container, makeStyles, Typography } from '@material-ui/core';
+import { Container, makeStyles, Typography, useTheme } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import Slider from 'react-slick/lib';
 import { useQuery } from '@apollo/client';
 import gql from 'graphql-tag';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { withApollo } from '../../../hoc/withApollo';
 import CardSliderEvent from '../../../components/cards/CardSliderEvent';
 import Link from '../../../components/Link';
+
 
 const useStyles = makeStyles((theme) => ({
   cardTitle: {
     color: theme.typography.h5.color,
     fontFamily: theme.typography.h5.fontFamily,
+    textTransform: 'uppercase',
+    fontWeight: '400',
+    textAlign: 'center',
+    fontSize: '3em',
   },
   align: {
     'text-align': 'center',
@@ -20,12 +26,22 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: '5em',
     textAlign: 'center',
   },
+  border: {
+    width: '3em',
+    borderColor: '#2C367E',
+    borderBottom: 'solid',
+    marginLeft: '48%',
+    borderBottomColor: '#2C367E',
+    color: '#2C367E',
+    height: '1em',
+    textAlign: 'center',
+  },
   buttonGrid: {
+    fontSize: '1.5em',
     margin: '2.5em 0 2.5em 0 ',
     color: 'white',
     'background-color': '#2C367E',
     border: 'none',
-    
     borderRadius: '1.5em',
     padding: '0 3em 0 3em',
     height: '2.5em',
@@ -53,7 +69,7 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: '5em',
     paddingBottom: '5em',
     textAlign: 'center',
-    backgroundColor: '#e8f4f2',
+    backgroundColor: '#ecedf2',
     backgroundImage: "url('/icons/calendar-home.svg')",
     backgroundSize: '30%',
     backgroundPosition: 'right',
@@ -65,20 +81,37 @@ const useStyles = makeStyles((theme) => ({
 
 const LastActor = () => {
   const GET_EVENTS = gql`
-    query events($limit: Int, $sort: String, $way: String) {
-      events(limit: $limit, sort: $sort, way: $way) {
+    query events($limit: Int, $sort: String, $way: String,$startingDate: String) {
+      events(limit: $limit, sort: $sort, way: $way,startingDate: $startingDate) {
         id
         label
-        shortDescription
-        description
         startedAt
         endedAt
         published
-        categories {
-          id
+        lat
+        lng
+        address
+        city
+        entries {
           label
           icon
-          color
+          collection {
+            code
+            label
+          }
+          parentEntry {
+            code
+            label
+            color
+            collection {
+              code
+              label
+            }
+          }
+        }
+        actors {
+          id
+          name
         }
         pictures {
           id
@@ -92,12 +125,15 @@ const LastActor = () => {
           croppedZoom
           croppedRotation
           position
+          logo
+          main
         }
       }
     }
   `;
   const [eventToRender, setEventToRender] = useState(null);
-
+  const date = new Date();
+  date.setHours(0, 0, 0, 0);
   const {
     data: eventData,
     loading: loadingEvent,
@@ -105,8 +141,9 @@ const LastActor = () => {
   } = useQuery(GET_EVENTS, {
     variables: {
       limit: 4,
-      sort: 'createdAt',
-      way: 'DESC',
+      sort: 'startedAt',
+      way: 'ASC',
+      startingDate: date.toISOString(),
     },
   });
 
@@ -137,14 +174,16 @@ const LastActor = () => {
       />
     );
   }
-
+  const theme = useTheme();
+  const mobile = useMediaQuery(theme.breakpoints.down('sm'));
   const styles = useStyles();
+  const maxImageDisplay = !mobile?5:2
   const settings = {
     dots: true,
     infinite: true,
     slidesToShow:
-      eventToRender?.eventData && eventToRender.eventData.events.length > 5
-        ? 5
+      eventToRender?.eventData && eventToRender.eventData.events.length > maxImageDisplay
+        ? maxImageDisplay
         : eventToRender?.eventData && eventToRender.eventData.events.length,
     slidesToScroll: 1,
     // autoplay: true,
@@ -155,9 +194,10 @@ const LastActor = () => {
   };
   return (
     <Container className={[styles.event]}>
-      <Typography variant="h5" className={[styles.cardTitle, styles.align]}>
+      <Typography variant="h5" className={[styles.cardTitle]}>
         LES EVENEMENTS A VENIR
       </Typography>
+      <div className={[styles.border]}/>
       <Slider {...settings} className={[styles.articleCarroussel]}>
         {eventToRender?.eventData &&
           eventToRender.eventData.events.map((event) => {
@@ -167,7 +207,7 @@ const LastActor = () => {
       <div className={styles.buttonArticle}>
         <Link href="/agenda">
           <button className={styles.buttonGrid}>
-            VOIR TOUS LES EVENEMENTS
+            VOIR L'AGENDA COMPLET
           </button>
         </Link>
       </div>

@@ -1,18 +1,28 @@
-import { Container, makeStyles, Typography } from '@material-ui/core';
+import { Container, makeStyles, Typography, useTheme } from '@material-ui/core';
 import React from 'react';
 import Search from '../../../components/Search';
 import Link from '../../../components/Link';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 const useStyles = makeStyles((theme) => ({
   titleContainer: {
     marginTop: theme.spacing(2),
-    backgroundImage: "url('./cover_accueil.jpg')",
+    backgroundImage: "url('./OUAAA-pix-022.jpg')",
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
-    height: '24em',
+    [theme.breakpoints.up('md')]: {
+      height: '45em',
+    },
+   
     color: 'white',
     'text-align': 'center',
-    padding: '3em',
+    
+    [theme.breakpoints.up('md')]: {
+      padding: '8em',
+    },
+    [theme.breakpoints.down('sm')]: {
+      height: '30em',
+    },
   },
   title: {
     padding: '1em',
@@ -29,12 +39,33 @@ const useStyles = makeStyles((theme) => ({
   align: {
     'text-align': 'center',
   },
+  baseLine:{
+    'fontSize': '1em',
+    [theme.breakpoints.up('xs')]: {
+      'text-align': 'center',
+    },
+    [theme.breakpoints.down('xs')]: {
+      'text-align': 'justify',
+    },
+  },
+  addActor:{
+    [theme.breakpoints.up('md')]: {
+      paddingTop: '5em',
+    },
+  },
   h1 : {
-    'display' : 'none',
+    paddingTop: '1em',
+    [theme.breakpoints.up('md')]: {
+      fontSize: '3em',
+    },
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '2em',
+    },
+   
+    textTransform: 'uppercase',
   },
   buttonGrid: {
-
-    fontSize: 'inherit',
+    fontSize: '1em',
     margin: '1.5em 0 1.5em 0 ',
     color: 'white',
     'background-color': 'transparent',
@@ -52,26 +83,30 @@ const useStyles = makeStyles((theme) => ({
     backgroundImage: "url('./arrow.svg')",
     backgroundRepeat: 'no-repeat',
     'background-position-x': '5px',
-    [theme.breakpoints.down('sm')]: {
-      fontSize: '0.8em',
-    },
+    'background-position-y': '-2px',
   },
 }));
 
+
 const PresentationSection = () => {
   const styles = useStyles();
-
+  const theme = useTheme();
+  const mobile = useMediaQuery(theme.breakpoints.down('sm'));
   return (
     <Container className={styles.titleContainer}>
 
       <div className={styles.title}>
-      <h1 className={styles.h1}>Agir pour la transition en Aunis</h1>
-        <img src="./titre_acceuil.png" alt="Agir pour la transition en Aunis" className={styles.imageTitle} />
+      <h1 className={styles.h1}>agir pour la transition écologique <br/> et sociale en aunis</h1>
       </div>
-      <Typography >
+      <Typography className={styles.baseLine}>
+        Nous sommes là pour te faire connaire celles et ceux qui oeuvrent { !mobile && (<br/>)}
+        pour la transition écologique, sociale et démocratique, te donner le calendrier de leurs actions et te permettre de les rejoindre.
+      </Typography >
+
+      <Typography className={styles.addActor}>
         <Link href="/addactor">
           <button className={styles.buttonGrid}>
-            JE M'INSCRIS EN TANT QU'ACTEUR DE LA TRANSITION
+            JE DEVIENS ACTEUR
           </button>
         </Link>
       </Typography>

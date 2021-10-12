@@ -1,8 +1,9 @@
-import { Container, makeStyles, Typography } from '@material-ui/core';
+import { Container, makeStyles, Typography, useTheme } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import Slider from 'react-slick/lib';
 import { useQuery } from '@apollo/client';
 import gql from 'graphql-tag';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import CardSliderActor from '../../../components/cards/CardSliderActor';
 import { withApollo } from '../../../hoc/withApollo';
 import Link from '../../../components/Link';
@@ -11,6 +12,10 @@ const useStyles = makeStyles((theme) => ({
   cardTitle: {
     color: theme.typography.h5.color,
     fontFamily: theme.typography.h5.fontFamily,
+    textTransform: 'uppercase',
+    fontWeight: '400',
+    textAlign: 'center',
+    fontSize: '3em',
   },
   align: {
     'text-align': 'center',
@@ -20,27 +25,39 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: '5em',
     textAlign: 'center',
   },
+  border: {
+    width: '3em',
+    borderColor: '#2C367E',
+    borderBottom: 'solid',
+    marginLeft: '48%',
+    borderBottomColor: '#2C367E',
+    color: '#2C367E',
+    height: '1em',
+    textAlign: 'center',
+  },
   buttonGrid: {
+    fontSize: '1.5em',
     margin: '2.5em 0 2.5em 0 ',
-    color: 'white',
-    'background-color': '#2C367E',
-    border: 'none',
     
     borderRadius: '1.5em',
     padding: '0 3em 0 3em',
     height: '2.5em',
     '&:hover': {
       cursor: 'pointer',
-      color: '#2C367E',
-      'background-color': 'white',
-      border: '2px solid #2C367E',
-      backgroundImage: "url('./arrow-hover.svg')",
+      backgroundImage: "url('./arrow.svg')",
+      border: 'none',
+      color: 'white',
+      'background-color': '#2C367E',
     },
-    backgroundImage: "url('./arrow.svg')",
+    color: '#2C367E',
+    'background-color': 'white',
+    border: '2px solid #2C367E',
+    backgroundImage: "url('./arrow-hover.svg')",
+
     backgroundRepeat: 'no-repeat',
     'background-position-x': '5px',
     'background-position-y': '1px',
-    'background-size': '11%',
+    'background-size': '12%',
   },
   articleCarroussel: {
     paddingTop: '2em',
@@ -52,8 +69,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 const LastActor = () => {
   const GET_ACTORS = gql`
-    query actors($limit: Int, $sort: String, $way: String) {
-      actors(limit: $limit, sort: $sort, way: $way) {
+    query actors($limit: Int, $sort: String, $way: String,$isValidated: Boolean) {
+      actors(limit: $limit, sort: $sort, way: $way, isValidated: $isValidated) {
         id
         name
         address
@@ -86,9 +103,11 @@ const LastActor = () => {
     error: errorActor,
   } = useQuery(GET_ACTORS, {
     variables: {
+      isValidated: true,
       limit: 4,
       sort: 'createdAt',
       way: 'DESC',
+     
     },
   });
 
@@ -119,14 +138,16 @@ const LastActor = () => {
       />
     );
   }
-
+  const theme = useTheme();
+  const mobile = useMediaQuery(theme.breakpoints.down('sm'));
   const styles = useStyles();
+  const maxImageDisplay = !mobile?5:2
   const settings = {
     dots: true,
     infinite: true,
     slidesToShow:
-      actorToRender?.actorData && actorToRender.actorData.actors.length > 5
-        ? 5
+      actorToRender?.actorData && actorToRender.actorData.actors.length > maxImageDisplay
+        ? maxImageDisplay
         : actorToRender?.actorData && actorToRender.actorData.actors.length,
     slidesToScroll: 1,
     // autoplay: true,
@@ -137,10 +158,10 @@ const LastActor = () => {
   };
   return (
     <Container className={[styles.actorContainer]}>
-      <Typography variant="h2" className={[styles.cardTitle, styles.align]}>
+      <Typography variant="h2" className={[styles.cardTitle]}>
         LES ACTEURS RECEMMENTS AJOUTES
       </Typography>
-
+      <div className={[styles.border]}/>
       <Slider {...settings} className={[styles.articleCarroussel]}>
         {actorToRender?.actorData &&
           actorToRender.actorData.actors.map((actor) => {
