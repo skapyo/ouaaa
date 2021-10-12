@@ -20,8 +20,8 @@ export const entriesHasElementWithCode = (entries, code) => {
 
 /* parse Text and find the URL to show as hyperlink */
 export const linkify = (text) => {
-  var urlRegex = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gi;
+  var urlRegex = /([\w+]+\:\/\/)?([\w\d-]+\.)*[\w-]+[\.\:]\w+([\/\?\=\&\#\.]?[\w-]+)*\/?/gi;
   return text.replace(urlRegex, function (url) {
-    return '<a href="' + url + '" target="_blank">' + url + '</a>';
+    return '<a href="' + url + '" + target="_blank">' + url + '</a>';
   });
 };
