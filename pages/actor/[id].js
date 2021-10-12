@@ -44,7 +44,11 @@ import CardSliderEvent from '../../components/cards/CardSliderEvent';
 import Newsletter from '../../containers/layouts/Newsletter';
 import { useSessionState } from '../../context/session/session';
 import CardAddEvent from '../../components/cards/CardAddEvent';
-import { getImageUrl, entriesHasElementWithCode } from '../../utils/utils';
+import {
+  getImageUrl,
+  entriesHasElementWithCode,
+  linkify,
+} from '../../utils/utils';
 import Calendar from '../../components/Calendar';
 
 const useStyles = makeStyles((theme) => ({
@@ -358,6 +362,7 @@ query actor($id: String) {
   }
 }
 `;
+
 const Actor = ({ initialData }) => {
   const router = useRouter();
   const mapRef = useRef();
@@ -1009,7 +1014,7 @@ const Actor = ({ initialData }) => {
                 <div className={styles.border} />
                 <br />
                 <br />
-                <p>{data && Parser(data.actor.description)}</p>
+                <p>{data && Parser(linkify(data.actor.description))}</p>
                 <div>
                   {data &&
                     data.actor.entries.map(
@@ -1214,7 +1219,7 @@ const Actor = ({ initialData }) => {
                   </Typography>
                   <br />
                   <div className={styles.volunteerDescription}>
-                    {data && Parser(data.actor.volunteerDescription)}
+                    {data && Parser(linkify(data.actor.volunteerDescription))}
                   </div>
                   <div>
                     {data &&
