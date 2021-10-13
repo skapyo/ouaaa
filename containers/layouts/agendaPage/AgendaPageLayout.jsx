@@ -27,6 +27,7 @@ if (typeof window !== 'undefined') {
   var Marker = require('react-leaflet').Marker;
   var Popup = require('react-leaflet').Popup;
   var Tooltip = require('react-leaflet').Tooltip;
+  var ZoomControl = require('react-leaflet').ZoomControl;
   var MarkerClusterGroup = require('react-leaflet-markercluster').default;
   matchesWindow = window.matchMedia("(max-width: 600px)").matches;
 }
@@ -341,6 +342,7 @@ const AgendaPageLayout = () => {
                 attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               />
+              <ZoomControl position="topright" />
               <MarkerClusterGroup>
                 {typeof eventData !== 'undefined' &&
                   eventData.events.map((event, index) => {
@@ -382,7 +384,7 @@ const AgendaPageLayout = () => {
                                   event.pictures.length >= 1
                                     ? `url(${getImageUrl(
                                       event.pictures.sort((a, b) =>
-                                      a.logo ? -1 : 1,
+                                        a.logo ? -1 : 1,
                                       )[0].croppedPicturePath,
                                     )})`
                                     : '',
@@ -449,7 +451,7 @@ const AgendaPageLayout = () => {
                                   event.pictures.length >= 1
                                     ? `url(${getImageUrl(
                                       event.pictures.sort((a, b) =>
-                                      a.logo ? -1 : 1,
+                                        a.logo ? -1 : 1,
                                       )[0].croppedPicturePath,
                                     )})`
                                     : '',

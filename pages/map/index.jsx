@@ -24,6 +24,7 @@ if (typeof window !== 'undefined') {
   var Marker = require('react-leaflet').Marker;
   var Popup = require('react-leaflet').Popup;
   var Tooltip = require('react-leaflet').Tooltip;
+  var ZoomControl = require('react-leaflet').ZoomControl;
   var MarkerClusterGroup = require('react-leaflet-markercluster').default;
   matchesWindow = window.matchMedia("(max-width: 600px)").matches;
 }
@@ -312,7 +313,7 @@ const carto = () => {
     const { current = {} } = mapRef;
   }, [mapRef]);
 
-  const styles = useStyles({ isMenuOpen });
+  const styles = useStyles({ isMenuOpen, isMapMode: listMode });
 
   const position = [46.1085193, -0.9864794];
 
@@ -496,6 +497,7 @@ const carto = () => {
                   attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                   url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
+                <ZoomControl position="topright" />
                 <MarkerClusterGroup>
                   {typeof data !== 'undefined' &&
                     data.actors.map((actor, index) => {

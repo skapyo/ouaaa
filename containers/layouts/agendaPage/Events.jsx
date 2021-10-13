@@ -8,6 +8,7 @@ const useStyles = makeStyles(theme => ({
   events: {
     flex: 1,
     padding: '0 5em',
+    paddingBottom: 66,
     overflow: 'auto',
     [theme.breakpoints.down('sm')]: {
       padding: '0 1em',
@@ -57,10 +58,10 @@ const Events = (props) => {
           moment(new Date(parseInt(event.startedAt))),
           'days',
         );
-        if(nbDayEvent >=1 ){
+        if (nbDayEvent >= 1) {
           const newEventForOtherDay = { ...event };
-          event.duration=`Durée de l'action : ${nbDayEvent+1} jours`
-          newEventForOtherDay.duration=`Durée de l'action : ${nbDayEvent+1} jours`
+          event.duration = `Durée de l'action : ${nbDayEvent + 1} jours`
+          newEventForOtherDay.duration = `Durée de l'action : ${nbDayEvent + 1} jours`
           newEventForOtherDay.startedAt = moment(
             new Date(parseInt(event.startedAt)),
           )
@@ -68,7 +69,7 @@ const Events = (props) => {
             .toDate();
           localEvents.push(newEventForOtherDay);
         }
-       
+
       }
     });
     return localEvents.sort(compare);
