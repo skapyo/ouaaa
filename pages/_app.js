@@ -80,6 +80,7 @@ const MyApp = (props) => {
     if (jssStyles) {
       jssStyles.parentElement.removeChild(jssStyles);
     }
+    console.log("SEO: " +process.env.NEXT_PUBLIC_SEO_DISABLED)
   }, []);
 
   return (
@@ -87,7 +88,10 @@ const MyApp = (props) => {
       <Head>
         <meta charSet="utf-8" />
 
-        <title>OUAAA! : Agir pour la Transition Ecologie & Sociale en Aunis | La Rochelle</title>
+        <title>OUAAA! : Agir pour la Transition Ecologique & Sociale en Aunis | La Rochelle</title>
+        { (process.env.NEXT_PUBLIC_SEO_DISABLED && process.env.NEXT_PUBLIC_SEO_DISABLED.localeCompare('true')===0 )&&  (
+          <meta name="robots" content="noindex"/>
+        )}
         <meta
           name="viewport"
           content="minimum-scale=1, initial-scale=1, width=device-width"

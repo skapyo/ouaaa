@@ -186,7 +186,7 @@ const PresentationSection = () => {
               <i>OUAAA!</i>
             </Typography>
             <Typography variant="h3" className={styles.cardTitle}>
-              C'EST QUOUUA ?
+              C'EST QUOUAAA ?
             </Typography>
             <div className={styles.border} />
           </div>
@@ -231,7 +231,7 @@ const PresentationSection = () => {
                 className={styles.listItemText}
                 primary={
                   <>
-                    Partenaire de La Rochelle zero carbone, La plateforme participative <i>OUAAA!</i> souhaite rendre visible, auprès des habitants et citoyens, tous celles et ceux qui aspirent à changer la société dans le cadre de la la transition sociale et environnementale
+                    Partenaire de La Rochelle Territoire Zéro Carbone, La plateforme participative <i>OUAAA!</i> souhaite rendre visible, auprès des habitants et citoyens, tous celles et ceux qui aspirent à changer la société dans le cadre de la la transition sociale et environnementale
                   </>
                 }
               />
@@ -292,7 +292,7 @@ const PresentationSection = () => {
         <Grid item md={5} sm={10} className={[styles.gridItem, styles.align]}>
           <img width="30%" src="./Icone_decouvrir_acteur.png"  className={styles.imageGrid} />
           <Typography className={styles.titleGrid}>
-            Tu es un citoyen et souhaitez mieux
+            Tu es un citoyen et souhaites mieux
           </Typography>
           <Typography className={styles.titleGrid}>
             connaire, soutenir, vous engager ?

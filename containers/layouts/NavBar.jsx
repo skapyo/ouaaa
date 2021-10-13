@@ -133,7 +133,7 @@ const NavBar = () => {
                 <img
                   className={styles.logo}
                   src="/Logo_OUAAA.svg"
-                  alt="OUAAA! : Agir pour la Transition Ecologie & Sociale en Aunis | La Rochelle"
+                  alt="OUAAA! : Agir pour la Transition Ecologique & Sociale en Aunis | La Rochelle"
                 />
               </Link>
             </Grid>
