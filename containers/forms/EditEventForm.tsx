@@ -518,9 +518,9 @@ const TitleWithTooltip = (props: TitleWithTooltipProps) => {
       {
         !!tooltipTitle
         && (
-        <Tooltip title={tooltipTitle} color="primary" className={styles.tooltip}>
-          <InfoIcon />
-        </Tooltip>
+          <Tooltip title={tooltipTitle} color="primary" className={styles.tooltip}>
+            <InfoIcon />
+          </Tooltip>
         )
       }
     </Grid>
@@ -570,7 +570,7 @@ const EditEventForm = (props) => {
     let isContained = false;
     if (user !== null) {
       actors.forEach((actor) => {
-        actor.referents.forEach((element) => {
+        (actor.referents || []).forEach((element) => {
           if (element.id == user.id) {
             isContained = true;
           }
@@ -1788,7 +1788,7 @@ const EditEventForm = (props) => {
             && !!validationResult?.result.shortDescription
           }
           errorText={`Maximum 90 caractères. ${formValues.shortDescription?.length - 90
-          } caractères en trop.`}
+            } caractères en trop.`}
         />
         <Typography variant="body1" color="primary" className={styles.label}>
           Description
@@ -1873,15 +1873,15 @@ const EditEventForm = (props) => {
           <Autocomplete
             id="combo-box-parentEvent"
             options={dataEvents && dataEvents.events}
-                // @ts-ignore
+            // @ts-ignore
             onInput={inputHasParentChangeHandler}
             open={showOtherEventList}
-                // @ts-ignore
+            // @ts-ignore
             getOptionLabel={(option) => `${option.label} du ${moment(parseInt(option.startedAt)).format('DD/MM/YYYY HH:mm')} au ${moment(parseInt(option.endedAt)).format('DD/MM/YYYY HH:mm')} `}
             onChange={autocompleteHasParentHandler}
-           // defaultValue={getDefaultValueParentEvent()}
+            // defaultValue={getDefaultValueParentEvent()}
             style={{ width: 300 }}
-                // eslint-disable-next-line react/jsx-props-no-spreading
+            // eslint-disable-next-line react/jsx-props-no-spreading
             renderInput={(params) => (
               <TextField
                 {...params}
