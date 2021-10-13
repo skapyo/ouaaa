@@ -8,7 +8,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     position: 'absolute',
     backgroundColor: 'white',
-    right: 30,
+    right: 10,
     bottom: 20,
     zIndex: 1000,
     [theme.breakpoints.down('sm')]: {
