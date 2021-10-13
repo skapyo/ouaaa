@@ -1072,7 +1072,7 @@ const Event = ({ initialData }) => {
                   <div>
                     <div>
                       <Typography variant="h5" className={styles.cardTitle}>
-                        INFO PRATIQUES COMPLEMENTS
+                        INFO PRATIQUES
                       </Typography>
                       <div className={styles.border} />
                       <br />
