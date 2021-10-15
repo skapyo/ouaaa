@@ -1234,6 +1234,9 @@ const AddEventForm = ({ actorId }) => {
         {editorLoaded ? (
           <>
             <CKEditor
+              config={{
+                toolbar: ['bold', 'italic'],
+              }}
               editor={ClassicEditor}
               data={formValues.practicalInfo}
               onReady={(editor) => {
@@ -1327,6 +1330,9 @@ const AddEventForm = ({ actorId }) => {
         <p />
         {editorLoaded ? (
           <CKEditor
+            config={{
+              toolbar: ['bold', 'italic'],
+            }}
             editor={ClassicEditor}
             data={formValues.description}
             onReady={(editor) => {
