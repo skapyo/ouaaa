@@ -60,8 +60,8 @@ const Events = (props) => {
         );
         if (nbDayEvent >= 1) {
           const newEventForOtherDay = { ...event };
-          event.duration = `Durée de l'action : ${nbDayEvent + 1} jours`
-          newEventForOtherDay.duration = `Durée de l'action : ${nbDayEvent + 1} jours`
+          event.duration = `Premier jour de l'action. L'action va durer ${nbDayEvent + 1} jours`
+          newEventForOtherDay.duration = `Dernier jour de l'action. L'action a durée  ${nbDayEvent + 1} jours`
           newEventForOtherDay.startedAt = moment(
             new Date(parseInt(event.startedAt)),
           )
