@@ -67,14 +67,19 @@ const useStyles = makeStyles((theme) => ({
     backgroundPosition: 'right',
     backgroundRepeat: 'no-repeat',
     backgroundOpacity: ' 0.5',
-    //  backgroundImage:`url('./fond.png')`,
     borderRadius: '0.5em',
     width: '80%',
     justify: 'center',
     alignItems: 'center',
-    'max-width': '755px',
-    'margin-top': '-53px',
-    'box-shadow': '0px 0px 38px -14px rgba(0, 0, 0, 0.46)',
+    maxWidth: 755,
+    marginTop: ({ hasBannerUrl }) => hasBannerUrl ? -53 : 20,
+    marginBottom: 20,
+    boxShadow: '0px 0px 38px -14px rgba(0, 0, 0, 0.46)',
+    [theme.breakpoints.down('sm')]: {
+      padding: '2em',
+      width: 'auto',
+      marginBottom: 0,
+    },
   },
   cardTitle: {
     color: theme.typography.h5.color,
@@ -86,6 +91,9 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up('sm')]: {
       paddingLeft: '2em',
     },
+    [theme.breakpoints.down('sm')]: {
+      width: '100%'
+    },
   },
   h1: {
     fontSize: '3rem',
@@ -93,6 +101,9 @@ const useStyles = makeStyles((theme) => ({
   map: {
     height: '30em',
     width: '30em',
+    [theme.breakpoints.down('sm')]: {
+      width: 'auto'
+    },
   },
   actorName: {
     width: '100%',
@@ -103,6 +114,7 @@ const useStyles = makeStyles((theme) => ({
   infoPratiqueGrid: {
     textAlign: 'center',
     backgroundColor: '#ededf5',
+    borderRadius: 5,
   },
   infoPratiqueTitle: {
     fontWeight: '900',
@@ -135,7 +147,7 @@ const useStyles = makeStyles((theme) => ({
 
   item: {
     border: '1px solid #2C367E',
-    borderWidth: ' 1px 0px 1px 0px ',
+    borderWidth: '1px 0px 0px 0px',
     borderStyle: 'dashed',
   },
   icon: {
@@ -388,10 +400,16 @@ const Event = ({ initialData }) => {
   }
   const data = initialData.data;
 
-  const [stylesProps, setStylesProps] = useState({
+  const bannerUrl = useMemo(() => {
+    return (data?.event?.pictures || []).filter((picture) => picture.main).length >= 1 ?
+      data.event.pictures.filter((picture) => picture.main)[0].croppedPicturePath : null;
+  }, [data]);
+
+  const stylesProps = useMemo(() => ({
     topImageSize: '250px',
     headerDisplay: 'static',
-  });
+    hasBannerUrl: bannerUrl !== null,
+  }), []);
 
   const [
     addParticipate,
@@ -598,9 +616,9 @@ const Event = ({ initialData }) => {
               content={
                 data.event.pictures.length >= 1
                   ? getImageUrl(
-                      data.event.pictures.filter((picture) => picture.logo)[0]
-                        .croppedPicturePath,
-                    )
+                    data.event.pictures.filter((picture) => picture.logo)[0]
+                      .croppedPicturePath,
+                  )
                   : ''
               }
             />
@@ -608,21 +626,11 @@ const Event = ({ initialData }) => {
       </Head>
       <RootRef>
         <Box>
-          {data && data.event && (
+          {bannerUrl && (
             <Container
               className={styles.titleContainer}
               style={{
-                backgroundImage:
-                  data &&
-                  data.event &&
-                  data.event.pictures.length >= 1 &&
-                  data.event.pictures.filter((picture) => picture.main)
-                    .length >= 1
-                    ? `url(${getImageUrl(
-                        data.event.pictures.filter((picture) => picture.main)[0]
-                          .croppedPicturePath,
-                      )})`
-                    : '',
+                backgroundImage: `url(${getImageUrl(bannerUrl)})`,
               }}
             />
           )}
@@ -639,10 +647,10 @@ const Event = ({ initialData }) => {
                           src={
                             data.event.pictures.length >= 1
                               ? getImageUrl(
-                                  data.event.pictures.filter(
-                                    (picture) => picture.logo,
-                                  )[0].croppedPicturePath,
-                                )
+                                data.event.pictures.filter(
+                                  (picture) => picture.logo,
+                                )[0].croppedPicturePath,
+                              )
                               : ''
                           }
                         />
@@ -670,15 +678,14 @@ const Event = ({ initialData }) => {
                                 entry.parentEntry &&
                                 entry.parentEntry.collection &&
                                 entry.parentEntry.collection.code ===
-                                  'event_type' && (
+                                'event_type' && (
                                   <div>
                                     <Typography
                                       variant="h7"
                                       className={styles.cardTitleCategories}
                                     >
-                                      {`${entry && entry.parentEntry.label} : ${
-                                        entry && entry.label
-                                      }`}
+                                      {`${entry && entry.parentEntry.label} : ${entry && entry.label
+                                        }`}
                                     </Typography>
                                   </div>
                                 ),
@@ -709,7 +716,7 @@ const Event = ({ initialData }) => {
                                   entry &&
                                   entry.collection &&
                                   entry.collection.code ===
-                                    'event_public_target' && (
+                                  'event_public_target' && (
                                     <div>
                                       <Typography
                                         variant="h7"
@@ -944,9 +951,8 @@ const Event = ({ initialData }) => {
                               className={styles.cardTitleCategories}
                             >
                               {/* @ts-ignore */}
-                              {` ${
-                                entry.parentEntry && entry.parentEntry.label
-                              } `}
+                              {` ${entry.parentEntry && entry.parentEntry.label
+                                } `}
                               {/* @ts-ignore */}:
                               {entry.icon && (
                                 <img
@@ -1122,9 +1128,8 @@ const Event = ({ initialData }) => {
                         {data && data.event.address && data.event.city && (
                           <span>
                             {/* @ts-ignore */}
-                            {`${data && data.event.address} ${
-                              data && data.event.city
-                            }`}
+                            {`${data && data.event.address} ${data && data.event.city
+                              }`}
                           </span>
                         )}
                       </Popup>
@@ -1241,12 +1246,12 @@ const Event = ({ initialData }) => {
             (containUser(data.event.referents) ||
               containUserActorsReferent(data.event.actors))) ||
             (user && user.role === 'admin')) && (
-            <Link href={`/actorAdmin/event/${id}`}>
-              <Fab className={styles.fab} aria-label="edit">
-                <EditIcon />
-              </Fab>
-            </Link>
-          )}
+              <Link href={`/actorAdmin/event/${id}`}>
+                <Fab className={styles.fab} aria-label="edit">
+                  <EditIcon />
+                </Fab>
+              </Link>
+            )}
         </Box>
       </RootRef>
     </AppLayout>
@@ -1275,10 +1280,10 @@ export async function getServerSideProps(ctxt) {
   if (initialData.errors) {
     console.error(
       ' Error fetching event id ' +
-        ctxt.params.id +
-        ' error message : ' +
-        initialData.errors[0].message +
-        '',
+      ctxt.params.id +
+      ' error message : ' +
+      initialData.errors[0].message +
+      '',
     );
   }
 
