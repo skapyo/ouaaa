@@ -18,10 +18,17 @@ export const entriesHasElementWithCode = (entries, code) => {
   return hasEntry;
 };
 
+export const urlWithHttpsdefault = (url) => {
+  if (!url.includes('http')) {
+    return `https://${url}`;
+  }
+  return url;
+};
+
 /* parse Text and find the URL to show as hyperlink */
 export const linkify = (text) => {
-  var urlRegex = /([\w+]+\:\/\/)?([\w\d-]+\.)*[\w-]+[\.\:]\w+([\/\?\=\&\#\.]?[\w-]+)*\/?/gi;
-  return text.replace(urlRegex, function (url) {
-    return '<a href="' + url + '" + target="_blank">' + url + '</a>';
+  const urlRegex = /([\w+]+\:\/\/)?([\w\d-]+\.)*[\w-]+[\.\:]\w+([\/\?\=\&\#\.]?[\w-]+)*\/?/gi;
+  return text.replace(urlRegex, (url) => {
+    return `<a href="${url}" + target="_blank">${url}</a>`;
   });
 };

@@ -48,6 +48,7 @@ import {
   getImageUrl,
   entriesHasElementWithCode,
   linkify,
+  urlWithHttpsdefault,
 } from '../../utils/utils';
 import Calendar from '../../components/Calendar';
 
@@ -828,7 +829,7 @@ const Actor = ({ initialData }) => {
                           </div>
                           <span className={[styles.infoValue]}>
                             <a
-                              href={data && data.actor.website}
+                              href={data && urlWithHttpsdefault(data.actor.website)}
                               target="_blank"
                               rel="noreferrer"
                             >
@@ -853,7 +854,7 @@ const Actor = ({ initialData }) => {
                         <div className={[styles.infoLabel]}>Réseau social</div>
                         <span className={[styles.infoValue]}>
                           <a
-                            href={data && data.actor.socialNetwork}
+                            href={data && urlWithHttpsdefault(data.actor.socialNetwork)}
                             target="_blank"
                             rel="noreferrer"
                           >

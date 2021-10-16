@@ -41,6 +41,7 @@ import {
   getImageUrl,
   entriesHasElementWithCode,
   linkify,
+  urlWithHttpsdefault,
 } from '../../utils/utils';
 import { useSessionState } from '../../context/session/session';
 import Newsletter from '../../containers/layouts/Newsletter';
@@ -263,6 +264,7 @@ const GET_EVENT = `
         endedAt
         registerLink
         practicalInfo
+        facebookUrl
         entries {
           label
           icon
@@ -761,7 +763,7 @@ const Event = ({ initialData }) => {
                       </span>
                     </Grid>
                   </Grid>
-                  {data && data.event.socialNetwork && (
+                  {data && data.event.facebookUrl && (
                     <Grid container className={[styles.item]}>
                       <Grid item xs={3} className={[styles.alignRight]}>
                         <img
@@ -773,7 +775,7 @@ const Event = ({ initialData }) => {
                       <Grid item xs={8} className={[styles.alignLeft]}>
                         <span className={[styles.infoValue]}>
                           <a
-                            href={data && data.event.facebookUrl}
+                            href={data && urlWithHttpsdefault(data.event.facebookUrl)}
                             target="_blank"
                             className={[styles.infoLabel]}
                           >
