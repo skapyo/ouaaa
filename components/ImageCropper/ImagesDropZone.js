@@ -6,6 +6,7 @@ import { useDropArea } from 'react-use';
 import Button from '@material-ui/core/Button';
 import Hidden from '@material-ui/core/Hidden';
 import { useSnackbar } from 'notistack';
+
 const useStyles = makeStyles((theme) => ({
   image: {
     width: '100%',
@@ -19,6 +20,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'none',
   },
 }));
+
 const ImagesDropZone = ({ onDropHandler, text }) => {
   const styles = useStyles();
   const scnackbar = useSnackbar();
@@ -53,11 +55,11 @@ const ImagesDropZone = ({ onDropHandler, text }) => {
   };
   const idInput = `contained-button-file${Math.random()}`;
   return (
-    <Card className={styles.dropZone}>
+    <Card className={styles.dropZone} {...bond}>
       <Grid container alignItems="center">
         <Hidden mdDown>
           <Grid item xs={8}>
-            <div {...bond}>
+            <div>
               <div>
                 <InsertPhotoIcon />
               </div>
