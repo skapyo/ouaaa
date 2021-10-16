@@ -462,7 +462,7 @@ const AgendaPageLayout = () => {
                                         )}
                                       </Typography>
                                     {event.parentEvent && (
-                                    <span>fait partie de <Link href={`/event/${event.parentEvent.id}`}>{event.parentEvent.label}</Link></span>
+                                    <><span>fait partie de <Link href={`/event/${event.parentEvent.id}`}>{event.parentEvent.label}</Link></span><br/></>
                                     )}
                                      <span>{addressCity(event)}</span>
                                   </div>
@@ -546,7 +546,7 @@ const AgendaPageLayout = () => {
                                         )}
                                       </Typography>
                                     {event.parentEvent && (
-                                    <span>fait partie de <Link href={`/event/${event.parentEvent.id}`}>{event.parentEvent.label}</Link></span>
+                                    <><span>fait partie de <Link href={`/event/${event.parentEvent.id}`}>{event.parentEvent.label}</Link></span><br/></>
                                     )}
                                      <span>{addressCity(event)}</span>
                                 </Grid>

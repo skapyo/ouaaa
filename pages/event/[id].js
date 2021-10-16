@@ -606,7 +606,8 @@ const Event = ({ initialData }) => {
         <title>
           {/* @ts-ignore */}
           {data && data.event.label}-{/* @ts-ignore */}
-          {data && data.event.city}
+          {data && data.event.city}-
+          {data && moment(parseInt(data.event.startedAt)).format('DD/MM/YYYY HH:mm')}-{data && moment(parseInt(data.event.endedAt)).format('DD/MM/YYYY HH:mm')}
           {/* @ts-ignore */}-{/* @ts-ignore */}
           {data && showCategory(data.event.entries)}
         </title>
