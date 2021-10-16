@@ -221,7 +221,7 @@ const PresentationSection = () => {
                 className={styles.listItemText}
                 primary={
                   <>Les personnes agissant pour la transition écologique et sociale, sont présentes sur tout le territoire de l'anse de l'Aiguillon à l'embouchure de la Charente, de la forêt de Benon au bout de l'île de Ré en passant par Surgères, L’agglo de La Rochelle, Saint Martin de Ré, Marans, et Châtelaillon-Plage. 
-                Tu représentes un acteur (particulier, association, ONG, entreprise, service public) engagée par ses actions et ses projets d’innovation, de développement ou de production. Celui-ci souhaite se faire connaitre ? <Link href="/addActor">Inscris toi dès maintenant en tant qu’acteur de la transition en Aunis</Link>
+                Tu représentes un acteur (particulier, association, ONG, entreprise, service public) engagé par ses actions et ses projets d’innovation, de développement ou de production. Celui-ci souhaite se faire connaître ? <Link href="/addActor">Inscris toi dès maintenant en tant qu’acteur de la transition en Aunis</Link>
                 </>
                 }
               />
@@ -231,7 +231,7 @@ const PresentationSection = () => {
                 className={styles.listItemText}
                 primary={
                   <>
-                    Partenaire de La Rochelle Territoire Zéro Carbone, La plateforme participative <i>OUAAA!</i> souhaite rendre visible, auprès des habitants et citoyens, tous celles et ceux qui aspirent à changer la société dans le cadre de la la transition sociale et environnementale
+                    Partenaire de La Rochelle Territoire Zéro Carbone, La plateforme participative <i>OUAAA!</i> souhaite rendre visible, auprès des habitants et citoyens, toutes celles et ceux qui aspirent à changer la société dans le cadre de la la transition sociale et environnementale
                   </>
                 }
               />
@@ -295,7 +295,7 @@ const PresentationSection = () => {
             Tu es un citoyen et souhaites mieux
           </Typography>
           <Typography className={styles.titleGrid}>
-            connaire, soutenir, vous engager ?
+            connaître, soutenir, t'engager ?
           </Typography>
           <Link href="/map">
             <button className={styles.buttonInverseActor}>
@@ -314,7 +314,7 @@ const PresentationSection = () => {
             Vous êtes une organisation et vous
           </Typography>
           <Typography className={styles.titleGrid}>
-            souhaitez vous faire connaitre ?
+            souhaitez vous faire connaître ?
           </Typography>
           <Link href="/addactor">
             <button className={styles.buttonInverseOrganisation}>JE DEVIENS UN ACTEUR</button>
