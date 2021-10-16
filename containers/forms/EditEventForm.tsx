@@ -1376,6 +1376,27 @@ const EditEventForm = (props) => {
             } else if (collection.code === 'event_public_target') {
               helperText = 'contrairement à votre page acteur, ici vous pouvez ajouter plusieurs catégories de publics pour un même événement';
             }
+            let defaultValue = '';
+            if (
+              IsTree(collection)
+              && !collection.multipleSelection
+              && formValues
+              && formValues.entries
+            ) {
+              // @ts-ignore
+              formValues.entries.map((entry) => {
+                let isPresent = false;
+                if (collection.entries) {
+                  collection.entries.map((entryCollection) => {
+                    entryCollection.subEntries.map((subEntryCollection) => {
+                      if (subEntryCollection.id === entry) isPresent = true;
+                      return isPresent;
+                    });
+                  });
+                }
+                if (isPresent) defaultValue = entry;
+              });
+            }
 
             if (collection.code === 'event_price') return '';
             return (
@@ -1447,7 +1468,7 @@ const EditEventForm = (props) => {
                   IsTree(collection) && !collection.multipleSelection && (
                     // @ts-ignore
                     <Entries initValues={formValues.entries}>
-                      <RadioGroupForContext initValue={formValues.entries}>
+                      <RadioGroupForContext initValue={defaultValue}>
                         <TreeView
                           className={styles.rootTree}
                           defaultCollapseIcon={<ArrowDropDownIcon />}
@@ -1456,6 +1477,7 @@ const EditEventForm = (props) => {
                         >
                           <CustomRadioGroupForm
                             formChangeHandler={formChangeHandler}
+                            initValue={defaultValue}
                           >
                             {collection.entries
                               && collection.entries.map((entry) => {
@@ -1479,7 +1501,7 @@ const EditEventForm = (props) => {
                                             value={entry.id}
                                             control={<Radio />}
                                             label={entry.label}
-                                            // @ts-ignore
+                                            // @ts-ignore YOP
                                             checked={
                                               formValues.entries
                                               && formValues.entries.includes(entry.id)
@@ -1487,6 +1509,7 @@ const EditEventForm = (props) => {
                                           />
                                         );
                                       })}
+
                                   </StyledTreeItem>
                                 );
                               })}
@@ -1528,10 +1551,11 @@ const EditEventForm = (props) => {
                 {
                   // display &&
                   !IsTree(collection) && !collection.multipleSelection && (
-                    <RadioGroupForContext initValue={' '}>
+                    <RadioGroupForContext initValue={defaultValue}>
                       <CustomRadioGroup
                         formChangeHandler={formChangeHandler}
                         entries={collection.entries}
+                        defaultValue={defaultValue}
                       />
                     </RadioGroupForContext>
 
