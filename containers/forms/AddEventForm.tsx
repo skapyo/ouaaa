@@ -1443,7 +1443,7 @@ const AddEventForm = ({ actorId }) => {
               onClick={(e) => e.stopPropagation()}
             />
           )}
-          label="est affilité à un autre événement existant"
+          label="est affilié à un autre événement existant"
         />
         {hasParentEvent ? (
           <Autocomplete
