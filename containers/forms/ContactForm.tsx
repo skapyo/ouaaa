@@ -1,13 +1,18 @@
 import { useMutation } from "@apollo/client";
-import { Container, FormControlLabel, makeStyles, Radio, RadioGroup, TextField } from "@material-ui/core";
-import { styles } from "@material-ui/pickers/views/Calendar/Calendar";
+import { Container, FormControlLabel, makeStyles, Radio, RadioGroup, TextField, Tooltip, Typography } from "@material-ui/core";
 import ClassicButton from "components/buttons/ClassicButton";
 import FormController, { RenderCallback, ValidationRules, ValidationRuleType } from "components/controllers/FormController";
+import ImagesDropZone from "components/ImageCropper/ImagesDropZone";
+import ImagesDisplay from 'components/ImageCropper/ImagesDisplay';
 import { useSessionState } from "context/session/session";
 import gql from "graphql-tag";
 import { withApollo } from "hoc/withApollo";
 import { useSnackbar } from "notistack";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useState } from "react";
+import InfoIcon from '@material-ui/icons/Info';
+import useDnDStateManager from "hooks/useDnDStateManager";
+import useImageReader from "hooks/useImageReader";
+import withDndProvider from "hoc/withDnDProvider";
 
 const SEND_CONTACT_FORM_EMAIL = gql`
   mutation sendContactFormEmail($formValues: ContactFormInfos!) {
@@ -142,6 +147,38 @@ const ContactForm = () => {
       }
     ];
 
+    const [setImagesList, loading, result, imagesListState] = useImageReader();
+
+    const onDropHandler = useCallback(
+      (files) => {
+        if (objectsList?.filter(file => !file.deleted).length + files.length > 3) {
+          enqueueSnackbar('Maximum 3 photos autorisées', {
+            preventDuplicate: true,
+          });
+        } else {
+          // @ts-ignore
+          setImagesList(files);
+        }
+      },
+      [setImagesList],
+    );
+
+    const {
+      objectsList,
+      moveObject,
+      findObject,
+      updateActiveIndicator,
+      updateDeletedIndicator,
+      initState,
+      addValues,
+      updateKeyIndicator,
+    } = useDnDStateManager([]);
+
+    useEffect(() => {
+      if (result) addValues(result);
+      // @ts-ignore
+    }, result);
+
     const radioChangeHandler = (event) => {
       setCategory(event.target.value);
     }
@@ -151,12 +188,15 @@ const ContactForm = () => {
     }
 
     const submitContactForm = () => {
+      const pictures = objectsList?.filter(object => !object.deleted).map(object => object.file);
+
       sendContactForm({
         variables: {
           formValues: {
             ...formValues,
             object: formValues.object || 'Pas d\'objet spécifié',
-            category
+            category,
+            pictures
           }
         }
       });
@@ -202,6 +242,29 @@ const ContactForm = () => {
               ></FormItem>
             );
           })}
+            
+          {category !== 'message' ? (
+          <Container>
+            <Typography variant="body1" color="primary">
+              Ajouter une photo de votre écran &nbsp;
+              <Tooltip title="Vous pouvez supprimer l'image affichée via la poubelle puis en télécharger une nouvelle. Seul le format JPG est accepté. Veillez à ce que chaque fichier n’excède pas 4Mo">
+                <InfoIcon />
+              </Tooltip>
+            </Typography>
+            {objectsList ? (
+              <ImagesDisplay
+                cards={objectsList}
+                moveCard={moveObject}
+                findCard={findObject}
+                updateDeletedIndicator={updateDeletedIndicator}
+                updateKeyIndicator={updateKeyIndicator}
+              />
+            ) : null}
+            <ImagesDropZone
+              onDropHandler={onDropHandler}
+              text="Déposez ici vos photos au format jpg pour nous aider à comprendre le bug rencontré ou l'amélioration souhaitée"
+            />
+          </Container>) : null}
         </div>
       );
     });
@@ -250,4 +313,4 @@ const ContactForm = () => {
           />;
 };
 
-export default withApollo()(ContactForm);
+export default withDndProvider(withApollo()(ContactForm));

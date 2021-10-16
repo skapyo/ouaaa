@@ -98,7 +98,7 @@ const PresentationSection = () => {
       <h1 className={styles.h1}>agir pour la transition écologique <br/> et sociale en aunis</h1>
       </div>
       <Typography className={styles.baseLine}>
-        Nous sommes là pour te faire connaire celles et ceux qui oeuvrent { !mobile && (<br/>)}
+        Nous sommes là pour te faire connaître celles et ceux qui oeuvrent { !mobile && (<br/>)}
         pour la transition écologique, sociale et démocratique, te donner le calendrier de leurs actions et te permettre de les rejoindre.
       </Typography >
 
