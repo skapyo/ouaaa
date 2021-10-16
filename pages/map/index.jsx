@@ -573,7 +573,7 @@ const carto = () => {
                                     {actor && actor.name}
                                   </Typography>
                                 </div>
-                                <p className={styles.shortDescription}>
+                                <p>
                                   {!actor.address && actor.city && (
                                     <span>
                                       {/* @ts-ignore */}
@@ -620,7 +620,7 @@ const carto = () => {
                               </div>
                               <div className={styles.content}>
                                 <Grid container>
-                                  <Grid item xs={10}>
+                                  <Grid item>
                                     <div className={styles.titleDiv}>
                                       <Typography
                                         variant="h6"
@@ -630,7 +630,7 @@ const carto = () => {
                                         {actor && actor.name}
                                       </Typography>
                                     </div>
-                                    <p className={styles.shortDescription}>
+                                    <p>
                                       {!actor.address && actor.city && (
                                         <span>
                                           {/* @ts-ignore */}

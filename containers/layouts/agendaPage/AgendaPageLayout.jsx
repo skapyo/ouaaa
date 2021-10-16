@@ -178,6 +178,7 @@ const AgendaPageLayout = () => {
         lng
         address
         city
+        shortDescription
         entries {
           label
           icon
@@ -213,6 +214,10 @@ const AgendaPageLayout = () => {
           position
           logo
           main
+        }
+        parentEvent {
+          id
+          label
         }
       }
     }
