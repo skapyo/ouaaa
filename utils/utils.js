@@ -29,6 +29,6 @@ export const urlWithHttpsdefault = (url) => {
 export const linkify = (text) => {
   const urlRegex = /([\w+]+\:\/\/)?([\w\d-]+\.)*[\w-]+[\.\:]\w+([\/\?\=\&\#\.]?[\w-]+)*\/?/gi;
   return text.replace(urlRegex, (url) => {
-    return `<a href="${url}" + target="_blank">${url}</a>`;
+    return `<a href="${urlWithHttpsdefault(url)}" + target="_blank">${urlWithHttpsdefault(url)}</a>`;
   });
 };
