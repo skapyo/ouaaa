@@ -238,6 +238,10 @@ const AgendaPageLayout = () => {
 
   const classes = useStyles({ isMenuOpen, isMapMode });
 
+  const toggleMenu = useCallback(() => {
+    setIsMenuOpen(!isMenuOpen);
+  }, [isMenuOpen]);
+
   const date = new Date();
   const position = [46.1085193, -0.9864794];
   const startDateFormat = !matches ? '[ de ]HH[h]mm' : 'HH[h]mm';
@@ -276,7 +280,7 @@ const AgendaPageLayout = () => {
     return (eventData?.events || []).map(evt => {
       const startDate = moment(parseInt(evt.startedAt));
       const endDate = moment(parseInt(evt.endedAt));
-     
+
       const duration = Math.ceil(moment.duration(endDate.diff(startDate)).asDays());
 
       if (false && duration > 2) {
@@ -318,13 +322,13 @@ const AgendaPageLayout = () => {
           classes={{
             paper: classes.drawerPaper
           }}
-          onClose={() => setIsMenuOpen(false)}
+          onClose={toggleMenu}
         >
           <Filters
             isEventList
             onFiltersChange={handleFiltersChange}
             isCalendarMode={isCalendarMode}
-            closeHandler={() => setIsMenuOpen(!isMenuOpen)}
+            closeHandler={toggleMenu}
           />
         </Drawer>
 
@@ -333,7 +337,7 @@ const AgendaPageLayout = () => {
             <Button
               variant="contained"
               className={classes.filterButton}
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              onClick={toggleMenu}
               startIcon={<DoubleArrowIcon className={classes.filterButtonIcon} />}
               color="primary"
             >
@@ -435,10 +439,10 @@ const AgendaPageLayout = () => {
                                     >
                                       {!event.duration && (
                                         <>
-                                          Le <Moment  locale="fr"
-                                        format="DD MMMM YYYY" unix>
-                                          {event.startedAt / 1000}
-                                        </Moment>
+                                          Le <Moment locale="fr"
+                                            format="DD MMMM YYYY" unix>
+                                            {event.startedAt / 1000}
+                                          </Moment>
                                           <Moment format={startDateFormat} unix>
                                             {event.startedAt / 1000}
                                           </Moment>
@@ -446,26 +450,26 @@ const AgendaPageLayout = () => {
                                             {event.endedAt / 1000}
                                           </Moment>
                                         </>
-                                        )}
+                                      )}
                                       {event.duration && (
                                         <>
-                                          <span>Du </span> 
+                                          <span>Du </span>
                                           <Moment locale="fr"
-                                        format="DD MMMM YYYY" unix>
+                                            format="DD MMMM YYYY" unix>
                                             {event.startedAt / 1000}
                                           </Moment>
-                                          <span> au </span> 
-                                          <Moment  locale="fr"
-                                        format="DD MMMM YYYY"  unix>
+                                          <span> au </span>
+                                          <Moment locale="fr"
+                                            format="DD MMMM YYYY" unix>
                                             {event.endedAt / 1000}
                                           </Moment>
                                         </>
-                                        )}
-                                      </Typography>
+                                      )}
+                                    </Typography>
                                     {event.parentEvent && (
-                                    <><span>fait partie de <Link href={`/event/${event.parentEvent.id}`}>{event.parentEvent.label}</Link></span><br/></>
+                                      <><span>fait partie de <Link href={`/event/${event.parentEvent.id}`}>{event.parentEvent.label}</Link></span><br /></>
                                     )}
-                                     <span>{addressCity(event)}</span>
+                                    <span>{addressCity(event)}</span>
                                   </div>
                                 </Grid>
                               </Grid>
@@ -513,43 +517,43 @@ const AgendaPageLayout = () => {
                                     </Typography>
                                   </div>
                                   <Typography
-                                      variant="h6"
-                                      component="h2"
-                                      className={classes.title}
-                                    >
-                                      {!event.duration && (
-                                        <>
-                                          Le <Moment  locale="fr"
-                                        format="DD MMMM YYYY" unix>
+                                    variant="h6"
+                                    component="h2"
+                                    className={classes.title}
+                                  >
+                                    {!event.duration && (
+                                      <>
+                                        Le <Moment locale="fr"
+                                          format="DD MMMM YYYY" unix>
                                           {event.startedAt / 1000}
                                         </Moment>
-                                          <Moment format={startDateFormat} unix>
-                                            {event.startedAt / 1000}
-                                          </Moment>
-                                          <Moment format={endDateFormat} unix>
-                                            {event.endedAt / 1000}
-                                          </Moment>
-                                        </>
-                                        )}
-                                      {event.duration && (
-                                        <>
-                                          <span>Du </span> 
-                                          <Moment locale="fr"
-                                        format="DD MMMM YYYY" unix>
-                                            {event.startedAt / 1000}
-                                          </Moment>
-                                          <span> au </span> 
-                                          <Moment  locale="fr"
-                                        format="DD MMMM YYYY"  unix>
-                                            {event.endedAt / 1000}
-                                          </Moment>
-                                        </>
-                                        )}
-                                      </Typography>
-                                    {event.parentEvent && (
-                                    <><span>fait partie de <Link href={`/event/${event.parentEvent.id}`}>{event.parentEvent.label}</Link></span><br/></>
+                                        <Moment format={startDateFormat} unix>
+                                          {event.startedAt / 1000}
+                                        </Moment>
+                                        <Moment format={endDateFormat} unix>
+                                          {event.endedAt / 1000}
+                                        </Moment>
+                                      </>
                                     )}
-                                     <span>{addressCity(event)}</span>
+                                    {event.duration && (
+                                      <>
+                                        <span>Du </span>
+                                        <Moment locale="fr"
+                                          format="DD MMMM YYYY" unix>
+                                          {event.startedAt / 1000}
+                                        </Moment>
+                                        <span> au </span>
+                                        <Moment locale="fr"
+                                          format="DD MMMM YYYY" unix>
+                                          {event.endedAt / 1000}
+                                        </Moment>
+                                      </>
+                                    )}
+                                  </Typography>
+                                  {event.parentEvent && (
+                                    <><span>fait partie de <Link href={`/event/${event.parentEvent.id}`}>{event.parentEvent.label}</Link></span><br /></>
+                                  )}
+                                  <span>{addressCity(event)}</span>
                                 </Grid>
 
                                 {false && (<Grid item xs={2}>

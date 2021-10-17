@@ -309,6 +309,10 @@ const carto = () => {
   const [filters, setFilters] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(!matchesWindow);
 
+  const toggleMenu = useCallback(() => {
+    setIsMenuOpen(!isMenuOpen);
+  }, [isMenuOpen]);
+
   useEffect(() => {
     const { current = {} } = mapRef;
   }, [mapRef]);
@@ -468,10 +472,11 @@ const carto = () => {
             classes={{
               paper: styles.drawerPaper
             }}
-            onClose={() => setIsMenuOpen(false)}
+            onClose={toggleMenu}
           >
             <Filters
               onFiltersChange={handleFiltersChange}
+              closeHandler={toggleMenu}
               isActorList
             />
           </Drawer>
@@ -481,7 +486,7 @@ const carto = () => {
               <Button
                 variant="contained"
                 className={styles.filterButton}
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                onClick={toggleMenu}
                 startIcon={<DoubleArrowIcon className={styles.filterButtonIcon} />}
                 color="primary"
               >

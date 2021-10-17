@@ -28,9 +28,10 @@ const useStyles = makeStyles(theme => ({
     overflowY: 'auto',
     overflowX: 'hidden',
     [theme.breakpoints.down('sm')]: {
-      maxWidth: 'none'
+      maxWidth: 'none',
+      paddingBottom: 56,
     },
-    '& > *': {
+    '& > *:not(button)': {
       width: '100%',
       backgroundColor: 'white'
     }
@@ -69,7 +70,11 @@ const useStyles = makeStyles(theme => ({
   },
   expansionPanel: {
     margin: 'inherit!important',
-    padding: 'inherit!important',
+    [theme.breakpoints.down('sm')]: {
+      '&:nth-last-child(2)': {
+        boxShadow: 'none'
+      },
+    },
   },
   expansionPanelSummary: {
     padding: '0px 5px 0px 5px!important',
@@ -80,9 +85,13 @@ const useStyles = makeStyles(theme => ({
   entriesCheckbox: {
     padding: '1px',
   },
-  filterButton:{
+  filterButton: {
     color: 'white',
-    backgroundColor: '#2c367e!important',
+    backgroundColor: '#2c367e !important',
+    position: 'absolute',
+    bottom: 0,
+    margin: '10px 0',
+    width: '80%',
   },
   filterButtonIcon: {
     transform: 'rotate(180deg)',
@@ -253,18 +262,6 @@ function Filters(props) {
       wrap="nowrap"
       className={classes.root}
     >
-      {matches && (
-        <Button
-          variant="contained"
-          className={classes.filterButton}
-          onClick={closeHandler}
-          startIcon={<DoubleArrowIcon className={classes.filterButtonIcon} />}
-          color="primary"
-        >
-          Filtres
-        </Button>
-      )
-      }
       {
         isEventList && (
           <DateFilter
@@ -306,6 +303,20 @@ function Filters(props) {
           </ExpansionPanel>
         );
       })}
+
+      {
+        matches && (
+          <Button
+            variant="contained"
+            className={classes.filterButton}
+            onClick={closeHandler}
+            startIcon={<DoubleArrowIcon className={classes.filterButtonIcon} />}
+            color="primary"
+          >
+            Filtres
+          </Button>
+        )
+      }
     </Grid>
   );
 }
@@ -313,13 +324,15 @@ function Filters(props) {
 Filters.propTypes = {
   isEventList: PropTypes.bool,
   isActorList: PropTypes.bool,
-  onFiltersChange: PropTypes.func
+  onFiltersChange: PropTypes.func,
+  closeHandler: PropTypes.func,
 };
 
 Filters.defaultProps = {
   isEventList: false,
   isActorList: false,
-  onFiltersChange: () => { }
+  onFiltersChange: () => { },
+  closeHandler: () => { },
 }
 
 export default Filters;
