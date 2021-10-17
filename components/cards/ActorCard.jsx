@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme, props) => ({
     backgroundColor: 'white',
     borderRadius: '10px',
     margin: '16px 0',
-    height: '106px',
+    minHeight: '106px',
     borderLeft: `solid 12px ${props.color}`,
     display: 'flex',
   }),

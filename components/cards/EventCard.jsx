@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: 'white',
     borderRadius: '10px',
     margin: '16px 0',
-    height: '106px',
+    minHeight: '106px',
     borderLeft: `solid 12px ${props.color}`,
     display: 'flex',
   }),
@@ -168,11 +168,12 @@ const EventCard = ({ event }) => {
                 <br/>
                 <span>{event.shortDescription}</span>
               </div>
-              {event.duration && (
-                <div >{event.duration}</div>
-              )}
+                {event.duration && (
+                  <>{event.duration} .</>
+                )}
+              
               {event.parentEvent && (
-              <span>fait partie de <Link href={`/event/${event.parentEvent.id}`}>{event.parentEvent.label}</Link></span>
+              <span>Fait partie de <Link href={`/event/${event.parentEvent.id}`}>{event.parentEvent.label}</Link></span>
               )}
             </div>
           </div>

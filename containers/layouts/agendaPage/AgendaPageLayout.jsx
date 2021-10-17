@@ -324,6 +324,7 @@ const AgendaPageLayout = () => {
             isEventList
             onFiltersChange={handleFiltersChange}
             isCalendarMode={isCalendarMode}
+            closeHandler={() => setIsMenuOpen(!isMenuOpen)}
           />
         </Drawer>
 
