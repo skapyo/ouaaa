@@ -37,10 +37,11 @@ import Parser from 'html-react-parser';
 import Fab from '@material-ui/core/Fab';
 import EditIcon from '@material-ui/icons/Edit';
 import Link from 'components/Link';
+import Image from 'next/image';
 import {
   getImageUrl,
   entriesHasElementWithCode,
-  linkify,
+  urlRectification,
   urlWithHttpsdefault,
 } from '../../utils/utils';
 import { useSessionState } from '../../context/session/session';
@@ -568,6 +569,10 @@ const Event = ({ initialData }) => {
     return text;
   }
 
+  const myLoader = ({ src, width, quality }) => {
+    return `${process.env.NEXT_PUBLIC_URI}${src}?w=${width}&q=${quality || 75}`;
+  };
+
   const events = useMemo(() => {
     return (data?.event?.subEvents || []).map((evt) => {
       const startDate = moment(parseInt(evt.startedAt));
@@ -646,7 +651,8 @@ const Event = ({ initialData }) => {
                       data.event.pictures.length >= 1 &&
                       data.event.pictures.filter((picture) => picture.logo)
                         .length >= 1 && (
-                        <img
+                        <Image
+                          width="100%" height="100%"
                           src={
                             data.event.pictures.length >= 1
                               ? getImageUrl(
@@ -665,9 +671,10 @@ const Event = ({ initialData }) => {
                         'event_type',) */
                     <Grid container className={[styles.item]}>
                       <Grid item xs={3} className={[styles.alignRight]}>
-                        <img
+                        <Image
                           src={'/icons/types.svg'}
                           alt="Collectif & réseau"
+                          width="25px" height="25px" objectFit="contain"
                           className={[styles.icon]}
                         />
                       </Grid>
@@ -704,9 +711,10 @@ const Event = ({ initialData }) => {
                     ) && (
                       <Grid container className={[styles.item]}>
                         <Grid item xs={3} className={[styles.alignRight]}>
-                          <img
+                          <Image
                             src={'/icons/public.svg'}
                             alt="Collectif & réseau"
+                            width="25px" height="25px"  objectFit="contain"
                             className={[styles.icon]}
                           />
                         </Grid>
@@ -736,9 +744,10 @@ const Event = ({ initialData }) => {
                     )}
                   <Grid container className={[styles.item]}>
                     <Grid item xs={3} className={[styles.alignRight]}>
-                      <img
+                      <Image
                         src={'/icons/location.svg'}
                         alt="Localisation"
+                        width="25px" height="25px" objectFit="contain"
                         className={[styles.icon]}
                       />
                     </Grid>
@@ -767,9 +776,10 @@ const Event = ({ initialData }) => {
                   {data && data.event.facebookUrl && (
                     <Grid container className={[styles.item]}>
                       <Grid item xs={3} className={[styles.alignRight]}>
-                        <img
+                        <Image
                           src={'/icons/social.svg'}
                           alt="Réseau social"
+                          width="25px" height="25px" objectFit="contain"
                           className={[styles.icon]}
                         />
                       </Grid>
@@ -789,8 +799,9 @@ const Event = ({ initialData }) => {
                   {data && (
                     <Grid container className={[styles.item]}>
                       <Grid item xs={3} className={[styles.alignRight]}>
-                        <img
+                        <Image
                           src={'/icons/clock.svg'}
+                          width="25px" height="25px" objectFit="contain"
                           alt="Horaire"
                           className={[styles.icon]}
                         />
@@ -818,8 +829,9 @@ const Event = ({ initialData }) => {
                     ) && (
                       <Grid container className={[styles.item]}>
                         <Grid item xs={3} className={[styles.alignRight]}>
-                          <img
+                          <Image
                             src={'/icons/tarifs.svg'}
+                            width="25px" height="25px" objectFit="contain"
                             alt="Tarif"
                             className={[styles.icon]}
                           />
@@ -850,8 +862,9 @@ const Event = ({ initialData }) => {
 
                   <Grid container className={[styles.item]}>
                     <Grid item xs={3} className={[styles.alignRight]}>
-                      <img
+                      <Image
                         src="/icons/social.svg"
+                        width="25px" height="25px" objectFit="contain"
                         alt="Réseau social"
                         className={[styles.icon]}
                       />
@@ -877,8 +890,9 @@ const Event = ({ initialData }) => {
                           round
                           url={`${currentLocationWindows}`}
                         >
-                          <img
+                          <Image
                             src="/icons/facebook_messenger_icon.svg"
+                            width="25px" height="25px" objectFit="contain"
                             alt="Téléphone"
                             className={[styles.socialNetworkIcon]}
                           />
@@ -941,7 +955,7 @@ const Event = ({ initialData }) => {
                 <div className={styles.border} />
                 <br />
                 <br />
-                <p>{data && Parser(linkify(data.event.description))}</p>
+                <p>{data && Parser(urlRectification(data.event.description))}</p>
                 <div>
                   {data &&
                     data.event.entries.map(
@@ -958,7 +972,8 @@ const Event = ({ initialData }) => {
                                 } `}
                               {/* @ts-ignore */}:
                               {entry.icon && (
-                                <img
+                                <Image
+                                width="30px" height="25px" 
                                   src={`/icons/${entry.icon}.svg`}
                                   alt="icon"
                                   className={styles.iconEntry}
@@ -979,9 +994,10 @@ const Event = ({ initialData }) => {
                     'actor_status',
                   ) && (
                     <div className={[styles.descriptionInfoDiv]}>
-                      <img
+                      <Image
                         src="/icons/status.svg"
                         alt="Collectif & réseau"
+                        width="100%" height="100%" layout="responsive" objectFit="contain"
                         className={[styles.icon]}
                       />
                       <div className={[styles.descriptionInfoLabel]}>
@@ -1014,9 +1030,10 @@ const Event = ({ initialData }) => {
                     'public_target',
                   ) && (
                     <div className={[styles.descriptionInfoDiv]}>
-                      <img
+                      <Image
                         src="/icons/public.svg"
                         alt="Collectif & réseau"
+                        width="100%" height="100%" layout="responsive" objectFit="contain"
                         className={[styles.icon]}
                       />
                       <div className={[styles.descriptionInfoLabel]}>
@@ -1048,9 +1065,10 @@ const Event = ({ initialData }) => {
                     'collectif',
                   ) && (
                     <div className={[styles.descriptionInfoDiv]}>
-                      <img
+                      <Image
                         src="/icons/network.svg"
                         alt="Collectif & réseau"
+                        width="100%" height="100%" layout="responsive" objectFit="contain"
                         className={[styles.icon]}
                       />
                       <div className={[styles.descriptionInfoLabel]}>
@@ -1086,7 +1104,7 @@ const Event = ({ initialData }) => {
                       <div className={styles.border} />
                       <br />
                     </div>
-                    <p>{data && Parser(linkify(data.event.practicalInfo))}</p>
+                    <p>{data && Parser(urlRectification(data.event.practicalInfo))}</p>
                   </div>
                 )}
                 <div />
@@ -1192,9 +1210,13 @@ const Event = ({ initialData }) => {
                 data.event.pictures
                   .sort((a, b) => (a.position > b.position ? 1 : -1))
                   .map((picture) => (
-                    <img
-                      src={getImageUrl(picture.croppedPicturePath)}
-                      className={[styles.img]}
+                      <Image
+                      loader={myLoader}
+                      width="100%"
+                      height="20px"
+                      layout="responsive"
+                      objectFit="contain"
+                      src={picture.croppedPicturePath}
                     />
                   ))}
             </Slider>

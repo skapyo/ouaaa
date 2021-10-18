@@ -38,6 +38,7 @@ import Head from 'next/head';
 import Parser from 'html-react-parser';
 import Fab from '@material-ui/core/Fab';
 import EditIcon from '@material-ui/icons/Edit';
+import Image from 'next/image';
 import Link from 'components/Link';
 import moment from 'moment';
 import CardSliderEvent from '../../components/cards/CardSliderEvent';
@@ -47,7 +48,7 @@ import CardAddEvent from '../../components/cards/CardAddEvent';
 import {
   getImageUrl,
   entriesHasElementWithCode,
-  linkify,
+  urlRectification,
   urlWithHttpsdefault,
 } from '../../utils/utils';
 import Calendar from '../../components/Calendar';
@@ -156,7 +157,6 @@ const useStyles = makeStyles((theme) => ({
       height: '100%',
       width: '100%',
       objectFit: 'contain',
-      borderRadius: '50%',
     },
   },
   infoPratiqueTitle: {
@@ -482,6 +482,9 @@ const Actor = ({ initialData }) => {
       },
     });
   };
+  const myLoader = ({ src, width, quality }) => {
+    return `${process.env.NEXT_PUBLIC_URI}${src}?w=${width}&q=${quality || 75}`;
+  };
   const getDay = (dayNumber) => {
     switch (dayNumber) {
       case '1':
@@ -698,15 +701,15 @@ const Actor = ({ initialData }) => {
                       data.actor.pictures.length >= 1 &&
                       data.actor.pictures.filter((picture) => picture.logo)
                         .length >= 1 && (
-                        <img
-                          src={
-                            data.actor.pictures.length >= 1
-                              ? getImageUrl(
-                                  data.actor.pictures.filter(
-                                    (picture) => picture.logo,
-                                  )[0].croppedPicturePath,
-                                )
-                              : ''
+                        <Image
+                          loader={myLoader}
+                          width="100%"
+                          height="50px"
+                          layout="responsive"
+                          objectFit="contain"
+                          src={data.actor.pictures.filter(
+                            (picture) => picture.logo,
+                          )[0].croppedPicturePath
                           }
                         />
                       )}
@@ -714,9 +717,10 @@ const Actor = ({ initialData }) => {
 
                   <Grid container className={[styles.item]}>
                     <Grid item xs={3} className={[styles.alignRight]}>
-                      <img
+                      <Image
                         src="/icons/location.svg"
                         alt="Localisation"
+                        width="25px" height="25px"  objectFit="contain"
                         className={[styles.icon]}
                       />
                     </Grid>
@@ -779,8 +783,9 @@ const Actor = ({ initialData }) => {
                     <div className={[styles.infoDiv]}>
                       <Grid container className={[styles.item]}>
                         <Grid item xs={3} className={[styles.alignRight]}>
-                          <img
+                          <Image
                             src="/icons/phone.svg"
+                            width="25px" height="25px"  objectFit="contain"
                             alt="Téléphone"
                             className={[styles.icon]}
                           />
@@ -798,8 +803,9 @@ const Actor = ({ initialData }) => {
                     <div className={[styles.infoDiv]}>
                       <Grid container className={[styles.item]}>
                         <Grid item xs={3} className={[styles.alignRight]}>
-                          <img
+                          <Image
                             src="/icons/email.svg"
+                            width="25px" height="25px"  objectFit="contain"
                             alt="Email"
                             className={[styles.icon]}
                           />
@@ -817,8 +823,9 @@ const Actor = ({ initialData }) => {
                     <div className={[styles.infoDiv]}>
                       <Grid container className={[styles.item]}>
                         <Grid item xs={3} className={[styles.alignRight]}>
-                          <img
+                          <Image
                             src="/icons/web_site.svg"
+                            width="25px" height="25px"  objectFit="contain"
                             alt="Site Web"
                             className={[styles.icon]}
                           />
@@ -844,8 +851,9 @@ const Actor = ({ initialData }) => {
                   {data && data.actor.socialNetwork && (
                     <Grid container className={[styles.item]}>
                       <Grid item xs={3} className={[styles.alignRight]}>
-                        <img
+                        <Image
                           src="/icons/social.svg"
+                          width="25px" height="25px"  objectFit="contain"
                           alt="Réseau social"
                           className={[styles.icon]}
                         />
@@ -871,8 +879,9 @@ const Actor = ({ initialData }) => {
                     data?.actor?.openingHours.length !== 0 && (
                       <Grid container className={[styles.item]}>
                         <Grid item xs={3} className={[styles.alignRight]}>
-                          <img
+                          <Image
                             src="/icons/clock.svg"
+                            width="25px" height="25px"  objectFit="contain"
                             alt="Horaire"
                             className={[styles.icon]}
                           />
@@ -924,9 +933,10 @@ const Actor = ({ initialData }) => {
                     )}
                   <Grid container className={[styles.item]}>
                     <Grid item xs={3} className={[styles.alignRight]}>
-                      <img
+                      <Image
                         src="/icons/social.svg"
                         alt="Réseau social"
+                        width="25px" height="25px"  objectFit="contain"
                         className={[styles.icon]}
                       />
                     </Grid>
@@ -951,11 +961,12 @@ const Actor = ({ initialData }) => {
                           round
                           url={`${currentLocationWindows}`}
                         >
-                          <img
-                          src="/icons/facebook_messenger_icon.svg"
-                          alt="Téléphone"
-                          className={[styles.socialNetworkIcon]}
-                        />
+                          <Image
+                            src="/icons/facebook_messenger_icon.svg"
+                            alt="Téléphone"
+                            width="25px" height="25px"  objectFit="contain"
+                            className={[styles.socialNetworkIcon]}
+                          />
                         </FacebookMessengerShareButton>
                         <TwitterShareButton
                           size={32}
@@ -1015,7 +1026,7 @@ const Actor = ({ initialData }) => {
                 <div className={styles.border} />
                 <br />
                 <br />
-                <p>{data && Parser(linkify(data.actor.description))}</p>
+                <p>{data && Parser(urlRectification(data.actor.description))}</p>
                 <div>
                   {data &&
                     data.actor.entries.map(
@@ -1033,9 +1044,12 @@ const Actor = ({ initialData }) => {
                               } `}
                               {/* @ts-ignore */}:
                               {entry.icon && (
-                                <img
+                                <Image
                                   src={`/icons/${entry.icon}.svg`}
                                   alt="icon"
+                                  width="30px"
+                                  height="25px"
+                                  objectFit="contain"
                                   className={styles.iconEntry}
                                 />
                               )}
@@ -1054,9 +1068,12 @@ const Actor = ({ initialData }) => {
                     'actor_status',
                   ) && (
                     <div className={[styles.descriptionInfoDiv]}>
-                      <img
+                      <Image
                         src="/icons/status.svg"
                         alt="Collectif & réseau"
+                        width="25px"
+                        height="25px"
+                        objectFit="contain"
                         className={[styles.icon]}
                       />
                       <div className={[styles.descriptionInfoLabel]}>
@@ -1089,9 +1106,12 @@ const Actor = ({ initialData }) => {
                     'public_target',
                   ) && (
                     <div className={[styles.descriptionInfoDiv]}>
-                      <img
+                      <Image
                         src="/icons/public.svg"
                         alt="Collectif & réseau"
+                        width="25px"
+                        height="25px"
+                        objectFit="contain"
                         className={[styles.icon]}
                       />
                       <div className={[styles.descriptionInfoLabel]}>
@@ -1123,9 +1143,12 @@ const Actor = ({ initialData }) => {
                     'collectif',
                   ) && (
                     <div className={[styles.descriptionInfoDiv]}>
-                      <img
+                      <Image
                         src="/icons/network.svg"
                         alt="Collectif & réseau"
+                        width="25px"
+                        height="25px"
+                        objectFit="contain"
                         className={[styles.icon]}
                       />
                       <div className={[styles.descriptionInfoLabel]}>
@@ -1220,7 +1243,7 @@ const Actor = ({ initialData }) => {
                   </Typography>
                   <br />
                   <div className={styles.volunteerDescription}>
-                    {data && Parser(linkify(data.actor.volunteerDescription))}
+                    {data && Parser(urlRectification(data.actor.volunteerDescription))}
                   </div>
                   <div>
                     {data &&
@@ -1263,8 +1286,13 @@ const Actor = ({ initialData }) => {
                 data.actor.pictures
                   .sort((a, b) => (a.position > b.position ? 1 : -1))
                   .map((picture) => (
-                    <img
-                      src={getImageUrl(picture.croppedPicturePath)}
+                    <Image
+                      loader={myLoader}
+                      width="100%"
+                      height="20px"
+                      layout="responsive"
+                      objectFit="contain"
+                      src={picture.croppedPicturePath}
                       className={[styles.img]}
                     />
                   ))}

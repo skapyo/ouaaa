@@ -24,6 +24,12 @@ export const urlWithHttpsdefault = (url) => {
   }
   return url;
 };
+export const urlRectification = (text) => {
+  const urlRegex = /([\w+]+\:\/\/)?([\w\d-]+\.)*[\w-]+[\.\:]\w+([\/\?\=\&\#\.]?[\w-]+)*\/?/gi;
+  return text.replace(urlRegex, (url) => {
+    return `${urlWithHttpsdefault(url)}`;
+  });
+};
 
 /* parse Text and find the URL to show as hyperlink */
 export const linkify = (text) => {

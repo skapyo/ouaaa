@@ -1582,7 +1582,7 @@ const EditActorForm = (props) => {
           <>
             <CKEditor
               config={{
-                toolbar: ['bold', 'italic'],
+                toolbar: ['bold', 'italic', 'link'],
               }}
               editor={ClassicEditor}
               data={formValues.description}
@@ -1608,7 +1608,7 @@ const EditActorForm = (props) => {
           <>
             <CKEditor
               config={{
-                toolbar: ['bold', 'italic'],
+                toolbar: ['bold', 'italic', 'link'],
               }}
               editor={ClassicEditor}
               data={formValues.volunteerDescription}

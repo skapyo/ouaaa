@@ -1099,7 +1099,7 @@ const AddActorForm = () => {
             <Hidden mdDown>
               <CKEditor
                 config={{
-                  toolbar: ['bold', 'italic'],
+                  toolbar: ['bold', 'italic', 'link'],
                 }}
                 editor={ClassicEditor}
                 data={formValues.description}
@@ -1111,7 +1111,7 @@ const AddActorForm = () => {
             <Hidden lgUp>
               <CKEditor
                 config={{
-                  toolbar: ['bold', 'italic'],
+                  toolbar: ['bold', 'italic', 'link'],
                 }}
                 editor={ClassicEditor}
                 data={formValues.description}
@@ -1142,7 +1142,7 @@ const AddActorForm = () => {
             <Hidden mdDown>
               <CKEditor
                 config={{
-                  toolbar: ['bold', 'italic'],
+                  toolbar: ['bold', 'italic', 'link'],
                 }}
                 editor={ClassicEditor}
                 data={formValues.volunteerDescription}
@@ -1154,7 +1154,7 @@ const AddActorForm = () => {
             <Hidden lgUp>
               <CKEditor
                 config={{
-                  toolbar: ['bold', 'italic'],
+                  toolbar: ['bold', 'italic', 'link'],
                 }}
                 editor={ClassicEditor}
                 data={formValues.volunteerDescription}

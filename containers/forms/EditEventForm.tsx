@@ -1312,7 +1312,7 @@ const EditEventForm = (props) => {
         {editorLoaded ? (
           <CKEditor
             config={{
-              toolbar: ['bold', 'italic'],
+              toolbar: ['bold', 'italic', 'link'],
             }}
             editor={ClassicEditor}
             data={formValues.description}
@@ -1343,7 +1343,7 @@ const EditEventForm = (props) => {
           <>
             <CKEditor
               config={{
-                toolbar: ['bold', 'italic'],
+                toolbar: ['bold', 'italic', 'link'],
               }}
               editor={ClassicEditor}
               data={formValues.practicalInfo}

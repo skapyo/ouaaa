@@ -11,5 +11,7 @@ module.exports = {
     // !! WARN !!
     ignoreBuildErrors: true,
   },
-
+  images: {
+    domains: ['localhost', 'static.recette.ouaaa-transition.fr','static.recette.ouaaa-transition.fr', 'static.ouaaa-transition.fr', 'ouaaa-transition.fr'],
+  },
 };
