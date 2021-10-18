@@ -83,6 +83,7 @@ export default function SimpleCard({ event }) {
                   event.categories[0].label}
               </Typography>
             </div>
+            { event.pictures.sort((a, b) => (a.logo ? -1 : 1))[0] && (
             <Image
               loader={myLoader}
               width="100%"
@@ -94,6 +95,7 @@ export default function SimpleCard({ event }) {
               }
               alt={event.name}
             />
+            )}
           </div>
           <div className={classes.content}>
             <div className={classes.titleDiv}>

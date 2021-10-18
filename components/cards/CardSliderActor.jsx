@@ -83,6 +83,7 @@ export default function SimpleCard({ actor }) {
                   && actor.entries[0].label}
               </Typography>
             </div>
+            { actor.pictures.sort((a, b) => (a.logo ? -1 : 1))[0] && (
             <Image
               loader={myLoader}
               width="100%"
@@ -94,6 +95,7 @@ export default function SimpleCard({ actor }) {
               }
               alt={actor.name}
             />
+            )}
           </div>
           <div className={classes.content}>
             <div className={classes.titleDiv}>
