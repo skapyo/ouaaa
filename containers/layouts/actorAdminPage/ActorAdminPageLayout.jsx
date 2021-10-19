@@ -55,9 +55,9 @@ const ActorAdminPageLayout = ({ children }) => {
           Administration des pages acteurs et événements
         </Typography>
         <Box className={styles.gridContainer}>
-          <Grid container spacing={10}>
+          <Grid container >
             <Hidden smDown>
-              <Grid item lg={3}>
+              <Grid item lg={2}>
                 <ActorAdminLeftMenu />
               </Grid>
             </Hidden>

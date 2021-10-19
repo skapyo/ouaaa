@@ -531,8 +531,8 @@ const Actor = ({ initialData }) => {
     infinite: true,
     slidesToShow: nbSlidetoshow,
     slidesToScroll: 1,
-    // autoplay: true,
-    // autoplaySpeed: 2000,
+     autoplay: true,
+     autoplaySpeed: 200,
     //  pauseOnHover: true,
     nextArrow: <SampleNextArrow />,
     prevArrow: <SamplePrevArrow />,
@@ -642,7 +642,7 @@ const Actor = ({ initialData }) => {
           {/* @ts-ignore */}-{/* @ts-ignore */}
           {data && showCategory(data.actor.entries)}
         </title>
-        {data &&
+        {data && data.actor.pictures && 
           data.actor.pictures.length >= 1 &&
           data.actor.pictures.filter((picture) => picture.logo).length >= 1 && (
             <meta
@@ -680,7 +680,7 @@ const Actor = ({ initialData }) => {
               className={styles.titleContainer}
               style={{
                 backgroundImage:
-                  data.actor.pictures.length >= 1 &&
+                data.actor.pictures && data.actor.pictures.length >= 1 &&
                   data.actor.pictures.filter((picture) => picture.main)
                     .length >= 1
                     ? `url(${getImageUrl(
@@ -698,13 +698,13 @@ const Actor = ({ initialData }) => {
                 <Grid container className={[styles.infoPratiqueGrid]}>
                   <div className={styles.image}>
                     {data &&
-                      data.actor.pictures.length >= 1 &&
+                      data.actor.pictures && data.actor.pictures.length >= 1 &&
                       data.actor.pictures.filter((picture) => picture.logo)
                         .length >= 1 && (
                         <Image
                           loader={myLoader}
                           width="100%"
-                          height="50px"
+                          height="100px"
                           layout="responsive"
                           objectFit="contain"
                           src={data.actor.pictures.filter(
@@ -956,18 +956,6 @@ const Actor = ({ initialData }) => {
                             className={[styles.socialNetworkIcon]}
                           />
                         </FacebookShareButton>
-                        <FacebookMessengerShareButton
-                          size={32}
-                          round
-                          url={`${currentLocationWindows}`}
-                        >
-                          <Image
-                            src="/icons/facebook_messenger_icon.svg"
-                            alt="Téléphone"
-                            width="25px" height="25px"  objectFit="contain"
-                            className={[styles.socialNetworkIcon]}
-                          />
-                        </FacebookMessengerShareButton>
                         <TwitterShareButton
                           size={32}
                           round
@@ -1288,8 +1276,8 @@ const Actor = ({ initialData }) => {
                   .map((picture) => (
                     <Image
                       loader={myLoader}
-                      width="100%"
-                      height="20px"
+                      width="90%"
+                      height="70px"
                       layout="responsive"
                       objectFit="contain"
                       src={picture.croppedPicturePath}
@@ -1335,6 +1323,11 @@ export default withApollo()(Actor);
 // It may be called again, on a serverless function, if
 // revalidation is enabled and a new request comes in
 export async function getServerSideProps(ctxt) {
+  const startDate = moment();
+      
+      let recurrentOptions = null;
+   console.debug("before fetch");
+   
   const res = await fetch(process.env.NEXT_PUBLIC_API_URI, {
     method: 'POST',
     body: JSON.stringify({
@@ -1345,7 +1338,9 @@ export async function getServerSideProps(ctxt) {
       query: GET_ACTOR_SSR,
     }),
   });
+  const endDate = moment();
 
+  console.debug("before json" + moment.duration(endDate.diff(startDate)).asMilliseconds(),);
   const initialData = await res.json();
   if (initialData.errors) {
     console.error(
@@ -1356,7 +1351,9 @@ export async function getServerSideProps(ctxt) {
         '',
     );
   }
+  const after = moment();
 
+  console.debug("after json"+moment.duration(after.diff(endDate)).asMilliseconds() + initialData);
   return {
     props: { initialData },
   };

@@ -652,7 +652,10 @@ const Event = ({ initialData }) => {
                       data.event.pictures.filter((picture) => picture.logo)
                         .length >= 1 && (
                         <Image
-                          width="100%" height="100%"
+                        width="100%"
+                        height="100px"
+                        layout="responsive"
+                        objectFit="contain"
                           src={
                             data.event.pictures.length >= 1
                               ? getImageUrl(
@@ -874,7 +877,7 @@ const Event = ({ initialData }) => {
                         Partager la page sur les réseaux
                       </div>
                       <span className={[styles.infoValue]}>
-                        <FacebookMessengerShareButton
+                        <FacebookShareButton
                           size={32}
                           round
                           url={`${currentLocationWindows}`}
@@ -882,18 +885,6 @@ const Event = ({ initialData }) => {
                           <FacebookIcon
                             round
                             size={32}
-                            className={[styles.socialNetworkIcon]}
-                          />
-                        </FacebookMessengerShareButton>
-                        <FacebookShareButton
-                          size={32}
-                          round
-                          url={`${currentLocationWindows}`}
-                        >
-                          <Image
-                            src="/icons/facebook_messenger_icon.svg"
-                            width="25px" height="25px" objectFit="contain"
-                            alt="Téléphone"
                             className={[styles.socialNetworkIcon]}
                           />
                         </FacebookShareButton>
@@ -1212,8 +1203,8 @@ const Event = ({ initialData }) => {
                   .map((picture) => (
                       <Image
                       loader={myLoader}
-                      width="100%"
-                      height="20px"
+                      width="90%"
+                      height="50px"
                       layout="responsive"
                       objectFit="contain"
                       src={picture.croppedPicturePath}
