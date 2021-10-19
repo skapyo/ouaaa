@@ -11,7 +11,11 @@ import Newsletter from '../../containers/layouts/Newsletter';
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    padding: '10em',
+    width: '90%',
+    [theme.breakpoints.down('md')]: {
+      paddingTop: '5em',
+    },
+   
   },
   align: {
     'text-align': 'center',

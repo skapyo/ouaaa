@@ -1,10 +1,11 @@
 import React from 'react';
-import {makeStyles} from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
+import Image from 'next/image';
 import Link from '../Link';
-import {getImageUrl} from '../../utils/utils';
+import { getImageUrl } from '../../utils/utils';
 
 const useStyles = makeStyles({
   root: {
@@ -64,31 +65,37 @@ const useStyles = makeStyles({
 export default function SimpleCard({ actor }) {
   const classes = useStyles();
   const bull = <span className={classes.bullet}>•</span>;
-
+  const myLoader = ({ src, width, quality }) => {
+    return `${process.env.NEXT_PUBLIC_URI}${src}?w=${width}&q=${quality || 75}`;
+  };
   return (
     <Link href={`/actor/${actor.id}`}>
       <Card className={classes.root}>
         <CardContent>
           <div
             className={classes.image}
-            style={{
-              backgroundImage:
-                actor.pictures.length >= 1
-                  ? `url(${getImageUrl(
-                      actor.pictures.sort((a, b) =>
-                        a.position > b.position ? 1 : -1,
-                      )[0].croppedPicturePath,
-                    )})`
-                  : '',
-            }}
           >
+
             <div className={classes.categorie}>
               <Typography className={classes.categorie} gutterBottom>
-                {actor.entries &&
-                  actor.entries.length > 0 &&
-                  actor.entries[0].label}
+                {actor.entries
+                  && actor.entries.length > 0
+                  && actor.entries[0].label}
               </Typography>
             </div>
+            { actor.pictures.sort((a, b) => (a.logo ? -1 : 1))[0] && (
+            <Image
+              loader={myLoader}
+              width="100%"
+              height="50px"
+              layout="responsive"
+              objectFit="contain"
+              src={
+                actor.pictures.sort((a, b) => (a.logo ? -1 : 1))[0].croppedPicturePath
+              }
+              alt={actor.name}
+            />
+            )}
           </div>
           <div className={classes.content}>
             <div className={classes.titleDiv}>

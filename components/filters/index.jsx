@@ -7,14 +7,16 @@ import {
   ExpansionPanel,
   ExpansionPanelSummary,
   ExpansionPanelDetails,
-  Button
+  Button,
+  useTheme
 } from '@material-ui/core';
 
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/client';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Entries from 'containers/forms/Entries';
 import ParentContainer from './ParentContainer';
 import DateFilter from '../../containers/layouts/agendaPage/DateFilter';
@@ -26,33 +28,14 @@ const useStyles = makeStyles(theme => ({
     overflowY: 'auto',
     overflowX: 'hidden',
     [theme.breakpoints.down('sm')]: {
-      maxWidth: 'none'
+      maxWidth: 'none',
+      paddingBottom: 56,
     },
-    '& > *': {
+    '& > *:not(button)': {
       width: '100%',
       backgroundColor: 'white'
-    },
-    '& > *:not(:first-child)': {
-      [theme.breakpoints.down('sm')]: {
-        display: props.openFilters ? 'flex' : 'none'
-      },
-      '&.MuiPaper-root': {
-        [theme.breakpoints.down('sm')]: {
-          display: props.openFilters ? 'block' : 'none'
-        }
-      }
     }
   }),
-  filterButtonContainer: {
-    display: 'none',
-    [theme.breakpoints.down('sm')]: {
-      display: 'flex'
-    },
-    '& > *': {
-      flex: 1,
-      borderRadius: 0
-    }
-  },
   collectionLabel: {
     textAlign: 'center',
     color: '#2C367E',
@@ -87,7 +70,11 @@ const useStyles = makeStyles(theme => ({
   },
   expansionPanel: {
     margin: 'inherit!important',
-    padding: 'inherit!important',
+    [theme.breakpoints.down('sm')]: {
+      '&:nth-last-child(2)': {
+        boxShadow: 'none'
+      },
+    },
   },
   expansionPanelSummary: {
     padding: '0px 5px 0px 5px!important',
@@ -97,6 +84,17 @@ const useStyles = makeStyles(theme => ({
   },
   entriesCheckbox: {
     padding: '1px',
+  },
+  filterButton: {
+    color: 'white',
+    backgroundColor: '#2c367e !important',
+    position: 'absolute',
+    bottom: 0,
+    margin: '10px 0',
+    width: '80%',
+  },
+  filterButtonIcon: {
+    transform: 'rotate(180deg)',
   },
   listItemText: {
     marginTop: '0px',
@@ -148,9 +146,9 @@ const FilterItem = props => {
 function Filters(props) {
   const {
     isEventList,
-    onFiltersChange
+    onFiltersChange,
+    closeHandler
   } = props;
-  const theme = useTheme();
 
   const GET_COLLECTIONS = gql`
   {
@@ -182,11 +180,13 @@ function Filters(props) {
     }
   `;
 
-  const [dataCollections, setDataCollections] = useState({});
+  const [dataCollections, setDataCollections] = useState(null);
   const [errorPostCode, setErrorPostCode] = useState(false);
   const [filters, setFilters] = useState({});
   const [openFilters, setOpenFilters] = useState(false);
 
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.down('sm'));
   const classes = useStyles({ openFilters });
 
   const handleFilterChange = useCallback((name, value) => {
@@ -250,7 +250,7 @@ function Filters(props) {
     return [];
   }, [dataCollections, isEventList]);
 
-  if (loadingCollections) return 'Loading...';
+  if (loadingCollections && !dataCollections) return 'Loading...';
   if (errorCollections) return `Error! ${errorCollections.message}`;
 
   return (
@@ -262,10 +262,6 @@ function Filters(props) {
       wrap="nowrap"
       className={classes.root}
     >
-      <Grid container justifyContent="center" className={classes.filterButtonContainer}>
-        <Button variant="contained" onClick={() => setOpenFilters(!openFilters)}>Filtres</Button>
-      </Grid>
-
       {
         isEventList && (
           <DateFilter
@@ -307,6 +303,20 @@ function Filters(props) {
           </ExpansionPanel>
         );
       })}
+
+      {
+        matches && (
+          <Button
+            variant="contained"
+            className={classes.filterButton}
+            onClick={closeHandler}
+            startIcon={<DoubleArrowIcon className={classes.filterButtonIcon} />}
+            color="primary"
+          >
+            Filtres
+          </Button>
+        )
+      }
     </Grid>
   );
 }
@@ -314,13 +324,15 @@ function Filters(props) {
 Filters.propTypes = {
   isEventList: PropTypes.bool,
   isActorList: PropTypes.bool,
-  onFiltersChange: PropTypes.func
+  onFiltersChange: PropTypes.func,
+  closeHandler: PropTypes.func,
 };
 
 Filters.defaultProps = {
   isEventList: false,
   isActorList: false,
-  onFiltersChange: () => { }
+  onFiltersChange: () => { },
+  closeHandler: () => { },
 }
 
 export default Filters;

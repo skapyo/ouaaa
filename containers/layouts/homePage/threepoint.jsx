@@ -40,6 +40,7 @@ const useStyles = makeStyles((theme) => ({
   cardTitle: {
     color: theme.typography.h5.color,
     fontFamily: theme.typography.h5.fontFamily,
+    fontSize: '3em',
   },
   image: {
     width: '100%',
@@ -56,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
 
   buttonGrid: {
 
-    fontSize: '1em',
+    fontSize: '1.5em',
     margin: '1.5em 0 1.5em 0 ',
     color: 'white',
     'background-color': '#2C367E',
@@ -75,41 +76,70 @@ const useStyles = makeStyles((theme) => ({
     backgroundImage: "url('./arrow.svg')",
     backgroundRepeat: 'no-repeat',
     'background-position-x': '5px',
-    'background-position-y': '1px',
+    'background-position-y': '-3px',
+   
+    boxShadow: '11px 13px 22px -10px rgb(0 0 0 / 46%)',
+  },
+  buttonGridDiv: {
     [theme.breakpoints.down('sm')]: {
-      fontSize: '0.8em',
+      textAlign: 'center',
     },
   },
-  button: {
-    margin: '2.5em 0 2.5em 0 ',
-    color: 'white',
-    'background-color': '#2C367E',
-    border: 'none',
+  buttonInverseActor: {
 
+    fontSize: '1.5em',
+    margin: '1.5em 0 1.5em 0 ',
+    fontWeight: 'bold',
     borderRadius: '1.5em',
-    padding: '0 3em 0 3em',
+    padding: '0.2em 3em 0.2em 3em',
     minHeight: '2.5em',
+    color: '#68b5a9',
+    'background-color': 'white',
+    border: '2px solid #68b5a9',
+    backgroundImage: "url('./arrow-actor.svg')",
     '&:hover': {
       cursor: 'pointer',
-      color: '#2C367E',
-      'background-color': 'white',
-      border: '2px solid #2C367E',
-      backgroundImage: "url('./arrow-hover.svg')",
+      color: 'white',
+      'background-color': '#68b5a9',
+      border: 'none',
+      backgroundImage: "url('./arrow-hover-inverse.svg')",
     },
-    backgroundImage: "url('./arrow.svg')",
     backgroundRepeat: 'no-repeat',
     'background-position-x': '5px',
-    'background-position-y': '1px',
-    'background-size': '15%',
-    marginBottom: '30px',
+    'background-position-y': '-3px',
+ 
+  },
+  buttonInverseOrganisation: {
+
+    fontSize: '1.5em',
+    margin: '1.5em 0 1.5em 0 ',
+    fontWeight: 'bold',
+    borderRadius: '1.5em',
+    padding: '0.2em 3em 0.2em 3em',
+    minHeight: '2.5em',
+    color: '#d96552',
+    'background-color': 'white',
+    border: '2px solid #d96552',
+    backgroundImage: "url('./arrow-organisation.svg')",
+    '&:hover': {
+      cursor: 'pointer',
+      color: 'white',
+      'background-color': '#d96552',
+      border: 'none',
+      backgroundImage: "url('./arrow-hover-inverse.svg')",
+    },
+    backgroundRepeat: 'no-repeat',
+    'background-position-x': '5px',
+    'background-position-y': '-3px',
+  
   },
   map: {
     paddingLeft: '19%',
   },
   titleGrid: {
-    color: '#2C367E',
-    fontSize: '12px',
+    fontSize: '1.5em',
     lineHeight: 'inherit',
+    fontWeight: '600',
   },
   root: {
     width: '100%',
@@ -149,13 +179,6 @@ const PresentationSection = () => {
 
   return (
     <Container className={styles.cardInfo}>
-      <Typography className={styles.inprogress}>
-        <img className={styles.inprogress} src="./in_progress.png" />
-        <p />
-        {/* <p>Abonnez-vous à la newsletter pour suivre les avancées.</p> */}
-      </Typography>
-
-
       <Grid container spacing={3} className={styles.flexColumn}>
         <Grid item md={6}>
           <div className={styles.gridTitle}>
@@ -163,7 +186,7 @@ const PresentationSection = () => {
               <i>OUAAA!</i>
             </Typography>
             <Typography variant="h3" className={styles.cardTitle}>
-              C'EST QUOUUA ?
+              C'EST QUOUAAA ?
             </Typography>
             <div className={styles.border} />
           </div>
@@ -173,7 +196,7 @@ const PresentationSection = () => {
                 className={styles.listItemText}
                 primary={
                   <>
-                    <i>OUAAA!</i> est le site des initiatives, des réseaux et des acteurs de la transition vers une société plus humaine et plus écologique sur le territoire de l'Aunis (nord Charente-Maritime).
+                    <i>OUAAA!</i> est le site des initiatives, des réseaux et des acteurs de la transition qui contribuent à une société plus humaine et plus écologique sur le territoire de l'Aunis (nord Charente-Maritime).
                   </>
                 }
               />
@@ -181,7 +204,46 @@ const PresentationSection = () => {
             <ListItem>
               <ListItemText
                 className={styles.listItemText}
-                primary="L'idée du site est née en 2020 de la volonté de 3 collectifs citoyens de créer une vitrine pour permettre à tous celles et ceux qui souhaitent changer la société de devenir acteur.rices de la transition sociale, environnementale, de renforcer les liens entre elles.eux, et de se faire connaître auprès du plus grand nombre."
+                primary={
+                  <>Tu habites le nord de la Charente-Maritime et tu veux  <Link href="/map">trouver une recyclerie, réparer un objet, changer de producteur d'énergie, t'inscrire dans une AMAP, rénover ta maison</Link> et bien plus encore ?
+                  </>
+                }
+              />
+            </ListItem>
+            <ListItem>
+              <ListItemText
+                className={styles.listItemText}
+                primary="La transition écologique et sociale touche à toutes les thématiques :  l'éducation, la culture, la santé, l'alimentation, la justice, l'économie, la citoyenneté, l'agriculture, l'industrie, l'habitat, la mobilité, l'énergie, le recyclage, la réduction des déchets, le climat, la qualité de l'air, la biodiversité, la gestion de l'eau, l'aménagement du territoire, et plus encore !"
+              />
+            </ListItem>
+            <ListItem>
+              <ListItemText
+                className={styles.listItemText}
+                primary={
+                  <>Les personnes agissant pour la transition écologique et sociale, sont présentes sur tout le territoire de l'anse de l'Aiguillon à l'embouchure de la Charente, de la forêt de Benon au bout de l'île de Ré en passant par Surgères, L’agglo de La Rochelle, Saint Martin de Ré, Marans, et Châtelaillon-Plage. 
+                Tu représentes un acteur (particulier, association, ONG, entreprise, service public) engagé par ses actions et ses projets d’innovation, de développement ou de production. Celui-ci souhaite se faire connaître ? <Link href="/addActor">Inscris toi dès maintenant en tant qu’acteur de la transition en Aunis</Link>
+                </>
+                }
+              />
+            </ListItem>
+            <ListItem>
+              <ListItemText
+                className={styles.listItemText}
+                primary={
+                  <>
+                    Partenaire de La Rochelle Territoire Zéro Carbone, La plateforme participative <i>OUAAA!</i> souhaite rendre visible, auprès des habitants et citoyens, toutes celles et ceux qui aspirent à changer la société dans le cadre de la la transition sociale et environnementale
+                  </>
+                }
+              />
+            </ListItem>
+              <ListItem>
+              <ListItemText
+                className={styles.listItemText}
+                primary={
+                  <>
+                    Tu veux en savoir plus sur <Link href="/charter">les engagements éthiques de <i>OUAAA!</i></Link> ?
+                  </>
+                }
               />
             </ListItem>
             <ListItem>
@@ -199,14 +261,14 @@ const PresentationSection = () => {
                 className={styles.listItemText}
                 primary={
                   <>
-                    Plateforme d’information et d’engagement, <i>OUAAA!</i> veut accélérer la transition vers un fonctionnement plus sobre, plus humain et véritablement « durable » dans les communautés de communes Aunis Atlantique, Aunis Sud, dans l’agglomération de La Rochelle, et dans l'Île de Ré.
+                    Plateforme d’information et d’engagement, <i>OUAAA!</i> accompagne la transition vers un fonctionnement plus sobre, plus solidaire et véritablement « durable » dans les communautés de communes Aunis Atlantique, Aunis Sud, dans l’agglomération de La Rochelle, et dans l'Île de Ré. Dans les villes comme dans les villages, <i>OUAAA!</i> est la communauté des acteurs qui s’engagent pour le climat, la planète et tous ceux qui y habitent !
                   </>
                 }
               />
             </ListItem>
           </List>
 
-          <div className={styles.align}>
+          <div className={styles.buttonGridDiv}>
             <Link href="/map">
               <button className={styles.buttonGrid}>
                 VOIR LA CARTE
@@ -219,53 +281,48 @@ const PresentationSection = () => {
           <img className={styles.image} src="./image_accueil.png" />
         </Grid>
       </Grid>
-      {/*
-      <br />
-      <Typography variant="h2" className={[styles.cardTitle, styles.align]}>
-        <i>OUAAA!</i> : Agir pour la transition en Aunis
-      </Typography>
-      <Typography variant="h3" className={[styles.cardTitle, styles.align]}>
-        C'EST POUR QUI ?
-      </Typography>
+
       <br />
       <Grid
         container
         justify="center"
         className={[styles.align, styles.flexColumn]}
       >
+       
         <Grid item md={5} sm={10} className={[styles.gridItem, styles.align]}>
-          <img width="20%" src="./people.svg" className={styles.imageGrid} />
+          <img width="30%" src="./Icone_decouvrir_acteur.png"  className={styles.imageGrid} />
           <Typography className={styles.titleGrid}>
-            Vous êtes un citoyen et souhaitez mieux
+            Tu es un citoyen et souhaites mieux
           </Typography>
           <Typography className={styles.titleGrid}>
-            connaire, soutenir, vous engager ?
+            connaître, soutenir, t'engager ?
           </Typography>
           <Link href="/map">
-            <button className={styles.buttonGrid}>
+            <button className={styles.buttonInverseActor}>
               JE DECOUVRE LES ACTEURS
             </button>
           </Link>
         </Grid>
+         
         <Grid item md={5} sm={10} className={[styles.gridItem, styles.align]}>
           <img
-            width="20%"
+            width="30%"
             className={styles.imageGrid}
-            src="./organisation.svg"
+            src="./Icone_acteur.png"
           />
           <Typography className={styles.titleGrid}>
             Vous êtes une organisation et vous
           </Typography>
           <Typography className={styles.titleGrid}>
-            souhaitez vous faire connaitre ?
+            souhaitez vous faire connaître ?
           </Typography>
           <Link href="/addactor">
-            <button className={styles.buttonGrid}>JE DEVIENS UN ACTEUR</button>
+            <button className={styles.buttonInverseOrganisation}>JE DEVIENS UN ACTEUR</button>
           </Link>
         </Grid>
 
       </Grid>
-        */}
+      
     </Container>
   );
 };

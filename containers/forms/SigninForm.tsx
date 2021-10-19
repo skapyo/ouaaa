@@ -98,25 +98,32 @@ const SigninForm = () => {
   const Form: RenderCallback = (props) => {
     const { formChangeHandler, formValues, validationResult } = props;
 
-    const [signin, { data, error }] = useMutation(SIGNIN);
-    useGraphQLErrorDisplay(error);
-    const styles = useStyles();
     const [checkBoxChecked, setCheckBoxChecked] = useState(false);
     const [validEmail, setValidEmail] = useState(true);
+    const [showPassword, setShowPassword] = useState(false);
+
+    const [signin, { data, error }] = useMutation(SIGNIN);
+    const router = useRouter();
+    useGraphQLErrorDisplay(error);
+    const styles = useStyles();
     const sessionDispatch = useSessionDispatch();
     const redirect = useCookieRedirection();
-    const [showPassword, setShowPassword] = useState(false);
-    const handleClickShowPassword = () => setShowPassword(!showPassword);
-    const handleMouseDownPassword = () => setShowPassword(!showPassword);
+
+    const toggleShowPassword = useCallback(() => {
+      setShowPassword(!showPassword)
+    }, [showPassword]);
+
     const checkBoxChangeHandler = useCallback(
       (e) => {
         setCheckBoxChecked(e.target.checked);
       },
       [setCheckBoxChecked],
     );
-    const router = useRouter();
 
-    const submitHandler2 = useCallback(() => {
+    const handleSignin = useCallback((evt) => {
+      evt.preventDefault();
+      evt.stopPropagation();
+
       signin({
         variables: {
           email: formValues.email,
@@ -126,9 +133,14 @@ const SigninForm = () => {
       });
     }, [checkBoxChecked, formValues, signin]);
 
+    const handleClickSignup = useCallback(() => {
+      router.push('/signup')
+    }, [router]);
+
     useEffect(() => {
-      if (data && !data?.login?.isEmailValidated) setValidEmail(false);
-      else if (data?.login?.id) {
+      if (data && !data?.login?.isEmailValidated) {
+        setValidEmail(false);
+      } else if (data?.login?.id) {
         sessionDispatch({
           type: 'login',
           payload: omitTypename(data.login),
@@ -139,87 +151,91 @@ const SigninForm = () => {
 
     if (!validEmail)
       return <FallbackEmailNotValidated email={formValues?.email} />;
+
     return (
       <Container component="main" maxWidth="xs">
-        <div className={styles.paper}>
-          <Avatar className={styles.avatar}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Connexion
-          </Typography>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            label="Adresse email"
-            name="email"
-            autoComplete="current-email"
-            autoFocus
-            defaultValue=""
-            value={formValues?.email}
-            onChange={formChangeHandler}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Mot de passe"
-            type={showPassword ? 'text' : 'password'}
-            autoComplete="current-password"
-            defaultValue=""
-            InputProps={{
-              // <-- This is where the toggle button is added.
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={handleClickShowPassword}
-                    onMouseDown={handleMouseDownPassword}
-                  >
-                    {showPassword ? <Visibility /> : <VisibilityOff />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-            value={formValues?.password}
-            onChange={formChangeHandler}
-          />
-          <Box className={styles.box}>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  value="remember"
-                  color="primary"
-                  onChange={checkBoxChangeHandler}
-                />
-              }
-              label="Se souvenir de moi"
+        <form onSubmit={handleSignin}>
+          <div className={styles.paper}>
+            <Avatar className={styles.avatar}>
+              <LockOutlinedIcon />
+            </Avatar>
+            <Typography component="h1" variant="h5">
+              Connexion
+            </Typography>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              label="Adresse email"
+              name="email"
+              autoComplete="current-email"
+              autoFocus
+              defaultValue=""
+              value={formValues?.email}
+              onChange={formChangeHandler}
             />
-          </Box>
-          <ClassicButton
-            fullWidth
-            variant="contained"
-            className={styles.submit}
-            onClick={submitHandler2}
-            disabled={!validationResult?.global}
-          >
-            Se connecter
-          </ClassicButton>
-          <ClassicButton
-            fullWidth
-            variant="contained"
-            className={styles.signup}
-            onClick={() => router.push('/signup')}
-          >
-            Créer un compte
-          </ClassicButton>
-          {/* @ts-ignore */}
-          <Link href="/forgotPassword">Mot de passe oublié ?</Link>
-        </div>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Mot de passe"
+              type={showPassword ? 'text' : 'password'}
+              autoComplete="current-password"
+              defaultValue=""
+              InputProps={{
+                // <-- This is where the toggle button is added.
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={toggleShowPassword}
+                      onMouseDown={toggleShowPassword}
+                    >
+                      {showPassword ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+              value={formValues?.password}
+              onChange={formChangeHandler}
+            />
+            <Box className={styles.box}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    value="remember"
+                    color="primary"
+                    onChange={checkBoxChangeHandler}
+                  />
+                }
+                label="Se souvenir de moi"
+              />
+            </Box>
+            <ClassicButton
+              fullWidth
+              variant="contained"
+              className={styles.submit}
+              onClick={handleSignin}
+              disabled={!validationResult?.global}
+              type="submit"
+            >
+              Se connecter
+            </ClassicButton>
+            <ClassicButton
+              fullWidth
+              variant="contained"
+              className={styles.signup}
+              onClick={handleClickSignup}
+            >
+              Créer un compte
+            </ClassicButton>
+            {/* @ts-ignore */}
+            <Link href="/forgotPassword">Mot de passe oublié ?</Link>
+          </div>
+        </form>
       </Container>
     );
   };

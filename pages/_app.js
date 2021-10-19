@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Head from 'next/head';
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import { createTheme, ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { red } from '@material-ui/core/colors';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
@@ -20,7 +20,7 @@ import 'slick-carousel/slick/slick-theme.css';
 import 'react-leaflet-markercluster/dist/styles.min.css';
 import 'moment/locale/fr';
 
-const theme = createMuiTheme({
+const theme = createTheme({
   palette: {
     primary: {
       main: '#2C367E',
@@ -80,6 +80,7 @@ const MyApp = (props) => {
     if (jssStyles) {
       jssStyles.parentElement.removeChild(jssStyles);
     }
+    console.log("SEO: " +process.env.NEXT_PUBLIC_SEO_DISABLED)
   }, []);
 
   return (
@@ -87,7 +88,10 @@ const MyApp = (props) => {
       <Head>
         <meta charSet="utf-8" />
 
-        <title>Ouaaa! : agir pour la transition écologique & citoyenne Aunis | La Rochelle</title>
+        <title>OUAAA! : Agir pour la Transition Ecologique & Sociale en Aunis | La Rochelle</title>
+        { (process.env.NEXT_PUBLIC_SEO_DISABLED && process.env.NEXT_PUBLIC_SEO_DISABLED.localeCompare('true')===0 )&&  (
+          <meta name="robots" content="noindex"/>
+        )}
         <meta
           name="viewport"
           content="minimum-scale=1, initial-scale=1, width=device-width"

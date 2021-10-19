@@ -7,18 +7,34 @@ export const getImageUrl = (url) => {
 export const entriesHasElementWithCode = (entries, code) => {
   let hasEntry = false;
   if (entries) {
-    entries.map(
-      (entry) => {
-        if (entry
-        && entry.collection
-        && entry.collection.code
-          === code) {
-          hasEntry = true;
-        }
-        return hasEntry;
-      },
-    );
+    entries.map((entry) => {
+      if (entry && entry.collection && entry.collection.code === code) {
+        hasEntry = true;
+      }
+      return hasEntry;
+    });
   }
 
   return hasEntry;
+};
+
+export const urlWithHttpsdefault = (url) => {
+  if (!url.includes('http')) {
+    return `https://${url}`;
+  }
+  return url;
+};
+export const urlRectification = (text) => {
+  const urlRegex = /([\w+]+\:\/\/)?([\w\d-]+\.)*[\w-]+[\.\:]\w+([\/\?\=\&\#\.]?[\w-]+)*\/?/gi;
+  return text.replace(urlRegex, (url) => {
+    return `${urlWithHttpsdefault(url)}`;
+  });
+};
+
+/* parse Text and find the URL to show as hyperlink */
+export const linkify = (text) => {
+  const urlRegex = /([\w+]+\:\/\/)?([\w\d-]+\.)*[\w-]+[\.\:]\w+([\/\?\=\&\#\.]?[\w-]+)*\/?/gi;
+  return text.replace(urlRegex, (url) => {
+    return `<a href="${urlWithHttpsdefault(url)}" + target="_blank">${url}</a>`;
+  });
 };

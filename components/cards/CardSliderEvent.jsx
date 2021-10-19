@@ -4,6 +4,7 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import Moment from 'react-moment';
+import Image from 'next/image';
 import Link from '../Link';
 import {getImageUrl} from '../../utils/utils';
 
@@ -65,23 +66,15 @@ const useStyles = makeStyles({
 export default function SimpleCard({ event }) {
   const classes = useStyles();
   const bull = <span className={classes.bullet}>•</span>;
-
+  const myLoader = ({ src, width, quality }) => {
+    return `${process.env.NEXT_PUBLIC_URI}${src}?w=${width}&q=${quality || 75}`;
+  };
   return (
     <Link href={`/event/${event.id}`}>
       <Card className={classes.root}>
         <CardContent>
           <div
             className={classes.image}
-            style={{
-              backgroundImage:
-                event.pictures.length >= 1
-                  ? `url(${getImageUrl(
-                      event.pictures.sort((a, b) =>
-                        a.position > b.position ? 1 : -1,
-                      )[0].croppedPicturePath,
-                    )})`
-                  : '',
-            }}
           >
             <div className={classes.categorie}>
               <Typography className={classes.categorie} gutterBottom>
@@ -90,6 +83,19 @@ export default function SimpleCard({ event }) {
                   event.categories[0].label}
               </Typography>
             </div>
+            { event.pictures.sort((a, b) => (a.logo ? -1 : 1))[0] && (
+            <Image
+              loader={myLoader}
+              width="100%"
+              height="70px"
+              layout="responsive"
+              objectFit="contain"
+              src={
+                event.pictures.sort((a, b) => (a.logo ? -1 : 1))[0].croppedPicturePath
+              }
+              alt={event.name}
+            />
+            )}
           </div>
           <div className={classes.content}>
             <div className={classes.titleDiv}>

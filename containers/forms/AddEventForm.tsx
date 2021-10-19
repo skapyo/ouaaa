@@ -211,6 +211,16 @@ query actors {
   }
 }
 `;
+const GET_EVENTS = gql`
+query events ($notFinished: Boolean ) {
+  events (notFinished: $notFinished){
+    id
+    label
+    startedAt
+    endedAt
+  }
+}
+`;
 const GET_COLLECTIONS = gql`
   {
     collections {
@@ -380,8 +390,30 @@ const AddEventForm = ({ actorId }) => {
     // const { formChangeHandler, formValues, validationResult } = props;
     const [addEvent, { data, error }] = useMutation(ADDEVENT);
 
+    const [showOtherEventList, setShowOtherEventList] = useState(false);
 
     const { data: dataActors } = useQuery(GET_ACTORS, {});
+    const { data: dataEvents } = useQuery(GET_EVENTS, {
+      variables: {
+        notFinished: true,
+      },
+    });
+
+    const inputHasParentChangeHandler = (event, value) => {
+      if (event.target.value) {
+        if (event.target.value.length < 3) {
+          setShowOtherEventList(false);
+        } else {
+          setShowOtherEventList(true);
+        }
+      }
+    };
+    const autocompleteHasParentHandler = (event, value) => {
+      if (value) {
+        formValues.parentEventId = value.id;
+      }
+      setShowOtherEventList(false);
+    };
 
     useGraphQLErrorDisplay(error);
     const styles = useStyles();
@@ -405,10 +437,13 @@ const AddEventForm = ({ actorId }) => {
     } = useQuery(GET_ACTOR, {
       variables: { id: actorId },
     });
+    const [hasParentEvent, setHasParentEvent] = useState(false);
     const handleClickAddActor = useCallback(() => {
       setShowAddActor(!showAddActor);
     }, [showAddActor]);
-
+    const hasParentChangeHandler = (result) => {
+      setHasParentEvent(!hasParentEvent);
+    };
     const handleClickDeleteActor = useCallback(actor => {
       // @ts-ignore
       let currentActors = [...formValues.actors];
@@ -740,6 +775,7 @@ const AddEventForm = ({ actorId }) => {
             postCode: formValues.postCode,
             city,
             registerLink: formValues.registerLink,
+            parentEventId: formValues.parentEventId,
             // @ts-ignore
             actors: formValues.actors.map(item => item.id)
           },
@@ -798,6 +834,95 @@ const AddEventForm = ({ actorId }) => {
           }
           errorText="Nom de l'action requis."
         />
+        <Grid className={styles.location}>
+          <Typography className={styles.collectionLabel}>Adresse complète de l’événement *</Typography>
+          <br/>
+          <GooglePlacesAutocomplete
+            placeholder="Taper et sélectionner l'adresse*"
+            initialValue={
+              formValues.address
+              && formValues.address
+                .concat(' ')
+                .concat(formValues.postCode)
+                .concat(' ')
+                .concat(formValues.city)
+            }
+            onSelect={({ description }) => geocodeByAddress(description).then((results) => {
+              getLatLng(results[0])
+                .then((value) => {
+                  formValues.lat = `${value.lat}`;
+                  formValues.lng = `${value.lng}`;
+                })
+                .catch((error) => console.error(error));
+              getAddressDetails(results);
+            })}
+          />
+        </Grid>
+        <FormItem
+          label="Description courte"
+          inputName="shortDescription"
+          formChangeHandler={formChangeHandler}
+          value={formValues.shortDescription}
+          required
+          errorBool={
+            !validationResult?.global
+            && !!validationResult?.result.shortDescription
+          }
+          errorText={`Maximum 90 caractères. ${formValues.shortDescription?.length - 90
+            } caractères en trop.`}
+        />
+        <Typography variant="body1" color="primary" className={styles.label}>
+          Description *
+        </Typography>
+        <p />
+        {editorLoaded ? (
+          <CKEditor
+            config={{
+              toolbar: ['bold', 'italic', 'link'],
+            }}
+            editor={ClassicEditor}
+            data={formValues.description}
+            onReady={(editor) => {
+              setDescriptionEditor(editor);
+            }}
+          />
+        ) : (
+          <div>Editor loading</div>
+        )}
+        <br />
+        <FormItem
+          label="Lien externe de l'action (Facebook ou site)"
+          inputName="facebookUrl"
+          formChangeHandler={formChangeHandler}
+          value={formValues.facebookUrl}
+          required={false}
+          errorBool={false}
+          errorText=""
+              />
+        <br />
+        <TitleWithTooltip
+          title="Infos pratiques"
+          tooltipTitle="Ici vous pouvez indiquer toutes les infos comme tarifs, parking, moyen d’accès, … elles apparaitront ainsi aux visiteurs de OUAAA dans un bloc dédié plus lisible"
+        />
+        <p />
+        {editorLoaded ? (
+          <>
+            <CKEditor
+              config={{
+                toolbar: ['bold', 'italic', 'link'],
+              }}
+              editor={ClassicEditor}
+              data={formValues.practicalInfo}
+              onReady={(editor) => {
+                setPracticalInfoEditor(editor);
+              }}
+            />
+
+          </>
+        ) : (
+          <div>Editor loading</div>
+        )}
+        <br />
         {
           /* @ts-ignore */
           dataCollections.collections
@@ -973,30 +1098,7 @@ const AddEventForm = ({ actorId }) => {
             );
           })
         }
-        <Grid className={styles.location}>
-          <Typography className={styles.collectionLabel}>Adresse complète de l’événement *</Typography>
-          <br/>
-          <GooglePlacesAutocomplete
-            placeholder="Taper et sélectionner l'adresse*"
-            initialValue={
-              formValues.address
-              && formValues.address
-                .concat(' ')
-                .concat(formValues.postCode)
-                .concat(' ')
-                .concat(formValues.city)
-            }
-            onSelect={({ description }) => geocodeByAddress(description).then((results) => {
-              getLatLng(results[0])
-                .then((value) => {
-                  formValues.lat = `${value.lat}`;
-                  formValues.lng = `${value.lng}`;
-                })
-                .catch((error) => console.error(error));
-              getAddressDetails(results);
-            })}
-          />
-        </Grid>
+
         <br/>
         <TitleWithTooltip
           title="Calendrier "
@@ -1226,26 +1328,7 @@ const AddEventForm = ({ actorId }) => {
         </Grid>
 
 
-        <TitleWithTooltip
-          title="Infos pratiques complément "
-          tooltipTitle="Ici vous pouvez indiquer toutes les infos comme tarifs, parking, moyen d’accès, … elles apparaitront ainsi aux visiteurs de OUAAA dans un bloc dédié plus lisible"
-        />
-        <p />
-        {editorLoaded ? (
-          <>
-            <CKEditor
-              editor={ClassicEditor}
-              data={formValues.practicalInfo}
-              onReady={(editor) => {
-                setPracticalInfoEditor(editor);
-              }}
-            />
 
-          </>
-        ) : (
-          <div>Editor loading</div>
-        )}
-        <br />
         <br />
         <Typography className={styles.collectionLabel}>
           Inscription à l’évement
@@ -1299,44 +1382,6 @@ const AddEventForm = ({ actorId }) => {
           </RadioGroup>
         </FormControl>
         <p />
-        <FormItem
-          label="Lien externe de l'action (Facebook ou site)"
-          inputName="facebookUrl"
-          formChangeHandler={formChangeHandler}
-          value={formValues.facebookUrl}
-          required={false}
-          errorBool={false}
-          errorText=""
-        />
-        <FormItem
-          label="Description courte"
-          inputName="shortDescription"
-          formChangeHandler={formChangeHandler}
-          value={formValues.shortDescription}
-          required
-          errorBool={
-            !validationResult?.global
-            && !!validationResult?.result.shortDescription
-          }
-          errorText={`Maximum 90 caractères. ${formValues.shortDescription?.length - 90
-            } caractères en trop.`}
-        />
-        <Typography variant="body1" color="primary" className={styles.label}>
-          Description
-        </Typography>
-        <p />
-        {editorLoaded ? (
-          <CKEditor
-            editor={ClassicEditor}
-            data={formValues.description}
-            onReady={(editor) => {
-              setDescriptionEditor(editor);
-            }}
-          />
-        ) : (
-          <div>Editor loading</div>
-        )}
-        <br />
         <Typography variant="body1" color="primary" className={styles.label}>
           Logo de l'événement
         </Typography>
@@ -1387,7 +1432,47 @@ const AddEventForm = ({ actorId }) => {
           onDropHandler={onDropHandler}
           text="Déposez ici votre autres photos au format jpg"
         />
-
+         <FormControlLabel
+          control={(
+            <Checkbox
+              edge="start"
+              tabIndex={-1}
+              disableRipple
+              onChange={hasParentChangeHandler}
+              name="hasParent"
+              onClick={(e) => e.stopPropagation()}
+            />
+          )}
+          label="est affilié à un autre événement existant"
+        />
+        {hasParentEvent ? (
+          <Autocomplete
+            id="combo-box-parentEvent"
+            options={dataEvents && dataEvents.events}
+            // @ts-ignore
+            onInput={inputHasParentChangeHandler}
+            open={showOtherEventList}
+            // @ts-ignore
+            getOptionLabel={(option) => `${option.label} du ${moment(parseInt(option.startedAt)).format('DD/MM/YYYY HH:mm')} au ${moment(parseInt(option.endedAt)).format('DD/MM/YYYY HH:mm')} `}
+            onChange={autocompleteHasParentHandler}
+            // defaultValue={getDefaultValueParentEvent()}
+            style={{ width: 300 }}
+            // eslint-disable-next-line react/jsx-props-no-spreading
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Evénement parent"
+                variant="outlined"
+                placeholder="Tapez les 3 premières lettres"
+              />
+            )}
+            noOptionsText="Pas d'événement trouvé'"
+            clearText="Effacer"
+            closeText="Fermer"
+          />
+        ) : (
+          ''
+        )}
         <ClassicButton
           fullWidth
           variant="contained"

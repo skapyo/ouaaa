@@ -301,11 +301,13 @@ const GET_COLLECTIONS = gql`
     }
   }
 `;
+
 const DELETE_ACTOR = gql`
   mutation deleteActor($actorId: Int!) {
     deleteActor(actorId: $actorId)
   }
 `;
+
 const useStyles = makeStyles((theme) => ({
   gridContainer: {
     marginTop: theme.spacing(5),
@@ -1580,7 +1582,7 @@ const EditActorForm = (props) => {
           <>
             <CKEditor
               config={{
-                toolbar: ['bold', 'italic'],
+                toolbar: ['bold', 'italic', 'link'],
               }}
               editor={ClassicEditor}
               data={formValues.description}
@@ -1606,7 +1608,7 @@ const EditActorForm = (props) => {
           <>
             <CKEditor
               config={{
-                toolbar: ['bold', 'italic'],
+                toolbar: ['bold', 'italic', 'link'],
               }}
               editor={ClassicEditor}
               data={formValues.volunteerDescription}

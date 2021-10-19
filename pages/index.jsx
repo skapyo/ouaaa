@@ -8,7 +8,7 @@ import PresentationSection from '../containers/layouts/homePage/presentationSect
 import ThreePoint from '../containers/layouts/homePage/threepoint';
 import LastActor from '../containers/layouts/homePage/lastActor';
 import LastEvent from '../containers/layouts/homePage/lastEvent';
-
+import Head from 'next/head';
 const useStyles = makeStyles((theme) => ({
   leftTitle: {
     fontWeight: theme.typography.fontWeightBold,
@@ -108,31 +108,20 @@ const Index = () => {
   const styles = useStyles(stylesProps);
 
   return (
+  
     <AppLayout>
       <RootRef>
         <Box>
+        
            <PresentationSection /> 
 
            <ThreePoint />
 
-           {/* <Container className={[styles.geoContainer]}>
-            <Typography className={[styles.align]}>
-              Le site a vocation à répertorier les acteurs de la transition sur
-              les 4 communautés de communes constituant l'Aunis : la CDA de la
-              Rochelle, la CDC Aunis Atlantique, la CDC de l'ile de ré, et la CDC Aunis Sud. Ainsi,
-              l’information sera disponible aussi bien pour les habitants des
-              zones les plus urbaines : La Rochelle et sa première couronne
-              (Aytré, Lagord, Périgny, Angoulins), Chatelaillon, Surgères,
-              Marans, Courçon, Aigrefeuille que pour ceux des zones les plus
-              rurales : Clavette, St Médard, Puyravault, Ballons, le Thou,
-              Chambon, Ballon, St Saturnin du Bois, St Jean de Liversay, Benon.
-            </Typography>
-          </Container>
 
           <LastActor />
 
           <LastEvent />
-
+{/*
           <Newsletter />
           */}
         </Box>

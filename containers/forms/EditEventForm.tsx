@@ -373,6 +373,10 @@ const GET_EVENT = gql`
           lastname
         }
       }
+      parentEvent {
+          id
+          label
+      }
     }
   }
 `;
@@ -518,9 +522,9 @@ const TitleWithTooltip = (props: TitleWithTooltipProps) => {
       {
         !!tooltipTitle
         && (
-        <Tooltip title={tooltipTitle} color="primary" className={styles.tooltip}>
-          <InfoIcon />
-        </Tooltip>
+          <Tooltip title={tooltipTitle} color="primary" className={styles.tooltip}>
+            <InfoIcon />
+          </Tooltip>
         )
       }
     </Grid>
@@ -570,7 +574,7 @@ const EditEventForm = (props) => {
     let isContained = false;
     if (user !== null) {
       actors.forEach((actor) => {
-        actor.referents.forEach((element) => {
+        (actor.referents || []).forEach((element) => {
           if (element.id == user.id) {
             isContained = true;
           }
@@ -596,6 +600,7 @@ const EditEventForm = (props) => {
     data: eventData,
   } = useQuery(GET_EVENT, {
     variables: { id: props.id.toString() },
+    fetchPolicy: 'no-cache',
     onCompleted: (data) => {
       if (user === undefined || user == null) {
         enqueueSnackbar(
@@ -830,7 +835,7 @@ const EditEventForm = (props) => {
     const [dateChange, setDateChange] = useState(false);
     const [showRegisterLink, setShowRegisterLink] = useState(false);
     const [hasParentEvent, setHasParentEvent] = useState(
-      !!formValues.parentEvent,
+      !!formValues.parentId,
     );
     const hasParentChangeHandler = (result) => {
       setHasParentEvent(!hasParentEvent);
@@ -855,9 +860,9 @@ const EditEventForm = (props) => {
 
     const getDefaultValueParentEvent = () => {
       let defaultEvent;
-      if (dataEvents && dataEvents.events !== null) {
+      if (dataEvents && dataEvents.events !== null && eventData.event.parentEvent) {
         dataEvents.events.map((event) => {
-          if (event.id === eventData.event.event_id) {
+          if (event.id === eventData.event.parentEvent.id) {
             defaultEvent = event;
           }
         });
@@ -974,6 +979,10 @@ const EditEventForm = (props) => {
       formValues.lng = eventData.event.lng;
       formValues.registerLink = eventData.event.registerLink;
       formValues.actors = eventData.event.actors;
+      formValues.parentId =eventData.event !== undefined ?eventData.event.parentEvent.id:null;
+      if(formValues.parentId){
+        setHasParentEvent(!!formValues.parentId);
+      }
       setShowRegisterLink(formValues.registerLink !== undefined && formValues.registerLink !== '');
 
       setAddress(eventData.event.address);
@@ -1259,6 +1268,95 @@ const EditEventForm = (props) => {
           }
           errorText="Nom de l'action requis."
         />
+        <Grid className={styles.location}>
+          <Typography className={styles.collectionLabel}>Adresse complète de l’événement *</Typography>
+          <br />
+          <GooglePlacesAutocomplete
+            placeholder="Taper et sélectionner l'adresse*"
+            initialValue={
+              formValues.address
+              && formValues.address
+                .concat(' ')
+                .concat(formValues.postCode)
+                .concat(' ')
+                .concat(formValues.city)
+            }
+            onSelect={({ description }) => geocodeByAddress(description).then((results) => {
+              getLatLng(results[0])
+                .then((value) => {
+                  formValues.lat = `${value.lat}`;
+                  formValues.lng = `${value.lng}`;
+                })
+                .catch((error) => console.error(error));
+              getAddressDetails(results);
+            })}
+          />
+        </Grid>
+        <FormItemTextareaAutosize
+          label="Description courte"
+          inputName="shortDescription"
+          formChangeHandler={formChangeHandler}
+          value={formValues.shortDescription}
+          required
+          errorBool={
+            !validationResult?.global
+            && !!validationResult?.result.shortDescription
+          }
+          errorText={`Maximum 90 caractères. ${formValues.shortDescription?.length - 90
+            } caractères en trop.`}
+        />
+        <Typography variant="body1" color="primary" className={styles.label}>
+          Description *
+        </Typography>
+        <p />
+        {editorLoaded ? (
+          <CKEditor
+            config={{
+              toolbar: ['bold', 'italic', 'link'],
+            }}
+            editor={ClassicEditor}
+            data={formValues.description}
+            onReady={(editor) => {
+              setDescriptionEditor(editor);
+            }}
+          />
+        ) : (
+          <div>Editor loading</div>
+        )}
+        <br />
+        <FormItem
+          label="Lien externe de l'événement (Facebook ou site)"
+          inputName="facebookUrl"
+          formChangeHandler={formChangeHandler}
+          value={formValues.facebookUrl}
+          required={false}
+          errorBool={false}
+          errorText=""
+        />
+        <br />
+        <TitleWithTooltip
+          title="Infos pratiques"
+          tooltipTitle="Ici vous pouvez indiquer toutes les infos comme tarifs, parking, moyen d’accès, … elles apparaitront ainsi aux visiteurs de OUAAA dans un bloc dédié plus lisible"
+        />
+        <p />
+        {editorLoaded ? (
+          <>
+            <CKEditor
+              config={{
+                toolbar: ['bold', 'italic', 'link'],
+              }}
+              editor={ClassicEditor}
+              data={formValues.practicalInfo}
+              onReady={(editor) => {
+                setPracticalInfoEditor(editor);
+              }}
+            />
+
+          </>
+        ) : (
+          <div>Editor loading</div>
+        )}
+        <br />
         {
           /* @ts-ignore */
           dataCollections.collections
@@ -1277,6 +1375,27 @@ const EditEventForm = (props) => {
               helperText = 'un événement peut traiter un sous-sujet non  associé au départ avec la page acteur. Vous pouvez choisir plusieurs sujets à rattacher à votre événement';
             } else if (collection.code === 'event_public_target') {
               helperText = 'contrairement à votre page acteur, ici vous pouvez ajouter plusieurs catégories de publics pour un même événement';
+            }
+            let defaultValue = '';
+            if (
+              IsTree(collection)
+              && !collection.multipleSelection
+              && formValues
+              && formValues.entries
+            ) {
+              // @ts-ignore
+              formValues.entries.map((entry) => {
+                let isPresent = false;
+                if (collection.entries) {
+                  collection.entries.map((entryCollection) => {
+                    entryCollection.subEntries.map((subEntryCollection) => {
+                      if (subEntryCollection.id === entry) isPresent = true;
+                      return isPresent;
+                    });
+                  });
+                }
+                if (isPresent) defaultValue = entry;
+              });
             }
 
             if (collection.code === 'event_price') return '';
@@ -1349,7 +1468,7 @@ const EditEventForm = (props) => {
                   IsTree(collection) && !collection.multipleSelection && (
                     // @ts-ignore
                     <Entries initValues={formValues.entries}>
-                      <RadioGroupForContext initValue={formValues.entries}>
+                      <RadioGroupForContext initValue={defaultValue}>
                         <TreeView
                           className={styles.rootTree}
                           defaultCollapseIcon={<ArrowDropDownIcon />}
@@ -1358,6 +1477,7 @@ const EditEventForm = (props) => {
                         >
                           <CustomRadioGroupForm
                             formChangeHandler={formChangeHandler}
+                            initValue={defaultValue}
                           >
                             {collection.entries
                               && collection.entries.map((entry) => {
@@ -1381,7 +1501,7 @@ const EditEventForm = (props) => {
                                             value={entry.id}
                                             control={<Radio />}
                                             label={entry.label}
-                                            // @ts-ignore
+                                            // @ts-ignore YOP
                                             checked={
                                               formValues.entries
                                               && formValues.entries.includes(entry.id)
@@ -1389,6 +1509,7 @@ const EditEventForm = (props) => {
                                           />
                                         );
                                       })}
+
                                   </StyledTreeItem>
                                 );
                               })}
@@ -1430,10 +1551,11 @@ const EditEventForm = (props) => {
                 {
                   // display &&
                   !IsTree(collection) && !collection.multipleSelection && (
-                    <RadioGroupForContext initValue={' '}>
+                    <RadioGroupForContext initValue={defaultValue}>
                       <CustomRadioGroup
                         formChangeHandler={formChangeHandler}
                         entries={collection.entries}
+                        defaultValue={defaultValue}
                       />
                     </RadioGroupForContext>
 
@@ -1444,30 +1566,7 @@ const EditEventForm = (props) => {
             );
           })
         }
-        <Grid className={styles.location}>
-          <Typography className={styles.collectionLabel}>Adresse complète de l’événement *</Typography>
-          <br />
-          <GooglePlacesAutocomplete
-            placeholder="Taper et sélectionner l'adresse*"
-            initialValue={
-              formValues.address
-              && formValues.address
-                .concat(' ')
-                .concat(formValues.postCode)
-                .concat(' ')
-                .concat(formValues.city)
-            }
-            onSelect={({ description }) => geocodeByAddress(description).then((results) => {
-              getLatLng(results[0])
-                .then((value) => {
-                  formValues.lat = `${value.lat}`;
-                  formValues.lng = `${value.lng}`;
-                })
-                .catch((error) => console.error(error));
-              getAddressDetails(results);
-            })}
-          />
-        </Grid>
+   
         <br />
         <TitleWithTooltip
           title="Calendrier "
@@ -1692,26 +1791,7 @@ const EditEventForm = (props) => {
 
         <br />
 
-        <TitleWithTooltip
-          title="Infos pratiques complément "
-          tooltipTitle="Ici vous pouvez indiquer toutes les infos comme tarifs, parking, moyen d’accès, … elles apparaitront ainsi aux visiteurs de OUAAA dans un bloc dédié plus lisible"
-        />
-        <p />
-        {editorLoaded ? (
-          <>
-            <CKEditor
-              editor={ClassicEditor}
-              data={formValues.practicalInfo}
-              onReady={(editor) => {
-                setPracticalInfoEditor(editor);
-              }}
-            />
-
-          </>
-        ) : (
-          <div>Editor loading</div>
-        )}
-        <br />
+ 
         <br />
         <Typography className={styles.collectionLabel}>
           Inscription à l’évement
@@ -1768,44 +1848,7 @@ const EditEventForm = (props) => {
         </FormControl>
         <p />
 
-        <FormItem
-          label="Lien externe de l'événement (Facebook ou site)"
-          inputName="facebookUrl"
-          formChangeHandler={formChangeHandler}
-          value={formValues.facebookUrl}
-          required={false}
-          errorBool={false}
-          errorText=""
-        />
-        <FormItemTextareaAutosize
-          label="Description courte"
-          inputName="shortDescription"
-          formChangeHandler={formChangeHandler}
-          value={formValues.shortDescription}
-          required
-          errorBool={
-            !validationResult?.global
-            && !!validationResult?.result.shortDescription
-          }
-          errorText={`Maximum 90 caractères. ${formValues.shortDescription?.length - 90
-          } caractères en trop.`}
-        />
-        <Typography variant="body1" color="primary" className={styles.label}>
-          Description
-        </Typography>
-        <p />
-        {editorLoaded ? (
-          <CKEditor
-            editor={ClassicEditor}
-            data={formValues.description}
-            onReady={(editor) => {
-              setDescriptionEditor(editor);
-            }}
-          />
-        ) : (
-          <div>Editor loading</div>
-        )}
-        <br />
+ 
         <Typography variant="body1" color="primary" className={styles.label}>
           Logo de l'événement
         </Typography>
@@ -1863,25 +1906,27 @@ const EditEventForm = (props) => {
               tabIndex={-1}
               disableRipple
               onChange={hasParentChangeHandler}
+              checked={hasParentEvent}
               name="hasParent"
               onClick={(e) => e.stopPropagation()}
             />
           )}
-          label="est affilité à un autre événement existant"
+          label="est affilié à un autre événement existant"
         />
         {hasParentEvent ? (
           <Autocomplete
             id="combo-box-parentEvent"
             options={dataEvents && dataEvents.events}
-                // @ts-ignore
+            // @ts-ignore
             onInput={inputHasParentChangeHandler}
             open={showOtherEventList}
-                // @ts-ignore
+            // @ts-ignore
             getOptionLabel={(option) => `${option.label} du ${moment(parseInt(option.startedAt)).format('DD/MM/YYYY HH:mm')} au ${moment(parseInt(option.endedAt)).format('DD/MM/YYYY HH:mm')} `}
             onChange={autocompleteHasParentHandler}
-           // defaultValue={getDefaultValueParentEvent()}
+            defaultValue={getDefaultValueParentEvent()}
             style={{ width: 300 }}
-                // eslint-disable-next-line react/jsx-props-no-spreading
+            // defaultValue={getDefaultValueParentEvent()}
+            // eslint-disable-next-line react/jsx-props-no-spreading
             renderInput={(params) => (
               <TextField
                 {...params}

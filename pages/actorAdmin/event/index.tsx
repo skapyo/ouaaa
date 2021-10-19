@@ -206,9 +206,14 @@ const EventAdminPage = () => {
       <Typography
         color="secondary"
         variant="h6"
-        className={styles.userInfosTitle}
       >
         Listes des actions dont vous êtes administrateur
+      </Typography>
+      <Typography
+        color="secondary"
+        className={styles.userInfosTitle}
+      >
+        Vous pouvez ajouter une nouvelle action depuis l'écran <Link href={`/actorAdmin`}>Administrer mes pages acteurs</Link>
       </Typography>
       {typeof dataAdminEvent !== 'undefined' && (
         <TableContainer component={Paper}>

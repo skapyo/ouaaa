@@ -1002,7 +1002,7 @@ const AddActorForm = () => {
 
         <Typography variant="body1" color="primary" className={styles.label}>
           Votre logo &nbsp;
-          <Tooltip title="Une seule photo de logo possible, vous pouvez supprimer celle affichée via la poubelle puis en télécharger une nouvelle. Seul le format JPG est accepté. Veuillez à ce que le fichier n’excède pas 4Mo">
+          <Tooltip title="Une seule photo de logo possible, vous pouvez supprimer celle affichée via la poubelle puis en télécharger une nouvelle. Seul le format JPG est accepté. Veillez à ce que le fichier n’excède pas 4Mo">
             <InfoIcon />
           </Tooltip>
         </Typography>
@@ -1022,7 +1022,7 @@ const AddActorForm = () => {
 
         <Typography variant="body1" color="primary" className={styles.label}>
           Photo principale &nbsp;
-          <Tooltip title="Une seule photo principale est possible, vous pouvez supprimer celle affichée via la poubelle puis en télécharger une nouvelle. Seul le format JPG est accepté. Veuillez à ce que le fichier n’excède pas 4Mo">
+          <Tooltip title="Une seule photo principale est possible, vous pouvez supprimer celle affichée via la poubelle puis en télécharger une nouvelle. Seul le format JPG est accepté. Veillez à ce que le fichier n’excède pas 4Mo">
             <InfoIcon />
           </Tooltip>
         </Typography>
@@ -1042,7 +1042,7 @@ const AddActorForm = () => {
 
         <Typography variant="body1" color="primary" className={styles.label}>
           Autres photos &nbsp;
-          <Tooltip title="Vous pouvez supprimer l'image affichée via la poubelle puis en télécharger une nouvelle. Seul le format JPG est accepté. Veuillez à ce que chaque fichier n’excède pas 4Mo">
+          <Tooltip title="Vous pouvez supprimer l'image affichée via la poubelle puis en télécharger une nouvelle. Seul le format JPG est accepté. Veillez à ce que chaque fichier n’excède pas 4Mo">
             <InfoIcon />
           </Tooltip>
         </Typography>
@@ -1057,7 +1057,7 @@ const AddActorForm = () => {
         ) : null}
         <ImagesDropZone
           onDropHandler={onDropHandler}
-          text="Déposez ici votre autres photos au format jpg et de poids inférieur à 4Mo"
+          text="Déposez ici vos autres photos au format jpg et de poids inférieur à 4Mo"
         />
 
         <p />
@@ -1099,7 +1099,7 @@ const AddActorForm = () => {
             <Hidden mdDown>
               <CKEditor
                 config={{
-                  toolbar: ['bold', 'italic'],
+                  toolbar: ['bold', 'italic', 'link'],
                 }}
                 editor={ClassicEditor}
                 data={formValues.description}
@@ -1111,7 +1111,7 @@ const AddActorForm = () => {
             <Hidden lgUp>
               <CKEditor
                 config={{
-                  toolbar: ['bold', 'italic'],
+                  toolbar: ['bold', 'italic', 'link'],
                 }}
                 editor={ClassicEditor}
                 data={formValues.description}
@@ -1142,7 +1142,7 @@ const AddActorForm = () => {
             <Hidden mdDown>
               <CKEditor
                 config={{
-                  toolbar: ['bold', 'italic'],
+                  toolbar: ['bold', 'italic', 'link'],
                 }}
                 editor={ClassicEditor}
                 data={formValues.volunteerDescription}
@@ -1154,7 +1154,7 @@ const AddActorForm = () => {
             <Hidden lgUp>
               <CKEditor
                 config={{
-                  toolbar: ['bold', 'italic'],
+                  toolbar: ['bold', 'italic', 'link'],
                 }}
                 editor={ClassicEditor}
                 data={formValues.volunteerDescription}
