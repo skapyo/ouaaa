@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
       color: '#2C367E',
       'background-color': 'white',
     },
-    backgroundImage: "url('./arrow.svg')",
+    backgroundImage: "url('/arrow.svg')",
     backgroundRepeat: 'no-repeat',
     'background-position-x': '5px',
     'background-position-y': '1px',

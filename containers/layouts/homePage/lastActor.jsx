@@ -36,11 +36,11 @@ const useStyles = makeStyles((theme) => ({
       border: '2px solid #2C367E',
       backgroundImage: "url('./arrow-hover.svg')",
     },
-    backgroundImage: "url('./arrow.svg')",
+    backgroundImage: "url('/arrow.svg')",
     backgroundRepeat: 'no-repeat',
     'background-position-x': '5px',
     'background-position-y': '1px',
-    'background-size': '11%',
+    'background-size': '20%',
   },
   articleCarroussel: {
     paddingTop: '2em',
