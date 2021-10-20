@@ -32,217 +32,119 @@ const Charter = () => {
               <Typography variant="h1">Charte</Typography>
             </div>
             Sommaire
-            <div>1. L’esprit du site</div>
+            <div>1. L'esprit du site et ses objectifs </div>
             <div>
-              2. Les objectifs et les usages en fonction des utilisateurs
+              2. Les usages en fonction des usagers 
             </div>
-            <div>3. La définitions des acteurs</div>
+            <div>3. Qui peut s’inscrire ?</div>
             <div>4. La gouvernance</div>
             <div />
             <p />
-            <Typography variant="h5">1. L'esprit du site :</Typography>
+            <Typography variant="h5">1. L'esprit du site et ses objectifs  :</Typography>
             <p>
               <div>
-                • Ce site ambitionne d'être un outil au service de la transition
-                citoyenne en Aunis.
+              «La transition citoyenne est un mouvement global pour inventer ensemble un monde économiquement viable, socialement responsable et écologiquement soutenable : une transition non-violente vers des sociétés du bien-vivre par l'éducation, la culture, les échanges fraternels et la recherche de l'intérêt général.» (extrait de la charte du Collectif National pour la Transition).
+              </div>
+              <br/>
+              <div>
+              Des initiatives locales donnent des réponses concrètes et pertinentes à des crises majeures : changement climatique, écroulement de la biodiversité, pollutions, gaspillage et surexploitation des ressources, repli sur soi, financiarisation de l’économie et bulles spéculatives, etc. Elles apportent des solutions ici et maintenant grâce à tous ceux qui participent à la transition / s’engagent dans des pratiques alternatives. Ces solutions une fois démultipliées, mises en réseau, rendues accessibles à tous les citoyens-habitants-usagers, forment un projet de société nouvelle et désirable.
+              </div>
+              <br/>
+              <div>
+              Site internet collaboratif généraliste :  ouaaa-transition.fr ambitionne d’accélerer la transition écologique, sociale et citoyenne en Aunis. En valorisant les acteurs et leurs actions, le site invite chacun à  participer pour "être ce changement que nous souhaitons pour le monde". Pour répondre à ces enjeux, il souhaite devenir le site de référence proposant une synthèse claire, accessible, globale, de confiance, pour trouver les informations utiles sur notre territoire. Il  se construit en tenant compte de l'ensemble des acteurs et usagers, propose des solutions aux besoins quotidiens comme aux aspirations les plus engagées.
+              </div>
+              <br/>
+              <div>
+              OUAAA! affirme son refus d’intégrer toute pratique violente, discriminatoire, anti-démocratique, sexiste, homophobe, xénophobe ou raciste.   </div>
+            </p>
+            
+            <Typography variant="h5">2. Les usages en fonction des usagers :</Typography>
+            <p>
+              <div>
+              En tant qu’utilisateur, vous pouvez grâce aux fonctionnalités actuelles du site :
+              </div>
+                <div>
+                • Voir les acteurs proches de chez vous grâce à une carte 
               </div>
               <div>
-                «La transition citoyenne est un mouvement global pour inventer
-                ensemble un monde économiquement viable, socialement responsable
-                et écologiquement soutenable : une transition non-violente vers
-                des sociétés du bien-vivre par l'éducation, la culture, les
-                échanges fraternels et la recherche de l'intérêt général.»
-                (extrait de la charte du Collectif National pour la Transition).
+                • Trouver des solutions concrètes à vos besoins grâce à notre filtre
+              </div>
+              <div>
+                • Être au courant des événements grâce à l'agenda
+              </div>
+              <div>
+                • Contacter directement les acteurs si vous souhaitez vous engager
               </div>
             </p>
             <p>
-              • En effet, des initiatives locales donnent des réponses concrètes
-              et pertinentes à des crises majeures : changement climatique,
-              écroulement de la biodiversité, pollutions, gaspillage et
-              surexploitation des ressources, repli sur soi, financiarisation de
-              l’économie et bulles spéculatives, etc... Elles apportent des
-              solutions ici et maintenant grâce à des agriculteurs,
-              associations, collectivités, entrepreneurs, citoyens qui
-              s’engagent dans des voies nouvelles. Ces solutions une fois
-              démultipliées, mises en réseau, rendues accessibles à tous,
-              forment un projet de société nouvelle et désirable. Ce site se
-              propose de présenter ces initiatives et d'inviter chacun à
-              s'engager pour "être ce changement que nous souhaitons pour le
-              monde" - en partant de l'Aunis. Pour répondre à ces intentions, il
-              souhaite devenir le site de référence proposant une synthèse
-              claire, accessible, globale, de confiance, pour trouver les
-              informations utiles sur notre territoire. Il doit donc se
-              construire en tenant compte de l'ensemble des acteurs et usagers,
-              proposer des solutions aux besoins quotidiens de base comme aux
-              aspirations les plus engagées.
+            En tant qu'acteur de la transition, vous pouvez actuellement :
+              <div>
+                • Etre visible et référencé sur notre carte 
+              </div>
+              <div>
+                • Présenter vos actions, actualités et événéments
+              </div>
+              <div>
+                • Utiliser la page web qui vous est dédiée comme votre site internet, ou renvoyer à cette page depuis votre propre site
+              </div>
             </p>
-            <Typography variant="h5">2. Les objectifs :</Typography>
+            <div>
+            Dans un esprit collaboratif, de nouvelles fonctionnalités viendront s'ajouter réguliérement. Elles seront basées sur les besoins des utilisateurs et acteurs de OUAAA!
+              </div>
+              <br/>
+            <Typography variant="h5">3. Qui peut s’inscrire ?</Typography>
             <p>
-              <div>
-                C'est un outil d'orientation vers les acteurs locaux,
-                d'information sur la transition et ses thèmes, et de
-                coordination des initiatives :
-              </div>
-              <div>En tant que citoyen.ne, vous pouvez grâce au site :</div>
-              <div>
-                • Situer les acteurs proches de chez vous grâce à une carte et
-                les découvrir dans les fiches détaillant leurs activités
+            Dans un principe de neutralité, tous les types d’acteurs (particuliers, associations & ONG, entreprises, entreprises coopératives et services publics) peuvent intégrer OUAAA! S’ils : 
+            <div>
+                • ont manifesté leur accord avec les valeurs de la charte
               </div>
               <div>
-                • Être au courant des événements grâce à l'agenda participatif
+                • sont basés en AUNIS (défini comme le regroupement des communautés de communes : Aunis Atlantique, Aunis Sud, Île de Ré et agglomération de La Rochelle) ou y ont une succursale
               </div>
-              <div>
-                • Contacter directement les acteurs si vous souhaitez vous
-                engager
-              </div>
-              <div>
-                • Etre informé.e des événements ou actions organisés par les
-                acteurs en vous abonnant à l'infolettre
-              </div>
-              <div>
-                • Prendre connaissance des idées d'actions et en proposer
-              </div>
-              <div>
-                • Trouver des solutions concrètes à vos préoccupations les plus
-                quotidiennes.
-              </div>
+              
             </p>
+              Les acteurs référencés interviennent pour améliorer, expérimenter et réinventer la société.
             <p>
-              En tant qu'acteur de la transition, vous pouvez :
-              <div>
-                • Présenter vos actions et vous faire connaître davantage
+            <Typography variant="h5">Ne seront pas référencés :</Typography>
+            <div>
+                • Les prestations de soin, santé, bien-être, massages, développement personnel ou de coaching induisant des relations humaines d'une teneur particulière (confiance, intimité, ascendant moral, influence) entre les prestataires et leurs clients 
               </div>
               <div>
-                • Utiliser la page web qui vous est dédiée comme votre site
-                internet, ou renvoyer à cette page depuis votre propre site
+                • Les partis politiques, associations dépendantes de partis ou mouvements à caractère partisan ou prosélyte
               </div>
-              <div>
-                • Sur une partie réservée du site, vous pourrez entrer en
-                contact, coordonner vos actions, partager vos bonnes pratiques
-                et connaissances avec les autres acteurs
-              </div>
+              
             </p>
-            <Typography variant="h5">3. La définition des acteurs :</Typography>
-            <p>
-              Les acteurs que nous référençons sont de tous types : citoyens,
-              associations, collectifs, professionnels du secteur public ou
-              privé.
-              <div>
-                Ils interviennent pour améliorer, expérimenter, réinventer la
-                société sur un ou plusieurs sujets d’une des thématiques
-                suivantes :
-              </div>
-              <div>
-                • l'économie sociale et solidaire, l'emploi par le soutien aux
-                circuits locaux
-              </div>
-              <div>
-                • les modes de consommation, d'échanges de biens et de services
-              </div>
-              <div>
-                • la production locale d'une alimentation saine pour les
-                consommateurs et pour l'environnement,
-              </div>
-              <div>• l’habitat (écoquartier et écohabitat)</div>
-              <div>• la mobilité (transport doux et collectif)</div>
-              <div>
-                • l'énergie (économies d'énergie et énergies renouvelables)
-              </div>
-              <div>
-                • l’environnement, la valorisation de nos paysages, la
-                protection des sols, de l'eau, de la biodiversité, de la place
-                des végétaux et de l'arbre,
-              </div>
-              <div>
-                • le réemploi, l'économie circulaire, la réduction et la gestion
-                des déchets,
-              </div>
-              <div>
-                • la solidarité, le vivre ensemble, les liens
-                intergénérationnels
-              </div>
-              <div>
-                • les projets éducatifs, artistiques, de concertation citoyenne
-                pour apprendre et agir, l’éducation populaire
-              </div>
-              <div> • le numérique au service de la transition</div>
-              <div>
-                • la réflexion et la sensibilisation sur les thèmes majeurs de
-                la transition (démocratie, justice sociale au niveau local et
-                global, environnement et système économique mondial).
-              </div>
-            </p>
-            Exemples : AMAP, éco-construction, producteurs locaux, vente à la
-            ferme, artisanat, recyclage, compostage, cuisine bio ou
-            végétarienne, écoles ou crèches engagées dans des pédagogies
-            novatrices, systèmes d'échanges non monétaires, jardins partagés,
-            jardins d'insertion, éco-gîtes, tiers-lieux, associations
-            d'éducation populaire, de promotion de l'autonomie alimentaire, de
-            mobilité douce, de l'ESS, de défense de l'environnement, de défense
-            des droits de l'homme.
-            <p>
-              <div>
-                {' '}
-                Dans un souci de neutralité et de précaution, nous appliquons
-                les restrictions suivantes :
-              </div>
-              <div>
-                {' '}
-                • Les structures nationales ou internationales devront avoir une
-                succursale en Aunis.
-              </div>
-
-              <div>
-                • Les prestations de soin, santé, bien-être, massages, induisant
-                des relations humaines d'une teneur particulière (confiance,
-                intimité, ascendant moral, influence) entre les prestataires et
-                leurs clients : nous préférons par précaution ne pas les
-                référencer.
-              </div>
-
-              <div>
-                {' '}
-                • Il en va de même pour les activités de développement personnel
-                ou de coaching.
-              </div>
-
-              <div>
-                {' '}
-                • Neutralité : la carte ne référence pas les partis politiques,
-                associations dépendantes de partis ou mouvements à caractère
-                partisan ou prosélyte. Toutefois des actions organisées par ce
-                type d'organisations pourront être annoncées dans l'agenda si
-                leur objectif coïncide avec les nôtres.
-              </div>
-            </p>
-            La Plateforme affirme son refus d’intégrer toute pratique violente,
-            discriminatoire, anti-démocratique, sexiste, homophobe, xénophobe ou
-            raciste.
             <p />
             <Typography variant="h5"> 4. La Gouvernance :</Typography>
             <p>
-              Les inscriptions sur la plate-forme sont soumises à un comité de
-              pilotage élu parmi les acteurs. Celui-ci délibère et dans le cas
-              d’un refus, motive sa décision.
+            • Les inscriptions d’acteurs sont soumises à vérification du respect de notre charte
               <div>
-                {' '}
-                Suppression / modification des informations : nous nous laissons
-                la possibilité de modifier des informations si elles sont
-                erronées et de supprimer un acteur si celui-ci n'est plus en
-                activité ou s’il contrevient à la charte.
+              • Un acteur peut être exclu du site si ses pratiques contreviennent à la charte.
               </div>
               <div>
-                {' '}
-                Protection de la vie privée : les personnes qui proposent des
-                acteurs s'engagent à ne fournir que les coordonnées publiques
-                desdits acteurs : sites web, emails, téléphones, adresses…
+              • Nous nous laissons la possibilité de supprimer un acteur si celui-ci n'est plus en activité ou inactif sur le site pendant une période prolongée.
               </div>
-              <div> Nous nous engageons à respecter le RGPD.</div>
-              <div> Révision de la charte</div>
               <div>
-                Cette charte est adoptée par le groupe de préfiguration du site
-                en réunion plénière du 26 juin 2020. Elle est révisable sur
-                demande du quorum du futur comité de pilotage.
+              • Les acteurs sont responsables des contenus  (page acteur, pages événements) qu’ils créent.
+              </div>
+              <div>
+              • Ils s'engagent à ne fournir que les coordonnées publiques desdits acteurs : sites web, emails, téléphones, adresses postales, etc.
+              </div>
+              <div>
+              • Nous nous réservons le droit de modifier une information erronée.
+              </div>
+              <div>
+              • OUAAA! s’engage à respecter le règlement général sur la protection des données (RGPD).
+              </div>
+              <br/>
+              <div>
+                {' '}
+                Une gouvernance participative (composée d’acteurs et utilisateurs) permet de développer OUAAA!, fixer ses objectifs, réfléchir à son orientation et gérer les différents aspects afférents.
+              </div>
+              <br/>
+              <div>
+              ouaaa-transition.fr est porté juridiquement par le Collectif Aunis En Transition (loi 1901, AET).
+Cette charte est adoptée le 13.10.2021
               </div>
             </p>
           </Container>
