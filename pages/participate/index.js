@@ -50,32 +50,48 @@ const Participate = () => {
         <Box>
           <Container className={styles.align}>
             <Typography variant="h1">Je Participe</Typography>
-
-            <Link href="/addactor">
-              <button className={styles.buttonGrid}>
-                JE DEVIENS UN ACTEUR
-              </button>
-            </Link>
             <Typography>
+              <br/>
+              <br/>
               <div>
-
-                Tu veux changer le monde ? Vas-y fonce :
+              Tu cherches comment participer activement à la transition écologique et sociale en Aunis ? Les acteurs présents sur OUAAA! peuvent avoir des besoins pour organiser un festival, intervenir dans les écoles pour sensibiliser les jeunes, distribuer des repas, nettoyer nos plages… Rendez-vous sur leur  page acteur, un onglet « recherche des bénévoles » t’indique présicément leurs besoins du moment. Il ne te reste plus qu’à cliquer sur « devenir bénévole » et hop ! C’est parti
               </div>
               <br/>
               <div>
-                Ouaaa est un site collaboratif, ce qui veut dire qu'il est fait par et pour ses contributeurs :  Sa gouvernance est assurée par les citoyens et organisations, acteurs de la transition que l'on peut trouver dans ses pages. Son administration suppose un gros travail de gestion de données, de coordination, de relation publique et de communication assuré en grande partie bénévolement.
-                Nous sommes donc toujours à la recherche de personnes motivées qui souhaitent mettre de leur temps, leurs savoir faire, et leur énergie au service de la promotion de la transition écologique, sociale et citoyenne en Aunis !
+              Tu représentes un acteur (particulier, association, ONG, entreprise, service public...) engagée sur les questions de transition écologique et sociale et celui-ci souhaite se faire connaitre ?
               </div>
               <br/>
+              <Link href="/addactor">
+                <button className={styles.buttonGrid}>
+                JE M'INSCRIS EN TANT QU'ACTEUR DE LA TRANSITION
+                </button>
+              </Link>
+            <div>
+              Tu veux changer le monde avec nous ?
+            </div>
+            <div>
+            OUAAA! est un site collaboratif.  Il est fait pour et par ses usagers, les acteurs recensés et ses partenaires publics ou privés. 
+            </div>
+            <br/>
+            <div>
+            Majoritairement bénévole, l'équipe projet est toujours à la recherche de personnes motivées qui souhaitent mettre de leurs temps, leurs savoir-faire, et leur énergie au service de la promotion de la transition écologique et sociale en Aunis.
+            </div>
+            <br/>
+            <div>
+            Si tu as des affinités notamment avec la communication, le développement-codage ou encore les relations partenaires, rejoins-nous dès maintenant ! 
+            </div>
+            <br/>
             </Typography>
             <Typography variant="h4">
-              <a href="mailto:contact@ouaaa-transition.fr?subject=Offre de bénévolat">
-              Je Participe et je rejoins l'équipe du
+              <a href="https://contact466459.typeform.com/to/x0uyBGSf" target="_blank">
+              JE REJOINS L’EQUIPE
                 {' '}
-                <i>Ouaaa</i>
+                <i>OUAAA!</i>
               </a>
               {/* @ts-ignore */}
             </Typography>
+            <br/>
+            <br/>
           </Container>
           <Newsletter />
         </Box>
