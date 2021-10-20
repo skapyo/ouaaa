@@ -195,8 +195,7 @@ const PresentationSection = () => {
               <ListItemText
                 className={styles.listItemText}
                 primary={
-                  <>
-                    <i>OUAAA!</i> est le site des initiatives, des réseaux et des acteurs de la transition qui contribuent à une société plus humaine et plus écologique sur le territoire de l'Aunis (nord Charente-Maritime).
+                  <>Tu habites le Territoire du Nord de la Charente-Maritime ou la ville de La Rochelle et t tu veux  <Link href="/map">trouver une recyclerie, réparer un objet, changer de producteur d'énergie, t'inscrire dans une AMAP, rénover ta maison</Link> et bien plus encore ? Tu es au bon endroit ! 
                   </>
                 }
               />
@@ -204,65 +203,15 @@ const PresentationSection = () => {
             <ListItem>
               <ListItemText
                 className={styles.listItemText}
-                primary={
-                  <>Tu habites le nord de la Charente-Maritime et tu veux  <Link href="/map">trouver une recyclerie, réparer un objet, changer de producteur d'énergie, t'inscrire dans une AMAP, rénover ta maison</Link> et bien plus encore ?
-                  </>
-                }
-              />
-            </ListItem>
-            <ListItem>
-              <ListItemText
-                className={styles.listItemText}
-                primary="La transition écologique et sociale touche à toutes les thématiques :  l'éducation, la culture, la santé, l'alimentation, la justice, l'économie, la citoyenneté, l'agriculture, l'industrie, l'habitat, la mobilité, l'énergie, le recyclage, la réduction des déchets, le climat, la qualité de l'air, la biodiversité, la gestion de l'eau, l'aménagement du territoire, et plus encore !"
+                primary="Le projet OUAAA! accompagne la transition de notre territoire vers un fonctionnement plus sobre, plus solidaire et véritablement durable. Tu trouveras ici des informations sur les acteurs qui participent à la transition écologique et sociale dans des domaines aussi variées que : l'éducation, la culture, la santé, l'alimentation, la justice, l'économie, la citoyenneté, l'agriculture, l'industrie, l'habitat, la mobilité, l'énergie, le recyclage, la réduction des déchets, le développement durable, le climat, la qualité de l'air, la biodiversité, la gestion de l'eau, l'aménagement du territoire, etc"
               />
             </ListItem>
             <ListItem>
               <ListItemText
                 className={styles.listItemText}
                 primary={
-                  <>Les personnes agissant pour la transition écologique et sociale, sont présentes sur tout le territoire de l'anse de l'Aiguillon à l'embouchure de la Charente, de la forêt de Benon au bout de l'île de Ré en passant par Surgères, L’agglo de La Rochelle, Saint Martin de Ré, Marans, et Châtelaillon-Plage. 
-                Tu représentes un acteur (particulier, association, ONG, entreprise, service public) engagé par ses actions et ses projets d’innovation, de développement ou de production. Celui-ci souhaite se faire connaître ? <Link href="/addActor">Inscris toi dès maintenant en tant qu’acteur de la transition en Aunis</Link>
+                  <>Partenaire de La Rochelle Territoire Zéro carbone, la plateforme participative <i>OUAAA!</i> met un coup de projecteur, sur tous celles et ceux qui agissent pour la transition climatique. Cette communauté d’acteurs est présente sur tout le territoire, dans les villes comme dans les villages, de l'anse de l'Aiguillon à l'embouchure de la Charente, de la forêt de Benon au bout de l'île de Ré en passant par Surgères, l’agglomération de La Rochelle, Saint Martin de Ré, Marans, et Châtelaillon-Plage.
                 </>
-                }
-              />
-            </ListItem>
-            <ListItem>
-              <ListItemText
-                className={styles.listItemText}
-                primary={
-                  <>
-                    Partenaire de La Rochelle Territoire Zéro Carbone, La plateforme participative <i>OUAAA!</i> souhaite rendre visible, auprès des habitants et citoyens, toutes celles et ceux qui aspirent à changer la société dans le cadre de la la transition sociale et environnementale
-                  </>
-                }
-              />
-            </ListItem>
-              <ListItem>
-              <ListItemText
-                className={styles.listItemText}
-                primary={
-                  <>
-                    Tu veux en savoir plus sur <Link href="/charter">les engagements éthiques de <i>OUAAA!</i></Link> ?
-                  </>
-                }
-              />
-            </ListItem>
-            <ListItem>
-              <ListItemText
-                className={styles.listItemText}
-                primary={
-                  <>
-                    100% coopératif et animé par une équipe bénévole : sans but lucratif, <i>OUAAA!</i> est développé sur la base d’outils libres, il est utilisable et clonable par tous.
-                  </>
-                }
-              />
-            </ListItem>
-            <ListItem>
-              <ListItemText
-                className={styles.listItemText}
-                primary={
-                  <>
-                    Plateforme d’information et d’engagement, <i>OUAAA!</i> accompagne la transition vers un fonctionnement plus sobre, plus solidaire et véritablement « durable » dans les communautés de communes Aunis Atlantique, Aunis Sud, dans l’agglomération de La Rochelle, et dans l'Île de Ré. Dans les villes comme dans les villages, <i>OUAAA!</i> est la communauté des acteurs qui s’engagent pour le climat, la planète et tous ceux qui y habitent !
-                  </>
                 }
               />
             </ListItem>

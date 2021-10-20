@@ -56,7 +56,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundRepeat: 'no-repeat',
     'background-position-x': '5px',
     'background-position-y': '1px',
-    'background-size': '20%',
+    'background-size': '12%',
   },
   articleCarroussel: {
     paddingTop: '2em',
