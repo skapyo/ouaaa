@@ -7,7 +7,9 @@ import {
   makeStyles,
   RootRef,
   Typography,
+  useTheme,
 } from '@material-ui/core';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { withApollo } from 'hoc/withApollo.jsx';
 import { useRouter } from 'next/router';
 import gql from 'graphql-tag';
@@ -171,6 +173,9 @@ const useStyles = makeStyles((theme) => ({
       objectFit: 'contain',
     },
   },
+  slider: {
+    textAlign: 'center',
+  },
   infoValue: {
     color: theme.typography.h5.color,
     fontWeight: 700,
@@ -185,6 +190,28 @@ const useStyles = makeStyles((theme) => ({
   },
   descriptionInfoValue: {
     display: 'inline-block',
+  },
+  buttonLink: {
+    margin: '2.5em 0 2.5em 0 ',
+    color: 'white',
+    'background-color': '#2C367E',
+    border: 'none',
+
+    borderRadius: '1.5em',
+    padding: '0.5em 3em 0.5em 3em',
+    height: '2.5em',
+    '&:hover': {
+      cursor: 'pointer',
+      color: '#2C367E',
+      'background-color': 'white',
+      border: '2px solid #2C367E',
+    },
+    backgroundImage: "url('/arrow.svg')",
+    backgroundRepeat: 'no-repeat',
+    'background-position-x': '5px',
+    'background-position-y': '1px',
+    'background-size': '20%',
+    fontSize: '1em',
   },
   button: {
     margin: '2.5em 0 2.5em 0 ',
@@ -506,12 +533,14 @@ const Event = ({ initialData }) => {
   };
 
   const styles = useStyles(stylesProps);
-
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.down('sm'));
+  const maxSlideToShowEvent = !matches?5:1;
   const settingsSliderevent = {
     infinite: true,
     slidesToShow:
-      data && data.event.actors.length > 5
-        ? 5
+      data && data.event.actors.length >= maxSlideToShowEvent
+        ? maxSlideToShowEvent
         : data && data.event.actors.length,
     slidesToScroll: 1,
     // autoplay: true,
@@ -520,11 +549,12 @@ const Event = ({ initialData }) => {
     nextArrow: <SampleNextArrow />,
     prevArrow: <SamplePrevArrow />,
   };
+  const maxSlideToShowImaget = !matches?3:1;
   const settingsSliderImage = {
     infinite: true,
     slidesToShow:
-      data && data.event.pictures && data.event.pictures.length > 3
-        ? 3
+      data && data.event.pictures && data.event.pictures.length >= maxSlideToShowImaget
+        ? maxSlideToShowImaget
         : data && data.event.pictures && data.event.pictures.length,
     slidesToScroll: 1,
     // autoplay: true,
@@ -1180,7 +1210,7 @@ const Event = ({ initialData }) => {
                   <a
                     href={data && data.event.registerLink}
                     target="blank"
-                    className={styles.button}
+                    className={styles.buttonLink}
                   >
                     Je participe
                   </a>
@@ -1195,19 +1225,15 @@ const Event = ({ initialData }) => {
                 <br />
               </div>
             )}
-            <Slider {...settingsSliderImage}>
+            <Slider {...settingsSliderImage} className={[styles.slider]}>
               {data &&
                 data.event.pictures &&
                 data.event.pictures
                   .sort((a, b) => (a.position > b.position ? 1 : -1))
                   .map((picture) => (
-                      <Image
-                      loader={myLoader}
-                      width="90%"
-                      height="50px"
-                      layout="responsive"
-                      objectFit="contain"
-                      src={picture.croppedPicturePath}
+                    <img
+                      src={getImageUrl(picture.croppedPicturePath)}
+                      className={[styles.img]}
                     />
                   ))}
             </Slider>

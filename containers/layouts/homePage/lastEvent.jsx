@@ -177,7 +177,7 @@ const LastActor = () => {
   const theme = useTheme();
   const mobile = useMediaQuery(theme.breakpoints.down('sm'));
   const styles = useStyles();
-  const maxImageDisplay = !mobile?5:2
+  const maxImageDisplay = !mobile?5:1
   const settings = {
     dots: true,
     infinite: true,
@@ -195,7 +195,7 @@ const LastActor = () => {
   return (
     <Container className={[styles.event]}>
       <Typography variant="h5" className={[styles.cardTitle]}>
-        LES EVENEMENTS A VENIR
+        LES ÉVÉNEMENTS À VENIR
       </Typography>
       <div className={[styles.border]}/>
       <Slider {...settings} className={[styles.articleCarroussel]}>

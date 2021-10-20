@@ -95,6 +95,8 @@ const LastActor = () => {
       }
     }
   `;
+
+  
   const [actorToRender, setActorToRender] = useState(null);
 
   const {
@@ -141,7 +143,7 @@ const LastActor = () => {
   const theme = useTheme();
   const mobile = useMediaQuery(theme.breakpoints.down('sm'));
   const styles = useStyles();
-  const maxImageDisplay = !mobile?5:2
+  const maxImageDisplay = !mobile?5:1
   const settings = {
     dots: true,
     infinite: true,
@@ -159,7 +161,7 @@ const LastActor = () => {
   return (
     <Container className={[styles.actorContainer]}>
       <Typography variant="h2" className={[styles.cardTitle]}>
-        LES ACTEURS RECEMMENTS AJOUTES
+        LES ACTEURS RÉCEMMENTS AJOUTÉS
       </Typography>
       <div className={[styles.border]}/>
       <Slider {...settings} className={[styles.articleCarroussel]}>

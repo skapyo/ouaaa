@@ -195,7 +195,7 @@ const PresentationSection = () => {
               <ListItemText
                 className={styles.listItemText}
                 primary={
-                  <>Tu habites le Territoire du Nord de la Charente-Maritime ou la ville de La Rochelle et t tu veux  <Link href="/map">trouver une recyclerie, réparer un objet, changer de producteur d'énergie, t'inscrire dans une AMAP, rénover ta maison</Link> et bien plus encore ? Tu es au bon endroit ! 
+                  <>Tu habites le Territoire du Nord de la Charente-Maritime ou la ville de La Rochelle et tu veux  <Link href="/map">trouver une recyclerie, réparer un objet, changer de producteur d'énergie, t'inscrire dans une AMAP, rénover ta maison</Link> et bien plus encore ? Tu es au bon endroit ! 
                   </>
                 }
               />
@@ -248,7 +248,7 @@ const PresentationSection = () => {
           </Typography>
           <Link href="/map">
             <button className={styles.buttonInverseActor}>
-              JE DECOUVRE LES ACTEURS
+              JE DÉCOUVRE LES ACTEURS
             </button>
           </Link>
         </Grid>

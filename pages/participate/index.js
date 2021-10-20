@@ -14,7 +14,17 @@ const useStyles = makeStyles((theme) => ({
   align: {
     'text-align': 'center',
   },
-
+  container: {
+    width: '90%',
+    [theme.breakpoints.down('md')]: {
+      paddingTop: '5em',
+    },
+    'text-align': 'center',
+   
+  },
+  justify: {
+    'text-align': 'justify',
+  },
   buttonGrid: {
     padddingTop: '6em',
     margin: '5em 0 5em 0 ',
@@ -48,24 +58,27 @@ const Participate = () => {
     <AppLayout>
       <RootRef>
         <Box>
-          <Container className={styles.align}>
+          <Container className={styles.container}>
             <Typography variant="h1">Je Participe</Typography>
-            <Typography>
+            <Typography className={styles.justify}>
               <br/>
               <br/>
               <div>
-              Tu cherches comment participer activement à la transition écologique et sociale en Aunis ? Les acteurs présents sur OUAAA! peuvent avoir des besoins pour organiser un festival, intervenir dans les écoles pour sensibiliser les jeunes, distribuer des repas, nettoyer nos plages… Rendez-vous sur leur  page acteur, un onglet « recherche des bénévoles » t’indique présicément leurs besoins du moment. Il ne te reste plus qu’à cliquer sur « devenir bénévole » et hop ! C’est parti
+              Tu cherches comment participer activement à la transition écologique et sociale en Aunis ? <br/> Les acteurs présents sur OUAAA! peuvent avoir des besoins pour organiser un festival, intervenir dans les écoles pour sensibiliser les jeunes, distribuer des repas, nettoyer nos plages… Rendez-vous sur leur  page acteur, un onglet « recherche des bénévoles » t’indique présicément leurs besoins du moment. Il ne te reste plus qu’à cliquer sur « devenir bénévole » et hop ! C’est parti
               </div>
               <br/>
+              
               <div>
               Tu représentes un acteur (particulier, association, ONG, entreprise, service public...) engagée sur les questions de transition écologique et sociale et celui-ci souhaite se faire connaitre ?
               </div>
               <br/>
+              </Typography>
               <Link href="/addactor">
                 <button className={styles.buttonGrid}>
                 JE M'INSCRIS EN TANT QU'ACTEUR DE LA TRANSITION
                 </button>
               </Link>
+              <Typography className={styles.justify}>
             <div>
               Tu veux changer le monde avec nous ?
             </div>

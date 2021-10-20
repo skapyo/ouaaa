@@ -13,7 +13,9 @@ import {
   makeStyles,
   RootRef,
   Typography,
+  useTheme,
 } from '@material-ui/core';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { withApollo } from 'hoc/withApollo.jsx';
 import { useRouter } from 'next/router';
 import gql from 'graphql-tag';
@@ -158,6 +160,9 @@ const useStyles = makeStyles((theme) => ({
       width: '100%',
       objectFit: 'contain',
     },
+  },
+  slider: {
+    textAlign: 'center',
   },
   infoPratiqueTitle: {
     fontWeight: '900',
@@ -507,11 +512,15 @@ const Actor = ({ initialData }) => {
   };
 
   const headerRef = React.useRef();
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.down('sm'));
+  const maxSlideToShowImage= !matches?3:1;
+
   const settingsSliderImage = {
     infinite: true,
     slidesToShow:
-      data && data.actor.pictures && data.actor.pictures.length > 3
-        ? 3
+      data && data.actor.pictures && data.actor.pictures.length >= maxSlideToShowImage
+        ? maxSlideToShowImage
         : data && data.actor.pictures && data.actor.pictures.length,
     slidesToScroll: 1,
     // autoplay: true,
@@ -520,23 +529,7 @@ const Actor = ({ initialData }) => {
     nextArrow: <SampleNextArrow />,
     prevArrow: <SamplePrevArrow />,
   };
-  const nbSlidetoshow =
-    data && data.actor.events && data.actor.events.length > 5
-      ? 5
-      : data &&
-        data.actor.events &&
-        data.actor.events.length + (containUser(data.actor.referents) ? 1 : 0);
 
-  const settingsSliderevent = {
-    infinite: true,
-    slidesToShow: nbSlidetoshow,
-    slidesToScroll: 1,
-     autoplay: true,
-     autoplaySpeed: 200,
-    //  pauseOnHover: true,
-    nextArrow: <SampleNextArrow />,
-    prevArrow: <SamplePrevArrow />,
-  };
   function SampleNextArrow(props) {
     const { className, style, onClick } = props;
     return (
@@ -1268,19 +1261,14 @@ const Actor = ({ initialData }) => {
                 <br />
               </div>
             )}
-            <Slider {...settingsSliderImage}>
+            <Slider {...settingsSliderImage} className={[styles.slider]}>
               {data &&
                 data.actor.pictures &&
                 data.actor.pictures
                   .sort((a, b) => (a.position > b.position ? 1 : -1))
                   .map((picture) => (
-                    <Image
-                      loader={myLoader}
-                      width="90%"
-                      height="70px"
-                      layout="responsive"
-                      objectFit="contain"
-                      src={picture.croppedPicturePath}
+                    <img
+                      src={getImageUrl(picture.croppedPicturePath)}
                       className={[styles.img]}
                     />
                   ))}

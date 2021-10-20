@@ -141,7 +141,7 @@ const Charter = () => {
                 {' '}
                 Une gouvernance participative (composée d’acteurs et utilisateurs) permet de développer OUAAA!, fixer ses objectifs, réfléchir à son orientation et gérer les différents aspects afférents.
               </div>
-              <br/>
+             
               <div>
               ouaaa-transition.fr est porté juridiquement par le Collectif Aunis En Transition (loi 1901, AET).
 Cette charte est adoptée le 13.10.2021

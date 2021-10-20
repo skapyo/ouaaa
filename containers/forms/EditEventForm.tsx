@@ -979,7 +979,7 @@ const EditEventForm = (props) => {
       formValues.lng = eventData.event.lng;
       formValues.registerLink = eventData.event.registerLink;
       formValues.actors = eventData.event.actors;
-      formValues.parentId =eventData.event !== undefined ?eventData.event.parentEvent.id:null;
+      formValues.parentId =eventData.event !== undefined && eventData.event.parentEvent && eventData.event.parentEvent.id;
       if(formValues.parentId){
         setHasParentEvent(!!formValues.parentId);
       }
