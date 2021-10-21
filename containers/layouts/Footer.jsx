@@ -56,7 +56,7 @@ const Footer = () => {
       </Typography>
       <div className={classes.socialNetworks}>
         <a
-          href="https://www.facebook.com/OUtilsdesActeursAlternatifsenAunis"
+          href="https://www.facebook.com/OuaaaTransition"
           target="_blank"
         >
           <FacebookIcon className={classes.icons} fontSize="large" />
