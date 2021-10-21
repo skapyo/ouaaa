@@ -77,7 +77,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundRepeat: 'no-repeat',
     'background-position-x': '5px',
     'background-position-y': '-3px',
-   
+
     boxShadow: '11px 13px 22px -10px rgb(0 0 0 / 46%)',
   },
   buttonGridDiv: {
@@ -107,7 +107,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundRepeat: 'no-repeat',
     'background-position-x': '5px',
     'background-position-y': '-3px',
- 
+
   },
   buttonInverseOrganisation: {
 
@@ -131,7 +131,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundRepeat: 'no-repeat',
     'background-position-x': '5px',
     'background-position-y': '-3px',
-  
+
   },
   map: {
     paddingLeft: '19%',
@@ -195,7 +195,7 @@ const PresentationSection = () => {
               <ListItemText
                 className={styles.listItemText}
                 primary={
-                  <>Tu habites le Territoire du Nord de la Charente-Maritime ou la ville de La Rochelle et tu veux  <Link href="/map">trouver une recyclerie, réparer un objet, changer de producteur d'énergie, t'inscrire dans une AMAP, rénover ta maison</Link> et bien plus encore ? Tu es au bon endroit ! 
+                  <>Tu habites le Territoire du Nord de la Charente-Maritime ou la ville de <b>La Rochelle</b> et tu veux  <Link href="/map">trouver une recyclerie, réparer un objet, changer de producteur d'énergie, t'inscrire dans une AMAP, rénover ta maison</Link> et bien plus encore ? Tu es au bon endroit !
                   </>
                 }
               />
@@ -203,15 +203,18 @@ const PresentationSection = () => {
             <ListItem>
               <ListItemText
                 className={styles.listItemText}
-                primary="Le projet OUAAA! accompagne la transition de notre territoire vers un fonctionnement plus sobre, plus solidaire et véritablement durable. Tu trouveras ici des informations sur les acteurs qui participent à la transition écologique et sociale dans des domaines aussi variées que : l'éducation, la culture, la santé, l'alimentation, la justice, l'économie, la citoyenneté, l'agriculture, l'industrie, l'habitat, la mobilité, l'énergie, le recyclage, la réduction des déchets, le développement durable, le climat, la qualité de l'air, la biodiversité, la gestion de l'eau, l'aménagement du territoire, etc"
+                primary={
+                  <>Le <b>projet OUAAA! accompagne la transition</b> de notre territoire vers un fonctionnement plus  <b>sobre</b>,  <b>plus solidaire</b> et véritablement <b>durable</b>. Tu trouveras ici des informations sur les acteurs qui participent à la transition écologique et sociale dans des domaines aussi variées que : <b>l'éducation</b>, la culture, la santé, <b>l'alimentation</b>, la justice, l'économie, la citoyenneté, l'agriculture, l'industrie, l'habitat, la mobilité, <b>l'énergie</b>, le recyclage, la réduction des déchets, <b>le développement durable</b>, <b>le climat</b>, la qualité de l'air, la biodiversité, la gestion de l'eau, l'aménagement du territoire, etc
+                  </>
+                }
               />
             </ListItem>
             <ListItem>
               <ListItemText
                 className={styles.listItemText}
                 primary={
-                  <>Partenaire de La Rochelle Territoire Zéro carbone, la plateforme participative <i>OUAAA!</i> met un coup de projecteur, sur tous celles et ceux qui agissent pour la transition climatique. Cette communauté d’acteurs est présente sur tout le territoire, dans les villes comme dans les villages, de l'anse de l'Aiguillon à l'embouchure de la Charente, de la forêt de Benon au bout de l'île de Ré en passant par Surgères, l’agglomération de La Rochelle, Saint Martin de Ré, Marans, et Châtelaillon-Plage.
-                </>
+                  <>Partenaire de <b>La Rochelle Territoire Zéro carbone</b>, la plateforme participative <i>OUAAA!</i> met un coup de projecteur, sur tous celles et ceux qui agissent pour la <b>transition climatique</b>. Cette communauté d’acteurs est présente sur tout le territoire, dans les villes comme dans les villages, de l'anse de l'Aiguillon à l'embouchure de la Charente, de la forêt de Benon au bout de l'île de Ré en passant par Surgères, l’agglomération de La Rochelle, Saint Martin de Ré, Marans, et Châtelaillon-Plage.
+                  </>
                 }
               />
             </ListItem>
@@ -237,9 +240,9 @@ const PresentationSection = () => {
         justify="center"
         className={[styles.align, styles.flexColumn]}
       >
-       
+
         <Grid item md={5} sm={10} className={[styles.gridItem, styles.align]}>
-          <img width="30%" src="./Icone_decouvrir_acteur.png"  className={styles.imageGrid} />
+          <img width="30%" src="./Icone_decouvrir_acteur.png" className={styles.imageGrid} />
           <Typography className={styles.titleGrid}>
             Tu es un citoyen et souhaites mieux
           </Typography>
@@ -252,7 +255,7 @@ const PresentationSection = () => {
             </button>
           </Link>
         </Grid>
-         
+
         <Grid item md={5} sm={10} className={[styles.gridItem, styles.align]}>
           <img
             width="30%"
@@ -271,7 +274,7 @@ const PresentationSection = () => {
         </Grid>
 
       </Grid>
-      
+
     </Container>
   );
 };
