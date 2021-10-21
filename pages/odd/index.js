@@ -42,6 +42,9 @@ const Charter = () => {
                 <div>
                   En 2015, les 193 pays membres de l'ONU signent de façon unanime deux traités importants dont l'accord sur les Objectifs du Développement Durable (ODD). Inspiré par plusieurs pays d'Amérique Latine. Contrairement aux précédents, cet accord va au-delà de l'aide au "tiers-monde". Un effort collectif pour le bien commun !
                 </div>
+                <div className={styles.align}>
+                  <img src="/image/odd-donut_simplifie.jpg" alt="Plancher social, Plancher environnemental" />
+                </div>
                 <br />
                 <div>
                   Bien plus ambitieux, il convient que les pays riches doivent diminuer leur empreinte écologique, et les pays pauvres augmenter leur indice de développement humain (autre indice ONU regroupant le PIB par habitant, l’espérance de vie à la naissance et le niveau d’éducation). Ce concept a été schématisé par l’économiste KATE RAWORTH comme un « doughnut » Son nom ludique peut interpeller, et pourtant cette théorie est très sérieuse ! Elle représente le défi du 21ème siècle : «construire un espace sûr et juste pour l’humanité». Pour y parvenir, il est nécessaire de répondre aux besoins sociaux (le plancher qui permet de vivre décemment) tout en respectant les limites de notre planète (plafond qui marque la zone à ne pas dépasser)
@@ -49,6 +52,9 @@ const Charter = () => {
                 <br />
                 <div>
                   Décliné en "Agenda 2030", le traité invite chaque pays du Monde à répondre aux enjeux majeurs tout en gardant la possibilité d’aller au-delà du minimum requis par l’accord et proposer des indicateurs plus pertinents.
+                </div>
+                <div className={styles.align}>
+                  <img src="/image/17_ODD_ONU.jpg" alt="ODD ONU" />
                 </div>
                 <br />
               </p>
