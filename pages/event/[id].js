@@ -463,7 +463,7 @@ const Event = ({ initialData }) => {
       enqueueSnackbar('Participation prise en compte', {
         preventDuplicate: true,
       });
-      refetch();
+      setHasClickParticipate(true);
     }
   }, [participateData]);
 
@@ -472,13 +472,14 @@ const Event = ({ initialData }) => {
       enqueueSnackbar('Participation retiré', {
         preventDuplicate: true,
       });
-      refetch();
+      setHasClickParticipate(false);
     }
   }, [removeparticipateData]);
 
   const user = useSessionState();
   const [cookies, setCookie, removeCookie] = useCookies();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const [hasClickParticipate, setHasClickParticipate] = useState(false);
 
   function containUser(list) {
     let isContained = false;
@@ -535,7 +536,7 @@ const Event = ({ initialData }) => {
   const styles = useStyles(stylesProps);
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down('sm'));
-  const maxSlideToShowEvent = !matches?5:1;
+  const maxSlideToShowEvent = !matches ? 5 : 1;
   const settingsSliderevent = {
     infinite: true,
     slidesToShow:
@@ -549,7 +550,7 @@ const Event = ({ initialData }) => {
     nextArrow: <SampleNextArrow />,
     prevArrow: <SamplePrevArrow />,
   };
-  const maxSlideToShowImaget = !matches?3:1;
+  const maxSlideToShowImaget = !matches ? 3 : 1;
   const settingsSliderImage = {
     infinite: true,
     slidesToShow:
@@ -682,10 +683,10 @@ const Event = ({ initialData }) => {
                       data.event.pictures.filter((picture) => picture.logo)
                         .length >= 1 && (
                         <Image
-                        width="100%"
-                        height="100px"
-                        layout="responsive"
-                        objectFit="contain"
+                          width="100%"
+                          height="100px"
+                          layout="responsive"
+                          objectFit="contain"
                           src={
                             data.event.pictures.length >= 1
                               ? getImageUrl(
@@ -747,7 +748,7 @@ const Event = ({ initialData }) => {
                           <Image
                             src={'/icons/public.svg'}
                             alt="Collectif & réseau"
-                            width="25px" height="25px"  objectFit="contain"
+                            width="25px" height="25px" objectFit="contain"
                             className={[styles.icon]}
                           />
                         </Grid>
@@ -994,7 +995,7 @@ const Event = ({ initialData }) => {
                               {/* @ts-ignore */}:
                               {entry.icon && (
                                 <Image
-                                width="30px" height="25px" 
+                                  width="30px" height="25px"
                                   src={`/icons/${entry.icon}.svg`}
                                   alt="icon"
                                   className={styles.iconEntry}
@@ -1182,15 +1183,17 @@ const Event = ({ initialData }) => {
             </Grid>
 
             <div className={styles.buttonParticipate}>
-              {data && containUser(data.event.participants) && (
-                <button
-                  className={styles.buttonInverse}
-                  onClick={removeParticipateHandler}
-                >
-                  Je ne participe plus
-                </button>
-              )}
-              {!(data && containUser(data.event.participants)) &&
+              {data && (containUser(data.event.participants) ||
+                hasClickParticipate) && (
+                  <button
+                    className={styles.buttonInverse}
+                    onClick={removeParticipateHandler}
+                  >
+                    Je ne participe plus
+                  </button>
+                )}
+              {data && !containUser(data.event.participants) &&
+                !hasClickParticipate &&
                 !(
                   data &&
                   data.event.registerLink &&
