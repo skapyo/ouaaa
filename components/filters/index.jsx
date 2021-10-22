@@ -123,6 +123,10 @@ const FilterItem = props => {
   const { collection, categoryChange, onEntryChange } = props;
   const classes = useStyles();
 
+  const handleCategoryChange = useCallback((entries) => {
+    onEntryChange(entries, collection);
+  }, [collection, onEntryChange])
+
   return (
     <Entries className={classes.entries} initValues={[]}>
       {
@@ -133,7 +137,7 @@ const FilterItem = props => {
               entry={entry}
               subEntries={entry.subEntries}
               categoryChange={categoryChange}
-              onCategoryChange={onEntryChange}
+              onCategoryChange={handleCategoryChange}
               isForm={false}
             />
           );
@@ -213,17 +217,19 @@ function Filters(props) {
     }
   }, [setErrorPostCode]);
 
-  const handleEntryChange = useCallback((entries) => {
+  const handleEntryChange = useCallback((entries, collection) => {
     let currentEntries = [...filters.entries || []];
     entries.forEach(newEntry => {
-      const alreadyChecked = currentEntries.find(id => id === newEntry.id);
+      const alreadyChecked = currentEntries.find(subEntries => subEntries.find(id => id === newEntry.id));
       if (alreadyChecked) {
         if (!newEntry.checked) {
-          currentEntries = currentEntries.filter(id => id !== newEntry.id);
+          currentEntries[collection.position] = currentEntries[collection.position].filter(id => id !== newEntry.id);
         }
       } else {
         if (newEntry.checked) {
-          currentEntries.push(newEntry.id);
+          let collectionEntries = currentEntries[collection.position] || [];
+          collectionEntries.push(newEntry.id);
+          currentEntries[collection.position] = collectionEntries;
         }
       }
     });
