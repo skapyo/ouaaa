@@ -120,7 +120,7 @@ const IsTree = (collection) => {
 };
 
 const FilterItem = props => {
-  const { collection, categoryChange, onCategoryChange } = props;
+  const { collection, categoryChange, onEntryChange } = props;
   const classes = useStyles();
 
   return (
@@ -133,7 +133,7 @@ const FilterItem = props => {
               entry={entry}
               subEntries={entry.subEntries}
               categoryChange={categoryChange}
-              onCategoryChange={onCategoryChange}
+              onCategoryChange={onEntryChange}
               isForm={false}
             />
           );
@@ -213,22 +213,22 @@ function Filters(props) {
     }
   }, [setErrorPostCode]);
 
-  const handleCategoryChange = useCallback((categories) => {
-    let currentCategories = [...filters.categories || []];
-    categories.forEach(newCategory => {
-      const alreadyChecked = currentCategories.find(id => id === newCategory.id);
+  const handleEntryChange = useCallback((entries) => {
+    let currentEntries = [...filters.entries || []];
+    entries.forEach(newEntry => {
+      const alreadyChecked = currentEntries.find(id => id === newEntry.id);
       if (alreadyChecked) {
-        if (!newCategory.checked) {
-          currentCategories = currentCategories.filter(id => id !== newCategory.id);
+        if (!newEntry.checked) {
+          currentEntries = currentEntries.filter(id => id !== newEntry.id);
         }
       } else {
-        if (newCategory.checked) {
-          currentCategories.push(newCategory.id);
+        if (newEntry.checked) {
+          currentEntries.push(newEntry.id);
         }
       }
     });
 
-    handleFilterChange('entries', currentCategories);
+    handleFilterChange('entries', currentEntries);
   }, [filters, handleFilterChange]);
 
   const { loading: loadingCollections, error: errorCollections } = useQuery(
@@ -297,7 +297,7 @@ function Filters(props) {
             <ExpansionPanelDetails className={classes.expansionPanelDetails}>
               <FilterItem
                 collection={collection}
-                onCategoryChange={handleCategoryChange}
+                onEntryChange={handleEntryChange}
               />
             </ExpansionPanelDetails>
           </ExpansionPanel>
