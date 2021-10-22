@@ -34,7 +34,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Avatar from '@material-ui/core/Avatar';
 import TreeView from '@material-ui/lab/TreeView';
 import { Autocomplete } from '@material-ui/lab';
-
+import Head from 'next/head';
 import InfoIcon from '@material-ui/icons/Info';
 import AddCircleOutline from '@material-ui/icons/AddCircleOutline';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
@@ -1280,6 +1280,14 @@ const EditActorForm = (props) => {
     );
 
     return (
+      <>
+     { /*<Head>
+      <script
+            type="text/javascript"
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDvUKXlWS1470oj8C-vD6s62Bs9Y8XQf00&language=fr&region=FR&libraries=places"
+          />
+      </Head>
+     */}
       <Container component="main" maxWidth="sm">
         <FormItem
           label="Nom"
@@ -1909,6 +1917,7 @@ const EditActorForm = (props) => {
           </Dialog>
         </Grid>
       </Container>
+      </>
     );
   };
 

@@ -733,6 +733,8 @@ const AddActorForm = () => {
       </React.Fragment>
     ));
     return (
+
+      
       <Container component="main" maxWidth="sm">
         <br />
         <Typography className={styles.introduction}>
