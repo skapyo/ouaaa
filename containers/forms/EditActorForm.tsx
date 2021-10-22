@@ -1281,13 +1281,6 @@ const EditActorForm = (props) => {
 
     return (
       <>
-     { /*<Head>
-      <script
-            type="text/javascript"
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDvUKXlWS1470oj8C-vD6s62Bs9Y8XQf00&language=fr&region=FR&libraries=places"
-          />
-      </Head>
-     */}
       <Container component="main" maxWidth="sm">
         <FormItem
           label="Nom"
@@ -1344,6 +1337,7 @@ const EditActorForm = (props) => {
         <div className={styles.field}>
           <Grid className={styles.location}>
             <GooglePlacesAutocomplete
+              apiKey="AIzaSyDvUKXlWS1470oj8C-vD6s62Bs9Y8XQf00"
               placeholder="Taper et sélectionner la localisation *"
               initialValue={
                 formValues.address

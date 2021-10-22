@@ -849,6 +849,7 @@ const AddActorForm = () => {
         <div className={styles.field}>
           <Grid className={styles.location}>
             <GooglePlacesAutocomplete
+              apiKey="AIzaSyDvUKXlWS1470oj8C-vD6s62Bs9Y8XQf00"
               placeholder="Taper et sélectionner la localisation *"
               initialValue={
                 formValues.address
