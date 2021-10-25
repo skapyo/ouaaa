@@ -87,7 +87,6 @@ const MyApp = (props) => {
     <>
       <Head>
         <meta charSet="utf-8" />
-
         <title>OUAAA! : Agir pour la Transition Ecologique & Sociale en Aunis | La Rochelle</title>
         { (process.env.NEXT_PUBLIC_SEO_DISABLED && process.env.NEXT_PUBLIC_SEO_DISABLED.localeCompare('true')===0 )&&  (
           <meta name="robots" content="noindex"/>
@@ -97,10 +96,6 @@ const MyApp = (props) => {
           content="minimum-scale=1, initial-scale=1, width=device-width"
         />
         <meta name="description" content="Plateforme d’information & d'initiative des acteurs de la transition vers une société plus humaine & écologique sur le territoire de l'Aunis  !" />
-        <script
-          type="text/javascript"
-          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDvUKXlWS1470oj8C-vD6s62Bs9Y8XQf00&language=fr&region=FR&libraries=places"
-        />
         <script
           type="text/javascript"
           src="/analytics/piwik-pro.js"
