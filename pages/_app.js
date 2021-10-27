@@ -91,7 +91,7 @@ const MyApp = (props) => {
         { (process.env.NEXT_PUBLIC_SEO_DISABLED && process.env.NEXT_PUBLIC_SEO_DISABLED.localeCompare('true')===0 )&&  (
           <meta name="robots" content="noindex"/>
         )}
-        <meta
+        <metas
           name="viewport"
           content="minimum-scale=1, initial-scale=1, width=device-width"
         />
