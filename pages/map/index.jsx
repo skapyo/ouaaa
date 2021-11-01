@@ -473,6 +473,9 @@ const carto = () => {
               paper: styles.drawerPaper
             }}
             onClose={toggleMenu}
+            ModalProps={{
+              keepMounted: true
+            }}
           >
             <Filters
               onFiltersChange={handleFiltersChange}
