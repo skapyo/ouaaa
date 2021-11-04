@@ -115,14 +115,14 @@ const ProposeActorForm = () => {
       },
       {
         label: "Nom de l'acteur à inviter",
-        name: 'name',
+        name: 'actorName',
         required: true,
         errorText: 'Nom requis.',
         fullWidth: true
       },
       {
         label: "Email de l'acteur à inviter",
-        name: 'email',
+        name: 'actorEmail',
         required: true,
         errorText: 'Email requis.',
         fullWidth: true
@@ -213,10 +213,10 @@ const ProposeActorForm = () => {
   }
 
   const validationRules: ValidationRules = {
-    name: {
+    actorName: {
       rule: ValidationRuleType.required
     },
-    email: {
+    actorEmail: {
       rule: ValidationRuleType.required && ValidationRuleType.email
     }
   };
