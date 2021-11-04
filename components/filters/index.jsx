@@ -80,7 +80,7 @@ const useStyles = makeStyles(theme => ({
       },
     },
   },
-  proposeActor: {
+  inviteActor: {
     width: '90%',
     margin: '1em',
   },
@@ -316,7 +316,7 @@ function Filters(props) {
 
   const bodyModalAddActor = (
     <div style={modalStyle} className={classes.paper}>
-      <h2 id="simple-modal-title">Proposer un nouvel acteur de la transition</h2>
+      <h2 id="simple-modal-title">Inviter un nouvel acteur de la transition</h2>
       <ProposeActorForm />
     </div>
   );
@@ -376,11 +376,11 @@ function Filters(props) {
         <Button
       variant="contained"
       color="secondary"
-      className={classes.proposeActor}
+      className={classes.inviteActor}
       startIcon={<AddIcon />}
       onClick={handleOpenModalAddActor}
     >
-      Proposer un acteur non présent
+      Inviter un acteur non référencé
     </Button>
       )
     }

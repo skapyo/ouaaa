@@ -15,8 +15,8 @@ import useImageReader from "hooks/useImageReader";
 import withDndProvider from "hoc/withDnDProvider";
 
 const PROPOSE_ACTORFORM = gql`
-  mutation proposeActor($formValues: ProposeActorInfos!) {
-    proposeActor(proposeActorInfos: $formValues)
+  mutation inviteActor($formValues: ProposeActorInfos!) {
+    inviteActor(inviteActorInfos: $formValues)
   }
 `
 
@@ -102,28 +102,34 @@ const ProposeActorForm = () => {
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
     
     const [
-      proposeActor,
-      { data: proposeActorData, error: proposeActorError, loading: proposeActorLoading },
+      inviteActor,
+      { data: inviteActorData, error: inviteActorError, loading: inviteActorLoading },
     ] = useMutation(PROPOSE_ACTORFORM);
 
     const inputs = [
       {
-        label: "Nom de l'acteur",
+        label: 'Votre nom à vous (Facultatf)',
+        name: 'requesterName',
+        required: false,
+        fullWidth: true
+      },
+      {
+        label: "Nom de l'acteur à inviter",
         name: 'name',
         required: true,
         errorText: 'Nom requis.',
         fullWidth: true
       },
       {
-        label: 'Email',
+        label: "Email de l'acteur à inviter",
         name: 'email',
         required: true,
         errorText: 'Email requis.',
         fullWidth: true
       },
       {
-        label: 'Commune',
-        name: 'city',
+        label: "Code postal de l'acteur à inviter (Facultatf)",
+        name: 'postCode',
         required: false,
         fullWidth: true
       },
@@ -146,7 +152,7 @@ const ProposeActorForm = () => {
     }
 
     const submitContactForm = () => {
-      proposeActor({
+      inviteActor({
         variables: {
           formValues: {
             ...formValues
@@ -156,14 +162,14 @@ const ProposeActorForm = () => {
     };
 
     useEffect(() => {
-      if (!proposeActorLoading && proposeActorData) {
+      if (!inviteActorLoading && inviteActorData) {
         setMessageSent(true);
-      } else if (proposeActorError) {
+      } else if (inviteActorError) {
         enqueueSnackbar('Une erreur s\'est produite, merci de bien vouloir réessayer.', {
           preventDuplicate: true,
         });
       }
-    }, [proposeActorData, proposeActorError, proposeActorLoading]);
+    }, [inviteActorData, inviteActorError, inviteActorLoading]);
 
     const getFormInputs = (() => {
       return (
@@ -200,7 +206,7 @@ const ProposeActorForm = () => {
           onClick={submitContactForm}
           disabled={!validationResult?.global}
         >
-          Soumettre le nouvel acteur
+          Inviter le nouvel acteur
         </ClassicButton>
       </Container>
     )
@@ -218,7 +224,7 @@ const ProposeActorForm = () => {
   if (messageSent) {
     return (
       <div className={styles.formContainer}>
-        <p>Merci de votre aide. N'hésitez pas à proposer d'autres acteurs.</p>
+        <p>Merci de votre aide. N'hésitez pas à inviter d'autres acteurs.</p>
       </div>
     )
   }
