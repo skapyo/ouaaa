@@ -4,6 +4,7 @@ import ClassicButton from "components/buttons/ClassicButton";
 import FormController, { RenderCallback, ValidationRules, ValidationRuleType } from "components/controllers/FormController";
 import ImagesDropZone from "components/ImageCropper/ImagesDropZone";
 import ImagesDisplay from 'components/ImageCropper/ImagesDisplay';
+import Checkbox from '@material-ui/core/Checkbox';
 import { useSessionState } from "context/session/session";
 import gql from "graphql-tag";
 import { withApollo } from "hoc/withApollo";
@@ -84,65 +85,81 @@ const FormItem = (props: FormItemProps) => {
   );
 };
 
-const ProposeActorForm = () => {
+const ProposeActorForm = (props) => {
+  const {
+    noEmailInviteActor,
+  } = props;
 
   const styles = useStyles();
   const user = useSessionState();
   const [messageSent, setMessageSent] = useState(false);
   const [category, setCategory] = useState('message');
+  const [noEmailInvite, setNoEmailInvite] = useState(noEmailInviteActor === 'true');
 
   const initFormValues = {
     firstName: user?.surname,
     lastName: user?.lastname,
-    email: user?.email
+    email: user?.email,
+    sendEmail: !noEmailInvite,
   };
 
   const Form: RenderCallback = (props) => {
     const { formChangeHandler, formValues, validationResult } = props;
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
     
+    
+    const handleChangeInvite = () => {
+      setNoEmailInvite(!noEmailInvite);
+      formValues.sendEmail = noEmailInvite;
+    };
+
     const [
       inviteActor,
       { data: inviteActorData, error: inviteActorError, loading: inviteActorLoading },
     ] = useMutation(PROPOSE_ACTORFORM);
 
     const inputs = [
-      {
-        label: 'Votre nom à vous (Facultatf)',
+      
+      
+    ];
+    if(!user){
+      inputs.push({
+        label: '  Votre nom à vous (Facultatf)',
         name: 'requesterName',
         required: false,
         fullWidth: true
-      },
-      {
-        label: "Nom de l'acteur à inviter",
-        name: 'actorName',
-        required: true,
-        errorText: 'Nom requis.',
-        fullWidth: true
-      },
-      {
-        label: "Email de l'acteur à inviter",
-        name: 'actorEmail',
-        required: true,
-        errorText: 'Email requis.',
-        fullWidth: true
-      },
-      {
-        label: "Code postal de l'acteur à inviter (Facultatf)",
-        name: 'postCode',
-        required: false,
-        fullWidth: true
-      },
-      {
+      });
+    }
+    inputs.push({
+      label: noEmailInvite ? "Nom de l'acteur contacté":"Nom de l'acteur à inviter" ,
+      name: 'actorName',
+      required: true,
+      errorText: 'Nom requis.',
+      fullWidth: true
+    });
+
+    inputs.push({
+      label: noEmailInvite ? "Email de l'acteur contacté" : "Email de l'acteur à inviter",
+      name: 'actorEmail',
+      required: true,
+      errorText: 'Email requis.',
+      fullWidth: true
+    });
+    inputs.push({
+      label: noEmailInvite ? "Code postal de l'acteur contacté (Facultatf)" : "Code postal de l'acteur à inviter (Facultatf)",
+      name: 'postCode',
+      required: false,
+      fullWidth: true
+    });
+    if(!noEmailInvite){
+      inputs.push({
         label: "Message optionnel pour l'acteur",
         name: 'message',
         required: false,
         multiline: true,
         fullWidth: true
-        
-      }
-    ];
-
+      });
+    }
    
 
 
@@ -192,6 +209,12 @@ const ProposeActorForm = () => {
               ></FormItem>
             );
           })}
+          {noEmailInviteActor && (
+            <FormControlLabel
+            control={<Checkbox onChange={handleChangeInvite}></Checkbox>}
+            label="Inviter un nouvel acteur avec un email automatique "
+          />
+          )}
 
         </div>
       );
@@ -206,7 +229,7 @@ const ProposeActorForm = () => {
           onClick={submitContactForm}
           disabled={!validationResult?.global}
         >
-          Inviter le nouvel acteur
+          { noEmailInvite?"Ajouter l'acteur":"Inviter le nouvel acteur"}
         </ClassicButton>
       </Container>
     )

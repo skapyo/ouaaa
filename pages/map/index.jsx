@@ -11,6 +11,7 @@ import { getImageUrl } from '../../utils/utils';
 import Actors from 'containers/layouts/mapPage/actors';
 import Filters from '../../components/filters';
 import Parser from 'html-react-parser';
+import { useRouter } from 'next/router';
 import Head from 'next/head';
 import ButtonGroupSelected from '../../components/buttons/ButtonGroupSelected';
 import Drawer from '@material-ui/core/Drawer';
@@ -298,7 +299,8 @@ const carto = () => {
   const isFirstRef = useRef(true);
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down('sm'));
-
+  const router = useRouter();
+  const { inviteActor,noEmailInviteActor } = router.query;
   const [categoriesChecked, setCategoriesChecked] = useState(categories.Sujets);
   const [otherCategoriesChecked, setOtherCategoriesChecked] = useState(
     otherCategories,
@@ -481,6 +483,8 @@ const carto = () => {
               onFiltersChange={handleFiltersChange}
               closeHandler={toggleMenu}
               isActorList
+              inviteActor={inviteActor}
+              noEmailInviteActor={noEmailInviteActor}
             />
           </Drawer>
 

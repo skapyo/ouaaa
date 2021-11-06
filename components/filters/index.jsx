@@ -182,7 +182,9 @@ function Filters(props) {
   const {
     isEventList,
     onFiltersChange,
-    closeHandler
+    closeHandler,
+    inviteActor,
+    noEmailInviteActor,
   } = props;
 
   const GET_COLLECTIONS = gql`
@@ -235,8 +237,7 @@ function Filters(props) {
   const [errorPostCode, setErrorPostCode] = useState(false);
   const [filters, setFilters] = useState({});
   const [openFilters, setOpenFilters] = useState(false);
-  const [openModalAddActor, setOpenModalAddActor] = useState(false);
-
+  const [openModalAddActor, setOpenModalAddActor] = useState(inviteActor);
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down('sm'));
   const classes = useStyles({ openFilters });
@@ -316,8 +317,8 @@ function Filters(props) {
 
   const bodyModalAddActor = (
     <div style={modalStyle} className={classes.paper}>
-      <h2 id="simple-modal-title">Inviter un nouvel acteur de la transition</h2>
-      <ProposeActorForm />
+      <h2 id="simple-modal-title">{ noEmailInviteActor?"Ajouter l'acteur que vous avez contacté":"Inviter un nouvel acteur de la transition"}</h2>
+      <ProposeActorForm noEmailInviteActor={noEmailInviteActor} />
     </div>
   );
   return (
@@ -414,11 +415,17 @@ Filters.propTypes = {
   isActorList: PropTypes.bool,
   onFiltersChange: PropTypes.func,
   closeHandler: PropTypes.func,
+  inviteActor: PropTypes.bool,
+  noEmailInviteActor: PropTypes.bool,
+
+  
 };
 
 Filters.defaultProps = {
   isEventList: false,
   isActorList: false,
+  inviteActor: false,
+  noEmailInviteActor: false,
   onFiltersChange: () => { },
   closeHandler: () => { },
 }
