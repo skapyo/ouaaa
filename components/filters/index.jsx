@@ -18,6 +18,10 @@ import gql from 'graphql-tag';
 import { useQuery } from '@apollo/client';
 import { makeStyles } from '@material-ui/core/styles';
 import Entries from 'containers/forms/Entries';
+import ProposeActorForm from 'containers/forms/ProposeActorForm';
+
+import AddIcon from '@material-ui/icons/Add';
+import Modal from '@material-ui/core/Modal';
 import ParentContainer from './ParentContainer';
 import DateFilter from '../../containers/layouts/agendaPage/DateFilter';
 
@@ -76,6 +80,10 @@ const useStyles = makeStyles(theme => ({
       },
     },
   },
+  inviteActor: {
+    width: '90%',
+    margin: '1em',
+  },
   expansionPanelSummary: {
     padding: '0px 5px 0px 5px!important',
   },
@@ -100,8 +108,31 @@ const useStyles = makeStyles(theme => ({
     marginTop: '0px',
     marginBottom: '0px',
   },
+  paper: {
+    position: 'absolute',
+    [theme.breakpoints.down('sm')]: {
+      width: '90%',
+    },
+    width: '60%',
+    backgroundColor: theme.palette.background.paper,
+    border: '2px solid #000',
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+  },
 }));
-
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  pt: 2,
+  px: 4,
+  pb: 3,
+};
 const compare = (a, b) => a.position > b.position;
 
 const IsTree = (collection) => {
@@ -151,7 +182,9 @@ function Filters(props) {
   const {
     isEventList,
     onFiltersChange,
-    closeHandler
+    closeHandler,
+    inviteActor,
+    noEmailInviteActor,
   } = props;
 
   const GET_COLLECTIONS = gql`
@@ -183,12 +216,28 @@ function Filters(props) {
       }
     }
   `;
+  
+  function rand() {
+    return Math.round(Math.random() * 20) - 10;
+  }
 
+  function getModalStyle() {
+    const top = 50;
+    const left = 50;
+  
+    return {
+      top: `${top}%`,
+      left: `${left}%`,
+      transform: `translate(-${top}%, -${left}%)`,
+    };
+  }
+    
+  const [modalStyle] = React.useState(getModalStyle);
   const [dataCollections, setDataCollections] = useState(null);
   const [errorPostCode, setErrorPostCode] = useState(false);
   const [filters, setFilters] = useState({});
   const [openFilters, setOpenFilters] = useState(false);
-
+  const [openModalAddActor, setOpenModalAddActor] = useState(inviteActor);
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down('sm'));
   const classes = useStyles({ openFilters });
@@ -246,7 +295,13 @@ function Filters(props) {
       },
     },
   );
+  const handleOpenModalAddActor = () => {
+    setOpenModalAddActor(true);
+  };
 
+  const handleCloseModalAddActor = () => {
+    setOpenModalAddActor(false);
+  };
   const filterCollections = useMemo(() => {
     if (dataCollections && dataCollections.collections && dataCollections.collections.length > 0) {
       return dataCollections.collections.filter(collection => {
@@ -259,6 +314,13 @@ function Filters(props) {
   if (loadingCollections && !dataCollections) return 'Loading...';
   if (errorCollections) return `Error! ${errorCollections.message}`;
 
+
+  const bodyModalAddActor = (
+    <div style={modalStyle} className={classes.paper}>
+      <h2 id="simple-modal-title">{ noEmailInviteActor?"Ajouter l'acteur que vous avez contacté":"Inviter un nouvel acteur de la transition"}</h2>
+      <ProposeActorForm noEmailInviteActor={noEmailInviteActor} />
+    </div>
+  );
   return (
     <Grid
       container
@@ -310,6 +372,27 @@ function Filters(props) {
         );
       })}
 
+    {
+      !isEventList && (
+        <Button
+      variant="contained"
+      color="secondary"
+      className={classes.inviteActor}
+      startIcon={<AddIcon />}
+      onClick={handleOpenModalAddActor}
+    >
+      Inviter un acteur non référencé
+    </Button>
+      )
+    }
+      <Modal
+        open={openModalAddActor}
+        onClose={handleCloseModalAddActor}
+        aria-labelledby="parent-modal-title"
+        aria-describedby="parent-modal-description"
+      >
+        {bodyModalAddActor}
+      </Modal>
       {
         matches && (
           <Button
@@ -332,11 +415,17 @@ Filters.propTypes = {
   isActorList: PropTypes.bool,
   onFiltersChange: PropTypes.func,
   closeHandler: PropTypes.func,
+  inviteActor: PropTypes.bool,
+  noEmailInviteActor: PropTypes.bool,
+
+  
 };
 
 Filters.defaultProps = {
   isEventList: false,
   isActorList: false,
+  inviteActor: false,
+  noEmailInviteActor: false,
   onFiltersChange: () => { },
   closeHandler: () => { },
 }

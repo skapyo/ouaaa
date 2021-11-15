@@ -323,6 +323,9 @@ const AgendaPageLayout = () => {
             paper: classes.drawerPaper
           }}
           onClose={toggleMenu}
+          ModalProps={{
+            keepMounted: true
+          }}
         >
           <Filters
             isEventList
