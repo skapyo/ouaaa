@@ -37,7 +37,6 @@ const Actors = (data) => {
       {actors &&
         actors.sort(compare).map((actor) => (
           <div key={actor.id}>
-            {actor.name}
             <ActorCard key={actor.id} actor={actor} />
           </div>
         ))}
