@@ -26,7 +26,7 @@ const Actors = (data) => {
   const classes = useStyles();
 
   const compare = (a, b) => {
-    return a.name > b.name;
+    return a.name.localeCompare(b.name, undefined, { sensitivity: 'accent' });
   };
 
   const actors = data.data && data.data.actors.slice();
@@ -37,6 +37,7 @@ const Actors = (data) => {
       {actors &&
         actors.sort(compare).map((actor) => (
           <div key={actor.id}>
+            {actor.name}
             <ActorCard key={actor.id} actor={actor} />
           </div>
         ))}

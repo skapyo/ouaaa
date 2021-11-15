@@ -220,7 +220,7 @@ function Filters(props) {
   const handleEntryChange = useCallback((entries, collection) => {
     let currentEntries = [...filters.entries || []];
     entries.forEach(newEntry => {
-      const alreadyChecked = currentEntries.find(subEntries => subEntries.find(id => id === newEntry.id));
+      const alreadyChecked = currentEntries.find(subEntries => subEntries != undefined && subEntries.find(id => id === newEntry.id));
       if (alreadyChecked) {
         if (!newEntry.checked) {
           currentEntries[collection.position] = currentEntries[collection.position].filter(id => id !== newEntry.id);

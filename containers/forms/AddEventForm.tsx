@@ -134,6 +134,9 @@ const useStyles = makeStyles((theme) => ({
     padding: '5px 0 5px 0',
     width: '100%',
   },
+  checkbox: {
+    padding: '0px!important',
+  },
   container: {
     textAlign: 'center',
   },
@@ -1073,6 +1076,7 @@ const AddEventForm = ({ actorId }) => {
                                 onChange={formChangeHandler}
                                 name="entries"
                                 value={entry.id}
+                                className={styles.checkbox}
                                 onClick={(e) => e.stopPropagation()}
                               />
                             </ListItem>

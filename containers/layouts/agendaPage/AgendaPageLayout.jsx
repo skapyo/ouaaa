@@ -167,7 +167,7 @@ const VIEW_STATE = {
 
 const AgendaPageLayout = () => {
   const GET_EVENTS = gql`
-    query events($startingDate: String, $entries: [String]) {
+    query events($startingDate: String, $entries: [[String]]) {
       events(startingDate: $startingDate, entries: $entries) {
         id
         label
