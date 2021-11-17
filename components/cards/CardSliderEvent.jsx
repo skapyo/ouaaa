@@ -91,7 +91,7 @@ export default function SimpleCard({ event }) {
               layout="responsive"
               objectFit="contain"
               src={
-                event.pictures.sort((a, b) => (a.logo ? -1 : 1))[0].croppedPicturePath
+                event.pictures.sort((a, b) => (a.logo ? -1 : 1))[0].originalPicturePath
               }
               alt={event.name}
             />

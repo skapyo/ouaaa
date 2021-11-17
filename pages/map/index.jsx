@@ -362,12 +362,6 @@ const carto = () => {
             label
             originalPicturePath
             originalPictureFilename
-            croppedPicturePath
-            croppedPictureFilename
-            croppedX
-            croppedY
-            croppedZoom
-            croppedRotation
             position
             logo
           }
@@ -553,7 +547,7 @@ const carto = () => {
                                       ? `url(${getImageUrl(
                                         actor.pictures.sort((a, b) =>
                                           a.logo ? -1 : 1,
-                                        )[0].croppedPicturePath,
+                                        )[0].originalPicturePath,
                                       )})`
                                       : '',
                                 }}
@@ -613,7 +607,7 @@ const carto = () => {
                                   backgroundImage:
                                     actor.pictures.length >= 1
                                       ? `url(${getImageUrl(
-                                        actor.pictures[0].croppedPicturePath,
+                                        actor.pictures[0].originalPicturePath,
                                       )})`
                                       : '',
                                 }}

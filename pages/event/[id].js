@@ -321,12 +321,6 @@ const GET_EVENT = `
             label
             originalPicturePath
             originalPictureFilename
-            croppedPicturePath
-            croppedPictureFilename
-            croppedX
-            croppedY
-            croppedZoom
-            croppedRotation
             position
           }
           referents {
@@ -350,12 +344,6 @@ const GET_EVENT = `
           label
           originalPicturePath
           originalPictureFilename
-          croppedPicturePath
-          croppedPictureFilename
-          croppedX
-          croppedY
-          croppedZoom
-          croppedRotation
           position
           logo
           main
@@ -370,12 +358,6 @@ const GET_EVENT = `
             label
             originalPicturePath
             originalPictureFilename
-            croppedPicturePath
-            croppedPictureFilename
-            croppedX
-            croppedY
-            croppedZoom
-            croppedRotation
             position
             logo
             main
@@ -432,7 +414,7 @@ const Event = ({ initialData }) => {
 
   const bannerUrl = useMemo(() => {
     return (data?.event?.pictures || []).filter((picture) => picture.main).length >= 1 ?
-      data.event.pictures.filter((picture) => picture.main)[0].croppedPicturePath : null;
+      data.event.pictures.filter((picture) => picture.main)[0].originalPicturePath : null;
   }, [data]);
 
   const stylesProps = useMemo(() => ({
@@ -656,7 +638,7 @@ const Event = ({ initialData }) => {
                 data.event.pictures.length >= 1
                   ? getImageUrl(
                     data.event.pictures.filter((picture) => picture.logo)[0]
-                      .croppedPicturePath,
+                      .originalPicturePath,
                   )
                   : ''
               }
@@ -692,7 +674,7 @@ const Event = ({ initialData }) => {
                               ? getImageUrl(
                                 data.event.pictures.filter(
                                   (picture) => picture.logo,
-                                )[0].croppedPicturePath,
+                                )[0].originalPicturePath,
                               )
                               : ''
                           }
@@ -1235,7 +1217,7 @@ const Event = ({ initialData }) => {
                   .sort((a, b) => (a.position > b.position ? 1 : -1))
                   .map((picture) => (
                     <img
-                      src={getImageUrl(picture.croppedPicturePath)}
+                      src={getImageUrl(picture.originalPicturePath)}
                       className={[styles.img]}
                     />
                   ))}

@@ -116,7 +116,7 @@ const ActorCard = ({ actor }) => {
                   src={
                     actor.pictures.filter(picture => picture.logo).length >= 1
                       ? getImageUrl(
-                        actor.pictures.filter(picture => picture.logo)[0].croppedPicturePath,
+                        actor.pictures.filter(picture => picture.logo)[0].originalPicturePath,
                       )
                       : ''
                   }

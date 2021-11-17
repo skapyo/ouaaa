@@ -130,7 +130,7 @@ const EventCard = ({ event }) => {
   const logoPath = useMemo(() => {
     const logoPaths = (event?.pictures || []).filter((picture) => picture.logo);
     if (logoPaths.length > 0) {
-      return getImageUrl(logoPaths[0].croppedPicturePath);
+      return getImageUrl(logoPaths[0].originalPicturePath);
     }
     return null;
   }, [event, getImageUrl]);

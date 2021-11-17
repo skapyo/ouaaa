@@ -303,12 +303,6 @@ query actor($id: String) {
         label
         originalPicturePath
         originalPictureFilename
-        croppedPicturePath
-        croppedPictureFilename
-        croppedX
-        croppedY
-        croppedZoom
-        croppedRotation
         position
       }
       address
@@ -346,12 +340,6 @@ query actor($id: String) {
       label
       originalPicturePath
       originalPictureFilename
-      croppedPicturePath
-      croppedPictureFilename
-      croppedX
-      croppedY
-      croppedZoom
-      croppedRotation
       position
       logo
       main
@@ -644,7 +632,7 @@ const Actor = ({ initialData }) => {
                 data.actor.pictures.length >= 1
                   ? getImageUrl(
                     data.actor.pictures.filter((picture) => picture.logo)[0]
-                      .croppedPicturePath,
+                      .originalPicturePath,
                   )
                   : ''
               }
@@ -695,7 +683,7 @@ const Actor = ({ initialData }) => {
                       data.actor.pictures.filter((picture) => picture.logo)
                         .length >= 1 && data.actor.pictures.filter(
                           (picture) => picture.logo,
-                        )[0].croppedPicturePath && (
+                        )[0].originalPicturePath && (
                         <Image
                           loader={myLoader}
                           width="100%"
@@ -704,7 +692,7 @@ const Actor = ({ initialData }) => {
                           objectFit="contain"
                           src={data.actor.pictures.filter(
                             (picture) => picture.logo,
-                          )[0].croppedPicturePath
+                          )[0].originalPicturePath
                           }
                         />
                       )}
@@ -1267,7 +1255,7 @@ const Actor = ({ initialData }) => {
                   .sort((a, b) => (a.position > b.position ? 1 : -1))
                   .map((picture) => (
                     <img
-                      src={getImageUrl(picture.croppedPicturePath)}
+                      src={getImageUrl(picture.originalPicturePath)}
                       className={[styles.img]}
                     />
                   ))}

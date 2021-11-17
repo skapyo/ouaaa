@@ -205,12 +205,6 @@ const AgendaPageLayout = () => {
           label
           originalPicturePath
           originalPictureFilename
-          croppedPicturePath
-          croppedPictureFilename
-          croppedX
-          croppedY
-          croppedZoom
-          croppedRotation
           position
           logo
           main
@@ -408,7 +402,7 @@ const AgendaPageLayout = () => {
                                     ? `url(${getImageUrl(
                                       event.pictures.sort((a, b) =>
                                         a.logo ? -1 : 1,
-                                      )[0].croppedPicturePath,
+                                      )[0].originalPicturePath,
                                     )})`
                                     : '',
                               }}
@@ -491,7 +485,7 @@ const AgendaPageLayout = () => {
                                     ? `url(${getImageUrl(
                                       event.pictures.sort((a, b) =>
                                         a.logo ? -1 : 1,
-                                      )[0].croppedPicturePath,
+                                      )[0].originalPicturePath,
                                     )})`
                                     : '',
                               }}
