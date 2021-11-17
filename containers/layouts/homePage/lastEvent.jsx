@@ -118,12 +118,6 @@ const LastActor = () => {
           label
           originalPicturePath
           originalPictureFilename
-          croppedPicturePath
-          croppedPictureFilename
-          croppedX
-          croppedY
-          croppedZoom
-          croppedRotation
           position
           logo
           main

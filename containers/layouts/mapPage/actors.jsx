@@ -26,7 +26,7 @@ const Actors = (data) => {
   const classes = useStyles();
 
   const compare = (a, b) => {
-    return a.name > b.name;
+    return a.name.localeCompare(b.name, undefined, { sensitivity: 'accent' });
   };
 
   const actors = data.data && data.data.actors.slice();

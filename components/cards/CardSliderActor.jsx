@@ -91,7 +91,7 @@ export default function SimpleCard({ actor }) {
               layout="responsive"
               objectFit="contain"
               src={
-                actor.pictures.sort((a, b) => (a.logo ? -1 : 1))[0].croppedPicturePath
+                actor.pictures.sort((a, b) => (a.logo ? -1 : 1))[0].originalPicturePath
               }
               alt={actor.name}
             />

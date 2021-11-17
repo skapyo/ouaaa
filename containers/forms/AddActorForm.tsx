@@ -607,12 +607,6 @@ const AddActorForm = () => {
             logo: true,
             file: {
               originalPicture: object.file,
-              croppedPicture: object.croppedImg.file,
-              croppedPictureModified: object.croppedImg.modified,
-              croppedX: object.croppedImg.crop.x,
-              croppedY: object.croppedImg.crop.y,
-              croppedZoom: object.croppedImg.zoom,
-              croppedRotation: object.croppedImg.rotation,
             },
           };
         });
@@ -629,12 +623,6 @@ const AddActorForm = () => {
             main: true,
             file: {
               originalPicture: object.file,
-              croppedPicture: object.croppedImg.file,
-              croppedPictureModified: object.croppedImg.modified,
-              croppedX: object.croppedImg.crop.x,
-              croppedY: object.croppedImg.crop.y,
-              croppedZoom: object.croppedImg.zoom,
-              croppedRotation: object.croppedImg.rotation,
             },
           };
         });
@@ -650,12 +638,6 @@ const AddActorForm = () => {
             deleted: object.deleted,
             file: {
               originalPicture: object.file,
-              croppedPicture: object.croppedImg.file,
-              croppedPictureModified: object.croppedImg.modified,
-              croppedX: object.croppedImg.crop.x,
-              croppedY: object.croppedImg.crop.y,
-              croppedZoom: object.croppedImg.zoom,
-              croppedRotation: object.croppedImg.rotation,
             },
           };
         });

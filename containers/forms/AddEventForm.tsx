@@ -134,6 +134,9 @@ const useStyles = makeStyles((theme) => ({
     padding: '5px 0 5px 0',
     width: '100%',
   },
+  checkbox: {
+    padding: '0px!important',
+  },
   container: {
     textAlign: 'center',
   },
@@ -257,12 +260,6 @@ const GET_ACTOR = gql`
         label
         originalPicturePath
         originalPictureFilename
-        croppedPicturePath
-        croppedPictureFilename
-        croppedX
-        croppedY
-        croppedZoom
-        croppedRotation
         position
         logo
         main
@@ -696,12 +693,6 @@ const AddEventForm = ({ actorId }) => {
             logo: true,
             file: {
               originalPicture: object.file,
-              croppedPicture: object.croppedImg.file,
-              croppedPictureModified: object.croppedImg.modified,
-              croppedX: object.croppedImg.crop.x,
-              croppedY: object.croppedImg.crop.y,
-              croppedZoom: object.croppedImg.zoom,
-              croppedRotation: object.croppedImg.rotation,
             },
           };
         });
@@ -718,12 +709,6 @@ const AddEventForm = ({ actorId }) => {
             main: true,
             file: {
               originalPicture: object.file,
-              croppedPicture: object.croppedImg.file,
-              croppedPictureModified: object.croppedImg.modified,
-              croppedX: object.croppedImg.crop.x,
-              croppedY: object.croppedImg.crop.y,
-              croppedZoom: object.croppedImg.zoom,
-              croppedRotation: object.croppedImg.rotation,
             },
           };
         });
@@ -739,12 +724,6 @@ const AddEventForm = ({ actorId }) => {
             deleted: object.deleted,
             file: {
               originalPicture: object.file,
-              croppedPicture: object.croppedImg.file,
-              croppedPictureModified: object.croppedImg.modified,
-              croppedX: object.croppedImg.crop.x,
-              croppedY: object.croppedImg.crop.y,
-              croppedZoom: object.croppedImg.zoom,
-              croppedRotation: object.croppedImg.rotation,
             },
           };
         });
@@ -1073,6 +1052,7 @@ const AddEventForm = ({ actorId }) => {
                                 onChange={formChangeHandler}
                                 name="entries"
                                 value={entry.id}
+                                className={styles.checkbox}
                                 onClick={(e) => e.stopPropagation()}
                               />
                             </ListItem>

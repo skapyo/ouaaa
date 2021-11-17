@@ -82,9 +82,9 @@ const useStyles = makeStyles((theme) => ({
       padding: '5em',
     },
     justify: 'center',
+    marginTop: ({ hasBannerUrl }) => hasBannerUrl ? -53 : 20,
     alignItems: 'center',
     'max-width': '755px',
-    'margin-top': '-53px',
     'box-shadow': '0px 0px 38px -14px rgba(0, 0, 0, 0.46)',
   },
   description: {
@@ -303,12 +303,6 @@ query actor($id: String) {
         label
         originalPicturePath
         originalPictureFilename
-        croppedPicturePath
-        croppedPictureFilename
-        croppedX
-        croppedY
-        croppedZoom
-        croppedRotation
         position
       }
       address
@@ -346,12 +340,6 @@ query actor($id: String) {
       label
       originalPicturePath
       originalPictureFilename
-      croppedPicturePath
-      croppedPictureFilename
-      croppedX
-      croppedY
-      croppedZoom
-      croppedRotation
       position
       logo
       main
@@ -391,6 +379,14 @@ const Actor = ({ initialData }) => {
     var Popup = require('react-leaflet').Popup;
   }
 
+  const data = initialData.data;
+
+
+  const bannerUrl = useMemo(() => {
+    return (data?.actor?.pictures || []).filter((picture) => picture.main).length >= 1 ?
+      data.actor.pictures.filter((picture) => picture.main)[0].originalPicturePath : null;
+  }, [data]);
+
   const ADD_ACTOR_VOLUNTEER = gql`
     mutation addActorVolunteer($actorId: Int!, $userId: Int!) {
       addActorVolunteer(actorId: $actorId, userId: $userId)
@@ -405,6 +401,7 @@ const Actor = ({ initialData }) => {
   const [stylesProps, setStylesProps] = useState({
     topImageSize: '250px',
     headerDisplay: 'static',
+    hasBannerUrl: bannerUrl !== null,
   });
   const styles = useStyles(stylesProps);
 
@@ -433,16 +430,6 @@ const Actor = ({ initialData }) => {
     }
     return isContained;
   }
-
-  /*const {
-    data, loading, error, refetch,
-  } = useQuery(GET_ACTOR, {
-    variables: {
-      id,
-    },
-  });*/
-  const data = initialData.data;
-
   useEffect(() => {
     if (volunteerData !== undefined) {
       enqueueSnackbar('Demande de bénévole prise en compte', {
@@ -644,7 +631,7 @@ const Actor = ({ initialData }) => {
                 data.actor.pictures.length >= 1
                   ? getImageUrl(
                     data.actor.pictures.filter((picture) => picture.logo)[0]
-                      .croppedPicturePath,
+                      .originalPicturePath,
                   )
                   : ''
               }
@@ -667,24 +654,14 @@ const Actor = ({ initialData }) => {
             {/* @ts-ignore */}-{/* @ts-ignore */}
             {data && showCategory(data.actor.entries)}
           </Typography>
-
-          {data && data.actor && (
+          {bannerUrl && (
             <Container
               className={styles.titleContainer}
               style={{
-                backgroundImage:
-                  data.actor.pictures && data.actor.pictures.length >= 1 &&
-                    data.actor.pictures.filter((picture) => picture.main)
-                      .length >= 1
-                    ? `url(${getImageUrl(
-                      data.actor.pictures.filter((picture) => picture.main)[0]
-                        .originalPicturePath,
-                    )})`
-                    : '',
+                backgroundImage: `url(${getImageUrl(bannerUrl)})`,
               }}
             />
           )}
-
           <Container className={styles.cardInfo}>
             <Grid container>
               <Grid item md={5} sm={10} className={[styles.align]}>
@@ -695,7 +672,7 @@ const Actor = ({ initialData }) => {
                       data.actor.pictures.filter((picture) => picture.logo)
                         .length >= 1 && data.actor.pictures.filter(
                           (picture) => picture.logo,
-                        )[0].croppedPicturePath && (
+                        )[0].originalPicturePath && (
                         <Image
                           loader={myLoader}
                           width="100%"
@@ -704,7 +681,7 @@ const Actor = ({ initialData }) => {
                           objectFit="contain"
                           src={data.actor.pictures.filter(
                             (picture) => picture.logo,
-                          )[0].croppedPicturePath
+                          )[0].originalPicturePath
                           }
                         />
                       )}
@@ -1267,7 +1244,7 @@ const Actor = ({ initialData }) => {
                   .sort((a, b) => (a.position > b.position ? 1 : -1))
                   .map((picture) => (
                     <img
-                      src={getImageUrl(picture.croppedPicturePath)}
+                      src={getImageUrl(picture.originalPicturePath)}
                       className={[styles.img]}
                     />
                   ))}

@@ -73,7 +73,7 @@ A l’écoute des usagers : acteurs inscrits et visiteurs du site, nous recueil
           
           <br />
           <b>wOUAAAw, ils s’engagent à nos côté !  </b> <br /> <br />
-            <img width ="200px" src ="https://static.ouaaa-transition.fr/static/images/actor/32/32-9WylkfPt1K-cropped.jpeg" alt="Aunis en transition" />
+            <img width ="200px" src ="https://static.ouaaa-transition.fr/static/images/actor/32/32-9WylkfPt1K-original.jpeg" alt="Aunis en transition" />
           Porté par le collectif Aunis en Transition : l'association reprend le flambeau du Collectif Transition Citoyenne Pays Rochelais avec la volonté de fédérer les acteurs de tout l'Aunis, échelle cohérente pour organiser un territoire résilient. Son ambition est la suivante : Créer du lien entre les acteurs de la transition, favoriser leur coopération, les faire mieux connaitre du grand public.
           <br />
           <br />

@@ -241,12 +241,6 @@ const EDIT_EVENT = gql`
         label
         originalPicturePath
         originalPictureFilename
-        croppedPicturePath
-        croppedPictureFilename
-        croppedX
-        croppedY
-        croppedZoom
-        croppedRotation
         position
         logo
         main
@@ -320,12 +314,6 @@ const GET_EVENT = gql`
         label
         originalPicturePath
         originalPictureFilename
-        croppedPicturePath
-        croppedPictureFilename
-        croppedX
-        croppedY
-        croppedZoom
-        croppedRotation
         position
         main
         logo
@@ -640,25 +628,6 @@ const EditEventForm = (props) => {
             // @ts-ignore
             img: getImageUrl(picture.originalPicturePath),
             // @ts-ignore
-            croppedImg: {
-              crop: {
-                // @ts-ignore
-                x: picture.croppedX,
-                // @ts-ignore
-                y: picture.croppedY,
-              },
-              // @ts-ignore
-              rotation: picture.croppedRotation,
-              // @ts-ignore
-              zoom: picture.croppedZoom,
-              // @ts-ignore
-              file: null,
-              // @ts-ignore
-              img: getImageUrl(picture.croppedPicturePath),
-              // @ts-ignore
-              modified: false,
-            },
-            // @ts-ignore
             activated: true,
             // @ts-ignore
             deleted: false,
@@ -691,25 +660,6 @@ const EditEventForm = (props) => {
             // @ts-ignore
             img: getImageUrl(picture.originalPicturePath),
             // @ts-ignore
-            croppedImg: {
-              crop: {
-                // @ts-ignore
-                x: picture.croppedX,
-                // @ts-ignore
-                y: picture.croppedY,
-              },
-              // @ts-ignore
-              rotation: picture.croppedRotation,
-              // @ts-ignore
-              zoom: picture.croppedZoom,
-              // @ts-ignore
-              file: null,
-              // @ts-ignore
-              img: getImageUrl(picture.croppedPicturePath),
-              // @ts-ignore
-              modified: false,
-            },
-            // @ts-ignore
             activated: true,
             // @ts-ignore
             deleted: false,
@@ -741,25 +691,6 @@ const EditEventForm = (props) => {
             file: null,
             // @ts-ignore
             img: getImageUrl(picture.originalPicturePath),
-            // @ts-ignore
-            croppedImg: {
-              crop: {
-                // @ts-ignore
-                x: picture.croppedX,
-                // @ts-ignore
-                y: picture.croppedY,
-              },
-              // @ts-ignore
-              rotation: picture.croppedRotation,
-              // @ts-ignore
-              zoom: picture.croppedZoom,
-              // @ts-ignore
-              file: null,
-              // @ts-ignore
-              img: getImageUrl(picture.croppedPicturePath),
-              // @ts-ignore
-              modified: false,
-            },
             // @ts-ignore
             activated: true,
             // @ts-ignore
@@ -1161,12 +1092,6 @@ const EditEventForm = (props) => {
             logo: true,
             file: {
               originalPicture: object.file,
-              croppedPicture: object.croppedImg.file,
-              croppedPictureModified: object.croppedImg.modified,
-              croppedX: object.croppedImg.crop.x,
-              croppedY: object.croppedImg.crop.y,
-              croppedZoom: object.croppedImg.zoom,
-              croppedRotation: object.croppedImg.rotation,
             },
           };
         });
@@ -1183,12 +1108,6 @@ const EditEventForm = (props) => {
             main: true,
             file: {
               originalPicture: object.file,
-              croppedPicture: object.croppedImg.file,
-              croppedPictureModified: object.croppedImg.modified,
-              croppedX: object.croppedImg.crop.x,
-              croppedY: object.croppedImg.crop.y,
-              croppedZoom: object.croppedImg.zoom,
-              croppedRotation: object.croppedImg.rotation,
             },
           };
         });
@@ -1204,12 +1123,6 @@ const EditEventForm = (props) => {
             deleted: object.deleted,
             file: {
               originalPicture: object.file,
-              croppedPicture: object.croppedImg.file,
-              croppedPictureModified: object.croppedImg.modified,
-              croppedX: object.croppedImg.crop.x,
-              croppedY: object.croppedImg.crop.y,
-              croppedZoom: object.croppedImg.zoom,
-              croppedRotation: object.croppedImg.rotation,
             },
           };
         });
