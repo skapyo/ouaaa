@@ -182,6 +182,7 @@ function Filters(props) {
   const {
     isEventList,
     onFiltersChange,
+    onSearchChange,
     closeHandler,
     inviteActor,
     noEmailInviteActor,
@@ -266,6 +267,8 @@ function Filters(props) {
     }
   }, [setErrorPostCode]);
 
+
+
   const handleEntryChange = useCallback((entries, collection) => {
     let currentEntries = [...filters.entries || []];
     entries.forEach(newEntry => {
@@ -340,7 +343,7 @@ function Filters(props) {
       }
       <SearchBar
        // value={this.state.value}
-        //onChange={(newValue) => this.setState({ value: newValue })}
+        onChange={(newValue) => onSearchChange({ value: newValue })}
         //onRequestSearch={() => doSomethingWith(this.state.value)}
       />
       <TextField
