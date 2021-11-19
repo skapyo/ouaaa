@@ -15,10 +15,10 @@ import {
   Appointments,
   TodayButton,
   ViewSwitcher,
-  AllDayPanel
+  AllDayPanel,
 } from '@devexpress/dx-react-scheduler-material-ui';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   layout: (props) => ({
     height: '100%',
     '& > *:only-child': {
@@ -28,11 +28,11 @@ const useStyles = makeStyles(theme => ({
       '& > *:last-child': {
         flex: 1,
         '& table': {
-          height: '100%'
-        }
-      }
+          height: '100%',
+        },
+      },
     },
-    backgroundColor: props.backgroundColor
+    backgroundColor: props.backgroundColor,
   }),
   text: {
     overflow: 'hidden',
@@ -48,28 +48,28 @@ const useStyles = makeStyles(theme => ({
     height: '100%',
   },
   appointment: (props) => ({
-    backgroundColor: props.backgroundColor
+    backgroundColor: props.backgroundColor,
   }),
   appointmentContent: {
     padding: '1px 2px',
-    cursor: 'pointer'
+    cursor: 'pointer',
   },
   actionButton: {
     display: 'flex',
     flex: '1 0 0',
-    justifyContent: 'flex-end'
-  }
+    justifyContent: 'flex-end',
+  },
 }));
 
-const MonthLayout = props => {
+const MonthLayout = (props) => {
   const classes = useStyles();
-  return <MonthView.Layout {...props} className={classes.layout} />
+  return <MonthView.Layout {...props} className={classes.layout} />;
 };
 
-const AppointmentContent = props => {
+const AppointmentContent = (props) => {
   const { data } = props;
   const classes = useStyles();
-// debugger;
+  // debugger;
   return (
     <Appointments.AppointmentContent
       className={classes.appointmentContent}
@@ -84,16 +84,16 @@ const AppointmentContent = props => {
         </div>
       </div>
     </Appointments.AppointmentContent>
-  )
+  );
 };
 
-const Appointment = props => {
+const Appointment = (props) => {
   const { data } = props;
   const router = useRouter();
   const classes = useStyles({ backgroundColor: data.backgroundColor });
 
   const handleClick = useCallback(() => {
-    router.push('/event/' + data.id);
+    router.push(`/event/${data.id}`);
   }, [router, data]);
 
   return (
@@ -102,7 +102,7 @@ const Appointment = props => {
       className={classes.appointment}
       {...props}
     />
-  )
+  );
 };
 
 const FlexibleEmptySpaceAddEvent = () => {
@@ -111,7 +111,7 @@ const FlexibleEmptySpaceAddEvent = () => {
 
   const handleClickAddEvent = useCallback(() => {
     const { id } = router.query;
-    router.push('/addevent/' + id)
+    router.push(`/addevent/${id}`);
   }, [router]);
 
   return (
@@ -128,11 +128,13 @@ const FlexibleEmptySpaceAddEvent = () => {
   );
 };
 
-const Calendar = props => {
-  const { events, withViewSwitcher, withAddEvent } = props;
+const Calendar = (props) => {
+  const {
+    events, withViewSwitcher, withAddEvent, isValidated,
+  } = props;
 
-  const toolbarProps = withAddEvent && {
-    flexibleSpaceComponent: FlexibleEmptySpaceAddEvent
+  const toolbarProps = withAddEvent && isValidated && {
+    flexibleSpaceComponent: FlexibleEmptySpaceAddEvent,
   };
   const defaultMessages = {
     allDay: 'Toute la journée',
@@ -142,7 +144,7 @@ const Calendar = props => {
       firstDayOfWeek={1}
       locale="fr-FR"
       RootProps={{
-        height: 'auto'
+        height: 'auto',
       }}
       data={events}
     >
@@ -181,13 +183,13 @@ const Calendar = props => {
 Calendar.propTypes = {
   withViewSwitcher: PropTypes.bool,
   withAddEvent: PropTypes.bool,
-  events: PropTypes.array
-}
+  events: PropTypes.array,
+};
 
 Calendar.defaultProps = {
   events: [],
   withViewSwitcher: true,
-  withAddEvent: false
+  withAddEvent: false,
 };
 
 export default Calendar;
