@@ -96,7 +96,7 @@ const ImagePrev = ({
         style={{ opacity }}
       >
         <Card>
-          <img src={croppedImg.img} className="image" />
+          <img src={originalImg.img} className="image" />
         </Card>
         <Card>
           <Grid container spacing={3}>
@@ -111,14 +111,6 @@ const ImagePrev = ({
             </Grid>
           </Grid>
         </Card>
-        <ImageCropper
-          updateKeyIndicator={updateKeyIndicator}
-          id={id}
-          croppedImg={file.croppedImg}
-          src={originalImg}
-          open={modalOpened}
-          onClose={() => setOpenedInd(false)}
-        />
       </div>
     </Grid>
   );

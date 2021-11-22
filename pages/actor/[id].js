@@ -24,6 +24,7 @@ import FacebookIcon from '@material-ui/icons/Facebook';
 import TwitterIcon from '@material-ui/icons/Twitter';
 import WhatsAppIcon from '@material-ui/icons/WhatsApp';
 import TelegramIcon from '@material-ui/icons/Telegram';
+import Modal from '@material-ui/core/Modal';
 import EmailIcon from '@material-ui/icons/Email';
 import {
   FacebookShareButton,
@@ -370,7 +371,9 @@ const Actor = ({ initialData }) => {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const [cookies, setCookie, removeCookie] = useCookies();
   const [hasClickVolunteer, setHasClickVolunteer] = useState(false);
+  const [openModalSlider, setOpenModalSlider] = useState(false);
 
+  
   if (typeof window !== 'undefined') {
     var L = require('leaflet');
     var Map = require('react-leaflet').Map;
@@ -1243,12 +1246,31 @@ const Actor = ({ initialData }) => {
                 data.actor.pictures
                   .sort((a, b) => (a.position > b.position ? 1 : -1))
                   .map((picture) => (
+                    
                     <img
                       src={getImageUrl(picture.originalPicturePath)}
                       className={[styles.img]}
+                      onClick={() => setOpenModalSlider(true)}
                     />
                   ))}
             </Slider>
+              <Modal  open={openModalSlider}         aria-labelledby="parent-modal-title"
+        aria-describedby="parent-modal-description">
+                <Slider {...settingsSliderImage} >
+                    {data &&
+                      data.actor.pictures &&
+                      data.actor.pictures
+                        .sort((a, b) => (a.position > b.position ? 1 : -1))
+                        .map((picture) => (
+                          
+                          <img
+                            src={getImageUrl(picture.originalPicturePath)}
+                           
+                            onClick={() => setOpenModalSlider(false)}
+                          />
+                        ))}
+                   </Slider>
+              </Modal>
             <br />
             <div>
               <Typography variant="h5" className={[styles.cardTitle]}>
