@@ -83,7 +83,7 @@ const useStyles = makeStyles((theme) => ({
       padding: '5em',
     },
     justify: 'center',
-    marginTop: ({ hasBannerUrl }) => hasBannerUrl ? -53 : 20,
+    marginTop: ({ hasBannerUrl }) => (hasBannerUrl ? -53 : 20),
     alignItems: 'center',
     'max-width': '755px',
     'box-shadow': '0px 0px 38px -14px rgba(0, 0, 0, 0.46)',
@@ -336,6 +336,7 @@ query actor($id: String) {
       surname
       lastname
     }
+    isValidated
     pictures {
       id
       label
@@ -384,10 +385,12 @@ const Actor = ({ initialData }) => {
 
   const data = initialData.data;
 
-
   const bannerUrl = useMemo(() => {
-    return (data?.actor?.pictures || []).filter((picture) => picture.main).length >= 1 ?
-      data.actor.pictures.filter((picture) => picture.main)[0].originalPicturePath : null;
+    return (data?.actor?.pictures || []).filter((picture) => picture.main)
+      .length >= 1
+      ? data.actor.pictures.filter((picture) => picture.main)[0]
+          .originalPicturePath
+      : null;
   }, [data]);
 
   const ADD_ACTOR_VOLUNTEER = gql`
@@ -509,7 +512,9 @@ const Actor = ({ initialData }) => {
   const settingsSliderImage = {
     infinite: true,
     slidesToShow:
-      data && data.actor.pictures && data.actor.pictures.length >= maxSlideToShowImage
+      data &&
+      data.actor.pictures &&
+      data.actor.pictures.length >= maxSlideToShowImage
         ? maxSlideToShowImage
         : data && data.actor.pictures && data.actor.pictures.length,
     slidesToScroll: 1,
@@ -625,7 +630,8 @@ const Actor = ({ initialData }) => {
           {/* @ts-ignore */}-{/* @ts-ignore */}
           {data && showCategory(data.actor.entries)}
         </title>
-        {data && data.actor.pictures &&
+        {data &&
+          data.actor.pictures &&
           data.actor.pictures.length >= 1 &&
           data.actor.pictures.filter((picture) => picture.logo).length >= 1 && (
             <meta
@@ -633,9 +639,9 @@ const Actor = ({ initialData }) => {
               content={
                 data.actor.pictures.length >= 1
                   ? getImageUrl(
-                    data.actor.pictures.filter((picture) => picture.logo)[0]
-                      .originalPicturePath,
-                  )
+                      data.actor.pictures.filter((picture) => picture.logo)[0]
+                        .originalPicturePath,
+                    )
                   : ''
               }
             />
@@ -671,20 +677,22 @@ const Actor = ({ initialData }) => {
                 <Grid container className={[styles.infoPratiqueGrid]}>
                   <div className={styles.image}>
                     {data &&
-                      data.actor.pictures && data.actor.pictures.length >= 1 &&
+                      data.actor.pictures &&
+                      data.actor.pictures.length >= 1 &&
                       data.actor.pictures.filter((picture) => picture.logo)
-                        .length >= 1 && data.actor.pictures.filter(
-                          (picture) => picture.logo,
-                        )[0].originalPicturePath && (
+                        .length >= 1 &&
+                      data.actor.pictures.filter((picture) => picture.logo)[0]
+                        .originalPicturePath && (
                         <Image
                           loader={myLoader}
                           width="100%"
                           height="100px"
                           layout="responsive"
                           objectFit="contain"
-                          src={data.actor.pictures.filter(
-                            (picture) => picture.logo,
-                          )[0].originalPicturePath
+                          src={
+                            data.actor.pictures.filter(
+                              (picture) => picture.logo,
+                            )[0].originalPicturePath
                           }
                         />
                       )}
@@ -695,7 +703,9 @@ const Actor = ({ initialData }) => {
                       <Image
                         src="/icons/location.svg"
                         alt="Localisation"
-                        width="25px" height="25px" objectFit="contain"
+                        width="25px"
+                        height="25px"
+                        objectFit="contain"
                         className={[styles.icon]}
                       />
                     </Grid>
@@ -716,8 +726,9 @@ const Actor = ({ initialData }) => {
                         {data && data.actor.address && data.actor.city && (
                           <span>
                             {/* @ts-ignore */}
-                            {`${data && data.actor.address} ${data && data.actor.city
-                              }`}
+                            {`${data && data.actor.address} ${
+                              data && data.actor.city
+                            }`}
                           </span>
                         )}
                       </span>
@@ -737,7 +748,7 @@ const Actor = ({ initialData }) => {
                                     entry &&
                                     entry.collection &&
                                     entry.collection.code ===
-                                    'actor_location_action' && (
+                                      'actor_location_action' && (
                                       <div>
                                         <Typography
                                           variant="h7"
@@ -759,7 +770,9 @@ const Actor = ({ initialData }) => {
                         <Grid item xs={3} className={[styles.alignRight]}>
                           <Image
                             src="/icons/phone.svg"
-                            width="25px" height="25px" objectFit="contain"
+                            width="25px"
+                            height="25px"
+                            objectFit="contain"
                             alt="Téléphone"
                             className={[styles.icon]}
                           />
@@ -779,7 +792,9 @@ const Actor = ({ initialData }) => {
                         <Grid item xs={3} className={[styles.alignRight]}>
                           <Image
                             src="/icons/email.svg"
-                            width="25px" height="25px" objectFit="contain"
+                            width="25px"
+                            height="25px"
+                            objectFit="contain"
                             alt="Email"
                             className={[styles.icon]}
                           />
@@ -799,7 +814,9 @@ const Actor = ({ initialData }) => {
                         <Grid item xs={3} className={[styles.alignRight]}>
                           <Image
                             src="/icons/web_site.svg"
-                            width="25px" height="25px" objectFit="contain"
+                            width="25px"
+                            height="25px"
+                            objectFit="contain"
                             alt="Site Web"
                             className={[styles.icon]}
                           />
@@ -810,7 +827,9 @@ const Actor = ({ initialData }) => {
                           </div>
                           <span className={[styles.infoValue]}>
                             <a
-                              href={data && urlWithHttpsdefault(data.actor.website)}
+                              href={
+                                data && urlWithHttpsdefault(data.actor.website)
+                              }
                               target="_blank"
                               rel="noreferrer"
                             >
@@ -827,7 +846,9 @@ const Actor = ({ initialData }) => {
                       <Grid item xs={3} className={[styles.alignRight]}>
                         <Image
                           src="/icons/social.svg"
-                          width="25px" height="25px" objectFit="contain"
+                          width="25px"
+                          height="25px"
+                          objectFit="contain"
                           alt="Réseau social"
                           className={[styles.icon]}
                         />
@@ -836,7 +857,10 @@ const Actor = ({ initialData }) => {
                         <div className={[styles.infoLabel]}>Réseau social</div>
                         <span className={[styles.infoValue]}>
                           <a
-                            href={data && urlWithHttpsdefault(data.actor.socialNetwork)}
+                            href={
+                              data &&
+                              urlWithHttpsdefault(data.actor.socialNetwork)
+                            }
                             target="_blank"
                             rel="noreferrer"
                           >
@@ -855,7 +879,9 @@ const Actor = ({ initialData }) => {
                         <Grid item xs={3} className={[styles.alignRight]}>
                           <Image
                             src="/icons/clock.svg"
-                            width="25px" height="25px" objectFit="contain"
+                            width="25px"
+                            height="25px"
+                            objectFit="contain"
                             alt="Horaire"
                             className={[styles.icon]}
                           />
@@ -910,7 +936,9 @@ const Actor = ({ initialData }) => {
                       <Image
                         src="/icons/social.svg"
                         alt="Réseau social"
-                        width="25px" height="25px" objectFit="contain"
+                        width="25px"
+                        height="25px"
+                        objectFit="contain"
                         className={[styles.icon]}
                       />
                     </Grid>
@@ -988,7 +1016,9 @@ const Actor = ({ initialData }) => {
                 <div className={styles.border} />
                 <br />
                 <br />
-                <p>{data && Parser(urlRectification(data.actor.description))}</p>
+                <p>
+                  {data && Parser(urlRectification(data.actor.description))}
+                </p>
                 <div>
                   {data &&
                     data.actor.entries.map(
@@ -1001,8 +1031,9 @@ const Actor = ({ initialData }) => {
                               className={styles.cardTitleCategories}
                             >
                               {/* @ts-ignore */}
-                              {` ${entry.parentEntry && entry.parentEntry.label
-                                } `}
+                              {` ${
+                                entry.parentEntry && entry.parentEntry.label
+                              } `}
                               {/* @ts-ignore */}:
                               {entry.icon && (
                                 <Image
@@ -1178,8 +1209,9 @@ const Actor = ({ initialData }) => {
                         {data && data.actor.address && data.actor.city && (
                           <span>
                             {/* @ts-ignore */}
-                            {`${data && data.actor.address} ${data && data.actor.city
-                              }`}
+                            {`${data && data.actor.address} ${
+                              data && data.actor.city
+                            }`}
                           </span>
                         )}
                       </Popup>
@@ -1203,7 +1235,8 @@ const Actor = ({ initialData }) => {
                   </Typography>
                   <br />
                   <div className={styles.volunteerDescription}>
-                    {data && Parser(urlRectification(data.actor.volunteerDescription))}
+                    {data &&
+                      Parser(urlRectification(data.actor.volunteerDescription))}
                   </div>
                   <div>
                     {data &&
@@ -1286,17 +1319,18 @@ const Actor = ({ initialData }) => {
                 (data && containUser(data.actor.referents)) ||
                 (user && user.role === 'admin')
               }
+              isValidated={data?.actor.isValidated}
             />
           </Container>
           <Newsletter />
           {((data && containUser(data.actor.referents)) ||
             (user && user.role === 'admin')) && (
-              <Link href={`/actorAdmin/actor/${id}`}>
-                <Fab className={styles.fab} aria-label="edit">
-                  <EditIcon />
-                </Fab>
-              </Link>
-            )}
+            <Link href={`/actorAdmin/actor/${id}`}>
+              <Fab className={styles.fab} aria-label="edit">
+                <EditIcon />
+              </Fab>
+            </Link>
+          )}
         </Box>
       </RootRef>
     </AppLayout>
@@ -1312,7 +1346,7 @@ export async function getServerSideProps(ctxt) {
   const startDate = moment();
 
   let recurrentOptions = null;
-  console.debug("before fetch");
+  console.debug('before fetch');
 
   const res = await fetch(process.env.NEXT_PUBLIC_API_URI, {
     method: 'POST',
@@ -1326,20 +1360,26 @@ export async function getServerSideProps(ctxt) {
   });
   const endDate = moment();
 
-  console.debug("before json" + moment.duration(endDate.diff(startDate)).asMilliseconds(),);
+  console.debug(
+    'before json' + moment.duration(endDate.diff(startDate)).asMilliseconds(),
+  );
   const initialData = await res.json();
   if (initialData.errors) {
     console.error(
       ' Error fetching actor id ' +
-      ctxt.params.id +
-      ' error message : ' +
-      initialData.errors[0].message +
-      '',
+        ctxt.params.id +
+        ' error message : ' +
+        initialData.errors[0].message +
+        '',
     );
   }
   const after = moment();
 
-  console.debug("after json" + moment.duration(after.diff(endDate)).asMilliseconds() + initialData);
+  console.debug(
+    'after json' +
+      moment.duration(after.diff(endDate)).asMilliseconds() +
+      initialData,
+  );
   return {
     props: { initialData },
   };
