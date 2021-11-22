@@ -5,7 +5,8 @@ import SearchIcon from '@material-ui/icons/Search';
 import TextField from '@material-ui/core/TextField';
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/client';
-import { Typography, makeStyles } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
+import { useRouter } from 'next/router'
 
 const SEARCH = gql`
   query search($searchEvent: Boolean, $searchActor: Boolean, $searchValue: String!) {
@@ -46,6 +47,7 @@ const SearchEngine = (props) => {
   const [data, setData] = useState();
   const [value, setValue] = useState(null);
   const classes = useStyles();
+  const router = useRouter();
 
   const { refetch, loading } = useQuery(SEARCH, {
     variables: {
@@ -83,7 +85,13 @@ const SearchEngine = (props) => {
     return eventOptions.concat(actorOptions);
   }, [data]);
 
-
+  const handleClickOption = useCallback((evt, option) => {
+    if (option.type === 'Actions') {
+      router.push('/event/' + option.id);
+    } else {
+      router.push('/actor/' + option.id);
+    }
+  }, [router]);
 
   return (
     <Autocomplete
@@ -93,13 +101,14 @@ const SearchEngine = (props) => {
         inputRoot: classes.inputRoot,
         popupIndicator: classes.popupIndicator
       }}
-      autoSelect={false}
       style={{ width: '60%', margin: 'auto' }}
       onInputChange={handleInputChange}
+      onChange={handleClickOption}
       openOnFocus={false}
       open={open}
       groupBy={(option) => option.type}
       getOptionLabel={(option) => option.label}
+      getOptionSelected={(option, currentvalue) => option.label === currentvalue.label}
       options={options}
       loading={loading}
       popupIcon={(
