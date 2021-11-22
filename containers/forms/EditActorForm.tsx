@@ -970,7 +970,7 @@ const EditActorForm = (props) => {
             newpic: object.newpic,
             deleted: object.deleted,
             file: {
-              originalPicture: object.file,
+              originalPicture: object.originalPicture,
             },
           };
         });

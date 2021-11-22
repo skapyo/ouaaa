@@ -28,7 +28,6 @@ const ImagesDisplay = ({
           id={file.id}
           key={`image${file.id}`}
           originalImg={file.img}
-          croppedImg={file.croppedImg}
           moveCard={moveCard}
           findCard={findCard}
           deletedIconClickHandler={updateDeletedIndicator}
@@ -96,7 +95,7 @@ const ImagePrev = ({
         style={{ opacity }}
       >
         <Card>
-          <img src={originalImg.img} className="image" />
+          <img src={originalImg} className="image" />
         </Card>
         <Card>
           <Grid container spacing={3}>
