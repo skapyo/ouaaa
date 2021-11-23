@@ -10,7 +10,7 @@ import {
   Button,
   useTheme
 } from '@material-ui/core';
-
+import SearchBar from "material-ui-search-bar";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
@@ -266,6 +266,8 @@ function Filters(props) {
     }
   }, [setErrorPostCode]);
 
+
+
   const handleEntryChange = useCallback((entries, collection) => {
     let currentEntries = [...filters.entries || []];
     entries.forEach(newEntry => {
@@ -330,6 +332,7 @@ function Filters(props) {
       wrap="nowrap"
       className={classes.root}
     >
+      
       {
         isEventList && (
           <DateFilter
@@ -337,7 +340,11 @@ function Filters(props) {
           />
         )
       }
-
+      <SearchBar
+       // value={this.state.value}
+        onChange={(newValue) => onSearchChange({ value: newValue })}
+        //onRequestSearch={() => doSomethingWith(this.state.value)}
+      />
       <TextField
         variant="outlined"
         label="Code Postal"

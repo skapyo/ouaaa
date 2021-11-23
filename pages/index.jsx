@@ -121,9 +121,9 @@ const Index = () => {
           <LastActor />
 
           <LastEvent />
-{/*
+
           <Newsletter />
-          */}
+         
         </Box>
       </RootRef>
     </AppLayout>

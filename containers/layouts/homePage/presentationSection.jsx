@@ -1,8 +1,9 @@
 import { Container, makeStyles, Typography, useTheme } from '@material-ui/core';
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import Search from '../../../components/Search';
 import Link from '../../../components/Link';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import SearchEngine from '../../../components/SearchEngine';
 
 const useStyles = makeStyles((theme) => ({
   titleContainer: {
@@ -12,10 +13,10 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up('md')]: {
       height: '45em',
     },
-   
+
     color: 'white',
     'text-align': 'center',
-    
+
     [theme.breakpoints.up('md')]: {
       padding: '8em',
     },
@@ -32,13 +33,13 @@ const useStyles = makeStyles((theme) => ({
   },
   titleTypo: {
     fontSize: '2em',
-    
+
     color: 'white',
   },
   align: {
     'text-align': 'center',
   },
-  baseLine:{
+  baseLine: {
     'fontSize': '1em',
     [theme.breakpoints.up('xs')]: {
       'text-align': 'center',
@@ -47,12 +48,12 @@ const useStyles = makeStyles((theme) => ({
       'text-align': 'justify',
     },
   },
-  addActor:{
+  addActor: {
     [theme.breakpoints.up('md')]: {
-      paddingTop: '5em',
+      paddingTop: '1em',
     },
   },
-  h1 : {
+  h1: {
     paddingTop: '1em',
     [theme.breakpoints.up('md')]: {
       fontSize: '3em',
@@ -60,7 +61,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('sm')]: {
       fontSize: '2em',
     },
-   
+
     textTransform: 'uppercase',
   },
   buttonGrid: {
@@ -86,21 +87,23 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
 const PresentationSection = () => {
   const styles = useStyles();
   const theme = useTheme();
   const mobile = useMediaQuery(theme.breakpoints.down('sm'));
+
   return (
     <Container className={styles.titleContainer}>
-
       <div className={styles.title}>
-      <h1 className={styles.h1}>agir pour la transition écologique <br/> et sociale en aunis</h1>
+        <h1 className={styles.h1}>agir pour la transition écologique <br /> et sociale en aunis</h1>
       </div>
+
       <Typography className={styles.baseLine}>
-        Nous sommes là pour te faire connaître celles et ceux qui oeuvrent { !mobile && (<br/>)}
+        Nous sommes là pour te faire connaître celles et ceux qui oeuvrent {!mobile && (<br />)}
         pour la transition écologique, sociale et démocratique, te donner le calendrier de leurs actions et te permettre de les rejoindre.
       </Typography >
+
+      <SearchEngine />
 
       <Typography className={styles.addActor}>
         <Link href="/addactor">
@@ -109,7 +112,10 @@ const PresentationSection = () => {
           </button>
         </Link>
       </Typography>
-      {/*  <Search /> */}
+
+     
+      
+     
     </Container>
   );
 };

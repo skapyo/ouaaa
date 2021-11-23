@@ -302,6 +302,7 @@ const carto = () => {
   const router = useRouter();
   const { inviteActor,noEmailInviteActor } = router.query;
   const [categoriesChecked, setCategoriesChecked] = useState(categories.Sujets);
+
   const [otherCategoriesChecked, setOtherCategoriesChecked] = useState(
     otherCategories,
   );
@@ -369,6 +370,43 @@ const carto = () => {
       }
     `;
 
+    const SEARCH = gql`
+    query search($searchEvent: Boolean, $searchActor: Boolean,$searchValue: String!) {
+      search(searchEvent: $searchEvent,searchActor: $searchActor,searchValue: $searchValue) {
+        actors
+        {
+          id
+          name
+          address
+          city
+          shortDescription
+          lat
+          lng
+          entries {
+            label
+            icon
+            color
+            description
+            parentEntry {
+              code
+              label
+              color
+            }
+          }
+        }
+      }
+    }
+    `;
+
+    const {  data : dataSearch, loading : loadingSearch, error : errorSearch, refetch: refetchSearch } = useQuery(SEARCH, {
+      fetchPolicy: 'network-only',
+      variables: {
+        searchValue: '',
+        searchActor: true,
+        searchEvent: true,
+      },
+    });
+
     const { data, loading, error, refetch } = useQuery(GET_ACTORS, {
       variables: {
         entries: [categoriesChecked],
@@ -407,6 +445,15 @@ const carto = () => {
       refetch({ ...newFilters });
     }, [refetch]);
 
+    const handleSearch = useCallback(object => {
+      if(object.value.length > 2){
+        refetchSearch({ 
+        searchValue: object.value,
+        searchActor: true,
+        searchEvent: false});
+        }
+   }, [refetchSearch]);
+  
     function splitWord(word, number) {
       if (word != null) {
         var indexMax = Math.round(word.length / number);
@@ -475,6 +522,7 @@ const carto = () => {
           >
             <Filters
               onFiltersChange={handleFiltersChange}
+              onSearchChange={handleSearch}
               closeHandler={toggleMenu}
               isActorList
               inviteActor={inviteActor}
@@ -556,7 +604,7 @@ const carto = () => {
                                 >
                                   <Typography
                                     className={styles.categorie}
-                                    style={{ color: actor?.entries[0]?.parentEntry?.color }}
+                                    style={{ color:  actor?.entries && actor?.entries[0]?.parentEntry?.color }}
                                     gutterBottom
                                   >
                                     {actor.entries &&
@@ -615,7 +663,7 @@ const carto = () => {
                                 <div className={styles.categorie} >
                                   <Typography
                                     className={styles.categorie}
-                                    style={{ color: actor?.entries[0]?.parentEntry?.color }}
+                                    style={{ color: actor?.entries && actor?.entries[0]?.parentEntry?.color }}
                                     gutterBottom
                                   >
                                     {actor.entries &&
