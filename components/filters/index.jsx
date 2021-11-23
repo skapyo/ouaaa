@@ -182,7 +182,6 @@ function Filters(props) {
   const {
     isEventList,
     onFiltersChange,
-    onSearchChange,
     closeHandler,
     inviteActor,
     noEmailInviteActor,

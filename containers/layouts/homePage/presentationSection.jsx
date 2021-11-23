@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
   },
   addActor: {
     [theme.breakpoints.up('md')]: {
-      paddingTop: '5em',
+      paddingTop: '1em',
     },
   },
   h1: {
@@ -103,6 +103,8 @@ const PresentationSection = () => {
         pour la transition écologique, sociale et démocratique, te donner le calendrier de leurs actions et te permettre de les rejoindre.
       </Typography >
 
+      <SearchEngine />
+
       <Typography className={styles.addActor}>
         <Link href="/addactor">
           <button className={styles.buttonGrid}>
@@ -111,9 +113,9 @@ const PresentationSection = () => {
         </Link>
       </Typography>
 
-      <SearchEngine />
-
-      {/*  <Search /> */}
+     
+      
+     
     </Container>
   );
 };

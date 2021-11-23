@@ -24,13 +24,25 @@ const SEARCH = gql`
         city
         shortDescription
       }
+      actors
+        {
+          id
+          name
+          address
+          city
+          shortDescription
+          lat
+          lng
+        }
     }
   }
 `;
 
 const useStyles = makeStyles((theme) => ({
   inputRoot: {
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    borderRadius: '34px',
+    paddingTop: '3em',
   },
   popupIndicator: {
     transform: 'none',
@@ -80,7 +92,7 @@ const SearchEngine = (props) => {
     if (!data) return [];
 
     const eventOptions = data.events.map(event => ({ ...event, type: 'Actions' }));
-    const actorOptions = data.actors.map(actor => ({ ...actor, type: 'Acteurs' }));
+    const actorOptions = data.actors.map(actor => ({ ...actor, type: 'Acteurs', label: actor.name  }));
 
     return eventOptions.concat(actorOptions);
   }, [data]);
@@ -101,7 +113,7 @@ const SearchEngine = (props) => {
         inputRoot: classes.inputRoot,
         popupIndicator: classes.popupIndicator
       }}
-      style={{ width: '60%', margin: 'auto' }}
+      style={{ width: '45em', paddingTop: '3em', margin: 'auto' }}
       onInputChange={handleInputChange}
       onChange={handleClickOption}
       openOnFocus={false}
@@ -109,6 +121,7 @@ const SearchEngine = (props) => {
       groupBy={(option) => option.type}
       getOptionLabel={(option) => option.label}
       getOptionSelected={(option, currentvalue) => option.label === currentvalue.label}
+      noOptionsText={'Pas de résultat'}
       options={options}
       loading={loading}
       popupIcon={(
@@ -125,7 +138,7 @@ const SearchEngine = (props) => {
               endAdornment: (
                 <React.Fragment>
                   {loading ? <CircularProgress color="inherit" size={20} /> : null}
-                  {params.InputProps.endAdornment}
+                   {params.InputProps.endAdornment}
                 </React.Fragment>
               ),
             }}
