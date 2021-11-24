@@ -342,7 +342,10 @@ function Filters(props) {
       }
       <SearchBar
        // value={this.state.value}
-        onChange={(newValue) => onSearchChange({ value: newValue })}
+        placeholder="Recherche par nom"
+        onChange={(newValue) => { handleFilterChange('search', newValue) }}
+        onCancelSearch={() => { handleFilterChange('search', '') }}
+
         //onRequestSearch={() => doSomethingWith(this.state.value)}
       />
       <TextField

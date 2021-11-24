@@ -338,8 +338,8 @@ const carto = () => {
       headerDisplay: 'static',
     });
     const GET_ACTORS = gql`
-      query actors($entries: [[String]], $postCode: String,$isValidated: Boolean) {
-        actors(entries: $entries, postCode: $postCode,isValidated: $isValidated) {
+      query actors($entries: [[String]], $search: String,$postCode: String,$isValidated: Boolean) {
+        actors(entries: $entries, search: $search,postCode: $postCode,isValidated: $isValidated) {
           id
           name
           address
@@ -369,43 +369,6 @@ const carto = () => {
         }
       }
     `;
-
-    const SEARCH = gql`
-    query search($searchEvent: Boolean, $searchActor: Boolean,$searchValue: String!) {
-      search(searchEvent: $searchEvent,searchActor: $searchActor,searchValue: $searchValue) {
-        actors
-        {
-          id
-          name
-          address
-          city
-          shortDescription
-          lat
-          lng
-          entries {
-            label
-            icon
-            color
-            description
-            parentEntry {
-              code
-              label
-              color
-            }
-          }
-        }
-      }
-    }
-    `;
-
-    const {  data : dataSearch, loading : loadingSearch, error : errorSearch, refetch: refetchSearch } = useQuery(SEARCH, {
-      fetchPolicy: 'network-only',
-      variables: {
-        searchValue: '',
-        searchActor: true,
-        searchEvent: true,
-      },
-    });
 
     const { data, loading, error, refetch } = useQuery(GET_ACTORS, {
       variables: {
@@ -445,15 +408,6 @@ const carto = () => {
       refetch({ ...newFilters });
     }, [refetch]);
 
-    const handleSearch = useCallback(object => {
-      if(object.value.length > 2){
-        refetchSearch({ 
-        searchValue: object.value,
-        searchActor: true,
-        searchEvent: false});
-        }
-   }, [refetchSearch]);
-  
     function splitWord(word, number) {
       if (word != null) {
         var indexMax = Math.round(word.length / number);
@@ -522,7 +476,6 @@ const carto = () => {
           >
             <Filters
               onFiltersChange={handleFiltersChange}
-              onSearchChange={handleSearch}
               closeHandler={toggleMenu}
               isActorList
               inviteActor={inviteActor}

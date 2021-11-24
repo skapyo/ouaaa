@@ -167,8 +167,8 @@ const VIEW_STATE = {
 
 const AgendaPageLayout = () => {
   const GET_EVENTS = gql`
-    query events($startingDate: String, $entries: [[String]]) {
-      events(startingDate: $startingDate, entries: $entries) {
+    query events($startingDate: String,$search: String, $entries: [[String]]) {
+      events(startingDate: $startingDate, search: $search,entries: $entries) {
         id
         label
         startedAt
@@ -216,25 +216,7 @@ const AgendaPageLayout = () => {
       }
     }
     `;
-   const SEARCH = gql`
-   query search($searchEvent: Boolean, $searchActor: Boolean,$searchValue: String!) {
-     search(searchEvent: $searchEvent,searchActor: $searchActor,searchValue: $searchValue) {
-       events
-       {
-        id
-        label
-        startedAt
-        endedAt
-        published
-        lat
-        lng
-        address
-        city
-        shortDescription
-     }
-   }
-   }
-   `;
+
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -271,13 +253,7 @@ const AgendaPageLayout = () => {
     },
   });
 
-  const {  data : dataSearch, loading : loadingSearch, error : errorSearch, refetch: refetchSearch } = useQuery(SEARCH, {
-    variables: {
-      searchValue: '',
-      searchActor: false,
-      searchEvent: true,
-    },
-  });
+
 
   if (typeof window !== 'undefined') {
     L.Icon.Default.mergeOptions({
@@ -285,14 +261,6 @@ const AgendaPageLayout = () => {
     });
   }
 
-  const handleSearch = useCallback(object => {
-      if(object.value.length > 2){
-        refetchSearch({ 
-        searchValue: object.value,
-        searchActor: false,
-        searchEvent: true});
-        }
-  }, [refetchSearch]);
 
   const handleFiltersChange = useCallback(newFilters => {
     setFilters(newFilters);
@@ -360,7 +328,6 @@ const AgendaPageLayout = () => {
         >
           <Filters
             isEventList
-            onSearchChange={handleSearch}
             onFiltersChange={handleFiltersChange}
             isCalendarMode={isCalendarMode}
             closeHandler={toggleMenu}
