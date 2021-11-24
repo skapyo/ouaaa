@@ -1,6 +1,5 @@
 import { Container, makeStyles, Typography, useTheme } from '@material-ui/core';
-import React, { useCallback, useState } from 'react';
-import Search from '../../../components/Search';
+import React from 'react';
 import Link from '../../../components/Link';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import SearchEngine from '../../../components/SearchEngine';
@@ -10,18 +9,13 @@ const useStyles = makeStyles((theme) => ({
     backgroundImage: "url('./OUAAA-pix-022.jpg')",
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
+    color: 'white',
+    textAlign: 'center',
     [theme.breakpoints.up('md')]: {
       height: '45em',
     },
-
-    color: 'white',
-    'text-align': 'center',
-
     [theme.breakpoints.up('md')]: {
       padding: '8em',
-    },
-    [theme.breakpoints.down('sm')]: {
-      height: '30em',
     },
   },
   title: {
@@ -37,15 +31,15 @@ const useStyles = makeStyles((theme) => ({
     color: 'white',
   },
   align: {
-    'text-align': 'center',
+    textAlign: 'center',
   },
   baseLine: {
-    'fontSize': '1em',
+    fontSize: '1em',
     [theme.breakpoints.up('xs')]: {
-      'text-align': 'center',
+      textAlign: 'center',
     },
     [theme.breakpoints.down('xs')]: {
-      'text-align': 'justify',
+      textAlign: 'justify',
     },
   },
   addActor: {
@@ -55,35 +49,34 @@ const useStyles = makeStyles((theme) => ({
   },
   h1: {
     paddingTop: '1em',
+    textTransform: 'uppercase',
     [theme.breakpoints.up('md')]: {
       fontSize: '3em',
     },
     [theme.breakpoints.down('sm')]: {
       fontSize: '2em',
     },
-
-    textTransform: 'uppercase',
   },
   buttonGrid: {
     fontSize: '1em',
     margin: '1.5em 0 1.5em 0 ',
     color: 'white',
-    'background-color': 'transparent',
+    backgroundColor: 'transparent',
     border: '2px solid white',
     borderRadius: '1.5em',
     padding: '0.2em 3em 0.2em 3em',
     minHeight: '2.5em',
+    backgroundImage: "url('./arrow.svg')",
+    backgroundRepeat: 'no-repeat',
+    backgroundPositionX: 5,
+    backgroundPositionY: -2,
     '&:hover': {
       cursor: 'pointer',
       color: '#2C367E',
-      'background-color': 'white',
+      backgroundColor: 'white',
       border: '2px solid #2C367E',
       backgroundImage: "url('./arrow-hover.svg')",
     },
-    backgroundImage: "url('./arrow.svg')",
-    backgroundRepeat: 'no-repeat',
-    'background-position-x': '5px',
-    'background-position-y': '-2px',
   },
 }));
 
@@ -112,10 +105,6 @@ const PresentationSection = () => {
           </button>
         </Link>
       </Typography>
-
-     
-      
-     
     </Container>
   );
 };

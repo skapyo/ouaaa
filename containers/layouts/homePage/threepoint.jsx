@@ -23,6 +23,7 @@ const useStyles = makeStyles((theme) => ({
       marginLeft: '0',
       marginRight: '0',
       width: '100%',
+      marginTop: 0,
     },
   },
   inprogress: {

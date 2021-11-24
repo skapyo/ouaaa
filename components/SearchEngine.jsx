@@ -39,9 +39,18 @@ const SEARCH = gql`
 `;
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    width: '45em',
+    paddingTop: '3em',
+    margin: 'auto',
+    [theme.breakpoints.down('sm')]: {
+      width: 'auto',
+      paddingTop: '1em'
+    },
+  },
   inputRoot: {
     backgroundColor: 'white',
-    borderRadius: '34px',
+    borderRadius: 34,
     paddingTop: '3em',
   },
   popupIndicator: {
@@ -135,10 +144,10 @@ const SearchEngine = (props) => {
       id="search-engine"
       clearOnBlur={false}
       classes={{
+        root: classes.root,
         inputRoot: classes.inputRoot,
         popupIndicator: classes.popupIndicator
       }}
-      style={{ width: '45em', paddingTop: '3em', margin: 'auto' }}
       onInputChange={handleInputChange}
       onChange={handleClickOption}
       openOnFocus={false}
