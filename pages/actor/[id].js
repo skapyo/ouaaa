@@ -99,10 +99,6 @@ const useStyles = makeStyles((theme) => ({
     textTransform: 'uppercase',
     fontWeight: '400',
   },
-  map: {
-    height: '30em',
-    width: '30em',
-  },
   actorName: {
     width: '100%',
   },
@@ -1178,6 +1174,7 @@ const Actor = ({ initialData }) => {
                 {data && L && data.actor && data.actor.lat && data.actor.lng && (
                   <Map
                     ref={mapRef}
+                    id="map"
                     center={[data.actor.lat, data.actor.lng]}
                     zoom={11}
                     className={styles.map}

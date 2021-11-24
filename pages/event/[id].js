@@ -1122,6 +1122,7 @@ const Event = ({ initialData }) => {
                 {data && L && (
                   <Map
                     ref={mapRef}
+                    id="map"
                     center={[data.event.lat, data.event.lng]}
                     zoom={11}
                     className={styles.map}
