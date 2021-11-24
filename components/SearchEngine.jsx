@@ -51,8 +51,33 @@ const useStyles = makeStyles((theme) => ({
   group: {
     marginLeft: 10,
     borderBottom: '1px solid #d9d7d7'
+  },
+  optionShortDescription: {
+    fontSize: 14,
+    marginLeft: 14,
+    fontStyle: 'italic'
   }
 }));
+
+const getTextWithSearchValue = (originalText, inputValue) => {
+  let newOriginalText = originalText;
+  if (originalText) {
+    // Find the position value in the original string
+    const matchIndex = originalText.toLowerCase().search(inputValue.toLowerCase());
+    if (matchIndex => 0) {
+      // Build string list with the first part, the match part and last part of the original string
+      // And return the match part surrounded by bold tag
+      newOriginalText = [originalText.slice(0, matchIndex)]
+        .concat(originalText.slice(matchIndex, matchIndex + inputValue.length))
+        .concat(originalText.slice(matchIndex + inputValue.length))
+        .map((part, index) => {
+          if (index === 1) return <b key={index}>{part}</b>;
+          return part;
+        });
+    }
+  }
+  return newOriginalText;
+};
 
 const SearchEngine = (props) => {
   const [open, setOpen] = useState(false);
@@ -92,7 +117,7 @@ const SearchEngine = (props) => {
     if (!data) return [];
 
     const eventOptions = data.events.map(event => ({ ...event, type: 'Actions' }));
-    const actorOptions = data.actors.map(actor => ({ ...actor, type: 'Acteurs', label: actor.name  }));
+    const actorOptions = data.actors.map(actor => ({ ...actor, type: 'Acteurs', label: actor.name }));
 
     return eventOptions.concat(actorOptions);
   }, [data]);
@@ -138,11 +163,25 @@ const SearchEngine = (props) => {
               endAdornment: (
                 <React.Fragment>
                   {loading ? <CircularProgress color="inherit" size={20} /> : null}
-                   {params.InputProps.endAdornment}
+                  {params.InputProps.endAdornment}
                 </React.Fragment>
               ),
             }}
           />
+        )
+      }}
+      renderOption={(option, state) => {
+        const { label, shortDescription } = option;
+        const { inputValue } = state;
+
+        const newLabel = getTextWithSearchValue(label, inputValue);
+        const newShortDescription = getTextWithSearchValue(shortDescription, inputValue);
+
+        return (
+          <div>
+            <div>{newLabel}</div>
+            {shortDescription && <div className={classes.optionShortDescription}>{newShortDescription}</div>}
+          </div>
         )
       }}
     />
