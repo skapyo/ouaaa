@@ -929,6 +929,7 @@ const EditActorForm = (props) => {
 
     const submitHandler = useCallback(() => {
       let logoPictures;
+      debugger;
       // @ts-ignore
       if (objectsListLogo) {
         logoPictures = objectsListLogo.map((object) => {
@@ -970,7 +971,7 @@ const EditActorForm = (props) => {
             newpic: object.newpic,
             deleted: object.deleted,
             file: {
-              originalPicture: object.originalPicture,
+              originalPicture: object.file,
             },
           };
         });

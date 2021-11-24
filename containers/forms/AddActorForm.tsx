@@ -637,7 +637,7 @@ const AddActorForm = () => {
             newpic: object.newpic,
             deleted: object.deleted,
             file: {
-              originalPicture: object.originalPicture,
+              originalPicture: object.file,
             },
           };
         });
