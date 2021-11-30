@@ -180,9 +180,6 @@ const Newsletter = () => {
       user,
     ]);
 
-    /* TODO Hide until 1.1 */
-  return (<></>);
-
     return (
       <Grid container direction="column" alignItems="center" justifyContent="space-around" className={styles.newsletter}>
         <Typography variant="h2" className={[styles.cardTitle, styles.align]}>

@@ -148,7 +148,6 @@ Cette charte est adoptée le 13.10.2021
               </div>
             </p>
           </Container>
-          <Newsletter />
         </Box>
       </RootRef>
     </AppLayout>

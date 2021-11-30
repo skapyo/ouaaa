@@ -596,7 +596,6 @@ const AgendaPageLayout = () => {
           </Grid>
         )}
       </Container>
-      <Newsletter />
     </Container>
   );
 };

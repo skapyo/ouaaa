@@ -92,7 +92,6 @@ A l’écoute des usagers : acteurs inscrits et visiteurs du site, nous recueil
             <br />
             <br />
           </Container>
-          <Newsletter />
         </Box>
       </RootRef>
     </AppLayout>

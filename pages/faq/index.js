@@ -191,7 +191,6 @@ const Faq = () => {
           <br />
           <br />
           </Container>
-          <Newsletter />
         </Box>
       </RootRef>
     </AppLayout>

@@ -1355,7 +1355,6 @@ const Actor = ({ initialData }) => {
               isValidated={data?.actor.isValidated}
             />
           </Container>
-          <Newsletter />
           {((data && containUser(data.actor.referents)) ||
             (user && user.role === 'admin')) && (
               <Link href={`/actorAdmin/actor/${id}`}>

@@ -24,7 +24,6 @@ const News = () => {
             <Typography variant="h1">Le Journal</Typography>
             <Typography variant="h4">En cours de construction</Typography>
           </Container>
-          <Newsletter />
         </Box>
       </RootRef>
     </AppLayout>

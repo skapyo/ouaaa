@@ -1328,7 +1328,6 @@ const Event = ({ initialData }) => {
               </div>
             )}
           </Container>
-          <Newsletter />
           {((data &&
             (containUser(data.event.referents) ||
               containUserActorsReferent(data.event.actors))) ||

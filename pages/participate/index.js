@@ -106,7 +106,6 @@ const Participate = () => {
             <br/>
             <br/>
           </Container>
-          <Newsletter />
         </Box>
       </RootRef>
     </AppLayout>

@@ -64,7 +64,6 @@ const Improvment = () => {
               </a>
             </div>
           </Container>
-          <Newsletter />
         </Box>
       </RootRef>
     </AppLayout>

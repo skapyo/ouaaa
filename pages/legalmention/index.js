@@ -38,7 +38,6 @@ const Charter = () => {
             <br />
             <br />
           </Container>
-          <Newsletter />
         </Box>
       </RootRef>
     </AppLayout >
