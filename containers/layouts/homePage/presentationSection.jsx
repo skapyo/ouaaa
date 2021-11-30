@@ -97,14 +97,6 @@ const PresentationSection = () => {
       </Typography >
 
       <SearchEngine />
-
-      <Typography className={styles.addActor}>
-        <Link href="/addactor">
-          <button className={styles.buttonGrid}>
-            JE DEVIENS ACTEUR
-          </button>
-        </Link>
-      </Typography>
     </Container>
   );
 };
