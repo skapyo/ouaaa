@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AppLayout = ({ children }) => {
+const AppLayout = ({ children, hideFooter }) => {
   /* if (typeof window !== 'undefined' && process.env.NODE_ENV !== 'development') {
     const trackingId = 'UA-179407370-1'; // Replace with your Google Analytics tracking ID
     ReactGA.initialize(trackingId);
@@ -21,7 +21,9 @@ const AppLayout = ({ children }) => {
     <Box className={styles.root}>
       <NavBar />
       {children}
-      <Footer />
+      {!hideFooter && (
+        <Footer />
+      )}
     </Box>
   );
 };

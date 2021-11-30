@@ -9,7 +9,7 @@ const EditEvent = () => {
   const { id } = router.query;
 
   return (
-    <AppLayout>
+    <AppLayout hideFooter={true}>
       <EditEventForm id={id} />
     </AppLayout>
   );
