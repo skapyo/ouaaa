@@ -276,9 +276,9 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
   },
   mapContainer: {
-    height: '88vh',
+    height: '100% !important',
     [theme.breakpoints.down('sm')]: {
-      height: '80vh'
+      height: '80vh !important'
     }
   }
 }));
@@ -300,7 +300,7 @@ const carto = () => {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down('sm'));
   const router = useRouter();
-  const { inviteActor,noEmailInviteActor } = router.query;
+  const { inviteActor, noEmailInviteActor } = router.query;
   const [categoriesChecked, setCategoriesChecked] = useState(categories.Sujets);
 
   const [otherCategoriesChecked, setOtherCategoriesChecked] = useState(
@@ -557,7 +557,7 @@ const carto = () => {
                                 >
                                   <Typography
                                     className={styles.categorie}
-                                    style={{ color:  actor?.entries && actor?.entries[0]?.parentEntry?.color }}
+                                    style={{ color: actor?.entries && actor?.entries[0]?.parentEntry?.color }}
                                     gutterBottom
                                   >
                                     {actor.entries &&

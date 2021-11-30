@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: 'white',
     right: 10,
     bottom: 20,
-    zIndex: 1000,
+    zIndex: 1001,
     [theme.breakpoints.down('sm')]: {
       position: 'initial',
       width: '100%',

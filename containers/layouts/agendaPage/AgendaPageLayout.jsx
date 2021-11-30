@@ -151,9 +151,9 @@ const useStyles = makeStyles(theme => ({
     color: '#AD2740',
   },
   mapContainer: {
-    height: '88vh',
+    height: '100% !important',
     [theme.breakpoints.down('sm')]: {
-      height: '80vh'
+      height: '80vh !important'
     }
   }
 }));
