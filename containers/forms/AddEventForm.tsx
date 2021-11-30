@@ -10,6 +10,7 @@ import {
   TextField,
   Typography,
 } from '@material-ui/core';
+import frLocale from 'date-fns/locale/fr';
 import ClassicButton from 'components/buttons/ClassicButton';
 import FormController, {
   RenderCallback,
@@ -1089,18 +1090,17 @@ const AddEventForm = ({ actorId }) => {
           title="Calendrier "
           tooltipTitle="Vous pourrez ajouter des infos plus détaillés dans le corps du texte de la déscription ou dans le bloc infos pratiques"
         />
+         <br/>
         <Grid className={styles.datetime}>
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <LocalizationProvider locale={frLocale} dateAdapter={AdapterDateFns}>
             <Grid container justify="space-around">
               <DateTimePicker
                 value={selectedStartDate}
                 onChange={handleStartDateChange}
                 ampm={false}
-                error={
-                  !!selectedStartDate
-                  && moment(selectedStartDate) <= moment(Date.now())
-                }
-                renderInput={params => <TextField  {...params} abel="Date de début" helperText={
+                inputFormat="dd MMM yyyy HH:mm"
+                minDate={new Date()}
+                renderInput={params => <TextField  {...params} label="Date de début" helperText={
                   selectedStartDate
                     && moment(selectedStartDate) <= moment(Date.now())
                     ? 'La date de début ne peut être dans le passé.'
@@ -1113,13 +1113,14 @@ const AddEventForm = ({ actorId }) => {
                 value={selectedEndDate}
                 onChange={handleEndDateChange}
                 ampm={false}
+                inputFormat="dd MMM yyyy HH:mm"
                 KeyboardButtonProps={{
                   'aria-label': 'change date',
                 }}
-                error={
+                minDate={
                   !!selectedStartDate
                   && !!selectedEndDate
-                  && moment(selectedStartDate) >= moment(selectedEndDate)
+                  && selectedStartDate
                 }
                 renderInput={params => <TextField {...params}  label="Date de fin" helperText={
                   selectedStartDate

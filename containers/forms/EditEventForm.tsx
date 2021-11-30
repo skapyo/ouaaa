@@ -45,11 +45,6 @@ import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import Collapse from '@material-ui/core/Collapse/Collapse';
 import DateFnsUtils from '@date-io/date-fns';
-import {
-  KeyboardDatePicker,
-  KeyboardTimePicker,
-  MuiPickersUtilsProvider,
-} from '@material-ui/pickers';
 import moment from 'moment';
 import Dialog from '@material-ui/core/Dialog';
 import AddCircleOutline from '@material-ui/icons/AddCircleOutline';
@@ -69,8 +64,17 @@ import HeightIcon from '@material-ui/core/SvgIcon/SvgIcon';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { useDropArea } from 'react-use';
 import { Autocomplete, TreeView } from '@material-ui/lab';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider'
+import 
+  DatePicker 
+ from '@mui/lab/DatePicker';
+ import DateTimePicker from '@mui/lab/DateTimePicker';
+import {
+  KeyboardTimePicker,
+} from '@material-ui/pickers';
 import RadioGroup from '@material-ui/core/RadioGroup';
-
+import frLocale from 'date-fns/locale/fr';
 import StyledTreeItem from 'components/filters/StyledTreeItem';
 import InfoIcon from '@material-ui/icons/Info';
 import CustomRadioGroup from 'components/form/CustomRadioGroup';
@@ -1487,97 +1491,47 @@ const EditEventForm = (props) => {
           tooltipTitle="Vous pourrez ajouter des infos plus détaillés dans le corps du texte de la déscription ou dans le bloc infos pratiques"
         />
         <Grid className={styles.datetime}>
-          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+        <LocalizationProvider locale={frLocale} dateAdapter={AdapterDateFns}>
             <Grid container justify="space-around">
-              <KeyboardDatePicker
-                disableToolbar
-                variant="inline"
-                format="dd/MM/yyyy"
-                margin="normal"
-                id="date-picker-inline"
-                label="Date de début"
+              <DateTimePicker
                 value={selectedStartDate}
                 onChange={handleStartDateChange}
-                KeyboardButtonProps={{
-                  'aria-label': 'change date',
-                }}
-                error={
-                  dateChange
-                  && !!selectedStartDate
-                  && moment(selectedStartDate) <= moment(Date.now())
-                }
-                helperText={
-                  dateChange
-                    && selectedStartDate
+                ampm={false}
+                inputFormat="dd MMM yyyy HH:mm"
+                minDate={new Date()}
+                renderInput={params => <TextField  {...params} label="Date de début" helperText={
+                  selectedStartDate
                     && moment(selectedStartDate) <= moment(Date.now())
                     ? 'La date de début ne peut être dans le passé.'
                     : ''
-                }
-              />
-              <KeyboardTimePicker
-                margin="normal"
-                id="time-picker"
-                label="Heure de début"
-                value={selectedStartDate}
-                onChange={handleStartDateChange}
-                KeyboardButtonProps={{
-                  'aria-label': 'change time',
-                }}
-                ampm={false}
-                minutesStep={5}
-                error={
-                  dateChange
-                  && !!selectedStartDate
-                  && moment(selectedStartDate) <= moment()
-                }
-              />
-              <KeyboardDatePicker
-                disableToolbar
-                variant="inline"
-                format="dd/MM/yyyy"
-                margin="normal"
-                id="date-picker-inline"
-                label="Date de fin"
+                     }/>
+                    }
+                    />
+          
+              <DateTimePicker
                 value={selectedEndDate}
                 onChange={handleEndDateChange}
+                ampm={false}
+                inputFormat="dd MMM yyyy HH:mm"
                 KeyboardButtonProps={{
                   'aria-label': 'change date',
                 }}
-                error={
-                  dateChange
-                  && !!selectedStartDate
+                minDate={
+                  !!selectedStartDate
                   && !!selectedEndDate
-                  && moment(selectedStartDate) >= moment(selectedEndDate)
+                  && selectedStartDate
                 }
-                helperText={
-                  dateChange
-                    && selectedStartDate
+                renderInput={params => <TextField {...params}  label="Date de fin" helperText={
+                  selectedStartDate
                     && selectedEndDate
                     && selectedStartDate >= selectedEndDate
-                    ? 'La date de fin doit être après la date de début.'
+                    ? 'La date de fin ne peut être dans le début.'
                     : ''
-                }
-              />
-              <KeyboardTimePicker
-                margin="normal"
-                id="time-picker"
-                label="Heure de fin"
-                value={selectedEndDate}
-                onChange={handleEndDateChange}
-                KeyboardButtonProps={{
-                  'aria-label': 'change time',
-                }}
-                ampm={false}
-                minutesStep={5}
-                error={
-                  dateChange
-                  && !!selectedStartDate
-                  && !!selectedEndDate
-                  && moment(selectedStartDate) >= moment(selectedEndDate)
-                }
+                     }/>
+                    }
               />
             </Grid>
-          </MuiPickersUtilsProvider>
+        </LocalizationProvider>
         </Grid>
         <p />
         {

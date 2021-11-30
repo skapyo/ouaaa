@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef, useMemo } from 'react';
 import AppLayout from 'containers/layouts/AppLayout';
 import {
-  Box,
   Container,
   Grid,
   makeStyles,
@@ -22,6 +21,10 @@ import TwitterIcon from '@material-ui/icons/Twitter';
 import WhatsAppIcon from '@material-ui/icons/WhatsApp';
 import TelegramIcon from '@material-ui/icons/Telegram';
 import EmailIcon from '@material-ui/icons/Email';
+import Modal from '@mui/material/Modal';
+import CloseIcon from '@material-ui/icons/Close';
+import IconButton from '@material-ui/core/IconButton';
+import Box from '@mui/material/Box';
 import {
   FacebookShareButton,
   FacebookMessengerShareButton,
@@ -212,6 +215,18 @@ const useStyles = makeStyles((theme) => ({
     'background-position-y': '1px',
     'background-size': '20%',
     fontSize: '1em',
+  },
+  imgModal: {
+    padding: '1em',
+    maxHeight: '50em',
+    maxWidth: '100%',
+    width: 'inherit!important',
+  },
+  closeButton: {
+    position: 'absolute',
+    right: theme.spacing.unit / 2,
+    top: theme.spacing.unit / 2,
+    color: theme.palette.grey[500],
   },
   button: {
     margin: '2.5em 0 2.5em 0 ',
@@ -462,6 +477,7 @@ const Event = ({ initialData }) => {
   const [cookies, setCookie, removeCookie] = useCookies();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const [hasClickParticipate, setHasClickParticipate] = useState(false);
+  const [openModalSlider, setOpenModalSlider] = useState(false);
 
   function containUser(list) {
     let isContained = false;
@@ -514,7 +530,17 @@ const Event = ({ initialData }) => {
       },
     });
   };
-
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '80%',
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+  };
   const styles = useStyles(stylesProps);
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down('sm'));
@@ -525,6 +551,16 @@ const Event = ({ initialData }) => {
       data && data.event.actors.length >= maxSlideToShowEvent
         ? maxSlideToShowEvent
         : data && data.event.actors.length,
+    slidesToScroll: 1,
+    // autoplay: true,
+    // autoplaySpeed: 2000,
+    //  pauseOnHover: true,
+    nextArrow: <SampleNextArrow />,
+    prevArrow: <SamplePrevArrow />,
+  };
+  const settingsSliderModal = {
+    infinite: true,
+    slidesToShow: 1,
     slidesToScroll: 1,
     // autoplay: true,
     // autoplaySpeed: 2000,
@@ -1220,9 +1256,32 @@ const Event = ({ initialData }) => {
                     <img
                       src={getImageUrl(picture.originalPicturePath)}
                       className={[styles.img]}
+                      onClick={() => setOpenModalSlider(true)}
                     />
                   ))}
             </Slider>
+            <Modal open={openModalSlider} onClose={() => setOpenModalSlider(false)} aria-labelledby="parent-modal-title"
+              aria-describedby="parent-modal-description">
+              <Box sx={style}>
+                <IconButton aria-label="Close" className={styles.closeButton} onClick={() => setOpenModalSlider(false)}>
+                  <CloseIcon />
+                </IconButton>
+                <Slider {...settingsSliderModal} className={[styles.slider]}>
+                  {data &&
+                    data.event.pictures &&
+                    data.event.pictures
+                      .sort((a, b) => (a.position > b.position ? 1 : -1))
+                      .map((picture) => (
+
+                        <img
+                          src={getImageUrl(picture.originalPicturePath)}
+                          className={[styles.imgModal]}
+                          onClick={() => setOpenModalSlider(true)}
+                        />
+                      ))}
+                </Slider>
+              </Box>
+            </Modal>
             {data && data.event.actors && data.event.actors.length > 0 && (
               <div>
                 <Typography variant="h5" className={styles.cardTitle}>
