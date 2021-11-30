@@ -7,7 +7,6 @@ import React, {
 } from 'react';
 import AppLayout from 'containers/layouts/AppLayout';
 import {
-  Box,
   Container,
   Grid,
   makeStyles,
@@ -24,7 +23,10 @@ import FacebookIcon from '@material-ui/icons/Facebook';
 import TwitterIcon from '@material-ui/icons/Twitter';
 import WhatsAppIcon from '@material-ui/icons/WhatsApp';
 import TelegramIcon from '@material-ui/icons/Telegram';
-import Modal from '@material-ui/core/Modal';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
+import Modal from '@mui/material/Modal';
+import Box from '@mui/material/Box';
 import EmailIcon from '@material-ui/icons/Email';
 import {
   FacebookShareButton,
@@ -161,6 +163,12 @@ const useStyles = makeStyles((theme) => ({
   slider: {
     textAlign: 'center',
   },
+  closeButton: {
+    position: 'absolute',
+    right: theme.spacing.unit / 2,
+    top: theme.spacing.unit / 2,
+    color: theme.palette.grey[500],
+  },
   infoPratiqueTitle: {
     fontWeight: '900',
     color: '#2C367E',
@@ -191,6 +199,12 @@ const useStyles = makeStyles((theme) => ({
   img: {
     padding: '1em',
     maxHeight: '200px',
+    width: 'inherit!important',
+  },
+  imgModal: {
+    padding: '1em',
+    maxHeight: '50em',
+    maxWidth: '100%',
     width: 'inherit!important',
   },
   hide: {
@@ -370,7 +384,7 @@ const Actor = ({ initialData }) => {
   const [hasClickVolunteer, setHasClickVolunteer] = useState(false);
   const [openModalSlider, setOpenModalSlider] = useState(false);
 
-  
+
   if (typeof window !== 'undefined') {
     var L = require('leaflet');
     var Map = require('react-leaflet').Map;
@@ -385,7 +399,7 @@ const Actor = ({ initialData }) => {
     return (data?.actor?.pictures || []).filter((picture) => picture.main)
       .length >= 1
       ? data.actor.pictures.filter((picture) => picture.main)[0]
-          .originalPicturePath
+        .originalPicturePath
       : null;
   }, [data]);
 
@@ -500,6 +514,17 @@ const Actor = ({ initialData }) => {
     }
   };
 
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '80%',
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+  };
   const headerRef = React.useRef();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down('sm'));
@@ -509,8 +534,8 @@ const Actor = ({ initialData }) => {
     infinite: true,
     slidesToShow:
       data &&
-      data.actor.pictures &&
-      data.actor.pictures.length >= maxSlideToShowImage
+        data.actor.pictures &&
+        data.actor.pictures.length >= maxSlideToShowImage
         ? maxSlideToShowImage
         : data && data.actor.pictures && data.actor.pictures.length,
     slidesToScroll: 1,
@@ -520,7 +545,16 @@ const Actor = ({ initialData }) => {
     nextArrow: <SampleNextArrow />,
     prevArrow: <SamplePrevArrow />,
   };
-
+  const settingsSliderModal = {
+    infinite: true,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    // autoplay: true,
+    // autoplaySpeed: 2000,
+    //  pauseOnHover: true,
+    nextArrow: <SampleNextArrow />,
+    prevArrow: <SamplePrevArrow />,
+  };
   function SampleNextArrow(props) {
     const { className, style, onClick } = props;
     return (
@@ -635,9 +669,9 @@ const Actor = ({ initialData }) => {
               content={
                 data.actor.pictures.length >= 1
                   ? getImageUrl(
-                      data.actor.pictures.filter((picture) => picture.logo)[0]
-                        .originalPicturePath,
-                    )
+                    data.actor.pictures.filter((picture) => picture.logo)[0]
+                      .originalPicturePath,
+                  )
                   : ''
               }
             />
@@ -722,9 +756,8 @@ const Actor = ({ initialData }) => {
                         {data && data.actor.address && data.actor.city && (
                           <span>
                             {/* @ts-ignore */}
-                            {`${data && data.actor.address} ${
-                              data && data.actor.city
-                            }`}
+                            {`${data && data.actor.address} ${data && data.actor.city
+                              }`}
                           </span>
                         )}
                       </span>
@@ -744,7 +777,7 @@ const Actor = ({ initialData }) => {
                                     entry &&
                                     entry.collection &&
                                     entry.collection.code ===
-                                      'actor_location_action' && (
+                                    'actor_location_action' && (
                                       <div>
                                         <Typography
                                           variant="h7"
@@ -1027,9 +1060,8 @@ const Actor = ({ initialData }) => {
                               className={styles.cardTitleCategories}
                             >
                               {/* @ts-ignore */}
-                              {` ${
-                                entry.parentEntry && entry.parentEntry.label
-                              } `}
+                              {` ${entry.parentEntry && entry.parentEntry.label
+                                } `}
                               {/* @ts-ignore */}:
                               {entry.icon && (
                                 <Image
@@ -1206,9 +1238,8 @@ const Actor = ({ initialData }) => {
                         {data && data.actor.address && data.actor.city && (
                           <span>
                             {/* @ts-ignore */}
-                            {`${data && data.actor.address} ${
-                              data && data.actor.city
-                            }`}
+                            {`${data && data.actor.address} ${data && data.actor.city
+                              }`}
                           </span>
                         )}
                       </Popup>
@@ -1276,7 +1307,7 @@ const Actor = ({ initialData }) => {
                 data.actor.pictures
                   .sort((a, b) => (a.position > b.position ? 1 : -1))
                   .map((picture) => (
-                    
+
                     <img
                       src={getImageUrl(picture.originalPicturePath)}
                       className={[styles.img]}
@@ -1284,23 +1315,28 @@ const Actor = ({ initialData }) => {
                     />
                   ))}
             </Slider>
-              <Modal  open={openModalSlider}         aria-labelledby="parent-modal-title"
-        aria-describedby="parent-modal-description">
-                <Slider {...settingsSliderImage} >
-                    {data &&
-                      data.actor.pictures &&
-                      data.actor.pictures
-                        .sort((a, b) => (a.position > b.position ? 1 : -1))
-                        .map((picture) => (
-                          
-                          <img
-                            src={getImageUrl(picture.originalPicturePath)}
-                           
-                            onClick={() => setOpenModalSlider(false)}
-                          />
-                        ))}
-                   </Slider>
-              </Modal>
+            <Modal open={openModalSlider} onClose={() => setOpenModalSlider(false)} aria-labelledby="parent-modal-title"
+              aria-describedby="parent-modal-description">
+              <Box sx={style}>
+                <IconButton aria-label="Close" className={styles.closeButton} onClick={() => setOpenModalSlider(false)}>
+                  <CloseIcon />
+                </IconButton>
+                <Slider {...settingsSliderModal} className={[styles.slider]}>
+                  {data &&
+                    data.actor.pictures &&
+                    data.actor.pictures
+                      .sort((a, b) => (a.position > b.position ? 1 : -1))
+                      .map((picture) => (
+
+                        <img
+                          src={getImageUrl(picture.originalPicturePath)}
+                          className={[styles.imgModal]}
+                          onClick={() => setOpenModalSlider(true)}
+                        />
+                      ))}
+                </Slider>
+              </Box>
+            </Modal>
             <br />
             <div>
               <Typography variant="h5" className={[styles.cardTitle]}>
@@ -1322,12 +1358,12 @@ const Actor = ({ initialData }) => {
           <Newsletter />
           {((data && containUser(data.actor.referents)) ||
             (user && user.role === 'admin')) && (
-            <Link href={`/actorAdmin/actor/${id}`}>
-              <Fab className={styles.fab} aria-label="edit">
-                <EditIcon />
-              </Fab>
-            </Link>
-          )}
+              <Link href={`/actorAdmin/actor/${id}`}>
+                <Fab className={styles.fab} aria-label="edit">
+                  <EditIcon />
+                </Fab>
+              </Link>
+            )}
         </Box>
       </RootRef>
     </AppLayout>
@@ -1364,18 +1400,18 @@ export async function getServerSideProps(ctxt) {
   if (initialData.errors) {
     console.error(
       ' Error fetching actor id ' +
-        ctxt.params.id +
-        ' error message : ' +
-        initialData.errors[0].message +
-        '',
+      ctxt.params.id +
+      ' error message : ' +
+      initialData.errors[0].message +
+      '',
     );
   }
   const after = moment();
 
   console.debug(
     'after json' +
-      moment.duration(after.diff(endDate)).asMilliseconds() +
-      initialData,
+    moment.duration(after.diff(endDate)).asMilliseconds() +
+    initialData,
   );
   return {
     props: { initialData },
