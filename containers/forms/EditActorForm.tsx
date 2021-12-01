@@ -20,17 +20,18 @@ import {
   Container, Grid, makeStyles, Typography,
 } from '@material-ui/core';
 import List from '@material-ui/core/List';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import IconButton from '@material-ui/core/IconButton';
-import Checkbox from '@material-ui/core/Checkbox';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControl from '@material-ui/core/FormControl';
 import Radio from '@material-ui/core/Radio';
 import Tooltip from '@material-ui/core/Tooltip';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Avatar from '@material-ui/core/Avatar';
 import TreeView from '@material-ui/lab/TreeView';
 import { Autocomplete } from '@material-ui/lab';
@@ -291,8 +292,8 @@ const GET_COLLECTIONS = gql`
 `;
 
 const DELETE_ACTOR = gql`
-  mutation deleteActor($actorId: Int!) {
-    deleteActor(actorId: $actorId)
+  mutation deleteActor($actorId: Int!, $deleteEvent: Boolean) {
+    deleteActor(actorId: $actorId, deleteEvent: $deleteEvent)
   }
 `;
 
@@ -701,6 +702,9 @@ const EditActorForm = (props) => {
     const [volunteerEditor, setVolunteerEditor] = useState();
     const [estlarochelle, setEstlarochelle] = useState(false);
     const [firstRender, setFirstRender] = useState(true);
+    const [deleteActorAndEvent, setdeleteActorAndEvent] = useState(true);
+
+    
     const [
       initentriesWithInformation,
       setInitentriesWithInformation,
@@ -736,6 +740,7 @@ const EditActorForm = (props) => {
       deleteActor({
         variables: {
           actorId: parseInt(props.id),
+          deleteEvent: deleteActorAndEvent,
         },
       });
       setOpenDeletePopup(false);
@@ -929,7 +934,6 @@ const EditActorForm = (props) => {
 
     const submitHandler = useCallback(() => {
       let logoPictures;
-      debugger;
       // @ts-ignore
       if (objectsListLogo) {
         logoPictures = objectsListLogo.map((object) => {
@@ -1810,9 +1814,11 @@ const EditActorForm = (props) => {
               <DialogContentText id="alert-dialog-description">
                 Une fois supprimé, cet acteur sera définitivement supprimé. Il
                 ne sera plus visible sur notre plateforme, ni pour vous, ni pour
-                les visiteurs. Pensez à supprimer vos anciennes action avant de
-                supprimer votre page acteur.
+                les visiteurs.
               </DialogContentText>
+              <FormGroup>
+                <FormControlLabel control={<Checkbox defaultChecked onClick={() => setdeleteActorAndEvent(!deleteActorAndEvent)} />} label="je souhaite également supprimer les actions dont l'acteur est l'unique référent" />
+              </FormGroup>
             </DialogContent>
             <DialogActions>
               <Button onClick={handleClose} color="primary">
