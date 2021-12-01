@@ -130,10 +130,10 @@ const FlexibleEmptySpaceAddEvent = () => {
 
 const Calendar = (props) => {
   const {
-    events, withViewSwitcher, withAddEvent, isValidated,
+    events, withViewSwitcher, withAddEvent,
   } = props;
 
-  const toolbarProps = withAddEvent && isValidated && {
+  const toolbarProps = withAddEvent && {
     flexibleSpaceComponent: FlexibleEmptySpaceAddEvent,
   };
   const defaultMessages = {

@@ -1349,10 +1349,9 @@ const Actor = ({ initialData }) => {
               events={events}
               withViewSwitcher={false}
               withAddEvent={
-                (data && containUser(data.actor.referents)) ||
+                (data && containUser(data.actor.referents) && data.actor.isValidated) ||
                 (user && user.role === 'admin')
               }
-              isValidated={data?.actor.isValidated}
             />
           </Container>
           {((data && containUser(data.actor.referents)) ||
