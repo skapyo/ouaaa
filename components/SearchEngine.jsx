@@ -73,7 +73,8 @@ const getTextWithSearchValue = (originalText, inputValue) => {
   if (originalText) {
     // Find the position value in the original string
     const matchIndex = originalText.toLowerCase().search(inputValue.toLowerCase());
-    if (matchIndex => 0) {
+
+    if (matchIndex !== -1) {
       // Build string list with the first part, the match part and last part of the original string
       // And return the match part surrounded by bold tag
       newOriginalText = [originalText.slice(0, matchIndex)]
@@ -139,6 +140,10 @@ const SearchEngine = (props) => {
     }
   }, [router]);
 
+  const filterOptions = useCallback(() => {
+    return options;
+  }, [options])
+
   return (
     <Autocomplete
       id="search-engine"
@@ -155,8 +160,9 @@ const SearchEngine = (props) => {
       groupBy={(option) => option.type}
       getOptionLabel={(option) => option.label}
       getOptionSelected={(option, currentvalue) => option.label === currentvalue.label}
-      noOptionsText={'Pas de résultat'}
+      noOptionsText="Pas de résultat"
       options={options}
+      filterOptions={filterOptions}
       loading={loading}
       popupIcon={(
         <SearchIcon size={48} />
