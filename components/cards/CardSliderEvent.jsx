@@ -83,7 +83,7 @@ export default function SimpleCard({ event }) {
                   event.categories[0].label}
               </Typography>
             </div>
-            {  event.pictures.sort((a, b) => (a.logo ? -1 : 1))[0] && event.pictures.sort((a, b) => (a.logo ? -1 : 1))[0].croppedPicturePath!=null && (
+            {  event.pictures.sort((a, b) => (a.logo ? -1 : 1))[0] && event.pictures.sort((a, b) => (a.logo ? -1 : 1))[0].originalPicturePath!=null && (
             <Image
               loader={myLoader}
               width="100%"
