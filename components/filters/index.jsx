@@ -19,7 +19,8 @@ import { useQuery } from '@apollo/client';
 import { makeStyles } from '@material-ui/core/styles';
 import Entries from 'containers/forms/Entries';
 import ProposeActorForm from 'containers/forms/ProposeActorForm';
-
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
 import AddIcon from '@material-ui/icons/Add';
 import Modal from '@material-ui/core/Modal';
 import ParentContainer from './ParentContainer';
@@ -118,6 +119,12 @@ const useStyles = makeStyles(theme => ({
     border: '2px solid #000',
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
+  },
+  closeButton: {
+    position: 'absolute',
+    right: theme.spacing.unit / 2,
+    top: theme.spacing.unit / 2,
+    color: theme.palette.grey[500],
   },
 }));
 const style = {
@@ -319,6 +326,9 @@ function Filters(props) {
 
   const bodyModalAddActor = (
     <div style={modalStyle} className={classes.paper}>
+      <IconButton aria-label="Close" className={classes.closeButton} onClick={() => setOpenModalAddActor(false)}>
+        <CloseIcon />
+      </IconButton>
       <h2 id="simple-modal-title">{ noEmailInviteActor?"Ajouter l'acteur que vous avez contacté":"Inviter un nouvel acteur de la transition"}</h2>
       <ProposeActorForm noEmailInviteActor={noEmailInviteActor} />
     </div>

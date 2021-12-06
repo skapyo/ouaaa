@@ -14,6 +14,7 @@ import InfoIcon from '@material-ui/icons/Info';
 import useDnDStateManager from "hooks/useDnDStateManager";
 import useImageReader from "hooks/useImageReader";
 import withDndProvider from "hoc/withDnDProvider";
+import { FormatStrikethroughTwoTone } from "@material-ui/icons";
 
 const PROPOSE_ACTORFORM = gql`
   mutation inviteActor($formValues: ProposeActorInfos!) {
@@ -124,12 +125,18 @@ const ProposeActorForm = (props) => {
     ];
     if(!user){
       inputs.push({
-        label: '  Votre nom à vous (Facultatf)',
+        label: 'Votre nom à vous (Facultatif)',
         name: 'requesterName',
         required: false,
         fullWidth: true
       });
     }
+    inputs.push({
+      label: "Nom du contact (Facultatif)",
+      name: 'contactName',
+      required: false,
+      fullWidth: true
+    });
     inputs.push({
       label: noEmailInvite ? "Nom de l'acteur contacté":"Nom de l'acteur à inviter" ,
       name: 'actorName',
@@ -139,21 +146,21 @@ const ProposeActorForm = (props) => {
     });
 
     inputs.push({
-      label: noEmailInvite ? "Email de l'acteur contacté" : "Email de l'acteur à inviter",
+      label: noEmailInvite ? "Email de l'acteur contacté" : "Email de l'acteur à inviter ou du contact",
       name: 'actorEmail',
       required: true,
       errorText: 'Email requis.',
       fullWidth: true
     });
     inputs.push({
-      label: noEmailInvite ? "Code postal de l'acteur contacté (Facultatf)" : "Code postal de l'acteur à inviter (Facultatf)",
+      label: noEmailInvite ? "Code postal de l'acteur contacté (Facultatif)" : "Code postal de l'acteur à inviter (Facultatif)",
       name: 'postCode',
       required: false,
       fullWidth: true
     });
     if(!noEmailInvite){
       inputs.push({
-        label: "Message optionnel pour l'acteur",
+        label: "Message optionnel pour l'acteur ou le contact",
         name: 'message',
         required: false,
         multiline: true,
@@ -181,6 +188,9 @@ const ProposeActorForm = (props) => {
     useEffect(() => {
       if (!inviteActorLoading && inviteActorData) {
         setMessageSent(true);
+        inputs.map((input, i) => {
+        formValues[input.name]='';
+      });
       } else if (inviteActorError) {
         enqueueSnackbar('Une erreur s\'est produite, merci de bien vouloir réessayer.', {
           preventDuplicate: true,
@@ -246,9 +256,16 @@ const ProposeActorForm = (props) => {
 
   if (messageSent) {
     return (
+      <div>
       <div className={styles.formContainer}>
-        <p>Merci de votre aide. N'hésitez pas à inviter d'autres acteurs.</p>
+        <p>Merci de votre aide pour avoir inviter. Vous pouvez continuer à inviter d'autres acteurs.</p>
       </div>
+       <FormController 
+       render={Form} 
+       validationRules={validationRules}
+       initValues={initFormValues} 
+     />;
+     </div>
     )
   }
   return <FormController 
