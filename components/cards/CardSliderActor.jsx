@@ -83,7 +83,7 @@ export default function SimpleCard({ actor }) {
                   && actor.entries[0].label}
               </Typography>
             </div>
-            { actor.pictures.sort((a, b) => (a.logo ? -1 : 1))[0] && (
+            { actor.pictures.sort((a, b) => (a.logo ? -1 : 1))[0]&& actor.pictures.sort((a, b) => (a.logo ? -1 : 1))[0].croppedPicturePath!=null   && (
             <Image
               loader={myLoader}
               width="100%"
