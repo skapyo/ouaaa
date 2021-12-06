@@ -258,7 +258,7 @@ const ProposeActorForm = (props) => {
     return (
       <div>
       <div className={styles.formContainer}>
-        <p>Merci de votre aide pour avoir inviter. Vous pouvez continuer à inviter d'autres acteurs.</p>
+        <p>Merci de nous aider à faire grossir la communauté de OUAAA. Vous pouvez continuer à inviter d'autres acteurs.</p>
       </div>
        <FormController 
        render={Form} 
