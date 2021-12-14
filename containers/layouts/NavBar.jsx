@@ -22,6 +22,7 @@ import ButtonAppBarCollapse from './ButtonAppBarCollapse';
 
 const useStyles = makeStyles((theme) => ({
   navbar: {
+    height: '100px',
     backgroundColor: 'white',
     boxShadow: 'none',
   },
@@ -150,7 +151,7 @@ const NavBar = () => {
                       CARTE DES ACTEURS
                     </MenuItem>
                   </Grid>
-                 <Grid item>
+                  <Grid item>
                     <MenuItem
                       button
                       component={Link}
@@ -160,17 +161,17 @@ const NavBar = () => {
                       AGENDA DES ACTIONS
                     </MenuItem>
                   </Grid>
-                   {
-                  <Grid item>
-                    <MenuItem
-                      button
-                      component={Link}
-                      className={styles.menuItem}
-                      href="/participate"
-                    >
-                      JE PARTICIPE
-                    </MenuItem>
-                  </Grid>
+                  {
+                    <Grid item>
+                      <MenuItem
+                        button
+                        component={Link}
+                        className={styles.menuItem}
+                        href="/participate"
+                      >
+                        JE PARTICIPE
+                      </MenuItem>
+                    </Grid>
                   /*
                   <Grid item>
                     <MenuItem
@@ -310,17 +311,17 @@ const NavBar = () => {
                       AGENDA DES ACTIONS
                     </MenuItem>
                   </Grid>
-                   {
-                  <Grid item>
-                    <MenuItem
-                      button
-                      component={Link}
-                      className={styles.menuItem}
-                      href="/participate"
-                    >
-                      JE PARTICIPE
-                    </MenuItem>
-                  </Grid>
+                  {
+                    <Grid item>
+                      <MenuItem
+                        button
+                        component={Link}
+                        className={styles.menuItem}
+                        href="/participate"
+                      >
+                        JE PARTICIPE
+                      </MenuItem>
+                    </Grid>
                   /*
                   <Grid item>
                     <MenuItem

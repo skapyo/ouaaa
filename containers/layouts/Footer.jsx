@@ -11,6 +11,7 @@ const useStyles = makeStyles({
     height: '26em',
     textAlign: 'center',
     paddingTop: '3em',
+    marginTop: 'auto',
   },
   footerTitle: {
     color: 'white',
@@ -47,7 +48,9 @@ const Footer = () => {
   const classes = useStyles();
 
   return (
-    <Container className={classes.footer}>
+    <Container
+      className={classes.footer}
+    >
       <Typography variant="h5" className={classes.footerTitle}>
         RESTONS CONNECTÉS!
       </Typography>
@@ -58,6 +61,7 @@ const Footer = () => {
         <a
           href="https://www.facebook.com/OuaaaTransition"
           target="_blank"
+          rel="noreferrer"
         >
           <FacebookIcon className={classes.icons} fontSize="large" />
         </a>
@@ -74,6 +78,8 @@ const Footer = () => {
         <Link href="/charter">Charte</Link>
         <span> - </span>
         <Link href="/odd">ODD</Link>
+        <span> - </span>
+        <Link href="/annuaire">Annuaire</Link>
       </div>
       <div className={classes.logo} />
     </Container>

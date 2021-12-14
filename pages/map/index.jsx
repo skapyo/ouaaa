@@ -1,33 +1,37 @@
-import React, { useCallback, useEffect, useRef, useState, useMemo } from 'react';
-import { Grid, Typography, useMediaQuery, Button } from '@material-ui/core';
+import React, {
+  useCallback, useEffect, useRef, useState, useMemo,
+} from 'react';
+import {
+  Grid, Typography, useMediaQuery, Button,
+} from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/client';
 import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded';
 import FavoriteRoundedIcon from '@material-ui/icons/FavoriteRounded';
-import { withApollo } from '../../hoc/withApollo';
-import AppLayout from '../../containers/layouts/AppLayout';
-import { getImageUrl } from '../../utils/utils';
 import Actors from 'containers/layouts/mapPage/actors';
-import Filters from '../../components/filters';
 import Parser from 'html-react-parser';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
-import ButtonGroupSelected from '../../components/buttons/ButtonGroupSelected';
 import Drawer from '@material-ui/core/Drawer';
 import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
+import ButtonGroupSelected from '../../components/buttons/ButtonGroupSelected';
+import Filters from '../../components/filters';
+import { getImageUrl } from '../../utils/utils';
+import AppLayout from '../../containers/layouts/AppLayout';
+import { withApollo } from '../../hoc/withApollo';
 
-var matchesWindow = false;
+let matchesWindow = false;
 if (typeof window !== 'undefined') {
   var L = require('leaflet');
-  var Map = require('react-leaflet').Map;
-  var TileLayer = require('react-leaflet').TileLayer;
-  var Marker = require('react-leaflet').Marker;
-  var Popup = require('react-leaflet').Popup;
-  var Tooltip = require('react-leaflet').Tooltip;
-  var ZoomControl = require('react-leaflet').ZoomControl;
-  var MarkerClusterGroup = require('react-leaflet-markercluster').default;
-  matchesWindow = window.matchMedia("(max-width: 600px)").matches;
+  const { Map } = require('react-leaflet');
+  const { TileLayer } = require('react-leaflet');
+  const { Marker } = require('react-leaflet');
+  const { Popup } = require('react-leaflet');
+  const { Tooltip } = require('react-leaflet');
+  const { ZoomControl } = require('react-leaflet');
+  const MarkerClusterGroup = require('react-leaflet-markercluster').default;
+  matchesWindow = window.matchMedia('(max-width: 600px)').matches;
 }
 
 const drawerWidth = 310;
@@ -43,15 +47,15 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: 'none',
     position: 'relative',
     overflow: 'hidden',
-    height: '88vh',
+    height: 'calc(100vh - 100px)',
     flexDirection: 'row',
     flexWrap: 'nowrap',
     [theme.breakpoints.down('sm')]: {
       flexDirection: 'column',
       alignItems: 'center',
       height: 'auto',
-      width: '100%'
-    }
+      width: '100%',
+    },
   },
   drawer: ({ isMenuOpen, isMapMode }) => ({
     width: isMenuOpen ? (isMapMode ? 0 : drawerWidth) : 0,
@@ -80,7 +84,7 @@ const useStyles = makeStyles((theme) => ({
       position: 'fixed',
       bottom: 10,
       left: 10,
-    }
+    },
   }),
   filterButtonIcon: ({ isMenuOpen }) => ({
     transform: isMenuOpen ? 'rotate(180deg)' : 'rotate(0deg)',
@@ -98,14 +102,14 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('sm')]: {
       position: 'initial',
       marginTop: 25,
-      width: '75%'
-    }
+      width: '75%',
+    },
   },
   listButtonIcon: {
-    marginRight: 10
+    marginRight: 10,
   },
   gridList: {
-    overflow: 'hidden auto'
+    overflow: 'hidden auto',
   },
   leftTitle: {
     fontWeight: theme.typography.fontWeightBold,
@@ -278,9 +282,9 @@ const useStyles = makeStyles((theme) => ({
   mapContainer: {
     height: '100% !important',
     [theme.breakpoints.down('sm')]: {
-      height: '80vh !important'
-    }
-  }
+      height: '80vh !important',
+    },
+  },
 }));
 
 const categories = {
@@ -370,7 +374,9 @@ const carto = () => {
       }
     `;
 
-    const { data, loading, error, refetch } = useQuery(GET_ACTORS, {
+    const {
+      data, loading, error, refetch,
+    } = useQuery(GET_ACTORS, {
       variables: {
         entries: [categoriesChecked],
         isValidated: true,
@@ -389,7 +395,7 @@ const carto = () => {
         });
 
         if (isFirstRef.current) {
-          //If filter still empty no refetch
+          // If filter still empty no refetch
           if (newEntries.length != 0 || typeof postcode !== 'undefined') {
             isFirstRef.current = false;
           } else {
@@ -401,32 +407,28 @@ const carto = () => {
       filterChange();
     }, [categoriesChecked, otherCategoriesChecked, postCode]);
 
-
-
-    const handleFiltersChange = useCallback(newFilters => {
+    const handleFiltersChange = useCallback((newFilters) => {
       setFilters(newFilters);
       refetch({ ...newFilters });
     }, [refetch]);
 
     function splitWord(word, number) {
       if (word != null) {
-        var indexMax = Math.round(word.length / number);
-        var wordSplit = '';
+        const indexMax = Math.round(word.length / number);
+        let wordSplit = '';
         if (indexMax > 1) {
           for (let i = 0; i < indexMax; i++) {
             wordSplit += word.slice(i * number, (i + 1) * number);
             if (i + 1 <= indexMax) {
-              wordSplit += '<br><br> '
+              wordSplit += '<br><br> ';
             }
           }
           return wordSplit;
-        } else {
-          return word;
         }
-      } else {
-        return '';
+        return word;
       }
-    };
+      return '';
+    }
 
     const otherCategoryChange = useCallback((e, collectionLabel) => {
       const newOtherCategories = { ...otherCategoriesChecked };
@@ -448,12 +450,12 @@ const carto = () => {
     const fabActions = useMemo(() => {
       return [
         { name: 'map', label: 'Carte', onClick: switchMode },
-        { name: 'list', label: 'Liste', onClick: switchMode }
-      ]
+        { name: 'list', label: 'Liste', onClick: switchMode },
+      ];
     }, [switchMode]);
 
     return (
-      <AppLayout hideFooter={true}>
+      <AppLayout hideFooter>
         <Head>
           <title>Les acteurs de la transition citoyenne et écologique autour de la Rochelle, Aunis, Charente-Maritime</title>
           <meta name="description" content="Viens découvrir les acteurs agissant pour :  l'éducation, la culture, la santé, l'alimentation, la justice, l'économie, la citoyenneté, l'agriculture, l'industrie, l'habitat, la mobilité, l'énergie, le recyclage, la réduction des déchets, le climat, la qualité de l'air, la biodiversité, la gestion de l'eau, l'aménagement du territoire et d'autres sujets sur la transition citoyenne et écologique" />
@@ -463,15 +465,15 @@ const carto = () => {
 
           <Drawer
             anchor="left"
-            variant={matches ? "temporary" : "persistent"}
+            variant={matches ? 'temporary' : 'persistent'}
             open={isMenuOpen}
             className={styles.drawer}
             classes={{
-              paper: styles.drawerPaper
+              paper: styles.drawerPaper,
             }}
             onClose={toggleMenu}
             ModalProps={{
-              keepMounted: true
+              keepMounted: true,
             }}
           >
             <Filters
@@ -506,17 +508,17 @@ const carto = () => {
                 />
                 <ZoomControl position="topright" />
                 <MarkerClusterGroup>
-                  {typeof data !== 'undefined' &&
-                    data.actors.map((actor, index) => {
+                  {typeof data !== 'undefined'
+                    && data.actors.map((actor, index) => {
                       let icone;
                       let color;
                       if (actor.lat != null && actor.lng != null) {
                         if (
-                          actor.entries &&
-                          actor.entries.length > 0 &&
-                          actor.entries[0].icon
+                          actor.entries
+                          && actor.entries.length > 0
+                          && actor.entries[0].icon
                         ) {
-                          icone = '/icons/marker/marker_' + actor.entries[0].icon + '.svg';
+                          icone = `/icons/marker/marker_${actor.entries[0].icon}.svg`;
                           color = actor.entries[0].color;
                         } else {
                           icone = '/icons/' + 'place' + '.svg';
@@ -538,33 +540,27 @@ const carto = () => {
                             position={[actor.lat, actor.lng]}
                             icon={suitcasePoint}
                           >
-                            <Tooltip
-                            >
+                            <Tooltip>
                               <div
                                 className={styles.image}
                                 style={{
                                   backgroundImage:
                                     actor.pictures.length >= 1
                                       ? `url(${getImageUrl(
-                                        actor.pictures.sort((a, b) =>
-                                          a.logo ? -1 : 1,
-                                        )[0].originalPicturePath,
+                                        actor.pictures.sort((a, b) => (a.logo ? -1 : 1))[0].originalPicturePath,
                                       )})`
                                       : '',
                                 }}
                               >
-                                <div className={styles.categorie}
-                                >
+                                <div className={styles.categorie}>
                                   <Typography
                                     className={styles.categorie}
                                     style={{ color: actor?.entries && actor?.entries[0]?.parentEntry?.color }}
                                     gutterBottom
                                   >
-                                    {actor.entries &&
-                                      actor.entries.length > 0 &&
-                                      actor.entries[0].label}
-
-
+                                    {actor.entries
+                                      && actor.entries.length > 0
+                                      && actor.entries[0].label}
 
                                   </Typography>
                                 </div>
@@ -584,14 +580,18 @@ const carto = () => {
                                   {!actor.address && actor.city && (
                                     <span>
                                       {/* @ts-ignore */}
-                                      <img src={"/icons/location.svg"} alt="Localisation" className={[styles.icon]} /> {actor.city}
+                                      <img src="/icons/location.svg" alt="Localisation" className={[styles.icon]} />
+                                      {' '}
+                                      {actor.city}
                                     </span>
                                   )}
                                   {actor.address && actor.city && (
                                     <span>
                                       {/* @ts-ignore */}
-                                      <img src={"/icons/location.svg"} alt="Localisation" className={[styles.icon]} /> {`${actor.address} ${actor.city
-                                        }`}
+                                      <img src="/icons/location.svg" alt="Localisation" className={[styles.icon]} />
+                                      {' '}
+                                      {`${actor.address} ${actor.city
+                                      }`}
                                     </span>
                                   )}
                                 </p>
@@ -613,15 +613,15 @@ const carto = () => {
                                       : '',
                                 }}
                               >
-                                <div className={styles.categorie} >
+                                <div className={styles.categorie}>
                                   <Typography
                                     className={styles.categorie}
                                     style={{ color: actor?.entries && actor?.entries[0]?.parentEntry?.color }}
                                     gutterBottom
                                   >
-                                    {actor.entries &&
-                                      actor.entries.length > 0 &&
-                                      actor.entries[0].label}
+                                    {actor.entries
+                                      && actor.entries.length > 0
+                                      && actor.entries[0].label}
                                   </Typography>
                                 </div>
                               </div>
@@ -641,43 +641,49 @@ const carto = () => {
                                       {!actor.address && actor.city && (
                                         <span>
                                           {/* @ts-ignore */}
-                                          <img src={"/icons/location.svg"} alt="Localisation" className={[styles.icon]} /> {actor.city}
+                                          <img src="/icons/location.svg" alt="Localisation" className={[styles.icon]} />
+                                          {' '}
+                                          {actor.city}
                                         </span>
                                       )}
                                       {actor.address && actor.city && (
                                         <span>
                                           {/* @ts-ignore */}
-                                          <img src={"/icons/location.svg"} alt="Localisation" className={[styles.icon]} /> {`${actor.address} ${actor.city
-                                            }`}
+                                          <img src="/icons/location.svg" alt="Localisation" className={[styles.icon]} />
+                                          {' '}
+                                          {`${actor.address} ${actor.city
+                                          }`}
                                         </span>
                                       )}
                                     </p>
                                   </Grid>
 
-                                  {false && (<Grid item xs={2}>
+                                  {false && (
+                                  <Grid item xs={2}>
                                     <div
                                       className={styles.favorite}
                                       onClick={() => setFavorite(!favorite)}
                                     >
                                       {!favorite && (
-                                        <FavoriteBorderRoundedIcon
-                                          className={styles.favoriteIcon}
-                                        />
+                                      <FavoriteBorderRoundedIcon
+                                        className={styles.favoriteIcon}
+                                      />
                                       )}
                                       {favorite && (
-                                        <FavoriteRoundedIcon
-                                          className={styles.favoriteIcon}
-                                        />
+                                      <FavoriteRoundedIcon
+                                        className={styles.favoriteIcon}
+                                      />
                                       )}
                                     </div>
-                                  </Grid>)}
+                                  </Grid>
+                                  )}
                                 </Grid>
 
                                 <Typography component="p">
                                   {actor && actor.shortDescription}
                                 </Typography>
                               </div>
-                              <a href={`/actor/${actor.id}`} target="_blank">
+                              <a href={`/actor/${actor.id}`} target="_blank" rel="noreferrer">
                                 <button className={styles.buttonGrid}>
                                   EN SAVOIR PLUS
                                 </button>
