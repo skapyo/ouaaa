@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { withApollo } from 'hoc/withApollo';
 import { useRouter } from 'next/router';
 import { useQuery } from '@apollo/client';
@@ -13,15 +13,20 @@ import {
   Typography,
   useTheme,
 } from '@material-ui/core';
-import TableContainer from '@material-ui/core/TableContainer';
 import Paper from '@material-ui/core/Paper/Paper';
-import Table from '@material-ui/core/Table';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import TableCell from '@material-ui/core/TableCell/TableCell';
-import TableBody from '@material-ui/core/TableBody';
 import IconButton from '@material-ui/core/IconButton';
 import LastPageIcon from '@material-ui/core/SvgIcon/SvgIcon';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import LinearProgress from '@mui/material/LinearProgress';
+
 import Edit from '@material-ui/icons/Edit';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
@@ -53,6 +58,63 @@ const GET_EVENTS = gql`
   }
 `;
 
+const GET_PARTICIPANTS_BY_EVENT = gql`
+  query participants($eventId: String!) {
+    participants(eventId: $eventId) {
+      id
+      surname
+      lastname
+      participatedAt
+    }
+  }
+`;
+
+const ParticipantList = (props: any) => {
+  const { event } = props;
+  const [participants, setParticipants] = useState([]);
+
+  const { loading, error } = useQuery(GET_PARTICIPANTS_BY_EVENT, {
+    variables: {
+      eventId: event?.id
+    },
+    onCompleted: (data: any) => {
+      setParticipants(data.participants);
+    },
+    fetchPolicy: 'network-only'
+  });
+
+  if (error) return null;
+
+  if (loading) return <LinearProgress />;
+
+  return (
+    <Table>
+      <TableHead>
+        <TableRow>
+          <TableCell>Prénom</TableCell>
+          <TableCell>Nom</TableCell>
+          <TableCell align="right">Date de participation</TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {participants.map((participant: any) => (
+          <TableRow key={participant.id}>
+            <TableCell component="th" scope="row">
+              {participant.surname}
+            </TableCell>
+            <TableCell>{participant.lastname}</TableCell>
+            <TableCell align="right">
+              <Moment format="DD/MM/YYYY HH:mm" unix>
+                {participant.participatedAt / 1000}
+              </Moment>
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  )
+};
+
 const useStyles = makeStyles((theme) => ({
   avatar: {
     width: '200px',
@@ -66,6 +128,9 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     cursor: 'pointer'
+  },
+  dialogContent: {
+    padding: '0 !important'
   }
 }));
 
@@ -160,12 +225,16 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
 }
 
 const NbParticipantsItem = (props: any) => {
-  const { event, className } = props;
+  const { event, className, onClick } = props;
+
+  const handleClick = useCallback(() => {
+    onClick(event);
+  }, [onClick, event]);
 
   if (event.nbParticipants === 0) return <span>Aucun</span>;
 
   return (
-    <div className={className}>
+    <div className={className} onClick={handleClick}>
       {event.nbParticipants}
       <ZoomInIcon />
     </div>
@@ -176,6 +245,26 @@ const EventAdminPage = () => {
   const user = useSessionState();
   const { enqueueSnackbar } = useSnackbar();
   const router = useRouter();
+  const [participantsEvent, setParticipantsEvent] = useState(null);
+  const [openModal, setOpenModal] = useState(false);
+  const styles = useStyles();
+
+  const closeModal = useCallback(() => {
+    setOpenModal(false);
+  }, []);
+
+  const handleClickParticipantsEvent = useCallback(event => {
+    setParticipantsEvent(event);
+    setOpenModal(true);
+  }, []);
+
+  useEffect(() => {
+    if (!participantsEvent) {
+      setTimeout(() => {
+        setParticipantsEvent(null);
+      }, 200)
+    }
+  }, [participantsEvent]);
 
   const { data: dataAdminEvent } = useQuery(GET_EVENTS, {
     variables: {
@@ -198,7 +287,6 @@ const EventAdminPage = () => {
   const handleChange = (actor, event) => {
     setState({ ...state, [actor.id.toString()]: event.target.checked });
   };
-  const styles = useStyles();
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -326,7 +414,11 @@ const EventAdminPage = () => {
                         })}
                     </TableCell>
                     <TableCell>
-                      <NbParticipantsItem event={event} className={styles.nbParticipantsItem} />
+                      <NbParticipantsItem
+                        event={event}
+                        className={styles.nbParticipantsItem}
+                        onClick={handleClickParticipantsEvent}
+                      />
                     </TableCell>
                     <TableCell style={{ width: 160 }} align="left">
                       {/* @ts-ignore */}
@@ -350,6 +442,17 @@ const EventAdminPage = () => {
           </Table>
         </TableContainer>
       )}
+
+      <Dialog open={openModal} onBackdropClick={closeModal}>
+        <DialogTitle>
+          <div>Participants pour l'évènement <i>{(participantsEvent as any)?.label}</i></div>
+        </DialogTitle>
+        <DialogContent classes={{ root: styles.dialogContent }}>
+          {
+            participantsEvent && <ParticipantList event={participantsEvent} />
+          }
+        </DialogContent>
+      </Dialog>
     </ActorAdminPageLayout>
   );
 };
