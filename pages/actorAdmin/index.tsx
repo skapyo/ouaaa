@@ -1,4 +1,8 @@
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
+import gql from 'graphql-tag';
+import Moment from 'react-moment';
+
 import {
   createStyles,
   makeStyles,
@@ -24,48 +28,74 @@ import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import AddCircleOutline from '@material-ui/icons/AddCircleOutline';
+import ZoomInIcon from '@mui/icons-material/ZoomIn';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import LinearProgress from '@mui/material/LinearProgress';
 
 
 import ActorAdminPageLayout from 'containers/layouts/actorAdminPage/ActorAdminPageLayout';
-import gql from 'graphql-tag';
 import { withApollo } from 'hoc/withApollo';
-import React, { useCallback, useEffect } from 'react';
-import Moment from 'react-moment';
 import Link from '../../components/Link';
 import { useSessionState } from '../../context/session/session';
 
-const useStyles = makeStyles((theme) => ({
-  avatar: {
-    width: '200px',
-    height: '200px',
-    marginBottom: theme.spacing(4),
-  },
-  userInfosTitle: {
-    marginBottom: theme.spacing(5),
-  },
-  buttonGrid: {
-    color: 'white',
-    'background-color': '#2C367E',
-    border: 'none',
-    padding: '0 1em 0 1em',
-    fontSize: '16px',
-    borderRadius: '1.5em',
-    height: '32px',
-    '&:hover': {
-      cursor: 'pointer',
-      color: '#2C367E',
-      'background-color': 'white',
-      border: '2px solid #2C367E',
+const GET_ACTORS = gql`
+  query actorsAdmin($userId: String!) {
+    actorsAdmin(userId: $userId) {
+      id
+      name
+      address
+      shortDescription
+      createdAt
+      updatedAt
+      city
+      lat
+      lng
+      referents {
+        surname
+        lastname
+        email
+        phone
+      }
+      isValidated
+      dateValidation
+      userValidated {
+        surname
+        lastname
+        email
+        phone
+      }
+      nbVolunteers
     }
-  },
-}));
+  }
+`;
 
-const useStyles1 = makeStyles((theme: Theme) => createStyles({
+const VALIDATE_ACTOR = gql`
+  mutation validateActor($actorId: Int!, $userId: Int!) {
+    validateActor(actorId: $actorId, userId: $userId) {
+      name
+    }
+  }
+`;
+
+const GET_VOLUNTEERS_BY_ACTOR = gql`
+  query volunteers($actorId: String!) {
+    volunteers(actorId: $actorId) {
+      id
+      surname
+      lastname
+    }
+  }
+`;
+
+const useTablePaginationActionsStyles = makeStyles((theme: Theme) => createStyles({
   root: {
     flexShrink: 0,
     marginLeft: theme.spacing(2.5),
   },
 }));
+
 interface TablePaginationActionsProps {
   count: number;
   page: number;
@@ -77,7 +107,7 @@ interface TablePaginationActionsProps {
 }
 
 function TablePaginationActions(props: TablePaginationActionsProps) {
-  const classes = useStyles1();
+  const classes = useTablePaginationActionsStyles();
   const theme = useTheme();
   const {
     count, page, rowsPerPage, onChangePage,
@@ -149,11 +179,95 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
   );
 }
 
-function createData(name: string, calories: number, fat: number) {
-  return { name, calories, fat };
+const VolunteerList = (props: any) => {
+  const { actor } = props;
+  const [volunteers, setVolunteers] = useState([]);
+
+  const { loading, error } = useQuery(GET_VOLUNTEERS_BY_ACTOR, {
+    variables: {
+      actorId: actor?.id
+    },
+    onCompleted: (data: any) => {
+      setVolunteers(data.volunteers);
+    },
+    fetchPolicy: 'network-only'
+  });
+
+  if (error) return null;
+
+  if (loading) return <LinearProgress />;
+
+  return (
+    <Table>
+      <TableHead>
+        <TableRow>
+          <TableCell>Prénom</TableCell>
+          <TableCell>Nom</TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {volunteers.map((volunteers: any) => (
+          <TableRow key={volunteers.id}>
+            <TableCell component="th" scope="row">
+              {volunteers.surname}
+            </TableCell>
+            <TableCell>{volunteers.lastname}</TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  )
+};
+
+const NbVolunteersItem = (props: any) => {
+  const { actor, className, onClick } = props;
+
+  const handleClick = useCallback(() => {
+    onClick(actor);
+  }, [onClick, actor]);
+
+  if (actor.nbVolunteers === 0) return <span>Aucun</span>;
+
+  return (
+    <div className={className} onClick={handleClick}>
+      {actor.nbVolunteers}
+      <ZoomInIcon />
+    </div>
+  )
 }
 
-const useStyles2 = makeStyles({
+const useStyles = makeStyles((theme) => ({
+  avatar: {
+    width: '200px',
+    height: '200px',
+    marginBottom: theme.spacing(4),
+  },
+  userInfosTitle: {
+    marginBottom: theme.spacing(5),
+  },
+  buttonGrid: {
+    color: 'white',
+    'background-color': '#2C367E',
+    border: 'none',
+    padding: '0 1em 0 1em',
+    fontSize: '16px',
+    borderRadius: '1.5em',
+    height: '32px',
+    '&:hover': {
+      cursor: 'pointer',
+      color: '#2C367E',
+      'background-color': 'white',
+      border: '2px solid #2C367E',
+    }
+  },
+  nbVolunteersItem: {
+    display: 'flex',
+    alignItems: 'center',
+    cursor: 'pointer'
+  },
+  dialogContent: {
+    padding: '0 !important'
+  },
   table: {
     minWidth: 500,
   },
@@ -174,64 +288,46 @@ const useStyles2 = makeStyles({
       height: '100%',
     },
   },
-});
+}));
 
 const ActorAdminPage = () => {
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [actorIdValidated, setActorIdValidated] = useState(0);
+  const [volunteersActor, setVolunteersActor] = useState(null);
+  const [openModal, setOpenModal] = useState(false);
+  const [state, setState] = useState({});
   const user = useSessionState();
-  const GET_ACTORS = gql`
-    query actorsAdmin($userId: String!) {
-      actorsAdmin(userId: $userId) {
-        id
-        name
-        address
-        shortDescription
-        createdAt
-        updatedAt
-        city
-        lat
-        lng
-        referents {
-          surname
-          lastname
-          email
-          phone
-        }
-        isValidated
-        dateValidation
-        userValidated {
-          surname
-          lastname
-          email
-          phone
-        }
-      }
-    }
-  `;
+  const styles = useStyles();
 
-  const VALIDATE_ACTOR = gql`
-    mutation validateActor($actorId: Int!, $userId: Int!) {
-      validateActor(actorId: $actorId, userId: $userId) {
-        name
-      }
+  const closeModal = useCallback(() => {
+    setOpenModal(false);
+  }, []);
+
+  const handleClickVolunteersActor = useCallback(event => {
+    setVolunteersActor(event);
+    setOpenModal(true);
+  }, []);
+
+  useEffect(() => {
+    if (!volunteersActor) {
+      setTimeout(() => {
+        setVolunteersActor(null);
+      }, 200)
     }
-  `;
-  const {
-    data, loading, error, refetch,
-  } = useQuery(GET_ACTORS, {
+  }, [volunteersActor]);
+
+  const { data, loading, error, refetch } = useQuery(GET_ACTORS, {
     variables: {
-      userId: user &&`${user.id}`,
+      userId: user && `${user.id}`,
     },
   });
-  const classes = useStyles2();
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [actorIdValidated, setActorIdValidated] = React.useState(0);
-  let row = 0;
-  if (typeof data !== 'undefined') {
-    row = data.actorsAdmin.length;
-  }
 
-  const emptyRows = rowsPerPage - Math.min(rowsPerPage, row - page * rowsPerPage);
+  const emptyRows = useMemo(() => {
+    const row = typeof data !== 'undefined' ? data.actorsAdmin.length : 0;
+
+    return rowsPerPage - Math.min(rowsPerPage, row - page * rowsPerPage);
+  }, [data, rowsPerPage, page]);
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
@@ -246,8 +342,6 @@ const ActorAdminPage = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-
-  const [state, setState] = React.useState({});
 
   const handleChange = (actor, event) => {
     setState({ ...state, [actor.id.toString()]: event.target.checked });
@@ -272,12 +366,12 @@ const ActorAdminPage = () => {
     },
     [validateActor],
   );
+
   useEffect(() => {
     if (dataValidateActor) {
       refetch();
     }
   }, [dataValidateActor]);
-  const styles = useStyles();
 
   return (
     <ActorAdminPageLayout>
@@ -292,7 +386,7 @@ const ActorAdminPage = () => {
           </Typography>
         </Grid>
         <Grid item xs={3}>
-           {/* @ts-ignore */}
+          {/* @ts-ignore */}
           <Link href="/addactor">
             <button className={styles.buttonGrid}> Créer une nouvelle page</button>
           </Link>
@@ -301,7 +395,7 @@ const ActorAdminPage = () => {
 
       {typeof data !== 'undefined' && (
         <TableContainer component={Paper}>
-          <Table className={classes.table} aria-label="custom pagination table">
+          <Table className={styles.table} aria-label="custom pagination table">
             <TableHead>
               <TableRow>
                 <TableCell component="th" scope="row">
@@ -325,7 +419,10 @@ const ActorAdminPage = () => {
                 <TableCell style={{ width: 160 }} align="left">
                   Editer la page
                 </TableCell>
-                
+                <TableCell style={{ width: 160 }} align="left">
+                  Volontaires
+                </TableCell>
+
                 {user && user.role == 'admin' && (
                   <>
                     <TableCell style={{ width: 160 }} align="left">
@@ -337,12 +434,12 @@ const ActorAdminPage = () => {
                     <TableCell style={{ width: 160 }} align="left">
                       Personne ayant validé
                     </TableCell>
-                   
+
                   </>
                 )}
-                 <TableCell style={{ width: 160 }} align="left">
-                      Ajouter une nouvelle action
-                    </TableCell>
+                <TableCell style={{ width: 160 }} align="left">
+                  Ajouter une nouvelle action
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -398,6 +495,15 @@ const ActorAdminPage = () => {
                         <Edit />
                       </Link>
                     </TableCell>
+
+                    <TableCell>
+                      <NbVolunteersItem
+                        actor={actor}
+                        className={styles.nbVolunteersItem}
+                        onClick={handleClickVolunteersActor}
+                      />
+                    </TableCell>
+
                     {user && user.role == 'admin' && (
                       <>
                         <TableCell style={{ width: 160 }} align="center">
@@ -423,11 +529,11 @@ const ActorAdminPage = () => {
                       </>
                     )}
                     <TableCell style={{ width: 160 }} align="center">
-                        {/* @ts-ignore */}
-                        <Link href={`/addevent/${actor.id}`}>
-                          <AddCircleOutline />
-                        </Link>
-                      </TableCell>
+                      {/* @ts-ignore */}
+                      <Link href={`/addevent/${actor.id}`}>
+                        <AddCircleOutline />
+                      </Link>
+                    </TableCell>
                   </TableRow>
                 ))}
 
@@ -438,6 +544,17 @@ const ActorAdminPage = () => {
           </Table>
         </TableContainer>
       )}
+
+      <Dialog open={openModal} onBackdropClick={closeModal}>
+        <DialogTitle>
+          <div>Volontaires pour l'acteur <i>{(volunteersActor as any)?.name}</i></div>
+        </DialogTitle>
+        <DialogContent classes={{ root: styles.dialogContent }}>
+          {
+            volunteersActor && <VolunteerList actor={volunteersActor} />
+          }
+        </DialogContent>
+      </Dialog>
     </ActorAdminPageLayout>
   );
 };
