@@ -105,6 +105,10 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up('sm')]: {
       paddingLeft: '2em',
     },
+    [theme.breakpoints.down('sm')]: {
+      width: '100%',
+      marginTop: 10,
+    },
   },
   cardTitle: {
     color: theme.typography.h5.color,
@@ -284,6 +288,23 @@ const useStyles = makeStyles((theme) => ({
       color: '#2C367E',
     },
   },
+  map: {
+    width: '100% !important'
+  },
+  calendar: {
+    [theme.breakpoints.down('sm')]: {
+      width: '100vw',
+      marginLeft: -16,
+      '& > *:first-child': {
+        paddingLeft: 8,
+        paddingRight: 8,
+        paddingBottom: 5
+      }
+    },
+    [theme.breakpoints.up('sm')]: {
+      width: '100%',
+    },
+  }
 }));
 
 const GET_ACTOR_SSR = `
@@ -1342,6 +1363,7 @@ const Actor = ({ initialData }) => {
                 (data && containUser(data.actor.referents) && data.actor.isValidated) ||
                 (user && user.role === 'admin')
               }
+              className={styles.calendar}
             />
           </Container>
           {((data && containUser(data.actor.referents)) ||
