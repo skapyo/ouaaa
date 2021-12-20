@@ -73,26 +73,41 @@ const useStyles = makeStyles((theme) => ({
     'text-align': 'center',
   },
   cardInfo: {
-    backgroundColor: 'white',
     // backgroundImage: "url('/icons/planet.svg')",
+    //  backgroundImage:`url('./fond.png')`,
+    backgroundColor: 'white',
     backgroundPosition: 'right',
     backgroundRepeat: 'no-repeat',
     backgroundOpacity: ' 0.5',
-    //  backgroundImage:`url('./fond.png')`,
     borderRadius: '0.5em',
+    justify: 'center',
+    marginTop: ({ hasBannerUrl }) => (hasBannerUrl ? -53 : 20),
+    alignItems: 'center',
+    maxWidth: 755,
+    boxShadow: '0px 0px 38px -14px rgba(0, 0, 0, 0.46)',
     [theme.breakpoints.up('sm')]: {
       width: '80%',
       padding: '5em',
     },
-    justify: 'center',
-    marginTop: ({ hasBannerUrl }) => (hasBannerUrl ? -53 : 20),
-    alignItems: 'center',
-    'max-width': '755px',
-    'box-shadow': '0px 0px 38px -14px rgba(0, 0, 0, 0.46)',
+    [theme.breakpoints.down('sm')]: {
+      paddingTop: 16,
+    },
+  },
+  infoPratiqueGrid: {
+    textAlign: 'center',
+    backgroundColor: '#ededf5',
+    borderRadius: 5,
+    '& > *:first-child': {
+      border: 'none'
+    }
   },
   description: {
     [theme.breakpoints.up('sm')]: {
       paddingLeft: '2em',
+    },
+    [theme.breakpoints.down('sm')]: {
+      width: '100%',
+      marginTop: 10,
     },
   },
   cardTitle: {
@@ -100,6 +115,9 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: theme.typography.h5.fontFamily,
     textTransform: 'uppercase',
     fontWeight: '400',
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '1.5rem !important',
+    },
   },
   actorName: {
     width: '100%',
@@ -146,10 +164,6 @@ const useStyles = makeStyles((theme) => ({
     display: 'inline-block',
     margin: '0em 1em 0em 1em',
   },
-  infoPratiqueGrid: {
-    textAlign: 'center',
-    backgroundColor: '#ededf5',
-  },
   image: {
     height: '200px',
     width: '200px',
@@ -162,6 +176,14 @@ const useStyles = makeStyles((theme) => ({
   },
   slider: {
     textAlign: 'center',
+    [theme.breakpoints.down('sm')]: {
+      '& .slick-prev': {
+        left: 0
+      },
+      '& .slick-next': {
+        right: 0
+      }
+    },
   },
   closeButton: {
     position: 'absolute',
@@ -185,9 +207,9 @@ const useStyles = makeStyles((theme) => ({
     padding: '1em',
   },
   item: {
-    border: '1px solid #2C367E',
-    borderWidth: ' 1px 0px 1px 0px ',
+    borderWidth: '1px 0px 0px 0px',
     borderStyle: 'dashed',
+    borderColor: '#2C367E',
   },
   infoDiv: {
     width: '100%',
@@ -266,7 +288,25 @@ const useStyles = makeStyles((theme) => ({
       color: '#2C367E',
     },
   },
+  map: {
+    width: '100% !important'
+  },
+  calendar: {
+    [theme.breakpoints.down('sm')]: {
+      width: '100vw',
+      marginLeft: -16,
+      '& > *:first-child': {
+        paddingLeft: 8,
+        paddingRight: 8,
+        paddingBottom: 5
+      }
+    },
+    [theme.breakpoints.up('sm')]: {
+      width: '100%',
+    },
+  }
 }));
+
 const GET_ACTOR_SSR = `
 query actor($id: String) {
   actor(id: $id) {
@@ -368,6 +408,17 @@ query actor($id: String) {
   }
 }
 `;
+
+const SliderArrow = (props) => {
+  const { className, style, onClick } = props;
+  return (
+    <div
+      className={className}
+      style={{ ...style, display: 'block' }}
+      onClick={onClick}
+    />
+  );
+};
 
 const Actor = ({ initialData }) => {
   const router = useRouter();
@@ -530,52 +581,25 @@ const Actor = ({ initialData }) => {
   const matches = useMediaQuery(theme.breakpoints.down('sm'));
   const maxSlideToShowImage = !matches ? 3 : 1;
 
-  const settingsSliderImage = {
-    infinite: true,
-    slidesToShow:
-      data &&
-        data.actor.pictures &&
-        data.actor.pictures.length >= maxSlideToShowImage
-        ? maxSlideToShowImage
-        : data && data.actor.pictures && data.actor.pictures.length,
-    slidesToScroll: 1,
-    // autoplay: true,
-    // autoplaySpeed: 2000,
-    //  pauseOnHover: true,
-    nextArrow: <SampleNextArrow />,
-    prevArrow: <SamplePrevArrow />,
-  };
-  const settingsSliderModal = {
+  const sliderSettings = {
     infinite: true,
     slidesToShow: 1,
     slidesToScroll: 1,
-    // autoplay: true,
-    // autoplaySpeed: 2000,
-    //  pauseOnHover: true,
-    nextArrow: <SampleNextArrow />,
-    prevArrow: <SamplePrevArrow />,
+    nextArrow: <SliderArrow />,
+    prevArrow: <SliderArrow />,
   };
-  function SampleNextArrow(props) {
-    const { className, style, onClick } = props;
-    return (
-      <div
-        className={className}
-        style={{ ...style, display: 'block' }}
-        onClick={onClick}
-      />
-    );
-  }
 
-  function SamplePrevArrow(props) {
-    const { className, style, onClick } = props;
-    return (
-      <div
-        className={className}
-        style={{ ...style, display: 'block' }}
-        onClick={onClick}
-      />
-    );
-  }
+  const actorPictures = data?.actor?.pictures || [];
+
+  const settingsSliderImage = useMemo(() => {
+    return {
+      ...sliderSettings,
+      slidesToShow: actorPictures.length >= maxSlideToShowImage
+        ? maxSlideToShowImage
+        : actorPictures.length,
+    };
+  }, [actorPictures, sliderSettings, maxSlideToShowImage]);
+
   function showCategory(entries) {
     let text = '';
     const nbEntryToShow = 1;
@@ -646,6 +670,11 @@ const Actor = ({ initialData }) => {
     url = window.location.href;
   }
 
+  const logo = useMemo(() => {
+    const logoPictures = actorPictures.filter((picture) => picture.logo);
+    return logoPictures.length > 0 ? logoPictures[0] : null;
+  }, [actorPictures]);
+
   return (
     <AppLayout>
       <Head>
@@ -660,22 +689,12 @@ const Actor = ({ initialData }) => {
           {/* @ts-ignore */}-{/* @ts-ignore */}
           {data && showCategory(data.actor.entries)}
         </title>
-        {data &&
-          data.actor.pictures &&
-          data.actor.pictures.length >= 1 &&
-          data.actor.pictures.filter((picture) => picture.logo).length >= 1 && (
-            <meta
-              property="og:image"
-              content={
-                data.actor.pictures.length >= 1
-                  ? getImageUrl(
-                    data.actor.pictures.filter((picture) => picture.logo)[0]
-                      .originalPicturePath,
-                  )
-                  : ''
-              }
-            />
-          )}
+        {logo && (
+          <meta
+            property="og:image"
+            content={getImageUrl(logo.originalPicturePath)}
+          />
+        )}
       </Head>
       <RootRef>
         <Box>
@@ -705,28 +724,20 @@ const Actor = ({ initialData }) => {
             <Grid container>
               <Grid item md={5} sm={10} className={[styles.align]}>
                 <Grid container className={[styles.infoPratiqueGrid]}>
-                  <div className={styles.image}>
-                    {data &&
-                      data.actor.pictures &&
-                      data.actor.pictures.length >= 1 &&
-                      data.actor.pictures.filter((picture) => picture.logo)
-                        .length >= 1 &&
-                      data.actor.pictures.filter((picture) => picture.logo)[0]
-                        .originalPicturePath && (
+                  {
+                    logo && logo.originalPicturePath && (
+                      <div className={styles.image}>
                         <Image
                           loader={myLoader}
                           width="100%"
                           height="100px"
                           layout="responsive"
                           objectFit="contain"
-                          src={
-                            data.actor.pictures.filter(
-                              (picture) => picture.logo,
-                            )[0].originalPicturePath
-                          }
+                          src={logo.originalPicturePath}
                         />
-                      )}
-                  </div>
+                      </div>
+                    )
+                  }
 
                   <Grid container className={[styles.item]}>
                     <Grid item xs={3} className={[styles.alignRight]}>
@@ -1321,7 +1332,7 @@ const Actor = ({ initialData }) => {
                 <IconButton aria-label="Close" className={styles.closeButton} onClick={() => setOpenModalSlider(false)}>
                   <CloseIcon />
                 </IconButton>
-                <Slider {...settingsSliderModal} className={[styles.slider]}>
+                <Slider {...sliderSettings} className={[styles.slider]}>
                   {data &&
                     data.actor.pictures &&
                     data.actor.pictures
@@ -1352,6 +1363,7 @@ const Actor = ({ initialData }) => {
                 (data && containUser(data.actor.referents) && data.actor.isValidated) ||
                 (user && user.role === 'admin')
               }
+              className={styles.calendar}
             />
           </Container>
           {((data && containUser(data.actor.referents)) ||

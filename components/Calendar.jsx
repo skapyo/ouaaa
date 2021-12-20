@@ -130,7 +130,7 @@ const FlexibleEmptySpaceAddEvent = () => {
 
 const Calendar = (props) => {
   const {
-    events, withViewSwitcher, withAddEvent,
+    events, withViewSwitcher, withAddEvent, className,
   } = props;
 
   const toolbarProps = withAddEvent && {
@@ -139,6 +139,13 @@ const Calendar = (props) => {
   const defaultMessages = {
     allDay: 'Toute la journée',
   };
+
+  const RootComponent = useCallback((rootComponentProps) => {
+    return (
+      <div {...rootComponentProps} className={className} />
+    )
+  }, [className]);
+
   return (
     <Scheduler
       firstDayOfWeek={1}
@@ -147,6 +154,7 @@ const Calendar = (props) => {
         height: 'auto',
       }}
       data={events}
+      rootComponent={RootComponent}
     >
       <ViewState
         defaultCurrentDate={new Date()}
