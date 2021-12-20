@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
   layout: {
     display: 'flex',
     justifyContent: 'center',
-    backgroundColor: '#F6F6F6',
+    backgroundColor: theme.palette.background.grey,
     padding: '0',
     margin: '0',
     width: '100%',

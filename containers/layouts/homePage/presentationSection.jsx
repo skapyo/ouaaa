@@ -1,7 +1,9 @@
-import { Container, makeStyles, Typography, useTheme } from '@material-ui/core';
+import {
+  Container, makeStyles, Typography, useTheme,
+} from '@material-ui/core';
 import React from 'react';
-import Link from '../../../components/Link';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import Link from '../../../components/Link';
 import SearchEngine from '../../../components/SearchEngine';
 
 const useStyles = makeStyles((theme) => ({
@@ -88,13 +90,21 @@ const PresentationSection = () => {
   return (
     <Container className={styles.titleContainer}>
       <div className={styles.title}>
-        <h1 className={styles.h1}>agir pour la transition écologique <br /> et sociale en aunis</h1>
+        <h1 className={styles.h1}>
+          agir pour la transition écologique
+          {' '}
+          <br />
+          {' '}
+          et sociale en aunis
+        </h1>
       </div>
 
       <Typography className={styles.baseLine}>
-        Nous sommes là pour te faire connaître celles et ceux qui oeuvrent {!mobile && (<br />)}
+        Nous sommes là pour te faire connaître celles et ceux qui oeuvrent
+        {' '}
+        {!mobile && (<br />)}
         pour la transition écologique, sociale et démocratique, te donner le calendrier de leurs actions et te permettre de les rejoindre.
-      </Typography >
+      </Typography>
 
       <SearchEngine />
     </Container>

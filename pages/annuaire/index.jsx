@@ -1,8 +1,9 @@
-import { Typography, Container } from '@material-ui/core';
+import { Typography } from '@mui/material';
 import React from 'react';
 import AppLayout from 'containers/layouts/AppLayout';
 import { withApollo } from 'hoc/withApollo.jsx';
 import Grid from '@mui/material/Grid';
+import Container from '@mui/material/Container';
 import CategoryCard from '../../components/cards/CategoryCard';
 
 const GET_CATEGORIES = `
@@ -21,14 +22,19 @@ const AnnuairePage = ({ initialData }) => {
 
   return (
     <AppLayout>
-      <Container maxWidth="md">
-        <Typography variant="h1">Annuaire</Typography>
+      <Container sx={{
+        backgroundColor: '#F6F6F6',
+      }}
+      >
+        <Container maxWidth="md">
+          <Typography variant="h1" pt={4}>Annuaire</Typography>
 
-        <Grid container spacing={2}>
-          {initialData && data?.categories?.map((category) => {
-            return <CategoryCard key={category.id} category={category} />;
-          })}
-        </Grid>
+          <Grid container spacing={2} py={4}>
+            {initialData && (data?.categories?.map((category) => {
+              return <CategoryCard key={category.id} category={category} />;
+            }))}
+          </Grid>
+        </Container>
       </Container>
     </AppLayout>
   );

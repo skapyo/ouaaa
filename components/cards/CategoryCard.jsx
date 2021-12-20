@@ -5,15 +5,15 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { Link } from '@mui/material';
 import { makeStyles } from '@material-ui/core/styles';
-import styled from 'styled-components';
+import StyledBoxOnHover from '../animated/StyledBoxOnHover';
 
 const useStyles = makeStyles((theme) => ({
   card: {
     width: '100%',
     height: '100%',
     padding: theme.spacing(2),
-    border: `1px solid ${theme.palette.primary.light}`,
     borderRadius: '10px',
+    backgroundColor: 'white',
   },
   category: {
     width: 40,
@@ -61,19 +61,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const StyledBox = styled(Box)`
-  ${({ theme }) => `
-  cursor: pointer;
-  box-shadow: none;
-  transition: ${theme.transitions.create(['box-shadow'], {
-    duration: theme.transitions.duration.standard,
-  })};
-  &:hover {
-    box-shadow: 2px 2px 8px ${theme.palette.primary.light};
-  }
-  `}
-`;
-
 const CategoryCard = ({ category }) => {
   const {
     id, label, description, icon, color,
@@ -88,7 +75,7 @@ const CategoryCard = ({ category }) => {
       xs={12}
     >
       <Link href={`/annuaire/${id}`} color="inherit" underline="none">
-        <StyledBox
+        <StyledBoxOnHover
           className={styles.card}
         >
           <Stack
@@ -108,7 +95,7 @@ const CategoryCard = ({ category }) => {
               </Typography>
             </Box>
           </Stack>
-        </StyledBox>
+        </StyledBoxOnHover>
       </Link>
     </Grid>
   );

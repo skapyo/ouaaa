@@ -1,14 +1,16 @@
 import AppLayout from 'containers/layouts/AppLayout';
-import { Box, Container, RootRef, Typography } from '@material-ui/core';
+import { RootRef } from '@material-ui/core';
+import { Box } from '@mui/material';
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { withApollo } from 'hoc/withApollo';
+import Head from 'next/head';
 import Newsletter from '../containers/layouts/Newsletter';
 import PresentationSection from '../containers/layouts/homePage/presentationSection';
 import ThreePoint from '../containers/layouts/homePage/threepoint';
 import LastActor from '../containers/layouts/homePage/lastActor';
 import LastEvent from '../containers/layouts/homePage/lastEvent';
-import Head from 'next/head';
+
 const useStyles = makeStyles((theme) => ({
   leftTitle: {
     fontWeight: theme.typography.fontWeightBold,
@@ -28,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
     color: 'white',
     'background-color': '#2C367E',
     border: 'none',
-    
+
     borderRadius: '1.5em',
     padding: '0 3em 0 3em',
     height: '2.5em',
@@ -108,22 +110,21 @@ const Index = () => {
   const styles = useStyles(stylesProps);
 
   return (
-  
+
     <AppLayout>
       <RootRef>
         <Box>
-        
-           <PresentationSection /> 
 
-           <ThreePoint />
+          <PresentationSection />
 
+          <ThreePoint />
 
           <LastActor />
 
           <LastEvent />
 
           <Newsletter />
-         
+
         </Box>
       </RootRef>
     </AppLayout>

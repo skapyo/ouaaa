@@ -1,15 +1,13 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded';
-import FavoriteRoundedIcon from '@material-ui/icons/FavoriteRounded';
+import { Avatar } from '@mui/material';
 import Link from '../Link';
-import { getImageUrl } from '../../utils/utils';
+import StyledBoxOnHover from '../animated/StyledBoxOnHover';
 
 const useStyles = makeStyles((theme, props) => ({
   card: (props) => ({
     backgroundColor: 'white',
     borderRadius: '10px',
-    margin: '16px 0',
     minHeight: '106px',
     borderLeft: `solid 12px ${props.color}`,
     display: 'flex',
@@ -40,7 +38,7 @@ const useStyles = makeStyles((theme, props) => ({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    position: 'relative'
+    position: 'relative',
   },
   opacity: (props) => ({
     width: '40px',
@@ -95,33 +93,35 @@ const useStyles = makeStyles((theme, props) => ({
 }));
 
 const ActorCard = ({ actor }) => {
-  const color =
-  actor.entries && actor.entries.length > 0 && actor.entries[0].parentEntry
-      ? actor.entries[0].parentEntry.color
-      : '#AD2740';
+  const color = actor.entries && actor.entries.length > 0 && actor.entries[0].parentEntry
+    ? actor.entries[0].parentEntry.color
+    : '#AD2740';
   const icon = actor.entries[0] ? actor.entries[0].icon : 'fruit';
   const actorName = actor.name;
 
   const classes = useStyles({ color, icon });
   const [favorite, setFavorite] = useState(false);
 
+  const getActorProfilePicture = () => {
+    const profilePictures = actor.pictures?.filter((picture) => picture.logo) || [];
+    const picture = profilePictures.length > 0 ? profilePictures[0].originalPicturePath : undefined;
+    return picture;
+  };
+
   return (
-    <div className={classes.card}>
-      <div className={classes.content}>
-        <a href={`/actor/${actor.id}`} target="_blank" rel="noreferrer">
+    <Link href={`/actor/${actor.id}`} color="inherit" underline="none">
+      <StyledBoxOnHover className={classes.card}>
+        <div className={classes.content}>
           <div className={classes.leftContent}>
             <div className={classes.image}>
-              {actor.pictures.length >= 1 && actor.pictures.filter(picture => picture.logo).length >= 1 && (
-                <img
-                  src={
-                    actor.pictures.filter(picture => picture.logo).length >= 1
-                      ? getImageUrl(
-                        actor.pictures.filter(picture => picture.logo)[0].originalPicturePath,
-                      )
-                      : ''
-                  }
-                />
-              )}
+              <Avatar
+                alt={actor.name}
+                src={getActorProfilePicture()}
+                sx={{
+                  width: 72,
+                  height: 72,
+                }}
+              />
             </div>
             <div className={classes.text}>
               <div className={classes.actor}>{actorName}</div>
@@ -140,7 +140,8 @@ const ActorCard = ({ actor }) => {
                       src="/icons/location.svg"
                       alt="Localisation"
                       className={[classes.icon]}
-                    />{' '}
+                    />
+                    {' '}
                     {actor.city}
                   </span>
                 )}
@@ -151,27 +152,28 @@ const ActorCard = ({ actor }) => {
                       src="/icons/location.svg"
                       alt="Localisation"
                       className={[classes.icon]}
-                    />{' '}
+                    />
+                    {' '}
                     {`${actor.address} ${actor.city}`}
                   </span>
                 )}
               </div>
             </div>
           </div>
-        </a>
-        <div className={classes.category}>
-          <span className={classes.opacity} />
-          <span className={classes.categoryIcon} />
-        </div>
-      </div>
-      {
-        false && (
-          <div className={classes.favorite} onClick={() => setFavorite(!favorite)}>
-            <FavoriteIconComponent className={classes.favoriteIcon} />
+          <div className={classes.category}>
+            <span className={classes.opacity} />
+            <span className={classes.categoryIcon} />
           </div>
-        )
-      }
-    </div>
+        </div>
+        {
+          false && (
+            <div className={classes.favorite} onClick={() => setFavorite(!favorite)}>
+              <FavoriteIconComponent className={classes.favoriteIcon} />
+            </div>
+          )
+        }
+      </StyledBoxOnHover>
+    </Link>
   );
 };
 

@@ -38,6 +38,7 @@ const theme = createTheme({
     },
     background: {
       default: '#fff',
+      grey: '#F6F6F6',
     },
     text: {
       primary: '#3c3b37',
@@ -45,29 +46,28 @@ const theme = createTheme({
     lightBox: {
       main: '#F7F7F7',
     },
+    shadow: {
+      main: 'rgba(10, 14, 18, .1)',
+    },
   },
   typography: {
     body1: {
       lineHeight: 1.7,
     },
-    h5: {
-      color: '#2C367E',
-
-    },
     h1: {
       fontSize: '4rem',
       color: '#2C367E',
-
     },
     h2: {
       fontSize: '1.5rem',
       color: '#2C367E',
-
     },
     h3: {
       fontSize: '1.5rem',
       color: '#2C367E',
-
+    },
+    h5: {
+      color: '#2C367E',
     },
   },
   transitions: {

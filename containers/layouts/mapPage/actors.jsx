@@ -1,15 +1,15 @@
 import ActorCard from 'components/cards/ActorCard';
+import { makeStyles } from '@material-ui/core';
+import { Container, Stack } from '@mui/material';
 
-import { Container, makeStyles } from '@material-ui/core';
-
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   actors: {
     width: '100%',
     margin: '0',
     paddingBottom: 66,
     [theme.breakpoints.down('sm')]: {
       padding: '0 1em',
-    }
+    },
   },
   title: {
     color: '#2C367E',
@@ -34,12 +34,14 @@ const Actors = (data) => {
   return (
     <Container className={classes.actors}>
       <h1 className={classes.title}>Liste des acteurs </h1>
-      {actors &&
-        actors.sort(compare).map((actor) => (
+      <Stack spacing={2}>
+        {actors
+        && actors.sort(compare).map((actor) => (
           <div key={actor.id}>
             <ActorCard key={actor.id} actor={actor} />
           </div>
         ))}
+      </Stack>
     </Container>
   );
 };
