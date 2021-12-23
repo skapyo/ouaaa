@@ -86,9 +86,11 @@ const CategoryCard = ({ category }) => {
               <span className={styles.opacity} />
               <span className={styles.categoryIcon} />
             </div>
-            <Typography variant="h5" className={styles.categoryTitle}>
-              {label}
-            </Typography>
+            <Link href={`/annuaire/${id}`} color="inherit" underline="none">
+              <Typography variant="h5" className={styles.categoryTitle}>
+                {label}
+              </Typography>
+            </Link>
             <Box>
               <Typography variant="subtitle1" className={styles.threeLines}>
                 {description}

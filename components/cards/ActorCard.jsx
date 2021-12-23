@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Avatar } from '@mui/material';
-import Link from '../Link';
+import { Avatar, Link } from '@mui/material';
 import StyledBoxOnHover from '../animated/StyledBoxOnHover';
 
 const useStyles = makeStyles((theme, props) => ({
@@ -98,7 +97,6 @@ const ActorCard = ({ actor }) => {
     : '#AD2740';
   const icon = actor.entries[0] ? actor.entries[0].icon : 'fruit';
   const actorName = actor.name;
-
   const classes = useStyles({ color, icon });
   const [favorite, setFavorite] = useState(false);
 
@@ -124,7 +122,9 @@ const ActorCard = ({ actor }) => {
               />
             </div>
             <div className={classes.text}>
-              <div className={classes.actor}>{actorName}</div>
+              <Link href={`/actor/${actor.id}`} color="inherit" underline="none">
+                <div className={classes.actor}>{actorName}</div>
+              </Link>
               <div className={classes.label}>{actor.label}</div>
               <div className={classes.actorDetails}>
                 <span>

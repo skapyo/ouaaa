@@ -9,6 +9,7 @@ query category($id: String!) {
   category(id: $id) {
     id
     label
+    description
   }
 }`;
 
@@ -55,6 +56,7 @@ const AnnuaireCategoryPage = ({ category, actors }) => {
       >
         <Container maxWidth="md">
           <Typography variant="h1" pt={4}>{ category.data.category.label }</Typography>
+          <Typography variant="h2">{ category.data.category.description }</Typography>
           <Stack spacing={2} py={4}>
             {actors && (data?.actorsByCategory?.map((actor) => {
               return <ActorCard key={actor.id} actor={actor} />;
