@@ -321,6 +321,7 @@ query actor($id: String) {
     phone
     website
     description
+    shortDescription
     socialNetwork
     volunteerDescription
     activity
@@ -680,14 +681,10 @@ const Actor = ({ initialData }) => {
       <Head>
         <title>
           {/* @ts-ignore */}
-          {data && data.actor.name}-{/* @ts-ignore */}
-          {data && data.actor.activity}
+          {data && data.actor.name} {/* @ts-ignore */}
+          {data && data.actor.shortDescription}
           {/* @ts-ignore */}-{/* @ts-ignore */}
           {data && data.actor.city}
-          {/* @ts-ignore */}
-          {data && showLaRochelleQuarter(data.actor.entries)}
-          {/* @ts-ignore */}-{/* @ts-ignore */}
-          {data && showCategory(data.actor.entries)}
         </title>
         {logo && (
           <meta
