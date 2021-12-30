@@ -46,11 +46,11 @@ const About = () => {
               <br />
               <div>
               C'est ainsi qu'est né le site « OUAAA! -  Agir pour la transition en Aunis » 
-Au fait, pourquoi ce nom ? A l’origine, c’était un accronyme pour : Outils des Acteurs Alternatifs en Aunis. Pour nous, c'est surtout l’effet wOUAAAw !
+Au fait, pourquoi ce nom ? A l’origine, c’était un acronyme pour : Outils des Acteurs Alternatifs en Aunis. Pour nous, c'est surtout l’effet wOUAAAw !
               </div>
               <br />
              <b>wOUAAAw, un projet local !</b> <br /> <br />
-             <div>
+             <div>Logo_OUAAA
              Si le web n’a, par principe pas d’échelle géographique, notre projet a lui un territoire défini intégrant les communautés de communes Aunis Atlantique, Aunis Sud, Île de Ré et l’agglomération de La Rochelle. Cet échelon permet des liens entre zone urbaine et communes rurales pour, par exemple construire une filière agricole vivrière avec les paysans et les consommateurs. C’est aussi les choix pris pour le SCOT, le plan alimentation ou encore celui du projet de monnaie locale « la trémière ». Un territoire résilient !
               </div>
               <br />
