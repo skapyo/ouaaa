@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Avatar, Link } from '@mui/material';
 import StyledBoxOnHover from '../animated/StyledBoxOnHover';
+import { getImageUrl } from '../../utils/utils';
 
 const useStyles = makeStyles((theme, props) => ({
   card: (props) => ({
@@ -100,9 +101,18 @@ const ActorCard = ({ actor }) => {
   const classes = useStyles({ color, icon });
   const [favorite, setFavorite] = useState(false);
 
+  function stringAvatar(name) {
+    if (name !== undefined) {
+      return {
+        children: `${name.split(' ')[0][0]}${name.split(' ')[0][1]}`,
+      };
+    }
+    return '';
+  }
+
   const getActorProfilePicture = () => {
     const profilePictures = actor.pictures?.filter((picture) => picture.logo) || [];
-    const picture = profilePictures.length > 0 ? profilePictures[0].originalPicturePath : undefined;
+    const picture = profilePictures.length > 0 ?  getImageUrl(profilePictures[0].originalPicturePath) : undefined;
     return picture;
   };
 
@@ -119,6 +129,7 @@ const ActorCard = ({ actor }) => {
                   width: 72,
                   height: 72,
                 }}
+
               />
             </div>
             <div className={classes.text}>
