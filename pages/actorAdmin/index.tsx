@@ -85,6 +85,8 @@ const GET_VOLUNTEERS_BY_ACTOR = gql`
       id
       surname
       lastname
+      email
+      participatedAt
     }
   }
 `;
@@ -203,6 +205,8 @@ const VolunteerList = (props: any) => {
         <TableRow>
           <TableCell>Prénom</TableCell>
           <TableCell>Nom</TableCell>
+          <TableCell>Email</TableCell>
+          <TableCell align="right">Date</TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
@@ -212,6 +216,12 @@ const VolunteerList = (props: any) => {
               {volunteers.surname}
             </TableCell>
             <TableCell>{volunteers.lastname}</TableCell>
+            <TableCell>{volunteers.email}</TableCell>
+            <TableCell align="right">
+              <Moment format="DD/MM/YYYY HH:mm" unix>
+                {volunteers.participatedAt / 1000}
+              </Moment>
+            </TableCell>
           </TableRow>
         ))}
       </TableBody>

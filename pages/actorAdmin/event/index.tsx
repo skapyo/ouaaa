@@ -65,6 +65,7 @@ const GET_PARTICIPANTS_BY_EVENT = gql`
       surname
       lastname
       participatedAt
+      email
     }
   }
 `;
@@ -93,6 +94,7 @@ const ParticipantList = (props: any) => {
         <TableRow>
           <TableCell>Prénom</TableCell>
           <TableCell>Nom</TableCell>
+          <TableCell>Email</TableCell>
           <TableCell align="right">Date de participation</TableCell>
         </TableRow>
       </TableHead>
@@ -103,6 +105,7 @@ const ParticipantList = (props: any) => {
               {participant.surname}
             </TableCell>
             <TableCell>{participant.lastname}</TableCell>
+            <TableCell>{participant.email}</TableCell>
             <TableCell align="right">
               <Moment format="DD/MM/YYYY HH:mm" unix>
                 {participant.participatedAt / 1000}
