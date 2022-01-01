@@ -79,7 +79,7 @@ A l’écoute des usagers : acteurs inscrits et visiteurs du site, nous recueil
           <br />
           <br />
             <img width ="200px" src ="https://www.larochelle-zerocarbone.fr/lr-zerocarbone-theme/images/logo-zerocarbone-fill.svg" alt="La Rochelle Territoire Zéro Carbone" />
-            Partenaire de La Rochelle Territoire Zéro Carbone projet initié par cinq entités fondatrices et 130 organismes impliqués, entreprises, associations, collectifs, collectivités, LRTZC se décline sous forme d’actions comme c’est le cas de ouaaa-transition.fr ! L’enjeu : préparer la ville de demain, pour un territoire sans carbone en 2040. 
+            Souhaitant atteindre les objectifs d'un territoire zéro carbone, projet initié par cinq entités fondatrices et 130 organismes impliqués, entreprises, associations, collectifs, collectivités, LRTZC se décline sous forme d’actions comme c’est le cas de ouaaa-transition.fr ! L’enjeu : préparer la ville de demain, pour un territoire sans carbone en 2040. 
             <br />
             <br />
             <br />

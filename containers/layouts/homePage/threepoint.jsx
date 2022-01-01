@@ -214,7 +214,7 @@ const PresentationSection = () => {
               <ListItemText
                 className={styles.listItemText}
                 primary={
-                  <>Partenaire de <b>La Rochelle Territoire Zéro carbone</b>, la plateforme participative <i>OUAAA!</i> met un coup de projecteur, sur tous celles et ceux qui agissent pour la <b>transition climatique</b>. Cette communauté d’acteurs est présente sur tout le territoire, dans les villes comme dans les villages, de l'anse de l'Aiguillon à l'embouchure de la Charente, de la forêt de Benon au bout de l'île de Ré en passant par Surgères, l’agglomération de La Rochelle, Saint Martin de Ré, Marans, et Châtelaillon-Plage.
+                  <>Souhaitant atteindre les objectifs d'un territoire zéro carbone, la plateforme participative <i>OUAAA!</i> met un coup de projecteur, sur tous celles et ceux qui agissent pour la <b>transition climatique</b>. Cette communauté d’acteurs est présente sur tout le territoire, dans les villes comme dans les villages, de l'anse de l'Aiguillon à l'embouchure de la Charente, de la forêt de Benon au bout de l'île de Ré en passant par Surgères, l’agglomération de La Rochelle, Saint Martin de Ré, Marans, et Châtelaillon-Plage.
                   </>
                 }
               />
