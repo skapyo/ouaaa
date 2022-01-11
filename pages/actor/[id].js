@@ -682,7 +682,7 @@ const Actor = ({ initialData }) => {
         <title>
           {/* @ts-ignore */}
           {data && data.actor.name} {/* @ts-ignore */}
-          {data && data.actor.shortDescription}
+          {data && data.actor.activity}
           {/* @ts-ignore */}-{/* @ts-ignore */}
           {data && data.actor.city}
         </title>
