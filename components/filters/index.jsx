@@ -235,6 +235,8 @@ function Filters(props) {
     return {
       top: `${top}%`,
       left: `${left}%`,
+      height: '90%',
+      overflow: 'auto',
       transform: `translate(-${top}%, -${left}%)`,
     };
   }

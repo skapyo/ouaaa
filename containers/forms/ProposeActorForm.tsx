@@ -25,7 +25,7 @@ const PROPOSE_ACTORFORM = gql`
 const useStyles = makeStyles((theme) => ({
   formContainer: {
     marginTop: theme.spacing(8),
-    marginBottom: theme.spacing(8)
+    marginBottom: theme.spacing(8),
   },
   field: {
     marginBottom: theme.spacing(3)
@@ -94,6 +94,7 @@ const ProposeActorForm = (props) => {
   const styles = useStyles();
   const user = useSessionState();
   const [messageSent, setMessageSent] = useState(false);
+  const [lastActorNameSent, setLastActorNameSent] = useState('');
   const [category, setCategory] = useState('message');
   const [noEmailInvite, setNoEmailInvite] = useState(noEmailInviteActor === 'true');
 
@@ -189,6 +190,9 @@ const ProposeActorForm = (props) => {
       if (!inviteActorLoading && inviteActorData) {
         setMessageSent(true);
         inputs.map((input, i) => {
+          if (input.name === 'actorName') {
+            setLastActorNameSent(formValues[input.name]);
+          }
         formValues[input.name]='';
       });
       } else if (inviteActorError) {
@@ -231,7 +235,7 @@ const ProposeActorForm = (props) => {
     });
 
     return (
-      <Container component="main" maxWidth="md" className={styles.formContainer}>
+      <Container  maxWidth="md" className={styles.formContainer}>
         { getFormInputs() }
         <ClassicButton
           fullWidth
@@ -258,7 +262,7 @@ const ProposeActorForm = (props) => {
     return (
       <div>
       <div className={styles.formContainer}>
-        <p>Merci de nous aider à faire grossir la communauté de OUAAA. Vous pouvez continuer à inviter d'autres acteurs.</p>
+        <p>Merci de nous aider à faire grandir la communauté de OUAAA. Votre invitation à l'acteur <b>{lastActorNameSent}</b> a bien été envoyé. Vous pouvez continuer à inviter d'autres acteurs.</p>
       </div>
        <FormController 
        render={Form} 
