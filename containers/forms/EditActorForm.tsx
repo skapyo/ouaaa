@@ -29,6 +29,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import IconButton from '@material-ui/core/IconButton';
 import RadioGroup from '@material-ui/core/RadioGroup';
+import CircularProgress from '@mui/material/CircularProgress';
 import FormControl from '@material-ui/core/FormControl';
 import Radio from '@material-ui/core/Radio';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -1786,13 +1787,20 @@ const EditActorForm = (props) => {
         <br />
 
         <Grid item xs={12}>
-          <ClassicButton
+          
+          { !editLoading && (
+            <ClassicButton
             onClick={submitHandler}
             fullWidth
             disabled={!validationResult?.global || user == null}
           >
             Mettre à jour cet acteur
-          </ClassicButton>
+        </ClassicButton>
+          )}
+          { editLoading && (
+          <CircularProgress />
+          )}
+          { !deleteLoading && (
           <ClassicButton
             fullWidth
             variant="contained"
@@ -1801,6 +1809,12 @@ const EditActorForm = (props) => {
           >
             Supprimer cet acteur
           </ClassicButton>
+          )}
+          { deleteLoading && (
+            <CircularProgress />
+            )}
+
+          
           <Dialog
             open={openDeletePopup}
             onClose={handleClose}
