@@ -222,6 +222,7 @@ const useStyles = makeStyles((theme) => ({
     padding: '1em',
     maxHeight: '200px',
     width: 'inherit!important',
+    cursor: 'pointer',
   },
   imgModal: {
     padding: '1em',
@@ -682,7 +683,7 @@ const Actor = ({ initialData }) => {
         <title>
           {/* @ts-ignore */}
           {data && data.actor.name} {/* @ts-ignore */}
-          {data && data.actor.shortDescription}
+          {data && data.actor.activity}
           {/* @ts-ignore */}-{/* @ts-ignore */}
           {data && data.actor.city}
         </title>
@@ -1339,7 +1340,7 @@ const Actor = ({ initialData }) => {
                         <img
                           src={getImageUrl(picture.originalPicturePath)}
                           className={[styles.imgModal]}
-                          onClick={() => setOpenModalSlider(true)}
+                          onClick={() => setOpenModalSlider(false)}
                         />
                       ))}
                 </Slider>
