@@ -1,22 +1,31 @@
-
+{
+  "theme_color": "#ffffff",
+  "background_color": "#f8f8f8",
+  "display": "browser",
+  "scope": "/",
+  "start_url": "/",
   "name": "OUAAA!",
   "short_name": "OUAAA!",
   "icons": [
-    {
-      "src": "/icone_192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-
-    {
-      "src": "/icone_512.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
-  ],
-  "theme_color": "#FFFFFF",
-  "background_color": "#FFFFFF",
-  "start_url": "/",
-  "display": "standalone",
-  "orientation": "portrait"
+      {
+          "src": "/icon-192x192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+      },
+      {
+          "src": "/icon-256x256.png",
+          "sizes": "256x256",
+          "type": "image/png"
+      },
+      {
+          "src": "/icon-384x384.png",
+          "sizes": "384x384",
+          "type": "image/png"
+      },
+      {
+          "src": "/icon-512x512.png",
+          "sizes": "512x512",
+          "type": "image/png"
+      }
+  ]
 }
