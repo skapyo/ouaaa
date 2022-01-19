@@ -11,3 +11,5 @@ static/*.jpeg
 node_modules/
 .next/
 .DS_Store
+public/sw.js
+public/workbox-*.js

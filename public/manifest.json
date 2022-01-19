@@ -1,8 +1,7 @@
 {
   "theme_color": "#ffffff",
   "background_color": "#f8f8f8",
-  "display": "browser",
-  "scope": "/",
+  "display": "standalone",
   "start_url": "/",
   "name": "OUAAA!",
   "short_name": "OUAAA!",
