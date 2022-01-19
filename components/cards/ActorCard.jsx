@@ -1,8 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
+import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded';
+import FavoriteRoundedIcon from '@material-ui/icons/FavoriteRounded';
 import { makeStyles } from '@material-ui/core/styles';
 import { Avatar, Link } from '@mui/material';
+import { useSnackbar } from 'notistack';
+import gql from 'graphql-tag';
+import { useMutation, useQuery } from '@apollo/client';
 import StyledBoxOnHover from '../animated/StyledBoxOnHover';
 import { getImageUrl } from '../../utils/utils';
+import { useSessionState } from '../../context/session/session';
+
+const ADD_FAVORITE = gql`
+  mutation addFavorite($actorId: Integer!, $favorite: Boolean!) {
+    addFavorite(actorId: $actorId, favorite: $favorite) 
+  }
+`;
 
 const useStyles = makeStyles((theme, props) => ({
   card: (props) => ({
@@ -13,7 +25,8 @@ const useStyles = makeStyles((theme, props) => ({
     display: 'flex',
   }),
   content: {
-    width: '100%',
+    width: '93%',
+    height: '100%',
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -100,6 +113,13 @@ const ActorCard = ({ actor }) => {
   const actorName = actor.name;
   const classes = useStyles({ color, icon });
   const [favorite, setFavorite] = useState(false);
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const user = useSessionState();
+
+  const [
+    addFavorite,
+    { data: addFavoriteData, loading: addFavoriteLoading, error: addFavoriteError },
+  ] = useMutation(ADD_FAVORITE);
 
   function stringAvatar(name) {
     if (name !== undefined) {
@@ -109,16 +129,36 @@ const ActorCard = ({ actor }) => {
     }
     return '';
   }
+  const changeFavorite = (isFavorite) => {
+    if (user == null) {
+      enqueueSnackbar('Veuillez vous connecter pour ajouter un favoris', {
+        preventDuplicate: true,
+      });
+    } else {
+      setFavorite(isFavorite);
+      addFavorite({
+        variables: {
+          actorId: parseInt(actor.id),
+          userId: parseInt(user.id),
+        },
+      });
+    }
+  };
+
+  const FavoriteIconComponent = useMemo(() => {
+    return favorite ? FavoriteRoundedIcon : FavoriteBorderRoundedIcon;
+  }, [favorite]);
 
   const getActorProfilePicture = () => {
     const profilePictures = actor.pictures?.filter((picture) => picture.logo) || [];
-    const picture = profilePictures.length > 0 ?  getImageUrl(profilePictures[0].originalPicturePath) : undefined;
+    const picture = profilePictures.length > 0 ? getImageUrl(profilePictures[0].originalPicturePath) : undefined;
     return picture;
   };
 
   return (
-    <Link href={`/actor/${actor.id}`} color="inherit" underline="none">
-      <StyledBoxOnHover className={classes.card}>
+
+    <StyledBoxOnHover className={classes.card}>
+      <Link href={`/actor/${actor.id}`} color="inherit" underline="none" width="100%">
         <div className={classes.content}>
           <div className={classes.leftContent}>
             <div className={classes.image}>
@@ -129,7 +169,6 @@ const ActorCard = ({ actor }) => {
                   width: 72,
                   height: 72,
                 }}
-
               />
             </div>
             <div className={classes.text}>
@@ -145,28 +184,28 @@ const ActorCard = ({ actor }) => {
               </div>
               <div className={classes.label}>
                 {!actor.address && actor.city && (
-                  <span>
-                    {/* @ts-ignore */}
-                    <img
-                      src="/icons/location.svg"
-                      alt="Localisation"
-                      className={[classes.icon]}
-                    />
-                    {' '}
-                    {actor.city}
-                  </span>
+                <span>
+                  {/* @ts-ignore */}
+                  <img
+                    src="/icons/location.svg"
+                    alt="Localisation"
+                    className={[classes.icon]}
+                  />
+                  {' '}
+                  {actor.city}
+                </span>
                 )}
                 {actor.address && actor.city && (
-                  <span>
-                    {/* @ts-ignore */}
-                    <img
-                      src="/icons/location.svg"
-                      alt="Localisation"
-                      className={[classes.icon]}
-                    />
-                    {' '}
-                    {`${actor.address} ${actor.city}`}
-                  </span>
+                <span>
+                  {/* @ts-ignore */}
+                  <img
+                    src="/icons/location.svg"
+                    alt="Localisation"
+                    className={[classes.icon]}
+                  />
+                  {' '}
+                  {`${actor.address} ${actor.city}`}
+                </span>
                 )}
               </div>
             </div>
@@ -176,15 +215,12 @@ const ActorCard = ({ actor }) => {
             <span className={classes.categoryIcon} />
           </div>
         </div>
-        {
-          false && (
-            <div className={classes.favorite} onClick={() => setFavorite(!favorite)}>
-              <FavoriteIconComponent className={classes.favoriteIcon} />
-            </div>
-          )
-        }
-      </StyledBoxOnHover>
-    </Link>
+      </Link>
+      <div className={classes.favorite} onClick={() => changeFavorite(!favorite)}>
+        <FavoriteIconComponent className={classes.favoriteIcon} />
+      </div>
+    </StyledBoxOnHover>
+
   );
 };
 

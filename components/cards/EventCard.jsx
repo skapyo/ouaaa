@@ -184,11 +184,9 @@ const EventCard = ({ event }) => {
         </div>
       </div>
       {
-        false && matches && (
           <div className={classes.favorite} onClick={() => setFavorite(!favorite)}>
             <FavoriteIconComponent className={classes.favoriteIcon} />
           </div>
-        )
       }
     </div>
   );

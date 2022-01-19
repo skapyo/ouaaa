@@ -583,8 +583,6 @@ const AgendaPageLayout = () => {
                                   )}
                                   <span>{addressCity(event)}</span>
                                 </Grid>
-
-                                {false && (
                                 <Grid item xs={2}>
                                   <div
                                     className={classes.favorite}
@@ -602,7 +600,6 @@ const AgendaPageLayout = () => {
                                     )}
                                   </div>
                                 </Grid>
-                                )}
                               </Grid>
 
                               <Typography component="p">
