@@ -101,13 +101,8 @@ const MyApp = (props) => {
         { (process.env.NEXT_PUBLIC_SEO_DISABLED && process.env.NEXT_PUBLIC_SEO_DISABLED.localeCompare('true') === 0) && (
           <meta name="robots" content="noindex" />
         )}
-         <meta
-          name="viewport"
-          content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"
-        />
-          <meta name="keywords" content="Keywords" />
-        <meta name="description" content="Plateforme d’information & d'initiative des acteurs de la transition vers une société plus humaine & écologique sur le territoire de l'Aunis  !" />
-        <script
+
+         <script
           type="text/javascript"
           src="/analytics/piwik-pro.js"
         />
