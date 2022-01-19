@@ -31,6 +31,7 @@ const SEARCH = gql`
           address
           city
           shortDescription
+          activity
           lat
           lng
         }
@@ -65,7 +66,12 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 14,
     marginLeft: 14,
     fontStyle: 'italic'
-  }
+  },
+  optionActivity: {
+    fontSize: 14,
+    marginLeft: 14,
+    fontStyle: 'italic'
+  },
 }));
 
 const getTextWithSearchValue = (originalText, inputValue) => {
@@ -186,15 +192,16 @@ const SearchEngine = (props) => {
         )
       }}
       renderOption={(option, state) => {
-        const { label, shortDescription } = option;
+        const { label, activity, shortDescription } = option;
         const { inputValue } = state;
 
         const newLabel = getTextWithSearchValue(label, inputValue);
+        const newActivity = getTextWithSearchValue(activity, inputValue);
         const newShortDescription = getTextWithSearchValue(shortDescription, inputValue);
 
         return (
           <div>
-            <div>{newLabel}</div>
+            <div>{newLabel} {newActivity && <div className={classes.optionActivity}>{newActivity}</div>}</div>
             {shortDescription && <div className={classes.optionShortDescription}>{newShortDescription}</div>}
           </div>
         )
