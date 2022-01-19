@@ -36,7 +36,7 @@ export default class MyDocument extends Document {
           <meta name='twitter:card' content='summary' />
           <meta name='twitter:url' content='https://recette.ouaaa-transition.fr/m' />
           <meta name='twitter:title' content='OUAAA!' />
-          <meta name='twitter:description' content='Plateforme d’information & d'initiative des acteurs de la transition vers une société plus humaine & écologique sur le territoire de l'Aunis  !" />
+          <meta name='twitter:description' content="Plateforme d’information & d'initiative des acteurs de la transition vers une société plus humaine & écologique sur le territoire de l'Aunis  !" />
           <meta name='twitter:image' content='https://recette.ouaaa-transition.fr/apple-touch-icon.png' />
           <meta name='twitter:creator' content='@DavidWShadow' />
           <meta property='og:type' content='website' />
