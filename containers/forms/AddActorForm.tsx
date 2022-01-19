@@ -8,7 +8,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
-
+import BugReportIcon from '@mui/icons-material/BugReport';
 import InfoIcon from '@material-ui/icons/Info';
 import CustomRadioGroup from 'components/form/CustomRadioGroup';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -1321,6 +1321,12 @@ const AddActorForm = () => {
             Créer le nouvel acteur
           </ClassicButton>
         </Grid>
+        <br />
+        <div>
+          Un problème lors de la création, reportez le nous en cliquant ici 
+          <Link href={`/contact`} target="_blank"><BugReportIcon /></Link>
+        </div>
+        <br />
       </Container>
     );
   };
