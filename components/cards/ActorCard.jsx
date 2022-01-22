@@ -143,7 +143,7 @@ const ActorCard = ({ actor }) => {
   }
   const changeFavorite = (isFavorite) => {
     if (user == null) {
-      enqueueSnackbar('Veuillez vous connecter pour ajouter un favoris', {
+      enqueueSnackbar('Veuillez vous connecter pour ajouter un ', {
         preventDuplicate: true,
       });
     } else {
@@ -160,11 +160,11 @@ const ActorCard = ({ actor }) => {
   useEffect(() => {
     if (!addFavoriteActorError && !addFavoriteActorLoading && addFavoriteActorData) {
       if (favorite) {
-        enqueueSnackbar('Favoris ajouté avec succès.', {
+        enqueueSnackbar('Favori ajouté avec succès.', {
           preventDuplicate: true,
         });
       } else {
-        enqueueSnackbar('Favoris retiré avec succès.', {
+        enqueueSnackbar('Favori retiré avec succès.', {
           preventDuplicate: true,
         });
       }

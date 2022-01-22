@@ -158,7 +158,7 @@ const EventCard = ({ event }) => {
 
   const changeFavorite = (isFavorite) => {
     if (user == null) {
-      enqueueSnackbar('Veuillez vous connecter pour ajouter un favoris', {
+      enqueueSnackbar('Veuillez vous connecter pour ajouter un favori', {
         preventDuplicate: true,
       });
     } else {
@@ -175,17 +175,17 @@ const EventCard = ({ event }) => {
   useEffect(() => {
     if (!addFavoriteEventError && !addFavoriteEventLoading && addFavoriteEventData) {
       if (favorite) {
-        enqueueSnackbar('Favoris ajouté avec succès.', {
+        enqueueSnackbar('Favori ajouté avec succès.', {
           preventDuplicate: true,
         });
       } else {
-        enqueueSnackbar('Favoris retiré avec succès.', {
+        enqueueSnackbar('Favori retiré avec succès.', {
           preventDuplicate: true,
         });
       }
     }
     if (addFavoriteEventError) {
-      enqueueSnackbar("Erreur lors de l'ajout du favoris.", {
+      enqueueSnackbar("Erreur lors de l'ajout du favori.", {
         preventDuplicate: true,
       });
     }

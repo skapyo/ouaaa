@@ -14,6 +14,8 @@ import { useRouter } from 'next/router';
 import gql from 'graphql-tag';
 import { useMutation, useQuery } from '@apollo/client';
 import Slider from 'react-slick/lib';
+import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded';
+import FavoriteRoundedIcon from '@material-ui/icons/FavoriteRounded';
 import CardSliderActor from 'components/cards/CardSliderActor';
 import CardSliderEvent from 'components/cards/CardSliderEvent';
 import FacebookIcon from '@material-ui/icons/Facebook';
@@ -137,6 +139,10 @@ const useStyles = makeStyles((theme) => ({
   alignRight: {
     textAlign: 'right',
     padding: '1em',
+  },
+  favoriteIcon: {
+    color: '#2C367E',
+    cursor: 'pointer',
   },
   border: {
     width: '3em',
@@ -308,6 +314,9 @@ const GET_EVENT = `
         registerLink
         practicalInfo
         facebookUrl
+        favorites {
+          id
+        }
         entries {
           label
           icon
@@ -393,19 +402,38 @@ const GET_EVENT = `
     }
   `;
 
+const ADD_FAVORITE = gql`
+  mutation addFavoriteEvent($eventId: Int!,$userId: Int!, $favorite: Boolean!) {
+    addFavoriteEvent(eventId: $eventId,userId: $userId, favorite: $favorite) 
+  }
+`;
+
 const Event = ({ initialData }) => {
   const router = useRouter();
   const mapRef = useRef();
-
   const { id } = router.query;
-
   const [currentLocationWindows, setCurrentLocationWindows] = useState(null);
+  const user = useSessionState();
+  const data = initialData.data;
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const [favorite, setFavorite] = useState(containUser(data?.event.favorites));
+  const [cookies, setCookie, removeCookie] = useCookies();
+  const [hasClickParticipate, setHasClickParticipate] = useState(false);
+  const [openModalSlider, setOpenModalSlider] = useState(false);
 
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setCurrentLocationWindows(window?.location);
+  
+  function containUser(list) {
+    let isContained = false;
+    if (user !== null && list !== undefined) {
+      list.forEach((element) => {
+        if (element.id == user.id) {
+          isContained = true;
+        }
+      });
     }
-  }, []);
+    return isContained;
+  }
+  
 
   const ADD_EVENT_PARTICIPATE = gql`
     mutation addEventParticipate($eventId: Int!, $userId: Int!) {
@@ -418,6 +446,53 @@ const Event = ({ initialData }) => {
     }
   `;
 
+  const [
+    addFavoriteEvent,
+    { data: addFavoriteEventData, loading: addFavoriteEventLoading, error: addFavoriteEventError },
+  ] = useMutation(ADD_FAVORITE);
+
+  const changeFavorite = (isFavorite) => {
+    if (user == null) {
+      enqueueSnackbar('Veuillez vous connecter pour ajouter un favori', {
+        preventDuplicate: true,
+      });
+    } else {
+      setFavorite(isFavorite);
+      addFavoriteEvent({
+        variables: {
+          eventId: parseInt(data?.event.id),
+          userId: parseInt(user.id),
+          favorite: isFavorite,
+        },
+      });
+    }
+  };
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setCurrentLocationWindows(window?.location);
+    }
+  }, []);
+
+
+  useEffect(() => {
+    if (!addFavoriteEventError && !addFavoriteEventLoading && addFavoriteEventData) {
+      if (favorite) {
+        enqueueSnackbar('Favori ajouté avec succès.', {
+          preventDuplicate: true,
+        });
+      } else {
+        enqueueSnackbar('Favori retiré avec succès.', {
+          preventDuplicate: true,
+        });
+      }
+    }
+  }, [addFavoriteEventError, addFavoriteEventLoading, addFavoriteEventData]);
+
+  const FavoriteIconComponent = useMemo(() => {
+    return favorite ? FavoriteRoundedIcon : FavoriteBorderRoundedIcon;
+  }, [favorite]);
+  
+
   if (typeof window !== 'undefined') {
     var L = require('leaflet');
     var Map = require('react-leaflet').Map;
@@ -425,7 +500,6 @@ const Event = ({ initialData }) => {
     var Marker = require('react-leaflet').Marker;
     var Popup = require('react-leaflet').Popup;
   }
-  const data = initialData.data;
 
   const bannerUrl = useMemo(() => {
     return (data?.event?.pictures || []).filter((picture) => picture.main).length >= 1 ?
@@ -473,23 +547,8 @@ const Event = ({ initialData }) => {
     }
   }, [removeparticipateData]);
 
-  const user = useSessionState();
-  const [cookies, setCookie, removeCookie] = useCookies();
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-  const [hasClickParticipate, setHasClickParticipate] = useState(false);
-  const [openModalSlider, setOpenModalSlider] = useState(false);
+  
 
-  function containUser(list) {
-    let isContained = false;
-    if (user !== null) {
-      list.forEach((element) => {
-        if (element.id == user.id) {
-          isContained = true;
-        }
-      });
-    }
-    return isContained;
-  }
   function containUserActorsReferent(actors) {
     let isContained = false;
     if (user !== null) {
@@ -825,6 +884,7 @@ const Event = ({ initialData }) => {
                       </span>
                     </Grid>
                   </Grid>
+ 
                   {data && data.event.facebookUrl && (
                     <Grid container className={[styles.item]}>
                       <Grid item xs={3} className={[styles.alignRight]}>
@@ -911,7 +971,20 @@ const Event = ({ initialData }) => {
                         </Grid>
                       </Grid>
                     )}
-
+                 <Grid container className={[styles.item]}>
+                    <Grid item xs={3} className={[styles.alignRight]}>
+                    <div onClick={() => changeFavorite(!favorite)}>
+                      <FavoriteIconComponent className={styles.favoriteIcon} />
+                    </div>
+                    </Grid>
+                    <Grid item xs={8} className={[styles.alignLeft]}>
+                      <div className={[styles.infoLabel]}>
+                        {!favorite ? ' Ajouter aux favoris' : ' Retirer des favoris'}
+                       
+                      </div>
+                      <span className={[styles.infoValue]}></span>
+                    </Grid>
+                  </Grid>
                   <Grid container className={[styles.item]}>
                     <Grid item xs={3} className={[styles.alignRight]}>
                       <Image
