@@ -24,6 +24,8 @@ import TwitterIcon from '@material-ui/icons/Twitter';
 import WhatsAppIcon from '@material-ui/icons/WhatsApp';
 import TelegramIcon from '@material-ui/icons/Telegram';
 import IconButton from '@material-ui/core/IconButton';
+import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded';
+import FavoriteRoundedIcon from '@material-ui/icons/FavoriteRounded';
 import CloseIcon from '@material-ui/icons/Close';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
@@ -206,6 +208,10 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'right',
     padding: '1em',
   },
+  favoriteIcon: {
+    color: '#2C367E',
+    cursor: 'pointer',
+  },
   item: {
     borderWidth: '1px 0px 0px 0px',
     borderStyle: 'dashed',
@@ -308,6 +314,12 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+const ADD_FAVORITE = gql`
+  mutation addFavoriteActor($actorId: Int!,$userId: Int!, $favorite: Boolean!) {
+    addFavoriteActor(actorId: $actorId,userId: $userId, favorite: $favorite) 
+  }
+`;
+
 const GET_ACTOR_SSR = `
 query actor($id: String) {
   actor(id: $id) {
@@ -326,6 +338,9 @@ query actor($id: String) {
     socialNetwork
     volunteerDescription
     activity
+    favorites {
+      id
+    }
     entries {
       label
       icon
@@ -407,7 +422,9 @@ query actor($id: String) {
       hours
       place
     }
+    
   }
+
 }
 `;
 
@@ -466,6 +483,60 @@ const Actor = ({ initialData }) => {
       removeActorVolunteer(actorId: $actorId, userId: $userId)
     }
   `;
+  
+  const user = useSessionState();
+  function containUser(list) {
+    let isContained = false;
+    if (user !== null && list !== undefined) {
+      list.forEach((element) => {
+        if (element.id == user.id) {
+          isContained = true;
+        }
+      });
+    }
+    return isContained;
+  }
+
+  const [favorite, setFavorite] = useState(containUser(data?.actor.favorites));
+  const [
+    addFavoriteActor,
+    { data: addFavoriteActorData, loading: addFavoriteActorLoading, error: addFavoriteActorError },
+  ] = useMutation(ADD_FAVORITE);
+
+  const changeFavorite = (isFavorite) => {
+    if (user == null) {
+      enqueueSnackbar('Veuillez vous connecter pour ajouter un favoris', {
+        preventDuplicate: true,
+      });
+    } else {
+      setFavorite(isFavorite);
+      addFavoriteActor({
+        variables: {
+          actorId: parseInt(data?.actor.id),
+          userId: parseInt(user.id),
+          favorite: isFavorite,
+        },
+      });
+    }
+  };
+  useEffect(() => {
+    if (!addFavoriteActorError && !addFavoriteActorLoading && addFavoriteActorData) {
+      if (favorite) {
+        enqueueSnackbar('Favoris ajouté avec succès.', {
+          preventDuplicate: true,
+        });
+      } else {
+        enqueueSnackbar('Favoris retiré avec succès.', {
+          preventDuplicate: true,
+        });
+      }
+    }
+  }, [addFavoriteActorError, addFavoriteActorLoading, addFavoriteActorData]);
+
+  const FavoriteIconComponent = useMemo(() => {
+    return favorite ? FavoriteRoundedIcon : FavoriteBorderRoundedIcon;
+  }, [favorite]);
+
 
   const [stylesProps, setStylesProps] = useState({
     topImageSize: '250px',
@@ -487,18 +558,6 @@ const Actor = ({ initialData }) => {
     },
   ] = useMutation(REMOVE_ACTOR_VOLUNTEER);
 
-  const user = useSessionState();
-  function containUser(list) {
-    let isContained = false;
-    if (user !== null) {
-      list.forEach((element) => {
-        if (element.id == user.id) {
-          isContained = true;
-        }
-      });
-    }
-    return isContained;
-  }
   useEffect(() => {
     if (volunteerData !== undefined) {
       enqueueSnackbar('Demande de bénévole prise en compte', {
@@ -969,6 +1028,20 @@ const Actor = ({ initialData }) => {
                         </Grid>
                       </Grid>
                     )}
+                     <Grid container className={[styles.item]}>
+                    <Grid item xs={3} className={[styles.alignRight]}>
+                    <div onClick={() => changeFavorite(!favorite)}>
+                      <FavoriteIconComponent className={styles.favoriteIcon} />
+                    </div>
+                    </Grid>
+                    <Grid item xs={8} className={[styles.alignLeft]}>
+                      <div className={[styles.infoLabel]}>
+                        {!favorite ? ' Ajouter aux favoris' : ' Retirer des favoris'}
+                       
+                      </div>
+                      <span className={[styles.infoValue]}></span>
+                    </Grid>
+                  </Grid>
                   <Grid container className={[styles.item]}>
                     <Grid item xs={3} className={[styles.alignRight]}>
                       <Image

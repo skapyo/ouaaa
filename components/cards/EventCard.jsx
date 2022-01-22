@@ -132,7 +132,7 @@ const EventCard = ({ event }) => {
   const user = useSessionState();
   function containUser(list) {
     let isContained = false;
-    if (user !== null) {
+    if (user !== null && list!=null ) {
       list.forEach((element) => {
         if (element.id == user.id) {
           isContained = true;
