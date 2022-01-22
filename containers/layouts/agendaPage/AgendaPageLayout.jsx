@@ -181,6 +181,9 @@ const AgendaPageLayout = () => {
         address
         city
         shortDescription
+        favorite{
+          id
+        }
         entries {
           label
           icon

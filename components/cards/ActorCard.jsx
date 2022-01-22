@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded';
 import FavoriteRoundedIcon from '@material-ui/icons/FavoriteRounded';
 import { makeStyles } from '@material-ui/core/styles';
@@ -11,8 +11,8 @@ import { getImageUrl } from '../../utils/utils';
 import { useSessionState } from '../../context/session/session';
 
 const ADD_FAVORITE = gql`
-  mutation addFavorite($actorId: Integer!, $favorite: Boolean!) {
-    addFavorite(actorId: $actorId, favorite: $favorite) 
+  mutation addFavoriteActor($actorId: Int!,$userId: Int!, $favorite: Boolean!) {
+    addFavoriteActor(actorId: $actorId,userId: $userId, favorite: $favorite) 
   }
 `;
 
@@ -112,13 +112,25 @@ const ActorCard = ({ actor }) => {
   const icon = actor.entries[0] ? actor.entries[0].icon : 'fruit';
   const actorName = actor.name;
   const classes = useStyles({ color, icon });
-  const [favorite, setFavorite] = useState(false);
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const user = useSessionState();
+  function containUser(list) {
+    let isContained = false;
+    if (user !== null) {
+      list.forEach((element) => {
+        if (element.id == user.id) {
+          isContained = true;
+        }
+      });
+    }
+    return isContained;
+  }
+
+  const [favorite, setFavorite] = useState(containUser(actor.favorites));
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const [
-    addFavorite,
-    { data: addFavoriteData, loading: addFavoriteLoading, error: addFavoriteError },
+    addFavoriteActor,
+    { data: addFavoriteActorData, loading: addFavoriteActorLoading, error: addFavoriteActorError },
   ] = useMutation(ADD_FAVORITE);
 
   function stringAvatar(name) {
@@ -136,14 +148,28 @@ const ActorCard = ({ actor }) => {
       });
     } else {
       setFavorite(isFavorite);
-      addFavorite({
+      addFavoriteActor({
         variables: {
           actorId: parseInt(actor.id),
           userId: parseInt(user.id),
+          favorite: isFavorite,
         },
       });
     }
   };
+  useEffect(() => {
+    if (!addFavoriteActorError && !addFavoriteActorLoading && addFavoriteActorData) {
+      if (favorite) {
+        enqueueSnackbar('Favoris ajouté avec succès.', {
+          preventDuplicate: true,
+        });
+      } else {
+        enqueueSnackbar('Favoris retiré avec succès.', {
+          preventDuplicate: true,
+        });
+      }
+    }
+  }, [addFavoriteActorError, addFavoriteActorLoading, addFavoriteActorData]);
 
   const FavoriteIconComponent = useMemo(() => {
     return favorite ? FavoriteRoundedIcon : FavoriteBorderRoundedIcon;

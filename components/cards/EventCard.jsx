@@ -1,11 +1,21 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded';
 import FavoriteRoundedIcon from '@material-ui/icons/FavoriteRounded';
+import { useSnackbar } from 'notistack';
+import gql from 'graphql-tag';
+import { useMutation, useQuery } from '@apollo/client';
 import Moment from 'react-moment';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Link from '../Link';
 import { getImageUrl } from '../../utils/utils';
+import { useSessionState } from '../../context/session/session';
+
+const ADD_FAVORITE = gql`
+  mutation addFavoriteEvent($eventId: Int!,$userId: Int!, $favorite: Boolean!) {
+    addFavoriteEvent(eventId: $eventId,userId: $userId, favorite: $favorite) 
+  }
+`;
 
 const useStyles = makeStyles((theme) => ({
   card: (props) => ({
@@ -119,13 +129,67 @@ const EventCard = ({ event }) => {
     : 'Potager de la Jarne';
 
   const classes = useStyles({ color, icon });
-  const [favorite, setFavorite] = useState(false);
+  const user = useSessionState();
+  function containUser(list) {
+    let isContained = false;
+    if (user !== null) {
+      list.forEach((element) => {
+        if (element.id == user.id) {
+          isContained = true;
+        }
+      });
+    }
+    return isContained;
+  }
 
+
+  const [favorite, setFavorite] = useState(containUser(event.favorites));
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up('sm'));
 
   const startDateFormat = matches ? '[De ]HH[h]mm' : 'HH[h]mm';
   const endDateFormat = matches ? '[ à ]HH[h]mm' : '[-]HH[h]mm';
+
+  const [
+    addFavoriteEvent,
+    { data: addFavoriteEventData, loading: addFavoriteEventLoading, error: addFavoriteEventError },
+  ] = useMutation(ADD_FAVORITE);
+
+  const changeFavorite = (isFavorite) => {
+    if (user == null) {
+      enqueueSnackbar('Veuillez vous connecter pour ajouter un favoris', {
+        preventDuplicate: true,
+      });
+    } else {
+      setFavorite(isFavorite);
+      addFavoriteEvent({
+        variables: {
+          eventId: parseInt(event.id),
+          userId: parseInt(user.id),
+          favorite: isFavorite,
+        },
+      });
+    }
+  };
+  useEffect(() => {
+    if (!addFavoriteEventError && !addFavoriteEventLoading && addFavoriteEventData) {
+      if (favorite) {
+        enqueueSnackbar('Favoris ajouté avec succès.', {
+          preventDuplicate: true,
+        });
+      } else {
+        enqueueSnackbar('Favoris retiré avec succès.', {
+          preventDuplicate: true,
+        });
+      }
+    }
+    if (addFavoriteEventError) {
+      enqueueSnackbar("Erreur lors de l'ajout du favoris.", {
+        preventDuplicate: true,
+      });
+    }
+  }, [addFavoriteEventError, addFavoriteEventLoading, addFavoriteEventData]);
 
   const logoPath = useMemo(() => {
     const logoPaths = (event?.pictures || []).filter((picture) => picture.logo);
@@ -161,19 +225,28 @@ const EventCard = ({ event }) => {
                   </Moment>
                   <Moment format={endDateFormat} unix>
                     {event.endedAt / 1000}
-                  </Moment><span> - </span>
+                  </Moment>
+                  <span> - </span>
                 </>
                 )}
                 <span>{addressCity}</span>
-                <br/>
+                <br />
                 <span>{event.shortDescription}</span>
               </div>
-                {event.duration && (
-                  <>{event.duration} .</>
-                )}
-              
+              {event.duration && (
+              <>
+                {event.duration}
+                {' '}
+                .
+              </>
+              )}
+
               {event.parentEvent && (
-              <span>Fait partie de <Link href={`/event/${event.parentEvent.id}`}>{event.parentEvent.label}</Link></span>
+              <span>
+                Fait partie de
+                {' '}
+                <Link href={`/event/${event.parentEvent.id}`}>{event.parentEvent.label}</Link>
+              </span>
               )}
             </div>
           </div>
@@ -183,11 +256,9 @@ const EventCard = ({ event }) => {
           <span className={classes.categoryIcon} />
         </div>
       </div>
-      {
-          <div className={classes.favorite} onClick={() => setFavorite(!favorite)}>
-            <FavoriteIconComponent className={classes.favoriteIcon} />
-          </div>
-      }
+      <div className={classes.favorite} onClick={() => changeFavorite(!favorite)}>
+        <FavoriteIconComponent className={classes.favoriteIcon} />
+      </div>
     </div>
   );
 };

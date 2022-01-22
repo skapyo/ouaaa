@@ -362,6 +362,9 @@ const carto = () => {
               color
             }
           }
+          favorites{
+            id
+          }
           pictures {
             id
             label
