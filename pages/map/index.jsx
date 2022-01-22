@@ -18,6 +18,8 @@ import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
 import ButtonGroupSelected from '../../components/buttons/ButtonGroupSelected';
 import Filters from '../../components/filters';
 import { getImageUrl } from '../../utils/utils';
+import { ActorPopup } from '../../components/popup/ActorPopup';
+
 import AppLayout from '../../containers/layouts/AppLayout';
 import { withApollo } from '../../hoc/withApollo';
 
@@ -273,7 +275,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   favoriteIcon: {
-    color: '#AD2740',
+    color: '#2C367E;',
   },
   shortDescription: {
     wordBreak: 'break-all',
@@ -605,92 +607,7 @@ const carto = () => {
                               </div>
                             </Tooltip>
                             <Popup>
-                              <div
-                                className={styles.image}
-                                style={{
-                                  backgroundImage:
-                                    actor.pictures.length >= 1
-                                      ? `url(${getImageUrl(
-                                        actor.pictures[0].originalPicturePath,
-                                      )})`
-                                      : '',
-                                }}
-                              >
-                                <div className={styles.categorie}>
-                                  <Typography
-                                    className={styles.categorie}
-                                    style={{ color: actor?.entries && actor?.entries[0]?.parentEntry?.color }}
-                                    gutterBottom
-                                  >
-                                    {actor.entries
-                                      && actor.entries.length > 0
-                                      && actor.entries[0].label}
-                                  </Typography>
-                                </div>
-                              </div>
-                              <div className={styles.content}>
-                                <Grid container>
-                                  <Grid item>
-                                    <div className={styles.titleDiv}>
-                                      <Typography
-                                        variant="h6"
-                                        component="h2"
-                                        className={styles.title}
-                                      >
-                                        {actor && actor.name}
-                                      </Typography>
-                                    </div>
-                                    <p>
-                                      {!actor.address && actor.city && (
-                                        <span>
-                                          {/* @ts-ignore */}
-                                          <img src="/icons/location.svg" alt="Localisation" className={[styles.icon]} />
-                                          {' '}
-                                          {actor.city}
-                                        </span>
-                                      )}
-                                      {actor.address && actor.city && (
-                                        <span>
-                                          {/* @ts-ignore */}
-                                          <img src="/icons/location.svg" alt="Localisation" className={[styles.icon]} />
-                                          {' '}
-                                          {`${actor.address} ${actor.city
-                                          }`}
-                                        </span>
-                                      )}
-                                    </p>
-                                  </Grid>
-
-                                  {false && (
-                                  <Grid item xs={2}>
-                                    <div
-                                      className={styles.favorite}
-                                      onClick={() => setFavorite(!favorite)}
-                                    >
-                                      {!favorite && (
-                                      <FavoriteBorderRoundedIcon
-                                        className={styles.favoriteIcon}
-                                      />
-                                      )}
-                                      {favorite && (
-                                      <FavoriteRoundedIcon
-                                        className={styles.favoriteIcon}
-                                      />
-                                      )}
-                                    </div>
-                                  </Grid>
-                                  )}
-                                </Grid>
-
-                                <Typography component="p">
-                                  {actor && actor.shortDescription}
-                                </Typography>
-                              </div>
-                              <a href={`/actor/${actor.id}`} target="_blank" rel="noreferrer">
-                                <button className={styles.buttonGrid}>
-                                  EN SAVOIR PLUS
-                                </button>
-                              </a>
+                              <ActorPopup actor={actor} />
                             </Popup>
                           </Marker>
                         );
