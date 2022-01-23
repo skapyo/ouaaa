@@ -177,6 +177,9 @@ const useStyles = makeStyles((theme) => ({
     color: '#bd0b3d',
     width: '20px',
   },
+  tooltip: {
+    width: '320px',
+  },
   datePicker: {
     border: '0.5px solid',
     borderRadius: '10px',
@@ -244,28 +247,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
   },
-  buttonGrid: {
-    margin: '2.5em 0 2.5em 0 ',
-    color: 'white',
-    'background-color': '#2C367E',
-    border: 'none',
 
-    borderRadius: '1.5em',
-    padding: '0 3em 0 3em',
-    height: '2.5em',
-    '&:hover': {
-      cursor: 'pointer',
-      color: '#2C367E',
-      'background-color': 'white',
-      border: '2px solid #2C367E',
-      backgroundImage: "url('./arrow-hover.svg')",
-    },
-    backgroundImage: "url('/arrow.svg')",
-    backgroundRepeat: 'no-repeat',
-    'background-position-x': '5px',
-    'background-position-y': '1px',
-    'background-size': '14%',
-  },
   favorite: {
     display: 'flex',
     justifyContent: 'center',
@@ -546,64 +528,8 @@ const carto = () => {
                             icon={suitcasePoint}
                           >
                             <Tooltip>
-                              <div
-                                className={styles.image}
-                                style={{
-                                  backgroundImage:
-                                    actor.pictures.length >= 1
-                                      ? `url(${getImageUrl(
-                                        actor.pictures.sort((a, b) => (a.logo ? -1 : 1))[0].originalPicturePath,
-                                      )})`
-                                      : '',
-                                }}
-                              >
-                                <div className={styles.categorie}>
-                                  <Typography
-                                    className={styles.categorie}
-                                    style={{ color: actor?.entries && actor?.entries[0]?.parentEntry?.color }}
-                                    gutterBottom
-                                  >
-                                    {actor.entries
-                                      && actor.entries.length > 0
-                                      && actor.entries[0].label}
-
-                                  </Typography>
-                                </div>
-                              </div>
-
-                              <div className={styles.content}>
-                                <div className={styles.titleDiv}>
-                                  <Typography
-                                    variant="h6"
-                                    component="h2"
-                                    className={styles.title}
-                                  >
-                                    {actor && actor.name}
-                                  </Typography>
-                                </div>
-                                <p>
-                                  {!actor.address && actor.city && (
-                                    <span>
-                                      {/* @ts-ignore */}
-                                      <img src="/icons/location.svg" alt="Localisation" className={[styles.icon]} />
-                                      {' '}
-                                      {actor.city}
-                                    </span>
-                                  )}
-                                  {actor.address && actor.city && (
-                                    <span>
-                                      {/* @ts-ignore */}
-                                      <img src="/icons/location.svg" alt="Localisation" className={[styles.icon]} />
-                                      {' '}
-                                      {`${actor.address} ${actor.city
-                                      }`}
-                                    </span>
-                                  )}
-                                </p>
-                                <p className={styles.shortDescription}>
-                                  {actor && Parser(splitWord(actor.shortDescription, 300))}
-                                </p>
-
+                              <div  className={styles.tooltip}>
+                                <ActorPopup actor={actor} />
                               </div>
                             </Tooltip>
                             <Popup>

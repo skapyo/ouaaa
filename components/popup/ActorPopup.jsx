@@ -1,82 +1,79 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded';
-import FavoriteRoundedIcon from '@material-ui/icons/FavoriteRounded';
 import { makeStyles } from '@material-ui/core/styles';
 import gql from 'graphql-tag';
 import {
   Grid, Typography,
 } from '@material-ui/core';
-import { useSnackbar } from 'notistack';
-import { useMutation, useQuery } from '@apollo/client';
-import { useSessionState } from '../../context/session/session';
+import Favorite from '../Favorite';
 import { getImageUrl } from '../../utils/utils';
 
 const ActorPopup = ({ actor }) => {
-  const ADD_FAVORITE = gql`
-  mutation addFavoriteActor($actorId: Int!,$userId: Int!, $favorite: Boolean!) {
-    addFavoriteActor(actorId: $actorId,userId: $userId, favorite: $favorite) 
-  }
-`;
   const useStyles = makeStyles((theme) => ({
     favoriteIcon: {
       color: '#2C367E;',
     },
+    image: {
+      backgroundPosition: 'center center',
+      backgroundRepeat: 'no-repeat',
+      backgroundSize: 'contain',
+      textAlign: 'inherit',
+      height: '10em',
+    },
+    categorie: {
+      backgroundColor: 'white',
+      borderRadius: '0.3em',
+      width: 'max-content',
+      padding: '0 5px 0 5px',
+      display: 'block',
+      marginLeft: 'auto',
+      textAlign: 'center',
+      marginRight: '68px',
+   
+    },
+
+
+    
+    content: {
+      padding: '10px',
+      width: '100%',
+    },
+    titleDiv: {
+      display: 'flex',
+      alignItems: 'center',
+    },
+    title: {
+      textAlign: 'left',
+      color: '#2C367E',
+      width: '100%',
+    },
+    icon: {
+      color: '#bd0b3d',
+      width: '20px',
+    },
+    buttonGrid: {
+      margin: '2.5em 0 2.5em 0 ',
+      color: 'white',
+      'background-color': '#2C367E',
+      border: 'none',
+  
+      borderRadius: '1.5em',
+      padding: '0 3em 0 3em',
+      height: '2.5em',
+      '&:hover': {
+        cursor: 'pointer',
+        color: '#2C367E',
+        'background-color': 'white',
+        border: '2px solid #2C367E',
+        backgroundImage: "url('./arrow-hover.svg')",
+      },
+      backgroundImage: "url('/arrow.svg')",
+      backgroundRepeat: 'no-repeat',
+      'background-position-x': '5px',
+      'background-position-y': '1px',
+      'background-size': '14%',
+    },
   }));
   const styles = useStyles();
-
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-  const user = useSessionState();
-  function containUser(list) {
-    let isContained = false;
-    if (user !== null) {
-      list.forEach((element) => {
-        if (element.id == user.id) {
-          isContained = true;
-        }
-      });
-    }
-    return isContained;
-  }
-  const [favorite, setFavorite] = useState(containUser(actor.favorites));
-
-  const [
-    addFavoriteActor,
-    { data: addFavoriteActorData, loading: addFavoriteActorLoading, error: addFavoriteActorError },
-  ] = useMutation(ADD_FAVORITE);
-
-  const changeFavorite = (isFavorite) => {
-    if (user == null) {
-      enqueueSnackbar('Veuillez vous connecter pour ajouter un ', {
-        preventDuplicate: true,
-      });
-    } else {
-      setFavorite(isFavorite);
-      addFavoriteActor({
-        variables: {
-          actorId: parseInt(actor.id),
-          userId: parseInt(user.id),
-          favorite: isFavorite,
-        },
-      });
-    }
-  };
-  useEffect(() => {
-    if (!addFavoriteActorError && !addFavoriteActorLoading && addFavoriteActorData) {
-      if (favorite) {
-        enqueueSnackbar('Favori ajouté avec succès.', {
-          preventDuplicate: true,
-        });
-      } else {
-        enqueueSnackbar('Favori retiré avec succès.', {
-          preventDuplicate: true,
-        });
-      }
-    }
-  }, [addFavoriteActorError, addFavoriteActorLoading, addFavoriteActorData]);
-
-  const FavoriteIconComponent = useMemo(() => {
-    return favorite ? FavoriteRoundedIcon : FavoriteBorderRoundedIcon;
-  }, [favorite]);
 
   return (
     <div>
@@ -91,22 +88,23 @@ const ActorPopup = ({ actor }) => {
               : '',
         }}
       >
+        <Grid container>
         <Grid item xs={2}>
-          <div className={styles.favorite} onClick={() => changeFavorite(!favorite)}>
-            <FavoriteIconComponent className={title.favoriteIcon} />
+          <Favorite actor={actor} />
+        </Grid>
+        <Grid item xs={9}>
+          <div className={styles.categorie}>
+            <Typography
+              style={{ color: actor?.entries && actor?.entries[0]?.parentEntry?.color }}
+              gutterBottom
+            >
+              {actor.entries
+                && actor.entries.length > 0
+                && actor.entries[0].label}
+            </Typography>
           </div>
         </Grid>
-        <div className={styles.categorie}>
-          <Typography
-            className={styles.categorie}
-            style={{ color: actor?.entries && actor?.entries[0]?.parentEntry?.color }}
-            gutterBottom
-          >
-            {actor.entries
-              && actor.entries.length > 0
-              && actor.entries[0].label}
-          </Typography>
-        </div>
+        </Grid>
       </div>
       <div className={styles.content}>
         <Grid container>

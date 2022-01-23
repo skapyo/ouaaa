@@ -16,9 +16,10 @@ const ADD_FAVORITE = gql`
 const useStyles = makeStyles((theme, props) => ({
   favoriteIcon: (props) => ({
     color: props.color,
+    cursor: 'pointer',
   }),
 }));
-const Favorite = ({ actor, event,handleFavoriteChange }) => {
+const Favorite = ({ actor, event, handleFavoriteChange }) => {
   let color;
   if (actor) {
     color = actor.entries && actor.entries.length > 0 && actor.entries[0].parentEntry
@@ -26,12 +27,12 @@ const Favorite = ({ actor, event,handleFavoriteChange }) => {
       : '#2C367E';
   } else {
     color = event.entries.length > 0 && event.entries[0].parentEntry
-    ? event.entries[0].parentEntry.color
-    : '#2C367E';
+      ? event.entries[0].parentEntry.color
+      : '#2C367E';
   }
-  color=color?color:"#2C367E";
+  color = color || '#2C367E';
   const classes = useStyles({ color });
- 
+
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const user = useSessionState();
   function containUser(list) {
@@ -58,7 +59,10 @@ const Favorite = ({ actor, event,handleFavoriteChange }) => {
       });
     } else {
       setFavorite(isFavorite);
-      handleFavoriteChange(isFavorite);  
+      if (typeof handleFavoriteChange === 'function') {
+        handleFavoriteChange(isFavorite);
+      }
+
       addFavorite({
         variables: {
           actorId: actor ? parseInt(actor.id) : null,
