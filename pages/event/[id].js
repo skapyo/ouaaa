@@ -54,6 +54,7 @@ import {
 import { useSessionState } from '../../context/session/session';
 import Newsletter from '../../containers/layouts/Newsletter';
 import Calendar from '../../components/Calendar';
+import Favorite from '../../components/Favorite';
 
 const useStyles = makeStyles((theme) => ({
   titleContainer: {
@@ -451,52 +452,15 @@ const Event = ({ initialData }) => {
     }
   `;
 
-  const [
-    addFavoriteEvent,
-    { data: addFavoriteEventData, loading: addFavoriteEventLoading, error: addFavoriteEventError },
-  ] = useMutation(ADD_FAVORITE);
-
-  const changeFavorite = (isFavorite) => {
-    if (user == null) {
-      enqueueSnackbar('Veuillez vous connecter pour ajouter un favori', {
-        preventDuplicate: true,
-      });
-    } else {
-      setFavorite(isFavorite);
-      addFavoriteEvent({
-        variables: {
-          eventId: parseInt(data?.event.id),
-          userId: parseInt(user.id),
-          favorite: isFavorite,
-        },
-      });
-    }
+  const handleFavoriteChange = (isFavorite) => {
+    setFavorite(isFavorite);
   };
+
   useEffect(() => {
     if (typeof window !== 'undefined') {
       setCurrentLocationWindows(window?.location);
     }
   }, []);
-
-
-  useEffect(() => {
-    if (!addFavoriteEventError && !addFavoriteEventLoading && addFavoriteEventData) {
-      if (favorite) {
-        enqueueSnackbar('Favori ajouté avec succès.', {
-          preventDuplicate: true,
-        });
-      } else {
-        enqueueSnackbar('Favori retiré avec succès.', {
-          preventDuplicate: true,
-        });
-      }
-    }
-  }, [addFavoriteEventError, addFavoriteEventLoading, addFavoriteEventData]);
-
-  const FavoriteIconComponent = useMemo(() => {
-    return favorite ? FavoriteRoundedIcon : FavoriteBorderRoundedIcon;
-  }, [favorite]);
-  
 
   if (typeof window !== 'undefined') {
     var L = require('leaflet');
@@ -978,9 +942,7 @@ const Event = ({ initialData }) => {
                     )}
                  <Grid container className={[styles.item]}>
                     <Grid item xs={3} className={[styles.alignRight]}>
-                    <div onClick={() => changeFavorite(!favorite)}>
-                      <FavoriteIconComponent className={styles.favoriteIcon} />
-                    </div>
+                      <Favorite event={data?.event} handleFavoriteChange={handleFavoriteChange} />
                     </Grid>
                     <Grid item xs={8} className={[styles.alignLeft]}>
                       <div className={[styles.infoLabel]}>

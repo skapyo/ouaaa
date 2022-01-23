@@ -1,15 +1,10 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded';
-import FavoriteRoundedIcon from '@material-ui/icons/FavoriteRounded';
-import { useSnackbar } from 'notistack';
 import gql from 'graphql-tag';
-import { useMutation, useQuery } from '@apollo/client';
-import Moment from 'react-moment';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Link from '../Link';
 import { getImageUrl } from '../../utils/utils';
-import { useSessionState } from '../../context/session/session';
+import Favorite from '../../components/Favorite';
 
 const ADD_FAVORITE = gql`
   mutation addFavoriteEvent($eventId: Int!,$userId: Int!, $favorite: Boolean!) {
@@ -129,67 +124,13 @@ const EventCard = ({ event }) => {
     : 'Potager de la Jarne';
 
   const classes = useStyles({ color, icon });
-  const user = useSessionState();
-  function containUser(list) {
-    let isContained = false;
-    if (user !== null && list!=null ) {
-      list.forEach((element) => {
-        if (element.id == user.id) {
-          isContained = true;
-        }
-      });
-    }
-    return isContained;
-  }
 
 
-  const [favorite, setFavorite] = useState(containUser(event.favorites));
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up('sm'));
 
   const startDateFormat = matches ? '[De ]HH[h]mm' : 'HH[h]mm';
   const endDateFormat = matches ? '[ à ]HH[h]mm' : '[-]HH[h]mm';
-
-  const [
-    addFavoriteEvent,
-    { data: addFavoriteEventData, loading: addFavoriteEventLoading, error: addFavoriteEventError },
-  ] = useMutation(ADD_FAVORITE);
-
-  const changeFavorite = (isFavorite) => {
-    if (user == null) {
-      enqueueSnackbar('Veuillez vous connecter pour ajouter un favori', {
-        preventDuplicate: true,
-      });
-    } else {
-      setFavorite(isFavorite);
-      addFavoriteEvent({
-        variables: {
-          eventId: parseInt(event.id),
-          userId: parseInt(user.id),
-          favorite: isFavorite,
-        },
-      });
-    }
-  };
-  useEffect(() => {
-    if (!addFavoriteEventError && !addFavoriteEventLoading && addFavoriteEventData) {
-      if (favorite) {
-        enqueueSnackbar('Favori ajouté avec succès.', {
-          preventDuplicate: true,
-        });
-      } else {
-        enqueueSnackbar('Favori retiré avec succès.', {
-          preventDuplicate: true,
-        });
-      }
-    }
-    if (addFavoriteEventError) {
-      enqueueSnackbar("Erreur lors de l'ajout du favori.", {
-        preventDuplicate: true,
-      });
-    }
-  }, [addFavoriteEventError, addFavoriteEventLoading, addFavoriteEventData]);
 
   const logoPath = useMemo(() => {
     const logoPaths = (event?.pictures || []).filter((picture) => picture.logo);
@@ -198,10 +139,6 @@ const EventCard = ({ event }) => {
     }
     return null;
   }, [event, getImageUrl]);
-
-  const FavoriteIconComponent = useMemo(() => {
-    return favorite ? FavoriteRoundedIcon : FavoriteBorderRoundedIcon;
-  }, [favorite]);
 
   const addressCity = useMemo(() => {
     if (!event.city) return 'Adresse manquante';
@@ -256,8 +193,8 @@ const EventCard = ({ event }) => {
           <span className={classes.categoryIcon} />
         </div>
       </div>
-      <div className={classes.favorite} onClick={() => changeFavorite(!favorite)}>
-        <FavoriteIconComponent className={classes.favoriteIcon} />
+      <div className={classes.favorite}>
+        <Favorite event={event} />
       </div>
     </div>
   );
