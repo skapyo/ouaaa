@@ -24,15 +24,12 @@ import TwitterIcon from '@material-ui/icons/Twitter';
 import WhatsAppIcon from '@material-ui/icons/WhatsApp';
 import TelegramIcon from '@material-ui/icons/Telegram';
 import IconButton from '@material-ui/core/IconButton';
-import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded';
-import FavoriteRoundedIcon from '@material-ui/icons/FavoriteRounded';
 import CloseIcon from '@material-ui/icons/Close';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import EmailIcon from '@material-ui/icons/Email';
 import {
   FacebookShareButton,
-  FacebookMessengerShareButton,
   TwitterShareButton,
   TelegramShareButton,
   WhatsappShareButton,
@@ -48,10 +45,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import Image from 'next/image';
 import Link from 'components/Link';
 import moment from 'moment';
-import CardSliderEvent from '../../components/cards/CardSliderEvent';
-import Newsletter from '../../containers/layouts/Newsletter';
 import { useSessionState } from '../../context/session/session';
-import CardAddEvent from '../../components/cards/CardAddEvent';
 import {
   getImageUrl,
   entriesHasElementWithCode,
@@ -59,6 +53,7 @@ import {
   urlWithHttpsdefault,
 } from '../../utils/utils';
 import Calendar from '../../components/Calendar';
+import Favorite from '../../components/Favorite';
 
 const useStyles = makeStyles((theme) => ({
   titleContainer: {
@@ -314,11 +309,6 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const ADD_FAVORITE = gql`
-  mutation addFavoriteActor($actorId: Int!,$userId: Int!, $favorite: Boolean!) {
-    addFavoriteActor(actorId: $actorId,userId: $userId, favorite: $favorite) 
-  }
-`;
 
 const GET_ACTOR_SSR = `
 query actor($id: String) {
@@ -498,44 +488,10 @@ const Actor = ({ initialData }) => {
   }
 
   const [favorite, setFavorite] = useState(containUser(data?.actor.favorites));
-  const [
-    addFavoriteActor,
-    { data: addFavoriteActorData, loading: addFavoriteActorLoading, error: addFavoriteActorError },
-  ] = useMutation(ADD_FAVORITE);
 
-  const changeFavorite = (isFavorite) => {
-    if (user == null) {
-      enqueueSnackbar('Veuillez vous connecter pour ajouter un favori', {
-        preventDuplicate: true,
-      });
-    } else {
-      setFavorite(isFavorite);
-      addFavoriteActor({
-        variables: {
-          actorId: parseInt(data?.actor.id),
-          userId: parseInt(user.id),
-          favorite: isFavorite,
-        },
-      });
-    }
+  const handleFavoriteChange = (isFavorite) => {
+    setFavorite(isFavorite);
   };
-  useEffect(() => {
-    if (!addFavoriteActorError && !addFavoriteActorLoading && addFavoriteActorData) {
-      if (favorite) {
-        enqueueSnackbar('Favori ajouté avec succès.', {
-          preventDuplicate: true,
-        });
-      } else {
-        enqueueSnackbar('Favori retiré avec succès.', {
-          preventDuplicate: true,
-        });
-      }
-    }
-  }, [addFavoriteActorError, addFavoriteActorLoading, addFavoriteActorData]);
-
-  const FavoriteIconComponent = useMemo(() => {
-    return favorite ? FavoriteRoundedIcon : FavoriteBorderRoundedIcon;
-  }, [favorite]);
 
 
   const [stylesProps, setStylesProps] = useState({
@@ -1030,9 +986,7 @@ const Actor = ({ initialData }) => {
                     )}
                      <Grid container className={[styles.item]}>
                     <Grid item xs={3} className={[styles.alignRight]}>
-                    <div onClick={() => changeFavorite(!favorite)}>
-                      <FavoriteIconComponent className={styles.favoriteIcon} />
-                    </div>
+                      <Favorite actor={data?.actor} handleFavoriteChange={handleFavoriteChange} />
                     </Grid>
                     <Grid item xs={8} className={[styles.alignLeft]}>
                       <div className={[styles.infoLabel]}>

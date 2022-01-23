@@ -1,20 +1,12 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded';
-import FavoriteRoundedIcon from '@material-ui/icons/FavoriteRounded';
 import { makeStyles } from '@material-ui/core/styles';
 import { Avatar, Link } from '@mui/material';
 import { useSnackbar } from 'notistack';
 import gql from 'graphql-tag';
-import { useMutation, useQuery } from '@apollo/client';
 import StyledBoxOnHover from '../animated/StyledBoxOnHover';
 import { getImageUrl } from '../../utils/utils';
+import Favorite from '../../components/Favorite';
 import { useSessionState } from '../../context/session/session';
-
-const ADD_FAVORITE = gql`
-  mutation addFavoriteActor($actorId: Int!,$userId: Int!, $favorite: Boolean!) {
-    addFavoriteActor(actorId: $actorId,userId: $userId, favorite: $favorite) 
-  }
-`;
 
 const useStyles = makeStyles((theme, props) => ({
   card: (props) => ({
@@ -30,10 +22,21 @@ const useStyles = makeStyles((theme, props) => ({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    margin: '0 24px',
+    [theme.breakpoints.up('sm')]: {
+      margin: '0 24px',
+    },
+    [theme.breakpoints.down('sm')]: {
+      margin: '0 5px',
+    },
   },
   favorite: (props) => ({
-    width: '100px',
+    [theme.breakpoints.up('sm')]: {
+      width: '100px',
+    },
+    [theme.breakpoints.down('sm')]: {
+      width: '50px',
+    },
+   
     borderLeft: `dashed 2px ${props.color}`,
     display: 'flex',
     justifyContent: 'center',
@@ -41,9 +44,6 @@ const useStyles = makeStyles((theme, props) => ({
     '&:hover': {
       cursor: 'pointer',
     },
-  }),
-  favoriteIcon: (props) => ({
-    color: props.color,
   }),
   category: {
     width: '40px',
@@ -77,7 +77,12 @@ const useStyles = makeStyles((theme, props) => ({
   image: {
     height: '72px',
     width: '72px',
-    margin: '0 24px 0 0',
+    [theme.breakpoints.up('sm')]: {
+      margin: '0 24px 0 0',
+    },
+    [theme.breakpoints.down('sm')]: {
+      margin: '0 5px 0 0',
+    },
     '& img': {
       height: '100%',
       width: '100%',
@@ -112,26 +117,6 @@ const ActorCard = ({ actor }) => {
   const icon = actor.entries[0] ? actor.entries[0].icon : 'fruit';
   const actorName = actor.name;
   const classes = useStyles({ color, icon });
-  const user = useSessionState();
-  function containUser(list) {
-    let isContained = false;
-    if (user !== null) {
-      list.forEach((element) => {
-        if (element.id == user.id) {
-          isContained = true;
-        }
-      });
-    }
-    return isContained;
-  }
-
-  const [favorite, setFavorite] = useState(containUser(actor.favorites));
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-
-  const [
-    addFavoriteActor,
-    { data: addFavoriteActorData, loading: addFavoriteActorLoading, error: addFavoriteActorError },
-  ] = useMutation(ADD_FAVORITE);
 
   function stringAvatar(name) {
     if (name !== undefined) {
@@ -141,39 +126,7 @@ const ActorCard = ({ actor }) => {
     }
     return '';
   }
-  const changeFavorite = (isFavorite) => {
-    if (user == null) {
-      enqueueSnackbar('Veuillez vous connecter pour ajouter un ', {
-        preventDuplicate: true,
-      });
-    } else {
-      setFavorite(isFavorite);
-      addFavoriteActor({
-        variables: {
-          actorId: parseInt(actor.id),
-          userId: parseInt(user.id),
-          favorite: isFavorite,
-        },
-      });
-    }
-  };
-  useEffect(() => {
-    if (!addFavoriteActorError && !addFavoriteActorLoading && addFavoriteActorData) {
-      if (favorite) {
-        enqueueSnackbar('Favori ajouté avec succès.', {
-          preventDuplicate: true,
-        });
-      } else {
-        enqueueSnackbar('Favori retiré avec succès.', {
-          preventDuplicate: true,
-        });
-      }
-    }
-  }, [addFavoriteActorError, addFavoriteActorLoading, addFavoriteActorData]);
 
-  const FavoriteIconComponent = useMemo(() => {
-    return favorite ? FavoriteRoundedIcon : FavoriteBorderRoundedIcon;
-  }, [favorite]);
 
   const getActorProfilePicture = () => {
     const profilePictures = actor.pictures?.filter((picture) => picture.logo) || [];
@@ -184,7 +137,7 @@ const ActorCard = ({ actor }) => {
   return (
 
     <StyledBoxOnHover className={classes.card}>
-      <Link href={`/actor/${actor.id}`} color="inherit" underline="none" width="100%">
+      <Link href={`/actor/${actor.id}`} target="_blank" color="inherit" underline="none" width="100%">
         <div className={classes.content}>
           <div className={classes.leftContent}>
             <div className={classes.image}>
@@ -198,9 +151,7 @@ const ActorCard = ({ actor }) => {
               />
             </div>
             <div className={classes.text}>
-              <Link href={`/actor/${actor.id}`} color="inherit" underline="none">
                 <div className={classes.actor}>{actorName}</div>
-              </Link>
               <div className={classes.label}>{actor.label}</div>
               <div className={classes.actorDetails}>
                 <span>
@@ -242,8 +193,8 @@ const ActorCard = ({ actor }) => {
           </div>
         </div>
       </Link>
-      <div className={classes.favorite} onClick={() => changeFavorite(!favorite)}>
-        <FavoriteIconComponent className={classes.favoriteIcon} />
+      <div className={classes.favorite}>
+        <Favorite actor={actor} />
       </div>
     </StyledBoxOnHover>
 
