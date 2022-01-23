@@ -450,6 +450,9 @@ const ActorAdminPage = () => {
                 <TableCell style={{ width: 160 }} align="left">
                   Ajouter une nouvelle action
                 </TableCell>
+                <TableCell style={{ width: 160 }} align="left">
+                  Ajouter un nouvel article
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -541,6 +544,12 @@ const ActorAdminPage = () => {
                     <TableCell style={{ width: 160 }} align="center">
                       {/* @ts-ignore */}
                       <Link href={`/addevent/${actor.id}`}>
+                        <AddCircleOutline />
+                      </Link>
+                    </TableCell>
+                    <TableCell style={{ width: 160 }} align="center">
+                      {/* @ts-ignore */}
+                      <Link href={`/addarticle/${actor.id}`}>
                         <AddCircleOutline />
                       </Link>
                     </TableCell>
