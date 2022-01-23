@@ -92,7 +92,7 @@ const ActorPopup = ({ actor }) => {
         }}
       >
         <Grid item xs={2}>
-          <div className={classes.favorite} onClick={() => changeFavorite(!favorite)}>
+          <div className={styles.favorite} onClick={() => changeFavorite(!favorite)}>
             <FavoriteIconComponent className={title.favoriteIcon} />
           </div>
         </Grid>

@@ -18,7 +18,7 @@ import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
 import ButtonGroupSelected from '../../components/buttons/ButtonGroupSelected';
 import Filters from '../../components/filters';
 import { getImageUrl } from '../../utils/utils';
-import { ActorPopup } from '../../components/popup/ActorPopup';
+import ActorPopup from '../../components/popup/ActorPopup';
 
 import AppLayout from '../../containers/layouts/AppLayout';
 import { withApollo } from '../../hoc/withApollo';
