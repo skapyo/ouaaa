@@ -212,7 +212,7 @@ const EventCard = ({ event }) => {
   return (
     <div className={classes.card}>
       <div className={classes.content}>
-        <Link href={`/event/${event.id}`}>
+        <Link href={`/event/${event.id}`} target="_blank" color="inherit" underline="none" width="100%">
           <div className={classes.leftContent}>
             {logoPath && <div className={classes.logo} style={{ backgroundImage: `url(${logoPath})` }} />}
             <div className={classes.contentText}>

@@ -30,10 +30,21 @@ const useStyles = makeStyles((theme, props) => ({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    margin: '0 24px',
+    [theme.breakpoints.up('sm')]: {
+      margin: '0 24px',
+    },
+    [theme.breakpoints.down('sm')]: {
+      margin: '0 5px',
+    },
   },
   favorite: (props) => ({
-    width: '100px',
+    [theme.breakpoints.up('sm')]: {
+      width: '100px',
+    },
+    [theme.breakpoints.down('sm')]: {
+      width: '50px',
+    },
+   
     borderLeft: `dashed 2px ${props.color}`,
     display: 'flex',
     justifyContent: 'center',
@@ -77,7 +88,12 @@ const useStyles = makeStyles((theme, props) => ({
   image: {
     height: '72px',
     width: '72px',
-    margin: '0 24px 0 0',
+    [theme.breakpoints.up('sm')]: {
+      margin: '0 24px 0 0',
+    },
+    [theme.breakpoints.down('sm')]: {
+      margin: '0 5px 0 0',
+    },
     '& img': {
       height: '100%',
       width: '100%',
@@ -184,7 +200,7 @@ const ActorCard = ({ actor }) => {
   return (
 
     <StyledBoxOnHover className={classes.card}>
-      <Link href={`/actor/${actor.id}`} color="inherit" underline="none" width="100%">
+      <Link href={`/actor/${actor.id}`} target="_blank" color="inherit" underline="none" width="100%">
         <div className={classes.content}>
           <div className={classes.leftContent}>
             <div className={classes.image}>
@@ -198,9 +214,7 @@ const ActorCard = ({ actor }) => {
               />
             </div>
             <div className={classes.text}>
-              <Link href={`/actor/${actor.id}`} color="inherit" underline="none">
                 <div className={classes.actor}>{actorName}</div>
-              </Link>
               <div className={classes.label}>{actor.label}</div>
               <div className={classes.actorDetails}>
                 <span>

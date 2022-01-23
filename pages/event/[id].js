@@ -95,7 +95,11 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: theme.typography.h5.fontFamily,
     textTransform: 'uppercase',
     fontWeight: '400',
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '1.5rem !important',
+    },
   },
+ 
   description: {
     [theme.breakpoints.up('sm')]: {
       paddingLeft: '2em',
@@ -111,7 +115,7 @@ const useStyles = makeStyles((theme) => ({
     height: '30em',
     width: '30em',
     [theme.breakpoints.down('sm')]: {
-      width: 'auto'
+      width: '100% !important',
     },
   },
   actorName: {
@@ -346,6 +350,7 @@ const GET_EVENT = `
             originalPicturePath
             originalPictureFilename
             position
+            logo
           }
           referents {
             id
