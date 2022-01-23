@@ -37,7 +37,7 @@ const Favorite = ({ actor, event, handleFavoriteChange }) => {
   const user = useSessionState();
   function containUser(list) {
     let isContained = false;
-    if (user !== null && user !== undefined) {
+    if (user !== null && user !== undefined && list !== undefined) {
       list.forEach((element) => {
         if (element.id == user.id) {
           isContained = true;

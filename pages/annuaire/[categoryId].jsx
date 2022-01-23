@@ -42,6 +42,9 @@ query actorsByCategory($categoryId: String!) {
       position
       logo
     }
+    favorites {
+      id
+    }
   }
 }`;
 
