@@ -8,25 +8,31 @@ import {
   ExpansionPanelSummary,
   ExpansionPanelDetails,
   Button,
-  useTheme
+  useTheme,
 } from '@material-ui/core';
-import SearchBar from "material-ui-search-bar";
+import SearchBar from 'material-ui-search-bar';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
 import gql from 'graphql-tag';
+import { useSnackbar } from 'notistack';
 import { useQuery } from '@apollo/client';
 import { makeStyles } from '@material-ui/core/styles';
 import Entries from 'containers/forms/Entries';
 import ProposeActorForm from 'containers/forms/ProposeActorForm';
+
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import AddIcon from '@material-ui/icons/Add';
 import Modal from '@material-ui/core/Modal';
+import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded';
+import FavoriteRoundedIcon from '@material-ui/icons/FavoriteRounded';
 import ParentContainer from './ParentContainer';
 import DateFilter from '../../containers/layouts/agendaPage/DateFilter';
+import { useSessionState } from '../../context/session/session';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: (props) => ({
     flexGrow: 1,
     maxWidth: 400,
@@ -38,8 +44,8 @@ const useStyles = makeStyles(theme => ({
     },
     '& > *:not(button)': {
       width: '100%',
-      backgroundColor: 'white'
-    }
+      backgroundColor: 'white',
+    },
   }),
   collectionLabel: {
     textAlign: 'center',
@@ -51,8 +57,8 @@ const useStyles = makeStyles(theme => ({
     },
     width: '100%',
     '& .MuiInputBase-root': {
-      borderRadius: 0
-    }
+      borderRadius: 0,
+    },
   },
   listItem: {
     paddingTop: '0px',
@@ -77,7 +83,7 @@ const useStyles = makeStyles(theme => ({
     margin: 'inherit!important',
     [theme.breakpoints.down('sm')]: {
       '&:nth-last-child(2)': {
-        boxShadow: 'none'
+        boxShadow: 'none',
       },
     },
   },
@@ -89,7 +95,7 @@ const useStyles = makeStyles(theme => ({
     padding: '0px 5px 0px 5px!important',
   },
   expansionPanelDetails: {
-    flexDirection: 'column'
+    flexDirection: 'column',
   },
   entriesCheckbox: {
     padding: '1px',
@@ -126,6 +132,16 @@ const useStyles = makeStyles(theme => ({
     top: theme.spacing.unit / 2,
     color: theme.palette.grey[500],
   },
+  favoriteGrid: {
+    textAlign: 'center',
+    borderBottom: '0.1em solid rgb(200, 200, 200)',
+    borderWidth: '1px',
+    padding: '0.3em',
+    marginTop: '10px',
+  },
+  favoriteIcon: {
+    color: '#2C367E;',
+  },
 }));
 const style = {
   position: 'absolute',
@@ -157,13 +173,13 @@ const IsTree = (collection) => {
   return isTree;
 };
 
-const FilterItem = props => {
+const FilterItem = (props) => {
   const { collection, categoryChange, onEntryChange } = props;
   const classes = useStyles();
 
   const handleCategoryChange = useCallback((entries) => {
     onEntryChange(entries, collection);
-  }, [collection, onEntryChange])
+  }, [collection, onEntryChange]);
 
   return (
     <Entries className={classes.entries} initValues={[]}>
@@ -182,8 +198,8 @@ const FilterItem = props => {
         })
       }
     </Entries>
-  )
-}
+  );
+};
 
 function Filters(props) {
   const {
@@ -223,7 +239,7 @@ function Filters(props) {
       }
     }
   `;
-  
+
   function rand() {
     return Math.round(Math.random() * 20) - 10;
   }
@@ -231,7 +247,7 @@ function Filters(props) {
   function getModalStyle() {
     const top = 50;
     const left = 50;
-  
+
     return {
       top: `${top}%`,
       left: `${left}%`,
@@ -240,8 +256,9 @@ function Filters(props) {
       transform: `translate(-${top}%, -${left}%)`,
     };
   }
-    
+
   const [modalStyle] = React.useState(getModalStyle);
+
   const [dataCollections, setDataCollections] = useState(null);
   const [errorPostCode, setErrorPostCode] = useState(false);
   const [filters, setFilters] = useState({});
@@ -250,15 +267,21 @@ function Filters(props) {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down('sm'));
   const classes = useStyles({ openFilters });
+  const [favorite, setFavorite] = useState(false);
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+
+  const FavoriteIconComponent = useMemo(() => {
+    return favorite ? FavoriteRoundedIcon : FavoriteBorderRoundedIcon;
+  }, [favorite]);
 
   const handleFilterChange = useCallback((name, value) => {
-    let currentFilters = filters || {};
+    const currentFilters = filters || {};
     currentFilters[name] = value;
     setFilters(currentFilters);
     onFiltersChange(currentFilters);
   }, [filters, onFiltersChange]);
 
-  const handleDateChange = useCallback(date => {
+  const handleDateChange = useCallback((date) => {
     handleFilterChange('startingDate', date);
   }, [handleFilterChange]);
 
@@ -275,28 +298,38 @@ function Filters(props) {
     }
   }, [setErrorPostCode]);
 
-
-
   const handleEntryChange = useCallback((entries, collection) => {
-    let currentEntries = [...filters.entries || []];
-    entries.forEach(newEntry => {
-      const alreadyChecked = currentEntries.find(subEntries => subEntries != undefined && subEntries.find(id => id === newEntry.id));
+    const currentEntries = [...filters.entries || []];
+    entries.forEach((newEntry) => {
+      const alreadyChecked = currentEntries.find((subEntries) => subEntries != undefined && subEntries.find((id) => id === newEntry.id));
       if (alreadyChecked) {
         if (!newEntry.checked) {
-          currentEntries[collection.position] = currentEntries[collection.position].filter(id => id !== newEntry.id);
+          currentEntries[collection.position] = currentEntries[collection.position].filter((id) => id !== newEntry.id);
         }
-      } else {
-        if (newEntry.checked) {
-          let collectionEntries = currentEntries[collection.position] || [];
-          collectionEntries.push(newEntry.id);
-          currentEntries[collection.position] = collectionEntries;
-        }
+      } else if (newEntry.checked) {
+        const collectionEntries = currentEntries[collection.position] || [];
+        collectionEntries.push(newEntry.id);
+        currentEntries[collection.position] = collectionEntries;
       }
     });
 
     handleFilterChange('entries', currentEntries);
   }, [filters, handleFilterChange]);
-
+  const user = useSessionState();
+  const changeFavorite = (isFavorite) => {
+    if (user == null) {
+      enqueueSnackbar('Veuillez vous connecter pour filtrer sur vos favoris ', {
+        preventDuplicate: true,
+      });
+    } else {
+      setFavorite(isFavorite);
+      if (isFavorite) {
+        handleFilterChange('favoritesForUser', user.id);
+      } else {
+        handleFilterChange('favoritesForUser', null);
+      }
+    }
+  };
   const { loading: loadingCollections, error: errorCollections } = useQuery(
     GET_COLLECTIONS,
     {
@@ -315,8 +348,8 @@ function Filters(props) {
   };
   const filterCollections = useMemo(() => {
     if (dataCollections && dataCollections.collections && dataCollections.collections.length > 0) {
-      return dataCollections.collections.filter(collection => {
-        return collection.filter && (isEventList ? collection.event : collection.actor)
+      return dataCollections.collections.filter((collection) => {
+        return collection.filter && (isEventList ? collection.event : collection.actor);
       });
     }
     return [];
@@ -325,13 +358,12 @@ function Filters(props) {
   if (loadingCollections && !dataCollections) return 'Loading...';
   if (errorCollections) return `Error! ${errorCollections.message}`;
 
-
   const bodyModalAddActor = (
     <div style={modalStyle} className={classes.paper}>
       <IconButton aria-label="Close" className={classes.closeButton} onClick={() => setOpenModalAddActor(false)}>
         <CloseIcon />
       </IconButton>
-      <h2 id="simple-modal-title">{ noEmailInviteActor?"Ajouter l'acteur que vous avez contacté":"Inviter un nouvel acteur de la transition"}</h2>
+      <h2 id="simple-modal-title">{ noEmailInviteActor ? "Ajouter l'acteur que vous avez contacté" : 'Inviter un nouvel acteur de la transition'}</h2>
       <ProposeActorForm noEmailInviteActor={noEmailInviteActor} />
     </div>
   );
@@ -344,7 +376,7 @@ function Filters(props) {
       wrap="nowrap"
       className={classes.root}
     >
-      
+
       {
         isEventList && (
           <DateFilter
@@ -355,10 +387,10 @@ function Filters(props) {
       <SearchBar
        // value={this.state.value}
         placeholder="Recherche par nom"
-        onChange={(newValue) => { handleFilterChange('search', newValue) }}
-        onCancelSearch={() => { handleFilterChange('search', '') }}
+        onChange={(newValue) => { handleFilterChange('search', newValue); }}
+        onCancelSearch={() => { handleFilterChange('search', ''); }}
 
-        //onRequestSearch={() => doSomethingWith(this.state.value)}
+        // onRequestSearch={() => doSomethingWith(this.state.value)}
       />
       <TextField
         variant="outlined"
@@ -371,6 +403,16 @@ function Filters(props) {
           errorPostCode ? 'Le code postal doit être composé de 5 chiffres' : ''
         }
       />
+      <Grid container className={classes.favoriteGrid}>
+        <Grid item xs={5}>
+          <div className={classes.favorite} onClick={() => changeFavorite(!favorite)}>
+            <FavoriteIconComponent className={classes.favoriteIcon} />
+          </div>
+        </Grid>
+        <Grid item xs={7}>
+          <div>{isEventList ? 'Actions favorites' : 'Acteurs favoris'}</div>
+        </Grid>
+      </Grid>
 
       {filterCollections.map((collection) => {
         return (
@@ -394,17 +436,17 @@ function Filters(props) {
         );
       })}
 
-    {
+      {
       !isEventList && (
         <Button
-      variant="contained"
-      color="secondary"
-      className={classes.inviteActor}
-      startIcon={<AddIcon />}
-      onClick={handleOpenModalAddActor}
-    >
-      Inviter un acteur non référencé
-    </Button>
+          variant="contained"
+          color="secondary"
+          className={classes.inviteActor}
+          startIcon={<AddIcon />}
+          onClick={handleOpenModalAddActor}
+        >
+          Inviter un acteur non référencé
+        </Button>
       )
     }
       <Modal
@@ -440,7 +482,6 @@ Filters.propTypes = {
   inviteActor: PropTypes.bool,
   noEmailInviteActor: PropTypes.bool,
 
-  
 };
 
 Filters.defaultProps = {
@@ -450,6 +491,6 @@ Filters.defaultProps = {
   noEmailInviteActor: false,
   onFiltersChange: () => { },
   closeHandler: () => { },
-}
+};
 
 export default Filters;

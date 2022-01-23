@@ -169,8 +169,8 @@ const VIEW_STATE = {
 
 const AgendaPageLayout = () => {
   const GET_EVENTS = gql`
-    query events($startingDate: String,$search: String, $entries: [[String]]) {
-      events(startingDate: $startingDate, search: $search,entries: $entries) {
+    query events($startingDate: String,$search: String, $entries: [[String]],$favoritesForUser: String) {
+      events(startingDate: $startingDate, search: $search,entries: $entries,favoritesForUser: $favoritesForUser) {
         id
         label
         startedAt

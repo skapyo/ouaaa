@@ -342,8 +342,8 @@ const carto = () => {
       headerDisplay: 'static',
     });
     const GET_ACTORS = gql`
-      query actors($entries: [[String]], $search: String,$postCode: String,$isValidated: Boolean) {
-        actors(entries: $entries, search: $search,postCode: $postCode,isValidated: $isValidated) {
+      query actors($entries: [[String]], $search: String,$postCode: String,$favoritesForUser: String,$isValidated: Boolean) {
+        actors(entries: $entries, search: $search,postCode: $postCode,favoritesForUser: $favoritesForUser,isValidated: $isValidated) {
           id
           name
           address
