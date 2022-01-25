@@ -50,7 +50,7 @@ const ActorAdminLeftMenu = () => (
       label="Administrer mes événements"
     />
      <ActorAdminLeftMenuListItem
-      pathname="/articleAdmin/event"
+      pathname="/actorAdmin/article"
       label="Administrer mes articles"
     />
   </List>

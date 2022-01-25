@@ -31,92 +31,22 @@ import Edit from '@material-ui/icons/Edit';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import FirstPageIcon from '@material-ui/icons/FirstPage';
-import ZoomInIcon from '@mui/icons-material/ZoomIn';
-
 import { useSessionState } from '../../../context/session/session';
 import Link from '../../../components/Link';
 
 import ActorAdminPageLayout from 'containers/layouts/actorAdminPage/ActorAdminPageLayout';
 
-const GET_EVENTS = gql`
-  query eventsAdmin($userId: String!) {
-    eventsAdmin(userId: $userId) {
+const GET_articles = gql`
+  query articlesAdmin($userId: String!) {
+    articlesAdmin(userId: $userId) {
       id
       label
       createdAt
       updatedAt
-      startedAt
-      endedAt
-      nbParticipants
-      referents {
-        surname
-        lastname
-        email
-        phone
-      }
     }
   }
 `;
 
-const GET_PARTICIPANTS_BY_EVENT = gql`
-  query participants($eventId: String!) {
-    participants(eventId: $eventId) {
-      id
-      surname
-      lastname
-      participatedAt
-      email
-    }
-  }
-`;
-
-const ParticipantList = (props: any) => {
-  const { event } = props;
-  const [participants, setParticipants] = useState([]);
-
-  const { loading, error } = useQuery(GET_PARTICIPANTS_BY_EVENT, {
-    variables: {
-      eventId: event?.id
-    },
-    onCompleted: (data: any) => {
-      setParticipants(data.participants);
-    },
-    fetchPolicy: 'network-only'
-  });
-
-  if (error) return null;
-
-  if (loading) return <LinearProgress />;
-
-  return (
-    <Table>
-      <TableHead>
-        <TableRow>
-          <TableCell>Prénom</TableCell>
-          <TableCell>Nom</TableCell>
-          <TableCell>Email</TableCell>
-          <TableCell align="right">Date de participation</TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {participants.map((participant: any) => (
-          <TableRow key={participant.id}>
-            <TableCell component="th" scope="row">
-              {participant.surname}
-            </TableCell>
-            <TableCell>{participant.lastname}</TableCell>
-            <TableCell>{participant.email}</TableCell>
-            <TableCell align="right">
-              <Moment format="DD/MM/YYYY HH:mm" unix>
-                {participant.participatedAt / 1000}
-              </Moment>
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
-  )
-};
 
 const useStyles = makeStyles((theme) => ({
   avatar: {
@@ -151,7 +81,7 @@ interface TablePaginationActionsProps {
   page: number;
   rowsPerPage: number;
   onChangePage: (
-    event: React.MouseEvent<HTMLButtonElement>,
+    article: React.Mousearticle<HTMLButtonElement>,
     newPage: number,
   ) => void;
 }
@@ -162,27 +92,27 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
   const { count, page, rowsPerPage, onChangePage } = props;
 
   const handleFirstPageButtonClick = (
-    event: React.MouseEvent<HTMLButtonElement>,
+    article: React.Mousearticle<HTMLButtonElement>,
   ) => {
-    onChangePage(event, 0);
+    onChangePage(article, 0);
   };
 
   const handleBackButtonClick = (
-    event: React.MouseEvent<HTMLButtonElement>,
+    article: React.Mousearticle<HTMLButtonElement>,
   ) => {
-    onChangePage(event, page - 1);
+    onChangePage(article, page - 1);
   };
 
   const handleNextButtonClick = (
-    event: React.MouseEvent<HTMLButtonElement>,
+    article: React.Mousearticle<HTMLButtonElement>,
   ) => {
-    onChangePage(event, page + 1);
+    onChangePage(article, page + 1);
   };
 
   const handleLastPageButtonClick = (
-    event: React.MouseEvent<HTMLButtonElement>,
+    article: React.Mousearticle<HTMLButtonElement>,
   ) => {
-    onChangePage(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
+    onChangePage(article, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
   };
 
   return (
@@ -227,28 +157,10 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
   );
 }
 
-const NbParticipantsItem = (props: any) => {
-  const { event, className, onClick } = props;
-
-  const handleClick = useCallback(() => {
-    onClick(event);
-  }, [onClick, event]);
-
-  if (event.nbParticipants === 0) return <span>Aucun</span>;
-
-  return (
-    <div className={className} onClick={handleClick}>
-      {event.nbParticipants}
-      <ZoomInIcon />
-    </div>
-  )
-}
-
-const EventAdminPage = () => {
+const ArticleAdminPage = () => {
   const user = useSessionState();
   const { enqueueSnackbar } = useSnackbar();
   const router = useRouter();
-  const [participantsEvent, setParticipantsEvent] = useState(null);
   const [openModal, setOpenModal] = useState(false);
   const styles = useStyles();
 
@@ -256,20 +168,7 @@ const EventAdminPage = () => {
     setOpenModal(false);
   }, []);
 
-  const handleClickParticipantsEvent = useCallback(event => {
-    setParticipantsEvent(event);
-    setOpenModal(true);
-  }, []);
-
-  useEffect(() => {
-    if (!participantsEvent) {
-      setTimeout(() => {
-        setParticipantsEvent(null);
-      }, 200)
-    }
-  }, [participantsEvent]);
-
-  const { data: dataAdminEvent } = useQuery(GET_EVENTS, {
+  const { data: dataAdminarticle } = useQuery(GET_articles, {
     variables: {
       userId: user && user.id,
     },
@@ -278,7 +177,7 @@ const EventAdminPage = () => {
         enqueueSnackbar(
           'Veuillez vous connecter pour effectuer des modifications.',
           {
-            preventDuplicate: true,
+            prarticleDuplicate: true,
           },
         );
         router.push('/');
@@ -287,32 +186,32 @@ const EventAdminPage = () => {
   });
   const [state, setState] = React.useState({});
 
-  const handleChange = (actor, event) => {
-    setState({ ...state, [actor.id.toString()]: event.target.checked });
+  const handleChange = (actor, article) => {
+    setState({ ...state, [actor.id.toString()]: article.target.checked });
   };
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   let row = 0;
-  if (typeof dataAdminEvent !== 'undefined') {
-    row = dataAdminEvent.eventsAdmin.length;
+  if (typeof dataAdminarticle !== 'undefined') {
+    row = dataAdminarticle.articlesAdmin.length;
   }
 
   const emptyRows =
     rowsPerPage - Math.min(rowsPerPage, row - page * rowsPerPage);
 
   const handleChangePage = (
-    event: React.MouseEvent<HTMLButtonElement> | null,
+    article: React.Mousearticle<HTMLButtonElement> | null,
     newPage: number,
   ) => {
     setPage(newPage);
   };
 
   const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    article: React.Changearticle<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
+    setRowsPerPage(parseInt(article.target.value, 10));
     setPage(0);
   };
 
@@ -322,16 +221,16 @@ const EventAdminPage = () => {
         color="secondary"
         variant="h6"
       >
-        Listes des actions dont vous êtes administrateur
+        Listes des articles dont vous êtes administrateur
       </Typography>
       <Typography
         color="secondary"
         className={styles.userInfosTitle}
       >
         {/* @ts-ignore */}
-        Vous pouvez ajouter une nouvelle action depuis l'écran <Link href='/actorAdmin'>Administrer mes pages acteurs</Link>
+        Vous pouvez ajouter un nouvel article depuis l'écran <Link href='/actorAdmin'>Administrer mes pages acteurs</Link>
       </Typography>
-      {typeof dataAdminEvent !== 'undefined' && (
+      {typeof dataAdminarticle !== 'undefined' && (
         <TableContainer component={Paper}>
           <Table aria-label="custom pagination table">
             <TableHead>
@@ -340,98 +239,46 @@ const EventAdminPage = () => {
                   Nom
                 </TableCell>
                 <TableCell style={{ width: 160 }} align="left">
-                  Date de début
-                </TableCell>
-                <TableCell style={{ width: 160 }} align="left">
-                  Date de fin
-                </TableCell>
-                <TableCell style={{ width: 160 }} align="left">
                   Date de création
                 </TableCell>
                 <TableCell style={{ width: 160 }} align="left">
                   Dernière date de modification
                 </TableCell>
                 <TableCell style={{ width: 160 }} align="left">
-                  Ville
+                  Lien Page acteur
                 </TableCell>
                 <TableCell style={{ width: 160 }} align="left">
-                  Référents
-                </TableCell>
-                <TableCell style={{ width: 160 }} align="left">
-                  Participants
-                </TableCell>
-                <TableCell style={{ width: 160 }} align="left">
-                  Lien de l'événement
-                </TableCell>
-                <TableCell style={{ width: 160 }} align="left">
-                  Editer l'événement
+                  Editer la page
                 </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {typeof dataAdminEvent !== 'undefined' &&
-                dataAdminEvent.eventsAdmin.map((event) => (
-                  <TableRow key={event.id} hover>
+              {typeof dataAdminarticle !== 'undefined' &&
+                dataAdminarticle.articlesAdmin.map((article) => (
+                  <TableRow key={article.id} hover>
                     <TableCell component="th" scope="row">
                       {/* @ts-ignore */}
-                      <Link href={`/event/${event.id}`}>{event.label}</Link>
+                      <Link href={`/article/${article.id}`}>{article.label}</Link>
                     </TableCell>
                     <TableCell style={{ width: 160 }} align="left">
                       <Moment format="DD/MM HH:mm" unix>
-                        {event.startedAt / 1000}
+                        {article.createdAt / 1000}
                       </Moment>
                     </TableCell>
                     <TableCell style={{ width: 160 }} align="left">
                       <Moment format="DD/MM HH:mm" unix>
-                        {event.endedAt / 1000}
+                        {article.updatedAt / 1000}
                       </Moment>
-                    </TableCell>
-                    <TableCell style={{ width: 160 }} align="left">
-                      <Moment format="DD/MM HH:mm" unix>
-                        {event.createdAt / 1000}
-                      </Moment>
-                    </TableCell>
-                    <TableCell style={{ width: 160 }} align="left">
-                      <Moment format="DD/MM HH:mm" unix>
-                        {event.updatedAt / 1000}
-                      </Moment>
-                    </TableCell>
-                    <TableCell style={{ width: 160 }} align="left">
-                      {event.city}
-                    </TableCell>
-                    <TableCell style={{ width: 160 }} align="left">
-                      {typeof event.referents !== 'undefined' &&
-                        event.referents.map((referent) => {
-                          {
-                            referent.surname;
-                          }
-                          {
-                            referent.lastname;
-                          }
-                          {
-                            referent.email;
-                          }
-                          {
-                            referent.phone;
-                          }
-                        })}
-                    </TableCell>
-                    <TableCell>
-                      <NbParticipantsItem
-                        event={event}
-                        className={styles.nbParticipantsItem}
-                        onClick={handleClickParticipantsEvent}
-                      />
                     </TableCell>
                     <TableCell style={{ width: 160 }} align="left">
                       {/* @ts-ignore */}
-                      <Link href={`/event/${event.id}`}>
-                        Lien vers page événement
+                      <Link href={`/article/${article.id}`}>
+                        Lien vers page article
                       </Link>
                     </TableCell>
                     <TableCell style={{ width: 160 }} align="right">
                       {/* @ts-ignore */}
-                      <Link href={`/actorAdmin/event/${event.id}`}>
+                      <Link href={`/actorAdmin/article/${article.id}`}>
                         <Edit />
                       </Link>
                     </TableCell>
@@ -445,19 +292,8 @@ const EventAdminPage = () => {
           </Table>
         </TableContainer>
       )}
-
-      <Dialog open={openModal} onBackdropClick={closeModal}>
-        <DialogTitle>
-          <div>Participants pour l'évènement <i>{(participantsEvent as any)?.label}</i></div>
-        </DialogTitle>
-        <DialogContent classes={{ root: styles.dialogContent }}>
-          {
-            participantsEvent && <ParticipantList event={participantsEvent} />
-          }
-        </DialogContent>
-      </Dialog>
     </ActorAdminPageLayout>
   );
 };
 
-export default withApollo()(EventAdminPage);
+export default withApollo()(ArticleAdminPage);

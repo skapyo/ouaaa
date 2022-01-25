@@ -16,10 +16,17 @@ import FormController, {
   ValidationRules,
   ValidationRuleType,
 } from 'components/controllers/FormController';
+import Dialog from '@material-ui/core/Dialog';
+import Button from '@material-ui/core/Button';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import { useMutation, useQuery } from '@apollo/client';
 import useGraphQLErrorDisplay from 'hooks/useGraphQLErrorDisplay';
 import useCookieRedirection from 'hooks/useCookieRedirection';
 import { useSnackbar } from 'notistack';
+import FallbackPageNotFound from 'containers/fallbacks/FallbackPageNotFound';
 import classnames from 'classnames';
 import { useRouter } from 'next/router';
 import List from '@material-ui/core/List';
@@ -48,6 +55,15 @@ const useStyles = makeStyles((theme) => ({
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
+  },
+  delete: {
+    background: 'none',
+    color: theme.palette.warning.main,
+    border: '1px solid',
+    borderColor: theme.palette.warning.main,
+    '&:hover': {
+      background: 'none',
+    },
   },
   categories: {
     '& span': {
@@ -115,16 +131,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ADDArticle = gql`
-  mutation createArticle(
+const EDITArticle = gql`
+  mutation editArticle(
     $articleInfos: ArticleInfos
-    $actorId: Int!
+    $articleId: Int!
     $userId: Int!
     $content: String!
   ) {
-    createArticle(
+    editArticle(
       articleInfos: $articleInfos
-      actorId: $actorId
+      articleId:$articleId
       userId: $userId
       content: $content
     ) {
@@ -134,7 +150,27 @@ const ADDArticle = gql`
     }
   }
 `;
-
+const GET_ARTICLE = gql`
+  query article(
+    $id: String!
+  ) {
+    article(
+      id: $id
+    ) {
+      id
+      label
+      content
+      shortDescription
+      actors{
+        id
+        name
+        referents{
+          id
+        }
+      }
+    }
+  }
+`;
 const GET_ACTORS = gql`
 query actors {
   actors {
@@ -148,21 +184,10 @@ query actors {
 }
 `;
 
-const GET_ACTOR = gql`
-  query actor($id: String!) {
-    actor(id: $id) {
-      id
-      name
-      pictures {
-        id
-        label
-        originalPicturePath
-        originalPictureFilename
-        position
-        logo
-        main
-      }
-    }
+
+const DELETE_ARTICLE = gql`
+  mutation deleteArticle($articleId: Int!) {
+    deleteArticle(articleId: $articleId)
   }
 `;
 
@@ -204,35 +229,6 @@ const FormItem = (props: FormItemProps) => {
   );
 };
 
-const FormItemTextareaAutosize = (props: FormItemProps) => {
-  const styles = useStyles();
-  const {
-    label,
-    inputName,
-    formChangeHandler,
-    value,
-    required,
-    errorBool,
-    errorText,
-  } = props;
-  return (
-    <TextField
-      multiline
-      rows={4}
-      className={styles.field}
-      variant="outlined"
-      value={value}
-      label={label}
-      name={inputName}
-      onChange={formChangeHandler}
-      defaultValue=""
-      fullWidth
-      required={required}
-      error={errorBool}
-      helperText={errorBool ? errorText : ''}
-    />
-  );
-};
 
 const TitleWithTooltip = (props: TitleWithTooltipProps) => {
   const { title, tooltipTitle, collection = false } = props;
@@ -255,7 +251,7 @@ const TitleWithTooltip = (props: TitleWithTooltipProps) => {
   );
 };
 
-const AddArticleForm = ({ actorId }) => {
+const EditArticleForm = (props) => {
   const validationRules: ValidationRules = {
     label: {
       rule: ValidationRuleType.required,
@@ -265,38 +261,101 @@ const AddArticleForm = ({ actorId }) => {
       maxLimit: 90,
     },
   };
-  function IsTree(collection) {
-    let isTree = false;
-    if (collection.entries) {
-      collection.entries.map((entry) => {
-        if (entry.subEntries) {
-          entry.subEntries.map((subentry) => {
-            isTree = true;
-            return isTree;
-          });
-        }
+  const user = useSessionState();
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const router = useRouter();
+  function containUserActorsReferent(actors) {
+    let isContained = false;
+    if (user !== null) {
+      actors.forEach((actor) => {
+        (actor.referents || []).forEach((element) => {
+          if (element.id == user.id) {
+            isContained = true;
+          }
+        });
       });
     }
-    return isTree;
+    return isContained;
   }
+  const {
+    loading: articleLoading,
+    error: articleError,
+    data: articleData,
+  } = useQuery(GET_ARTICLE, {
+    variables: { id: props.id.toString() },
+    fetchPolicy: 'no-cache',
+    onCompleted: (dataArticle) => {
+      if (user === undefined || user == null) {
+        enqueueSnackbar(
+          'Veuillez vous connecter pour effectuer des modifications.',
+          {
+            preventDuplicate: true,
+          },
+        );
+        router.push('/');
+      } else if (!(containUserActorsReferent(dataArticle.article.actors)  ||  user.role === 'admin')) {
+        enqueueSnackbar(
+          "Vous n'avez pas les droits d'éditer cet événenement",
+          {
+            preventDuplicate: true,
+          },
+        );
+        router.push('/');
+      }
+    },
+  });
+
+
+  const [
+    deleteArticle,
+    { data: deleteData, error: deleteError, loading: deleteLoading },
+  ] = useMutation(DELETE_ARTICLE);
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpenDeleteDialog = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const submitDeleteArticle = () => {
+    deleteArticle({
+      variables: {
+        articleId: parseInt(props.id),
+      },
+    });
+    setOpen(false);
+  };
+
+  useEffect(() => {
+    if (!deleteLoading && deleteData?.deleteArticle) {
+      enqueueSnackbar('Article supprimé.', {
+        preventDuplicate: true,
+      });
+      router.push('/actorAdmin/article');
+    } else if (deleteError) {
+      enqueueSnackbar("La suppression de l'article a échoué.", {
+        preventDuplicate: true,
+      });
+    }
+  }, [deleteData, deleteError, deleteLoading]);
+
+
   const Form: RenderCallback = ({
     formChangeHandler,
     validationResult,
     formValues,
   }) => {
     // const { formChangeHandler, formValues, validationResult } = props;
-    const [addArticle, { data, error }] = useMutation(ADDArticle);
-
-    const [showOtherArticleList, setShowOtherArticleList] = useState(false);
-
-    const { data: dataActors } = useQuery(GET_ACTORS, {});
+    const [editArticle, { data, error }] = useMutation(EDITArticle);
+   
+    const router = useRouter();
 
     useGraphQLErrorDisplay(error);
     const styles = useStyles();
     const redirect = useCookieRedirection();
-    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-    const user = useSessionState();
-    const router = useRouter();
     const [state, setState] = React.useState({});
     const [address, setAddress] = useState('');
     const [city, setCity] = useState('');
@@ -305,14 +364,51 @@ const AddArticleForm = ({ actorId }) => {
     const [actors] = useState([]);
     const [showOtherActors, setShowOtherActors] = useState(false);
     const [actorsId] = useState([]);
-    const {
-      loading: actorLoading,
-      error: actorError,
-      data: actorData,
-    } = useQuery(GET_ACTOR, {
-      variables: { id: actorId },
-    });
-    const [hasParentArticle, setHasParentArticle] = useState(false);
+
+    function containUser(list) {
+      let isContained = false;
+      if (user !== null) {
+        list.forEach((element) => {
+          if (element.id == user.id) {
+            isContained = true;
+          }
+        });
+      }
+      return isContained;
+    }
+   
+    const { data: dataActors } = useQuery(GET_ACTORS, {});
+    
+    
+    const [firstRender, setFirstRender] = useState(true);
+   const validateForm = () => {
+      if (
+        !formValues.shortDescription ||
+        !formValues.label
+        || !descriptionEditor?.getData()
+      ) setValidated(false);
+      else setValidated(true);
+    };
+    const initFormValues = () => {
+      formValues.label = '';
+      formValues.shortDescription = '';
+      formValues.content = '';
+    };
+    const updateFormValues = () => {
+      formValues.label = articleData.article.label;
+      formValues.content = articleData.article.content;
+      formValues.shortDescription = articleData.article.shortDescription;
+      formValues.actors = articleData.article.actors;
+      validateForm();
+    };
+    if (firstRender) {
+      initFormValues();
+    }
+    if (firstRender && !articleLoading && !articleError) {
+      updateFormValues();
+      setFirstRender(false);
+    }
+
     const handleClickAddActor = useCallback(() => {
       setShowAddActor(!showAddActor);
     }, [showAddActor]);
@@ -334,7 +430,7 @@ const AddArticleForm = ({ actorId }) => {
 
     if (user === undefined || user == null) {
       enqueueSnackbar(
-        'Veuillez vous connecter pour créer un article.',
+        'Veuillez vous connecter pour éditer un article.',
         {
           preventDuplicate: true,
         },
@@ -357,13 +453,6 @@ const AddArticleForm = ({ actorId }) => {
       }
     }, []);
 
-    useEffect(() => {
-      if (actorData && formValues) {
-        formValues.actors = [];
-        formValues.actors.push(actorData.actor);
-      }
-      // @ts-ignore
-    }, [formValues, actorData]);
 
     const editorRef = useRef();
     const [editorLoaded, setEditorLoaded] = useState(false);
@@ -385,10 +474,10 @@ const AddArticleForm = ({ actorId }) => {
 
     useEffect(() => {
       if (data) {
-        enqueueSnackbar('Article créé avec succès.', {
+        enqueueSnackbar('Article modifié avec succès.', {
           prArticleDuplicate: true,
         });
-        router.push(`/article/${data.createArticle.id}`);
+        router.push(`/article/${data.editArticle.id}`);
       }
     }, [data]);
 
@@ -396,17 +485,10 @@ const AddArticleForm = ({ actorId }) => {
       validateForm();
   
     });
-    const validateForm = () => {
-      if (
-        !formValues.shortDescription ||
-        !formValues.label
-        || !descriptionEditor?.getData()
-      ) setValidated(false);
-      else setValidated(true);
-    };
+  
 
     const submitHandler = () => {
-      addArticle({
+      editArticle({
         variables: {
           articleInfos: {
             label: formValues.label,
@@ -416,7 +498,7 @@ const AddArticleForm = ({ actorId }) => {
             // @ts-ignore
             actors: formValues.actors.map((item) => item.id),
           },
-          actorId: parseInt(actorId),
+          articleId: parseInt(articleData.article.id),
           userId: parseInt(user.id),
           // @ts-ignore
           content: descriptionEditor.getData(),
@@ -424,18 +506,7 @@ const AddArticleForm = ({ actorId }) => {
       });
     };
 
-    const autocompleteHandler = (Article, valueActor) => {
-      const ArticleModified = Article;
 
-      /* @ts-ignore */
-      actors.push(valueActor);
-      /* @ts-ignore */
-      actorsId.push(valueActor.id);
-      ArticleModified.target.name = 'actors';
-      ArticleModified.target.value = actorsId;
-      formChangeHandler(ArticleModified);
-      setShowOtherActors(false);
-    };
 
     const handleChangeActor = useCallback((Article, value) => {
       if (value) {
@@ -444,6 +515,7 @@ const AddArticleForm = ({ actorId }) => {
         currentActors.push(value);
         // @ts-ignore
         formValues.actors = currentActors;
+        debugger;
       }
       setShowAddActor(false);
       setOpenAddActorlist(false);
@@ -452,7 +524,7 @@ const AddArticleForm = ({ actorId }) => {
     return (
       <Container component="main" maxWidth="sm" className={styles.container}>
         <Typography className={styles.field} color="secondary" variant="h6">
-          Ajouter un article
+          Edition d'article
         </Typography>
         <FormItem
           label="Nom de l'article"
@@ -580,16 +652,56 @@ const AddArticleForm = ({ actorId }) => {
           onClick={submitHandler}
           disabled={!validationResult?.global || !validated}
         >
-          Créer l'article
+          Mettre à jour l'article
         </ClassicButton>
+        <ClassicButton
+          fullWidth
+          variant="contained"
+          className={styles.delete}
+          onClick={handleClickOpenDeleteDialog}
+        >
+          Supprimer cet article
+        </ClassicButton>
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">
+            Êtes-vous sûr(e) de vouloir supprimer cet article ?
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              Une fois supprimé, cette article sera définitivement supprimé. Il
+              ne sera plus visible sur notre plateforme, ni pour vous, ni pour
+              les visiteurs.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} color="primary">
+              Annuler
+            </Button>
+            <Button onClick={submitDeleteArticle} color="primary" autoFocus>
+              Supprimer
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Container>
     );
   };
+  
+  if (articleLoading) {
+    return null;
+  }
+  if (articleError) {
+    return <FallbackPageNotFound />;
+  }
 
   return <FormController render={Form} validationRules={validationRules} />;
 };
 
-export default withDndProvider(withApollo()(AddArticleForm));
+export default withDndProvider(withApollo()(EditArticleForm));
 function value(value: any) {
   throw new Error('Function not implemented.');
 }
