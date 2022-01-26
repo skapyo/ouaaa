@@ -46,6 +46,7 @@ import Image from 'next/image';
 import Link from 'components/Link';
 import moment from 'moment';
 import { useSessionState } from '../../context/session/session';
+import CardSliderArticle from 'components/cards/CardSliderArticle';
 import {
   getImageUrl,
   entriesHasElementWithCode,
@@ -411,6 +412,11 @@ query actor($id: String) {
       }
       hours
       place
+    }
+    articles{
+      id
+      label
+      shortDescription
     }
     
   }
@@ -1376,20 +1382,20 @@ const Actor = ({ initialData }) => {
             <br />
             <div>
               <Typography variant="h5" className={[styles.cardTitle]}>
-                LES ÉVÉNEMENTS DE : {data && data?.actor?.name}
+                LES ARTICLE DE : {data && data?.actor?.name}
               </Typography>
               <div className={styles.border} />
             </div>
             <br />
-            <Calendar
-              events={events}
-              withViewSwitcher={false}
-              withAddEvent={
-                (data && containUser(data.actor.referents) && data.actor.isValidated) ||
-                (user && user.role === 'admin')
-              }
-              className={styles.calendar}
-            />
+            <Slider
+              {...sliderSettings}
+              className={[styles.articleCarroussel]}
+            >
+              {data &&
+                data.actor.articles.map((article) => {
+                  return <CardSliderArticle key={article.id} article={article} />;
+                })}
+            </Slider>
           </Container>
           {((data && containUser(data.actor.referents)) ||
             (user && user.role === 'admin')) && (
@@ -1432,6 +1438,7 @@ export async function getServerSideProps(ctxt) {
     'before json' + moment.duration(endDate.diff(startDate)).asMilliseconds(),
   );
   const initialData = await res.json();
+  console.log(initialData);
   if (initialData.errors) {
     console.error(
       ' Error fetching actor id ' +

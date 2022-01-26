@@ -9,6 +9,8 @@ import Newsletter from '../containers/layouts/Newsletter';
 import PresentationSection from '../containers/layouts/homePage/presentationSection';
 import ThreePoint from '../containers/layouts/homePage/threepoint';
 import LastActor from '../containers/layouts/homePage/lastActor';
+import LastArticle from '../containers/layouts/homePage/lastArticle';
+ 
 import LastEvent from '../containers/layouts/homePage/lastEvent';
 
 const useStyles = makeStyles((theme) => ({
@@ -122,6 +124,8 @@ const Index = () => {
           <LastActor />
 
           <LastEvent />
+
+          <LastArticle />
 
           <Newsletter />
 

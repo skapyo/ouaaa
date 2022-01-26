@@ -25,7 +25,7 @@ const Favorite = ({ actor, event, handleFavoriteChange }) => {
     color = actor.entries && actor.entries.length > 0 && actor.entries[0].parentEntry
       ? actor.entries[0].parentEntry.color
       : '#2C367E';
-  } else {
+  } else if (event) {
     color = event.entries.length > 0 && event.entries[0].parentEntry
       ? event.entries[0].parentEntry.color
       : '#2C367E';
@@ -37,7 +37,7 @@ const Favorite = ({ actor, event, handleFavoriteChange }) => {
   const user = useSessionState();
   function containUser(list) {
     let isContained = false;
-    if (user !== null && user !== undefined && list !== undefined) {
+    if (user !== null && user !== undefined && list !== undefined && list)  {
       list.forEach((element) => {
         if (element.id == user.id) {
           isContained = true;
@@ -46,7 +46,7 @@ const Favorite = ({ actor, event, handleFavoriteChange }) => {
     }
     return isContained;
   }
-  const [favorite, setFavorite] = useState(containUser(actor ? actor.favorites : event.favorites));
+  const [favorite, setFavorite] = useState(containUser(actor ? actor.favorites : (event? event.favorites: null)));
   const [
     addFavorite,
     { data: addFavoriteData, loading: addFavoriteLoading, error: addFavoriteError },
