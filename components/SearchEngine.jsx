@@ -9,8 +9,8 @@ import { makeStyles } from '@material-ui/core';
 import { useRouter } from 'next/router'
 
 const SEARCH = gql`
-  query search($searchEvent: Boolean, $searchActor: Boolean, $searchValue: String!) {
-    search(searchEvent: $searchEvent, searchActor: $searchActor, searchValue: $searchValue) {
+  query search($searchEvent: Boolean, $searchActor: Boolean, $searchArticle: Boolean, $searchValue: String!) {
+    search(searchEvent: $searchEvent, searchActor: $searchActor, searchArticle: $searchArticle, searchValue: $searchValue) {
       events
       {
         id
@@ -34,6 +34,12 @@ const SEARCH = gql`
           activity
           lat
           lng
+        }
+        articles
+        {
+          id
+          label
+          shortDescription
         }
     }
   }
@@ -106,12 +112,13 @@ const SearchEngine = (props) => {
     variables: {
       searchActor: true,
       searchEvent: true,
+      searchArticle: true,
       searchValue: ""
     },
     onCompleted: (response) => {
       if (value !== null) {
-        const { events = [], actors = [] } = response.search;
-        setData({ events, actors });
+        const { events = [], actors = [], articles = [] } = response.search;
+        setData({ events, actors, articles });
         if (!open) {
           setOpen(true);
         }
@@ -123,7 +130,7 @@ const SearchEngine = (props) => {
   const handleInputChange = useCallback((evt, newValue) => {
     setValue(newValue);
     if (newValue.length >= 3) {
-      refetch({ searchValue: newValue, searchActor: true, searchEvent: true });
+      refetch({ searchValue: newValue, searchActor: true, searchEvent: true, searchArticle: true });
     } else {
       setOpen(false);
     }
@@ -134,8 +141,9 @@ const SearchEngine = (props) => {
 
     const eventOptions = data.events.map(event => ({ ...event, type: 'Actions' }));
     const actorOptions = data.actors.map(actor => ({ ...actor, type: 'Acteurs', label: actor.name }));
+    const articleOptions = data.articles.map(article => ({ ...article, type: 'Articles'}));
 
-    return eventOptions.concat(actorOptions);
+    return eventOptions.concat(actorOptions).concat(articleOptions);
   }, [data]);
 
   const handleClickOption = useCallback((evt, option) => {
