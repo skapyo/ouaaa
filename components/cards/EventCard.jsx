@@ -3,6 +3,7 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import gql from 'graphql-tag';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Link from '../Link';
+import Moment from 'react-moment';
 import { getImageUrl } from '../../utils/utils';
 import Favorite from '../../components/Favorite';
 
