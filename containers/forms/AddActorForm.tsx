@@ -34,7 +34,7 @@ import { useSnackbar } from 'notistack';
 import React, {
   ChangeEvent,
   useCallback,
-  useeEffect,
+  useEffect,
   useRef,
   useState,
 } from 'react';
