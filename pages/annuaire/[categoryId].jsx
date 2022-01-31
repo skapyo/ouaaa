@@ -1,6 +1,7 @@
 import React from 'react';
 import { Typography, Container, Stack } from '@mui/material';
 import ActorCard from 'components/cards/ActorCard';
+import Head from 'next/head';
 import AppLayout from 'containers/layouts/AppLayout';
 import { withApollo } from 'hoc/withApollo.jsx';
 
@@ -53,6 +54,12 @@ const AnnuaireCategoryPage = ({ category, actors }) => {
 
   return (
     <AppLayout>
+      <Head>
+        <title>
+          { category.data.category.description.replaceAll(' ; ',', ').substring(0, category.data.category.description.length > 90 ? 90 : category.data.category.description.length) } La rochelle
+        </title>
+        <meta name="description" content={ category.data.category.label + ' - ' +category.data.category.description} />
+      </Head>
       <Container sx={{
         backgroundColor: '#F6F6F6',
       }}

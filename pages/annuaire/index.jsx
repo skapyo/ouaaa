@@ -3,6 +3,7 @@ import React from 'react';
 import AppLayout from 'containers/layouts/AppLayout';
 import { withApollo } from 'hoc/withApollo.jsx';
 import Grid from '@mui/material/Grid';
+import Head from 'next/head';
 import Container from '@mui/material/Container';
 import CategoryCard from '../../components/cards/CategoryCard';
 
@@ -22,6 +23,11 @@ const AnnuairePage = ({ initialData }) => {
 
   return (
     <AppLayout>
+      <Head>
+        <title>
+          Annuaire
+        </title>
+      </Head>
       <Container sx={{
         backgroundColor: '#F6F6F6',
       }}
