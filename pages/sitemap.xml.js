@@ -25,7 +25,16 @@ query events {
 }
 }
 `;
-
+const GET_CATEGORIES_SSR= `
+query categories {
+  categories {
+    id
+    label
+    color
+    description
+    icon
+  }
+}`;
 export const getServerSideProps = async ({ res }) => {
   const staticPages = fs
     .readdirSync('pages')
@@ -37,6 +46,18 @@ export const getServerSideProps = async ({ res }) => {
         'sitemap.xml.js',
         'forgotPassword.jsx',
         'styles.css',
+        'index.jsx',
+        'signin.jsx',
+        'signup.jsx',
+        'administration',
+        'addevent',
+        'addarticle',
+        'addactor',
+        'actorAdmin',
+        'account',
+        'emailValidation',
+        'improvment',
+        'user',
       ].includes(staticPage);
     })
     .map((staticPagePath) => {
@@ -79,16 +100,44 @@ export const getServerSideProps = async ({ res }) => {
       }`,
     );
   }
+  const getCategories = await fetch(process.env.NEXT_PUBLIC_API_URI, {
+    method: 'POST',
+    body: JSON.stringify({
+      operationName: 'categories',
+      variables: {},
+      query: GET_CATEGORIES_SSR,
+    }),
+  });
+  const initialDataCategories = await getCategories.json();
+  if (initialDataCategories.errors) {
+    console.error(
+      ` Error fetching event error message : ${
+        initialDataCategories.errors[0].message
+      }`,
+    );
+  }
 
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
     <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+      <loc>${process.env.NEXT_PUBLIC_BASE_URL}</loc>
+      <lastmod>${new Date().toISOString()}</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>1.0</priority>
+    </url>
+    <url>
+      <loc>${process.env.NEXT_PUBLIC_BASE_URL}/agenda</loc>
+      <lastmod>${new Date().toISOString()}</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>1.0</priority>
+    </url>
       ${staticPages
     .map((url) => {
       return `
             <url>
               <loc>${url}</loc>
               <lastmod>${new Date().toISOString()}</lastmod>
-              <changefreq>monthly</changefreq>
+              <changefreq>weekly</changefreq>
               <priority>1.0</priority>
             </url>
           `;
@@ -100,7 +149,7 @@ export const getServerSideProps = async ({ res }) => {
           <url>
             <loc>${process.env.NEXT_PUBLIC_BASE_URL}/actor/${id}</loc>
             <lastmod>${moment(parseInt(updatedAt)).format("YYYY-MM-DDTHH:mm:ss:SSS[Z]")}</lastmod>
-            <changefreq>weekly</changefreq>
+            <changefreq>daily</changefreq>
             <priority>1.0</priority>
           </url>
         `;
@@ -112,12 +161,24 @@ export const getServerSideProps = async ({ res }) => {
             <url>
               <loc>${process.env.NEXT_PUBLIC_BASE_URL}/event/${id}</loc>
               <lastmod>${moment(parseInt(updatedAt)).format("YYYY-MM-DDTHH:mm:ss:SSS[Z]")}</lastmod>
-              <changefreq>weekly</changefreq>
+              <changefreq>daily</changefreq>
               <priority>1.0</priority>
             </url>
           `;
       })
       .join('')}
+      ${initialDataCategories.data.categories
+        .map(({ id, updatedAt }) => {
+          return `
+              <url>
+                <loc>${process.env.NEXT_PUBLIC_BASE_URL}/annuaire/${id}</loc>
+                <lastmod>${new Date().toISOString()}</lastmod>
+                <changefreq>daily</changefreq>
+                <priority>1.0</priority>
+              </url>
+            `;
+        })
+        .join('')}
     </urlset>
   `;
 
