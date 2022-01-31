@@ -58,6 +58,8 @@ export const getServerSideProps = async ({ res }) => {
         'emailValidation',
         'improvment',
         'user',
+        'event',
+        'agenda.jsx',
       ].includes(staticPage);
     })
     .map((staticPagePath) => {
@@ -130,6 +132,18 @@ export const getServerSideProps = async ({ res }) => {
       <lastmod>${new Date().toISOString()}</lastmod>
       <changefreq>weekly</changefreq>
       <priority>1.0</priority>
+    </url>
+    <url>
+      <loc>${process.env.NEXT_PUBLIC_BASE_URL}/signin</loc>
+      <lastmod>${new Date().toISOString()}</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.5</priority>
+    </url>
+    <url>
+      <loc>${process.env.NEXT_PUBLIC_BASE_URL}/forgotPassword</loc>
+      <lastmod>${new Date().toISOString()}</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.5</priority>
     </url>
       ${staticPages
     .map((url) => {
