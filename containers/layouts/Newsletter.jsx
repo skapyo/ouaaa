@@ -137,7 +137,7 @@ const validationRules = {
   },
 };
 
-const Newsletter = () => {
+const Newsletter = (prop) => {
   const Form = (props) => {
     const styles = useStyles();
     const user = useSessionState();
@@ -181,7 +181,7 @@ const Newsletter = () => {
     ]);
 
     return (
-      <Grid container direction="column" alignItems="center" justifyContent="space-around" className={styles.newsletter}>
+      <Grid id={prop.id} container direction="column" alignItems="center" justifyContent="space-around" className={styles.newsletter}>
         <Typography variant="h2" className={[styles.cardTitle, styles.align]}>
           POUR NE RIEN RATER DE <i>OUAAA!</i>
           <br />

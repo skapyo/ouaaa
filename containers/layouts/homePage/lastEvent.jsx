@@ -79,7 +79,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const LastActor = () => {
+const LastActor = (props) => {
   const GET_EVENTS = gql`
     query events($limit: Int, $sort: String, $way: String,$startingDate: String) {
       events(limit: $limit, sort: $sort, way: $way,startingDate: $startingDate) {
@@ -187,7 +187,7 @@ const LastActor = () => {
     prevArrow: <SamplePrevArrow />,
   };
   return (
-    <Container className={[styles.event]}>
+    <Container className={[styles.event]} id={props.id}>
       <Typography variant="h5" className={[styles.cardTitle]}>
         LES ÉVÉNEMENTS À VENIR
       </Typography>

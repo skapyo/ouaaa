@@ -9,8 +9,8 @@ import Newsletter from '../containers/layouts/Newsletter';
 import PresentationSection from '../containers/layouts/homePage/presentationSection';
 import ThreePoint from '../containers/layouts/homePage/threepoint';
 import LastActor from '../containers/layouts/homePage/lastActor';
+import ScrollToBottom from '../components/scroll/ScrollToBottom';
 import LastArticle from '../containers/layouts/homePage/lastArticle';
- 
 import LastEvent from '../containers/layouts/homePage/lastEvent';
 
 const useStyles = makeStyles((theme) => ({
@@ -111,24 +111,25 @@ const Index = () => {
   });
   const styles = useStyles(stylesProps);
 
+  const sections = ["PresentationSection", "ThreePoint", "LastActor", "LastEvent", "Newsletter"];
+  
   return (
 
     <AppLayout>
       <RootRef>
         <Box>
 
-          <PresentationSection />
+          <PresentationSection id={sections[0]} />
 
-          <ThreePoint />
+          <ThreePoint id={sections[1]} />
 
-          <LastActor />
+          <LastActor id={sections[2]} />
 
-          <LastEvent />
+          <LastEvent id={sections[3]} />
 
-          <LastArticle />
+          <Newsletter id={sections[4]} />
 
-          <Newsletter />
-
+          <ScrollToBottom sections={sections} />
         </Box>
       </RootRef>
     </AppLayout>

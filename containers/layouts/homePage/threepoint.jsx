@@ -175,11 +175,11 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const PresentationSection = () => {
+const PresentationSection = (props) => {
   const styles = useStyles();
 
   return (
-    <Container className={styles.cardInfo}>
+    <Container className={styles.cardInfo} id={props.id}>
       <Grid container spacing={3} className={styles.flexColumn}>
         <Grid item md={6}>
           <div className={styles.gridTitle}>

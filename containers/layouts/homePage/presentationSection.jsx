@@ -82,13 +82,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const PresentationSection = () => {
+const PresentationSection = (props) => {
   const styles = useStyles();
   const theme = useTheme();
   const mobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   return (
-    <Container className={styles.titleContainer}>
+    <Container className={styles.titleContainer} id={props.id}>
       <div className={styles.title}>
         <h1 className={styles.h1}>
           agir pour la transition écologique

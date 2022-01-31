@@ -67,7 +67,7 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: '1em',
   },
 }));
-const LastActor = () => {
+const LastActor = (props) => {
   const GET_ACTORS = gql`
     query actors($limit: Int, $sort: String, $way: String,$isValidated: Boolean) {
       actors(limit: $limit, sort: $sort, way: $way, isValidated: $isValidated) {
@@ -153,7 +153,7 @@ const LastActor = () => {
     prevArrow: <SamplePrevArrow />,
   };
   return (
-    <Container className={[styles.actorContainer]}>
+    <Container className={[styles.actorContainer]} id={props.id} >
       <Typography variant="h2" className={[styles.cardTitle]}>
         LES ACTEURS RÉCEMMENTS AJOUTÉS
       </Typography>
