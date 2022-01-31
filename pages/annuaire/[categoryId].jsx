@@ -51,12 +51,13 @@ query actorsByCategory($categoryId: String!) {
 
 const AnnuaireCategoryPage = ({ category, actors }) => {
   const { data } = actors;
-
+  let find = ' ; ';
+  let reg = new RegExp(find, 'g');
   return (
     <AppLayout>
       <Head>
         <title>
-          { category.data.category.description.replaceAll(' ; ',', ').substring(0, category.data.category.description.length > 90 ? 90 : category.data.category.description.length) } La rochelle
+          { category.data.category.description.replace(reg ,', ').substring(0, category.data.category.description.length > 90 ? 90 : category.data.category.description.length) } La rochelle
         </title>
         <meta name="description" content={ category.data.category.label + ' - ' +category.data.category.description} />
       </Head>
