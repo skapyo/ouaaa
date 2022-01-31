@@ -40,7 +40,7 @@ export const getServerSideProps = async ({ res }) => {
       ].includes(staticPage);
     })
     .map((staticPagePath) => {
-      return `${process.env.NEXT_PUBLIC_URI}/${staticPagePath}`;
+      return `${process.env.NEXT_PUBLIC_BASE_URL}/${staticPagePath}`;
     });
 
 
@@ -98,7 +98,7 @@ export const getServerSideProps = async ({ res }) => {
     .map(({ id, updatedAt }) => {
       return `
           <url>
-            <loc>${process.env.NEXT_PUBLIC_URI}/actor/${id}</loc>
+            <loc>${process.env.NEXT_PUBLIC_BASE_URL}/actor/${id}</loc>
             <lastmod>${moment(parseInt(updatedAt)).format("YYYY-MM-DDTHH:mm:ss:SSS[Z]")}</lastmod>
             <changefreq>weekly</changefreq>
             <priority>1.0</priority>
@@ -110,7 +110,7 @@ export const getServerSideProps = async ({ res }) => {
       .map(({ id, updatedAt }) => {
         return `
             <url>
-              <loc>${process.env.NEXT_PUBLIC_URI}/event/${id}</loc>
+              <loc>${process.env.NEXT_PUBLIC_BASE_URL}/event/${id}</loc>
               <lastmod>${moment(parseInt(updatedAt)).format("YYYY-MM-DDTHH:mm:ss:SSS[Z]")}</lastmod>
               <changefreq>weekly</changefreq>
               <priority>1.0</priority>
