@@ -127,7 +127,7 @@ const Index = () => {
 
           <LastEvent id={sections[3]} />
 
-          <LastArticle id={sections[4]} />
+          <LastArticle id={sections[4]}/>
 
           <Newsletter id={sections[5]} />
 

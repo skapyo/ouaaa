@@ -6,7 +6,7 @@ import TextField from '@material-ui/core/TextField';
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/client';
 import { makeStyles } from '@material-ui/core';
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/router';
 
 const SEARCH = gql`
   query search($searchEvent: Boolean, $searchActor: Boolean, $searchArticle: Boolean, $searchValue: String!) {
@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
     margin: 'auto',
     [theme.breakpoints.down('sm')]: {
       width: 'auto',
-      paddingTop: '1em'
+      paddingTop: '1em',
     },
   },
   inputRoot: {
@@ -62,21 +62,21 @@ const useStyles = makeStyles((theme) => ({
   },
   popupIndicator: {
     transform: 'none',
-    marginRight: 2
+    marginRight: 2,
   },
   group: {
     marginLeft: 10,
-    borderBottom: '1px solid #d9d7d7'
+    borderBottom: '1px solid #d9d7d7',
   },
   optionShortDescription: {
     fontSize: 14,
     marginLeft: 14,
-    fontStyle: 'italic'
+    fontStyle: 'italic',
   },
   optionActivity: {
     fontSize: 14,
     marginLeft: 14,
-    fontStyle: 'italic'
+    fontStyle: 'italic',
   },
 }));
 
@@ -113,7 +113,7 @@ const SearchEngine = (props) => {
       searchActor: true,
       searchEvent: true,
       searchArticle: true,
-      searchValue: ""
+      searchValue: '',
     },
     onCompleted: (response) => {
       if (value !== null) {
@@ -130,7 +130,9 @@ const SearchEngine = (props) => {
   const handleInputChange = useCallback((evt, newValue) => {
     setValue(newValue);
     if (newValue.length >= 3) {
-      refetch({ searchValue: newValue, searchActor: true, searchEvent: true, searchArticle: true });
+      refetch({
+        searchValue: newValue, searchActor: true, searchEvent: true, searchArticle: true,
+      });
     } else {
       setOpen(false);
     }
@@ -139,24 +141,26 @@ const SearchEngine = (props) => {
   const options = useMemo(() => {
     if (!data) return [];
 
-    const eventOptions = data.events.map(event => ({ ...event, type: 'Actions' }));
-    const actorOptions = data.actors.map(actor => ({ ...actor, type: 'Acteurs', label: actor.name }));
-    const articleOptions = data.articles.map(article => ({ ...article, type: 'Articles'}));
+    const eventOptions = data.events.map((event) => ({ ...event, type: 'Actions' }));
+    const actorOptions = data.actors.map((actor) => ({ ...actor, type: 'Acteurs', label: actor.name }));
+    const articleOptions = data.articles.map((article) => ({ ...article, type: 'Articles' }));
 
     return eventOptions.concat(actorOptions).concat(articleOptions);
   }, [data]);
 
   const handleClickOption = useCallback((evt, option) => {
     if (option.type === 'Actions') {
-      router.push('/event/' + option.id);
+      router.push(`/event/${option.id}`);
+    } if (option.type === 'Acteurs') {
+      router.push(`/actor/${option.id}`);
     } else {
-      router.push('/actor/' + option.id);
+      router.push(`/article/${option.id}`);
     }
   }, [router]);
 
   const filterOptions = useCallback(() => {
     return options;
-  }, [options])
+  }, [options]);
 
   return (
     <Autocomplete
@@ -165,7 +169,7 @@ const SearchEngine = (props) => {
       classes={{
         root: classes.root,
         inputRoot: classes.inputRoot,
-        popupIndicator: classes.popupIndicator
+        popupIndicator: classes.popupIndicator,
       }}
       onInputChange={handleInputChange}
       onChange={handleClickOption}
@@ -190,14 +194,14 @@ const SearchEngine = (props) => {
             InputProps={{
               ...params.InputProps,
               endAdornment: (
-                <React.Fragment>
+                <>
                   {loading ? <CircularProgress color="inherit" size={20} /> : null}
                   {params.InputProps.endAdornment}
-                </React.Fragment>
+                </>
               ),
             }}
           />
-        )
+        );
       }}
       renderOption={(option, state) => {
         const { label, activity, shortDescription } = option;
@@ -209,13 +213,17 @@ const SearchEngine = (props) => {
 
         return (
           <div>
-            <div>{newLabel} {newActivity && <div className={classes.optionActivity}>{newActivity}</div>}</div>
+            <div>
+              {newLabel}
+              {' '}
+              {newActivity && <div className={classes.optionActivity}>{newActivity}</div>}
+            </div>
             {shortDescription && <div className={classes.optionShortDescription}>{newShortDescription}</div>}
           </div>
-        )
+        );
       }}
     />
-  )
+  );
 };
 
 export default SearchEngine;

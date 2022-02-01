@@ -312,18 +312,6 @@ const NavBar = () => {
                       AGENDA DES ACTIONS
                     </MenuItem>
                   </Grid>
-                  {
-                    <Grid item>
-                      <MenuItem
-                        button
-                        component={Link}
-                        className={styles.menuItem}
-                        href="/participate"
-                      >
-                        JE PARTICIPE
-                      </MenuItem>
-                    </Grid>
-                  /*
                   <Grid item>
                     <MenuItem
                       button
@@ -334,7 +322,17 @@ const NavBar = () => {
                       LE JOURNAL
                     </MenuItem>
                   </Grid>
-                  <Grid item>
+                    <Grid item>
+                      <MenuItem
+                        button
+                        component={Link}
+                        className={styles.menuItem}
+                        href="/participate"
+                      >
+                        JE PARTICIPE
+                      </MenuItem>
+                    </Grid>
+                 {/* <Grid item>
                     <MenuItem
                       button
                       component={Link}

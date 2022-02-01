@@ -73,7 +73,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const LastArticle = () => {
+const LastArticle = (props) => {
   const GET_ARTICLES = gql`
     query articles($limit: Int, $sort: String, $way: String) {
       articles(limit: $limit, sort: $sort, way: $way) {
@@ -144,7 +144,7 @@ const LastArticle = () => {
     prevArrow: <SamplePrevArrow />,
   };
   return (
-    <Container className={[styles.article]}>
+    <Container className={[styles.article]} id={props.id}>
       <Typography variant="h5" className={[styles.cardTitle]}>
         LES DERNIERS ARTICLES
       </Typography>
