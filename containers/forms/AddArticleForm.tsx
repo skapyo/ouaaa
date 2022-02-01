@@ -356,11 +356,23 @@ const AddArticleForm = ({ actorId }) => {
         }
       }
     }, []);
+    const handleChangeActor = useCallback((Article, value) => {
+      if (value) {
+        // @ts-ignore
+        const currentActors: string[] = formValues.actors || [];
+        currentActors.push(value);
+        // @ts-ignore
+        formValues.actors = currentActors;
+      }
+      setShowAddActor(false);
+      setOpenAddActorlist(false);
+    }, [formValues]);
 
     useEffect(() => {
       if (actorData && formValues) {
         formValues.actors = [];
         formValues.actors.push(actorData.actor);
+      console.log(actorData.actor)
       }
       // @ts-ignore
     }, [formValues, actorData]);
@@ -437,17 +449,6 @@ const AddArticleForm = ({ actorId }) => {
       setShowOtherActors(false);
     };
 
-    const handleChangeActor = useCallback((Article, value) => {
-      if (value) {
-        // @ts-ignore
-        const currentActors: string[] = formValues.actors || [];
-        currentActors.push(value);
-        // @ts-ignore
-        formValues.actors = currentActors;
-      }
-      setShowAddActor(false);
-      setOpenAddActorlist(false);
-    }, [formValues]);
 
     return (
       <Container component="main" maxWidth="sm" className={styles.container}>

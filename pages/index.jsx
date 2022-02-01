@@ -111,7 +111,7 @@ const Index = () => {
   });
   const styles = useStyles(stylesProps);
 
-  const sections = ["PresentationSection", "ThreePoint", "LastActor", "LastEvent", "Newsletter"];
+  const sections = ["PresentationSection", "ThreePoint", "LastActor", "LastEvent","LastArticle", "Newsletter"];
   
   return (
 
@@ -127,7 +127,9 @@ const Index = () => {
 
           <LastEvent id={sections[3]} />
 
-          <Newsletter id={sections[4]} />
+          <LastArticle id={sections[4]} />
+
+          <Newsletter id={sections[5]} />
 
           <ScrollToBottom sections={sections} />
         </Box>

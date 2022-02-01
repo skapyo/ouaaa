@@ -156,9 +156,9 @@ const LastArticle = () => {
           })}
       </Slider>
       <div className={styles.buttonArticle}>
-        <Link href="/agenda">
+        <Link href="/news">
           <button className={styles.buttonGrid}>
-            VOIR LA LISTE COMPLETE
+            VOIR TOUS LES ARTICLES
           </button>
         </Link>
       </div>

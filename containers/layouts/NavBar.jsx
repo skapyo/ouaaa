@@ -161,7 +161,16 @@ const NavBar = () => {
                       AGENDA DES ACTIONS
                     </MenuItem>
                   </Grid>
-                  {
+                  <Grid item>
+                    <MenuItem
+                      button
+                      component={Link}
+                      className={styles.menuItem}
+                      href="/news"
+                    >
+                      ARTICLES
+                    </MenuItem>
+                  </Grid>
                     <Grid item>
                       <MenuItem
                         button
@@ -172,17 +181,9 @@ const NavBar = () => {
                         JE PARTICIPE
                       </MenuItem>
                     </Grid>
-                  /*
-                  <Grid item>
-                    <MenuItem
-                      button
-                      component={Link}
-                      className={styles.menuItem}
-                      href="/news"
-                    >
-                      INFO & ARTICLES
-                    </MenuItem>
-                  </Grid>
+                  
+                  
+                  {/*
                   <Grid item>
                     <MenuItem
                       button
@@ -193,7 +194,7 @@ const NavBar = () => {
                       A PROPOS
                     </MenuItem>
                   </Grid>
-                */}
+                  */}
 
                   {!user && (
                     <Grid item>
