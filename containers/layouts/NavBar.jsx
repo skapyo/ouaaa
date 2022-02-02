@@ -319,7 +319,7 @@ const NavBar = () => {
                       className={styles.menuItem}
                       href="/news"
                     >
-                      LE JOURNAL
+                      ARTICLES
                     </MenuItem>
                   </Grid>
                     <Grid item>
