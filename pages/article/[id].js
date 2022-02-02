@@ -88,6 +88,9 @@ const useStyles = makeStyles((theme) => ({
   description: {
     textAlign: 'left',
   },
+  createdAt: {
+    textAlign: 'right',
+  },
   h1: {
     fontSize: '3rem',
   },
@@ -289,6 +292,7 @@ const GET_ARTICLE = `
         id
         label
         content
+        createdAt
         pictures {
           id
           label
@@ -464,7 +468,11 @@ const Article = ({ initialData }) => {
                   </p>
                 </div>
                 <br />
-
+                <div className={styles.createdAt}>
+                  Publié le <Moment format="DD/MM/YYYY HH:mm" unix>
+                      {data.article && data.article.createdAt / 1000}
+                    </Moment>
+                </div>
                 {data && data.article.actors && data.article.actors.length > 0 && (
                 <div>
                   <Typography variant="h5" className={styles.cardTitle}>

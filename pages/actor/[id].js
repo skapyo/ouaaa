@@ -417,6 +417,16 @@ query actor($id: String) {
       id
       label
       shortDescription
+      createdAt
+      pictures {
+        id
+        label
+        originalPicturePath
+        originalPictureFilename
+        position
+        logo
+        main
+      }
     }
     
   }
@@ -603,6 +613,7 @@ const Actor = ({ initialData }) => {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down('sm'));
   const maxSlideToShowImage = !matches ? 3 : 1;
+  const maxSlideToShowArticle = !matches ? 5 : 1;
 
   const sliderSettings = {
     infinite: true,
@@ -613,6 +624,7 @@ const Actor = ({ initialData }) => {
   };
 
   const actorPictures = data?.actor?.pictures || [];
+  const articles = data?.actor?.articles || [];
 
   const settingsSliderImage = useMemo(() => {
     return {
@@ -622,6 +634,15 @@ const Actor = ({ initialData }) => {
         : actorPictures.length,
     };
   }, [actorPictures, sliderSettings, maxSlideToShowImage]);
+
+  const settingsSliderImageArticle = useMemo(() => {
+    return {
+      ...sliderSettings,
+      slidesToShow: articles.length >= maxSlideToShowArticle
+        ? maxSlideToShowArticle
+        : articles.length,
+    };
+  }, [actorPictures, sliderSettings, maxSlideToShowArticle]);
 
   function showCategory(entries) {
     let text = '';
@@ -1388,11 +1409,11 @@ const Actor = ({ initialData }) => {
             </div>
             <br />
             <Slider
-              {...sliderSettings}
+              {...settingsSliderImageArticle}
               className={[styles.articleCarroussel]}
             >
               {data &&
-                data.actor.articles.map((article) => {
+                data.actor.articles.sort((a, b) => (a.createdAt > b.createdAt ? -1 : 1)).map((article) => {
                   return <CardSliderArticle key={article.id} article={article} />;
                 })}
             </Slider>
@@ -1438,7 +1459,7 @@ export async function getServerSideProps(ctxt) {
     'before json' + moment.duration(endDate.diff(startDate)).asMilliseconds(),
   );
   const initialData = await res.json();
-  console.log(initialData);
+  console.log(initialData.data.actor.articles);
   if (initialData.errors) {
     console.error(
       ' Error fetching actor id ' +

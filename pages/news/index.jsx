@@ -24,6 +24,7 @@ query articles {
     id
     label
     shortDescription
+    createdAt
     pictures {
       id
       label

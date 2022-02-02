@@ -80,6 +80,7 @@ const LastArticle = (props) => {
         id
         label
         shortDescription
+        createdAt
         pictures {
           id
           label

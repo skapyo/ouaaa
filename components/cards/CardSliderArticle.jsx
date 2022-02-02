@@ -5,6 +5,7 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import Image from 'next/image';
 import Link from '../Link';
+import Moment from 'react-moment';
 
 const useStyles = makeStyles({
   root: {
@@ -97,6 +98,12 @@ export default function SimpleCard({ article }) {
             <Typography variant="body" component="p">
               {article && article.shortDescription}
             </Typography>
+            <br/>
+            <div className={classes.date}>
+              <Moment format="DD/MM/YYYY HH:mm" unix>
+                {article && article.createdAt / 1000}
+              </Moment>
+            </div>
           </div>
         </CardContent>
       </Card>
