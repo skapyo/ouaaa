@@ -80,6 +80,15 @@ const LastArticle = (props) => {
         id
         label
         shortDescription
+        pictures {
+          id
+          label
+          originalPicturePath
+          originalPictureFilename
+          position
+          logo
+          main
+        }
       }
     }
   `;
@@ -94,7 +103,7 @@ const LastArticle = (props) => {
     variables: {
       limit: 4,
       sort: 'createdAt',
-      way: 'ASC',
+      way: 'DESC',
     },
   });
 

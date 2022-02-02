@@ -22,6 +22,8 @@ import useCookieRedirection from 'hooks/useCookieRedirection';
 import { useSnackbar } from 'notistack';
 import classnames from 'classnames';
 import { useRouter } from 'next/router';
+import ImagesDropZone from 'components/ImageCropper/ImagesDropZone';
+import ImagesDisplay from 'components/ImageCropper/ImagesDisplay';
 import List from '@material-ui/core/List';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ListItem from '@material-ui/core/ListItem';
@@ -35,6 +37,8 @@ import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import { Autocomplete } from '@material-ui/lab';
 import { useSessionState } from '../../context/session/session';
+import useImageReader from '../../hooks/useImageReader';
+import useDnDStateManager from '../../hooks/useDnDStateManager';
 import withDndProvider from '../../hoc/withDnDProvider';
 
 const useStyles = makeStyles((theme) => ({
@@ -121,12 +125,14 @@ const ADDArticle = gql`
     $actorId: Int!
     $userId: Int!
     $content: String!
+    $mainPictures: [InputPictureType]
   ) {
     createArticle(
       articleInfos: $articleInfos
       actorId: $actorId
       userId: $userId
       content: $content
+      mainPictures: $mainPictures
     ) {
       id
       label
@@ -417,7 +423,53 @@ const AddArticleForm = ({ actorId }) => {
       else setValidated(true);
     };
 
+    const [
+      setImagesMainList,
+      loadingMain,
+      resultMain,
+      imagesMainListState,
+    ] = useImageReader();
+
+    const onDropMainHandler = useCallback(
+      (files) => {
+        // @ts-ignore
+        setImagesMainList(files);
+      },
+      [setImagesMainList],
+    );
+    const {
+      objectsList: objectsListMain,
+      moveObject: moveObjectMain,
+      findObject: findObjectMain,
+      updateActiveIndicator: updateActiveIndicatorMain,
+      updateDeletedIndicator: updateDeletedIndicatorMain,
+      initState: initStateMain,
+      addValues: addValuesMain,
+      updateKeyIndicator: updateKeyIndicatorMain,
+    } = useDnDStateManager([]);
+
+    useEffect(() => {
+      if (resultMain) addValuesMain(resultMain);
+      // @ts-ignore
+    }, resultMain);
+
     const submitHandler = () => {
+      let mainPictures;
+      // @ts-ignore
+      if (objectsListMain) {
+        mainPictures = objectsListMain.map((object) => {
+          // return object.file
+          return {
+            id: object.serverId,
+            newpic: object.newpic,
+            deleted: object.deleted,
+            main: true,
+            file: {
+              originalPicture: object.file,
+            },
+          };
+        });
+      }
       addArticle({
         variables: {
           articleInfos: {
@@ -432,6 +484,7 @@ const AddArticleForm = ({ actorId }) => {
           userId: parseInt(user.id),
           // @ts-ignore
           content: descriptionEditor.getData(),
+          mainPictures
         },
       });
     };
@@ -478,6 +531,23 @@ const AddArticleForm = ({ actorId }) => {
           }
           errorText={`Maximum 90 caractères. ${formValues.shortDescription?.length - 90
           } caractères en trop.`}
+        />
+        <br />
+        <Typography variant="body1" color="primary" className={styles.label}>
+          Photo principale
+        </Typography>
+        {objectsListMain ? (
+          <ImagesDisplay
+            cards={objectsListMain}
+            moveCard={moveObjectMain}
+            findCard={findObjectMain}
+            updateDeletedIndicator={updateDeletedIndicatorMain}
+            updateKeyIndicator={updateKeyIndicatorMain}
+          />
+        ) : null}
+        <ImagesDropZone
+          onDropHandler={onDropMainHandler}
+          text="Déposez ici votre photo principale au format jpg et de poids inférieur à 4Mo"
         />
         <Typography variant="body1" color="primary" className={styles.label}>
           Contenu de l'article *

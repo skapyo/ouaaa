@@ -289,6 +289,15 @@ const GET_ARTICLE = `
         id
         label
         content
+        pictures {
+          id
+          label
+          originalPicturePath
+          originalPictureFilename
+          position
+          logo
+          main
+        }
         actors {
           id
           name
@@ -302,6 +311,7 @@ const GET_ARTICLE = `
             originalPictureFilename
             position
             logo
+            main
           }
           referents {
             id
@@ -320,6 +330,7 @@ const Article = ({ initialData }) => {
   const [currentLocationWindows, setCurrentLocationWindows] = useState(null);
   const user = useSessionState();
   const { data } = initialData;
+
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   function containUser(list) {
     let isContained = false;
@@ -429,16 +440,29 @@ const Article = ({ initialData }) => {
       </Head>
       <RootRef>
         <Box>
+          {bannerUrl && (
+          <Container
+            className={styles.titleContainer}
+            style={{
+              backgroundImage: `url(${getImageUrl(bannerUrl)})`,
+            }}
+          />
+          )}
           <Container className={styles.cardInfo}>
             <Grid container>
-              <Grid item md={12} sm={12} >
+              <Grid item md={12} sm={12}>
                 <Typography variant="h1" className={styles.cardTitle}>
                   {data && data.article.label}
                 </Typography>
                 <div className={styles.border} />
                 <br />
                 <br />
-                <div className={styles.description}><p> {data && Parser(urlRectification(data.article.content))}</p></div>
+                <div className={styles.description}>
+                  <p>
+                    {' '}
+                    {data && Parser(urlRectification(data.article.content))}
+                  </p>
+                </div>
                 <br />
 
                 {data && data.article.actors && data.article.actors.length > 0 && (

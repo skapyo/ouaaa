@@ -24,6 +24,15 @@ query articles {
     id
     label
     shortDescription
+    pictures {
+      id
+      label
+      originalPicturePath
+      originalPictureFilename
+      position
+      logo
+      main
+    }
   }
 }`;
 const News = (props) => {

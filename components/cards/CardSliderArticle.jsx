@@ -3,7 +3,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
+import Image from 'next/image';
 import Link from '../Link';
+
 const useStyles = makeStyles({
   root: {
     minWidth: 120,
@@ -62,10 +64,30 @@ const useStyles = makeStyles({
 export default function SimpleCard({ article }) {
   const classes = useStyles();
   const bull = <span className={classes.bullet}>•</span>;
+  const myLoader = ({ src, width, quality }) => {
+    return `${process.env.NEXT_PUBLIC_URI}${src}?w=${width}&q=${quality || 75}`;
+  };
   return (
     <Link href={`/article/${article.id}`}>
       <Card className={classes.root}>
         <CardContent>
+          <div
+            className={classes.image}
+          >
+            { article.pictures.sort((a, b) => (a.logo ? -1 : 1))[0] && article.pictures.sort((a, b) => (a.logo ? -1 : 1))[0].originalPicturePath != null && (
+            <Image
+              loader={myLoader}
+              width="100%"
+              height="70px"
+              layout="responsive"
+              objectFit="contain"
+              src={
+                article.pictures.sort((a, b) => (a.logo ? -1 : 1))[0].originalPicturePath
+              }
+              alt={article.name}
+            />
+            )}
+          </div>
           <div className={classes.content}>
             <div className={classes.titleDiv}>
               <Typography className={classes.title}>

@@ -23,6 +23,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { useMutation, useQuery } from '@apollo/client';
+import { getImageUrl } from 'utils/utils';
 import useGraphQLErrorDisplay from 'hooks/useGraphQLErrorDisplay';
 import useCookieRedirection from 'hooks/useCookieRedirection';
 import { useSnackbar } from 'notistack';
@@ -31,6 +32,8 @@ import classnames from 'classnames';
 import { useRouter } from 'next/router';
 import List from '@material-ui/core/List';
 import DeleteIcon from '@material-ui/icons/Delete';
+import ImagesDisplay from 'components/ImageCropper/ImagesDisplay';
+import ImagesDropZone from 'components/ImageCropper/ImagesDropZone';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText/ListItemText';
@@ -41,9 +44,10 @@ import AddCircleOutline from '@material-ui/icons/AddCircleOutline';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import { Autocomplete } from '@material-ui/lab';
+import useImageReader from '../../hooks/useImageReader';
+import useDnDStateManager from '../../hooks/useDnDStateManager';
 import { useSessionState } from '../../context/session/session';
 import withDndProvider from '../../hoc/withDnDProvider';
-
 const useStyles = makeStyles((theme) => ({
   field: {
     marginBottom: theme.spacing(3),
@@ -137,16 +141,27 @@ const EDITArticle = gql`
     $articleId: Int!
     $userId: Int!
     $content: String!
+    $mainPictures: [InputPictureType]
   ) {
     editArticle(
       articleInfos: $articleInfos
       articleId:$articleId
       userId: $userId
       content: $content
+      mainPictures: $mainPictures
     ) {
       id
       label
       content
+      pictures {
+        id
+        label
+        originalPicturePath
+        originalPictureFilename
+        position
+        logo
+        main
+      }
     }
   }
 `;
@@ -167,6 +182,15 @@ const GET_ARTICLE = gql`
         referents{
           id
         }
+      }
+      pictures {
+        id
+        label
+        originalPicturePath
+        originalPictureFilename
+        position
+        logo
+        main
       }
     }
   }
@@ -304,6 +328,38 @@ const EditArticleForm = (props) => {
       }
     },
   });
+
+  const imgInitMain = [];
+  if (
+    articleData
+    && articleData.article.pictures
+    && articleData.article.pictures.length > 0
+  ) {
+    articleData.article.pictures
+      .sort((a, b) => (a.position > b.position ? 1 : -1))
+      .map((picture, index) => {
+        if (picture.main) {
+          imgInitMain.push({
+            // @ts-ignore
+            id: index,
+            // @ts-ignore
+            file: null,
+            // @ts-ignore
+            img: getImageUrl(picture.originalPicturePath),
+            // @ts-ignore
+            activated: true,
+            // @ts-ignore
+            deleted: false,
+            // @ts-ignore
+            newpic: false,
+            // @ts-ignore
+            serverId: picture.id,
+            // @ts-ignore
+            position: picture.position,
+          });
+        }
+      });
+  }
 
 
   const [
@@ -486,8 +542,53 @@ const EditArticleForm = (props) => {
   
     });
   
+    const [
+      setImagesMainList,
+      loadingMain,
+      resultMain,
+      imagesMainListState,
+    ] = useImageReader();
+
+    const onDropMainHandler = useCallback(
+      (files) => {
+        // @ts-ignore
+        setImagesMainList(files);
+      },
+      [setImagesMainList],
+    );
+    const {
+      objectsList: objectsListMain,
+      moveObject: moveObjectMain,
+      findObject: findObjectMain,
+      updateActiveIndicator: updateActiveIndicatorMain,
+      updateDeletedIndicator: updateDeletedIndicatorMain,
+      initState: initStateMain,
+      addValues: addValuesMain,
+      updateKeyIndicator: updateKeyIndicatorMain,
+    } = useDnDStateManager(imgInitMain);
+
+    useEffect(() => {
+      if (resultMain) addValuesMain(resultMain);
+      // @ts-ignore
+    }, resultMain);
 
     const submitHandler = () => {
+      let mainPictures;
+      // @ts-ignore
+      if (objectsListMain) {
+        mainPictures = objectsListMain.map((object) => {
+          // return object.file
+          return {
+            id: object.serverId,
+            newpic: object.newpic,
+            deleted: object.deleted,
+            main: true,
+            file: {
+              originalPicture: object.file,
+            },
+          };
+        });
+      }
       editArticle({
         variables: {
           articleInfos: {
@@ -502,6 +603,7 @@ const EditArticleForm = (props) => {
           userId: parseInt(user.id),
           // @ts-ignore
           content: descriptionEditor.getData(),
+          mainPictures,
         },
       });
     };
@@ -550,6 +652,23 @@ const EditArticleForm = (props) => {
           errorText={`Maximum 90 caractères. ${formValues.shortDescription?.length - 90
           } caractères en trop.`}
         />
+        <Typography variant="body1" color="primary" className={styles.label}>
+          Photo principale
+        </Typography>
+        {objectsListMain ? (
+          <ImagesDisplay
+            cards={objectsListMain}
+            moveCard={moveObjectMain}
+            findCard={findObjectMain}
+            updateDeletedIndicator={updateDeletedIndicatorMain}
+            updateKeyIndicator={updateKeyIndicatorMain}
+          />
+        ) : null}
+        <ImagesDropZone
+          onDropHandler={onDropMainHandler}
+          text="Déposez ici votre photo principale au format jpg et de poids inférieur à 4Mo"
+        />
+        <br />
         <Typography variant="body1" color="primary" className={styles.label}>
           Contenu de l'article *
         </Typography>
