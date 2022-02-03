@@ -73,18 +73,24 @@ A l’écoute des usagers : acteurs inscrits et visiteurs du site, nous recueil
           
           <br />
           <b>wOUAAAw, ils s’engagent à nos côté !  </b> <br /> <br />
-            <img width ="200px" src ="https://static.ouaaa-transition.fr/static/images/actor/32/32-9WylkfPt1K-original.jpeg" alt="Aunis en transition" />
+            <img height="100px" src ="https://static.ouaaa-transition.fr/static/images/actor/32/32-9WylkfPt1K-original.jpeg" alt="Aunis en transition" />
           Porté par le collectif Aunis en Transition : l'association reprend le flambeau du Collectif Transition Citoyenne Pays Rochelais avec la volonté de fédérer les acteurs de tout l'Aunis, échelle cohérente pour organiser un territoire résilient. Son ambition est la suivante : Créer du lien entre les acteurs de la transition, favoriser leur coopération, les faire mieux connaitre du grand public.
           <br />
           <br />
           <br />
-            <img width ="200px" src ="https://www.larochelle-zerocarbone.fr/lr-zerocarbone-theme/images/logo-zerocarbone-fill.svg" alt="La Rochelle Territoire Zéro Carbone" />
+            <img height="100px" src ="https://www.larochelle-zerocarbone.fr/lr-zerocarbone-theme/images/logo-zerocarbone-fill.svg" alt="La Rochelle Territoire Zéro Carbone" />
             Souhaitant atteindre les objectifs d'un territoire zéro carbone, projet initié par cinq entités fondatrices et 130 organismes impliqués, entreprises, associations, collectifs, collectivités, LRTZC se décline sous forme d’actions comme c’est le cas de ouaaa-transition.fr ! L’enjeu : préparer la ville de demain, pour un territoire sans carbone en 2040. 
             <br />
             <br />
             <br />
-            <img width ="200px"  src ="https://www.insightnest.fr/wp-content/uploads/2021/07/logo_full_dark_439.png" alt="Insighnest" />
+            <img height="100px"  src ="https://www.insightnest.fr/wp-content/uploads/2021/07/logo_full_dark_439.png" alt="Insighnest" />
             Basé à La Rochelle, réseau d’indépendants, Insightnest a été d’une grande utilité pour réussir à vous proposer ouaaa-transition.fr en venant renforcer notre équipe de développeurs web bénévoles
+            <br />
+            <br />
+            <br />
+            <img height="100px"  src ="https://www.onepercentfortheplanet.fr/wp-content/uploads/2020/06/Primary_Full_Color_Horizontal-1-scaled.png" alt="onpercentfortheplanet" />
+            1 % pour la planète (en anglais « 1% for the Planet ») est un mouvement mondial porté par des entreprises qui ont décidé de donner 1 % de leur chiffre d'affaires à des associations de préservation de l'environnement
+            
               </div>
               </Typography>
             <br />

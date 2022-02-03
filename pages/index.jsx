@@ -6,6 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { withApollo } from 'hoc/withApollo';
 import Head from 'next/head';
 import Newsletter from '../containers/layouts/Newsletter';
+import Partner from '../containers/layouts/Partner';
 import PresentationSection from '../containers/layouts/homePage/presentationSection';
 import ThreePoint from '../containers/layouts/homePage/threepoint';
 import LastActor from '../containers/layouts/homePage/lastActor';
@@ -124,6 +125,9 @@ const Index = () => {
           <LastEvent />
 
           <Newsletter />
+
+          <Partner />
+
 
         </Box>
       </RootRef>
