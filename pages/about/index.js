@@ -90,6 +90,14 @@ A l’écoute des usagers : acteurs inscrits et visiteurs du site, nous recueil
             <br />
             <img height="100px"  src ="https://www.onepercentfortheplanet.fr/wp-content/uploads/2020/06/Primary_Full_Color_Horizontal-1-scaled.png" alt="onpercentfortheplanet" />
             1 % pour la planète (en anglais « 1% for the Planet ») est un mouvement mondial porté par des entreprises qui ont décidé de donner 1 % de leur chiffre d'affaires à des associations de préservation de l'environnement
+            <br />
+            <br />
+            <br />
+            <img height="100px"  src ="https://www.leanature.com/wp-content/uploads/2020/11/logo-lea-nature.svg" alt="leanature" />
+            Léa Nature est un fabricant français de produits naturels et biologiques. Notre mission : proposer des produits naturels principalement certifiés bio contribuant à préserver la santé de l'Homme, en utilisant des ressources naturelles renouvelables sans porter atteinte à la biodiversité.
+            
+
+
             
               </div>
               </Typography>

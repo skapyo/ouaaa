@@ -35,6 +35,9 @@ const Partner = () => {
         <Grid item>
           <img height="50px" src="https://www.onepercentfortheplanet.fr/wp-content/uploads/2020/06/Primary_Full_Color_Horizontal-1-scaled.png" alt="onpercentfortheplanet" />
         </Grid>
+        <Grid item>
+          <img height="50px"  src ="https://www.leanature.com/wp-content/uploads/2020/11/logo-lea-nature.svg" alt="leanature" />
+        </Grid>
       </Grid>
     </Link>
   );
