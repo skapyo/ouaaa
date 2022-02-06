@@ -35,6 +35,15 @@ query categories {
     icon
   }
 }`;
+const GET_ARTICLES_SSR = `
+query articles {
+  articles {
+    id
+    label
+    updatedAt
+}
+}
+`;
 export const getServerSideProps = async ({ res }) => {
   const staticPages = fs
     .readdirSync('pages')
@@ -119,6 +128,22 @@ export const getServerSideProps = async ({ res }) => {
     );
   }
 
+  const getArticles = await fetch(process.env.NEXT_PUBLIC_API_URI, {
+    method: 'POST',
+    body: JSON.stringify({
+      operationName: 'articles',
+      variables: {},
+      query: GET_ARTICLES_SSR,
+    }),
+  });
+  const initialDataArticles = await getArticles.json();
+  if (initialDataArticles.errors) {
+    console.error(
+      ` Error fetching event error message : ${
+        initialDataArticles.errors[0].message
+      }`,
+    );
+  }
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
     <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
@@ -193,6 +218,18 @@ export const getServerSideProps = async ({ res }) => {
             `;
         })
         .join('')}
+        ${initialDataArticles.data.articles
+          .map(({ id, updatedAt }) => {
+            return `
+                <url>
+                  <loc>${process.env.NEXT_PUBLIC_BASE_URL}/article/${id}</loc>
+                  <lastmod>${new Date().toISOString()}</lastmod>
+                  <changefreq>daily</changefreq>
+                  <priority>1.0</priority>
+                </url>
+              `;
+          })
+          .join('')}
     </urlset>
   `;
 

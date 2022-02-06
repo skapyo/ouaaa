@@ -689,10 +689,11 @@ const Event = ({ initialData }) => {
           {/* @ts-ignore */}
           {data && data.event.label} {/* @ts-ignore */}
           {data && data.event.city} {/* @ts-ignore */}
-          {data && moment(parseInt(data.event.startedAt)).format('DD/MM/YYYY HH:mm')}-{data && moment(parseInt(data.event.endedAt)).format('DD/MM/YYYY HH:mm')}
+          {data && moment(parseInt(data.event.startedAt)).format('DD/MM/YYYY')}
           {/* @ts-ignore */} {/* @ts-ignore */}
           {data && showCategory(data.event.entries)}
         </title>
+        <meta name="description" content={data && (data.event.label + " " +data.event.city +" " + data && moment(parseInt(data.event.startedAt)).format('DD/MM/YYYY HH:mm')+ " " +moment(parseInt(data.event.endedAt)).format('DD/MM/YYYY HH:mm')+ showCategory(data.event.entries) ) } />
         {data &&
           data.event.pictures.length >= 1 &&
           data.event.pictures.filter((picture) => picture.logo).length >= 1 && (
