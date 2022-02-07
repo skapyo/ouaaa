@@ -171,7 +171,13 @@ const GET_ACTOR = gql`
     }
   }
 `;
-
+const AddPictureArticle = gql`
+  mutation addPictureArticle($picture: InputPictureType) {
+    addPictureArticle(picture: $picture) {
+      id
+    }
+  }
+`;
 type FormItemProps = {
   label: string;
   inputName: string;
@@ -292,6 +298,7 @@ const AddArticleForm = ({ actorId }) => {
   }) => {
     // const { formChangeHandler, formValues, validationResult } = props;
     const [addArticle, { data, error }] = useMutation(ADDArticle);
+    const [addPictureArticle, { data: dataPicture, error: errorPicture }] = useMutation(AddPictureArticle);
 
     const [showOtherArticleList, setShowOtherArticleList] = useState(false);
 
@@ -337,7 +344,6 @@ const AddArticleForm = ({ actorId }) => {
       });
     }, [formValues]);
 
-
     if (user === undefined || user == null) {
       enqueueSnackbar(
         'Veuillez vous connecter pour créer un article.',
@@ -378,7 +384,7 @@ const AddArticleForm = ({ actorId }) => {
       if (actorData && formValues) {
         formValues.actors = [];
         formValues.actors.push(actorData.actor);
-      console.log(actorData.actor)
+        console.log(actorData.actor);
       }
       // @ts-ignore
     }, [formValues, actorData]);
@@ -393,6 +399,7 @@ const AddArticleForm = ({ actorId }) => {
       editorRef.current = {
         CKEditor: require('@ckeditor/ckeditor5-react').CKEditor,
         ClassicEditor: require('@ckeditor/ckeditor5-build-classic'),
+        //       Alignment: require('@ckeditor/ckeditor5-alignment/src/alignment').Alignment,
       };
       setEditorLoaded(true);
     }, []);
@@ -412,12 +419,11 @@ const AddArticleForm = ({ actorId }) => {
 
     useEffect(() => {
       validateForm();
-  
     });
     const validateForm = () => {
       if (
-        !formValues.shortDescription ||
-        !formValues.label
+        !formValues.shortDescription
+        || !formValues.label
         || !descriptionEditor?.getData()
       ) setValidated(false);
       else setValidated(true);
@@ -484,7 +490,7 @@ const AddArticleForm = ({ actorId }) => {
           userId: parseInt(user.id),
           // @ts-ignore
           content: descriptionEditor.getData(),
-          mainPictures
+          mainPictures,
         },
       });
     };
@@ -501,7 +507,74 @@ const AddArticleForm = ({ actorId }) => {
       formChangeHandler(ArticleModified);
       setShowOtherActors(false);
     };
+    function MyCustomUploadAdapterPlugin(editor) {
+      editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
+        return new MyUploadAdapter(loader);
+      };
+    }
 
+    class MyUploadAdapter {
+      constructor(props) {
+        // CKEditor 5's FileLoader instance.
+        this.loader = props;
+      }
+
+      // Starts the upload process.
+      upload() {
+         return this.loader.file.then( file => new Promise( ( resolve, reject ) => {
+          addPictureArticle({
+            variables: {
+              picture: {
+                newpic: true,
+                deleted: false,
+                main: true,
+                file: {
+                  originalPicture: file,
+                },
+              },
+            },
+          });
+
+          resolve( {
+            default: `${process.env.NEXT_PUBLIC_URI}/static/images/article/${file.name}`
+        } );
+      }));
+      }
+
+      // Aborts the upload process.
+      abort() {
+      }
+    }
+
+    const customConfig = {
+      extraPlugins: [MyCustomUploadAdapterPlugin],
+      toolbar: {
+        items: [
+          'heading',
+          '|',
+          'alignment:left', 'alignment:right', 'alignment:center',
+          'bold',
+          'italic',
+          'link',
+          'bulletedList',
+          'numberedList',
+          '|',
+          'blockQuote',
+          'insertTable',
+          '|',
+          'imageUpload',
+          'undo',
+          'redo',
+        ],
+      },
+      //   plugins: [ Alignment],
+      alignment: {
+        options: ['left', 'right'],
+      },
+      table: {
+        contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells'],
+      },
+    };
 
     return (
       <Container component="main" maxWidth="sm" className={styles.container}>
@@ -555,9 +628,7 @@ const AddArticleForm = ({ actorId }) => {
         <p />
         {editorLoaded ? (
           <CKEditor
-            config={{
-              toolbar: ['bold', 'italic', 'link'],
-            }}
+            config={customConfig}
             editor={ClassicEditor}
             data={formValues.content}
             onReady={(editor) => {
@@ -661,6 +732,3 @@ const AddArticleForm = ({ actorId }) => {
 };
 
 export default withDndProvider(withApollo()(AddArticleForm));
-function value(value: any) {
-  throw new Error('Function not implemented.');
-}
