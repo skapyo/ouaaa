@@ -22,6 +22,7 @@ import TreeView from '@material-ui/lab/TreeView';
 import ClassicButton from 'components/buttons/ClassicButton';
 import Fab from '@material-ui/core/Fab';
 import EditIcon from '@material-ui/icons/Edit';
+import CircularProgress from '@mui/material/CircularProgress';
 import FormController, {
   RenderCallback,
 } from 'components/controllers/FormController';
@@ -340,7 +341,7 @@ const AddActorForm = () => {
   const { data: dataUsers } = useQuery(GET_USERS, {});
   const [open, setOpen] = React.useState([false]);
   const [cookies, setCookie, removeCookie] = useCookies();
-
+  
   function IsTree(collection) {
     let isTree = false;
     if (collection.entries) {
@@ -668,10 +669,12 @@ const AddActorForm = () => {
     ]);
     useEffect(() => {
       if (!createError && !createLoading && createData) {
+     
         enqueueSnackbar('Acteur ajouté avec succès.', {
           preventDuplicate: true,
         });
         router.push(`/actor/${createData.createActor.id}`);
+
       }
     }, [createLoading, createError, createData]);
 
@@ -1314,12 +1317,17 @@ const AddActorForm = () => {
         </div>
         <p />
         <Grid item xs={12}>
+          { !createLoading && (
           <ClassicButton
             onClick={submitHandler}
             disabled={!validationResult?.global}
           >
             Créer le nouvel acteur
           </ClassicButton>
+          )}
+          { createLoading && (
+          <CircularProgress />
+          )}
         </Grid>
         <br />
         <div>

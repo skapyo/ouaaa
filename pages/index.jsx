@@ -6,6 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { withApollo } from 'hoc/withApollo';
 import Head from 'next/head';
 import Newsletter from '../containers/layouts/Newsletter';
+import Partner from '../containers/layouts/Partner';
 import PresentationSection from '../containers/layouts/homePage/presentationSection';
 import ThreePoint from '../containers/layouts/homePage/threepoint';
 import LastActor from '../containers/layouts/homePage/lastActor';
@@ -112,7 +113,7 @@ const Index = () => {
   const styles = useStyles(stylesProps);
 
   const sections = ["PresentationSection", "ThreePoint", "LastActor", "LastEvent","LastArticle", "Newsletter"];
-  
+
   return (
 
     <AppLayout>
@@ -130,6 +131,8 @@ const Index = () => {
           <LastArticle id={sections[4]}/>
 
           <Newsletter id={sections[5]} />
+
+          <Partner />
 
           <ScrollToBottom sections={sections} />
         </Box>
