@@ -12,6 +12,11 @@ const useStyles = makeStyles((theme) => ({
       padding: '1em 0',
     },
   },
+  newsletterTitle: {
+    textAlign: 'center',
+    fontSize: '32px',
+    paddingTop: '2em',
+  },
   align: {
     'text-align': 'center',
   },
@@ -22,6 +27,9 @@ const Partner = () => {
 
   return (
     <Link href={`/about`} color="inherit" underline="none" >
+       <Grid container justifyContent="center" spacing={4} className={styles.newsletterTitle}>
+         Ils s'engagent avec nous
+       </Grid>
       <Grid container justifyContent="center" spacing={4} className={styles.newsletter}>
         <Grid item>
           <img height="50px" src="https://static.ouaaa-transition.fr/static/images/actor/32/32-AU0wmu0S9A-original.jpeg?w=1920&q=75" alt="Aunis en transition" />

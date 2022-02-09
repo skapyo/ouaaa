@@ -410,7 +410,7 @@ function Filters(props) {
           </div>
         </Grid>
         <Grid item xs={7}>
-          <div>{isEventList ? 'Actions favorites' : 'Acteurs favoris'}</div>
+          <div>Mes favoris</div>
         </Grid>
       </Grid>
 

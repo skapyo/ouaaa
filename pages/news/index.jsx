@@ -73,8 +73,6 @@ export async function getServerSideProps(ctxt) {
       `Error fetching categories, error message : ${initialData.errors[0].message}`,
     );
   }
-
-  console.log(initialData.data.articles);
   return {
     props: {
       initialData,
