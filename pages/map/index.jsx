@@ -370,14 +370,19 @@ const carto = () => {
     });
 
     const exportData = useCallback(() => {
+      data.actors.forEach((actor) => {
+        actor.url = `${process.env.NEXT_PUBLIC_BASE_URL}/actor/${actor.id}`;
+      });
+
       const actors = data.actors.map(({
-        id, name, address, city, shortDescription,
+        id, name, address, city, shortDescription, url
       }) => ({
-        id, name, address, city, shortDescription,
+        id, name, address, city, shortDescription, url
       }));
 
+      
       /* Create worksheet with the headers in French */
-      const ws = XLSX.utils.aoa_to_sheet([['ID', 'Nom', 'Adresse', 'Ville', 'Description']]);
+      const ws = XLSX.utils.aoa_to_sheet([['ID', 'Nom', 'Adresse', 'Ville', 'Description', 'URL']]);
       /* Add to the worksheet all values without header */
       XLSX.utils.sheet_add_json(ws, actors, { origin: 'A2', skipHeader: true });
       /* Specify column width */
