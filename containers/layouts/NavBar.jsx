@@ -21,6 +21,14 @@ import { withApollo } from 'hoc/withApollo';
 import ButtonAppBarCollapse from './ButtonAppBarCollapse';
 
 const useStyles = makeStyles((theme) => ({
+  '@media print': {
+    navbar: {
+      height: 50,
+    },
+    logo: {
+      width: '12em',
+    },
+  },
   navbar: {
     height: '100px',
     backgroundColor: 'white',
@@ -171,18 +179,18 @@ const NavBar = () => {
                       ARTICLES
                     </MenuItem>
                   </Grid>
-                    <Grid item>
-                      <MenuItem
-                        button
-                        component={Link}
-                        className={styles.menuItem}
-                        href="/participate"
-                      >
-                        JE PARTICIPE
-                      </MenuItem>
-                    </Grid>
-                  
-                  
+                  <Grid item>
+                    <MenuItem
+                      button
+                      component={Link}
+                      className={styles.menuItem}
+                      href="/participate"
+                    >
+                      JE PARTICIPE
+                    </MenuItem>
+                  </Grid>
+
+
                   {/*
                   <Grid item>
                     <MenuItem
@@ -322,17 +330,17 @@ const NavBar = () => {
                       ARTICLES
                     </MenuItem>
                   </Grid>
-                    <Grid item>
-                      <MenuItem
-                        button
-                        component={Link}
-                        className={styles.menuItem}
-                        href="/participate"
-                      >
-                        JE PARTICIPE
-                      </MenuItem>
-                    </Grid>
-                 {/* <Grid item>
+                  <Grid item>
+                    <MenuItem
+                      button
+                      component={Link}
+                      className={styles.menuItem}
+                      href="/participate"
+                    >
+                      JE PARTICIPE
+                    </MenuItem>
+                  </Grid>
+                  {/* <Grid item>
                     <MenuItem
                       button
                       component={Link}

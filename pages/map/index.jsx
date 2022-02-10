@@ -2,30 +2,27 @@ import React, {
   useCallback, useEffect, useRef, useState, useMemo,
 } from 'react';
 import {
-  Grid, Typography, useMediaQuery, Button,
+  Grid, useMediaQuery, Button,
 } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/client';
-import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded';
-import FavoriteRoundedIcon from '@material-ui/icons/FavoriteRounded';
-import Actors from 'containers/layouts/mapPage/actors';
-import Parser from 'html-react-parser';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Drawer from '@material-ui/core/Drawer';
 import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
+
+// eslint-disable-next-line import/no-unresolved
+import Actors from 'containers/layouts/mapPage/actors';
 import ButtonGroupSelected from '../../components/buttons/ButtonGroupSelected';
 import Filters from '../../components/filters';
-import { getImageUrl } from '../../utils/utils';
 import ActorPopup from '../../components/popup/ActorPopup';
-
 import AppLayout from '../../containers/layouts/AppLayout';
 import { withApollo } from '../../hoc/withApollo';
 
 let matchesWindow = false;
 if (typeof window !== 'undefined') {
-  var L = require('leaflet');
+  let L = require('leaflet');
   const { Map } = require('react-leaflet');
   const { TileLayer } = require('react-leaflet');
   const { Marker } = require('react-leaflet');
@@ -39,6 +36,18 @@ if (typeof window !== 'undefined') {
 const drawerWidth = 310;
 
 const useStyles = makeStyles((theme) => ({
+  '@media print': {
+    drawer: {
+      display: 'none',
+    },
+    filterButton: {
+      display: 'none',
+    },
+    layout: {
+      backgroundColor: 'white !important',
+      display: 'block !important',
+    },
+  },
   layout: {
     display: 'flex',
     justifyContent: 'center',
@@ -60,7 +69,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   drawer: ({ isMenuOpen, isMapMode }) => ({
-    width: isMenuOpen ? (isMapMode ? 0 : drawerWidth) : 0,
+    width: isMenuOpen && !isMapMode ? drawerWidth : 0,
     flexShrink: 0,
     transition: isMapMode ? null : theme.transitions.create(['width'], {
       easing: theme.transitions.easing.sharp,
@@ -282,6 +291,42 @@ const otherCategories = {
   'Collectif & réseaux': [],
 };
 
+const GET_ACTORS = gql`
+  query actors($entries: [[String]], $search: String,$postCode: String,$favoritesForUser: String,$isValidated: Boolean) {
+    actors(entries: $entries, search: $search,postCode: $postCode,favoritesForUser: $favoritesForUser,isValidated: $isValidated) {
+      id
+      name
+      address
+      city
+      shortDescription
+      lat
+      lng
+      entries {
+        label
+        icon
+        color
+        description
+        parentEntry {
+          code
+          label
+          color
+        }
+      }
+      favorites{
+        id
+      }
+      pictures {
+        id
+        label
+        originalPicturePath
+        originalPictureFilename
+        position
+        logo
+      }
+    }
+  }
+`;
+
 const carto = () => {
   const mapRef = useRef();
   const isFirstRef = useRef(true);
@@ -294,7 +339,6 @@ const carto = () => {
   const [otherCategoriesChecked, setOtherCategoriesChecked] = useState(
     otherCategories,
   );
-  const [favorite, setFavorite] = useState(false);
   const [listMode, setListMode] = useState(true);
   const [postCode, setPostCode] = useState(null);
   const [filters, setFilters] = useState(null);
@@ -303,10 +347,6 @@ const carto = () => {
   const toggleMenu = useCallback(() => {
     setIsMenuOpen(!isMenuOpen);
   }, [isMenuOpen]);
-
-  useEffect(() => {
-    const { current = {} } = mapRef;
-  }, [mapRef]);
 
   const styles = useStyles({ isMenuOpen, isMapMode: listMode });
 
@@ -320,49 +360,9 @@ const carto = () => {
     L.Icon.Default.mergeOptions({
       iconUrl: null,
     });
-    const [popupOpen, setPopupOpen] = useState(false);
-    const [stylesProps, setStylesProps] = useState({
-      topImageSize: '250px',
-      headerDisplay: 'static',
-    });
-    const GET_ACTORS = gql`
-      query actors($entries: [[String]], $search: String,$postCode: String,$favoritesForUser: String,$isValidated: Boolean) {
-        actors(entries: $entries, search: $search,postCode: $postCode,favoritesForUser: $favoritesForUser,isValidated: $isValidated) {
-          id
-          name
-          address
-          city
-          shortDescription
-          lat
-          lng
-          entries {
-            label
-            icon
-            color
-            description
-            parentEntry {
-              code
-              label
-              color
-            }
-          }
-          favorites{
-            id
-          }
-          pictures {
-            id
-            label
-            originalPicturePath
-            originalPictureFilename
-            position
-            logo
-          }
-        }
-      }
-    `;
 
     const {
-      data, loading, error, refetch,
+      data, refetch,
     } = useQuery(GET_ACTORS, {
       variables: {
         entries: [categoriesChecked],
@@ -383,7 +383,7 @@ const carto = () => {
 
         if (isFirstRef.current) {
           // If filter still empty no refetch
-          if (newEntries.length != 0 || typeof postcode !== 'undefined') {
+          if (newEntries.length !== 0 || typeof postcode !== 'undefined') {
             isFirstRef.current = false;
           } else {
             return;
@@ -398,24 +398,6 @@ const carto = () => {
       setFilters(newFilters);
       refetch({ ...newFilters });
     }, [refetch]);
-
-    function splitWord(word, number) {
-      if (word != null) {
-        const indexMax = Math.round(word.length / number);
-        let wordSplit = '';
-        if (indexMax > 1) {
-          for (let i = 0; i < indexMax; i++) {
-            wordSplit += word.slice(i * number, (i + 1) * number);
-            if (i + 1 <= indexMax) {
-              wordSplit += '<br><br> ';
-            }
-          }
-          return wordSplit;
-        }
-        return word;
-      }
-      return '';
-    }
 
     const otherCategoryChange = useCallback((e, collectionLabel) => {
       const newOtherCategories = { ...otherCategoriesChecked };
@@ -445,7 +427,11 @@ const carto = () => {
       <AppLayout hideFooter>
         <Head>
           <title>Les acteurs de la transition citoyenne et écologique autour de la Rochelle, Aunis, Charente-Maritime</title>
-          <meta name="description" content="Viens découvrir les acteurs agissant pour :  l'éducation, la culture, la santé, l'alimentation, la justice, l'économie, la citoyenneté, l'agriculture, l'industrie, l'habitat, la mobilité, l'énergie, le recyclage, la réduction des déchets, le climat, la qualité de l'air, la biodiversité, la gestion de l'eau, l'aménagement du territoire et d'autres sujets sur la transition citoyenne et écologique" />
+          <meta
+            name="description"
+            // eslint-disable-next-line max-len
+            content="Viens découvrir les acteurs agissant pour :  l'éducation, la culture, la santé, l'alimentation, la justice, l'économie, la citoyenneté, l'agriculture, l'industrie, l'habitat, la mobilité, l'énergie, le recyclage, la réduction des déchets, le climat, la qualité de l'air, la biodiversité, la gestion de l'eau, l'aménagement du territoire et d'autres sujets sur la transition citoyenne et écologique"
+          />
         </Head>
         <Grid container className={styles.layout}>
           <ButtonGroupSelected buttons={fabActions} />
@@ -496,10 +482,10 @@ const carto = () => {
                 <ZoomControl position="topright" />
                 <MarkerClusterGroup>
                   {typeof data !== 'undefined'
-                    && data.actors.map((actor, index) => {
-                      let icone;
-                      let color;
+                    && data.actors.map((actor) => {
                       if (actor.lat != null && actor.lng != null) {
+                        let icone;
+                        let color;
                         if (
                           actor.entries
                           && actor.entries.length > 0
@@ -508,7 +494,7 @@ const carto = () => {
                           icone = `/icons/marker/marker_${actor.entries[0].icon}.svg`;
                           color = actor.entries[0].color;
                         } else {
-                          icone = '/icons/' + 'place' + '.svg';
+                          icone = '/icons/place.svg';
                           color = 'ref';
                         }
                         const markerHtmlStyles = 'background-color: red';
@@ -523,12 +509,12 @@ const carto = () => {
                         });
                         return (
                           <Marker
-                            key={`marker-${index}`}
+                            key={`marker-${actor.id}`}
                             position={[actor.lat, actor.lng]}
                             icon={suitcasePoint}
                           >
                             <Tooltip>
-                              <div  className={styles.tooltip}>
+                              <div className={styles.tooltip}>
                                 <ActorPopup actor={actor} />
                               </div>
                             </Tooltip>
@@ -538,13 +524,14 @@ const carto = () => {
                           </Marker>
                         );
                       }
+                      return null;
                     })}
                 </MarkerClusterGroup>
               </Map>
             </Grid>
           )}
           {!listMode && (
-            <Grid item sm={10} xs={12} justify="center" className={styles.gridList}>
+            <Grid item xs={12} justify="center" className={styles.gridList}>
               {typeof data !== 'undefined' && <Actors data={data} />}
             </Grid>
           )}
