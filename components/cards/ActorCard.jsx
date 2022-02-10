@@ -1,14 +1,19 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Avatar, Link } from '@mui/material';
-import { useSnackbar } from 'notistack';
-import gql from 'graphql-tag';
 import StyledBoxOnHover from '../animated/StyledBoxOnHover';
 import { getImageUrl } from '../../utils/utils';
-import Favorite from '../../components/Favorite';
-import { useSessionState } from '../../context/session/session';
+import Favorite from '../Favorite';
 
 const useStyles = makeStyles((theme, props) => ({
+  '@media print': {
+    card: {
+      border: 'solid 1px grey',
+    },
+    favorite: {
+      display: 'none !important',
+    },
+  },
   card: (props) => ({
     backgroundColor: 'white',
     borderRadius: '10px',
@@ -36,7 +41,6 @@ const useStyles = makeStyles((theme, props) => ({
     [theme.breakpoints.down('sm')]: {
       width: '50px',
     },
-   
     borderLeft: `dashed 2px ${props.color}`,
     display: 'flex',
     justifyContent: 'center',
@@ -69,6 +73,8 @@ const useStyles = makeStyles((theme, props) => ({
     maskRepeat: 'no-repeat',
     maskSize: '22px',
     background: props.color,
+    borderRadius: '50%',
+    opacity: props.icon ? 1 : 0,
   }),
   leftContent: {
     display: 'flex',
@@ -100,6 +106,12 @@ const useStyles = makeStyles((theme, props) => ({
     color: 'black',
     fontWeight: 'bold',
   },
+  location: {
+    color: 'black',
+    fontWeight: 'bold',
+    display: 'flex',
+    alignItems: 'center',
+  },
   actorDetails: {
     fontStyle: 'italic',
     color: '#A3A3A3',
@@ -111,9 +123,7 @@ const useStyles = makeStyles((theme, props) => ({
 }));
 
 const ActorCard = ({ actor }) => {
-  const color = actor.entries && actor.entries.length > 0 && actor.entries[0].parentEntry
-    ? actor.entries[0].parentEntry.color
-    : '#AD2740';
+  const color = actor?.entries?.[0]?.parentEntry?.color || '#AD2740';
   const icon = actor.entries[0] ? actor.entries[0].icon : 'fruit';
   const actorName = actor.name;
   const classes = useStyles({ color, icon });
@@ -127,7 +137,6 @@ const ActorCard = ({ actor }) => {
     return '';
   }
 
-
   const getActorProfilePicture = () => {
     const profilePictures = actor.pictures?.filter((picture) => picture.logo) || [];
     const picture = profilePictures.length > 0 ? getImageUrl(profilePictures[0].originalPicturePath) : undefined;
@@ -135,7 +144,6 @@ const ActorCard = ({ actor }) => {
   };
 
   return (
-
     <StyledBoxOnHover className={classes.card}>
       <Link href={`/actor/${actor.id}`} target="_blank" color="inherit" underline="none" width="100%">
         <div className={classes.content}>
@@ -151,7 +159,7 @@ const ActorCard = ({ actor }) => {
               />
             </div>
             <div className={classes.text}>
-                <div className={classes.actor}>{actorName}</div>
+              <div className={classes.actor}>{actorName}</div>
               <div className={classes.label}>{actor.label}</div>
               <div className={classes.actorDetails}>
                 <span>
@@ -159,32 +167,19 @@ const ActorCard = ({ actor }) => {
                   {actor.shortDescription}
                 </span>
               </div>
-              <div className={classes.label}>
-                {!actor.address && actor.city && (
-                <span>
-                  {/* @ts-ignore */}
-                  <img
-                    src="/icons/location.svg"
-                    alt="Localisation"
-                    className={[classes.icon]}
-                  />
-                  {' '}
-                  {actor.city}
-                </span>
-                )}
-                {actor.address && actor.city && (
-                <span>
-                  {/* @ts-ignore */}
-                  <img
-                    src="/icons/location.svg"
-                    alt="Localisation"
-                    className={[classes.icon]}
-                  />
-                  {' '}
-                  {`${actor.address} ${actor.city}`}
-                </span>
-                )}
-              </div>
+              {
+                (actor.address || actor.city) && (
+                  <div className={classes.location}>
+                    {/* @ts-ignore */}
+                    <img
+                      src="/icons/location.svg"
+                      alt="Localisation"
+                      className={[classes.icon]}
+                    />
+                    {(actor.address || '').concat(' ').concat(actor.city)}
+                  </div>
+                )
+              }
             </div>
           </div>
           <div className={classes.category}>
@@ -197,7 +192,6 @@ const ActorCard = ({ actor }) => {
         <Favorite actor={actor} />
       </div>
     </StyledBoxOnHover>
-
   );
 };
 

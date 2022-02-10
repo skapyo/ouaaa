@@ -20,15 +20,22 @@ const useStyles = makeStyles((theme) => ({
       '& > *': {
         borderRadius: 0,
         boxShadow: 'none !important',
-        flexBasis: ({ buttons }) => `calc(100% / ${buttons.length})`
+        flexBasis: ({ buttons }) => `calc(100% / ${buttons.length})`,
       },
       '& > *:first-child': {
-        borderLeftWidth: 0
+        borderLeftWidth: 0,
       },
       '& > *:last-child': {
-        borderRightWidth: 0
-      }
-    }
+        borderRightWidth: 0,
+      },
+    },
+  },
+  '@media print': {
+    root: {
+      [theme.breakpoints.down('sm')]: {
+        display: 'none',
+      },
+    },
   },
 }));
 
