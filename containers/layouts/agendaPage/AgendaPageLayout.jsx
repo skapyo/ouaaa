@@ -592,14 +592,14 @@ const AgendaPageLayout = () => {
                                     onClick={() => setFavorite(!favorite)}
                                   >
                                     {!favorite && (
-                                    <FavoriteBorderRoundedIcon
-                                      className={classes.favoriteIcon}
-                                    />
+                                      <FavoriteBorderRoundedIcon
+                                        className={classes.favoriteIcon}
+                                      />
                                     )}
                                     {favorite && (
-                                    <FavoriteRoundedIcon
-                                      className={classes.favoriteIcon}
-                                    />
+                                      <FavoriteRoundedIcon
+                                        className={classes.favoriteIcon}
+                                      />
                                     )}
                                   </div>
                                 </Grid>
