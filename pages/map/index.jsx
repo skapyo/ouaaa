@@ -7,13 +7,14 @@ import {
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/client';
+import Actors from 'containers/layouts/mapPage/actors';
+import Parser from 'html-react-parser';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Drawer from '@material-ui/core/Drawer';
 import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
 
 // eslint-disable-next-line import/no-unresolved
-import Actors from 'containers/layouts/mapPage/actors';
 import ButtonGroupSelected from '../../components/buttons/ButtonGroupSelected';
 import Filters from '../../components/filters';
 import ActorPopup from '../../components/popup/ActorPopup';
