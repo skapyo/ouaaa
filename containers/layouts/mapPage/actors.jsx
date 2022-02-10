@@ -3,7 +3,9 @@ import { makeStyles } from '@material-ui/core';
 import {
   Stack, IconButton, Tooltip, useMediaQuery, useTheme,
 } from '@mui/material';
+import XLSX from 'xlsx';
 import PrintIcon from '@mui/icons-material/Print';
+import DownloadIcon from '@mui/icons-material/Download';
 // eslint-disable-next-line import/no-unresolved
 import ActorCard from 'components/cards/ActorCard';
 
@@ -54,10 +56,6 @@ const Actors = (props) => {
   // eslint-disable-next-line react/prop-types
   const { data } = props;
 
-  const handleClickPrint = useCallback(() => {
-    window.print();
-  }, []);
-
   const compare = useCallback((a, b) => {
     return a.name.localeCompare(b.name, undefined, { sensitivity: 'accent' });
   }, []);
@@ -66,6 +64,36 @@ const Actors = (props) => {
     // eslint-disable-next-line react/prop-types
     return data && data.actors.slice().sort(compare);
   }, [data]);
+
+  const handleClickPrint = useCallback(() => {
+    window.print();
+  }, []);
+
+  const handleClickExport = useCallback(() => {
+    const actorsToExport = actors
+      .map((actor) => ({
+        ...actor,
+        url: `${process.env.NEXT_PUBLIC_BASE_URL}/actor/${actor.id}`,
+      }))
+      .map(({
+        id, name, address, city, shortDescription, url,
+      }) => ({
+        id, name, address, city, shortDescription, url,
+      }));
+
+    /* Create worksheet with the headers in French */
+    const ws = XLSX.utils.aoa_to_sheet([['ID', 'Nom', 'Adresse', 'Ville', 'Description', 'URL']]);
+    /* Add to the worksheet all values without header */
+    XLSX.utils.sheet_add_json(ws, actorsToExport, { origin: 'A2', skipHeader: true });
+    /* Specify column width */
+    ws['!cols'] = [{ wch: 4 }, { wch: 30 }, { wch: 30 }, { wch: 30 }, { wch: 60 }, { wch: 50 }];
+    /* Create workbook */
+    const wb = XLSX.utils.book_new();
+    /* Add worksheet to workbook, with the name of worksheet */
+    XLSX.utils.book_append_sheet(wb, ws, 'acteurs');
+    /* Generate XLSX file with name of the file, and send to client */
+    XLSX.writeFile(wb, 'acteurs.xlsx');
+  }, [actors]);
 
   return (
     <div className={classes.actors}>
@@ -79,6 +107,11 @@ const Actors = (props) => {
               <Tooltip title="Imprimer">
                 <IconButton onClick={handleClickPrint} size="large">
                   <PrintIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="Exporter">
+                <IconButton onClick={handleClickExport} size="large">
+                  <DownloadIcon />
                 </IconButton>
               </Tooltip>
             </div>

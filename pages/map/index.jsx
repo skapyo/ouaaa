@@ -7,7 +7,6 @@ import {
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/client';
-import XLSX from 'xlsx';
 import Actors from 'containers/layouts/mapPage/actors';
 import Parser from 'html-react-parser';
 import { useRouter } from 'next/router';
@@ -372,32 +371,6 @@ const carto = () => {
       },
     });
 
-    const exportData = useCallback(() => {
-      data.actors.forEach((actor) => {
-        actor.url = `${process.env.NEXT_PUBLIC_BASE_URL}/actor/${actor.id}`;
-      });
-
-      const actors = data.actors.map(({
-        id, name, address, city, shortDescription, url
-      }) => ({
-        id, name, address, city, shortDescription, url
-      }));
-
-
-      /* Create worksheet with the headers in French */
-      const ws = XLSX.utils.aoa_to_sheet([['ID', 'Nom', 'Adresse', 'Ville', 'Description', 'URL']]);
-      /* Add to the worksheet all values without header */
-      XLSX.utils.sheet_add_json(ws, actors, { origin: 'A2', skipHeader: true });
-      /* Specify column width */
-      ws['!cols'] = [{ wch: 4 }, { wch: 30 }, { wch: 30 }, { wch: 30 }, { wch: 60 }];
-      /* Create workbook */
-      const wb = XLSX.utils.book_new();
-      /* Add worksheet to workbook, with the name of worksheet */
-      XLSX.utils.book_append_sheet(wb, ws, 'acteurs');
-      /* Generate XLSX file with name of the file, and send to client */
-      XLSX.writeFile(wb, 'acteurs.xlsx');
-    }, [data]);
-
     useEffect(() => {
       // avoid first rendering
 
@@ -562,10 +535,6 @@ const carto = () => {
             <Grid item xs={12} justify="center" className={styles.gridList}>
               {typeof data !== 'undefined' && <Actors data={data} />}
             </Grid>
-          )}
-
-          {!listMode && (
-            <Button variant="contained" style={{ position: 'fixed', bottom: 55, right: 50 }} onClick={exportData}>Export</Button>
           )}
         </Grid>
       </AppLayout>
