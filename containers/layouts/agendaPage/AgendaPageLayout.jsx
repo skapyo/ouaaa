@@ -42,6 +42,18 @@ currentDate.setMonth(9);
 const drawerWidth = 310;
 
 const useStyles = makeStyles((theme) => ({
+  '@media print': {
+    drawer: {
+      display: 'none !important',
+    },
+    filterButton: {
+      display: 'none',
+    },
+    layout: {
+      backgroundColor: 'white !important',
+      display: 'block !important',
+    },
+  },
   main: {
     padding: '0',
     margin: '0',

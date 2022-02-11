@@ -6,10 +6,26 @@ import {
 import Moment from 'react-moment';
 import moment from 'moment';
 import DownloadIcon from '@mui/icons-material/Download';
+import PrintIcon from '@mui/icons-material/Print';
 import EventCard from 'components/cards/EventCard';
 import useExcelExport from '../../../hooks/useExcelExport.ts';
 
 const useStyles = makeStyles(theme => ({
+  '@media print': {
+    header: {
+      display: 'none !important',
+    },
+    cardContainer: {
+      breakInside: 'avoid',
+    },
+    events: {
+      display: 'block !important',
+      marginTop: 10,
+    },
+    tooltipPopper: {
+      display: 'none !important',
+    }
+  },
   events: {
     flex: 1,
     padding: '0 5em',
@@ -89,6 +105,10 @@ const Events = (props) => {
     return localEvents.sort(compare);
   }, [data]);
 
+  const handleClickPrint = useCallback(() => {
+    window.print();
+  }, []);
+
   const handleClickExport = useCallback(() => {
     const eventsToExport = data?.events
       .map(event => ({
@@ -117,7 +137,12 @@ const Events = (props) => {
         {
           matches && (
             <div>
-              <Tooltip title="Exporter">
+              <Tooltip title="Imprimer" classes={{ popper: classes.tooltipPopper }}>
+                <IconButton onClick={handleClickPrint} size="large">
+                  <PrintIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="Exporter" classes={{ popper: classes.tooltipPopper }}>
                 <IconButton onClick={handleClickExport} size="large">
                   <DownloadIcon />
                 </IconButton>
@@ -143,7 +168,7 @@ const Events = (props) => {
         events.length > 0 && events.map((event, index) => {
           const lastEvent = index > 0 && events[index - 1];
           return (
-            <div key={event.id + index}>
+            <div key={event.id + index} className={classes.cardContainer}>
               {(!lastEvent || !sameDay(lastEvent.startedAt, event.startedAt)) && (
                 <Moment
                   locale="fr"
