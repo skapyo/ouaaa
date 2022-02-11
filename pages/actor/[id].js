@@ -3,7 +3,6 @@ import React, {
   useState,
   useRef,
   useMemo,
-  useCallback,
 } from 'react';
 import AppLayout from 'containers/layouts/AppLayout';
 import {
@@ -14,19 +13,20 @@ import {
   Typography,
   useTheme,
 } from '@material-ui/core';
+import {
+  Tooltip, Modal, Box,
+} from '@mui/material';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { withApollo } from 'hoc/withApollo.jsx';
 import { useRouter } from 'next/router';
 import gql from 'graphql-tag';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import TwitterIcon from '@material-ui/icons/Twitter';
 import WhatsAppIcon from '@material-ui/icons/WhatsApp';
 import TelegramIcon from '@material-ui/icons/Telegram';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
-import Modal from '@mui/material/Modal';
-import Box from '@mui/material/Box';
 import EmailIcon from '@material-ui/icons/Email';
 import {
   FacebookShareButton,
@@ -38,10 +38,12 @@ import {
 import Slider from 'react-slick/lib';
 import { useSnackbar } from 'notistack';
 import { useCookies } from 'react-cookie';
+import { useReactToPrint } from 'react-to-print';
 import Head from 'next/head';
 import Parser from 'html-react-parser';
 import Fab from '@material-ui/core/Fab';
 import EditIcon from '@material-ui/icons/Edit';
+import PrintIcon from '@material-ui/icons/Print';
 import Image from 'next/image';
 import Link from 'components/Link';
 import moment from 'moment';
@@ -53,10 +55,15 @@ import {
   urlRectification,
   urlWithHttpsdefault,
 } from '../../utils/utils';
-import Calendar from '../../components/Calendar';
 import Favorite from '../../components/Favorite';
+import ActorToPrint from '../../components/print/Actor';
 
 const useStyles = makeStyles((theme) => ({
+  '@media print': {
+    fab: {
+      display: 'none !important',
+    },
+  },
   titleContainer: {
     marginTop: theme.spacing(2),
     backgroundSize: 'cover',
@@ -92,12 +99,18 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   infoPratiqueGrid: {
+    position: 'relative',
     textAlign: 'center',
     backgroundColor: '#ededf5',
     borderRadius: 5,
     '& > *:first-child': {
-      border: 'none'
-    }
+      border: 'none',
+    },
+  },
+  printButton: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
   },
   description: {
     [theme.breakpoints.up('sm')]: {
@@ -143,6 +156,7 @@ const useStyles = makeStyles((theme) => ({
     borderBottomColor: '#2C367E',
     color: '#2C367E',
     height: '1em',
+    marginBottom: 10,
   },
   iconEntry: {
     height: '20px',
@@ -176,11 +190,11 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
     [theme.breakpoints.down('sm')]: {
       '& .slick-prev': {
-        left: 0
+        left: 0,
       },
       '& .slick-next': {
-        right: 0
-      }
+        right: 0,
+      },
     },
   },
   closeButton: {
@@ -291,8 +305,11 @@ const useStyles = makeStyles((theme) => ({
       color: '#2C367E',
     },
   },
+  fabPrint: {
+    bottom: '120px',
+  },
   map: {
-    width: '100% !important'
+    width: '100% !important',
   },
   calendar: {
     [theme.breakpoints.down('sm')]: {
@@ -301,15 +318,14 @@ const useStyles = makeStyles((theme) => ({
       '& > *:first-child': {
         paddingLeft: 8,
         paddingRight: 8,
-        paddingBottom: 5
-      }
+        paddingBottom: 5,
+      },
     },
     [theme.breakpoints.up('sm')]: {
       width: '100%',
     },
-  }
+  },
 }));
-
 
 const GET_ACTOR_SSR = `
 query actor($id: String) {
@@ -413,7 +429,7 @@ query actor($id: String) {
       hours
       place
     }
-    articles{
+    articles {
       id
       label
       shortDescription
@@ -428,9 +444,7 @@ query actor($id: String) {
         main
       }
     }
-    
   }
-
 }
 `;
 
@@ -445,9 +459,26 @@ const SliderArrow = (props) => {
   );
 };
 
+const ActorName = (props) => {
+  const { name } = props;
+  const styles = useStyles(props);
+
+  if (!name) return null;
+
+  return (
+    <div>
+      <Typography variant="h1" className={styles.cardTitle}>
+        {name}
+      </Typography>
+      <div className={styles.border} />
+    </div>
+  );
+};
+
 const Actor = ({ initialData }) => {
   const router = useRouter();
   const mapRef = useRef();
+  const printRef = useRef(null);
 
   const [currentLocationWindows, setCurrentLocationWindows] = useState(
     globalThis?.location,
@@ -460,6 +491,8 @@ const Actor = ({ initialData }) => {
   const [hasClickVolunteer, setHasClickVolunteer] = useState(false);
   const [openModalSlider, setOpenModalSlider] = useState(false);
 
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   if (typeof window !== 'undefined') {
     var L = require('leaflet');
@@ -489,7 +522,7 @@ const Actor = ({ initialData }) => {
       removeActorVolunteer(actorId: $actorId, userId: $userId)
     }
   `;
-  
+
   const user = useSessionState();
   function containUser(list) {
     let isContained = false;
@@ -508,7 +541,6 @@ const Actor = ({ initialData }) => {
   const handleFavoriteChange = (isFavorite) => {
     setFavorite(isFavorite);
   };
-
 
   const [stylesProps, setStylesProps] = useState({
     topImageSize: '250px',
@@ -610,7 +642,6 @@ const Actor = ({ initialData }) => {
     p: 4,
   };
   const headerRef = React.useRef();
-  const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down('sm'));
   const maxSlideToShowImage = !matches ? 3 : 1;
   const maxSlideToShowArticle = !matches ? 5 : 1;
@@ -719,6 +750,10 @@ const Actor = ({ initialData }) => {
     return logoPictures.length > 0 ? logoPictures[0] : null;
   }, [actorPictures]);
 
+  const handlePrint = useReactToPrint({
+    content: () => printRef.current,
+  });
+
   return (
     <AppLayout>
       <Head>
@@ -762,8 +797,17 @@ const Actor = ({ initialData }) => {
           )}
           <Container className={styles.cardInfo}>
             <Grid container>
+              {isMobile && <ActorName name={data?.actor?.name} />}
               <Grid item md={5} sm={10} className={[styles.align]}>
                 <Grid container className={[styles.infoPratiqueGrid]}>
+                  <div className={styles.printButton}>
+                    <Tooltip title="Imprimer la page acteur">
+                      <IconButton onClick={handlePrint}>
+                        <PrintIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </div>
+
                   {
                     logo && logo.originalPicturePath && (
                       <div className={styles.image}>
@@ -1011,14 +1055,14 @@ const Actor = ({ initialData }) => {
                         </Grid>
                       </Grid>
                     )}
-                     <Grid container className={[styles.item]}>
+                  <Grid container className={[styles.item]}>
                     <Grid item xs={3} className={[styles.alignRight]}>
                       <Favorite actor={data?.actor} handleFavoriteChange={handleFavoriteChange} />
                     </Grid>
                     <Grid item xs={8} className={[styles.alignLeft]}>
                       <div className={[styles.infoLabel]}>
                         {!favorite ? ' Ajouter aux favoris' : ' Retirer des favoris'}
-                       
+
                       </div>
                       <span className={[styles.infoValue]}></span>
                     </Grid>
@@ -1102,10 +1146,7 @@ const Actor = ({ initialData }) => {
               </Grid>
               <br />
               <Grid item md={7} sm={10} className={styles.description}>
-                <Typography variant="h1" className={styles.cardTitle}>
-                  {data && data?.actor?.name}
-                </Typography>
-                <div className={styles.border} />
+                {!isMobile && <ActorName name={data?.actor?.name} />}
                 <br />
                 <br />
                 <p>
@@ -1418,14 +1459,18 @@ const Actor = ({ initialData }) => {
                 })}
             </Slider>
           </Container>
-          {((data && containUser(data.actor.referents)) ||
-            (user && user.role === 'admin')) && (
+          {
+            ((data && containUser(data.actor.referents)) || (user && user.role === 'admin')) && (
               <Link href={`/actorAdmin/actor/${id}`}>
                 <Fab className={styles.fab} aria-label="edit">
                   <EditIcon />
                 </Fab>
               </Link>
-            )}
+            )
+          }
+          <div style={{ display: 'none' }}>
+            <ActorToPrint actor={data.actor} ref={printRef} />
+          </div>
         </Box>
       </RootRef>
     </AppLayout>
@@ -1459,7 +1504,7 @@ export async function getServerSideProps(ctxt) {
     'before json' + moment.duration(endDate.diff(startDate)).asMilliseconds(),
   );
   const initialData = await res.json();
-  console.log(initialData.data.actor.articles);
+  console.log(initialData);
   if (initialData.errors) {
     console.error(
       ' Error fetching actor id ' +
