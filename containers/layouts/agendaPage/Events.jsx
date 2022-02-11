@@ -106,7 +106,7 @@ const Events = (props) => {
       sheetName: 'actions',
       fileName: 'actions',
     });
-  }, [data.events]);
+  }, [data?.events]);
 
   return (
     <Grid className={classes.events} container direction="column" wrap="nowrap">
