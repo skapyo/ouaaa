@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, useRef } from 'react';
 import { withApollo } from 'hoc/withApollo';
 import { useRouter } from 'next/router';
 import { useQuery } from '@apollo/client';
@@ -13,30 +13,35 @@ import {
   Typography,
   useTheme,
 } from '@material-ui/core';
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  LinearProgress,
+  Grid,
+  Tooltip,
+  IconButton,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from '@mui/material';
 import Paper from '@material-ui/core/Paper/Paper';
-import IconButton from '@material-ui/core/IconButton';
 import LastPageIcon from '@material-ui/core/SvgIcon/SvgIcon';
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import LinearProgress from '@mui/material/LinearProgress';
 
-import Edit from '@material-ui/icons/Edit';
-import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
-import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
-import FirstPageIcon from '@material-ui/icons/FirstPage';
+import Edit from '@mui/icons-material/Edit';
+import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
+import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
+import FirstPageIcon from '@mui/icons-material/FirstPage';
 import ZoomInIcon from '@mui/icons-material/ZoomIn';
+import DownloadIcon from '@mui/icons-material/Download';
 
+import useExcelExport from 'hooks/useExcelExport';
+import ActorAdminPageLayout from 'containers/layouts/actorAdminPage/ActorAdminPageLayout';
 import { useSessionState } from '../../../context/session/session';
 import Link from '../../../components/Link';
-
-import ActorAdminPageLayout from 'containers/layouts/actorAdminPage/ActorAdminPageLayout';
 
 const GET_EVENTS = gql`
   query eventsAdmin($userId: String!) {
@@ -71,17 +76,18 @@ const GET_PARTICIPANTS_BY_EVENT = gql`
 `;
 
 const ParticipantList = (props: any) => {
-  const { event } = props;
+  const { event, participantsToExport } = props;
   const [participants, setParticipants] = useState([]);
 
   const { loading, error } = useQuery(GET_PARTICIPANTS_BY_EVENT, {
     variables: {
-      eventId: event?.id
+      eventId: event?.id,
     },
     onCompleted: (data: any) => {
       setParticipants(data.participants);
+      participantsToExport.current = data.participants;
     },
-    fetchPolicy: 'network-only'
+    fetchPolicy: 'network-only',
   });
 
   if (error) return null;
@@ -115,7 +121,7 @@ const ParticipantList = (props: any) => {
         ))}
       </TableBody>
     </Table>
-  )
+  );
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -134,7 +140,11 @@ const useStyles = makeStyles((theme) => ({
   },
   dialogContent: {
     padding: '0 !important'
-  }
+  },
+  dialogTitle: {
+    display: 'flex',
+    alignItems: 'center',
+  },
 }));
 
 const useStyles1 = makeStyles((theme: Theme) =>
@@ -241,8 +251,8 @@ const NbParticipantsItem = (props: any) => {
       {event.nbParticipants}
       <ZoomInIcon />
     </div>
-  )
-}
+  );
+};
 
 const EventAdminPage = () => {
   const user = useSessionState();
@@ -251,9 +261,12 @@ const EventAdminPage = () => {
   const [participantsEvent, setParticipantsEvent] = useState(null);
   const [openModal, setOpenModal] = useState(false);
   const styles = useStyles();
+  const participantsToExport = useRef(null);
+  const exportData = useExcelExport();
 
   const closeModal = useCallback(() => {
     setOpenModal(false);
+    participantsToExport.current = null;
   }, []);
 
   const handleClickParticipantsEvent = useCallback(event => {
@@ -315,6 +328,22 @@ const EventAdminPage = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+
+  const handleClickExport = useCallback(() => {
+    const dataToExport = (participantsToExport.current || []).map((participant: any) => ({
+      ...participant,
+      participatedAt: new Date(parseInt(participant.participatedAt, 10)),
+    }));
+
+    exportData({
+      data: dataToExport,
+      columns: ['id', 'surname', 'lastname', 'email', 'participatedAt'],
+      columnLabels: ['ID', 'Prénom', 'Nom', 'Email', 'Date'],
+      columnOptions: [{ wch: 4 }, { wch: 25 }, { wch: 25 }, { wch: 30 }, { wch: 20 }],
+      sheetName: 'participants',
+      fileName: 'participants',
+    });
+  }, [participantsToExport]);
 
   return (
     <ActorAdminPageLayout>
@@ -446,13 +475,20 @@ const EventAdminPage = () => {
         </TableContainer>
       )}
 
-      <Dialog open={openModal} onBackdropClick={closeModal}>
-        <DialogTitle>
-          <div>Participants pour l'évènement <i>{(participantsEvent as any)?.label}</i></div>
+      <Dialog open={openModal} onBackdropClick={closeModal} maxWidth="lg">
+        <DialogTitle classes={{ root: styles.dialogTitle }}>
+          <Grid xs={11}>Participants pour l'évènement <i>{(participantsEvent as any)?.label}</i></Grid>
+          <Grid item xs={1}>
+            <Tooltip title="Exporter">
+              <IconButton onClick={handleClickExport} size="large">
+                <DownloadIcon />
+              </IconButton>
+            </Tooltip>
+          </Grid>
         </DialogTitle>
         <DialogContent classes={{ root: styles.dialogContent }}>
           {
-            participantsEvent && <ParticipantList event={participantsEvent} />
+            participantsEvent && <ParticipantList event={participantsEvent} participantsToExport={participantsToExport} />
           }
         </DialogContent>
       </Dialog>

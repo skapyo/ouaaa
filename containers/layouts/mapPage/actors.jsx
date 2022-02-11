@@ -3,13 +3,13 @@ import { makeStyles } from '@material-ui/core';
 import {
   Stack, IconButton, Tooltip, useMediaQuery, useTheme,
 } from '@mui/material';
-import XLSX from 'xlsx';
 import PrintIcon from '@mui/icons-material/Print';
 import DownloadIcon from '@mui/icons-material/Download';
 // eslint-disable-next-line import/no-unresolved
 import ActorCard from 'components/cards/ActorCard';
+import useExcelExport from '../../../hooks/useExcelExport.ts';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   '@media print': {
     header: {
       display: 'none !important',
@@ -52,6 +52,7 @@ const useStyles = makeStyles((theme) => ({
 const Actors = (props) => {
   const classes = useStyles();
   const theme = useTheme();
+  const exportData = useExcelExport();
   const matches = useMediaQuery(theme.breakpoints.up('sm'));
   // eslint-disable-next-line react/prop-types
   const { data } = props;
@@ -71,28 +72,19 @@ const Actors = (props) => {
 
   const handleClickExport = useCallback(() => {
     const actorsToExport = actors
-      .map((actor) => ({
+      .map(actor => ({
         ...actor,
         url: `${process.env.NEXT_PUBLIC_BASE_URL}/actor/${actor.id}`,
-      }))
-      .map(({
-        id, name, address, city, shortDescription, url,
-      }) => ({
-        id, name, address, city, shortDescription, url,
       }));
 
-    /* Create worksheet with the headers in French */
-    const ws = XLSX.utils.aoa_to_sheet([['ID', 'Nom', 'Adresse', 'Ville', 'Description', 'URL']]);
-    /* Add to the worksheet all values without header */
-    XLSX.utils.sheet_add_json(ws, actorsToExport, { origin: 'A2', skipHeader: true });
-    /* Specify column width */
-    ws['!cols'] = [{ wch: 4 }, { wch: 30 }, { wch: 30 }, { wch: 30 }, { wch: 60 }, { wch: 50 }];
-    /* Create workbook */
-    const wb = XLSX.utils.book_new();
-    /* Add worksheet to workbook, with the name of worksheet */
-    XLSX.utils.book_append_sheet(wb, ws, 'acteurs');
-    /* Generate XLSX file with name of the file, and send to client */
-    XLSX.writeFile(wb, 'acteurs.xlsx');
+    exportData({
+      data: actorsToExport,
+      columns: ['id', 'name', 'address', 'city', 'shortDescription', 'url'],
+      columnLabels: ['ID', 'Nom', 'Adresse', 'Ville', 'Description', 'URL'],
+      columnOptions: [{ wch: 4 }, { wch: 30 }, { wch: 30 }, { wch: 30 }, { wch: 60 }, { wch: 50 }],
+      sheetName: 'acteurs',
+      fileName: 'acteurs',
+    });
   }, [actors]);
 
   return (
@@ -120,7 +112,7 @@ const Actors = (props) => {
       </div>
       <Stack spacing={2} className={classes.stack}>
         {
-          actors.map((actor) => (
+          actors.map(actor => (
             <div key={actor.id}>
               <ActorCard key={actor.id} actor={actor} />
             </div>

@@ -1,3 +1,4 @@
+import React, { useCallback, useState } from 'react';
 import AppLayout from 'containers/layouts/AppLayout';
 import AppContainer from 'containers/layouts/AppContainer';
 import {
@@ -13,7 +14,6 @@ import ActorAdminLeftMenu from 'containers/menus/ActorAdminLeftMenu';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import CloseIcon from '@material-ui/icons/Close';
-import { useCallback, useState } from 'react';
 
 const useStyles = makeStyles((theme) => ({
   gridContainer: {
@@ -55,13 +55,13 @@ const ActorAdminPageLayout = ({ children }) => {
           Administration des pages acteurs et événements
         </Typography>
         <Box className={styles.gridContainer}>
-          <Grid container >
+          <Grid container>
             <Hidden smDown>
               <Grid item lg={2}>
                 <ActorAdminLeftMenu />
               </Grid>
             </Hidden>
-            <Grid item lg={9}>
+            <Grid item lg={10}>
               {children}
             </Grid>
           </Grid>
