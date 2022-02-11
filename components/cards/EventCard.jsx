@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useMemo } from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import gql from 'graphql-tag';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
@@ -14,6 +14,14 @@ const ADD_FAVORITE = gql`
 `;
 
 const useStyles = makeStyles((theme) => ({
+  '@media print': {
+    card: {
+      border: 'solid 1px grey',
+    },
+    favorite: {
+      display: 'none !important',
+    },
+  },
   card: (props) => ({
     backgroundColor: 'white',
     borderRadius: '10px',
@@ -116,19 +124,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const EventCard = ({ event }) => {
-  const color = event.entries.length > 0 && event.entries[0].parentEntry
-    ? event.entries[0].parentEntry.color
-    : '#AD2740';
-  const icon = event.entries && event.entries[0] ? event.entries[0].icon : 'fruit';
-  const actorName = event.actors[0]
-    ? event.actors[0].name
-    : 'Potager de la Jarne';
-
-  const classes = useStyles({ color, icon });
-
-
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up('sm'));
+
+  const color = event?.entries?.[0]?.parentEntry?.color || '#AD2740';
+  const icon = event?.entries?.[0]?.icon || 'fruit';
+  const classes = useStyles({ color, icon });
 
   const startDateFormat = matches ? '[De ]HH[h]mm' : 'HH[h]mm';
   const endDateFormat = matches ? '[ à ]HH[h]mm' : '[-]HH[h]mm';
@@ -157,34 +158,34 @@ const EventCard = ({ event }) => {
               <div className={classes.label}>{event.label}</div>
               <div className={classes.eventDetails}>
                 {!event.duration && (
-                <>
-                  <Moment format={startDateFormat} unix>
-                    {event.startedAt / 1000}
-                  </Moment>
-                  <Moment format={endDateFormat} unix>
-                    {event.endedAt / 1000}
-                  </Moment>
-                  <span> - </span>
-                </>
+                  <>
+                    <Moment format={startDateFormat} unix>
+                      {event.startedAt / 1000}
+                    </Moment>
+                    <Moment format={endDateFormat} unix>
+                      {event.endedAt / 1000}
+                    </Moment>
+                    <span> - </span>
+                  </>
                 )}
                 <span>{addressCity}</span>
                 <br />
                 <span>{event.shortDescription}</span>
               </div>
               {event.duration && (
-              <>
-                {event.duration}
-                {' '}
-                .
-              </>
+                <>
+                  {event.duration}
+                  {' '}
+                  .
+                </>
               )}
 
               {event.parentEvent && (
-              <span>
-                Fait partie de
-                {' '}
-                <Link href={`/event/${event.parentEvent.id}`}>{event.parentEvent.label}</Link>
-              </span>
+                <span>
+                  Fait partie de
+                  {' '}
+                  <Link href={`/event/${event.parentEvent.id}`}>{event.parentEvent.label}</Link>
+                </span>
               )}
             </div>
           </div>
