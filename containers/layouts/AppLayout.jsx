@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AppLayout = ({ children, hideFooter }) => {
+const AppLayout = React.forwardRef(({ children, hideFooter }, ref) => {
   /* if (typeof window !== 'undefined' && process.env.NODE_ENV !== 'development') {
     const trackingId = 'UA-179407370-1'; // Replace with your Google Analytics tracking ID
     ReactGA.initialize(trackingId);
@@ -22,7 +22,7 @@ const AppLayout = ({ children, hideFooter }) => {
   const styles = useStyles();
 
   return (
-    <Box className={styles.root}>
+    <Box className={styles.root} ref={ref}>
       <NavBar />
       {children}
       {!hideFooter && (
@@ -30,6 +30,6 @@ const AppLayout = ({ children, hideFooter }) => {
       )}
     </Box>
   );
-};
+});
 
 export default AppLayout;
