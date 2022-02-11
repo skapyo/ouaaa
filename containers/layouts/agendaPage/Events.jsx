@@ -1,8 +1,13 @@
-import React, { useMemo } from 'react';
-import EventCard from 'components/cards/EventCard';
+import React, { useMemo, useCallback } from 'react';
 import { Grid, makeStyles, CircularProgress } from '@material-ui/core';
+import {
+  IconButton, Tooltip, useMediaQuery, useTheme,
+} from '@mui/material';
 import Moment from 'react-moment';
 import moment from 'moment';
+import DownloadIcon from '@mui/icons-material/Download';
+import EventCard from 'components/cards/EventCard';
+import useExcelExport from '../../../hooks/useExcelExport.ts';
 
 const useStyles = makeStyles(theme => ({
   events: {
@@ -12,12 +17,18 @@ const useStyles = makeStyles(theme => ({
     overflow: 'auto',
     [theme.breakpoints.down('sm')]: {
       padding: '0 1em',
-    }
+    },
+  },
+  header: {
+    display: 'flex',
+    width: '100%',
+    alignItems: 'center',
   },
   title: {
     color: '#2C367E',
-
     fontSize: '2.3em',
+    display: 'flex',
+    flex: 1,
   },
   date: {
     textTransform: 'uppercase',
@@ -49,6 +60,9 @@ const sameDay = (date1, date2) => {
 const Events = (props) => {
   const classes = useStyles();
   const { data, loading } = props;
+  const theme = useTheme();
+  const exportData = useExcelExport();
+  const matches = useMediaQuery(theme.breakpoints.up('sm'));
 
   const events = useMemo(() => {
     let localEvents = (data?.events || []).slice();
@@ -75,9 +89,44 @@ const Events = (props) => {
     return localEvents.sort(compare);
   }, [data]);
 
+  const handleClickExport = useCallback(() => {
+    const eventsToExport = data?.events
+      .map(event => ({
+        ...event,
+        url: `${process.env.NEXT_PUBLIC_BASE_URL}/event/${event.id}`,
+        startedAt: new Date(parseInt(event.startedAt, 10)),
+        endedAt: new Date(parseInt(event.endedAt, 10)),
+      }));
+
+    exportData({
+      data: eventsToExport,
+      columns: ['id', 'label', 'address', 'city', 'shortDescription', 'startedAt', 'endedAt', 'url'],
+      columnLabels: ['ID', 'Nom', 'Adresse', 'Ville', 'Description', 'Date début', 'Date fin', 'URL'],
+      columnOptions: [{ wch: 4 }, { wch: 35 }, { wch: 30 }, { wch: 20 }, { wch: 60 }, { wch: 15 }, { wch: 15 }, { wch: 40 }],
+      sheetName: 'actions',
+      fileName: 'actions',
+    });
+  }, [data.events]);
+
   return (
     <Grid className={classes.events} container direction="column" wrap="nowrap">
-      <h1 className={classes.title}>ÉVÉNEMENTS À VENIR</h1>
+      <div className={classes.header}>
+        <h1 className={classes.title}>
+          ÉVÉNEMENTS À VENIR
+        </h1>
+        {
+          matches && (
+            <div>
+              <Tooltip title="Exporter">
+                <IconButton onClick={handleClickExport} size="large">
+                  <DownloadIcon />
+                </IconButton>
+              </Tooltip>
+            </div>
+          )
+        }
+      </div>
+
       {
         loading && (
           <Grid container justifyContent="center">

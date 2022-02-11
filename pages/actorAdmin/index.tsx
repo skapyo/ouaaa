@@ -1,7 +1,8 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import gql from 'graphql-tag';
 import Moment from 'react-moment';
+import moment from 'moment';
 
 import {
   createStyles,
@@ -9,32 +10,34 @@ import {
   Theme,
   Typography,
   useTheme,
-  Grid,
 } from '@material-ui/core';
-import IconButton from '@material-ui/core/IconButton';
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  LinearProgress,
+  Grid,
+  Tooltip,
+  IconButton,
+} from '@mui/material';
 import Paper from '@material-ui/core/Paper/Paper';
 import LastPageIcon from '@material-ui/core/SvgIcon/SvgIcon';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
-import TableFooter from '@material-ui/core/TableFooter';
 import TableHead from '@material-ui/core/TableHead';
-import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import Edit from '@material-ui/icons/Edit';
-import FirstPageIcon from '@material-ui/icons/FirstPage';
-import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
-import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
-import AddCircleOutline from '@material-ui/icons/AddCircleOutline';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import Edit from '@mui/icons-material/Edit';
+import FirstPageIcon from '@mui/icons-material/FirstPage';
+import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
+import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
+import AddCircleOutline from '@mui/icons-material/AddCircleOutline';
 import ZoomInIcon from '@mui/icons-material/ZoomIn';
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import LinearProgress from '@mui/material/LinearProgress';
+import DownloadIcon from '@mui/icons-material/Download';
 
-
+import useExcelExport from 'hooks/useExcelExport';
 import ActorAdminPageLayout from 'containers/layouts/actorAdminPage/ActorAdminPageLayout';
 import { withApollo } from 'hoc/withApollo';
 import Link from '../../components/Link';
@@ -182,17 +185,18 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
 }
 
 const VolunteerList = (props: any) => {
-  const { actor } = props;
+  const { actor, volunteersToExport } = props;
   const [volunteers, setVolunteers] = useState([]);
 
   const { loading, error } = useQuery(GET_VOLUNTEERS_BY_ACTOR, {
     variables: {
-      actorId: actor?.id
+      actorId: actor?.id,
     },
     onCompleted: (data: any) => {
       setVolunteers(data.volunteers);
+      volunteersToExport.current = data.volunteers;
     },
-    fetchPolicy: 'network-only'
+    fetchPolicy: 'network-only',
   });
 
   if (error) return null;
@@ -210,16 +214,16 @@ const VolunteerList = (props: any) => {
         </TableRow>
       </TableHead>
       <TableBody>
-        {volunteers.map((volunteers: any) => (
-          <TableRow key={volunteers.id}>
+        {volunteers.map((volunteer: any) => (
+          <TableRow key={volunteer.id}>
             <TableCell component="th" scope="row">
-              {volunteers.surname}
+              {volunteer.surname}
             </TableCell>
-            <TableCell>{volunteers.lastname}</TableCell>
-            <TableCell>{volunteers.email}</TableCell>
+            <TableCell>{volunteer.lastname}</TableCell>
+            <TableCell>{volunteer.email}</TableCell>
             <TableCell align="right">
               <Moment format="DD/MM/YYYY HH:mm" unix>
-                {volunteers.participatedAt / 1000}
+                {volunteer.participatedAt / 1000}
               </Moment>
             </TableCell>
           </TableRow>
@@ -244,7 +248,7 @@ const NbVolunteersItem = (props: any) => {
       <ZoomInIcon />
     </div>
   )
-}
+};
 
 const useStyles = makeStyles((theme) => ({
   avatar: {
@@ -278,6 +282,10 @@ const useStyles = makeStyles((theme) => ({
   dialogContent: {
     padding: '0 !important'
   },
+  dialogTitle: {
+    display: 'flex',
+    alignItems: 'center',
+  },
   table: {
     minWidth: 500,
   },
@@ -309,9 +317,12 @@ const ActorAdminPage = () => {
   const [state, setState] = useState({});
   const user = useSessionState();
   const styles = useStyles();
+  const volunteersToExport = useRef(null);
+  const exportData = useExcelExport();
 
   const closeModal = useCallback(() => {
     setOpenModal(false);
+    volunteersToExport.current = null;
   }, []);
 
   const handleClickVolunteersActor = useCallback(event => {
@@ -323,7 +334,7 @@ const ActorAdminPage = () => {
     if (!volunteersActor) {
       setTimeout(() => {
         setVolunteersActor(null);
-      }, 200)
+      }, 200);
     }
   }, [volunteersActor]);
 
@@ -362,7 +373,7 @@ const ActorAdminPage = () => {
     {
       variables: {
         actorId: actorIdValidated,
-        userId: parseInt(user && user.id),
+        userId: parseInt(user && user.id, 10),
       },
     },
   );
@@ -370,7 +381,7 @@ const ActorAdminPage = () => {
   const validate = useCallback(
     (actor) => {
       if (!actor.isValidated) {
-        setActorIdValidated(parseInt(actor.id));
+        setActorIdValidated(parseInt(actor.id, 10));
         validateActor();
       }
     },
@@ -382,6 +393,22 @@ const ActorAdminPage = () => {
       refetch();
     }
   }, [dataValidateActor]);
+
+  const handleClickExport = useCallback(() => {
+    const dataToExport = (volunteersToExport.current || []).map((volunteer: any) => ({
+      ...volunteer,
+      participatedAt: new Date(parseInt(volunteer.participatedAt, 10)),
+    }));
+
+    exportData({
+      data: dataToExport,
+      columns: ['id', 'surname', 'lastname', 'email', 'participatedAt'],
+      columnLabels: ['ID', 'Prénom', 'Nom', 'Email', 'Date'],
+      columnOptions: [{ wch: 4 }, { wch: 25 }, { wch: 25 }, { wch: 30 }, { wch: 20 }],
+      sheetName: 'volontaires',
+      fileName: 'volontaires',
+    });
+  }, [volunteersToExport]);
 
   return (
     <ActorAdminPageLayout>
@@ -398,7 +425,7 @@ const ActorAdminPage = () => {
         <Grid item xs={3}>
           {/* @ts-ignore */}
           <Link href="/addactor">
-            <button className={styles.buttonGrid}> Créer une nouvelle page</button>
+            <button type="button" className={styles.buttonGrid}> Créer une nouvelle page</button>
           </Link>
         </Grid>
       </Grid>
@@ -433,7 +460,7 @@ const ActorAdminPage = () => {
                   Volontaires
                 </TableCell>
 
-                {user && user.role == 'admin' && (
+                {user && user.role === 'admin' && (
                   <>
                     <TableCell style={{ width: 160 }} align="left">
                       Validation
@@ -564,13 +591,20 @@ const ActorAdminPage = () => {
         </TableContainer>
       )}
 
-      <Dialog open={openModal} onBackdropClick={closeModal}>
-        <DialogTitle>
-          <div>Volontaires pour l'acteur <i>{(volunteersActor as any)?.name}</i></div>
+      <Dialog open={openModal} onBackdropClick={closeModal} maxWidth="lg">
+        <DialogTitle classes={{ root: styles.dialogTitle }}>
+          <Grid item xs={11}>Volontaires pour l'acteur <i>{(volunteersActor as any)?.name}</i></Grid>
+          <Grid item xs={1}>
+            <Tooltip title="Exporter">
+              <IconButton onClick={handleClickExport} size="large">
+                <DownloadIcon />
+              </IconButton>
+            </Tooltip>
+          </Grid>
         </DialogTitle>
         <DialogContent classes={{ root: styles.dialogContent }}>
           {
-            volunteersActor && <VolunteerList actor={volunteersActor} />
+            volunteersActor && <VolunteerList actor={volunteersActor} volunteersToExport={volunteersToExport} />
           }
         </DialogContent>
       </Dialog>
