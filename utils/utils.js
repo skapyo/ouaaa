@@ -19,7 +19,7 @@ export const entriesHasElementWithCode = (entries, code) => {
 };
 
 export const urlWithHttpsdefault = (url) => {
-  if (!url.includes('http')) {
+  if (url && !url.includes('http')) {
     return `https://${url}`;
   }
   return url;
