@@ -55,6 +55,7 @@ import {
   urlRectification,
   urlWithHttpsdefault,
 } from '../../utils/utils';
+import Calendar from '../../components/Calendar';
 import Favorite from '../../components/Favorite';
 import ActorToPrint from '../../components/print/Actor';
 
@@ -1441,6 +1442,22 @@ const Actor = ({ initialData }) => {
                 </Slider>
               </Box>
             </Modal>
+            <div>
+              <Typography variant="h5" className={[styles.cardTitle]}>
+                LES ÉVÉNEMENTS DE : {data && data?.actor?.name}
+              </Typography>
+              <div className={styles.border} />
+            </div>
+            <br />
+            <Calendar
+              events={events}
+              withViewSwitcher={false}
+              withAddEvent={
+                (data && containUser(data.actor.referents) && data.actor.isValidated) ||
+                (user && user.role === 'admin')
+              }
+              className={styles.calendar}
+            />
             <br />
             <div>
               <Typography variant="h5" className={[styles.cardTitle]}>
