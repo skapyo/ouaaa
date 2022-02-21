@@ -20,6 +20,8 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import 'react-leaflet-markercluster/dist/styles.min.css';
 import 'moment/locale/fr';
+import 'leaflet.markercluster/dist/MarkerCluster.css';
+import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 
 const theme = createTheme({
   palette: {
@@ -98,11 +100,11 @@ const MyApp = (props) => {
         <meta charSet="utf-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <title>OUAAA! : Agir pour la Transition Ecologique & Sociale en Aunis | La Rochelle</title>
-        { (process.env.NEXT_PUBLIC_SEO_DISABLED && process.env.NEXT_PUBLIC_SEO_DISABLED.localeCompare('true') === 0) && (
+        {(process.env.NEXT_PUBLIC_SEO_DISABLED && process.env.NEXT_PUBLIC_SEO_DISABLED.localeCompare('true') === 0) && (
           <meta name="robots" content="noindex" />
         )}
 
-         <script
+        <script
           type="text/javascript"
           src="/analytics/piwik-pro.js"
         />

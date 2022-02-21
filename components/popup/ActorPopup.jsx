@@ -7,7 +7,7 @@ import {
 import Favorite from '../Favorite';
 import { getImageUrl } from '../../utils/utils';
 
-const ActorPopup = ({ actor }) => {
+const ActorPopup = ({ actor, onMouseOut }) => {
   const useStyles = makeStyles((theme) => ({
     favoriteIcon: {
       color: '#2C367E;',
@@ -28,11 +28,11 @@ const ActorPopup = ({ actor }) => {
       marginLeft: 'auto',
       textAlign: 'center',
       marginRight: '68px',
-   
+
     },
 
 
-    
+
     content: {
       padding: '10px',
       width: '100%',
@@ -55,7 +55,7 @@ const ActorPopup = ({ actor }) => {
       color: 'white',
       'background-color': '#2C367E',
       border: 'none',
-  
+
       borderRadius: '1.5em',
       padding: '0 3em 0 3em',
       height: '2.5em',
@@ -76,7 +76,7 @@ const ActorPopup = ({ actor }) => {
   const styles = useStyles();
 
   return (
-    <div>
+    <div onMouseLeave={onMouseOut}>
       <div
         className={styles.image}
         style={{
@@ -89,21 +89,21 @@ const ActorPopup = ({ actor }) => {
         }}
       >
         <Grid container>
-        <Grid item xs={2}>
-          <Favorite actor={actor} />
-        </Grid>
-        <Grid item xs={9}>
-          <div className={styles.categorie}>
-            <Typography
-              style={{ color: actor?.entries && actor?.entries[0]?.parentEntry?.color }}
-              gutterBottom
-            >
-              {actor.entries
-                && actor.entries.length > 0
-                && actor.entries[0].label}
-            </Typography>
-          </div>
-        </Grid>
+          <Grid item xs={2}>
+            <Favorite actor={actor} />
+          </Grid>
+          <Grid item xs={9}>
+            <div className={styles.categorie}>
+              <Typography
+                style={{ color: actor?.entries && actor?.entries[0]?.parentEntry?.color }}
+                gutterBottom
+              >
+                {actor.entries
+                  && actor.entries.length > 0
+                  && actor.entries[0].label}
+              </Typography>
+            </div>
+          </Grid>
         </Grid>
       </div>
       <div className={styles.content}>
@@ -120,21 +120,21 @@ const ActorPopup = ({ actor }) => {
             </div>
             <p>
               {!actor.address && actor.city && (
-              <span>
-                {/* @ts-ignore */}
-                <img src="/icons/location.svg" alt="Localisation" className={[styles.icon]} />
-                {' '}
-                {actor.city}
-              </span>
+                <span>
+                  {/* @ts-ignore */}
+                  <img src="/icons/location.svg" alt="Localisation" className={[styles.icon]} />
+                  {' '}
+                  {actor.city}
+                </span>
               )}
               {actor.address && actor.city && (
-              <span>
-                {/* @ts-ignore */}
-                <img src="/icons/location.svg" alt="Localisation" className={[styles.icon]} />
-                {' '}
-                {`${actor.address} ${actor.city
-                }`}
-              </span>
+                <span>
+                  {/* @ts-ignore */}
+                  <img src="/icons/location.svg" alt="Localisation" className={[styles.icon]} />
+                  {' '}
+                  {`${actor.address} ${actor.city
+                    }`}
+                </span>
               )}
             </p>
           </Grid>

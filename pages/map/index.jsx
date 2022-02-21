@@ -8,29 +8,32 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/client';
 import Actors from 'containers/layouts/mapPage/actors';
-import Parser from 'html-react-parser';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Drawer from '@material-ui/core/Drawer';
 import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
+import dynamic from 'next/dynamic';
 
 // eslint-disable-next-line import/no-unresolved
 import ButtonGroupSelected from '../../components/buttons/ButtonGroupSelected';
 import Filters from '../../components/filters';
-import ActorPopup from '../../components/popup/ActorPopup';
 import AppLayout from '../../containers/layouts/AppLayout';
 import { withApollo } from '../../hoc/withApollo';
 
+const MapWithNoSSR = dynamic(() => import('../../components/map/Map'), {
+  ssr: false
+});
+
+const MarkerWithNoSSR = dynamic(() => import('../../components/map/ActorMarker'), {
+  ssr: false
+});
+
+const MarkerClusterWithNoSSR = dynamic(() => import('../../components/map/MarkerCluster'), {
+  ssr: false
+});
+
 let matchesWindow = false;
 if (typeof window !== 'undefined') {
-  let L = require('leaflet');
-  const { Map } = require('react-leaflet');
-  const { TileLayer } = require('react-leaflet');
-  const { Marker } = require('react-leaflet');
-  const { Popup } = require('react-leaflet');
-  const { Tooltip } = require('react-leaflet');
-  const { ZoomControl } = require('react-leaflet');
-  const MarkerClusterGroup = require('react-leaflet-markercluster').default;
   matchesWindow = window.matchMedia('(max-width: 600px)').matches;
 }
 
@@ -358,10 +361,6 @@ const carto = () => {
   }, [listMode]);
 
   if (typeof window !== 'undefined') {
-    L.Icon.Default.mergeOptions({
-      iconUrl: null,
-    });
-
     const {
       data, refetch,
     } = useQuery(GET_ACTORS, {
@@ -424,6 +423,10 @@ const carto = () => {
       ];
     }, [switchMode]);
 
+    const actorsWithLocation = useMemo(() => {
+      return (data?.actors || []).filter(actor => actor.lat && actor.lng);
+    }, [data]);
+
     return (
       <AppLayout hideFooter>
         <Head>
@@ -475,60 +478,17 @@ const carto = () => {
 
           {listMode && (
             <Grid item style={{ width: '100%' }}>
-              <Map ref={mapRef} center={position} zoom={11} className={styles.mapContainer}>
-                <TileLayer
-                  attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                />
-                <ZoomControl position="topright" />
-                <MarkerClusterGroup>
-                  {typeof data !== 'undefined'
-                    && data.actors.map((actor) => {
-                      if (actor.lat != null && actor.lng != null) {
-                        let icone;
-                        let color;
-                        if (
-                          actor.entries
-                          && actor.entries.length > 0
-                          && actor.entries[0].icon
-                        ) {
-                          icone = `/icons/marker/marker_${actor.entries[0].icon}.svg`;
-                          color = actor.entries[0].color;
-                        } else {
-                          icone = '/icons/place.svg';
-                          color = 'ref';
-                        }
-                        const markerHtmlStyles = 'background-color: red';
-                        const suitcasePoint = new L.Icon({
-                          iconUrl: icone,
-                          color,
-                          fillColor: color,
-                          iconAnchor: [13, 34], // point of the icon which will correspond to marker's location
-                          iconSize: [60],
-                          popupAnchor: [1, -25],
-                          html: `<span style="${markerHtmlStyles}" />`,
-                        });
-                        return (
-                          <Marker
-                            key={`marker-${actor.id}`}
-                            position={[actor.lat, actor.lng]}
-                            icon={suitcasePoint}
-                          >
-                            <Tooltip>
-                              <div className={styles.tooltip}>
-                                <ActorPopup actor={actor} />
-                              </div>
-                            </Tooltip>
-                            <Popup>
-                              <ActorPopup actor={actor} />
-                            </Popup>
-                          </Marker>
-                        );
-                      }
-                      return null;
-                    })}
-                </MarkerClusterGroup>
-              </Map>
+              <MapWithNoSSR>
+                <MarkerClusterWithNoSSR>
+                  {
+                    actorsWithLocation.map((actor) => {
+                      return (
+                        <MarkerWithNoSSR actor={actor} />
+                      )
+                    })
+                  }
+                </MarkerClusterWithNoSSR>
+              </MapWithNoSSR>
             </Grid>
           )}
           {!listMode && (
