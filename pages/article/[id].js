@@ -17,7 +17,9 @@ import gql from 'graphql-tag';
 import { useMutation, useQuery } from '@apollo/client';
 import Slider from 'react-slick/lib';
 import CardSliderActor from 'components/cards/CardSliderActor';
-import Box from '@mui/material/Box';
+import {
+  Tooltip, Modal, Box,
+} from '@mui/material';
 import moment from 'moment';
 import Moment from 'react-moment';
 import { useCookies } from 'react-cookie';
@@ -26,6 +28,8 @@ import Head from 'next/head';
 import Parser from 'html-react-parser';
 import Fab from '@material-ui/core/Fab';
 import EditIcon from '@material-ui/icons/Edit';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
 import Link from 'components/Link';
 import Image from 'next/image';
 import {
@@ -326,7 +330,16 @@ const GET_ARTICLE = `
       }
     }
   `;
-
+  const SliderArrow = (props) => {
+    const { className, style, onClick } = props;
+    return (
+      <div
+        className={className}
+        style={{ ...style, display: 'block' }}
+        onClick={onClick}
+      />
+    );
+  };
 const Article = ({ initialData }) => {
   const router = useRouter();
   const mapRef = useRef();
@@ -411,6 +424,25 @@ const Article = ({ initialData }) => {
     nextArrow: <SampleNextArrow />,
     prevArrow: <SamplePrevArrow />,
   };
+  const sliderSettings = {
+    infinite: true,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    nextArrow: <SliderArrow />,
+    prevArrow: <SliderArrow />,
+  };
+  const actorPictures = data?.article?.pictures || [];
+  const maxSlideToShowImage = !matches ? 3 : 1;
+  const maxSlideToShowArticle = !matches ? 5 : 1;
+  const settingsSliderImage = useMemo(() => {
+    return {
+      ...sliderSettings,
+      slidesToShow: actorPictures.length >= maxSlideToShowImage
+        ? maxSlideToShowImage
+        : actorPictures.length,
+    };
+  }, [actorPictures, sliderSettings, maxSlideToShowImage]);
+
   function SampleNextArrow(props) {
     const { className, style, onClick } = props;
     return (
@@ -473,6 +505,53 @@ const Article = ({ initialData }) => {
                       {data.article && data.article.createdAt / 1000}
                     </Moment>
                 </div>
+                {data && data.article.pictures && data.article.pictures.length > 0 && (
+                  <div>
+                    <Typography variant="h5" className={styles.cardTitle}>
+                      PHOTOS
+                    </Typography>
+                    <div className={styles.border} />
+                    <br />
+                  </div>
+                )}
+                <Slider {...settingsSliderImage} className={[styles.slider]}>
+                  {data &&
+                    data.article.pictures &&
+                    data.article.pictures
+                      .sort((a, b) => (a.position > b.position ? 1 : -1))
+                      .map((picture) => (
+
+                        <img
+                          src={getImageUrl(picture.originalPicturePath)}
+                          className={[styles.img]}
+                          onClick={() => setOpenModalSlider(true)}
+                        />
+                      ))}
+                </Slider>
+                <Modal open={openModalSlider} onClose={() => setOpenModalSlider(false)} aria-labelledby="parent-modal-title"
+              aria-describedby="parent-modal-description">
+              <Box sx={style}>
+                <IconButton aria-label="Close" className={styles.closeButton} onClick={() => setOpenModalSlider(false)}>
+                  <CloseIcon />
+                </IconButton>
+                <Slider {...sliderSettings} className={[styles.slider]}>
+                  {data &&
+                    data.article.pictures &&
+                    data.article.pictures
+                      .sort((a, b) => (a.position > b.position ? 1 : -1))
+                      .map((picture) => (
+
+                        <img
+                          src={getImageUrl(picture.originalPicturePath)}
+                          className={[styles.imgModal]}
+                          onClick={() => setOpenModalSlider(false)}
+                        />
+                      ))}
+                </Slider>
+              </Box>
+            </Modal>
+                <br />
+                <br />
                 {data && data.article.actors && data.article.actors.length > 0 && (
                 <div>
                   <Typography variant="h5" className={styles.cardTitle}>

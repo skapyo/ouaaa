@@ -142,6 +142,7 @@ const EDITArticle = gql`
     $userId: Int!
     $content: String!
     $mainPictures: [InputPictureType]
+    $pictures: [InputPictureType]
   ) {
     editArticle(
       articleInfos: $articleInfos
@@ -149,6 +150,7 @@ const EDITArticle = gql`
       userId: $userId
       content: $content
       mainPictures: $mainPictures
+      pictures: $pictures
     ) {
       id
       label
@@ -340,6 +342,37 @@ const EditArticleForm = (props) => {
       .map((picture, index) => {
         if (picture.main) {
           imgInitMain.push({
+            // @ts-ignore
+            id: index,
+            // @ts-ignore
+            file: null,
+            // @ts-ignore
+            img: getImageUrl(picture.originalPicturePath),
+            // @ts-ignore
+            activated: true,
+            // @ts-ignore
+            deleted: false,
+            // @ts-ignore
+            newpic: false,
+            // @ts-ignore
+            serverId: picture.id,
+            // @ts-ignore
+            position: picture.position,
+          });
+        }
+      });
+  }
+  const imgInit = [];
+  if (
+    articleData
+    && articleData.article.pictures
+    && articleData.article.pictures.length > 0
+  ) {
+    articleData.article.pictures
+      .sort((a, b) => (a.position > b.position ? 1 : -1))
+      .map((picture, index) => {
+        if (!picture.main && !picture.logo) {
+          imgInit.push({
             // @ts-ignore
             id: index,
             // @ts-ignore
@@ -572,6 +605,32 @@ const EditArticleForm = (props) => {
       // @ts-ignore
     }, resultMain);
 
+    const [setImagesList, loading, result, imagesListState] = useImageReader();
+
+    const onDropHandler = useCallback(
+      (files) => {
+        // @ts-ignore
+        setImagesList(files);
+      },
+      [setImagesList],
+    );
+
+    useEffect(() => {
+      if (result) addValues(result);
+      // @ts-ignore
+    }, result);
+
+    const {
+      objectsList,
+      moveObject,
+      findObject,
+      updateActiveIndicator,
+      updateDeletedIndicator,
+      initState,
+      addValues,
+      updateKeyIndicator,
+    } = useDnDStateManager(imgInit);
+
     const submitHandler = () => {
       let mainPictures;
       // @ts-ignore
@@ -583,6 +642,21 @@ const EditArticleForm = (props) => {
             newpic: object.newpic,
             deleted: object.deleted,
             main: true,
+            file: {
+              originalPicture: object.file,
+            },
+          };
+        });
+      }
+      let pictures;
+      // @ts-ignore
+      if (objectsList) {
+        pictures = objectsList.map((object) => {
+          // return object.file
+          return {
+            id: object.serverId,
+            newpic: object.newpic,
+            deleted: object.deleted,
             file: {
               originalPicture: object.file,
             },
@@ -604,6 +678,7 @@ const EditArticleForm = (props) => {
           // @ts-ignore
           content: descriptionEditor.getData(),
           mainPictures,
+          pictures,
         },
       });
     };
@@ -622,6 +697,72 @@ const EditArticleForm = (props) => {
       setShowAddActor(false);
       setOpenAddActorlist(false);
     }, [formValues]);
+    function MyCustomUploadAdapterPlugin(editor) {
+      editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
+        return new MyUploadAdapter(loader);
+      };
+    }
+
+    class MyUploadAdapter {
+      constructor(props) {
+        // CKEditor 5's FileLoader instance.
+        this.loader = props;
+      }
+
+      // Starts the upload process.
+      upload() {
+         return this.loader.file.then( file => new Promise( ( resolve, reject ) => {
+          addPictureArticle({
+            variables: {
+              picture: {
+                newpic: true,
+                deleted: false,
+                main: true,
+                file: {
+                  originalPicture: file,
+                },
+              },
+            },
+          });
+
+          resolve( {
+            default: `${process.env.NEXT_PUBLIC_URI}/static/images/article/${file.name}`
+        } );
+      }));
+      }
+
+      // Aborts the upload process.
+      abort() {
+      }
+    }
+    const customConfig = {
+      extraPlugins: [MyCustomUploadAdapterPlugin],
+      toolbar: {
+        items: [
+          'heading',
+          '|',
+          'alignment:left', 'alignment:right', 'alignment:center',
+          'bold',
+          'italic',
+          'link',
+          'bulletedList',
+          'numberedList',
+          '|',
+          'blockQuote',
+          'insertTable',
+          '|',
+          'undo',
+          'redo',
+        ],
+      },
+      //   plugins: [ Alignment],
+      alignment: {
+        options: ['left', 'right'],
+      },
+      table: {
+        contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells'],
+      },
+    };
 
     return (
       <Container component="main" maxWidth="sm" className={styles.container}>
@@ -675,9 +816,7 @@ const EditArticleForm = (props) => {
         <p />
         {editorLoaded ? (
           <CKEditor
-            config={{
-              toolbar: ['bold', 'italic', 'link'],
-            }}
+            config={customConfig}
             editor={ClassicEditor}
             data={formValues.content}
             onReady={(editor) => {
@@ -691,7 +830,23 @@ const EditArticleForm = (props) => {
           <div>Editor loading</div>
         )}
         <br />
-
+        <br />
+        <Typography variant="body1" color="primary" className={styles.label}>
+          Autres photos
+        </Typography>
+        {objectsList ? (
+          <ImagesDisplay
+            cards={objectsList}
+            moveCard={moveObject}
+            findCard={findObject}
+            updateDeletedIndicator={updateDeletedIndicator}
+            updateKeyIndicator={updateKeyIndicator}
+          />
+        ) : null}
+        <ImagesDropZone
+          onDropHandler={onDropHandler}
+          text="Déposez ici votre autres photos au format jpg et de poids inférieur à 4Mo"
+        />
         <br />
         <TitleWithTooltip
           title="Acteur(s) associé(s) à l'article "
