@@ -2,7 +2,7 @@ import React, {
   useCallback, useEffect, useRef, useState, useMemo,
 } from 'react';
 import {
-  Grid, useMediaQuery, Button,
+  Grid,Typography, useMediaQuery, Button,
 } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import gql from 'graphql-tag';
@@ -13,7 +13,7 @@ import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Drawer from '@material-ui/core/Drawer';
 import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
-
+import { getImageUrl } from '../../utils/utils';
 // eslint-disable-next-line import/no-unresolved
 import ButtonGroupSelected from '../../components/buttons/ButtonGroupSelected';
 import Filters from '../../components/filters';
@@ -186,9 +186,6 @@ const useStyles = makeStyles((theme) => ({
   icon: {
     color: '#bd0b3d',
     width: '20px',
-  },
-  tooltip: {
-    width: '320px',
   },
   datePicker: {
     border: '0.5px solid',
@@ -400,6 +397,24 @@ const carto = () => {
       refetch({ ...newFilters });
     }, [refetch]);
 
+    function splitWord(word, number) {
+      if (word != null) {
+        const indexMax = Math.round(word.length / number);
+        let wordSplit = '';
+        if (indexMax > 1) {
+          for (let i = 0; i < indexMax; i++) {
+            wordSplit += word.slice(i * number, (i + 1) * number);
+            if (i + 1 <= indexMax) {
+              wordSplit += '<br><br> ';
+            }
+          }
+          return wordSplit;
+        }
+        return word;
+      }
+      return '';
+    }
+
     const otherCategoryChange = useCallback((e, collectionLabel) => {
       const newOtherCategories = { ...otherCategoriesChecked };
 
@@ -516,7 +531,65 @@ const carto = () => {
                           >
                             <Tooltip>
                               <div className={styles.tooltip}>
-                                <ActorPopup actor={actor} />
+                              <div
+                                className={styles.image}
+                                style={{
+                                  backgroundImage:
+                                    actor.pictures.length >= 1
+                                      ? `url(${getImageUrl(
+                                        actor.pictures.sort((a, b) => (a.logo ? -1 : 1))[0].originalPicturePath,
+                                      )})`
+                                      : '',
+                                }}
+                              >
+                                <div className={styles.categorie}>
+                                  <Typography
+                                    className={styles.categorie}
+                                    style={{ color: actor?.entries && actor?.entries[0]?.parentEntry?.color }}
+                                    gutterBottom
+                                  >
+                                    {actor.entries
+                                      && actor.entries.length > 0
+                                      && actor.entries[0].label}
+
+                                  </Typography>
+                                </div>
+                              </div>
+
+                              <div className={styles.content}>
+                                <div className={styles.titleDiv}>
+                                  <Typography
+                                    variant="h6"
+                                    component="h2"
+                                    className={styles.title}
+                                  >
+                                    {actor && actor.name}
+                                  </Typography>
+                                </div>
+                                <p>
+                                  {!actor.address && actor.city && (
+                                    <span>
+                                      {/* @ts-ignore */}
+                                      <img src="/icons/location.svg" alt="Localisation" className={[styles.icon]} />
+                                      {' '}
+                                      {actor.city}
+                                    </span>
+                                  )}
+                                  {actor.address && actor.city && (
+                                    <span>
+                                      {/* @ts-ignore */}
+                                      <img src="/icons/location.svg" alt="Localisation" className={[styles.icon]} />
+                                      {' '}
+                                      {`${actor.address} ${actor.city
+                                      }`}
+                                    </span>
+                                  )}
+                                </p>
+                                <p className={styles.shortDescription}>
+                                  {actor && Parser(splitWord(actor.shortDescription, 300))}
+                                </p>
+
+                              </div>
                               </div>
                             </Tooltip>
                             <Popup>
