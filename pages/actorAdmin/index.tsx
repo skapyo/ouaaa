@@ -1,4 +1,6 @@
-import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react';
+import React, {
+  useCallback, useEffect, useMemo, useState, useRef,
+} from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import gql from 'graphql-tag';
 import Moment from 'react-moment';
@@ -28,6 +30,7 @@ import TableCell from '@material-ui/core/TableCell/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import CircularProgress from '@mui/material/CircularProgress';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import Edit from '@mui/icons-material/Edit';
 import FirstPageIcon from '@mui/icons-material/FirstPage';
@@ -230,7 +233,7 @@ const VolunteerList = (props: any) => {
         ))}
       </TableBody>
     </Table>
-  )
+  );
 };
 
 const NbVolunteersItem = (props: any) => {
@@ -247,7 +250,7 @@ const NbVolunteersItem = (props: any) => {
       {actor.nbVolunteers}
       <ZoomInIcon />
     </div>
-  )
+  );
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -272,15 +275,15 @@ const useStyles = makeStyles((theme) => ({
       color: '#2C367E',
       'background-color': 'white',
       border: '2px solid #2C367E',
-    }
+    },
   },
   nbVolunteersItem: {
     display: 'flex',
     alignItems: 'center',
-    cursor: 'pointer'
+    cursor: 'pointer',
   },
   dialogContent: {
-    padding: '0 !important'
+    padding: '0 !important',
   },
   dialogTitle: {
     display: 'flex',
@@ -325,7 +328,7 @@ const ActorAdminPage = () => {
     volunteersToExport.current = null;
   }, []);
 
-  const handleClickVolunteersActor = useCallback(event => {
+  const handleClickVolunteersActor = useCallback((event) => {
     setVolunteersActor(event);
     setOpenModal(true);
   }, []);
@@ -338,7 +341,9 @@ const ActorAdminPage = () => {
     }
   }, [volunteersActor]);
 
-  const { data, loading, error, refetch } = useQuery(GET_ACTORS, {
+  const {
+    data, loading, error, refetch,
+  } = useQuery(GET_ACTORS, {
     variables: {
       userId: user && `${user.id}`,
     },
@@ -368,24 +373,21 @@ const ActorAdminPage = () => {
     setState({ ...state, [actor.id.toString()]: event.target.checked });
   };
 
-  const [validateActor, { data: dataValidateActor }] = useMutation(
+  const [validateActor, { data: dataValidateActor, loading: loadingValidateActor }] = useMutation(
     VALIDATE_ACTOR,
-    {
-      variables: {
-        actorId: actorIdValidated,
-        userId: parseInt(user && user.id, 10),
-      },
-    },
   );
 
   const validate = useCallback(
     (actor) => {
       if (!actor.isValidated) {
-        setActorIdValidated(parseInt(actor.id, 10));
-        validateActor();
+        validateActor({
+          variables: {
+            actorId: parseInt(actor.id, 10),
+            userId: parseInt(user && user.id, 10),
+          },
+        });
       }
-    },
-    [validateActor],
+    }
   );
 
   useEffect(() => {
@@ -547,12 +549,18 @@ const ActorAdminPage = () => {
                     {user && user.role == 'admin' && (
                       <>
                         <TableCell style={{ width: 160 }} align="center">
+                          { !loadingValidateActor
+                          && (
                           <CheckCircleIcon
                             style={{
                               color: actor.isValidated ? 'green' : 'orange',
                             }}
                             onClick={() => validate(actor)}
                           />
+                          )}
+                          { loadingValidateActor && (
+                          <CircularProgress />
+                          )}
                         </TableCell>
                         <TableCell style={{ width: 160 }} align="center">
                           {actor.dateValidation && (
@@ -593,7 +601,11 @@ const ActorAdminPage = () => {
 
       <Dialog open={openModal} onBackdropClick={closeModal} maxWidth="lg">
         <DialogTitle classes={{ root: styles.dialogTitle }}>
-          <Grid item xs={11}>Volontaires pour l'acteur <i>{(volunteersActor as any)?.name}</i></Grid>
+          <Grid item xs={11}>
+            Volontaires pour l'acteur
+            {' '}
+            <i>{(volunteersActor as any)?.name}</i>
+          </Grid>
           <Grid item xs={1}>
             <Tooltip title="Exporter">
               <IconButton onClick={handleClickExport} size="large">
