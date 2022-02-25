@@ -4,7 +4,7 @@ import { withApollo } from 'hoc/withApollo.jsx';
 import moment from 'moment';
 import gql from 'graphql-tag';
 
-const Sitemap = () => {};
+const Sitemap = () => { };
 
 const GET_ACTORS_SSR = `
 query actors {
@@ -25,7 +25,7 @@ query events {
 }
 }
 `;
-const GET_CATEGORIES_SSR= `
+const GET_CATEGORIES_SSR = `
 query categories {
   categories {
     id
@@ -89,8 +89,7 @@ export const getServerSideProps = async ({ res }) => {
   const initialData = await getActor.json();
   if (initialData.errors) {
     console.error(
-      ` Error fetching actor error message : ${
-        initialData.errors[0].message
+      ` Error fetching actor error message : ${initialData.errors[0].message
       }`,
     );
   }
@@ -106,8 +105,7 @@ export const getServerSideProps = async ({ res }) => {
   const initialDataEvent = await getEvents.json();
   if (initialDataEvent.errors) {
     console.error(
-      ` Error fetching event error message : ${
-        initialDataEvent.errors[0].message
+      ` Error fetching event error message : ${initialDataEvent.errors[0].message
       }`,
     );
   }
@@ -122,8 +120,7 @@ export const getServerSideProps = async ({ res }) => {
   const initialDataCategories = await getCategories.json();
   if (initialDataCategories.errors) {
     console.error(
-      ` Error fetching event error message : ${
-        initialDataCategories.errors[0].message
+      ` Error fetching event error message : ${initialDataCategories.errors[0].message
       }`,
     );
   }
@@ -139,8 +136,7 @@ export const getServerSideProps = async ({ res }) => {
   const initialDataArticles = await getArticles.json();
   if (initialDataArticles.errors) {
     console.error(
-      ` Error fetching event error message : ${
-        initialDataArticles.errors[0].message
+      ` Error fetching event error message : ${initialDataArticles.errors[0].message
       }`,
     );
   }
@@ -148,58 +144,58 @@ export const getServerSideProps = async ({ res }) => {
     <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
       <loc>${process.env.NEXT_PUBLIC_BASE_URL}</loc>
-      <lastmod>${new Date().toISOString()}</lastmod>
+      <lastmod>${moment().format('YYYY-MM-DD')}</lastmod>
       <changefreq>weekly</changefreq>
       <priority>1.0</priority>
     </url>
     <url>
       <loc>${process.env.NEXT_PUBLIC_BASE_URL}/agenda</loc>
-      <lastmod>${new Date().toISOString()}</lastmod>
+      <lastmod>${moment().format('YYYY-MM-DD')}</lastmod>
       <changefreq>weekly</changefreq>
       <priority>1.0</priority>
     </url>
     <url>
       <loc>${process.env.NEXT_PUBLIC_BASE_URL}/signin</loc>
-      <lastmod>${new Date().toISOString()}</lastmod>
+      <lastmod>${moment().format('YYYY-MM-DD')}</lastmod>
       <changefreq>weekly</changefreq>
       <priority>0.5</priority>
     </url>
     <url>
       <loc>${process.env.NEXT_PUBLIC_BASE_URL}/forgotPassword</loc>
-      <lastmod>${new Date().toISOString()}</lastmod>
+      <lastmod>${moment().format('YYYY-MM-DD')}</lastmod>
       <changefreq>weekly</changefreq>
       <priority>0.5</priority>
     </url>
       ${staticPages
-    .map((url) => {
-      return `
+      .map((url) => {
+        return `
             <url>
               <loc>${url}</loc>
-              <lastmod>${new Date().toISOString()}</lastmod>
+              <lastmod>${moment().format('YYYY-MM-DD')}</lastmod>
               <changefreq>weekly</changefreq>
               <priority>1.0</priority>
             </url>
           `;
-    })
-    .join('')}
+      })
+      .join('')}
   ${initialData.data.actors
-    .map(({ id, updatedAt }) => {
-      return `
+      .map(({ id, updatedAt }) => {
+        return `
           <url>
             <loc>${process.env.NEXT_PUBLIC_BASE_URL}/actor/${id}</loc>
-            <lastmod>${moment(parseInt(updatedAt)).format("YYYY-MM-DDTHH:mm:ss:SSS[Z]")}</lastmod>
+            <lastmod>${moment(parseInt(updatedAt)).format('YYYY-MM-DD')}</lastmod>
             <changefreq>daily</changefreq>
             <priority>1.0</priority>
           </url>
         `;
-    })
-    .join('')}
+      })
+      .join('')}
     ${initialDataEvent.data.events
       .map(({ id, updatedAt }) => {
         return `
             <url>
               <loc>${process.env.NEXT_PUBLIC_BASE_URL}/event/${id}</loc>
-              <lastmod>${moment(parseInt(updatedAt)).format("YYYY-MM-DDTHH:mm:ss:SSS[Z]")}</lastmod>
+              <lastmod>${moment(parseInt(updatedAt)).format('YYYY-MM-DD')}</lastmod>
               <changefreq>daily</changefreq>
               <priority>1.0</priority>
             </url>
@@ -207,29 +203,29 @@ export const getServerSideProps = async ({ res }) => {
       })
       .join('')}
       ${initialDataCategories.data.categories
-        .map(({ id, updatedAt }) => {
-          return `
+      .map(({ id, updatedAt }) => {
+        return `
               <url>
                 <loc>${process.env.NEXT_PUBLIC_BASE_URL}/annuaire/${id}</loc>
-                <lastmod>${new Date().toISOString()}</lastmod>
+                <lastmod>${moment().format('YYYY-MM-DD')}</lastmod>
                 <changefreq>daily</changefreq>
                 <priority>1.0</priority>
               </url>
             `;
-        })
-        .join('')}
+      })
+      .join('')}
         ${initialDataArticles.data.articles
-          .map(({ id, updatedAt }) => {
-            return `
+      .map(({ id, updatedAt }) => {
+        return `
                 <url>
                   <loc>${process.env.NEXT_PUBLIC_BASE_URL}/article/${id}</loc>
-                  <lastmod>${new Date().toISOString()}</lastmod>
+                  <lastmod>${moment().format('YYYY-MM-DD')}</lastmod>
                   <changefreq>daily</changefreq>
                   <priority>1.0</priority>
                 </url>
               `;
-          })
-          .join('')}
+      })
+      .join('')}
     </urlset>
   `;
 
