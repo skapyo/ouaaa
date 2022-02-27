@@ -80,6 +80,7 @@
     "react-leaflet": "^2.7.0",
     "react-leaflet-markercluster": "^2.0.0",
     "react-moment": "^0.9.7",
+    "react-qr-code": "^2.0.3",
     "react-router-dom": "^5.2.0",
     "react-share": "^4.4.0",
     "react-slick": "^0.27.10",
