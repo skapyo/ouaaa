@@ -10,6 +10,7 @@ import {
 import Newsletter from '../../containers/layouts/Newsletter';
 import Link from '../../components/Link';
 
+
 const useStyles = makeStyles((theme) => ({
   align: {
     'text-align': 'center',

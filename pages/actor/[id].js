@@ -58,6 +58,7 @@ import {
 import Calendar from '../../components/Calendar';
 import Favorite from '../../components/Favorite';
 import ActorToPrint from '../../components/print/Actor';
+import ActorGameToPrint from '../../components/print/ActorGame';
 
 const useStyles = makeStyles((theme) => ({
   '@media print': {
@@ -149,7 +150,13 @@ const useStyles = makeStyles((theme) => ({
   infoLabel: {
     color: theme.typography.h5.color,
   },
-
+  game: {
+    paddingTop: '13px',
+    color: theme.typography.h5.color,
+  },
+  printIcon: {
+    color: theme.typography.h5.color,
+  },
   border: {
     width: '3em',
     borderColor: '#2C367E',
@@ -480,7 +487,9 @@ const Actor = ({ initialData }) => {
   const router = useRouter();
   const mapRef = useRef();
   const printRef = useRef(null);
+  const printGameRef = useRef(null);
 
+  
   const [currentLocationWindows, setCurrentLocationWindows] = useState(
     globalThis?.location,
   );
@@ -755,6 +764,11 @@ const Actor = ({ initialData }) => {
     content: () => printRef.current,
   });
 
+  const handleGamePrint = useReactToPrint({
+    content: () => printGameRef.current,
+  });
+
+  
   return (
     <AppLayout>
       <Head>
@@ -803,7 +817,7 @@ const Actor = ({ initialData }) => {
                 <Grid container className={[styles.infoPratiqueGrid]}>
                   <div className={styles.printButton}>
                     <Tooltip title="Imprimer la page acteur">
-                      <IconButton onClick={handlePrint}>
+                      <IconButton onClick={handlePrint} className={[styles.printIcon]}>
                         <PrintIcon />
                       </IconButton>
                     </Tooltip>
@@ -1141,6 +1155,21 @@ const Actor = ({ initialData }) => {
                           />
                         </EmailShareButton>
                       </span>
+                    </Grid>
+                  </Grid>
+                  <Grid container className={[styles.item]}>
+                    <Grid item xs={3} className={[styles.alignRight]}>
+                      <Tooltip title="Imrpimer votre fiche pour le jeu le grand défi">
+                        <IconButton onClick={handleGamePrint} className={[styles.printIcon]}>
+                          <PrintIcon />
+                        </IconButton>
+                      </Tooltip>
+                    </Grid>
+                    <Grid item xs={8} className={[styles.alignLeft]}>
+                      <div className={[styles.game]}>
+                        Imprimer votre fiche pour le jeu le grand défi
+                      </div>
+    
                     </Grid>
                   </Grid>
                 </Grid>
@@ -1487,6 +1516,9 @@ const Actor = ({ initialData }) => {
           }
           <div style={{ display: 'none' }}>
             <ActorToPrint actor={data.actor} ref={printRef} />
+          </div>
+          <div style={{ display: 'none' }}>
+            <ActorGameToPrint actor={data.actor} ref={printGameRef} />
           </div>
         </Box>
       </RootRef>
