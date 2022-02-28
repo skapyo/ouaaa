@@ -11,6 +11,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('md')]: {
       padding: '1em 0',
     },
+    width:"100%",
   },
   newsletterTitle: {
     textAlign: 'center',
@@ -27,23 +28,23 @@ const Partner = () => {
 
   return (
     <Link href={`/about`} color="inherit" underline="none" >
-       <Grid container justifyContent="center" spacing={4} className={styles.newsletterTitle}>
+       <Grid container justifyContent="center" className={styles.newsletterTitle}>
          Ils s'engagent avec nous
        </Grid>
-      <Grid container justifyContent="center" spacing={4} className={styles.newsletter}>
-        <Grid item>
+      <Grid container justifyContent="center"  spacing={3} className={styles.newsletter}>
+        <Grid item  spacing={4}>
           <img height="50px" src="https://static.ouaaa-transition.fr/static/images/actor/32/32-AU0wmu0S9A-original.jpeg?w=1920&q=75" alt="Aunis en transition" />
         </Grid>
-        <Grid item>
+        <Grid item  spacing={4}>
           <img height="50px" src="https://www.larochelle-zerocarbone.fr/lr-zerocarbone-theme/images/logo-zerocarbone-fill.svg" alt="La Rochelle Territoire Zéro Carbone" />
         </Grid>
-        <Grid item>
+        <Grid item spacing={4} >
           <img height="50px" src="https://www.insightnest.fr/wp-content/uploads/2021/07/logo_full_dark_439.png" alt="Insighnest" />
         </Grid>
-        <Grid item>
+        <Grid item spacing={4} >
           <img height="50px" src="https://www.onepercentfortheplanet.fr/wp-content/uploads/2020/06/Primary_Full_Color_Horizontal-1-scaled.png" alt="onpercentfortheplanet" />
         </Grid>
-        <Grid item>
+        <Grid item spacing={4}>
           <img height="50px"  src ="https://www.leanature.com/wp-content/uploads/2020/11/logo-lea-nature.svg" alt="leanature" />
         </Grid>
       </Grid>
