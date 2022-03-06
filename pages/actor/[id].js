@@ -1539,7 +1539,6 @@ export async function getServerSideProps(ctxt) {
   const startDate = moment();
 
   let recurrentOptions = null;
-  console.debug('before fetch');
 
   const res = await fetch(process.env.NEXT_PUBLIC_API_URI, {
     method: 'POST',
@@ -1553,11 +1552,8 @@ export async function getServerSideProps(ctxt) {
   });
   const endDate = moment();
 
-  console.debug(
-    'before json' + moment.duration(endDate.diff(startDate)).asMilliseconds(),
-  );
   const initialData = await res.json();
-  console.log(initialData);
+
   if (initialData.errors) {
     console.error(
       ' Error fetching actor id ' +
@@ -1569,11 +1565,6 @@ export async function getServerSideProps(ctxt) {
   }
   const after = moment();
 
-  console.debug(
-    'after json' +
-    moment.duration(after.diff(endDate)).asMilliseconds() +
-    initialData,
-  );
   return {
     props: { initialData },
   };
