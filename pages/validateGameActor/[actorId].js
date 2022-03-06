@@ -34,14 +34,12 @@ const ValidateGameActor = () => {
 
   useEffect(() => {
     if (!user) {
-      debugger;
       scnackbar.enqueueSnackbar('Vous devez vous connecter pour valider votre passage du Grand défi');
-      setCookie('redirect_url', router.asPath, { path: `/validateGameActor/${actorId}` });
+      setCookie('redirect_url', router.asPath, { path: `/validateGameActor/${router.query.actorId}` });
       router.push('/signin');
     }
 
     if (user && actorId) {
-      debugger;
       const userId = user.id;
       validateGameActor({ variables: { userId, actorId } });
     }
