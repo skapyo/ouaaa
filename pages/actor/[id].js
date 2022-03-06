@@ -1157,6 +1157,8 @@ const Actor = ({ initialData }) => {
                       </span>
                     </Grid>
                   </Grid>
+                  {
+            ((data && containUser(data.actor.referents)) || (user && user.role === 'admin')) && (
                   <Grid container className={[styles.item]}>
                     <Grid item xs={3} className={[styles.alignRight]}>
                       <Tooltip title="Imrpimer votre fiche pour le jeu le grand défi">
@@ -1172,6 +1174,8 @@ const Actor = ({ initialData }) => {
     
                     </Grid>
                   </Grid>
+            )
+          }
                 </Grid>
               </Grid>
               <br />
