@@ -13,6 +13,7 @@ import {
 import Parser from 'html-react-parser';
 import moment from 'moment';
 import QRCode from "react-qr-code";
+
 import AppLayout from 'containers/layouts/AppLayout';
 import {
   entriesHasElementWithCode,
@@ -185,7 +186,7 @@ const Actor = React.forwardRef((props, ref) => {
             <br />
             <br />
             <br />
-            <QRCode value={`${process.env.NEXT_PUBLIC_URI}/actor/${actor.id}`} />
+            <QRCode value={`${process.env.NEXT_PUBLIC_URI}/validateGameActor/${actor.id}`} />
             <br />
             <br />
             <br />
