@@ -7,27 +7,32 @@ import {
   RootRef,
   Typography,
 } from '@material-ui/core';
+import gql from 'graphql-tag';
+
+import { useQuery } from '@apollo/client';
+import Paper from '@material-ui/core/Paper/Paper';
 import Grid from '@mui/material/Grid';
+import { useRouter, withRouter } from 'next/router';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import Moment from 'react-moment';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import { withApollo } from 'hoc/withApollo';
 import Head from 'next/head';
+import { useSessionState } from '../../context/session/session';
 import Newsletter from '../../containers/layouts/Newsletter';
 import Link from '../../components/Link';
 
-const GET_EVENTS = gql`
-  query eventsAdmin($userId: String!) {
-    eventsAdmin(userId: $userId) {
+
+const GET_USER_ACTOR_GAME = gql`
+  query userActorGame($userId: String!) {
+    userActorGame(userId: $userId) {
       id
-      label
-      createdAt
-      updatedAt
-      startedAt
-      endedAt
-      nbParticipants
-      referents {
-        surname
-        lastname
-        email
-        phone
-      }
+      name
+      gameParticipationDate
     }
   }
 `;
@@ -97,15 +102,15 @@ const useStyles = makeStyles((theme) => ({
 }));
 const GrandDefi = () => {
   const styles = useStyles();
-
-  const { data: dataAdminEvent } = useQuery(GET_EVENTS, {
+  const user = useSessionState();
+  const { data: dataUserActorGame } = useQuery(GET_USER_ACTOR_GAME, {
     variables: {
       userId: user && user.id,
     },
     onCompleted: (data) => {
       if (user === undefined || user == null) {
         enqueueSnackbar(
-          'Veuillez vous connecter pour effectuer des modifications.',
+          'Veuillez vous connecter pour accéder à votre espace grand défi.',
           {
             preventDuplicate: true,
           },
@@ -113,6 +118,16 @@ const GrandDefi = () => {
         router.push('/');
       }
     },
+  });
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+  let row = 0;
+  if (typeof dataUserActorGame !== 'undefined') {
+    row = dataUserActorGame.userActorGame.length;
+  }
+  const emptyRows =
+    rowsPerPage - Math.min(rowsPerPage, row - page * rowsPerPage);
 
   return (
     <AppLayout>
@@ -155,108 +170,40 @@ const GrandDefi = () => {
              </div>
              </div>
              </Typography>
-             {typeof dataAdminEvent !== 'undefined' && (
+             {typeof dataUserActorGame !== 'undefined' && (
         <TableContainer component={Paper}>
           <Table aria-label="custom pagination table">
             <TableHead>
               <TableRow>
                 <TableCell component="th" scope="row">
-                  Nom
+                  Nom Acteur
                 </TableCell>
-                <TableCell style={{ width: 160 }} align="left">
-                  Date de début
+                <TableCell align="left">
+                  Date de passage
                 </TableCell>
-                <TableCell style={{ width: 160 }} align="left">
-                  Date de fin
+                <TableCell  align="left">
+                  Lien de la page acteur
                 </TableCell>
-                <TableCell style={{ width: 160 }} align="left">
-                  Date de création
-                </TableCell>
-                <TableCell style={{ width: 160 }} align="left">
-                  Dernière date de modification
-                </TableCell>
-                <TableCell style={{ width: 160 }} align="left">
-                  Ville
-                </TableCell>
-                <TableCell style={{ width: 160 }} align="left">
-                  Référents
-                </TableCell>
-                <TableCell style={{ width: 160 }} align="left">
-                  Participants
-                </TableCell>
-                <TableCell style={{ width: 160 }} align="left">
-                  Lien de l'événement
-                </TableCell>
-                <TableCell style={{ width: 160 }} align="left">
-                  Editer l'événement
-                </TableCell>
+
               </TableRow>
             </TableHead>
             <TableBody>
-              {typeof dataAdminEvent !== 'undefined' &&
-                dataAdminEvent.eventsAdmin.map((event) => (
-                  <TableRow key={event.id} hover>
+            {typeof dataUserActorGame !== 'undefined' &&
+                dataUserActorGame.userActorGame.map((actor) => (
+                  <TableRow key={actor.id} hover>
                     <TableCell component="th" scope="row">
                       {/* @ts-ignore */}
-                      <Link href={`/event/${event.id}`}>{event.label}</Link>
+                      <Link  target="_blank" color="inherit" underline="none" href={`/actor/${actor.id}`}>{actor.name}</Link>
                     </TableCell>
-                    <TableCell style={{ width: 160 }} align="left">
+                   <TableCell  align="left">
                       <Moment format="DD/MM HH:mm" unix>
-                        {event.startedAt / 1000}
+                        {actor.gameParticipationDate / 1000}
                       </Moment>
                     </TableCell>
-                    <TableCell style={{ width: 160 }} align="left">
-                      <Moment format="DD/MM HH:mm" unix>
-                        {event.endedAt / 1000}
-                      </Moment>
-                    </TableCell>
-                    <TableCell style={{ width: 160 }} align="left">
-                      <Moment format="DD/MM HH:mm" unix>
-                        {event.createdAt / 1000}
-                      </Moment>
-                    </TableCell>
-                    <TableCell style={{ width: 160 }} align="left">
-                      <Moment format="DD/MM HH:mm" unix>
-                        {event.updatedAt / 1000}
-                      </Moment>
-                    </TableCell>
-                    <TableCell style={{ width: 160 }} align="left">
-                      {event.city}
-                    </TableCell>
-                    <TableCell style={{ width: 160 }} align="left">
-                      {typeof event.referents !== 'undefined' &&
-                        event.referents.map((referent) => {
-                          {
-                            referent.surname;
-                          }
-                          {
-                            referent.lastname;
-                          }
-                          {
-                            referent.email;
-                          }
-                          {
-                            referent.phone;
-                          }
-                        })}
-                    </TableCell>
-                    <TableCell>
-                      <NbParticipantsItem
-                        event={event}
-                        className={styles.nbParticipantsItem}
-                        onClick={handleClickParticipantsEvent}
-                      />
-                    </TableCell>
-                    <TableCell style={{ width: 160 }} align="left">
+                    <TableCell  align="left">
                       {/* @ts-ignore */}
-                      <Link href={`/event/${event.id}`}>
-                        Lien vers page événement
-                      </Link>
-                    </TableCell>
-                    <TableCell style={{ width: 160 }} align="right">
-                      {/* @ts-ignore */}
-                      <Link href={`/actorAdmin/event/${event.id}`}>
-                        <Edit />
+                      <Link  target="_blank" color="inherit" underline="none" href={`/actor/${actor.id}`}>
+                        Lien vers page acteur
                       </Link>
                     </TableCell>
                   </TableRow>
@@ -278,4 +225,4 @@ const GrandDefi = () => {
   );
 };
 
-export default GrandDefi;
+export default withRouter(withApollo()(GrandDefi));
