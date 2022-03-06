@@ -18,6 +18,9 @@ const useStyles = makeStyles((theme) => ({
   },
   image: {
     width: '50%',
+    [theme.breakpoints.down('md')]: {
+      width: '100%',
+    },
   },
   container: {
     width: '90%',
