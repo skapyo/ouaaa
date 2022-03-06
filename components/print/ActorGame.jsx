@@ -186,7 +186,7 @@ const Actor = React.forwardRef((props, ref) => {
             <br />
             <br />
             <br />
-            <QRCode value={`${process.env.NEXT_PUBLIC_BASE_URL}/validateGameActor/${actor.id}`} />
+            <QRCode value={`${process.env.NEXT_PUBLIC_BASE_URL}/validateGameActor/${actor?.id}`} />
             <br />
             <br />
             <br />

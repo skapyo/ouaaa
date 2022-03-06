@@ -74,7 +74,6 @@ query actor($id: String) {
 const Print = () => {
   const router = useRouter();
   const { id } = router.query;
-
   const { data } = useQuery(GET_ACTOR, {
     variables: { id },
     fetchPolicy: 'no-cache',
