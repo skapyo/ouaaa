@@ -163,7 +163,8 @@ const GrandDefi = () => {
               <Typography variant="h1" className={styles.title} >Ta progression du grand défi</Typography>
               <br/>
               <br/>
-              Tu souhaites en savoir plus sur le jeu du grand défi, <Link href={`/granddefi`}>rends toi sur la page d'explication</Link>.
+              Tu souhaites en savoir plus sur le jeu du grand défi, <Link href={`/granddefi`}>rends toi sur la page d'explication</Link>. <br/>
+              Tu souhaites t'informer sur le réglement télécharge le <Link href={`/réglement_jeu_grand_défi.pdf`} target="_blank">ici</Link><br/>
               <br/>
             
               <br/>

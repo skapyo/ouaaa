@@ -104,10 +104,29 @@ const GrandDefi = () => {
               </Grid>
               <br/>
               <br/>
-              Le grand défi est un jeu gratuit, sans obligation d’achat. <br/>
-              Son but est simple, te faire découvrir les acteurs de la transition référencés sur OUAAA! en allant à leur rencontres en collectionnant les preuves de tes visites.  <br/>
-              Tu gagnera des lots à chaque palier atteint.
-
+              L'équipe du OUAAA! te lance un défi : rencontrer un maximum d'acteurs sur le territoire déjà présent sur OUAAA!.<br/>
+              Le but du grand défi est simple, en allant à leur rencontre tu collectionneras les preuves de tes visites et gagneras des lots à chaque palier atteint.
+              <br/>
+              <br/>
+              
+              <br/>
+              <div>
+                <Typography variant="h5" className={styles.cardTitle}>
+                Comment jouer ? 
+                </Typography>
+                <div className={styles.border} />
+                <br />
+              </div>
+              Tu devras au préalable <Link href={`/signin`}  target="_blank">créer ton compte.</Link> <br/>
+              Muni de ton téléphone, en scannant l'affiche du grand défi de l'acteur contenant le QR code, ton passage sera automatique validé par OUAAA!.<br/>
+              Tu pourras voir ton avancement dans l'espace grand défi en cliquant <Link href={`/OUAAA-GrdDEFI-DEPLIANT.pdf`} >ici</Link>.  <br/>
+              Tu seras informé des événements de remise de lots.  <br/>
+              </div>
+              <br/>
+              Si tu n'as pas de téléphone ou d'accès internet mobile, on a aussi pensé à toi.<br/>
+              Tu as peut-être déjà en main le dépliant du Grand défi. Si ce n'est pas le cas, tu peux le télécharger et l'imprimer <Link href={`/OUAAA-GrdDEFI-DEPLIANT.pdf`} target="_blank" >ici</Link>.<br/>
+              Tu pourrras présenter le dépliant lors de ta rencontre avec l'acteur qui inscrira la preuve de ton passage par une signature ou un tampon.<br/>
+              Rapporte ton dépliant lors des événements OUAAA! pour venir récupérer tes lots. Le prochain événement est le 18 juin.
               <br/>
               <br/>
               <div>
@@ -118,40 +137,23 @@ const GrandDefi = () => {
                 <br />
               </div>
               OUAAA ! est un jeune site participatif qui découvre et fait découvrir tous les jours de nouveaux acteurs de la transition écologique et sociale près de chez toi. <br/>
-              Si tu connais un acteur que OUAAA ! ne connaît pas encore, et si grâce à toi il est accepté sur OUAAA ! tu gagneras pour chaque nouvel inscrit une gratification spéciale contributeur : Le Bonus Caché !
+              Si tu connais un acteur que OUAAA ! ne connaît pas encore, et si grâce à toi il est accepté sur OUAAA !, tu gagneras pour chaque nouvel inscrit une gratification spéciale contributeur : Le Bonus Caché !
               <br/>
               <br/>
-              <br/>
-              <div>
-                <Typography variant="h5" className={styles.cardTitle}>
-                Version papier : 
-                </Typography>
-                <div className={styles.border} />
-                <br />
-              </div>
-              Tu as peut être déjà en main le dépliant du Grand défi. Si ce n'est pas le cas tu peux le télécharger et l'imprimer <a href="http://privatecloud.acteursdelatransition.fr/s/KQY7Nj8RG7BLBq4/download">ici</a>.<br/>
-              Tu pourrras présenter le dépliant lors de ta rencontre avec l'acteur qui inscrira la preuve de ton passage par une signature ou un tampon.<br/>
-              Ramènes ton dépliant lors des événements OUAAA! pour venir récupérer tes lot. Le prochain événement est le 17 juin.
+             Mets au défi tes amis et tes proches en leur proposant de jouer à leur tour.  <br/>
+             Seras-tu capables d'atteindre le premier d'ici le 18 juin, première date officelle de remise des lots ?
               <br/>
               <br/>
-              <div>
-                <Typography variant="h5" className={styles.cardTitle}>
-                Version numérique : 
-                </Typography>
-                <div className={styles.border} />
-                <br />
-              </div>
-              Tu devras au préalable créer ton compte sur le site ouaaa-transition.fr <br/>
-              Muni de ton téléphone, en scannant l'affiche du grand défi de l'acteur contenant le QR code, ton passage sera automatique validé par OUAAA!.<br/>
-              Tu pourras voir ton avancement dans l'espace grand défi en cliquant <Link href={`/granddefiProgression`}>ici </Link>  <br/>
-              Tu seras informé plus facilement des remises de lots  <br/>
-              </div>
+              
               <br/>
               </Typography>
               <Grid item  className={styles.align}>
                 <img className={styles.image} src="./image/granddefi.png" />
               </Grid>
-
+              <br/>
+              Tu souhaites t'informer sur le réglement télécharge le <Link href={`/réglement_jeu_grand_défi.pdf`} target="_blank">ici</Link><br/>
+               <br/>
+               <br/>
           </Container>
         </Box>
       </RootRef>
