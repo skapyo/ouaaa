@@ -233,7 +233,6 @@ const SchedulerContainer = (props) => {
 
         {timeContainerList.length > 0 &&
           timeContainerList.map(({ days, hours, place, id }) => {
-            console.log('id rendered', id);
             return (
               <div className={classes.timeContainer} key={id}>
                 <TimeContainer
