@@ -164,7 +164,7 @@ const GrandDefi = () => {
               <br/>
               <br/>
               Tu souhaites en savoir plus sur le jeu du grand défi, <Link href={`/granddefi`}>rends toi sur la page d'explication</Link>. <br/>
-              Tu souhaites t'informer sur le réglement télécharge le <Link href={`/réglement_jeu_grand_défi.pdf`} target="_blank">ici</Link><br/>
+              Tu souhaites t'informer sur le réglement, télécharges le <Link href={`/réglement_jeu_grand_défi.pdf`} target="_blank">ici</Link><br/>
               <br/>
             
               <br/>
