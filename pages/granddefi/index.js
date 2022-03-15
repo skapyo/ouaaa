@@ -104,8 +104,8 @@ const GrandDefi = () => {
               </Grid>
               <br/>
               <br/>
-              L'équipe du OUAAA! te lance un défi : rencontrer un maximum d'acteurs sur le territoire déjà présent sur OUAAA!.<br/>
-              Le but du grand défi est simple, en allant à leur rencontre tu collectionneras les preuves de tes visites et gagneras des lots à chaque palier atteint.
+              L'équipe du <i>OUAAA!</i> te lance un défi : rencontrer un maximum d'acteurs sur le territoire déjà référencés sur <i>OUAAA!</i>.<br/>
+              Le but du Grand Défi est simple, en allant à la rencontre des acteurs, tu collectionneras les preuves de tes visites et gagneras des lots à chaque palier atteint.
               <br/>
               <br/>
               
@@ -118,15 +118,15 @@ const GrandDefi = () => {
                 <br />
               </div>
               Tu devras au préalable <Link href={`/signin`}  target="_blank">créer ton compte.</Link> <br/>
-              Muni de ton téléphone, en scannant l'affiche du grand défi de l'acteur contenant le QR code, ton passage sera automatique validé par OUAAA!.<br/>
-              Tu pourras voir ton avancement dans l'espace grand défi en cliquant <Link href={`/OUAAA-GrdDEFI-DEPLIANT.pdf`} >ici</Link>.  <br/>
+              Muni de ton téléphone, en scannant l'affiche du Grand Défi de l'acteur contenant le QR code, ton passage sera automatiquement validé par <i>OUAAA!</i>.<br/>
+              Tu pourras voir ton avancement dans l'espace Grand Défi en cliquant <Link href={`/OUAAA-GrdDEFI-DEPLIANT.pdf`} >ici</Link>.  <br/>
               Tu seras informé des événements de remise de lots.  <br/>
               </div>
               <br/>
               Si tu n'as pas de téléphone ou d'accès internet mobile, on a aussi pensé à toi.<br/>
-              Tu as peut-être déjà en main le dépliant du Grand défi. Si ce n'est pas le cas, tu peux le télécharger et l'imprimer <Link href={`/OUAAA-GrdDEFI-DEPLIANT.pdf`} target="_blank" >ici</Link>.<br/>
+              Tu as peut-être déjà en main le dépliant du Grand Défi. Si ce n'est pas le cas, tu peux le télécharger et l'imprimer <Link href={`/OUAAA-GrdDEFI-DEPLIANT.pdf`} target="_blank" >ici</Link>.<br/>
               Tu pourrras présenter le dépliant lors de ta rencontre avec l'acteur qui inscrira la preuve de ton passage par une signature ou un tampon.<br/>
-              Rapporte ton dépliant lors des événements OUAAA! pour venir récupérer tes lots. Le prochain événement est le 18 juin.
+              Rapporte ton dépliant lors des événements <i>OUAAA!</i> pour venir récupérer tes lots. Le prochain événement est le 18 juin.
               <br/>
               <br/>
               <div>
@@ -136,12 +136,12 @@ const GrandDefi = () => {
                 <div className={styles.border} />
                 <br />
               </div>
-              OUAAA ! est un jeune site participatif qui découvre et fait découvrir tous les jours de nouveaux acteurs de la transition écologique et sociale près de chez toi. <br/>
-              Si tu connais un acteur que OUAAA ! ne connaît pas encore, et si grâce à toi il est accepté sur OUAAA !, tu gagneras pour chaque nouvel inscrit une gratification spéciale contributeur : Le Bonus Caché !
+              <i>OUAAA!</i> est un jeune site participatif qui découvre et fait découvrir tous les jours de nouveaux acteurs de la transition écologique et sociale près de chez toi. <br/>
+              Si tu connais un acteur que <i>OUAAA!</i> ne connaît pas encore, et si grâce à toi il est accepté sur <i>OUAAA!</i>, tu gagneras pour chaque nouvel inscrit une gratification spéciale contributeur : Le Bonus Caché !
               <br/>
               <br/>
              Mets au défi tes amis et tes proches en leur proposant de jouer à leur tour.  <br/>
-             Seras-tu capables d'atteindre le premier d'ici le 18 juin, première date officelle de remise des lots ?
+             Seras-tu capable d'atteindre le premier palier d'ici le 18 juin, première date officelle de remise des lots ?
               <br/>
               <br/>
               
@@ -151,7 +151,7 @@ const GrandDefi = () => {
                 <img className={styles.image} src="./image/granddefi.png" />
               </Grid>
               <br/>
-              Tu souhaites t'informer sur le réglement télécharge le <Link href={`/réglement_jeu_grand_défi.pdf`} target="_blank">ici</Link><br/>
+              Tu souhaites t'informer sur le réglement? Télécharge le <Link href={`/réglement_jeu_grand_défi.pdf`} target="_blank">ici</Link><br/>
                <br/>
                <br/>
           </Container>
