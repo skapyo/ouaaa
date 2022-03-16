@@ -104,8 +104,8 @@ const GrandDefi = () => {
               </Grid>
               <br/>
               <br/>
-              L'équipe du <i>OUAAA!</i> te lance un défi : rencontrer un maximum d'acteurs sur le territoire déjà référencés sur <i>OUAAA!</i>.<br/>
-              Le but du Grand Défi est simple, en allant à la rencontre des acteurs, tu collectionneras les preuves de tes visites et gagneras des lots à chaque palier atteint.
+              L'équipe du <i>OUAAA!</i> te lance un défi : rencontrer un maximum d'acteurs sur le territoire, déjà référencés sur <i>OUAAA!</i>.<br/>
+              Le but du Grand Défi est simple : en allant à la rencontre des acteurs, tu collectionneras les preuves de tes visites et gagneras des lots à chaque palier atteint.
               <br/>
               <br/>
               
@@ -123,10 +123,10 @@ const GrandDefi = () => {
               Tu seras informé des événements de remise de lots.  <br/>
               </div>
               <br/>
-              Si tu n'as pas de téléphone ou d'accès internet mobile, on a aussi pensé à toi.<br/>
+              Si tu n'as pas de téléphone ou d'accès internet mobile, on a aussi pensé à toi !<br/>
               Tu as peut-être déjà en main le dépliant du Grand Défi. Si ce n'est pas le cas, tu peux le télécharger et l'imprimer <Link href={`/OUAAA-GrdDEFI-DEPLIANT.pdf`} target="_blank" >ici</Link>.<br/>
-              Tu pourrras présenter le dépliant lors de ta rencontre avec l'acteur qui inscrira la preuve de ton passage par une signature ou un tampon.<br/>
-              Rapporte ton dépliant lors des événements <i>OUAAA!</i> pour venir récupérer tes lots. Le prochain événement est le 18 juin.
+              Tu pourras présenter le dépliant lors de ta rencontre avec l'acteur qui inscrira la preuve de ton passage par une signature ou un tampon.<br/>
+              Rapporte ton dépliant lors des événements <i>OUAAA!</i> pour venir récupérer tes lots, le prochain événement est le 18 juin.
               <br/>
               <br/>
               <div>
