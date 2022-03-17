@@ -490,7 +490,7 @@ const ActorAdminPage = () => {
                   <TableRow key={actor.id} hover>
                     <TableCell component="th" scope="row">
                       {/* @ts-ignore */}
-                      <Link href={`/actorAdmin/actor/${actor.id}`}>
+                      <Link href={`/actor/${actor.id}`}>
                         {actor.name}
                       </Link>
                     </TableCell>
