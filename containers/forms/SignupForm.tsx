@@ -10,6 +10,7 @@ import {
   Box,
   Grid,
   IconButton,
+  Container,
   InputAdornment,
   makeStyles,
   TextField,
@@ -30,7 +31,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    margin: theme.spacing(8, 4, 4, 0),
+    margin: theme.spacing(8, 4, 4, 4),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -43,7 +44,10 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(3, 0, 2),
   },
   passwordRequirements: {
-    marginTop: theme.spacing(24),
+    [theme.breakpoints.up('sm')]: {
+      marginTop: theme.spacing(24),
+    }
+    
   },
 }));
 
@@ -121,7 +125,9 @@ const SignupForm = () => {
     }, [formValues, signup]);
 
     useEffect(() => {
-      if (data?.register) {
+      if (data){
+
+      if(data.register) {
         setClicked(true);
         enqueueSnackbar(
           `Un email de validation a été envoyé à ${formValues.email}`,
@@ -129,13 +135,22 @@ const SignupForm = () => {
             preventDuplicate: true,
           },
         );
+        
+      }else{
+          enqueueSnackbar(
+            `Le compte ${formValues.email} existe déjà vous pouvez vous connecter `,
+            {
+              preventDuplicate: true,
+            },
+          );
       }
+    }
     }, [data, redirect]);
 
     return (
       <Grid container justify="center">
         <Grid xs={3} />
-        <Grid item className={styles.paper} xs={4}>
+        <Grid className={styles.paper} xs={12} md={4}>
           {clicked && (
             <p style={{ textAlign: 'center' }}>
               Veuillez confirmer votre compte.
@@ -271,7 +286,7 @@ const SignupForm = () => {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item className={styles.passwordRequirements} xs={3}>
+        <Grid item className={styles.passwordRequirements} xs={12} md={3}>
           <Box bgcolor="lightBox.main" p={2} borderRadius="10px">
             <Typography variant="h6">Mon mot de passe: </Typography>
             <br />
