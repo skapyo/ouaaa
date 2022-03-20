@@ -81,7 +81,8 @@ const useStyles = makeStyles((theme) => ({
   },
   logo: {
     marginBottom: '-20px',
-    marginTop: '-8px',
+    marginTop: '-11px',
+    width: '200px',
   },
 }));
 
@@ -140,7 +141,7 @@ const NavBar = () => {
               <Link href="/">
                 <img
                   className={styles.logo}
-                  src="/logo_navigation.png"
+                  src="/logo.png"
                   alt="OUAAA! : Agir pour la Transition Ecologique & Sociale en Aunis | La Rochelle"
                 />
               </Link>
