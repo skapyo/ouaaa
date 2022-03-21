@@ -6,7 +6,6 @@ import {
 } from '@material-ui/core';
 import { withApollo } from 'hoc/withApollo';
 import Events from 'containers/layouts/agendaPage/Events';
-import Newsletter from 'containers/layouts/Newsletter';
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/client';
 import Moment from 'react-moment';
@@ -16,6 +15,8 @@ import FavoriteRoundedIcon from '@material-ui/icons/FavoriteRounded';
 import Drawer from '@material-ui/core/Drawer';
 import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { RRule } from 'rrule';
+
 import ButtonGroupSelected from '../../../components/buttons/ButtonGroupSelected';
 import Calendar from '../../../components/Calendar';
 import Link from '../../../components/Link';
@@ -40,6 +41,61 @@ const currentDate = new Date();
 currentDate.setMonth(9);
 
 const drawerWidth = 310;
+
+const GET_EVENTS = gql`
+  query events($startingDate: String, $search: String, $entries: [[String]], $favoritesForUser: String) {
+    events(startingDate: $startingDate, search: $search, entries: $entries, favoritesForUser: $favoritesForUser) {
+      id
+      label
+      startedAt
+      endedAt
+      dateRule
+      published
+      lat
+      lng
+      address
+      city
+      shortDescription
+      favorites{
+        id
+      }
+      entries {
+        label
+        icon
+        collection {
+          code
+          label
+        }
+        parentEntry {
+          code
+          label
+          color
+          collection {
+            code
+            label
+          }
+        }
+      }
+      actors {
+        id
+        name
+      }
+      pictures {
+        id
+        label
+        originalPicturePath
+        originalPictureFilename
+        position
+        logo
+        main
+      }
+      parentEvent {
+        id
+        label
+      }
+    }
+  }
+`;
 
 const useStyles = makeStyles((theme) => ({
   '@media print': {
@@ -179,61 +235,21 @@ const VIEW_STATE = {
   CALENDAR: 'CALENDAR',
 };
 
-const AgendaPageLayout = () => {
-  const GET_EVENTS = gql`
-    query events($startingDate: String,$search: String, $entries: [[String]],$favoritesForUser: String) {
-      events(startingDate: $startingDate, search: $search,entries: $entries,favoritesForUser: $favoritesForUser) {
-        id
-        label
-        startedAt
-        endedAt
-        published
-        lat
-        lng
-        address
-        city
-        shortDescription
-        favorites{
-          id
-        }
-        entries {
-          label
-          icon
-          collection {
-            code
-            label
-          }
-          parentEntry {
-            code
-            label
-            color
-            collection {
-              code
-              label
-            }
-          }
-        }
-        actors {
-          id
-          name
-        }
-        pictures {
-          id
-          label
-          originalPicturePath
-          originalPictureFilename
-          position
-          logo
-          main
-        }
-        parentEvent {
-          id
-          label
-        }
-      }
-    }
-    `;
+const getAllEventsFromRecurringEvent = (event) => {
+  const startDate = moment(parseInt(event.startedAt));
+  const dateRule = event.dateRule;
 
+  const rrule = RRule.fromString('DTSTART:' + startDate.format('YYYYMMDD[T]hhmmss[Z]') + '\nRRULE:' + dateRule);
+
+  return rrule.all().slice(0, 100).map((date) => {
+    return {
+      ...event,
+      startedAt: moment(date).valueOf().toString()
+    }
+  })
+};
+
+const AgendaPageLayout = () => {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -257,9 +273,7 @@ const AgendaPageLayout = () => {
   const position = [46.1085193, -0.9864794];
   const startDateFormat = !matches ? '[ de ]HH[h]mm' : 'HH[h]mm';
   const endDateFormat = !matches ? '[ à ]HH[h]mm' : '[-]HH[h]mm';
-  const dayFormat = 'DD MM YYYY';
 
-  let recurrentOptions = null;
   date.setHours(0, 0, 0, 0);
 
   const { data: eventData, loading: loadingEvents, refetch } = useQuery(GET_EVENTS, {
@@ -288,17 +302,22 @@ const AgendaPageLayout = () => {
   }, []);
 
   const events = useMemo(() => {
-    return (eventData?.events || []).map((evt) => {
-      const startDate = moment(parseInt(evt.startedAt));
-      const endDate = moment(parseInt(evt.endedAt));
+    const initialEvents = (eventData?.events || []);
+    const recurringEvents = initialEvents.filter((event) => event.dateRule);
+    const allRecurringEvents = recurringEvents.map((evt) => getAllEventsFromRecurringEvent(evt));
+    const allEvents = initialEvents.concat(allRecurringEvents.reduce((acc, items) => acc.concat(items), []));
+    return allEvents;
+  }, [eventData]);
 
-      const duration = Math.ceil(moment.duration(endDate.diff(startDate)).asDays());
+  const calendarEvents = useMemo(() => {
+    const initialEvents = (eventData?.events || []);
 
-      if (false && duration > 2) {
-        recurrentOptions = {
-          endDate: startDate.endOf('day'),
-          rRule: `FREQ=DAILY;COUNT=${duration}`,
-        };
+    return initialEvents.map((evt) => {
+      let dateRule = {};
+      if (evt.dateRule) {
+        dateRule = {
+          rRule: evt.dateRule
+        }
       }
 
       return {
@@ -307,8 +326,8 @@ const AgendaPageLayout = () => {
         title: evt.label,
         id: evt.id,
         location: evt.city ? [evt.address, evt.city].join(', ') : '',
-        backgroundColor: evt.entries && evt.entries.length > 0 && evt.entries[0].parentEntry ? evt.entries[0].parentEntry.color : 'blue',
-        ...recurrentOptions,
+        backgroundColor: evt?.entries?.[0]?.parentEntry?.color || 'blue',
+        ...dateRule
       };
     });
   }, [eventData]);
@@ -361,11 +380,11 @@ const AgendaPageLayout = () => {
         }
 
         {isListMode && (
-          <Events data={eventData} loading={loadingEvents} />
+          <Events events={events} loading={loadingEvents} />
         )}
 
         {isCalendarMode && (
-          <Calendar events={events} />
+          <Calendar events={calendarEvents} />
         )}
 
         {isMapMode && (
@@ -379,23 +398,13 @@ const AgendaPageLayout = () => {
               <MarkerClusterGroup>
                 {typeof eventData !== 'undefined'
                   && eventData.events.map((event, index) => {
-                    let icone;
-                    let color;
                     if (event.lat != null && event.lng != null) {
-                      if (
-                        event.entries
-                        && event.entries.length > 0
-                        && event.entries[0].icon
-                      ) {
-                        icone = `/icons/marker/marker_${event.entries[0].icon}.svg`;
-                        color = event.entries[0].color;
-                      } else {
-                        icone = '/icons/' + 'place' + '.svg';
-                        color = 'black';
-                      }
+                      const icon = event?.entries?.[0]?.icon ? `/icons/marker/marker_${event.entries[0].icon}.svg` : '/icons/place.svg';
+                      const color = event?.entries?.[0]?.color || 'black';
+
                       const markerHtmlStyles = 'background-color: red';
                       const suitcasePoint = new L.Icon({
-                        iconUrl: icone,
+                        iconUrl: icon,
                         color,
                         fillColor: color,
                         iconAnchor: [13, 34], // point of the icon which will correspond to marker's location
@@ -426,9 +435,7 @@ const AgendaPageLayout = () => {
                                   className={classes.categorie}
                                   gutterBottom
                                 >
-                                  {event.categories
-                                    && event.categories.length > 0
-                                    && event.categories[0].label}
+                                  {event?.categories?.[0]?.label}
                                 </Typography>
                               </div>
                             </div>
@@ -441,7 +448,7 @@ const AgendaPageLayout = () => {
                                       component="h2"
                                       className={classes.title}
                                     >
-                                      {event && event.label}
+                                      {event?.label}
                                     </Typography>
                                     <Typography
                                       variant="h6"
@@ -503,7 +510,7 @@ const AgendaPageLayout = () => {
                               </Grid>
 
                               <Typography component="p">
-                                {event && event.shortDescription}
+                                {event?.shortDescription}
                               </Typography>
                             </div>
                           </Tooltip>
@@ -524,9 +531,7 @@ const AgendaPageLayout = () => {
                                   className={classes.categorie}
                                   gutterBottom
                                 >
-                                  {event.categories
-                                    && event.categories.length > 0
-                                    && event.categories[0].label}
+                                  {event?.categories?.[0]?.label}
                                 </Typography>
                               </div>
                             </div>
@@ -539,7 +544,7 @@ const AgendaPageLayout = () => {
                                       component="h2"
                                       className={classes.title}
                                     >
-                                      {event && event.label}
+                                      {event?.label}
                                     </Typography>
                                   </div>
                                   <Typography
@@ -618,7 +623,7 @@ const AgendaPageLayout = () => {
                               </Grid>
 
                               <Typography component="p">
-                                {event && event.shortDescription}
+                                {event?.shortDescription}
                               </Typography>
                             </div>
                             <Link href={`/event/${event.id}`}>

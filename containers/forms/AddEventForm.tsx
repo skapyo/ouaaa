@@ -34,19 +34,12 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import DateFnsUtils from '@date-io/date-fns';
 import Tooltip from '@material-ui/core/Tooltip';
 import InfoIcon from '@material-ui/icons/Info';
 import TreeView from '@material-ui/lab/TreeView';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import
-DatePicker
-  from '@mui/lab/DatePicker';
 import DateTimePicker from '@mui/lab/DateTimePicker';
-import {
-  KeyboardTimePicker,
-} from '@material-ui/pickers';
 import moment from 'moment';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
@@ -202,6 +195,7 @@ const ADDEVENT = gql`
       lat
       lng
       registerLink
+      dateRule
     }
   }
 `;
@@ -435,6 +429,7 @@ const AddEventForm = ({ actorId }) => {
     const [showAddActor, setShowAddActor] = useState(false);
     const [actors] = useState([]);
     const [actorsId] = useState([]);
+    const [dateRule, setDateRule] = useState();
     const {
       loading: actorLoading,
       error: actorError,
@@ -761,7 +756,8 @@ const AddEventForm = ({ actorId }) => {
             registerLink: formValues.registerLink,
             parentEventId: formValues.parentEventId,
             // @ts-ignore
-            actors: formValues.actors.map(item => item.id)
+            actors: formValues.actors.map(item => item.id),
+            dateRule,
           },
           actorId: parseInt(actorId),
           userId: parseInt(user.id),
@@ -800,6 +796,10 @@ const AddEventForm = ({ actorId }) => {
       setShowAddActor(false);
       setOpenAddActorlist(false);
     }, [formValues]);
+
+    const handleChangeDateRule = useCallback((rule) => {
+      setDateRule(rule);
+    }, []);
 
     return (
       <Container component="main" maxWidth="sm" className={styles.container}>
@@ -1135,7 +1135,7 @@ const AddEventForm = ({ actorId }) => {
               />
             </Grid>
           </LocalizationProvider>
-          <RecurringEventInput />
+          <RecurringEventInput onChange={handleChangeDateRule} value={dateRule} startDate={selectedStartDate} />
         </Grid>
         <br />
         {
