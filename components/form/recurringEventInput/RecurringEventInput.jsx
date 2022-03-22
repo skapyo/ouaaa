@@ -100,7 +100,7 @@ const GridWrapper = (props) => {
 
 const RecurringEventInput = (props) => {
   const { onChange, value, startDate } = props;
-  const [isRecurring, setIsRecurring] = useState(false);
+  const [isRecurring, setIsRecurring] = useState(value !== undefined);
   const [freq, setFreq] = useState('WEEKLY');
   const [count, setCount] = useState(1);
   const [interval, setInterval] = useState(1);
@@ -192,6 +192,7 @@ const RecurringEventInput = (props) => {
           label="évènement récurrent"
           labelPlacement="right"
           value={isRecurring}
+          checked={isRecurring}
           onChange={() => setIsRecurring(!isRecurring)}
         />
       </Grid>

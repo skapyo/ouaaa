@@ -57,6 +57,7 @@ import FormControl from '@material-ui/core/FormControl';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import ImagesDropZone from 'components/ImageCropper/ImagesDropZone';
 import ImagesDisplay from 'components/ImageCropper/ImagesDisplay';
+import RecurringEventInput from 'components/form/recurringEventInput/RecurringEventInput';
 import Entries from './Entries';
 import { useSessionState } from '../../context/session/session';
 import StyledTreeItem from '../../components/filters/StyledTreeItem';
@@ -64,7 +65,6 @@ import RadioGroupForContext from './RadioGroupForContext';
 import useImageReader from '../../hooks/useImageReader';
 import useDnDStateManager from '../../hooks/useDnDStateManager';
 import withDndProvider from '../../hoc/withDnDProvider';
-import RecurringEventInput from 'components/form/recurringEventInput/RecurringEventInput';
 
 const useStyles = makeStyles((theme) => ({
   field: {

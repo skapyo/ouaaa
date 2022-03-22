@@ -21,7 +21,7 @@ import ButtonGroupSelected from '../../../components/buttons/ButtonGroupSelected
 import Calendar from '../../../components/Calendar';
 import Link from '../../../components/Link';
 import Filters from '../../../components/filters';
-import { getImageUrl } from '../../../utils/utils';
+import { getImageUrl,rruleToText } from '../../../utils/utils';
 
 let matchesWindow = false;
 if (typeof window !== 'undefined') {
@@ -240,11 +240,12 @@ const getAllEventsFromRecurringEvent = (event) => {
   const dateRule = event.dateRule;
 
   const rrule = RRule.fromString('DTSTART:' + startDate.format('YYYYMMDD[T]hhmmss[Z]') + '\nRRULE:' + dateRule);
-
+  
   return rrule.all().slice(0, 100).map((date) => {
     return {
       ...event,
-      startedAt: moment(date).valueOf().toString()
+      startedAt: moment(date).valueOf().toString(),
+      duration: rruleToText(rrule)
     }
   })
 };

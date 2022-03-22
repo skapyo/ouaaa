@@ -84,11 +84,13 @@ import ImagesDropZone from 'components/ImageCropper/ImagesDropZone';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import IconButton from '@material-ui/core/IconButton';
 import { FlashOnTwoTone } from '@material-ui/icons';
+import RecurringEventInput from 'components/form/recurringEventInput/RecurringEventInput';
 import RadioGroupForContext from './RadioGroupForContext';
 import withDndProvider from '../../hoc/withDnDProvider';
 import useImageReader from '../../hooks/useImageReader';
 import useDnDStateManager from '../../hooks/useDnDStateManager';
 import { useSessionState } from '../../context/session/session';
+
 import Entries from './Entries';
 
 const useStyles = makeStyles((theme) => ({
@@ -291,7 +293,9 @@ const EDIT_EVENT = gql`
             lastname
           }
       }
+       dateRule
     }
+   
   }
 `;
 
@@ -369,6 +373,7 @@ const GET_EVENT = gql`
           id
           label
       }
+      dateRule
     }
   }
 `;
@@ -769,6 +774,7 @@ const EditEventForm = (props) => {
     const [validated, setValidated] = useState(false);
     const [dateChange, setDateChange] = useState(false);
     const [showRegisterLink, setShowRegisterLink] = useState(false);
+    const [dateRule, setDateRule] = useState();
     const [hasParentEvent, setHasParentEvent] = useState(
       !!formValues.parentId,
     );
@@ -922,6 +928,7 @@ const EditEventForm = (props) => {
 
       setAddress(eventData.event.address);
       setCity(eventData.event.city);
+      setDateRule(eventData.event.dateRule);
       setSelectedStartDate(new Date(parseInt(eventData.event.startedAt)));
       setSelectedEndDate(new Date(parseInt(eventData.event.endedAt)));
       const entries = [];
@@ -1002,6 +1009,11 @@ const EditEventForm = (props) => {
       setShowAddActor(false);
       setOpenAddActorlist(false);
     }, [formValues]);
+
+    const handleChangeDateRule = useCallback((rule) => {
+      setDateRule(rule);
+    }, []);
+
 
     const {
       objectsList: objectsListLogo,
@@ -1532,6 +1544,7 @@ const EditEventForm = (props) => {
               />
             </Grid>
         </LocalizationProvider>
+        <RecurringEventInput onChange={handleChangeDateRule} value={dateRule} startDate={selectedStartDate} />
         </Grid>
         <p />
         {

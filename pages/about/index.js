@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
     'text-align': 'justify',
   },
 }));
-const About = () => {
+const Aboutd = () => {
   const styles = useStyles();
   return (
     <AppLayout>
