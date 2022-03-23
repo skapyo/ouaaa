@@ -12,7 +12,9 @@ import {
 } from '@material-ui/core';
 import Parser from 'html-react-parser';
 import moment from 'moment';
-import QRCode from "react-qr-code";
+import QRCode from 'react-qr-code';
+import { decode as base64_decode, encode as base64_encode } from 'base-64';
+
 import AppLayout from 'containers/layouts/AppLayout';
 import {
   entriesHasElementWithCode,
@@ -156,10 +158,12 @@ const ActorName = (props) => {
   );
 };
 
-
 const Actor = React.forwardRef((props, ref) => {
   const { actor } = props;
   const classes = useStyles();
+  const CryptoJS = require('crypto-js');
+  let cipherId = CryptoJS.AES.encrypt(JSON.stringify(actor?.id), 'ouaaaTransition@2022').toString();
+  cipherId = base64_encode(cipherId);
 
   const actorPictures = actor?.pictures || [];
 
@@ -185,7 +189,7 @@ const Actor = React.forwardRef((props, ref) => {
             <br />
             <br />
             <br />
-            <QRCode value={`${process.env.NEXT_PUBLIC_URI}/actor/${actor.id}`} />
+            <QRCode value={`${process.env.NEXT_PUBLIC_BASE_URL}/validateGameActor/${cipherId}`} />
             <br />
             <br />
             <br />

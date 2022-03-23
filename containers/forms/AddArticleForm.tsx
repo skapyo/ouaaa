@@ -386,7 +386,6 @@ const AddArticleForm = ({ actorId }) => {
       if (actorData && formValues) {
         formValues.actors = [];
         formValues.actors.push(actorData.actor);
-        console.log(actorData.actor);
       }
       // @ts-ignore
     }, [formValues, actorData]);

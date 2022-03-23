@@ -80,9 +80,9 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   logo: {
-    width: '15em',
     marginBottom: '-20px',
-    marginTop: '-14px',
+    marginTop: '-11px',
+    width: '200px',
   },
 }));
 
@@ -184,6 +184,16 @@ const NavBar = () => {
                       button
                       component={Link}
                       className={styles.menuItem}
+                      href="/granddefi"
+                    >
+                      LE GRAND DEFI
+                    </MenuItem>
+                  </Grid>
+                  <Grid item>
+                    <MenuItem
+                      button
+                      component={Link}
+                      className={styles.menuItem}
                       href="/participate"
                     >
                       JE PARTICIPE
@@ -271,6 +281,14 @@ const NavBar = () => {
                           button
                           component={Link}
                           className={styles.menuItem}
+                          href="/granddefiProgression"
+                        >
+                          Espace grand défi
+                        </MenuItem>
+                        <MenuItem
+                          button
+                          component={Link}
+                          className={styles.menuItem}
                           href="/actorAdmin"
                         >
                           Espace Acteur
@@ -328,6 +346,16 @@ const NavBar = () => {
                       href="/news"
                     >
                       ARTICLES
+                    </MenuItem>
+                  </Grid>
+                  <Grid item>
+                    <MenuItem
+                      button
+                      component={Link}
+                      className={styles.menuItem}
+                      href="/granddefi"
+                    >
+                      LE GRAND DEFI
                     </MenuItem>
                   </Grid>
                   <Grid item>
@@ -413,6 +441,14 @@ const NavBar = () => {
                           href="/account"
                         >
                           Mon compte
+                        </MenuItem>
+                        <MenuItem
+                          button
+                          component={Link}
+                          className={styles.menuItem}
+                          href="/granddefiProgression"
+                        >
+                          Espace grand défi
                         </MenuItem>
                         <MenuItem
                           button

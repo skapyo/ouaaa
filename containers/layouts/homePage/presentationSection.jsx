@@ -8,7 +8,7 @@ import SearchEngine from '../../../components/SearchEngine';
 
 const useStyles = makeStyles((theme) => ({
   titleContainer: {
-    backgroundImage: "url('./OUAAA-pix-022.jpg')",
+    backgroundImage: "url('./cover.jpg')",
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
     color: 'white',
