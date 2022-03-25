@@ -1163,6 +1163,7 @@ const EditEventForm = (props) => {
             city,
             // @ts-ignore
             actors: formValues.actors.map((item) => item.id),
+            dateRule,
           },
           eventId: parseInt(eventData.event.id),
           logoPictures,

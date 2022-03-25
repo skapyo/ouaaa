@@ -37,7 +37,7 @@ const getDayOfTheWeek = (day) => {
     default:
       return 'dimanche';
   }
-}
+};
 
 const nbWeeksInMonth = (date) => {
   return moment(date).endOf('month').week() - moment(date).startOf('month').week() + 1;
@@ -62,7 +62,7 @@ const getDateSuffix = (date) => {
 
 const styles = {
   menuItem: {
-    display: 'flex !important'
+    display: 'flex !important',
   },
   buttonDay: {
     height: '30px !important',
@@ -74,17 +74,17 @@ const styles = {
       backgroundColor: '#2c367e !important',
       color: 'white  !important',
       '&:hover': {
-        backgroundColor: 'rgba(44, 54, 126, 0.7) !important'
-      }
+        backgroundColor: 'rgba(44, 54, 126, 0.7) !important',
+      },
     },
     '&:hover': {
-      backgroundColor: 'rgba(86, 86, 86, 0.15) !important'
-    }
+      backgroundColor: 'rgba(86, 86, 86, 0.15) !important',
+    },
   },
   radioButtonIcon: {
-    mr: '5px !important'
-  }
-}
+    mr: '5px !important',
+  },
+};
 
 const GridWrapper = (props) => {
   const { isOpen, children, ...gridProps } = props;
@@ -97,17 +97,57 @@ const GridWrapper = (props) => {
     </Grid>
   );
 };
+const extractfromString = (value, variable, defaultValue) => {
+  if (value !== undefined) {
+    let returnValue = '';
+    value.split(';').forEach((elm) => {
+      if (elm === '') return;
+      const spl = elm.split('=');
+      if (spl[0] === variable) {
+        // eslint-disable-next-line prefer-destructuring
+        returnValue = spl[1];
+      }
+    });
+    if (returnValue.length > 0) {
+      return returnValue;
+    }
+  }
+  return defaultValue;
+};
+
+const getEndMode = (value) => {
+  if (extractfromString(value, 'UNTIL', '') !== '') {
+    return 'until';
+  }
+  if (extractfromString(value, 'COUNT', '') !== '') {
+    return 'nb';
+  }
+
+  return 'never';
+};
+const getUntilDate = (value) => {
+  if (extractfromString(value, 'UNTIL', '') !== '') {
+    return moment(extractfromString(value, 'UNTIL', ''), 'YYYYMMDDT000000[Z]');
+  }
+  return '';
+};
+const getByDay = (value) => {
+  if (extractfromString(value, 'BYDAY', '') !== '') {
+    return extractfromString(value, 'BYDAY', '').split(',');
+  }
+  return [DAYS[moment().day() - 1]];
+};
 
 const RecurringEventInput = (props) => {
   const { onChange, value, startDate } = props;
   const [isRecurring, setIsRecurring] = useState(value !== undefined);
-  const [freq, setFreq] = useState('WEEKLY');
-  const [count, setCount] = useState(1);
-  const [interval, setInterval] = useState(1);
-  const [endMode, setEndMode] = useState('never');
+  const [freq, setFreq] = useState(extractfromString(value, 'FREQ', 'WEEKLY'));
+  const [count, setCount] = useState(extractfromString(value, 'COUNT', 1));
+  const [interval, setInterval] = useState(extractfromString(value, 'INTERVAL', 1));
+  const [endMode, setEndMode] = useState(getEndMode(value));
   const [monthMode, setMonthMode] = useState('day');
-  const [untilDate, setUntilDate] = useState();
-  const [daysOfWeek, setDaysOfWeek] = useState([DAYS[moment().day() - 1]]);
+  const [untilDate, setUntilDate] = useState(getUntilDate(value));
+  const [daysOfWeek, setDaysOfWeek] = useState(getByDay(value));
 
   const handleChangeFreq = useCallback((e) => {
     setFreq(e.target.value);
@@ -143,45 +183,45 @@ const RecurringEventInput = (props) => {
     if (!isRecurring) {
       onChange(null);
     } else {
-      let values = [];
+      const values = [];
 
       // FREQ
-      values.push('FREQ=' + (freq || 'WEEKLY'));
+      values.push(`FREQ=${freq || 'WEEKLY'}`);
 
       // INTERVAL
-      values.push('INTERVAL=' + (interval || 1));
+      values.push(`INTERVAL=${interval || 1}`);
 
       if (endMode !== 'never') {
         if (endMode === 'nb') {
           // COUNT
-          values.push('COUNT=' + (count || 1));
+          values.push(`COUNT=${count || 1}`);
         }
 
         if (endMode === 'until' && moment(untilDate).isValid()) {
           // UNTIL
-          values.push('UNTIL=' + (moment(untilDate).format('YYYYMMDDT000000[Z]')));
+          values.push(`UNTIL=${moment(untilDate).format('YYYYMMDDT000000[Z]')}`);
         }
       }
 
       if (freq === 'WEEKLY') {
         // BYDAY
-        values.push('BYDAY=' + daysOfWeek.join(','));
+        values.push(`BYDAY=${daysOfWeek.join(',')}`);
       }
 
       if (freq === 'MONTHLY' && moment(startDate).isValid()) {
         if (monthMode === 'date') {
           // BYMONTHDATE
-          values.push('BYMONTHDAY=' + moment(startDate).date());
+          values.push(`BYMONTHDAY=${moment(startDate).date()}`);
         }
 
         if (monthMode === 'day') {
           // BYDAY
-          values.push('BYDAY=' + currentWeek(startDate) + '' + DAYS[moment(startDate).day() - 1]);
+          values.push(`BYDAY=${currentWeek(startDate)}${DAYS[moment(startDate).day() - 1]}`);
         }
       }
 
       onChange(values.join(';'));
-    };
+    }
   }, [onChange, freq, interval, count, endMode, daysOfWeek, untilDate, monthMode, startDate, isRecurring, value]);
 
   return (
@@ -268,10 +308,17 @@ const RecurringEventInput = (props) => {
                 onChange={handleChangeMonthMode}
               >
                 <MenuItem value="date" sx={styles.menuItem}>
-                  Tous les mois le {moment(startDate).date()}
+                  Tous les mois le
+                  {' '}
+                  {moment(startDate).date()}
                 </MenuItem>
                 <MenuItem value="day" sx={styles.menuItem}>
-                  Tous les mois le {weekOfMonth(startDate)}{getDateSuffix(startDate)} {getDayOfTheWeek(DAYS[moment(startDate).day() - 1])}
+                  Tous les mois le
+                  {' '}
+                  {weekOfMonth(startDate)}
+                  {getDateSuffix(startDate)}
+                  {' '}
+                  {getDayOfTheWeek(DAYS[moment(startDate).day() - 1])}
                 </MenuItem>
               </Select>
             </Grid>
@@ -288,13 +335,16 @@ const RecurringEventInput = (props) => {
               onChange={handleChangeEndMode}
             >
               <FormControlLabel
-                value="never" control={<Radio sx={styles.radioButtonIcon} />} label="Jamais"
+                value="never"
+                control={<Radio sx={styles.radioButtonIcon} />}
+                label="Jamais"
                 sx={{ py: 1 }}
               />
               <FormControlLabel
-                value="until" control={<Radio sx={styles.radioButtonIcon} />}
+                value="until"
+                control={<Radio sx={styles.radioButtonIcon} />}
                 sx={{ py: 1 }}
-                label={
+                label={(
                   <Grid container alignItems="center">
                     <Grid item>Le</Grid>
                     <Grid item>
@@ -312,12 +362,13 @@ const RecurringEventInput = (props) => {
                       </LocalizationProvider>
                     </Grid>
                   </Grid>
-                }
+                )}
               />
               <FormControlLabel
-                value="nb" control={<Radio sx={styles.radioButtonIcon} />}
+                value="nb"
+                control={<Radio sx={styles.radioButtonIcon} />}
                 sx={{ py: 1 }}
-                label={
+                label={(
                   <Grid container alignItems="center">
                     <Grid item>Après</Grid>
                     <Grid item>
@@ -330,7 +381,7 @@ const RecurringEventInput = (props) => {
                     </Grid>
                     <Grid item>occurence(s)</Grid>
                   </Grid>
-                }
+                )}
               />
             </RadioGroup>
           </Grid>
