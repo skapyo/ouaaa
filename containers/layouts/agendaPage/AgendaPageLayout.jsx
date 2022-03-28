@@ -21,7 +21,7 @@ import ButtonGroupSelected from '../../../components/buttons/ButtonGroupSelected
 import Calendar from '../../../components/Calendar';
 import Link from '../../../components/Link';
 import Filters from '../../../components/filters';
-import { getImageUrl,rruleToText } from '../../../utils/utils';
+import { getImageUrl, rruleToText } from '../../../utils/utils';
 
 let matchesWindow = false;
 if (typeof window !== 'undefined') {
@@ -237,17 +237,17 @@ const VIEW_STATE = {
 
 const getAllEventsFromRecurringEvent = (event) => {
   const startDate = moment(parseInt(event.startedAt));
-  const dateRule = event.dateRule;
+  const { dateRule } = event;
 
-  const rrule = RRule.fromString('DTSTART:' + startDate.format('YYYYMMDD[T]hhmmss[Z]') + '\nRRULE:' + dateRule);
-  
+  const rrule = RRule.fromString(`DTSTART:${startDate.format('YYYYMMDD[T]hhmmss[Z]')}\nRRULE:${dateRule}`);
+
   return rrule.all().slice(0, 100).map((date) => {
     return {
       ...event,
       startedAt: moment(date).valueOf().toString(),
-      duration: rruleToText(rrule)
-    }
-  })
+      duration: rruleToText(rrule),
+    };
+  });
 };
 
 const AgendaPageLayout = () => {
@@ -303,10 +303,10 @@ const AgendaPageLayout = () => {
   }, []);
 
   const events = useMemo(() => {
-    const initialEvents = (eventData?.events || []);
+    const initialEvents = (eventData?.events || [])
     const recurringEvents = initialEvents.filter((event) => event.dateRule);
     const allRecurringEvents = recurringEvents.map((evt) => getAllEventsFromRecurringEvent(evt));
-    const allEvents = initialEvents.concat(allRecurringEvents.reduce((acc, items) => acc.concat(items), []));
+    const allEvents = initialEvents.filter((event) => !event.dateRule).concat(allRecurringEvents.reduce((acc, items) => acc.concat(items), [])).filter((event) => {return moment(parseInt(event.startedAt)) > moment()});
     return allEvents;
   }, [eventData]);
 
@@ -317,8 +317,8 @@ const AgendaPageLayout = () => {
       let dateRule = {};
       if (evt.dateRule) {
         dateRule = {
-          rRule: evt.dateRule
-        }
+          rRule: evt.dateRule,
+        };
       }
 
       return {
@@ -328,7 +328,7 @@ const AgendaPageLayout = () => {
         id: evt.id,
         location: evt.city ? [evt.address, evt.city].join(', ') : '',
         backgroundColor: evt?.entries?.[0]?.parentEntry?.color || 'blue',
-        ...dateRule
+        ...dateRule,
       };
     });
   }, [eventData]);
