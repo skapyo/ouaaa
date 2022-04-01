@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: '1em',
   },
 }));
-const Aboutd = () => {
+const About = () => {
   const styles = useStyles();
   return (
     <AppLayout>
