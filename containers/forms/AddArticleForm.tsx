@@ -126,6 +126,7 @@ const ADDArticle = gql`
     $userId: Int!
     $content: String!
     $mainPictures: [InputPictureType]
+    $pictures: [InputPictureType]
   ) {
     createArticle(
       articleInfos: $articleInfos
@@ -133,6 +134,7 @@ const ADDArticle = gql`
       userId: $userId
       content: $content
       mainPictures: $mainPictures
+      pictures: $pictures
     ) {
       id
       label
@@ -384,7 +386,6 @@ const AddArticleForm = ({ actorId }) => {
       if (actorData && formValues) {
         formValues.actors = [];
         formValues.actors.push(actorData.actor);
-        console.log(actorData.actor);
       }
       // @ts-ignore
     }, [formValues, actorData]);
@@ -459,6 +460,33 @@ const AddArticleForm = ({ actorId }) => {
       // @ts-ignore
     }, resultMain);
 
+    const [setImagesList, loading, result, imagesListState] = useImageReader();
+
+    const onDropHandler = useCallback(
+      (files) => {
+        // @ts-ignore
+        setImagesList(files);
+      },
+      [setImagesList],
+    );
+    
+    const {
+      objectsList,
+      moveObject,
+      findObject,
+      updateActiveIndicator,
+      updateDeletedIndicator,
+      initState,
+      addValues,
+      updateKeyIndicator,
+    } = useDnDStateManager([]);
+
+    useEffect(() => {
+      if (result) addValues(result);
+      // @ts-ignore
+    }, result);
+
+
     const submitHandler = () => {
       let mainPictures;
       // @ts-ignore
@@ -470,6 +498,21 @@ const AddArticleForm = ({ actorId }) => {
             newpic: object.newpic,
             deleted: object.deleted,
             main: true,
+            file: {
+              originalPicture: object.file,
+            },
+          };
+        });
+      }
+      let pictures;
+      // @ts-ignore
+      if (objectsList) {
+        pictures = objectsList.map((object) => {
+          // return object.file
+          return {
+            id: object.serverId,
+            newpic: object.newpic,
+            deleted: object.deleted,
             file: {
               originalPicture: object.file,
             },
@@ -491,6 +534,7 @@ const AddArticleForm = ({ actorId }) => {
           // @ts-ignore
           content: descriptionEditor.getData(),
           mainPictures,
+          pictures,
         },
       });
     };
@@ -562,7 +606,6 @@ const AddArticleForm = ({ actorId }) => {
           'blockQuote',
           'insertTable',
           '|',
-          'imageUpload',
           'undo',
           'redo',
         ],
@@ -642,7 +685,22 @@ const AddArticleForm = ({ actorId }) => {
           <div>Editor loading</div>
         )}
         <br />
-
+        <Typography variant="body1" color="primary" className={styles.label}>
+          Autres photos
+        </Typography>
+        {objectsList ? (
+          <ImagesDisplay
+            cards={objectsList}
+            moveCard={moveObject}
+            findCard={findObject}
+            updateDeletedIndicator={updateDeletedIndicator}
+            updateKeyIndicator={updateKeyIndicator}
+          />
+        ) : null}
+        <ImagesDropZone
+          onDropHandler={onDropHandler}
+          text="Déposez ici votre autres photos au format jpg"
+        />
         <br />
         <TitleWithTooltip
           title="Acteur(s) associé(s) à l'article "

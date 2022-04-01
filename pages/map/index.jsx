@@ -2,7 +2,7 @@ import React, {
   useCallback, useEffect, useRef, useState, useMemo,
 } from 'react';
 import {
-  Grid, useMediaQuery, Button,
+  Grid,Typography, useMediaQuery, Button,
 } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import gql from 'graphql-tag';
@@ -14,6 +14,7 @@ import Drawer from '@material-ui/core/Drawer';
 import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
 import dynamic from 'next/dynamic';
 
+import { getImageUrl } from '../../utils/utils';
 // eslint-disable-next-line import/no-unresolved
 import ButtonGroupSelected from '../../components/buttons/ButtonGroupSelected';
 import Filters from '../../components/filters';
@@ -189,9 +190,6 @@ const useStyles = makeStyles((theme) => ({
   icon: {
     color: '#bd0b3d',
     width: '20px',
-  },
-  tooltip: {
-    width: '320px',
   },
   datePicker: {
     border: '0.5px solid',
@@ -398,6 +396,24 @@ const carto = () => {
       setFilters(newFilters);
       refetch({ ...newFilters });
     }, [refetch]);
+
+    function splitWord(word, number) {
+      if (word != null) {
+        const indexMax = Math.round(word.length / number);
+        let wordSplit = '';
+        if (indexMax > 1) {
+          for (let i = 0; i < indexMax; i++) {
+            wordSplit += word.slice(i * number, (i + 1) * number);
+            if (i + 1 <= indexMax) {
+              wordSplit += '<br><br> ';
+            }
+          }
+          return wordSplit;
+        }
+        return word;
+      }
+      return '';
+    }
 
     const otherCategoryChange = useCallback((e, collectionLabel) => {
       const newOtherCategories = { ...otherCategoriesChecked };

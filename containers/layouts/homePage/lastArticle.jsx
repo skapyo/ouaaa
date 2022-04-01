@@ -8,7 +8,6 @@ import { withApollo } from '../../../hoc/withApollo';
 import CardSliderArticle from '../../../components/cards/CardSliderArticle';
 import Link from '../../../components/Link';
 
-
 const useStyles = makeStyles((theme) => ({
   cardTitle: {
     color: theme.typography.h5.color,
@@ -70,6 +69,7 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: '5em',
     textAlign: 'center',
     backgroundColor: 'white',
+    overflow: 'hidden',
   },
 }));
 
@@ -138,7 +138,7 @@ const LastArticle = (props) => {
   const theme = useTheme();
   const mobile = useMediaQuery(theme.breakpoints.down('sm'));
   const styles = useStyles();
-  const maxImageDisplay = !mobile?5:1
+  const maxImageDisplay = !mobile ? 5 : 1
   const settings = {
     dots: true,
     infinite: true,
@@ -158,7 +158,7 @@ const LastArticle = (props) => {
       <Typography variant="h5" className={[styles.cardTitle]}>
         LES DERNIERS ARTICLES
       </Typography>
-      <div className={[styles.border]}/>
+      <div className={[styles.border]} />
       <Slider {...settings} className={[styles.articleCarroussel]}>
         {articleToRender?.articleData &&
           articleToRender.articleData.articles.map((article) => {

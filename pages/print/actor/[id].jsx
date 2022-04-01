@@ -3,7 +3,7 @@ import React from 'react';
 import { withApollo } from 'hoc/withApollo';
 import { useQuery, gql } from '@apollo/client';
 import { useRouter } from 'next/router';
-import ActorToPrint from '../../../components/print/Actor';
+import ActorToPrint from '../../../components/print/ActorGame';
 
 const GET_ACTOR = gql`
 query actor($id: String) {
@@ -74,7 +74,6 @@ query actor($id: String) {
 const Print = () => {
   const router = useRouter();
   const { id } = router.query;
-
   const { data } = useQuery(GET_ACTOR, {
     variables: { id },
     fetchPolicy: 'no-cache',

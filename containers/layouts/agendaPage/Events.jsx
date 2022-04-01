@@ -75,14 +75,14 @@ const sameDay = (date1, date2) => {
 
 const Events = (props) => {
   const classes = useStyles();
-  const { data, loading } = props;
+  const { events = [], loading } = props;
   const theme = useTheme();
   const exportData = useExcelExport();
   const matches = useMediaQuery(theme.breakpoints.up('sm'));
 
-  const events = useMemo(() => {
-    let localEvents = (data?.events || []).slice();
-    data && data.events.forEach((event) => {
+  const sortedEvents = useMemo(() => {
+    let localEvents = (events || []).slice();
+    events.forEach((event) => {
       if (!sameDay(event.startedAt, event.endedAt)) {
         const nbDayEvent = moment(new Date(parseInt(event.endedAt))).diff(
           moment(new Date(parseInt(event.startedAt))),
@@ -103,14 +103,14 @@ const Events = (props) => {
       }
     });
     return localEvents.sort(compare);
-  }, [data]);
+  }, [events]);
 
   const handleClickPrint = useCallback(() => {
     window.print();
   }, []);
 
   const handleClickExport = useCallback(() => {
-    const eventsToExport = data?.events
+    const eventsToExport = events
       .map(event => ({
         ...event,
         url: `${process.env.NEXT_PUBLIC_BASE_URL}/event/${event.id}`,
@@ -126,7 +126,7 @@ const Events = (props) => {
       sheetName: 'actions',
       fileName: 'actions',
     });
-  }, [data?.events]);
+  }, [events]);
 
   return (
     <Grid className={classes.events} container direction="column" wrap="nowrap">
@@ -160,13 +160,13 @@ const Events = (props) => {
         )
       }
       {
-        (events.length === 0 && !loading) && (
+        (sortedEvents.length === 0 && !loading) && (
           <h2>Aucun évènement</h2>
         )
       }
       {
-        events.length > 0 && events.map((event, index) => {
-          const lastEvent = index > 0 && events[index - 1];
+        sortedEvents.length > 0 && sortedEvents.map((event, index) => {
+          const lastEvent = index > 0 && sortedEvents[index - 1];
           return (
             <div key={event.id + index} className={classes.cardContainer}>
               {(!lastEvent || !sameDay(lastEvent.startedAt, event.startedAt)) && (
