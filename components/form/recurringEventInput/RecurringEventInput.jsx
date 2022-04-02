@@ -98,7 +98,8 @@ const GridWrapper = (props) => {
   );
 };
 const extractfromString = (value, variable, defaultValue) => {
-  if (value !== undefined) {
+  if (value !== undefined && value) {
+    debugger;
     let returnValue = '';
     value.split(';').forEach((elm) => {
       if (elm === '') return;
