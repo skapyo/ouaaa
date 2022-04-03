@@ -2,7 +2,7 @@ import React, {
   useCallback, useEffect, useRef, useState, useMemo,
 } from 'react';
 import {
-  Grid,Typography, useMediaQuery, Button,
+  Grid, Typography, useMediaQuery, Button,
 } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import gql from 'graphql-tag';
@@ -22,15 +22,15 @@ import AppLayout from '../../containers/layouts/AppLayout';
 import { withApollo } from '../../hoc/withApollo';
 
 const MapWithNoSSR = dynamic(() => import('../../components/map/Map'), {
-  ssr: false
+  ssr: false,
 });
 
 const MarkerWithNoSSR = dynamic(() => import('../../components/map/ActorMarker'), {
-  ssr: false
+  ssr: false,
 });
 
 const MarkerClusterWithNoSSR = dynamic(() => import('../../components/map/MarkerCluster'), {
-  ssr: false
+  ssr: false,
 });
 
 let matchesWindow = false;
@@ -440,7 +440,7 @@ const carto = () => {
     }, [switchMode]);
 
     const actorsWithLocation = useMemo(() => {
-      return (data?.actors || []).filter(actor => actor.lat && actor.lng);
+      return (data?.actors || []).filter((actor) => actor.lat && actor.lng);
     }, [data]);
 
     return (
@@ -499,8 +499,8 @@ const carto = () => {
                   {
                     actorsWithLocation.map((actor) => {
                       return (
-                        <MarkerWithNoSSR actor={actor} />
-                      )
+                        <MarkerWithNoSSR  actor={actor} />
+                      );
                     })
                   }
                 </MarkerClusterWithNoSSR>

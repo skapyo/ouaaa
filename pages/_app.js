@@ -91,7 +91,7 @@ const MyApp = (props) => {
     if (jssStyles) {
       jssStyles.parentElement.removeChild(jssStyles);
     }
-    console.log(`SEO: ${process.env.NEXT_PUBLIC_SEO_DISABLED}`);
+    console.log(`Disable SEO: ${process.env.NEXT_PUBLIC_SEO_DISABLED}`);
   }, []);
 
   return (

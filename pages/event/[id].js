@@ -29,6 +29,7 @@ import Modal from '@mui/material/Modal';
 import CloseIcon from '@material-ui/icons/Close';
 import IconButton from '@material-ui/core/IconButton';
 import Box from '@mui/material/Box';
+
 import {
   FacebookShareButton,
   FacebookMessengerShareButton,
@@ -48,6 +49,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import Link from 'components/Link';
 import { RRule } from 'rrule';
 import Image from 'next/image';
+import dynamic from 'next/dynamic';
 import {
   getImageUrl,
   entriesHasElementWithCode,
@@ -432,6 +434,14 @@ const Event = ({ initialData }) => {
   const [hasClickParticipate, setHasClickParticipate] = useState(false);
   const [openModalSlider, setOpenModalSlider] = useState(false);
 
+  const MapWithNoSSR = dynamic(() => import('../../components/map/Map'), {
+    ssr: false,
+  });
+
+  const MarkerWithNoSSR = dynamic(() => import('../../components/map/MarkerEventLocation'), {
+    ssr: false,
+  });
+
   function containUser(list) {
     let isContained = false;
     if (user !== null && list !== undefined) {
@@ -464,14 +474,6 @@ const Event = ({ initialData }) => {
       setCurrentLocationWindows(window?.location);
     }
   }, []);
-
-  if (typeof window !== 'undefined') {
-    var L = require('leaflet');
-    const { Map } = require('react-leaflet');
-    const { TileLayer } = require('react-leaflet');
-    const { Marker } = require('react-leaflet');
-    const { Popup } = require('react-leaflet');
-  }
 
   const bannerUrl = useMemo(() => {
     return (data?.event?.pictures || []).filter((picture) => picture.main).length >= 1
@@ -916,10 +918,10 @@ const Event = ({ initialData }) => {
                       </Grid>
                       <Grid item xs={8} className={[styles.alignLeft]}>
 
-                        { data && data.event.dateRule &&(
+                        { data && data.event.dateRule && (
                           <span className={[styles.infoValue]}>
                             {getRruleTextEvent(data.event)}
-                            </span>
+                          </span>
                         )}
 
                         { data && !data.event.dateRule && (
@@ -1243,51 +1245,19 @@ const Event = ({ initialData }) => {
                 <div className={styles.border} />
                 <br />
 
-                {data && L && (
-                  <Map
+                {data && (
+                  <MapWithNoSSR
                     ref={mapRef}
-                    id="map"
+                    small
                     center={[data.event.lat, data.event.lng]}
                     zoom={11}
                     className={styles.map}
                   >
-                    <TileLayer
-                      attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    <MarkerWithNoSSR
+                      id="map"
+                      event={data.event}
                     />
-                    <Marker
-                      position={[data.event.lat, data.event.lng]}
-                      icon={
-                        new L.Icon({
-                          iconUrl: '/icons/location.svg',
-                          iconAnchor: [13, 34], // point of the icon which will correspond to marker's location
-                          iconSize: [25],
-                          popupAnchor: [1, -25],
-                          html: '<span style="background-color: red" />',
-                        })
-                      }
-                    >
-                      <Popup>
-                        {data.event.name}
-                        {' '}
-                        -
-                        {' '}
-                        {data && !data.event.address && data.event.city && (
-                          <span>
-                            {/* @ts-ignore */}
-                            {data && data.event.city}
-                          </span>
-                        )}
-                        {data && data.event.address && data.event.city && (
-                          <span>
-                            {/* @ts-ignore */}
-                            {`${data && data.event.address} ${data && data.event.city
-                            }`}
-                          </span>
-                        )}
-                      </Popup>
-                    </Marker>
-                  </Map>
+                  </MapWithNoSSR>
                 )}
               </Grid>
             </Grid>
