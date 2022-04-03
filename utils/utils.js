@@ -47,13 +47,13 @@ export const rruleToText = (rrule) => {
   };
   const language = {
     dayNames: [
+      'dimanche',
       'lundi',
       'mardi',
       'mercredi',
       'jeudi',
       'vendredi',
       'samedi',
-      'dimanche',
     ],
     monthNames: [
       'janvier ',
