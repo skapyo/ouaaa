@@ -16,8 +16,6 @@ const EventMarker = (props) => {
   const { map } = useLeafletContext();
   const popupRef = useRef();
   const tooltipRef = useRef();
-
-  
   const [clicked, setClicked] = useState(false);
   const styles = useStyles();
   let icone;
@@ -49,12 +47,12 @@ const EventMarker = (props) => {
       icon={suitcasePoint}
       eventHandlers={{
         click: () => {
-            tooltipRef.current.remove();
+          tooltipRef.current.remove();
         },
       }}
     >
-      <Tooltip   ref={tooltipRef}>
-      <EventPopup
+      <Tooltip ref={tooltipRef}>
+        <EventPopup
           event={event}
           onMouseOut={() => {
             if (!clicked) {

@@ -99,7 +99,6 @@ const GridWrapper = (props) => {
 };
 const extractfromString = (value, variable, defaultValue) => {
   if (value !== undefined && value) {
-    debugger;
     let returnValue = '';
     value.split(';').forEach((elm) => {
       if (elm === '') return;
@@ -141,7 +140,9 @@ const getByDay = (value) => {
 
 const RecurringEventInput = (props) => {
   const { onChange, value, startDate } = props;
-  const [isRecurring, setIsRecurring] = useState(value !== undefined);
+ 
+  const [isRecurring, setIsRecurring] = useState(value !== undefined && value != null);
+  debugger;
   const [freq, setFreq] = useState(extractfromString(value, 'FREQ', 'WEEKLY'));
   const [count, setCount] = useState(extractfromString(value, 'COUNT', 1));
   const [interval, setInterval] = useState(extractfromString(value, 'INTERVAL', 1));
@@ -205,6 +206,7 @@ const RecurringEventInput = (props) => {
       }
 
       if (freq === 'WEEKLY') {
+        daysOfWeek.pop('');
         // BYDAY
         values.push(`BYDAY=${daysOfWeek.join(',')}`);
       }
@@ -220,7 +222,7 @@ const RecurringEventInput = (props) => {
           values.push(`BYDAY=${currentWeek(startDate)}${DAYS[moment(startDate).day() - 1]}`);
         }
       }
-
+      debugger;
       onChange(values.join(';'));
     }
   }, [onChange, freq, interval, count, endMode, daysOfWeek, untilDate, monthMode, startDate, isRecurring, value]);

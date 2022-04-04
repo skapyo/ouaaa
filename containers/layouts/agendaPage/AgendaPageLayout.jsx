@@ -16,23 +16,27 @@ import Drawer from '@material-ui/core/Drawer';
 import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { RRule } from 'rrule';
-
+import dynamic from 'next/dynamic';
 import ButtonGroupSelected from '../../../components/buttons/ButtonGroupSelected';
 import Calendar from '../../../components/Calendar';
 import Link from '../../../components/Link';
 import Filters from '../../../components/filters';
 import { getImageUrl, rruleToText } from '../../../utils/utils';
 
+const MapWithNoSSR = dynamic(() => import('../../../components/map/Map'), {
+  ssr: false,
+});
+
+const MarkerWithNoSSR = dynamic(() => import('../../../components/map/EventMarker'), {
+  ssr: false,
+});
+
+const MarkerClusterWithNoSSR = dynamic(() => import('../../../components/map/MarkerCluster'), {
+  ssr: false,
+});
+
 let matchesWindow = false;
 if (typeof window !== 'undefined') {
-  var L = require('leaflet');
-  const { Map } = require('react-leaflet');
-  const { TileLayer } = require('react-leaflet');
-  const { Marker } = require('react-leaflet');
-  const { Popup } = require('react-leaflet');
-  const { Tooltip } = require('react-leaflet');
-  const { ZoomControl } = require('react-leaflet');
-  const MarkerClusterGroup = require('react-leaflet-markercluster').default;
   matchesWindow = window.matchMedia('(max-width: 600px)').matches;
 }
 
@@ -271,9 +275,6 @@ const AgendaPageLayout = () => {
   }, [isMenuOpen]);
 
   const date = new Date();
-  const position = [46.1085193, -0.9864794];
-  const startDateFormat = !matches ? '[ de ]HH[h]mm' : 'HH[h]mm';
-  const endDateFormat = !matches ? '[ à ]HH[h]mm' : '[-]HH[h]mm';
 
   date.setHours(0, 0, 0, 0);
 
@@ -282,12 +283,6 @@ const AgendaPageLayout = () => {
       startingDate: date.toISOString(),
     },
   });
-
-  if (typeof window !== 'undefined') {
-    L.Icon.Default.mergeOptions({
-      iconUrl: null,
-    });
-  }
 
   const handleFiltersChange = useCallback((newFilters) => {
     setFilters(newFilters);
@@ -303,10 +298,10 @@ const AgendaPageLayout = () => {
   }, []);
 
   const events = useMemo(() => {
-    const initialEvents = (eventData?.events || [])
+    const initialEvents = (eventData?.events || []);
     const recurringEvents = initialEvents.filter((event) => event.dateRule);
     const allRecurringEvents = recurringEvents.map((evt) => getAllEventsFromRecurringEvent(evt));
-    const allEvents = initialEvents.filter((event) => !event.dateRule).concat(allRecurringEvents.reduce((acc, items) => acc.concat(items), [])).filter((event) => {return moment(parseInt(event.startedAt)) > moment()});
+    const allEvents = initialEvents.filter((event) => !event.dateRule).concat(allRecurringEvents.reduce((acc, items) => acc.concat(items), [])).filter((event) => { return moment(parseInt(event.startedAt)) > moment(); });
     return allEvents;
   }, [eventData]);
 
@@ -333,12 +328,6 @@ const AgendaPageLayout = () => {
     });
   }, [eventData]);
 
-  function addressCity(event) {
-    if (!(event && event !== undefined && typeof event !== 'undefined')) return '';
-    if (!event.city) return 'Adresse manquante';
-    const list = [event.address, event.city];
-    return `${list.join(', ')}`;
-  }
 
   return (
     <Container className={classes.main}>
@@ -390,255 +379,18 @@ const AgendaPageLayout = () => {
 
         {isMapMode && (
           <Grid style={{ width: '100%' }}>
-            <Map ref={mapRef} center={position} zoom={11} className={classes.mapContainer}>
-              <TileLayer
-                attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              />
-              <ZoomControl position="topright" />
-              <MarkerClusterGroup>
+            <MapWithNoSSR>
+              <MarkerClusterWithNoSSR>
                 {typeof eventData !== 'undefined'
                   && eventData.events.map((event, index) => {
                     if (event.lat != null && event.lng != null) {
-                      const icon = event?.entries?.[0]?.icon ? `/icons/marker/marker_${event.entries[0].icon}.svg` : '/icons/place.svg';
-                      const color = event?.entries?.[0]?.color || 'black';
-
-                      const markerHtmlStyles = 'background-color: red';
-                      const suitcasePoint = new L.Icon({
-                        iconUrl: icon,
-                        color,
-                        fillColor: color,
-                        iconAnchor: [13, 34], // point of the icon which will correspond to marker's location
-                        iconSize: [60],
-                        popupAnchor: [1, -25],
-                        html: `<span style="${markerHtmlStyles}" />`,
-                      });
                       return (
-                        <Marker
-                          key={`marker-${index}`}
-                          position={[event.lat, event.lng]}
-                          icon={suitcasePoint}
-                        >
-                          <Tooltip>
-                            <div
-                              className={classes.image}
-                              style={{
-                                backgroundImage:
-                                  event.pictures.length >= 1
-                                    ? `url(${getImageUrl(
-                                      event.pictures.sort((a, b) => (a.logo ? -1 : 1))[0].originalPicturePath,
-                                    )})`
-                                    : '',
-                              }}
-                            >
-                              <div className={classes.categorie}>
-                                <Typography
-                                  className={classes.categorie}
-                                  gutterBottom
-                                >
-                                  {event?.categories?.[0]?.label}
-                                </Typography>
-                              </div>
-                            </div>
-                            <div className={classes.content}>
-                              <Grid container>
-                                <Grid item xs={10}>
-                                  <div className={classes.titleDiv}>
-                                    <Typography
-                                      variant="h6"
-                                      component="h2"
-                                      className={classes.title}
-                                    >
-                                      {event?.label}
-                                    </Typography>
-                                    <Typography
-                                      variant="h6"
-                                      component="h2"
-                                      className={classes.title}
-                                    >
-                                      {!event.duration && (
-                                        <>
-                                          Le
-                                          {' '}
-                                          <Moment
-                                            locale="fr"
-                                            format="DD MMMM YYYY"
-                                            unix
-                                          >
-                                            {event.startedAt / 1000}
-                                          </Moment>
-                                          <Moment format={startDateFormat} unix>
-                                            {event.startedAt / 1000}
-                                          </Moment>
-                                          <Moment format={endDateFormat} unix>
-                                            {event.endedAt / 1000}
-                                          </Moment>
-                                        </>
-                                      )}
-                                      {event.duration && (
-                                        <>
-                                          <span>Du </span>
-                                          <Moment
-                                            locale="fr"
-                                            format="DD MMMM YYYY"
-                                            unix
-                                          >
-                                            {event.startedAt / 1000}
-                                          </Moment>
-                                          <span> au </span>
-                                          <Moment
-                                            locale="fr"
-                                            format="DD MMMM YYYY"
-                                            unix
-                                          >
-                                            {event.endedAt / 1000}
-                                          </Moment>
-                                        </>
-                                      )}
-                                    </Typography>
-                                    {event.parentEvent && (
-                                      <>
-                                        <span>
-                                          fait partie de
-                                          <Link href={`/event/${event.parentEvent.id}`}>{event.parentEvent.label}</Link>
-                                        </span>
-                                        <br />
-                                      </>
-                                    )}
-                                    <span>{addressCity(event)}</span>
-                                  </div>
-                                </Grid>
-                              </Grid>
-
-                              <Typography component="p">
-                                {event?.shortDescription}
-                              </Typography>
-                            </div>
-                          </Tooltip>
-                          <Popup>
-                            <div
-                              className={classes.image}
-                              style={{
-                                backgroundImage:
-                                  event.pictures.length >= 1
-                                    ? `url(${getImageUrl(
-                                      event.pictures.sort((a, b) => (a.logo ? -1 : 1))[0].originalPicturePath,
-                                    )})`
-                                    : '',
-                              }}
-                            >
-                              <div className={classes.categorie}>
-                                <Typography
-                                  className={classes.categorie}
-                                  gutterBottom
-                                >
-                                  {event?.categories?.[0]?.label}
-                                </Typography>
-                              </div>
-                            </div>
-                            <div className={classes.content}>
-                              <Grid container>
-                                <Grid item xs={10}>
-                                  <div className={classes.titleDiv}>
-                                    <Typography
-                                      variant="h6"
-                                      component="h2"
-                                      className={classes.title}
-                                    >
-                                      {event?.label}
-                                    </Typography>
-                                  </div>
-                                  <Typography
-                                    variant="h6"
-                                    component="h2"
-                                    className={classes.title}
-                                  >
-                                    {!event.duration && (
-                                      <>
-                                        Le
-                                        {' '}
-                                        <Moment
-                                          locale="fr"
-                                          format="DD MMMM YYYY"
-                                          unix
-                                        >
-                                          {event.startedAt / 1000}
-                                        </Moment>
-                                        <Moment format={startDateFormat} unix>
-                                          {event.startedAt / 1000}
-                                        </Moment>
-                                        <Moment format={endDateFormat} unix>
-                                          {event.endedAt / 1000}
-                                        </Moment>
-                                      </>
-                                    )}
-                                    {event.duration && (
-                                      <>
-                                        <span>Du </span>
-                                        <Moment
-                                          locale="fr"
-                                          format="DD MMMM YYYY"
-                                          unix
-                                        >
-                                          {event.startedAt / 1000}
-                                        </Moment>
-                                        <span> au </span>
-                                        <Moment
-                                          locale="fr"
-                                          format="DD MMMM YYYY"
-                                          unix
-                                        >
-                                          {event.endedAt / 1000}
-                                        </Moment>
-                                      </>
-                                    )}
-                                  </Typography>
-                                  {event.parentEvent && (
-                                    <>
-                                      <span>
-                                        fait partie de
-                                        <Link href={`/event/${event.parentEvent.id}`}>{event.parentEvent.label}</Link>
-                                      </span>
-                                      <br />
-                                    </>
-                                  )}
-                                  <span>{addressCity(event)}</span>
-                                </Grid>
-                                <Grid item xs={2}>
-                                  <div
-                                    className={classes.favorite}
-                                    onClick={() => setFavorite(!favorite)}
-                                  >
-                                    {!favorite && (
-                                      <FavoriteBorderRoundedIcon
-                                        className={classes.favoriteIcon}
-                                      />
-                                    )}
-                                    {favorite && (
-                                      <FavoriteRoundedIcon
-                                        className={classes.favoriteIcon}
-                                      />
-                                    )}
-                                  </div>
-                                </Grid>
-                              </Grid>
-
-                              <Typography component="p">
-                                {event?.shortDescription}
-                              </Typography>
-                            </div>
-                            <Link href={`/event/${event.id}`}>
-                              <button className={classes.buttonGrid}>
-                                EN SAVOIR PLUS
-                              </button>
-                            </Link>
-                          </Popup>
-                        </Marker>
+                        <MarkerWithNoSSR event={event} />
                       );
                     }
                   })}
-              </MarkerClusterGroup>
-            </Map>
+              </MarkerClusterWithNoSSR>
+            </MapWithNoSSR>
           </Grid>
         )}
       </Container>
