@@ -40,6 +40,11 @@ const EventPopup = ({ event, onMouseOut }) => {
 
     },
 
+    popup: {
+      [theme.breakpoints.down('sm')]: {
+        width: '200px',
+      },
+    },
     content: {
       padding: '10px',
       width: '100%',
@@ -91,7 +96,7 @@ const EventPopup = ({ event, onMouseOut }) => {
 
 
   return (
-    <div onMouseLeave={onMouseOut}>
+    <div onMouseLeave={onMouseOut} className={styles.popup}>
       <div
         className={styles.image}
         style={{

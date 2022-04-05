@@ -1,13 +1,20 @@
 import React, { useRef, useState } from 'react';
 import L from 'leaflet';
 import { Marker, Tooltip, Popup } from 'react-leaflet';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { makeStyles } from '@material-ui/styles';
 import { useLeafletContext } from '@react-leaflet/core';
+import {
+  useTheme,
+} from '@material-ui/core';
 import EventPopup from '../popup/EventPopup';
 
 const useStyles = makeStyles((theme) => ({
   tooltip: {
-    width: '320px',
+    [theme.breakpoints.down('sm')]: {
+      width: '250px',
+    },
+
   },
 }));
 
@@ -17,7 +24,9 @@ const EventMarker = (props) => {
   const popupRef = useRef();
   const tooltipRef = useRef();
   const [clicked, setClicked] = useState(false);
+  const theme = useTheme();
   const styles = useStyles();
+  const matches = useMediaQuery(theme.breakpoints.down('sm'));
   let icone;
   let color;
 
@@ -47,28 +56,34 @@ const EventMarker = (props) => {
       icon={suitcasePoint}
       eventHandlers={{
         click: () => {
-          tooltipRef.current.remove();
+          if (tooltipRef.current) {
+            tooltipRef.current.remove();
+          }
         },
       }}
     >
+      { !matches && (
       <Tooltip ref={tooltipRef}>
         <EventPopup
           event={event}
+          className={styles.tooltip}
           onMouseOut={() => {
             if (!clicked) {
-              popupRef.current.remove();
+              tooltipRef.current.remove();
             }
           }}
         />
       </Tooltip>
+      )}
       <Popup
         ref={popupRef}
         autoClose
         closeOnClick={false}
         position={[event.lat, event.lng]}
+        className={styles.tooltip}
         eventHandlers={{
           mousedown: () => {
-            if (!clicked) {
+            if (!clicked && !matches) {
               popupRef.current.removeOn(map);
             }
           },
@@ -76,8 +91,9 @@ const EventMarker = (props) => {
       >
         <EventPopup
           event={event}
+
           onMouseOut={() => {
-            if (!clicked) {
+            if (!clicked && !matches) {
               popupRef.current.remove();
             }
           }}

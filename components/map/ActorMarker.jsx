@@ -2,8 +2,11 @@ import React, { useRef, useState } from 'react';
 import L from 'leaflet';
 import { Marker, Tooltip, Popup } from 'react-leaflet';
 import { makeStyles } from '@material-ui/styles';
-
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useLeafletContext } from '@react-leaflet/core';
+import {
+  useTheme,
+} from '@material-ui/core';
 import ActorPopup from '../popup/ActorPopup';
 
 const useStyles = makeStyles((theme) => ({
@@ -18,9 +21,10 @@ const ActorMarker = (props) => {
   const popupRef = useRef();
   const tooltipRef = useRef();
 
-  
   const [clicked, setClicked] = useState(false);
+  const theme = useTheme();
   const styles = useStyles();
+  const matches = useMediaQuery(theme.breakpoints.down('sm'));
   let icone;
   let color;
 
@@ -50,20 +54,24 @@ const ActorMarker = (props) => {
       icon={suitcasePoint}
       eventHandlers={{
         click: () => {
+          if (tooltipRef.current) {
             tooltipRef.current.remove();
+          }
         },
       }}
     >
-      <Tooltip   ref={tooltipRef}>
-      <ActorPopup
+      { !matches && (
+      <Tooltip ref={tooltipRef}>
+        <ActorPopup
           actor={actor}
           onMouseOut={() => {
             if (!clicked) {
-              popupRef.current.remove();
+              tooltipRef.current.remove();
             }
           }}
         />
       </Tooltip>
+      )}
       <Popup
         ref={popupRef}
         autoClose
@@ -71,7 +79,7 @@ const ActorMarker = (props) => {
         position={[actor.lat, actor.lng]}
         eventHandlers={{
           mousedown: () => {
-            if (!clicked) {
+            if (!clicked && !matches) {
               popupRef.current.removeOn(map);
             }
           },
@@ -80,7 +88,7 @@ const ActorMarker = (props) => {
         <ActorPopup
           actor={actor}
           onMouseOut={() => {
-            if (!clicked) {
+            if (!clicked && !matches) {
               popupRef.current.remove();
             }
           }}
