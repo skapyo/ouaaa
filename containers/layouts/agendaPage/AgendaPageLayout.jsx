@@ -244,8 +244,7 @@ const getAllEventsFromRecurringEvent = (event) => {
   const { dateRule } = event;
 
   const rrule = RRule.fromString(`DTSTART:${startDate.format('YYYYMMDD[T]hhmmss[Z]')}\nRRULE:${dateRule}`);
-
-  return rrule.all().slice(0, 100).map((date) => {
+  return rrule.between(new Date() ,moment().add(1, 'year').toDate()).map((date) => {
     return {
       ...event,
       startedAt: moment(date).valueOf().toString(),
@@ -327,7 +326,6 @@ const AgendaPageLayout = () => {
       };
     });
   }, [eventData]);
-
 
   return (
     <Container className={classes.main}>
