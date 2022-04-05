@@ -77,8 +77,6 @@ const EventMarker = (props) => {
       )}
       <Popup
         ref={popupRef}
-        autoClose
-        closeOnClick={false}
         position={[event.lat, event.lng]}
         className={styles.tooltip}
         eventHandlers={{

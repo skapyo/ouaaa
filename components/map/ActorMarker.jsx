@@ -74,8 +74,6 @@ const ActorMarker = (props) => {
       )}
       <Popup
         ref={popupRef}
-        autoClose
-        closeOnClick={false}
         position={[actor.lat, actor.lng]}
         eventHandlers={{
           mousedown: () => {
