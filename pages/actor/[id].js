@@ -20,7 +20,7 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { withApollo } from 'hoc/withApollo.jsx';
 import { useRouter } from 'next/router';
 import gql from 'graphql-tag';
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import TwitterIcon from '@material-ui/icons/Twitter';
 import WhatsAppIcon from '@material-ui/icons/WhatsApp';
@@ -336,6 +336,25 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const GET_ARTICLES = gql`
+query articles ($actorId: String){
+  articles(actorId: $actorId) {
+    id
+    label
+    shortDescription
+    createdAt
+    pictures {
+      id
+      label
+      originalPicturePath
+      originalPictureFilename
+      position
+      logo
+      main
+    }
+  }
+}`;
+
 const GET_ACTOR_SSR = `
 query actor($id: String) {
   actor(id: $id) {
@@ -438,21 +457,6 @@ query actor($id: String) {
       hours
       place
     }
-    articles {
-      id
-      label
-      shortDescription
-      createdAt
-      pictures {
-        id
-        label
-        originalPicturePath
-        originalPictureFilename
-        position
-        logo
-        main
-      }
-    }
   }
 }
 `;
@@ -512,10 +516,20 @@ const Actor = ({ initialData }) => {
     ssr: false,
   });
 
-
+  const {
+    data: dataArticles,
+  } = useQuery(GET_ARTICLES, {
+    variables: {
+      actorId: `${id}`,
+    },
+  });
 
   const data = initialData.data;
 
+  const bannerUr = useMemo(() => {
+    debugger;
+  }, [dataArticles]);
+  
   const bannerUrl = useMemo(() => {
     return (data?.actor?.pictures || []).filter((picture) => picture.main)
       .length >= 1
@@ -523,7 +537,6 @@ const Actor = ({ initialData }) => {
         .originalPicturePath
       : null;
   }, [data]);
-
   const ADD_ACTOR_VOLUNTEER = gql`
     mutation addActorVolunteer($actorId: Int!, $userId: Int!) {
       addActorVolunteer(actorId: $actorId, userId: $userId)
@@ -667,7 +680,7 @@ const Actor = ({ initialData }) => {
   };
 
   const actorPictures = data?.actor?.pictures || [];
-  const articles = data?.actor?.articles || [];
+  const articles = dataArticles?.articles || [];
 
   const settingsSliderImage = useMemo(() => {
     return {
@@ -1476,8 +1489,8 @@ const Actor = ({ initialData }) => {
               {...settingsSliderImageArticle}
               className={[styles.articleCarroussel]}
             >
-              {data &&
-                data.actor.articles.sort((a, b) => (a.createdAt > b.createdAt ? -1 : 1)).map((article) => {
+              {dataArticles &&
+                dataArticles?.articles.sort((a, b) => (a.createdAt > b.createdAt ? -1 : 1)).map((article) => {
                   return <CardSliderArticle key={article.id} article={article} />;
                 })}
             </Slider>
