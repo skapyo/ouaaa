@@ -1,6 +1,8 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core';
-import { MapContainer, TileLayer, Marker, Popup, Tooltip, ZoomControl } from 'react-leaflet';
+import {
+  MapContainer, TileLayer, Marker, Popup, Tooltip, ZoomControl,
+} from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet.markercluster';
 import 'leaflet/dist/leaflet.css';
@@ -28,8 +30,13 @@ const Map = (props) => {
 
   useEffect(() => {
     if (map) {
-      setInterval(function () {
-        map.invalidateSize();
+      setInterval(() => {
+        try {
+          if (map) {
+            map.invalidateSize();
+          }
+        } catch (error) {
+        }
       }, 100);
     }
   }, [map]);
@@ -40,7 +47,7 @@ const Map = (props) => {
         attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-     
+
       {children}
     </MapContainer>
   );

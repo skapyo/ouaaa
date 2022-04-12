@@ -406,12 +406,12 @@ const EventAdminPage = () => {
                       <Link href={`/event/${event.id}`}>{event.label}</Link>
                     </TableCell>
                     <TableCell style={{ width: 160 }} align="left">
-                      <Moment format="DD/MM HH:mm" unix>
+                      <Moment format="DD/MM/YY HH:mm" unix>
                         {event.startedAt / 1000}
                       </Moment>
                     </TableCell>
                     <TableCell style={{ width: 160 }} align="left">
-                      <Moment format="DD/MM HH:mm" unix>
+                      <Moment format="DD/MM/YY HH:mm" unix>
                         {event.endedAt / 1000}
                       </Moment>
                     </TableCell>

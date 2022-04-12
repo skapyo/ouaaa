@@ -318,6 +318,7 @@ const useStyles = makeStyles((theme) => ({
     bottom: '120px',
   },
   map: {
+    height: '400px !important',
     width: '10% !important',
   },
   calendar: {
@@ -354,7 +355,44 @@ query articles ($actorId: String){
     }
   }
 }`;
-
+const GET_EVENTS = gql`
+query events ($actorId: String){
+  events(actorId: $actorId) {
+    id
+    label
+    shortDescription
+    description
+    startedAt
+    endedAt
+    published
+    pictures {
+      id
+      label
+      originalPicturePath
+      originalPictureFilename
+      position
+    }
+    address
+    city
+    entries {
+      label
+      icon
+      collection {
+        code
+        label
+      }
+      parentEntry {
+        code
+        label
+        color
+        collection {
+          code
+          label
+        }
+      }
+    }
+  }
+}`;
 const GET_ACTOR_SSR = `
 query actor($id: String) {
   actor(id: $id) {
@@ -390,41 +428,6 @@ query actor($id: String) {
         collection {
           code
           label
-        }
-      }
-    }
-    events {
-      id
-      label
-      shortDescription
-      description
-      startedAt
-      endedAt
-      published
-      pictures {
-        id
-        label
-        originalPicturePath
-        originalPictureFilename
-        position
-      }
-      address
-      city
-      entries {
-        label
-        icon
-        collection {
-          code
-          label
-        }
-        parentEntry {
-          code
-          label
-          color
-          collection {
-            code
-            label
-          }
         }
       }
     }
@@ -523,13 +526,18 @@ const Actor = ({ initialData }) => {
       actorId: `${id}`,
     },
   });
+  const {
+    data: dataEvents,
+  } = useQuery(GET_EVENTS, {
+    variables: {
+      actorId: `${id}`,
+    },
+  });
+
 
   const data = initialData.data;
 
-  const bannerUr = useMemo(() => {
-    debugger;
-  }, [dataArticles]);
-  
+
   const bannerUrl = useMemo(() => {
     return (data?.actor?.pictures || []).filter((picture) => picture.main)
       .length >= 1
@@ -734,7 +742,7 @@ const Actor = ({ initialData }) => {
   }
 
   const events = useMemo(() => {
-    return (data?.actor?.events || []).map((evt) => {
+    return (dataEvents?.events || []).map((evt) => {
       const startDate = moment(parseInt(evt.startedAt));
       const endDate = moment(parseInt(evt.endedAt));
 
@@ -763,7 +771,7 @@ const Actor = ({ initialData }) => {
         ...recurrentOptions,
       };
     });
-  }, [data]);
+  }, [dataEvents]);
 
   let url;
   if (typeof window !== 'undefined') {

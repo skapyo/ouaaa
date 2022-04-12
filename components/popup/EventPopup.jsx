@@ -2,10 +2,11 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import gql from 'graphql-tag';
 import {
-  Grid, Typography,useTheme
+  Grid, Typography, useTheme,
 } from '@material-ui/core';
 import Moment from 'react-moment';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { Link } from '@mui/material';
 import Favorite from '../Favorite';
 import { getImageUrl } from '../../utils/utils';
 
@@ -93,8 +94,6 @@ const EventPopup = ({ event, onMouseOut }) => {
   const startDateFormat = !matches ? '[ de ]HH[h]mm' : 'HH[h]mm';
   const endDateFormat = !matches ? '[ à ]HH[h]mm' : '[-]HH[h]mm';
 
-
-
   return (
     <div onMouseLeave={onMouseOut} className={styles.popup}>
       <div
@@ -135,15 +134,15 @@ const EventPopup = ({ event, onMouseOut }) => {
               >
                 {event?.label}
               </Typography>
-              </div>
-              <br/>
-              <br/>
-              <Typography
-                variant="h6"
-                component="h2"
-                className={styles.title}
-              >
-                {!event.duration && (
+            </div>
+            <br />
+            <br />
+            <Typography
+              variant="h6"
+              component="h2"
+              className={styles.title}
+            >
+              {!event.duration && (
                 <>
                   Le
                   {' '}
@@ -161,8 +160,8 @@ const EventPopup = ({ event, onMouseOut }) => {
                     {event.endedAt / 1000}
                   </Moment>
                 </>
-                )}
-                {event.duration && (
+              )}
+              {event.duration && (
                 <>
                   <span>Du </span>
                   <Moment
@@ -181,9 +180,9 @@ const EventPopup = ({ event, onMouseOut }) => {
                     {event.endedAt / 1000}
                   </Moment>
                 </>
-                )}
-              </Typography>
-              {event.parentEvent && (
+              )}
+            </Typography>
+            {event.parentEvent && (
               <>
                 <span>
                   fait partie de
@@ -191,9 +190,9 @@ const EventPopup = ({ event, onMouseOut }) => {
                 </span>
                 <br />
               </>
-              )}
-              <span>{addressCity(event)}</span>
-            
+            )}
+            <span>{addressCity(event)}</span>
+
             <p />
           </Grid>
 
