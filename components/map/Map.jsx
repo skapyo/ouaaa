@@ -27,7 +27,6 @@ const Map = (props) => {
   const styles = useStyles();
   const [map, setMap] = useState(null);
   const { children } = props;
-
   useEffect(() => {
     if (map) {
       setInterval(() => {

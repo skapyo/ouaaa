@@ -319,7 +319,7 @@ const useStyles = makeStyles((theme) => ({
   },
   map: {
     height: '400px !important',
-    width: '10% !important',
+    width: '100% !important',
   },
   calendar: {
     [theme.breakpoints.down('sm')]: {
@@ -1365,18 +1365,17 @@ const Actor = ({ initialData }) => {
                 <br />
 
                 {data && data.actor && data.actor.lat && data.actor.lng && (
-                  <MapWithNoSSR
-                    actor={data.actor}
-                    ref={mapRef}
-                    id="map"
-                    center={[data.actor.lat, data.actor.lng]}
-                    zoom={11}
-                    className={styles.map}
-                  >
-                    <MarkerWithNoSSR
-                      event={data.actor}
-                    />
-                  </MapWithNoSSR>
+                  <div className={styles.map}>
+                    <MapWithNoSSR
+                      actor={data.actor}
+                      ref={mapRef}
+                      id="map"
+                    >
+                      <MarkerWithNoSSR
+                        event={data.actor}
+                      />
+                    </MapWithNoSSR>
+                  </div>
                 )}
               </Grid>
             </Grid>

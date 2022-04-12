@@ -119,11 +119,8 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '3rem',
   },
   map: {
-    height: '30em',
-    width: '30em',
-    [theme.breakpoints.down('sm')]: {
-      width: '100% !important',
-    },
+    height: '400px !important',
+    width: '100% !important',
   },
   actorName: {
     width: '100%',
@@ -142,6 +139,7 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     padding: '1em',
   },
+ 
   infoPratiqueItem: {},
   alignLeft: {
     textAlign: 'left',
@@ -1246,18 +1244,16 @@ const Event = ({ initialData }) => {
                 <br />
 
                 {data && (
+                <div className={styles.map}>
                   <MapWithNoSSR
                     ref={mapRef}
-                    small
-                    center={[data.event.lat, data.event.lng]}
-                    zoom={11}
-                    className={styles.map}
                   >
                     <MarkerWithNoSSR
                       id="map"
                       event={data.event}
                     />
                   </MapWithNoSSR>
+                </div>
                 )}
               </Grid>
             </Grid>
