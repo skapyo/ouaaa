@@ -17,7 +17,67 @@ export const entriesHasElementWithCode = (entries, code) => {
 
   return hasEntry;
 };
+export const rruleToText = (rrule) => {
+  const yourStrings = {
+    every: 'Chaques',
+    until: "jusqu'au",
+    day: 'jour',
+    days: 'jour',
+    week: 'semaine',
+    weeks: 'semaines',
+    on: 'le',
+    in: 'in',
+    'on the': 'le',
+    for: 'pour',
+    and: 'et',
+    or: 'ou',
+    at: 'à',
+    last: 'dernier',
+    '(~ approximate)': '(~ approximativement)',
+    times: 'fois',
+    time: 'fois',
+    minutes: 'minutes',
+    hours: 'heures',
+    weekdays: 'jours de la semaine',
+    weekday: 'jour de la semaine',
+    months: 'mois',
+    month: 'mois',
+    years: 'années',
+    year: 'année',
+  };
+  const language = {
+    dayNames: [
+      'dimanche',
+      'lundi',
+      'mardi',
+      'mercredi',
+      'jeudi',
+      'vendredi',
+      'samedi',
+    ],
+    monthNames: [
+      'janvier ',
+      'février',
+      'mars',
+      'avril',
+      'mai',
+      'juin',
+      'juillet',
+      'aoùt',
+      'septembre',
+      'octobre',
+      'novembre',
+      'décembre',
+    ],
+  };
+  const getText = (id) => {
+    return yourStrings[id];
+  };
 
+  const dateFormat = (year, month, day) => `${day} ${month} ${year}`;
+
+  return rrule.toText(getText, language, dateFormat);
+};
 export const urlWithHttpsdefault = (url) => {
   if (url && !url.includes('http')) {
     return `https://${url}`;

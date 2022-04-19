@@ -38,6 +38,7 @@
     "@mui/material": "^5.1.1",
     "@mui/styles": "^5.1.1",
     "@mui/system": "^5.2.4",
+    "@react-leaflet/core": "^1.0.2",
     "@types/react": "^17.0.36",
     "@typescript-eslint/eslint-plugin": "^3.1.0",
     "@typescript-eslint/parser": "^3.1.0",
@@ -59,7 +60,8 @@
     "html-react-parser": "^0.14.1",
     "immutability-helper": "^3.1.1",
     "isomorphic-unfetch": "^3.0.0",
-    "leaflet": "^1.6.0",
+    "leaflet": "^1.7.1",
+    "leaflet.markercluster": "^1.5.3",
     "lodash": "^4.17.21",
     "material-ui-image": "^3.3.0",
     "material-ui-search-bar": "^1.0.0",
@@ -79,7 +81,7 @@
     "react-elastic-carousel": "^0.7.4",
     "react-ga": "^2.7.0",
     "react-google-places-autocomplete": "^2.1.0",
-    "react-leaflet": "^2.7.0",
+    "react-leaflet": "^3.1.0",
     "react-leaflet-markercluster": "^2.0.0",
     "react-moment": "^0.9.7",
     "react-qr-code": "^2.0.3",
@@ -89,6 +91,7 @@
     "react-timestamp": "^5.1.0",
     "react-to-print": "^2.14.4",
     "react-use": "^15.3.4",
+    "rrule": "^2.6.9",
     "slick-carousel": "^1.8.1",
     "styled-components": "^5.1.1",
     "uuid": "^8.3.2",
@@ -112,5 +115,13 @@
     "prettier": "2.2.1",
     "typescript": "^4.3.2",
     "why-did-you-update": "^1.0.8"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not op_mini all"
+  ],
+  "resolutions": {
+    "@react-leaflet/core": "1.0.2"
   }
 }

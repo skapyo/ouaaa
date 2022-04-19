@@ -20,7 +20,7 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { withApollo } from 'hoc/withApollo.jsx';
 import { useRouter } from 'next/router';
 import gql from 'graphql-tag';
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import TwitterIcon from '@material-ui/icons/Twitter';
 import WhatsAppIcon from '@material-ui/icons/WhatsApp';
@@ -49,6 +49,7 @@ import Link from 'components/Link';
 import moment from 'moment';
 import { useSessionState } from '../../context/session/session';
 import CardSliderArticle from 'components/cards/CardSliderArticle';
+import dynamic from 'next/dynamic';
 import {
   getImageUrl,
   entriesHasElementWithCode,
@@ -317,6 +318,7 @@ const useStyles = makeStyles((theme) => ({
     bottom: '120px',
   },
   map: {
+    height: '400px !important',
     width: '100% !important',
   },
   calendar: {
@@ -335,6 +337,62 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const GET_ARTICLES = gql`
+query articles ($actorId: String){
+  articles(actorId: $actorId) {
+    id
+    label
+    shortDescription
+    createdAt
+    pictures {
+      id
+      label
+      originalPicturePath
+      originalPictureFilename
+      position
+      logo
+      main
+    }
+  }
+}`;
+const GET_EVENTS = gql`
+query events ($actorId: String){
+  events(actorId: $actorId) {
+    id
+    label
+    shortDescription
+    description
+    startedAt
+    endedAt
+    published
+    pictures {
+      id
+      label
+      originalPicturePath
+      originalPictureFilename
+      position
+    }
+    address
+    city
+    entries {
+      label
+      icon
+      collection {
+        code
+        label
+      }
+      parentEntry {
+        code
+        label
+        color
+        collection {
+          code
+          label
+        }
+      }
+    }
+  }
+}`;
 const GET_ACTOR_SSR = `
 query actor($id: String) {
   actor(id: $id) {
@@ -373,41 +431,6 @@ query actor($id: String) {
         }
       }
     }
-    events {
-      id
-      label
-      shortDescription
-      description
-      startedAt
-      endedAt
-      published
-      pictures {
-        id
-        label
-        originalPicturePath
-        originalPictureFilename
-        position
-      }
-      address
-      city
-      entries {
-        label
-        icon
-        collection {
-          code
-          label
-        }
-        parentEntry {
-          code
-          label
-          color
-          collection {
-            code
-            label
-          }
-        }
-      }
-    }
     volunteers {
       id
       surname
@@ -436,21 +459,6 @@ query actor($id: String) {
       }
       hours
       place
-    }
-    articles {
-      id
-      label
-      shortDescription
-      createdAt
-      pictures {
-        id
-        label
-        originalPicturePath
-        originalPictureFilename
-        position
-        logo
-        main
-      }
     }
   }
 }
@@ -503,16 +511,32 @@ const Actor = ({ initialData }) => {
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const MapWithNoSSR = dynamic(() => import('../../components/map/Map'), {
+    ssr: false,
+  });
 
-  if (typeof window !== 'undefined') {
-    var L = require('leaflet');
-    var Map = require('react-leaflet').Map;
-    var TileLayer = require('react-leaflet').TileLayer;
-    var Marker = require('react-leaflet').Marker;
-    var Popup = require('react-leaflet').Popup;
-  }
+  const MarkerWithNoSSR = dynamic(() => import('../../components/map/MarkerEventLocation'), {
+    ssr: false,
+  });
+
+  const {
+    data: dataArticles,
+  } = useQuery(GET_ARTICLES, {
+    variables: {
+      actorId: `${id}`,
+    },
+  });
+  const {
+    data: dataEvents,
+  } = useQuery(GET_EVENTS, {
+    variables: {
+      actorId: `${id}`,
+    },
+  });
+
 
   const data = initialData.data;
+
 
   const bannerUrl = useMemo(() => {
     return (data?.actor?.pictures || []).filter((picture) => picture.main)
@@ -521,7 +545,6 @@ const Actor = ({ initialData }) => {
         .originalPicturePath
       : null;
   }, [data]);
-
   const ADD_ACTOR_VOLUNTEER = gql`
     mutation addActorVolunteer($actorId: Int!, $userId: Int!) {
       addActorVolunteer(actorId: $actorId, userId: $userId)
@@ -665,7 +688,7 @@ const Actor = ({ initialData }) => {
   };
 
   const actorPictures = data?.actor?.pictures || [];
-  const articles = data?.actor?.articles || [];
+  const articles = dataArticles?.articles || [];
 
   const settingsSliderImage = useMemo(() => {
     return {
@@ -719,7 +742,7 @@ const Actor = ({ initialData }) => {
   }
 
   const events = useMemo(() => {
-    return (data?.actor?.events || []).map((evt) => {
+    return (dataEvents?.events || []).map((evt) => {
       const startDate = moment(parseInt(evt.startedAt));
       const endDate = moment(parseInt(evt.endedAt));
 
@@ -748,7 +771,7 @@ const Actor = ({ initialData }) => {
         ...recurrentOptions,
       };
     });
-  }, [data]);
+  }, [dataEvents]);
 
   let url;
   if (typeof window !== 'undefined') {
@@ -1341,48 +1364,18 @@ const Actor = ({ initialData }) => {
                 <div className={styles.border} />
                 <br />
 
-                {data && L && data.actor && data.actor.lat && data.actor.lng && (
-                  <Map
-                    ref={mapRef}
-                    id="map"
-                    center={[data.actor.lat, data.actor.lng]}
-                    zoom={11}
-                    className={styles.map}
-                  >
-                    <TileLayer
-                      attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    />
-                    <Marker
-                      position={[data.actor.lat, data.actor.lng]}
-                      icon={
-                        new L.Icon({
-                          iconUrl: '/icons/location.svg',
-                          iconAnchor: [13, 34], // point of the icon which will correspond to marker's location
-                          iconSize: [25],
-                          popupAnchor: [1, -25],
-                          html: `<span style="background-color: red" />`,
-                        })
-                      }
+                {data && data.actor && data.actor.lat && data.actor.lng && (
+                  <div className={styles.map}>
+                    <MapWithNoSSR
+                      actor={data.actor}
+                      ref={mapRef}
+                      id="map"
                     >
-                      <Popup>
-                        {data.actor.name} -{' '}
-                        {data && !data.actor.address && data.actor.city && (
-                          <span>
-                            {/* @ts-ignore */}
-                            {data && data.actor.city}
-                          </span>
-                        )}
-                        {data && data.actor.address && data.actor.city && (
-                          <span>
-                            {/* @ts-ignore */}
-                            {`${data && data.actor.address} ${data && data.actor.city
-                              }`}
-                          </span>
-                        )}
-                      </Popup>
-                    </Marker>
-                  </Map>
+                      <MarkerWithNoSSR
+                        event={data.actor}
+                      />
+                    </MapWithNoSSR>
+                  </div>
                 )}
               </Grid>
             </Grid>
@@ -1503,8 +1496,8 @@ const Actor = ({ initialData }) => {
               {...settingsSliderImageArticle}
               className={[styles.articleCarroussel]}
             >
-              {data &&
-                data.actor.articles.sort((a, b) => (a.createdAt > b.createdAt ? -1 : 1)).map((article) => {
+              {dataArticles &&
+                dataArticles?.articles.sort((a, b) => (a.createdAt > b.createdAt ? -1 : 1)).map((article) => {
                   return <CardSliderArticle key={article.id} article={article} />;
                 })}
             </Slider>

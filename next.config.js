@@ -15,12 +15,15 @@ module.exports = withPWA({
     ignoreBuildErrors: true,
   },
   images: {
-    domains: ['localhost', 'static.recette.ouaaa-transition.fr','static.recette.ouaaa-transition.fr', 'static.ouaaa-transition.fr', 'ouaaa-transition.fr'],
+    domains: ['localhost', 'static.recette.ouaaa-transition.fr', 'static.recette.ouaaa-transition.fr', 'static.ouaaa-transition.fr', 'ouaaa-transition.fr'],
   },
   pwa: {
     dest: 'public',
     runtimeCaching,
     register: true,
     disable: process.env.NODE_ENV === "development",
+  },
+  future: {
+    webpack5: true
   },
 });

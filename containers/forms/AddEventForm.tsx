@@ -34,19 +34,12 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import DateFnsUtils from '@date-io/date-fns';
 import Tooltip from '@material-ui/core/Tooltip';
 import InfoIcon from '@material-ui/icons/Info';
 import TreeView from '@material-ui/lab/TreeView';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import 
-  DatePicker 
- from '@mui/lab/DatePicker';
- import DateTimePicker from '@mui/lab/DateTimePicker';
-import {
-  KeyboardTimePicker,
-} from '@material-ui/pickers';
+import DateTimePicker from '@mui/lab/DateTimePicker';
 import moment from 'moment';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
@@ -64,6 +57,7 @@ import FormControl from '@material-ui/core/FormControl';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import ImagesDropZone from 'components/ImageCropper/ImagesDropZone';
 import ImagesDisplay from 'components/ImageCropper/ImagesDisplay';
+import RecurringEventInput from 'components/form/recurringEventInput/RecurringEventInput';
 import Entries from './Entries';
 import { useSessionState } from '../../context/session/session';
 import StyledTreeItem from '../../components/filters/StyledTreeItem';
@@ -201,11 +195,10 @@ const ADDEVENT = gql`
       lat
       lng
       registerLink
+      dateRule
     }
   }
 `;
-
-
 
 const GET_ACTORS = gql`
 query actors {
@@ -219,6 +212,7 @@ query actors {
   }
 }
 `;
+
 const GET_EVENTS = gql`
 query events ($notFinished: Boolean ) {
   events (notFinished: $notFinished){
@@ -229,6 +223,7 @@ query events ($notFinished: Boolean ) {
   }
 }
 `;
+
 const GET_COLLECTIONS = gql`
   {
     collections {
@@ -255,6 +250,7 @@ const GET_COLLECTIONS = gql`
     }
   }
 `;
+
 const GET_ACTOR = gql`
   query actor($id: String!) {
     actor(id: $id) {
@@ -360,36 +356,37 @@ const TitleWithTooltip = (props: TitleWithTooltipProps) => {
   );
 };
 
-const AddEventForm = ({ actorId }) => {
-  const validationRules: ValidationRules = {
-    label: {
-      rule: ValidationRuleType.required,
-    },
-    shortDescription: {
-      rule: ValidationRuleType.required && ValidationRuleType.maxLength,
-      maxLimit: 90,
-    },
-  };
-  function IsTree(collection) {
-    let isTree = false;
-    if (collection.entries) {
-      collection.entries.map((entry) => {
-        if (entry.subEntries) {
-          entry.subEntries.map((subentry) => {
-            isTree = true;
-            return isTree;
-          });
-        }
-      });
-    }
-    return isTree;
+const isTree = (collection) => {
+  let isTree = false;
+  if (collection.entries) {
+    collection.entries.map((entry) => {
+      if (entry.subEntries) {
+        entry.subEntries.map((subentry) => {
+          isTree = true;
+          return isTree;
+        });
+      }
+    });
   }
+  return isTree;
+};
+
+const validationRules: ValidationRules = {
+  label: {
+    rule: ValidationRuleType.required,
+  },
+  shortDescription: {
+    rule: ValidationRuleType.required && ValidationRuleType.maxLength,
+    maxLimit: 90,
+  },
+};
+
+const AddEventForm = ({ actorId }) => {
   const Form: RenderCallback = ({
     formChangeHandler,
     validationResult,
     formValues,
   }) => {
-    // const { formChangeHandler, formValues, validationResult } = props;
     const [addEvent, { data, error }] = useMutation(ADDEVENT);
 
     const [showOtherEventList, setShowOtherEventList] = useState(false);
@@ -432,6 +429,7 @@ const AddEventForm = ({ actorId }) => {
     const [showAddActor, setShowAddActor] = useState(false);
     const [actors] = useState([]);
     const [actorsId] = useState([]);
+    const [dateRule, setDateRule] = useState();
     const {
       loading: actorLoading,
       error: actorError,
@@ -517,9 +515,6 @@ const AddEventForm = ({ actorId }) => {
       }
       // @ts-ignore
     }, [formValues, actorData]);
-
-
-
 
     const [
       setImagesMainList,
@@ -761,7 +756,8 @@ const AddEventForm = ({ actorId }) => {
             registerLink: formValues.registerLink,
             parentEventId: formValues.parentEventId,
             // @ts-ignore
-            actors: formValues.actors.map(item => item.id)
+            actors: formValues.actors.map(item => item.id),
+            dateRule,
           },
           actorId: parseInt(actorId),
           userId: parseInt(user.id),
@@ -789,7 +785,6 @@ const AddEventForm = ({ actorId }) => {
       setShowOtherActors(false);
     };
 
-
     const handleChangeActor = useCallback((event, value) => {
       if (value) {
         // @ts-ignore
@@ -801,6 +796,10 @@ const AddEventForm = ({ actorId }) => {
       setShowAddActor(false);
       setOpenAddActorlist(false);
     }, [formValues]);
+
+    const handleChangeDateRule = useCallback((rule) => {
+      setDateRule(rule);
+    }, []);
 
     return (
       <Container component="main" maxWidth="sm" className={styles.container}>
@@ -820,7 +819,7 @@ const AddEventForm = ({ actorId }) => {
         />
         <Grid className={styles.location}>
           <Typography className={styles.collectionLabel}>Adresse complète de l’événement *</Typography>
-          <br/>
+          <br />
           <GooglePlacesAutocomplete
             apiKey="AIzaSyDvUKXlWS1470oj8C-vD6s62Bs9Y8XQf00"
             placeholder="Taper et sélectionner l'adresse*"
@@ -883,7 +882,7 @@ const AddEventForm = ({ actorId }) => {
           required={false}
           errorBool={false}
           errorText=""
-              />
+        />
         <br />
         <TitleWithTooltip
           title="Infos pratiques"
@@ -944,7 +943,7 @@ const AddEventForm = ({ actorId }) => {
                 <br />
                 {
                   // display &&
-                  IsTree(collection) && collection.multipleSelection && (
+                  isTree(collection) && collection.multipleSelection && (
                     <Entries initValues={[]}>
                       <TreeView
                         className={styles.rootTree}
@@ -996,7 +995,7 @@ const AddEventForm = ({ actorId }) => {
                 }
                 {
                   // display &&
-                  IsTree(collection) && !collection.multipleSelection && (
+                  isTree(collection) && !collection.multipleSelection && (
                     <Entries initValues={[]}>
                       <RadioGroupForContext initValue={' '}>
                         <TreeView
@@ -1043,7 +1042,7 @@ const AddEventForm = ({ actorId }) => {
                   )
                 }
                 {// display &&
-                  !IsTree(collection) && collection.multipleSelection && (
+                  !isTree(collection) && collection.multipleSelection && (
                     <List>
                       {collection.entries
                         && collection.entries.map((entry) => {
@@ -1068,7 +1067,7 @@ const AddEventForm = ({ actorId }) => {
                 }
                 {
                   // display &&
-                  !IsTree(collection) && !collection.multipleSelection && (
+                  !isTree(collection) && !collection.multipleSelection && (
                     <RadioGroupForContext initValue={' '}>
                       <CustomRadioGroup
                         formChangeHandler={formChangeHandler}
@@ -1085,12 +1084,12 @@ const AddEventForm = ({ actorId }) => {
           })
         }
 
-        <br/>
+        <br />
         <TitleWithTooltip
           title="Calendrier "
           tooltipTitle="Vous pourrez ajouter des infos plus détaillés dans le corps du texte de la déscription ou dans le bloc infos pratiques"
         />
-         <br/>
+        <br />
         <Grid className={styles.datetime}>
           <LocalizationProvider locale={frLocale} dateAdapter={AdapterDateFns}>
             <Grid container justify="space-around">
@@ -1100,15 +1099,17 @@ const AddEventForm = ({ actorId }) => {
                 ampm={false}
                 inputFormat="dd MMM yyyy HH:mm"
                 minDate={new Date()}
-                renderInput={params => <TextField  {...params} label="Date de début" helperText={
-                  selectedStartDate
-                    && moment(selectedStartDate) <= moment(Date.now())
-                    ? 'La date de début ne peut être dans le passé.'
-                    : ''
-                     }/>
+                renderInput={params => (
+                  <TextField
+                    {...params}
+                    label="Date de début"
+                    helperText={selectedStartDate && moment(selectedStartDate) <= moment(Date.now())
+                      ? 'La date de début ne peut être dans le passé.' : ''
                     }
-                    />
-          
+                  />
+                )}
+              />
+
               <DateTimePicker
                 value={selectedEndDate}
                 onChange={handleEndDateChange}
@@ -1122,17 +1123,19 @@ const AddEventForm = ({ actorId }) => {
                   && !!selectedEndDate
                   && selectedStartDate
                 }
-                renderInput={params => <TextField {...params}  label="Date de fin" helperText={
-                  selectedStartDate
-                    && selectedEndDate
-                    && selectedStartDate >= selectedEndDate
-                    ? 'La date de fin ne peut être dans le début.'
-                    : ''
-                     }/>
+                renderInput={params => (
+                  <TextField
+                    {...params}
+                    label="Date de fin"
+                    helperText={selectedStartDate && selectedEndDate && selectedStartDate >= selectedEndDate
+                      ? 'La date de fin ne peut être dans le début.' : ''
                     }
+                  />
+                )}
               />
             </Grid>
-        </LocalizationProvider>
+          </LocalizationProvider>
+          <RecurringEventInput onChange={handleChangeDateRule} value={dateRule} startDate={selectedStartDate} />
         </Grid>
         <br />
         {
@@ -1145,8 +1148,8 @@ const AddEventForm = ({ actorId }) => {
             //    const [display, setDisplay] = useState(false);
             let { label } = collection;
             let helperText = '';
-              helperText = 'Vous pourrez ajouter plus de détail dans le bloc infos pratiques ci dessous';
-      
+            helperText = 'Vous pourrez ajouter plus de détail dans le bloc infos pratiques ci dessous';
+
             if (collection.code !== 'event_price') return '';
 
             return (
@@ -1164,7 +1167,7 @@ const AddEventForm = ({ actorId }) => {
                 <br />
                 {
                   // display &&
-                  !IsTree(collection) && collection.multipleSelection && (
+                  !isTree(collection) && collection.multipleSelection && (
                     <List>
                       {collection.entries
                         && collection.entries.map((entry) => {
@@ -1188,7 +1191,7 @@ const AddEventForm = ({ actorId }) => {
                 }
                 {
                   // display &&
-                  !IsTree(collection) && !collection.multipleSelection && (
+                  !isTree(collection) && !collection.multipleSelection && (
                     <RadioGroupForContext initValue={' '}>
                       <CustomRadioGroup
                         formChangeHandler={formChangeHandler}
@@ -1376,7 +1379,7 @@ const AddEventForm = ({ actorId }) => {
           onDropHandler={onDropHandler}
           text="Déposez ici votre autres photos au format jpg"
         />
-         <FormControlLabel
+        <FormControlLabel
           control={(
             <Checkbox
               edge="start"
@@ -1434,6 +1437,7 @@ const AddEventForm = ({ actorId }) => {
 };
 
 export default withDndProvider(withApollo()(AddEventForm));
+
 function value(value: any) {
   throw new Error('Function not implemented.');
 }

@@ -261,12 +261,12 @@ const ArticleAdminPage = () => {
                       <Link href={`/article/${article.id}`}>{article.label}</Link>
                     </TableCell>
                     <TableCell style={{ width: 160 }} align="left">
-                      <Moment format="DD/MM HH:mm" unix>
+                      <Moment format="DD/MM/YY HH:mm" unix>
                         {article.createdAt / 1000}
                       </Moment>
                     </TableCell>
                     <TableCell style={{ width: 160 }} align="left">
-                      <Moment format="DD/MM HH:mm" unix>
+                      <Moment format="DD/MM/YY HH:mm" unix>
                         {article.updatedAt / 1000}
                       </Moment>
                     </TableCell>
