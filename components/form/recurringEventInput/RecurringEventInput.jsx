@@ -142,7 +142,6 @@ const RecurringEventInput = (props) => {
   const { onChange, value, startDate } = props;
  
   const [isRecurring, setIsRecurring] = useState(value !== undefined && value != null);
-  debugger;
   const [freq, setFreq] = useState(extractfromString(value, 'FREQ', 'WEEKLY'));
   const [count, setCount] = useState(extractfromString(value, 'COUNT', 1));
   const [interval, setInterval] = useState(extractfromString(value, 'INTERVAL', 1));
@@ -206,7 +205,6 @@ const RecurringEventInput = (props) => {
       }
 
       if (freq === 'WEEKLY') {
-        daysOfWeek.pop('');
         // BYDAY
         values.push(`BYDAY=${daysOfWeek.join(',')}`);
       }
