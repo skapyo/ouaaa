@@ -64,7 +64,9 @@ const EventPopup = ({ event, onMouseOut }) => {
       width: '20px',
     },
     buttonGrid: {
-      margin: '2.5em 0 2.5em 0 ',
+      [theme.breakpoints.up('sm')]: {
+        margin: '2.5em 0 2.5em 0 ',
+      },
       color: 'white',
       'background-color': '#2C367E',
       border: 'none',

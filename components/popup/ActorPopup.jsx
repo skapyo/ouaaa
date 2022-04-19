@@ -31,11 +31,10 @@ const ActorPopup = ({ actor, onMouseOut }) => {
 
     },
 
-
-
     content: {
       padding: '10px',
       width: '100%',
+     
     },
     titleDiv: {
       display: 'flex',
@@ -51,7 +50,9 @@ const ActorPopup = ({ actor, onMouseOut }) => {
       width: '20px',
     },
     buttonGrid: {
-      margin: '2.5em 0 2.5em 0 ',
+      [theme.breakpoints.up('sm')]: {
+        margin: '2.5em 0 2.5em 0 ',
+      },
       color: 'white',
       'background-color': '#2C367E',
       border: 'none',
@@ -76,7 +77,7 @@ const ActorPopup = ({ actor, onMouseOut }) => {
   const styles = useStyles();
 
   return (
-    <div onMouseLeave={onMouseOut}>
+    <div onMouseLeave={onMouseOut} className={styles.popup}>
       <div
         className={styles.image}
         style={{

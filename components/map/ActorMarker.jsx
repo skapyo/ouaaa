@@ -74,7 +74,7 @@ const ActorMarker = (props) => {
       )}
       <Popup
         ref={popupRef}
-        position={[actor.lat, actor.lng]}
+
         eventHandlers={{
           mousedown: () => {
             if (!clicked && !matches) {

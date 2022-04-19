@@ -66,13 +66,14 @@ export async function getServerSideProps(ctxt) {
       query: GET_ARTICLES,
     }),
   });
-
+ 
   const initialData = await res.json();
   if (initialData.errors) {
     console.error(
       `Error fetching categories, error message : ${initialData.errors[0].message}`,
     );
   }
+  
   return {
     props: {
       initialData,
