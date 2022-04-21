@@ -77,7 +77,7 @@ const ActorPopup = ({ actor, onMouseOut }) => {
   const styles = useStyles();
 
   return (
-    <div onMouseLeave={onMouseOut} className={styles.popup}>
+    <div onMouseLeave={onMouseOut}>
       <div
         className={styles.image}
         style={{
