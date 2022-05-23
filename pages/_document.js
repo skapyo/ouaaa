@@ -10,16 +10,21 @@ export default class MyDocument extends Document {
         <Head>
           {/* PWA primary color */}
           <meta name='application-name' content='OUAAA!' />
+          <meta name='apple-mobile-web-app-title' content='OUAAA!' />
+
           <meta name='apple-mobile-web-app-capable' content='yes' />
           <meta name='apple-mobile-web-app-status-bar-style' content='default' />
-          <meta name='apple-mobile-web-app-title' content='OUAAA!' />
-         <meta name='format-detection' content='telephone=no' />
+      
+
+          <meta name='format-detection' content='telephone=no' />
           <meta name='mobile-web-app-capable' content='yes' />
-          <meta name='msapplication-config' content="none"/>
+          <meta name='msapplication-config' content="none" />
           <meta name='msapplication-TileColor' content='#2B5797' />
           <meta name='msapplication-tap-highlight' content='no' />
           <meta name='theme-color' content='#000000' />
-          
+          <meta property='og:site_name' content='OUAAA!' />
+          <meta property='og:type' content='website' />
+
           <link rel='apple-touch-icon' href='/apple-touch-icon.png' />
           <link rel='apple-touch-icon' sizes='152x152' href='/apple-touch-icon.png' />
           <link rel='apple-touch-icon' sizes='180x180' href='/apple-touch-icon.png' />
@@ -31,19 +36,8 @@ export default class MyDocument extends Document {
           <link rel='mask-icon' href='/apple-touch-icon.png' color='#5bbad5' />
           <link rel='shortcut icon' href='/favicon.ico' />
           <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto:300,400,500' />
-              
+
           <meta name='twitter:card' content='summary' />
-          <meta name='twitter:url' content='https://ouaaa-transition.fr/m' />
-          <meta name='twitter:title' content='OUAAA!' />
-          <meta name='twitter:description' content="Plateforme d’information & d'initiative des acteurs de la transition vers une société plus humaine & écologique sur le territoire de l'Aunis  !" />
-          <meta name='twitter:image' content='https://ouaaa-transition.fr/apple-touch-icon.png' />
-          <meta name='twitter:creator' content='@DavidWShadow' />
-          <meta property='og:type' content='website' />
-          <meta property='og:title' content='OUAAA!' />
-          <meta property='og:description' content="Plateforme d’information & d'initiative des acteurs de la transition vers une société plus humaine & écologique sur le territoire de l'Aunis  !" />
-          <meta property='og:site_name' content='OUAAA!' />
-          <meta property='og:url' content='https://ouaaa-transition.fr/' />
-          <meta property='og:image' content='https://ouaaa-transition.fr/apple-touch-icon.png' />
           <meta name='viewport' content='minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover' />
           {/* <meta name="theme-color" content={theme.palette.primary.main} /> */}
           <link
