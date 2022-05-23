@@ -120,7 +120,7 @@ const ActorPopup = ({ actor, onMouseOut, tooltip = false }) => {
   const styles = useStyles();
 
   return (
-    <Grid container direction="column" onMouseLeave={onMouseOut} className={styles.popup}>
+    <Grid container direction="column" onMouseLeave={onMouseOut}>
       <Header actor={actor} />
       <div className={styles.content}>
         <Grid container>

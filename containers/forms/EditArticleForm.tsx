@@ -692,7 +692,6 @@ const EditArticleForm = (props) => {
         currentActors.push(value);
         // @ts-ignore
         formValues.actors = currentActors;
-        debugger;
       }
       setShowAddActor(false);
       setOpenAddActorlist(false);

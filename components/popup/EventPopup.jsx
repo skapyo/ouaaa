@@ -41,11 +41,7 @@ const EventPopup = ({ event, onMouseOut }) => {
 
     },
 
-    popup: {
-      [theme.breakpoints.down('sm')]: {
-        width: '200px',
-      },
-    },
+
     content: {
       padding: '10px',
       width: '100%',
@@ -97,17 +93,8 @@ const EventPopup = ({ event, onMouseOut }) => {
   const endDateFormat = !matches ? '[ à ]HH[h]mm' : '[-]HH[h]mm';
 
   return (
-    <div onMouseLeave={onMouseOut} className={styles.popup}>
+    <div onMouseLeave={onMouseOut}>
       <div
-        className={styles.image}
-        style={{
-          backgroundImage:
-          event.pictures.length >= 1
-            ? `url(${getImageUrl(
-              event.pictures.sort((a, b) => (a.logo ? -1 : 1))[0].originalPicturePath,
-            )})`
-            : '',
-        }}
       >
         <Grid container>
           <Grid item xs={2}>
