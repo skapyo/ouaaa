@@ -116,6 +116,7 @@ const useStyles = makeStyles((theme) => ({
     left: 0,
   },
   description: {
+    wordBreak: 'break-all',
     [theme.breakpoints.up('sm')]: {
       paddingLeft: '2em',
     },
@@ -497,7 +498,7 @@ const Actor = ({ initialData }) => {
   const printRef = useRef(null);
   const printGameRef = useRef(null);
 
-  
+
   const [currentLocationWindows, setCurrentLocationWindows] = useState(
     globalThis?.location,
   );
@@ -791,7 +792,7 @@ const Actor = ({ initialData }) => {
     content: () => printGameRef.current,
   });
 
-  
+
   return (
     <AppLayout>
       <Head>
@@ -804,14 +805,14 @@ const Actor = ({ initialData }) => {
         </title>
         {logo && (
           <>
-           <meta
-            property="og:image"
-            content={getImageUrl(logo.originalPicturePath)}
-          />
-           <meta name='twitter:image' content={getImageUrl(logo.originalPicturePath)} />
+            <meta
+              property="og:image"
+              content={getImageUrl(logo.originalPicturePath)}
+            />
+            <meta name='twitter:image' content={getImageUrl(logo.originalPicturePath)} />
           </>
         )}
-    
+
         <meta property='og:title' content={data && data.actor.name} />
         <meta property='og:description' content={data && data.actor.shortDescription} />
         <meta name='twitter:title' content={data && data.actor.name} />
@@ -1190,24 +1191,24 @@ const Actor = ({ initialData }) => {
                     </Grid>
                   </Grid>
                   {
-            ((data && containUser(data.actor.referents)) || (user && user.role === 'admin')) && (
-                  <Grid container className={[styles.item]}>
-                    <Grid item xs={3} className={[styles.alignRight]}>
-                      <Tooltip title="Imrpimer votre fiche pour le jeu le grand défi">
-                        <IconButton onClick={handleGamePrint} className={[styles.printIcon]}>
-                          <PrintIcon />
-                        </IconButton>
-                      </Tooltip>
-                    </Grid>
-                    <Grid item xs={8} className={[styles.alignLeft]}>
-                      <div className={[styles.game]}>
-                        Imprimer votre fiche pour le jeu le grand défi
-                      </div>
-    
-                    </Grid>
-                  </Grid>
-            )
-          }
+                    ((data && containUser(data.actor.referents)) || (user && user.role === 'admin')) && (
+                      <Grid container className={[styles.item]}>
+                        <Grid item xs={3} className={[styles.alignRight]}>
+                          <Tooltip title="Imrpimer votre fiche pour le jeu le grand défi">
+                            <IconButton onClick={handleGamePrint} className={[styles.printIcon]}>
+                              <PrintIcon />
+                            </IconButton>
+                          </Tooltip>
+                        </Grid>
+                        <Grid item xs={8} className={[styles.alignLeft]}>
+                          <div className={[styles.game]}>
+                            Imprimer votre fiche pour le jeu le grand défi
+                          </div>
+
+                        </Grid>
+                      </Grid>
+                    )
+                  }
                 </Grid>
               </Grid>
               <br />
