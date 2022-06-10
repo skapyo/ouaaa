@@ -64,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '3em',
   },
   buttonBar: {
-    [theme.breakpoints.down('xs')]: {
+    [theme.breakpoints.down('md')]: {
       display: 'none',
     },
     margin: '10px',
@@ -75,7 +75,7 @@ const useStyles = makeStyles((theme) => ({
     background: 'transparent',
   },
   navLayout: {
-    [theme.breakpoints.down('xs')]: {
+    [theme.breakpoints.down('md')]: {
       display: 'none',
     },
   },
