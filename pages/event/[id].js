@@ -1095,7 +1095,7 @@ const Event = ({ initialData }) => {
                 <div className={styles.border} />
                 <br />
                 <br />
-                <p>{data && Parser(urlRectification(data.event.description))}</p>
+                <p>{data && Parser(data.event.description)}</p>
                 <div>
                   {data
                     && data.event.entries.map(

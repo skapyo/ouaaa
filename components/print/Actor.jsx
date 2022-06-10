@@ -430,7 +430,7 @@ const Actor = React.forwardRef((props, ref) => {
           <Grid item md={7} sm={10} className={classes.description}>
             <br />
             <p>
-              {actor && Parser(urlRectification(actor?.description))}
+              {actor && Parser(actor?.description)}
             </p>
             <div>
               {
