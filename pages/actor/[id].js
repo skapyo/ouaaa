@@ -1216,7 +1216,7 @@ const Actor = ({ initialData }) => {
                 <br />
                 <br />
                 <p>
-                  {data && Parser(urlRectification(data.actor.description))}
+                  {data && Parser(data.actor.description)}
                 </p>
                 <div>
                   {data &&
@@ -1404,7 +1404,7 @@ const Actor = ({ initialData }) => {
                   <br />
                   <div className={styles.volunteerDescription}>
                     {data &&
-                      Parser(urlRectification(data.actor.volunteerDescription))}
+                      Parser(data.actor.volunteerDescription)}
                   </div>
                   <div>
                     {data &&

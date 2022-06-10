@@ -19,7 +19,7 @@ export const entriesHasElementWithCode = (entries, code) => {
 };
 export const rruleToText = (rrule) => {
   const yourStrings = {
-    every: 'Chaques',
+    every: 'Chaque',
     until: "jusqu'au",
     day: 'jour',
     days: 'jour',
