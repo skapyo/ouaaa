@@ -47,9 +47,9 @@ import PrintIcon from '@material-ui/icons/Print';
 import Image from 'next/image';
 import Link from 'components/Link';
 import moment from 'moment';
-import { useSessionState } from '../../context/session/session';
 import CardSliderArticle from 'components/cards/CardSliderArticle';
 import dynamic from 'next/dynamic';
+import { useSessionState } from '../../context/session/session';
 import {
   getImageUrl,
   entriesHasElementWithCode,
@@ -153,10 +153,10 @@ const useStyles = makeStyles((theme) => ({
   },
   game: {
     paddingTop: '13px',
-    color: theme.typography.h5.color,
+    color: '#D96552',
   },
   printIcon: {
-    color: theme.typography.h5.color,
+    color: '#D96552',
   },
   border: {
     width: '3em',
@@ -417,6 +417,11 @@ query actor($id: String) {
     entries {
       label
       icon
+      actorEntries {
+        linkDescription,
+        topSEO,
+        id,
+       }
       collection {
         code
         label
@@ -497,7 +502,6 @@ const Actor = ({ initialData }) => {
   const printRef = useRef(null);
   const printGameRef = useRef(null);
 
-  
   const [currentLocationWindows, setCurrentLocationWindows] = useState(
     globalThis?.location,
   );
@@ -534,9 +538,7 @@ const Actor = ({ initialData }) => {
     },
   });
 
-
-  const data = initialData.data;
-
+  const { data } = initialData;
 
   const bannerUrl = useMemo(() => {
     return (data?.actor?.pictures || []).filter((picture) => picture.main)
@@ -714,10 +716,10 @@ const Actor = ({ initialData }) => {
     let nbEntry = 0;
     entries.forEach((entry) => {
       if (
-        entry.parentEntry &&
-        entry.parentEntry.collection &&
-        entry.parentEntry.collection.code === 'category' &&
-        nbEntry <= nbEntryToShow
+        entry.parentEntry
+        && entry.parentEntry.collection
+        && entry.parentEntry.collection.code === 'category'
+        && nbEntry <= nbEntryToShow
       ) {
         text += `${entry.parentEntry.label} : `;
         text += `${entry.label}  `;
@@ -731,9 +733,9 @@ const Actor = ({ initialData }) => {
     let text = '';
     entries.forEach((entry) => {
       if (
-        entry &&
-        entry.collection &&
-        entry.collection.code === 'larochelle_quarter'
+        entry
+        && entry.collection
+        && entry.collection.code === 'larochelle_quarter'
       ) {
         text += `, ${entry.label}`;
       }
@@ -791,23 +793,37 @@ const Actor = ({ initialData }) => {
     content: () => printGameRef.current,
   });
 
-  
   return (
     <AppLayout>
       <Head>
         <title>
           {/* @ts-ignore */}
-          {data && data.actor.name} {/* @ts-ignore */}
+          {data && data.actor.name}
+          {' '}
+          {/* @ts-ignore */}
           {data && data.actor.activity}
-          {/* @ts-ignore */} - {/* @ts-ignore */}
+          {/* @ts-ignore */}
+          {' '}
+          -
+          {' '}
+          {/* @ts-ignore */}
           {data && data.actor.city}
         </title>
         {logo && (
-          <meta
+          <>
+           <meta
             property="og:image"
             content={getImageUrl(logo.originalPicturePath)}
           />
+           <meta name='twitter:image' content={getImageUrl(logo.originalPicturePath)} />
+          </>
         )}
+    
+        <meta property='og:title' content={data && data.actor.name} />
+        <meta property='og:description' content={data && data.actor.shortDescription} />
+        <meta name='twitter:title' content={data && data.actor.name} />
+        <meta name='twitter:description' content={data && data.actor.shortDescription} />
+
       </Head>
       <RootRef>
         <Box>
@@ -818,11 +834,15 @@ const Actor = ({ initialData }) => {
           -
           {/* @ts-ignore */}
             {data && data.actor.activity}
-            {/* @ts-ignore */}-{/* @ts-ignore */}
+            {/* @ts-ignore */}
+            -
+            {/* @ts-ignore */}
             {data && data.actor.city}
             {/* @ts-ignore */}
             {data && showLaRochelleQuarter(data.actor.entries)}
-            {/* @ts-ignore */}-{/* @ts-ignore */}
+            {/* @ts-ignore */}
+            -
+            {/* @ts-ignore */}
             {data && showCategory(data.actor.entries)}
           </Typography>
           {bannerUrl && (
@@ -890,12 +910,12 @@ const Actor = ({ initialData }) => {
                           <span>
                             {/* @ts-ignore */}
                             {`${data && data.actor.address} ${data && data.actor.city
-                              }`}
+                            }`}
                           </span>
                         )}
                       </span>
-                      {data &&
-                        entriesHasElementWithCode(
+                      {data
+                        && entriesHasElementWithCode(
                           data.actor.entries,
                           'actor_location_action',
                         ) && (
@@ -904,13 +924,12 @@ const Actor = ({ initialData }) => {
                               TERRITOIRE D'ACTION
                             </div>
                             <span className={[styles.infoValue]}>
-                              {data &&
-                                data.actor.entries.map(
-                                  (entry) =>
-                                    entry &&
-                                    entry.collection &&
-                                    entry.collection.code ===
-                                    'actor_location_action' && (
+                              {data
+                                && data.actor.entries.map(
+                                  (entry) => entry
+                                    && entry.collection
+                                    && entry.collection.code
+                                    === 'actor_location_action' && (
                                       <div>
                                         <Typography
                                           variant="h7"
@@ -919,11 +938,11 @@ const Actor = ({ initialData }) => {
                                           {` ${entry && entry.label}`}
                                         </Typography>
                                       </div>
-                                    ),
+                                  ),
                                 )}
                             </span>
                           </div>
-                        )}
+                      )}
                     </Grid>
                   </Grid>
                   {data && data.actor.phone && (
@@ -1020,8 +1039,8 @@ const Actor = ({ initialData }) => {
                         <span className={[styles.infoValue]}>
                           <a
                             href={
-                              data &&
-                              urlWithHttpsdefault(data.actor.socialNetwork)
+                              data
+                              && urlWithHttpsdefault(data.actor.socialNetwork)
                             }
                             target="_blank"
                             rel="noreferrer"
@@ -1034,9 +1053,9 @@ const Actor = ({ initialData }) => {
                     </Grid>
                   )}
 
-                  {data &&
-                    data?.actor?.openingHours &&
-                    data?.actor?.openingHours.length !== 0 && (
+                  {data
+                    && data?.actor?.openingHours
+                    && data?.actor?.openingHours.length !== 0 && (
                       <Grid container className={[styles.item]}>
                         <Grid item xs={3} className={[styles.alignRight]}>
                           <Image
@@ -1050,8 +1069,8 @@ const Actor = ({ initialData }) => {
                         </Grid>
                         <Grid item xs={8} className={[styles.alignLeft]}>
                           <div className={[styles.infoLabel]}>Horaire</div>
-                          {data &&
-                            data?.actor?.openingHours.map((openingHour) => {
+                          {data
+                            && data?.actor?.openingHours.map((openingHour) => {
                               // debugger;
                               return (
                                 <span className={[styles.infoValue]}>
@@ -1075,7 +1094,8 @@ const Actor = ({ initialData }) => {
                                           {hourtab.map((hour, index) => {
                                             return (
                                               <>
-                                                {moment(hour).format('HH')}h
+                                                {moment(hour).format('HH')}
+                                                h
                                                 {moment(hour).format('mm')}
                                                 {index === 0 && ' - '}
                                               </>
@@ -1092,7 +1112,7 @@ const Actor = ({ initialData }) => {
                             })}
                         </Grid>
                       </Grid>
-                    )}
+                  )}
                   <Grid container className={[styles.item]}>
                     <Grid item xs={3} className={[styles.alignRight]}>
                       <Favorite actor={data?.actor} handleFavoriteChange={handleFavoriteChange} />
@@ -1102,7 +1122,7 @@ const Actor = ({ initialData }) => {
                         {!favorite ? ' Ajouter aux favoris' : ' Retirer des favoris'}
 
                       </div>
-                      <span className={[styles.infoValue]}></span>
+                      <span className={[styles.infoValue]} />
                     </Grid>
                   </Grid>
                   <Grid container className={[styles.item]}>
@@ -1182,21 +1202,21 @@ const Actor = ({ initialData }) => {
                   </Grid>
                   {
             ((data && containUser(data.actor.referents)) || (user && user.role === 'admin')) && (
-                  <Grid container className={[styles.item]}>
-                    <Grid item xs={3} className={[styles.alignRight]}>
-                      <Tooltip title="Imrpimer votre fiche pour le jeu le grand défi">
-                        <IconButton onClick={handleGamePrint} className={[styles.printIcon]}>
-                          <PrintIcon />
-                        </IconButton>
-                      </Tooltip>
-                    </Grid>
-                    <Grid item xs={8} className={[styles.alignLeft]}>
-                      <div className={[styles.game]}>
-                        Imprimer votre fiche pour le jeu le grand défi
-                      </div>
-    
-                    </Grid>
-                  </Grid>
+            <Grid container className={[styles.item]}>
+              <Grid item xs={3} className={[styles.alignRight]}>
+                <Tooltip title="Imrpimer votre fiche pour le jeu le grand défi">
+                  <IconButton onClick={handleGamePrint} className={[styles.printIcon]}>
+                    <PrintIcon />
+                  </IconButton>
+                </Tooltip>
+              </Grid>
+              <Grid item xs={8} className={[styles.alignLeft]}>
+                <div className={[styles.game]}>
+                  Imprimer votre fiche pour le jeu le grand défi
+                </div>
+
+              </Grid>
+            </Grid>
             )
           }
                 </Grid>
@@ -1210,21 +1230,23 @@ const Actor = ({ initialData }) => {
                   {data && Parser(urlRectification(data.actor.description))}
                 </p>
                 <div>
-                  {data &&
-                    data.actor.entries.map(
-                      (entry) =>
-                        entry.parentEntry &&
-                        entry.parentEntry.collection.code === 'category' && (
+                  {data
+                    && data.actor.entries.map(
+                      (entry) => entry.parentEntry
+                        && entry.parentEntry.collection.code === 'category' && (
                           <div>
-                            <Typography
-                              variant="h7"
-                              className={styles.cardTitleCategories}
-                            >
-                              {/* @ts-ignore */}
-                              {` ${entry.parentEntry && entry.parentEntry.label
+                            {entry?.actorEntries?.linkDescription && (
+                            <Tooltip title={`${entry.label} - ${entry?.actorEntries?.linkDescription}`} color="primary" className={styles.tooltip}>
+                              <Typography
+                                variant="h7"
+                                className={styles.cardTitleCategories}
+                              >
+                                {/* @ts-ignore */}
+                                {` ${entry.parentEntry && entry.parentEntry.label
                                 } `}
-                              {/* @ts-ignore */}:
-                              {entry.icon && (
+                                {/* @ts-ignore */}
+                                :
+                                {entry.icon && (
                                 <Image
                                   src={`/icons/${entry.icon}.svg`}
                                   alt="icon"
@@ -1233,18 +1255,45 @@ const Actor = ({ initialData }) => {
                                   objectFit="contain"
                                   className={styles.iconEntry}
                                 />
-                              )}
-                              {/* @ts-ignore */}
-                              {` ${entry && entry.label}`}
-                              {/* @ts-ignore */}
-                            </Typography>
+                                )}
+                                {/* @ts-ignore */}
+                                {` ${entry && entry.label}`}
+                                {/* @ts-ignore */}
+                              </Typography>
+                            </Tooltip>
+                            )}
+                            {!entry?.actorEntries?.linkDescription && (
+                              <Typography
+                                variant="h7"
+                                className={styles.cardTitleCategories}
+                              >
+                                {/* @ts-ignore */}
+                                {` ${entry.parentEntry && entry.parentEntry.label
+                                } `}
+                                {/* @ts-ignore */}
+                                :
+                                {entry.icon && (
+                                <Image
+                                  src={`/icons/${entry.icon}.svg`}
+                                  alt="icon"
+                                  width="30px"
+                                  height="25px"
+                                  objectFit="contain"
+                                  className={styles.iconEntry}
+                                />
+                                )}
+                                {/* @ts-ignore */}
+                                {` ${entry && entry.label}`}
+                                {/* @ts-ignore */}
+                              </Typography>
+                            )}
                           </div>
-                        ),
+                      ),
                     )}
                 </div>
                 <br />
-                {data &&
-                  entriesHasElementWithCode(
+                {data
+                  && entriesHasElementWithCode(
                     data.actor.entries,
                     'actor_status',
                   ) && (
@@ -1262,12 +1311,11 @@ const Actor = ({ initialData }) => {
                         Statut :
                       </div>
                       <span className={[styles.descriptionInfoValue]}>
-                        {data &&
-                          data.actor.entries.map(
-                            (entry) =>
-                              entry &&
-                              entry.collection &&
-                              entry.collection.code === 'actor_status' && (
+                        {data
+                          && data.actor.entries.map(
+                            (entry) => entry
+                              && entry.collection
+                              && entry.collection.code === 'actor_status' && (
                                 <div>
                                   <Typography
                                     variant="h7"
@@ -1276,13 +1324,13 @@ const Actor = ({ initialData }) => {
                                     {`  ${entry && entry.label}`}
                                   </Typography>
                                 </div>
-                              ),
+                            ),
                           )}
                       </span>
                     </div>
-                  )}
-                {data &&
-                  entriesHasElementWithCode(
+                )}
+                {data
+                  && entriesHasElementWithCode(
                     data.actor.entries,
                     'public_target',
                   ) && (
@@ -1299,12 +1347,11 @@ const Actor = ({ initialData }) => {
                         Public principal visé
                       </div>
                       <span className={[styles.descriptionInfoValue]}>
-                        {data &&
-                          data.actor.entries.map(
-                            (entry) =>
-                              entry &&
-                              entry.collection &&
-                              entry.collection.code === 'public_target' && (
+                        {data
+                          && data.actor.entries.map(
+                            (entry) => entry
+                              && entry.collection
+                              && entry.collection.code === 'public_target' && (
                                 <div>
                                   <Typography
                                     variant="h7"
@@ -1313,13 +1360,13 @@ const Actor = ({ initialData }) => {
                                     {` ${entry && entry.label}`}
                                   </Typography>
                                 </div>
-                              ),
+                            ),
                           )}
                       </span>
                     </div>
-                  )}
-                {data &&
-                  entriesHasElementWithCode(
+                )}
+                {data
+                  && entriesHasElementWithCode(
                     data.actor.entries,
                     'collectif',
                   ) && (
@@ -1336,12 +1383,11 @@ const Actor = ({ initialData }) => {
                         Collectif & réseaux
                       </div>
                       <span className={[styles.descriptionInfoValue]}>
-                        {data &&
-                          data.actor.entries.map(
-                            (entry) =>
-                              entry &&
-                              entry.collection &&
-                              entry.collection.code === 'collectif' && (
+                        {data
+                          && data.actor.entries.map(
+                            (entry) => entry
+                              && entry.collection
+                              && entry.collection.code === 'collectif' && (
                                 <div>
                                   <Typography
                                     variant="h7"
@@ -1350,11 +1396,11 @@ const Actor = ({ initialData }) => {
                                     {` ${entry && entry.label}`}
                                   </Typography>
                                 </div>
-                              ),
+                            ),
                           )}
                       </span>
                     </div>
-                  )}
+                )}
 
                 <div />
                 <br />
@@ -1390,34 +1436,36 @@ const Actor = ({ initialData }) => {
                 <br />
                 <div className={styles.volunteerSection}>
                   <Typography className={styles.volunteerTitle}>
-                    {data && data.actor.name} recherche des bénévoles
+                    {data && data.actor.name}
+                    {' '}
+                    recherche des bénévoles
                   </Typography>
                   <br />
                   <div className={styles.volunteerDescription}>
-                    {data &&
-                      Parser(urlRectification(data.actor.volunteerDescription))}
+                    {data
+                      && Parser(urlRectification(data.actor.volunteerDescription))}
                   </div>
                   <div>
-                    {data &&
-                      (containUser(data.actor.volunteers) ||
-                        hasClickVolunteer) && (
+                    {data
+                      && (containUser(data.actor.volunteers)
+                        || hasClickVolunteer) && (
                         <button
                           className={styles.buttonVolunteer}
                           onClick={removeVolunteerHandler}
                         >
                           Je ne souhaite plus être bénévole
                         </button>
-                      )}
-                    {data &&
-                      !containUser(data.actor.volunteers) &&
-                      !hasClickVolunteer && (
+                    )}
+                    {data
+                      && !containUser(data.actor.volunteers)
+                      && !hasClickVolunteer && (
                         <button
                           className={styles.buttonVolunteer}
                           onClick={addVolunteerHandler}
                         >
                           Devenir bénévole
                         </button>
-                      )}
+                    )}
                   </div>
                 </div>
               </div>
@@ -1433,9 +1481,9 @@ const Actor = ({ initialData }) => {
               </div>
             )}
             <Slider {...settingsSliderImage} className={[styles.slider]}>
-              {data &&
-                data.actor.pictures &&
-                data.actor.pictures
+              {data
+                && data.actor.pictures
+                && data.actor.pictures
                   .sort((a, b) => (a.position > b.position ? 1 : -1))
                   .map((picture) => (
 
@@ -1446,16 +1494,20 @@ const Actor = ({ initialData }) => {
                     />
                   ))}
             </Slider>
-            <Modal open={openModalSlider} onClose={() => setOpenModalSlider(false)} aria-labelledby="parent-modal-title"
-              aria-describedby="parent-modal-description">
+            <Modal
+              open={openModalSlider}
+              onClose={() => setOpenModalSlider(false)}
+              aria-labelledby="parent-modal-title"
+              aria-describedby="parent-modal-description"
+            >
               <Box sx={style}>
                 <IconButton aria-label="Close" className={styles.closeButton} onClick={() => setOpenModalSlider(false)}>
                   <CloseIcon />
                 </IconButton>
                 <Slider {...sliderSettings} className={[styles.slider]}>
-                  {data &&
-                    data.actor.pictures &&
-                    data.actor.pictures
+                  {data
+                    && data.actor.pictures
+                    && data.actor.pictures
                       .sort((a, b) => (a.position > b.position ? 1 : -1))
                       .map((picture) => (
 
@@ -1470,7 +1522,9 @@ const Actor = ({ initialData }) => {
             </Modal>
             <div>
               <Typography variant="h5" className={[styles.cardTitle]}>
-                LES ÉVÉNEMENTS DE : {data && data?.actor?.name}
+                LES ÉVÉNEMENTS DE :
+                {' '}
+                {data && data?.actor?.name}
               </Typography>
               <div className={styles.border} />
             </div>
@@ -1479,15 +1533,17 @@ const Actor = ({ initialData }) => {
               events={events}
               withViewSwitcher={false}
               withAddEvent={
-                (data && containUser(data.actor.referents) && data.actor.isValidated) ||
-                (user && user.role === 'admin')
+                (data && containUser(data.actor.referents) && data.actor.isValidated)
+                || (user && user.role === 'admin')
               }
               className={styles.calendar}
             />
             <br />
             <div>
               <Typography variant="h5" className={[styles.cardTitle]}>
-                LES ARTICLE DE : {data && data?.actor?.name}
+                LES ARTICLE DE :
+                {' '}
+                {data && data?.actor?.name}
               </Typography>
               <div className={styles.border} />
             </div>
@@ -1496,8 +1552,8 @@ const Actor = ({ initialData }) => {
               {...settingsSliderImageArticle}
               className={[styles.articleCarroussel]}
             >
-              {dataArticles &&
-                dataArticles?.articles.sort((a, b) => (a.createdAt > b.createdAt ? -1 : 1)).map((article) => {
+              {dataArticles
+                && dataArticles?.articles.sort((a, b) => (a.createdAt > b.createdAt ? -1 : 1)).map((article) => {
                   return <CardSliderArticle key={article.id} article={article} />;
                 })}
             </Slider>
@@ -1531,7 +1587,7 @@ export default withApollo()(Actor);
 export async function getServerSideProps(ctxt) {
   const startDate = moment();
 
-  let recurrentOptions = null;
+  const recurrentOptions = null;
 
   const res = await fetch(process.env.NEXT_PUBLIC_API_URI, {
     method: 'POST',
@@ -1546,14 +1602,13 @@ export async function getServerSideProps(ctxt) {
   const endDate = moment();
 
   const initialData = await res.json();
-
   if (initialData.errors) {
     console.error(
-      ' Error fetching actor id ' +
-      ctxt.params.id +
-      ' error message : ' +
-      initialData.errors[0].message +
-      '',
+      ` Error fetching actor id ${
+        ctxt.params.id
+      } error message : ${
+        initialData.errors[0].message
+      }`,
     );
   }
   const after = moment();

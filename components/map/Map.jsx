@@ -41,12 +41,20 @@ const Map = (props) => {
   }, [map]);
 
   return (
-    <MapContainer ref={mapRef} center={position} zoom={11} className={styles.mapContainer} whenCreated={setMap}>
+    <MapContainer
+      ref={mapRef}
+      center={position}
+      zoom={11}
+      className={styles.mapContainer}
+      whenCreated={setMap}
+      zoomControl={false}
+      tap={false}
+    >
       <TileLayer
         attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-
+      <ZoomControl position="topright" />
       {children}
     </MapContainer>
   );
