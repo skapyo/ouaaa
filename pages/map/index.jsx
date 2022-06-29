@@ -271,7 +271,8 @@ const useStyles = makeStyles((theme) => ({
     color: '#2C367E;',
   },
   shortDescription: {
-    wordBreak: 'break-all',
+    wordBreak: 'break-word',
+    textAlign: 'justify',
     width: '100%',
   },
   mapContainer: {

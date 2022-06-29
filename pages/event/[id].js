@@ -102,13 +102,16 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: theme.typography.h5.fontFamily,
     textTransform: 'uppercase',
     fontWeight: '400',
+    fontSize: '3rem !important',
     [theme.breakpoints.down('sm')]: {
       fontSize: '1.5rem !important',
     },
   },
 
   description: {
-    wordBreak: 'break-all',
+    wordBreak: 'break-word',
+    textAlign: 'justify',
+    fontSize: '1rem !important',
     [theme.breakpoints.up('sm')]: {
       paddingLeft: '2em',
     },
