@@ -141,7 +141,7 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     padding: '1em',
   },
- 
+
   infoPratiqueItem: {},
   alignLeft: {
     textAlign: 'left',
@@ -521,6 +521,14 @@ const Event = ({ initialData }) => {
     }
   }, [removeparticipateData]);
 
+  const eventPictures = data?.event?.pictures || [];
+
+  const logo = useMemo(() => {
+    const logoPictures = eventPictures.filter((picture) => picture.logo);
+    return logoPictures.length > 0 ? logoPictures[0] : null;
+  }, [eventPictures]);
+
+
   function containUserActorsReferent(actors) {
     let isContained = false;
     if (user !== null) {
@@ -725,7 +733,18 @@ const Event = ({ initialData }) => {
                   : ''
               }
             />
+          )}
+        {logo && (
+          <meta
+            property="og:image"
+            content={getImageUrl(bannerUrl)}
+          />
         )}
+        <meta property='og:title' content={data && (data.event.label + ' ' + data.event.city + ' ' + moment(parseInt(data.event.startedAt)).format('DD/MM/YYYY HH:mm'))} />
+        <meta property='og:description' content={data && data.event.shortDescription} />
+        <meta name='twitter:title' content={data && (data.event.label + ' ' + data.event.city + ' ' + moment(parseInt(data.event.startedAt)).format('DD/MM/YYYY HH:mm'))} />
+        <meta name='twitter:description' content={data && data.event.shortDescription} />
+
       </Head>
       <RootRef>
         <Box>
@@ -761,7 +780,7 @@ const Event = ({ initialData }) => {
                               : ''
                           }
                         />
-                    )}
+                      )}
                   </div>
                   {data && (
                     /*  &&  entriesHasElementWithCode(
@@ -794,10 +813,10 @@ const Event = ({ initialData }) => {
                                       className={styles.cardTitleCategories}
                                     >
                                       {`${entry && entry.parentEntry.label} : ${entry && entry.label
-                                      }`}
+                                        }`}
                                     </Typography>
                                   </div>
-                              ),
+                                ),
                             )}
                         </span>
                       </Grid>
@@ -836,12 +855,12 @@ const Event = ({ initialData }) => {
                                         {` ${entry && entry.label}`}
                                       </Typography>
                                     </div>
-                                ),
+                                  ),
                               )}
                           </span>
                         </Grid>
                       </Grid>
-                  )}
+                    )}
                   <Grid container className={[styles.item]}>
                     <Grid item xs={3} className={[styles.alignRight]}>
                       <Image
@@ -918,13 +937,13 @@ const Event = ({ initialData }) => {
                       </Grid>
                       <Grid item xs={8} className={[styles.alignLeft]}>
 
-                        { data && data.event.dateRule && (
+                        {data && data.event.dateRule && (
                           <span className={[styles.infoValue]}>
                             {getRruleTextEvent(data.event)}
                           </span>
                         )}
 
-                        { data && !data.event.dateRule && (
+                        {data && !data.event.dateRule && (
                           <>
                             <div className={[styles.infoLabel]}>Date de début</div>
                             <span className={[styles.infoValue]}>
@@ -975,12 +994,12 @@ const Event = ({ initialData }) => {
                                         {` ${entry && entry.label}`}
                                       </Typography>
                                     </div>
-                                ),
+                                  ),
                               )}
                           </span>
                         </Grid>
                       </Grid>
-                  )}
+                    )}
                   <Grid container className={[styles.item]}>
                     <Grid item xs={3} className={[styles.alignRight]}>
                       <Favorite event={data?.event} handleFavoriteChange={handleFavoriteChange} />
@@ -1091,24 +1110,24 @@ const Event = ({ initialData }) => {
                             >
                               {/* @ts-ignore */}
                               {` ${entry.parentEntry && entry.parentEntry.label
-                              } `}
+                                } `}
                               {/* @ts-ignore */}
                               :
                               {entry.icon && (
-                              <Image
-                                width="30px"
-                                height="25px"
-                                src={`/icons/${entry.icon}.svg`}
-                                alt="icon"
-                                className={styles.iconEntry}
-                              />
+                                <Image
+                                  width="30px"
+                                  height="25px"
+                                  src={`/icons/${entry.icon}.svg`}
+                                  alt="icon"
+                                  className={styles.iconEntry}
+                                />
                               )}
                               {/* @ts-ignore */}
                               {` ${entry && entry.label}`}
                               {/* @ts-ignore */}
                             </Typography>
                           </div>
-                      ),
+                        ),
                     )}
                 </div>
                 <br />
@@ -1145,11 +1164,11 @@ const Event = ({ initialData }) => {
                                     {`  ${entry && entry.label}`}
                                   </Typography>
                                 </div>
-                            ),
+                              ),
                           )}
                       </span>
                     </div>
-                )}
+                  )}
                 {data
                   && entriesHasElementWithCode(
                     data.event.entries,
@@ -1182,11 +1201,11 @@ const Event = ({ initialData }) => {
                                     {` ${entry && entry.label}`}
                                   </Typography>
                                 </div>
-                            ),
+                              ),
                           )}
                       </span>
                     </div>
-                )}
+                  )}
                 {data
                   && entriesHasElementWithCode(
                     data.event.entries,
@@ -1219,11 +1238,11 @@ const Event = ({ initialData }) => {
                                     {` ${entry && entry.label}`}
                                   </Typography>
                                 </div>
-                            ),
+                              ),
                           )}
                       </span>
                     </div>
-                )}
+                  )}
 
                 {data && data.event.practicalInfo && (
                   <div>
@@ -1246,16 +1265,16 @@ const Event = ({ initialData }) => {
                 <br />
 
                 {data && (
-                <div className={styles.map}>
-                  <MapWithNoSSR
-                    ref={mapRef}
-                  >
-                    <MarkerWithNoSSR
-                      id="map"
-                      event={data.event}
-                    />
-                  </MapWithNoSSR>
-                </div>
+                  <div className={styles.map}>
+                    <MapWithNoSSR
+                      ref={mapRef}
+                    >
+                      <MarkerWithNoSSR
+                        id="map"
+                        event={data.event}
+                      />
+                    </MapWithNoSSR>
+                  </div>
                 )}
               </Grid>
             </Grid>
@@ -1269,7 +1288,7 @@ const Event = ({ initialData }) => {
                   >
                     Je ne participe plus
                   </button>
-              )}
+                )}
               {data && !containUser(data.event.participants)
                 && !hasClickParticipate
                 && !(
@@ -1283,7 +1302,7 @@ const Event = ({ initialData }) => {
                   >
                     Je participe
                   </button>
-              )}
+                )}
               {!(data && containUser(data.event.participants))
                 && data
                 && data.event.registerLink
@@ -1295,7 +1314,7 @@ const Event = ({ initialData }) => {
                   >
                     Je participe
                   </a>
-              )}
+                )}
             </div>
             {data && data.event.pictures && data.event.pictures.length > 0 && (
               <div>
@@ -1400,7 +1419,7 @@ const Event = ({ initialData }) => {
                   <EditIcon />
                 </Fab>
               </Link>
-          )}
+            )}
         </Box>
       </RootRef>
     </AppLayout>
@@ -1428,10 +1447,8 @@ export async function getServerSideProps(ctxt) {
   const initialData = await res.json();
   if (initialData.errors) {
     console.error(
-      ` Error fetching event id ${
-        ctxt.params.id
-      } error message : ${
-        initialData.errors[0].message
+      ` Error fetching event id ${ctxt.params.id
+      } error message : ${initialData.errors[0].message
       }`,
     );
   }

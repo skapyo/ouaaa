@@ -43,7 +43,7 @@ const ActorMarker = (props) => {
     fillColor: color,
     iconAnchor: [13, 34], // point of the icon which will correspond to marker's location
     iconSize: [60],
-    popupAnchor: [1, -25],
+    popupAnchor: [18, -30],
     html: `<span style="${markerHtmlStyles}" />`,
   });
 
@@ -60,21 +60,21 @@ const ActorMarker = (props) => {
         },
       }}
     >
-      { !matches && (
-      <Tooltip ref={tooltipRef}>
-        <ActorPopup
-          actor={actor}
-          onMouseOut={() => {
-            if (!clicked) {
-              tooltipRef.current.remove();
-            }
-          }}
-        />
-      </Tooltip>
+      {!matches && (
+        <Tooltip ref={tooltipRef} offset={[-2, -12]} direction="left">
+          <ActorPopup
+            actor={actor}
+            onMouseOut={() => {
+              if (!clicked) {
+                tooltipRef.current.remove();
+              }
+            }}
+            tooltip
+          />
+        </Tooltip>
       )}
       <Popup
         ref={popupRef}
-
         eventHandlers={{
           mousedown: () => {
             if (!clicked && !matches) {
@@ -82,6 +82,8 @@ const ActorMarker = (props) => {
             }
           },
         }}
+        closeButton={false}
+        minWidth={300}
       >
         <ActorPopup
           actor={actor}

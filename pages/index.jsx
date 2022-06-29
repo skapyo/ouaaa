@@ -117,6 +117,18 @@ const Index = () => {
   return (
 
     <AppLayout>
+      <Head>
+        <meta property='og:type' content='website' />
+        <meta property='og:title' content='OUAAA!' />
+        <meta property='og:description' content="Plateforme d’information & d'initiative des acteurs de la transition vers une société plus humaine & écologique sur le territoire de l'Aunis  !" />
+        <meta property='og:site_name' content='OUAAA!' />
+        <meta property='og:url' content='https://ouaaa-transition.fr/' />
+        <meta property='og:image' content='https://ouaaa-transition.fr/apple-touch-icon.png' />
+        <meta name='twitter:url' content='https://ouaaa-transition.fr/' />
+        <meta name='twitter:title' content='OUAAA!' />
+        <meta name='twitter:description' content="Plateforme d’information & d'initiative des acteurs de la transition vers une société plus humaine & écologique sur le territoire de l'Aunis  !" />
+        <meta name='twitter:image' content='https://ouaaa-transition.fr/apple-touch-icon.png' />
+      </Head>
       <RootRef>
         <Box>
 

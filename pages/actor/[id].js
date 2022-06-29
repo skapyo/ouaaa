@@ -810,11 +810,20 @@ const Actor = ({ initialData }) => {
           {data && data.actor.city}
         </title>
         {logo && (
-          <meta
+          <>
+           <meta
             property="og:image"
             content={getImageUrl(logo.originalPicturePath)}
           />
+           <meta name='twitter:image' content={getImageUrl(logo.originalPicturePath)} />
+          </>
         )}
+    
+        <meta property='og:title' content={data && data.actor.name} />
+        <meta property='og:description' content={data && data.actor.shortDescription} />
+        <meta name='twitter:title' content={data && data.actor.name} />
+        <meta name='twitter:description' content={data && data.actor.shortDescription} />
+
       </Head>
       <RootRef>
         <Box>
