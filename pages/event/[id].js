@@ -109,7 +109,8 @@ const useStyles = makeStyles((theme) => ({
   },
 
   description: {
-    wordBreak: 'break-all',
+    wordBreak: 'break-word',
+    textAlign: 'justify',
     fontSize: '1rem !important',
     [theme.breakpoints.up('sm')]: {
       paddingLeft: '2em',
