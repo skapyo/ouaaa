@@ -109,6 +109,7 @@ const useStyles = makeStyles((theme) => ({
   },
 
   description: {
+    wordBreak: 'break-all',
     fontSize: '1rem !important',
     [theme.breakpoints.up('sm')]: {
       paddingLeft: '2em',
@@ -1097,7 +1098,7 @@ const Event = ({ initialData }) => {
                 <div className={styles.border} />
                 <br />
                 <br />
-                <p>{data && Parser(urlRectification(data.event.description))}</p>
+                <p>{data && Parser(data.event.description)}</p>
                 <div>
                   {data
                     && data.event.entries.map(

@@ -116,6 +116,7 @@ const useStyles = makeStyles((theme) => ({
     left: 0,
   },
   description: {
+    wordBreak: 'break-all',
     [theme.breakpoints.up('sm')]: {
       paddingLeft: '2em',
     },
@@ -793,6 +794,7 @@ const Actor = ({ initialData }) => {
     content: () => printGameRef.current,
   });
 
+  
   return (
     <AppLayout>
       <Head>
@@ -811,14 +813,14 @@ const Actor = ({ initialData }) => {
         </title>
         {logo && (
           <>
-           <meta
-            property="og:image"
-            content={getImageUrl(logo.originalPicturePath)}
-          />
-           <meta name='twitter:image' content={getImageUrl(logo.originalPicturePath)} />
+            <meta
+              property="og:image"
+              content={getImageUrl(logo.originalPicturePath)}
+            />
+            <meta name='twitter:image' content={getImageUrl(logo.originalPicturePath)} />
           </>
         )}
-    
+
         <meta property='og:title' content={data && data.actor.name} />
         <meta property='og:description' content={data && data.actor.shortDescription} />
         <meta name='twitter:title' content={data && data.actor.name} />
@@ -1227,7 +1229,7 @@ const Actor = ({ initialData }) => {
                 <br />
                 <br />
                 <p>
-                  {data && Parser(urlRectification(data.actor.description))}
+                  {data && Parser(data.actor.description)}
                 </p>
                 <div>
                   {data
@@ -1443,7 +1445,7 @@ const Actor = ({ initialData }) => {
                   <br />
                   <div className={styles.volunteerDescription}>
                     {data
-                      && Parser(urlRectification(data.actor.volunteerDescription))}
+                      && Parser(data.actor.volunteerDescription)}
                   </div>
                   <div>
                     {data

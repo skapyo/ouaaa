@@ -88,9 +88,15 @@ const useStyles = makeStyles((theme) => ({
       fontSize: '1.5rem !important',
     },
   },
-
   description: {
+    wordBreak: 'break-all',
     textAlign: 'left',
+    [theme.breakpoints.up('sm')]: {
+      paddingLeft: '2em',
+    },
+    [theme.breakpoints.down('sm')]: {
+      width: '100%',
+    },
   },
   createdAt: {
     textAlign: 'right',
@@ -330,16 +336,16 @@ const GET_ARTICLE = `
       }
     }
   `;
-  const SliderArrow = (props) => {
-    const { className, style, onClick } = props;
-    return (
-      <div
-        className={className}
-        style={{ ...style, display: 'block' }}
-        onClick={onClick}
-      />
-    );
-  };
+const SliderArrow = (props) => {
+  const { className, style, onClick } = props;
+  return (
+    <div
+      className={className}
+      style={{ ...style, display: 'block' }}
+      onClick={onClick}
+    />
+  );
+};
 const Article = ({ initialData }) => {
   const router = useRouter();
   const mapRef = useRef();
@@ -477,16 +483,16 @@ const Article = ({ initialData }) => {
       <RootRef>
         <Box>
           {bannerUrl && (
-          <Container
-            className={styles.titleContainer}
-            style={{
-              backgroundImage: `url(${getImageUrl(bannerUrl)})`,
-            }}
-          />
+            <Container
+              className={styles.titleContainer}
+              style={{
+                backgroundImage: `url(${getImageUrl(bannerUrl)})`,
+              }}
+            />
           )}
           <Container className={styles.cardInfo}>
             <Grid container>
-              <Grid item md={12} sm={12}>
+              <Grid item md={12} sm={10} className={styles.description}>
                 <Typography variant="h1" className={styles.cardTitle}>
                   {data && data.article.label}
                 </Typography>
@@ -496,14 +502,14 @@ const Article = ({ initialData }) => {
                 <div className={styles.description}>
                   <p>
                     {' '}
-                    {data && Parser(urlRectification(data.article.content))}
+                    {data && Parser(data.article.content)}
                   </p>
                 </div>
                 <br />
                 <div className={styles.createdAt}>
                   Publié le <Moment format="DD/MM/YYYY HH:mm" unix>
-                      {data.article && data.article.createdAt / 1000}
-                    </Moment>
+                    {data.article && data.article.createdAt / 1000}
+                  </Moment>
                 </div>
                 {data && data.article.pictures && data.article.pictures.length > 0 && (
                   <div>
@@ -529,46 +535,46 @@ const Article = ({ initialData }) => {
                       ))}
                 </Slider>
                 <Modal open={openModalSlider} onClose={() => setOpenModalSlider(false)} aria-labelledby="parent-modal-title"
-              aria-describedby="parent-modal-description">
-              <Box sx={style}>
-                <IconButton aria-label="Close" className={styles.closeButton} onClick={() => setOpenModalSlider(false)}>
-                  <CloseIcon />
-                </IconButton>
-                <Slider {...sliderSettings} className={[styles.slider]}>
-                  {data &&
-                    data.article.pictures &&
-                    data.article.pictures
-                      .sort((a, b) => (a.position > b.position ? 1 : -1))
-                      .map((picture) => (
+                  aria-describedby="parent-modal-description">
+                  <Box sx={style}>
+                    <IconButton aria-label="Close" className={styles.closeButton} onClick={() => setOpenModalSlider(false)}>
+                      <CloseIcon />
+                    </IconButton>
+                    <Slider {...sliderSettings} className={[styles.slider]}>
+                      {data &&
+                        data.article.pictures &&
+                        data.article.pictures
+                          .sort((a, b) => (a.position > b.position ? 1 : -1))
+                          .map((picture) => (
 
-                        <img
-                          src={getImageUrl(picture.originalPicturePath)}
-                          className={[styles.imgModal]}
-                          onClick={() => setOpenModalSlider(false)}
-                        />
-                      ))}
-                </Slider>
-              </Box>
-            </Modal>
+                            <img
+                              src={getImageUrl(picture.originalPicturePath)}
+                              className={[styles.imgModal]}
+                              onClick={() => setOpenModalSlider(false)}
+                            />
+                          ))}
+                    </Slider>
+                  </Box>
+                </Modal>
                 <br />
                 <br />
                 {data && data.article.actors && data.article.actors.length > 0 && (
-                <div>
-                  <Typography variant="h5" className={styles.cardTitle}>
-                    LES ACTEURS PARTICIPANTS
-                  </Typography>
-                  <div className={styles.border} />
-                  <br />
-                </div>
+                  <div>
+                    <Typography variant="h5" className={styles.cardTitle}>
+                      LES ACTEURS PARTICIPANTS
+                    </Typography>
+                    <div className={styles.border} />
+                    <br />
+                  </div>
                 )}
                 <Slider
                   {...settingsSliderarticle}
                   className={[styles.articleCarroussel]}
                 >
                   {data
-                && data.article.actors.map((actor) => {
-                  return <CardSliderActor key={actor.id} actor={actor} />;
-                })}
+                    && data.article.actors.map((actor) => {
+                      return <CardSliderActor key={actor.id} actor={actor} />;
+                    })}
                 </Slider>
                 <br />
 
@@ -584,7 +590,7 @@ const Article = ({ initialData }) => {
                   <EditIcon />
                 </Fab>
               </Link>
-          )}
+            )}
         </Box>
       </RootRef>
     </AppLayout>
@@ -612,10 +618,8 @@ export async function getServerSideProps(ctxt) {
   const initialData = await res.json();
   if (initialData.errors) {
     console.error(
-      ` Error fetching article id ${
-        ctxt.params.id
-      } error message : ${
-        initialData.errors[0].message
+      ` Error fetching article id ${ctxt.params.id
+      } error message : ${initialData.errors[0].message
       }`,
     );
   }
