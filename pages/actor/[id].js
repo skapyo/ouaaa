@@ -130,6 +130,7 @@ const useStyles = makeStyles((theme) => ({
     color: theme.typography.h5.color,
     fontFamily: theme.typography.h5.fontFamily,
     textTransform: 'uppercase',
+    textAlign: 'center',
     fontWeight: '400',
     [theme.breakpoints.down('sm')]: {
       fontSize: '1.5rem !important',
@@ -210,8 +211,8 @@ const useStyles = makeStyles((theme) => ({
   },
   closeButton: {
     position: 'absolute',
-    right: theme.spacing.unit / 2,
-    top: theme.spacing.unit / 2,
+    right: theme.spacing(0.5),
+    top: theme.spacing(0.5),
     color: theme.palette.grey[500],
   },
   infoPratiqueTitle: {
