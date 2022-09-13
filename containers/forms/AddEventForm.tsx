@@ -112,6 +112,11 @@ const useStyles = makeStyles((theme) => ({
     color: '#2C367E',
     fontWeight: 600,
   },
+  errorautocomplete: {
+    border: 'solid 1px #ff1744!important',
+    color: '#ff1744!important',
+    paddingLeft: '15px',
+  },
   justify: {
     textAlign: 'justify',
   },
@@ -390,7 +395,7 @@ const AddEventForm = ({ actorId }) => {
     const [addEvent, { data, error }] = useMutation(ADDEVENT);
 
     const [showOtherEventList, setShowOtherEventList] = useState(false);
-
+    const [locationError, setlocationError] = useState(true);
     const { data: dataActors } = useQuery(GET_ACTORS, {});
     const { data: dataEvents } = useQuery(GET_EVENTS, {
       variables: {
@@ -823,6 +828,7 @@ const AddEventForm = ({ actorId }) => {
           <GooglePlacesAutocomplete
             apiKey="AIzaSyDvUKXlWS1470oj8C-vD6s62Bs9Y8XQf00"
             placeholder="Taper et sélectionner l'adresse*"
+            inputClassName={locationError && styles.errorautocomplete}
             initialValue={
               formValues.address
               && formValues.address
@@ -836,10 +842,13 @@ const AddEventForm = ({ actorId }) => {
                 .then((value) => {
                   formValues.lat = `${value.lat}`;
                   formValues.lng = `${value.lng}`;
+                  setlocationError(false);
                 })
                 .catch((error) => console.error(error));
               getAddressDetails(results);
-            })}
+            })
+          
+          }
           />
         </Grid>
         <FormItem
