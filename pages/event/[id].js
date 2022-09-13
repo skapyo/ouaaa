@@ -101,6 +101,7 @@ const useStyles = makeStyles((theme) => ({
     color: theme.typography.h5.color,
     fontFamily: theme.typography.h5.fontFamily,
     textTransform: 'uppercase',
+    textAlign: 'center',
     fontWeight: '400',
     fontSize: '3rem !important',
     [theme.breakpoints.down('sm')]: {
@@ -243,8 +244,8 @@ const useStyles = makeStyles((theme) => ({
   },
   closeButton: {
     position: 'absolute',
-    right: theme.spacing.unit / 2,
-    top: theme.spacing.unit / 2,
+    right: theme.spacing(0.5),
+    top: theme.spacing(0.5),
     color: theme.palette.grey[500],
   },
   button: {
@@ -530,7 +531,6 @@ const Event = ({ initialData }) => {
     return logoPictures.length > 0 ? logoPictures[0] : null;
   }, [eventPictures]);
 
-
   function containUserActorsReferent(actors) {
     let isContained = false;
     if (user !== null) {
@@ -735,17 +735,17 @@ const Event = ({ initialData }) => {
                   : ''
               }
             />
-          )}
+        )}
         {logo && (
           <meta
             property="og:image"
             content={getImageUrl(bannerUrl)}
           />
         )}
-        <meta property='og:title' content={data && (data.event.label + ' ' + data.event.city + ' ' + moment(parseInt(data.event.startedAt)).format('DD/MM/YYYY HH:mm'))} />
-        <meta property='og:description' content={data && data.event.shortDescription} />
-        <meta name='twitter:title' content={data && (data.event.label + ' ' + data.event.city + ' ' + moment(parseInt(data.event.startedAt)).format('DD/MM/YYYY HH:mm'))} />
-        <meta name='twitter:description' content={data && data.event.shortDescription} />
+        <meta property="og:title" content={data && (`${data.event.label} ${data.event.city} ${moment(parseInt(data.event.startedAt)).format('DD/MM/YYYY HH:mm')}`)} />
+        <meta property="og:description" content={data && data.event.shortDescription} />
+        <meta name="twitter:title" content={data && (`${data.event.label} ${data.event.city} ${moment(parseInt(data.event.startedAt)).format('DD/MM/YYYY HH:mm')}`)} />
+        <meta name="twitter:description" content={data && data.event.shortDescription} />
 
       </Head>
       <RootRef>
@@ -782,7 +782,7 @@ const Event = ({ initialData }) => {
                               : ''
                           }
                         />
-                      )}
+                    )}
                   </div>
                   {data && (
                     /*  &&  entriesHasElementWithCode(
@@ -815,10 +815,10 @@ const Event = ({ initialData }) => {
                                       className={styles.cardTitleCategories}
                                     >
                                       {`${entry && entry.parentEntry.label} : ${entry && entry.label
-                                        }`}
+                                      }`}
                                     </Typography>
                                   </div>
-                                ),
+                              ),
                             )}
                         </span>
                       </Grid>
@@ -857,12 +857,12 @@ const Event = ({ initialData }) => {
                                         {` ${entry && entry.label}`}
                                       </Typography>
                                     </div>
-                                  ),
+                                ),
                               )}
                           </span>
                         </Grid>
                       </Grid>
-                    )}
+                  )}
                   <Grid container className={[styles.item]}>
                     <Grid item xs={3} className={[styles.alignRight]}>
                       <Image
@@ -996,12 +996,12 @@ const Event = ({ initialData }) => {
                                         {` ${entry && entry.label}`}
                                       </Typography>
                                     </div>
-                                  ),
+                                ),
                               )}
                           </span>
                         </Grid>
                       </Grid>
-                    )}
+                  )}
                   <Grid container className={[styles.item]}>
                     <Grid item xs={3} className={[styles.alignRight]}>
                       <Favorite event={data?.event} handleFavoriteChange={handleFavoriteChange} />
@@ -1112,7 +1112,7 @@ const Event = ({ initialData }) => {
                             >
                               {/* @ts-ignore */}
                               {` ${entry.parentEntry && entry.parentEntry.label
-                                } `}
+                              } `}
                               {/* @ts-ignore */}
                               :
                               {entry.icon && (
@@ -1129,7 +1129,7 @@ const Event = ({ initialData }) => {
                               {/* @ts-ignore */}
                             </Typography>
                           </div>
-                        ),
+                      ),
                     )}
                 </div>
                 <br />
@@ -1166,11 +1166,11 @@ const Event = ({ initialData }) => {
                                     {`  ${entry && entry.label}`}
                                   </Typography>
                                 </div>
-                              ),
+                            ),
                           )}
                       </span>
                     </div>
-                  )}
+                )}
                 {data
                   && entriesHasElementWithCode(
                     data.event.entries,
@@ -1203,11 +1203,11 @@ const Event = ({ initialData }) => {
                                     {` ${entry && entry.label}`}
                                   </Typography>
                                 </div>
-                              ),
+                            ),
                           )}
                       </span>
                     </div>
-                  )}
+                )}
                 {data
                   && entriesHasElementWithCode(
                     data.event.entries,
@@ -1240,11 +1240,11 @@ const Event = ({ initialData }) => {
                                     {` ${entry && entry.label}`}
                                   </Typography>
                                 </div>
-                              ),
+                            ),
                           )}
                       </span>
                     </div>
-                  )}
+                )}
 
                 {data && data.event.practicalInfo && (
                   <div>
@@ -1290,7 +1290,7 @@ const Event = ({ initialData }) => {
                   >
                     Je ne participe plus
                   </button>
-                )}
+              )}
               {data && !containUser(data.event.participants)
                 && !hasClickParticipate
                 && !(
@@ -1304,7 +1304,7 @@ const Event = ({ initialData }) => {
                   >
                     Je participe
                   </button>
-                )}
+              )}
               {!(data && containUser(data.event.participants))
                 && data
                 && data.event.registerLink
@@ -1316,7 +1316,7 @@ const Event = ({ initialData }) => {
                   >
                     Je participe
                   </a>
-                )}
+              )}
             </div>
             {data && data.event.pictures && data.event.pictures.length > 0 && (
               <div>
@@ -1421,7 +1421,7 @@ const Event = ({ initialData }) => {
                   <EditIcon />
                 </Fab>
               </Link>
-            )}
+          )}
         </Box>
       </RootRef>
     </AppLayout>
