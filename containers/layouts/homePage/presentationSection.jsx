@@ -8,10 +8,11 @@ import SearchEngine from '../../../components/SearchEngine';
 
 const useStyles = makeStyles((theme) => ({
   titleContainer: {
-    backgroundImage: "url('./cover.jpg')",
+    backgroundImage: "url('./cover_3.jpg')",
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
     color: 'white',
+    backgroundPosition: 'center center',
     textAlign: 'center',
     [theme.breakpoints.up('md')]: {
       height: '45em',
@@ -43,6 +44,13 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('xs')]: {
       textAlign: 'justify',
     },
+    margin: 'auto',
+    width: 'fit-content',
+    background: 'white',
+    padding: '24px',
+    borderRadius: '26px',
+    color: 'black',
+    opacity: '0.9',
   },
   addActor: {
     [theme.breakpoints.up('md')]: {
@@ -58,6 +66,14 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('sm')]: {
       fontSize: '2em',
     },
+    background: 'white',
+    width: 'fit-content',
+    textAlign: 'center',
+    margin: 'auto',
+    padding: '20px',
+    borderRadius: '26px',
+    color: 'black',
+    opacity: '0.9',
   },
   buttonGrid: {
     fontSize: '1em',
