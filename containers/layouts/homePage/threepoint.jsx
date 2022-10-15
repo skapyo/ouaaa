@@ -4,6 +4,7 @@ import {
 import React from 'react';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import Image from 'next/image';
 import ListItemText from '@material-ui/core/ListItemText';
 import Build from '@material-ui/icons/Build';
 import Link from '../../../components/Link';
@@ -172,7 +173,7 @@ const useStyles = makeStyles((theme) => ({
     borderBottomColor: '#2C367E',
     color: '#2C367E',
     height: '1em',
-  }
+  },
 }));
 
 const PresentationSection = (props) => {
@@ -195,28 +196,62 @@ const PresentationSection = (props) => {
             <ListItem>
               <ListItemText
                 className={styles.listItemText}
-                primary={
-                  <>Tu habites le Territoire du Nord de la Charente-Maritime ou la ville de <b>La Rochelle</b> et tu veux  <Link href="/map">trouver une recyclerie, réparer un objet, changer de producteur d'énergie, t'inscrire dans une AMAP, rénover ta maison</Link> et bien plus encore ? Tu es au bon endroit !
+                primary={(
+                  <>
+                    Tu habites le Territoire du Nord de la Charente-Maritime ou la ville de
+                    <b>La Rochelle</b>
+                    {' '}
+                    et tu veux
+                    <Link href="/map">trouver une recyclerie, réparer un objet, changer de producteur d'énergie, t'inscrire dans une AMAP, rénover ta maison</Link>
+                    {' '}
+                    et bien plus encore ? Tu es au bon endroit !
                   </>
-                }
+                )}
               />
             </ListItem>
             <ListItem>
               <ListItemText
                 className={styles.listItemText}
-                primary={
-                  <>Le <b>projet OUAAA! accompagne la transition</b> de notre territoire vers un fonctionnement plus  <b>sobre</b>,  <b>plus solidaire</b> et véritablement <b>durable</b>. Tu trouveras ici des informations sur les acteurs qui participent à la transition écologique et sociale dans des domaines aussi variées que : <b>l'éducation</b>, la culture, la santé, <b>l'alimentation</b>, la justice, l'économie, la citoyenneté, l'agriculture, l'industrie, l'habitat, la mobilité, <b>l'énergie</b>, le recyclage, la réduction des déchets, <b>le développement durable</b>, <b>le climat</b>, la qualité de l'air, la biodiversité, la gestion de l'eau, l'aménagement du territoire, etc
+                primary={(
+                  <>
+                    Le
+                    <b>projet OUAAA! accompagne la transition</b>
+                    {' '}
+                    de notre territoire vers un fonctionnement plus
+                    <b>sobre</b>
+                    ,
+                    <b>plus solidaire</b>
+                    {' '}
+                    et véritablement
+                    <b>durable</b>
+                    . Tu trouveras ici des informations sur les acteurs qui participent à la transition écologique et sociale dans des domaines aussi variées que :
+                    <b>l'éducation</b>
+                    , la culture, la santé,
+                    <b>l'alimentation</b>
+                    , la justice, l'économie, la citoyenneté, l'agriculture, l'industrie, l'habitat, la mobilité,
+                    <b>l'énergie</b>
+                    , le recyclage, la réduction des déchets,
+                    <b>le développement durable</b>
+                    ,
+                    <b>le climat</b>
+                    , la qualité de l'air, la biodiversité, la gestion de l'eau, l'aménagement du territoire, etc
                   </>
-                }
+                )}
               />
             </ListItem>
             <ListItem>
               <ListItemText
                 className={styles.listItemText}
-                primary={
-                  <>Souhaitant atteindre les objectifs d'un territoire zéro carbone, la plateforme participative <i>OUAAA!</i> met un coup de projecteur, sur tous celles et ceux qui agissent pour la <b>transition climatique</b>. Cette communauté d’acteurs est présente sur tout le territoire, dans les villes comme dans les villages, de l'anse de l'Aiguillon à l'embouchure de la Charente, de la forêt de Benon au bout de l'île de Ré en passant par Surgères, l’agglomération de La Rochelle, Saint Martin de Ré, Marans, et Châtelaillon-Plage.
+                primary={(
+                  <>
+                    Souhaitant atteindre les objectifs d'un territoire zéro carbone, la plateforme participative
+                    <i>OUAAA!</i>
+                    {' '}
+                    met un coup de projecteur, sur tous celles et ceux qui agissent pour la
+                    <b>transition climatique</b>
+                    . Cette communauté d’acteurs est présente sur tout le territoire, dans les villes comme dans les villages, de l'anse de l'Aiguillon à l'embouchure de la Charente, de la forêt de Benon au bout de l'île de Ré en passant par Surgères, l’agglomération de La Rochelle, Saint Martin de Ré, Marans, et Châtelaillon-Plage.
                   </>
-                }
+                )}
               />
             </ListItem>
           </List>
@@ -230,8 +265,10 @@ const PresentationSection = (props) => {
           </div>
         </Grid>
 
-        <Grid item md={6} className={styles.align}>
-          <img className={styles.image} src="./image_accueil.png" />
+        <Grid item md={6} className={[styles.align, { position: 'relative', width: '300px', height: '500px' }]}>
+          <div className={[styles.align, { position: 'relative', width: '300px', height: '500px' }]}>
+            <Image alt="Mountains" width="100%" height="100%" sizes="33vw" src="/image_accueil.png" />
+          </div>
         </Grid>
       </Grid>
 

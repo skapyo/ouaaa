@@ -134,7 +134,7 @@ const Index = () => {
 
           <PresentationSection id={sections[0]} />
 
-          <ThreePoint id={sections[1]} />
+         <ThreePoint id={sections[1]} />
 
           <LastActor id={sections[2]} />
 
