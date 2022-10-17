@@ -24,6 +24,9 @@ module.exports = withPWA({
     register: true,
     disable: process.env.NODE_ENV === "development",
   },
+  experimental: {
+    esmExternals: false,
+  },
   future: {
     webpack5: true
   },
