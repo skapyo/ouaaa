@@ -199,7 +199,7 @@ const PresentationSection = (props) => {
                 primary={(
                   <>
                     Tu habites le Territoire du Nord de la Charente-Maritime ou la ville de
-                    <b>La Rochelle</b>
+                    <b> La Rochelle</b>
                     {' '}
                     et tu veux
                     <Link href="/map">trouver une recyclerie, réparer un objet, changer de producteur d'énergie, t'inscrire dans une AMAP, rénover ta maison</Link>
@@ -215,25 +215,25 @@ const PresentationSection = (props) => {
                 primary={(
                   <>
                     Le
-                    <b>projet OUAAA! accompagne la transition</b>
+                    <b> projet OUAAA! accompagne la transition</b>
                     {' '}
                     de notre territoire vers un fonctionnement plus
-                    <b>sobre</b>
+                    <b> sobre</b>
                     ,
-                    <b>plus solidaire</b>
+                    <b> plus solidaire</b>
                     {' '}
                     et véritablement
-                    <b>durable</b>
+                    <b> durable</b>
                     . Tu trouveras ici des informations sur les acteurs qui participent à la transition écologique et sociale dans des domaines aussi variées que :
-                    <b>l'éducation</b>
+                    <b> l'éducation</b>
                     , la culture, la santé,
-                    <b>l'alimentation</b>
+                    <b> l'alimentation</b>
                     , la justice, l'économie, la citoyenneté, l'agriculture, l'industrie, l'habitat, la mobilité,
-                    <b>l'énergie</b>
+                    <b> l'énergie</b>
                     , le recyclage, la réduction des déchets,
-                    <b>le développement durable</b>
+                    <b> le développement durable</b>
                     ,
-                    <b>le climat</b>
+                    <b> le climat</b>
                     , la qualité de l'air, la biodiversité, la gestion de l'eau, l'aménagement du territoire, etc
                   </>
                 )}
@@ -248,7 +248,7 @@ const PresentationSection = (props) => {
                     <i>OUAAA!</i>
                     {' '}
                     met un coup de projecteur, sur tous celles et ceux qui agissent pour la
-                    <b>transition climatique</b>
+                    <b> transition climatique</b>
                     . Cette communauté d’acteurs est présente sur tout le territoire, dans les villes comme dans les villages, de l'anse de l'Aiguillon à l'embouchure de la Charente, de la forêt de Benon au bout de l'île de Ré en passant par Surgères, l’agglomération de La Rochelle, Saint Martin de Ré, Marans, et Châtelaillon-Plage.
                   </>
                 )}
@@ -267,7 +267,7 @@ const PresentationSection = (props) => {
 
         <Grid item md={6} className={[styles.align, { position: 'relative', width: '300px', height: '500px' }]}>
           <div className={[styles.align, { position: 'relative', width: '300px', height: '500px' }]}>
-            <Image alt="Mountains" width="100%" height="100%" sizes="33vw" src="/image_accueil.png" />
+            <Image alt="Mountains" width="100%" height="76%" sizes="33vw" src="/image_accueil.png" />
           </div>
         </Grid>
       </Grid>

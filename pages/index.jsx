@@ -13,6 +13,7 @@ import LastActor from '../containers/layouts/homePage/lastActor';
 import ScrollToBottom from '../components/scroll/ScrollToBottom';
 import LastArticle from '../containers/layouts/homePage/lastArticle';
 import LastEvent from '../containers/layouts/homePage/lastEvent';
+import CookieConsent from 'react-cookie-consent';
 
 const useStyles = makeStyles((theme) => ({
   leftTitle: {
@@ -148,6 +149,18 @@ const Index = () => {
 
           <ScrollToBottom sections={sections} />
         </Box>
+        <CookieConsent
+          location="bottom"
+          buttonText="J'ai compris"
+          cookieName="myAwesomeCookieName2"
+          style={{ background: '#2c357d' }}
+          buttonStyle={{ color: '#2c357d', fontSize: '13px' }}
+          expires={150}
+        >
+          Ce site n'utilise que des cookies techniques.
+          {' '}
+        
+        </CookieConsent>
       </RootRef>
     </AppLayout>
   );
