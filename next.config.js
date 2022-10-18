@@ -22,7 +22,7 @@ module.exports = withPWA({
     dest: 'public',
     runtimeCaching,
     register: true,
-    disable: process.env.NODE_ENV === "development",
+    disable: true, //process.env.NODE_ENV === "development",
   },
   experimental: {
     esmExternals: false,
