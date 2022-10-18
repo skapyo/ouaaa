@@ -22,11 +22,9 @@ module.exports = withPWA({
     dest: 'public',
     runtimeCaching,
     register: true,
-    disable: true, //process.env.NODE_ENV === "development",
+    disable: process.env.NODE_ENV === "development",
   },
-  experimental: {
-    esmExternals: false,
-  },
+
   future: {
     webpack5: true
   },
