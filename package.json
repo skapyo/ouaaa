@@ -46,7 +46,7 @@
     "apollo-client": "^2.6.10",
     "apollo-link-http": "^1.5.17",
     "apollo-link-schema": "^1.2.5",
-    "apollo-upload-client": "^14.1.2",
+    "apollo-upload-client": "^17.0.0",
     "base-64": "^1.0.0",
     "classnames": "^2.3.1",
     "clsx": "^1.1.1",
