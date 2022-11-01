@@ -302,6 +302,7 @@ const GET_ARTICLE = `
         id
         label
         content
+        shortDescription
         createdAt
         pictures {
           id
@@ -479,6 +480,24 @@ const Article = ({ initialData }) => {
           {' '}
           {/* @ts-ignore */}
         </title>
+        {data && data.article.pictures &&(
+                        <>
+                          <meta
+                            property="og:image"
+                            content={getImageUrl(data.article.pictures
+                              .sort((a, b) => (a.position > b.position ? 1 : -1))[0].originalPicturePath)}
+                          />
+                          <meta name='twitter:image' content={getImageUrl(data.article.pictures
+                                .sort((a, b) => (a.position > b.position ? 1 : -1))[0].originalPicturePath)}
+                          />
+                        </>
+        )}
+
+        <meta property='og:title' content={data && data.article.label} />
+        <meta property='og:description' content={data && data.article.shortDescription} />
+        <meta name='twitter:title' content={data && data.article.label} />
+        <meta name='twitter:description' content={data && data.article.shortDescription} />
+
       </Head>
       <RootRef>
         <Box>
@@ -535,7 +554,8 @@ const Article = ({ initialData }) => {
                       ))}
                 </Slider>
                 <Modal open={openModalSlider} onClose={() => setOpenModalSlider(false)} aria-labelledby="parent-modal-title"
-                  aria-describedby="parent-modal-description">
+                  aria-describedby="parent-modal-description"
+                >
                   <Box sx={style}>
                     <IconButton aria-label="Close" className={styles.closeButton} onClick={() => setOpenModalSlider(false)}>
                       <CloseIcon />

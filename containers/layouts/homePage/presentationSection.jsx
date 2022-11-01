@@ -46,11 +46,10 @@ const useStyles = makeStyles((theme) => ({
     },
     margin: 'auto',
     width: 'fit-content',
-    background: 'white',
+    background: 'rgba(255, 255, 255, 0.7)',
     padding: '24px',
     borderRadius: '26px',
     color: 'black',
-    opacity: '0.9',
   },
   addActor: {
     [theme.breakpoints.up('md')]: {
@@ -66,14 +65,13 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('sm')]: {
       fontSize: '2em',
     },
-    background: 'white',
+    background: 'rgba(255, 255, 255, 0.7)',
     width: 'fit-content',
     textAlign: 'center',
     margin: 'auto',
     padding: '20px',
     borderRadius: '26px',
     color: 'black',
-    opacity: '0.9',
   },
   buttonGrid: {
     fontSize: '1em',
@@ -107,11 +105,11 @@ const PresentationSection = (props) => {
     <Container className={styles.titleContainer} id={props.id}>
       <div className={styles.title}>
         <h1 className={styles.h1}>
-          agir pour la transition écologique
-          {' '}
-          <br />
-          {' '}
-          et sociale en aunis
+            agir pour la transition écologique
+            {' '}
+            <br />
+            {' '}
+            et sociale en aunis
         </h1>
       </div>
 
