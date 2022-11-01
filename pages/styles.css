@@ -22,6 +22,9 @@ body {
   color: #2C367E !important;
   margin: 0px!important;
 }
+.slick-next {
+  right: -24px!important;
+}
 .image {
   max-width: 200px;
 }
