@@ -165,6 +165,17 @@ const SignupForm = () => {
           <Typography component="h1" variant="h5">
             Inscription
           </Typography>
+          <FormControlLabel
+            control={
+              <Checkbox
+                name="rgpd"
+                color="primary"
+                required
+                onChange={formChangeHandler}
+              />
+            }
+            label={<label>J'accepte que les données saisies soient utilisées par OUAAA pour vous contacter conformément à <a href="/legalmention">nos mentions légales </a>*</label>}
+          />
           <TextField
             variant="outlined"
             margin="normal"
@@ -257,17 +268,7 @@ const SignupForm = () => {
             onChange={formChangeHandler}
             disabled={clicked}
           />
-          <FormControlLabel
-            control={
-              <Checkbox
-                name="rgpd"
-                color="primary"
-                required
-                onChange={formChangeHandler}
-              />
-            }
-            label={<label>J'accepte que les données saisies soient utilisées par OUAAA pour vous contacter conformément à <a href="/legalmention">nos mentions légales </a>*</label>}
-          />
+          
           <ClassicButton
             fullWidth
             variant="contained"

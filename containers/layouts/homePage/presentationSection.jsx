@@ -38,6 +38,7 @@ const useStyles = makeStyles((theme) => ({
   },
   baseLine: {
     fontSize: '1em',
+    fontWeight: 'bold',
     [theme.breakpoints.up('xs')]: {
       textAlign: 'center',
     },
