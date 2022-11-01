@@ -23,7 +23,10 @@ body {
   margin: 0px!important;
 }
 .slick-next {
-  right: -24px!important;
+  right: -10px!important;
+}
+.slick-prev {
+  left: -10px!important;
 }
 .image {
   max-width: 200px;
