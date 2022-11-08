@@ -740,6 +740,11 @@ const AddActorForm = () => {
           de tous les visiteurs de <i>OUAAA!</i>
           <br />
           <br />
+          Une campagne annuelle de vérification des comptes a lieu afin de
+          vérifier la validité des adresses email. A cet effet une prise
+          de contact téléphonique peut avoir lieu.
+          <br />
+          <br />
           Vous pourrez actualiser les infos de votre/vos page(s) Acteurs dès que
           nécessaire via votre espace acteur (rubrique « administrer mes pages
           acteurs ») via{' '}
@@ -801,6 +806,7 @@ const AddActorForm = () => {
             !!validationResult?.result.email
           }
           errorText="Format de l'email invalide."
+          helperText="Un email générique type « contact@structure.fr » est préférable à un mail nominatif type «prenom.nom@gmail.com » notamment pour limiter la pollution publicitaire des boites mail (robots parsant le web)"
         />
         <FormItem
           label="Téléphone"

@@ -16,9 +16,17 @@ body {
 }
 .slick-prev::before {
   color: #2C367E !important;
+  margin: 0px!important;
 }
 .slick-next::before {
   color: #2C367E !important;
+  margin: 0px!important;
+}
+.slick-next {
+  right: -10px!important;
+}
+.slick-prev {
+  left: -10px!important;
 }
 .image {
   max-width: 200px;

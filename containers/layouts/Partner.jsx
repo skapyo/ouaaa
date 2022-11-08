@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid } from '@material-ui/core';
 import { useRouter } from 'next/router';
+import Image from 'next/image';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -37,25 +38,25 @@ const Partner = () => {
       </Grid>
       <Grid item container direction="row" justifyContent="space-around" className={styles.partners} xs={10} sm={6} onClick={handleClickAbout}>
         <Grid item>
-          <img height="50px" src="https://static.ouaaa-transition.fr/static/images/actor/32/32-AU0wmu0S9A-original.jpeg?w=1920&q=75" alt="Aunis en transition" />
+          <Image width="100%" height="50px" src="https://static.ouaaa-transition.fr/static/images/actor/32/32-AU0wmu0S9A-original.jpeg?w=1920&q=75" alt="Aunis en transition" />
         </Grid>
         <Grid item spacing={4}>
-          <img height="50px" src="/image/logo-LRTZC.jpg" alt="La Rochelle Territoire Zéro Carbone" />
+          <Image width="50%" height="50px" src="/image/logo-LRTZC.jpg" alt="La Rochelle Territoire Zéro Carbone" />
         </Grid>
         <Grid item spacing={4}>
-          <img height="50px" src="https://www.insightnest.fr/wp-content/uploads/2021/07/logo_full_dark_439.png" alt="Insighnest" />
+          <Image width="140%" height="50px" src="/logo_insightnest.png" alt="Insighnest" />
         </Grid>
         <Grid item spacing={4}>
-          <img height="50px" src="https://www.onepercentfortheplanet.fr/wp-content/uploads/2020/06/Primary_Full_Color_Horizontal-1-scaled.png" alt="onpercentfortheplanet" />
+          <Image width="100%" height="50px" src="/logo_one_per_cent_planet.png" alt="onpercentfortheplanet" />
         </Grid>
         <Grid item spacing={4}>
-          <img height="50px" src="https://www.leanature.com/wp-content/uploads/2020/11/logo-lea-nature.svg" alt="leanature" />
+          <Image width="100%" height="50px" src="/logo-lea-nature.svg" alt="leanature" />
         </Grid>
         <Grid item spacing={4}>
-          <img height="50px" src="/image/logo-CDA.jpg" alt="Communauté d'Agglomération de la rochelle" />
+          <Image width="200%" height="50px" src="/image/logo-CDA.jpg" alt="Communauté d'Agglomération de la rochelle" />
         </Grid>
         <Grid item spacing={4}>
-          <img height="50px" src="/image/logo-na.jpg" alt="Région nouvelle aquitaine" />
+          <Image width="100%" height="50px" src="/image/logo-na.jpg" alt="Région nouvelle aquitaine" />
         </Grid>
       </Grid>
     </Grid>

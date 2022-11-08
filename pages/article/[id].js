@@ -302,6 +302,7 @@ const GET_ARTICLE = `
         id
         label
         content
+        shortDescription
         createdAt
         pictures {
           id
@@ -479,6 +480,24 @@ const Article = ({ initialData }) => {
           {' '}
           {/* @ts-ignore */}
         </title>
+        {bannerUrl && (
+        <>
+          <meta
+            property="og:image"
+            content={getImageUrl(bannerUrl)}
+          />
+          <meta
+            name="twitter:image"
+            content={getImageUrl(bannerUrl)}
+          />
+        </>
+        )}
+
+        <meta property="og:title" content={data && data.article.label} />
+        <meta property="og:description" content={data && data.article.shortDescription} />
+        <meta name="twitter:title" content={data && data.article.label} />
+        <meta name="twitter:description" content={data && data.article.shortDescription} />
+
       </Head>
       <RootRef>
         <Box>
@@ -507,7 +526,9 @@ const Article = ({ initialData }) => {
                 </div>
                 <br />
                 <div className={styles.createdAt}>
-                  Publié le <Moment format="DD/MM/YYYY HH:mm" unix>
+                  Publié le
+                  {' '}
+                  <Moment format="DD/MM/YYYY HH:mm" unix>
                     {data.article && data.article.createdAt / 1000}
                   </Moment>
                 </div>
@@ -521,9 +542,9 @@ const Article = ({ initialData }) => {
                   </div>
                 )}
                 <Slider {...settingsSliderImage} className={[styles.slider]}>
-                  {data &&
-                    data.article.pictures &&
-                    data.article.pictures
+                  {data
+                    && data.article.pictures
+                    && data.article.pictures
                       .sort((a, b) => (a.position > b.position ? 1 : -1))
                       .map((picture) => (
 
@@ -534,16 +555,20 @@ const Article = ({ initialData }) => {
                         />
                       ))}
                 </Slider>
-                <Modal open={openModalSlider} onClose={() => setOpenModalSlider(false)} aria-labelledby="parent-modal-title"
-                  aria-describedby="parent-modal-description">
+                <Modal
+                  open={openModalSlider}
+                  onClose={() => setOpenModalSlider(false)}
+                  aria-labelledby="parent-modal-title"
+                  aria-describedby="parent-modal-description"
+                >
                   <Box sx={style}>
                     <IconButton aria-label="Close" className={styles.closeButton} onClick={() => setOpenModalSlider(false)}>
                       <CloseIcon />
                     </IconButton>
                     <Slider {...sliderSettings} className={[styles.slider]}>
-                      {data &&
-                        data.article.pictures &&
-                        data.article.pictures
+                      {data
+                        && data.article.pictures
+                        && data.article.pictures
                           .sort((a, b) => (a.position > b.position ? 1 : -1))
                           .map((picture) => (
 
@@ -590,7 +615,7 @@ const Article = ({ initialData }) => {
                   <EditIcon />
                 </Fab>
               </Link>
-            )}
+          )}
         </Box>
       </RootRef>
     </AppLayout>

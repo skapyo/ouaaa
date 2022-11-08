@@ -8,7 +8,7 @@ import FormController, {
 } from 'components/controllers/FormController';
 import { Grid, TextField, Typography, Button } from '@material-ui/core';
 import ClassicButton from 'components/buttons/ClassicButton';
-import SearchIcon from '@material-ui/icons/Search';
+import DoneIcon from '@material-ui/icons/Done';
 import TrendingFlatIcon from '@material-ui/icons/TrendingFlat';
 import { useSessionState } from 'context/session/session';
 
@@ -208,7 +208,7 @@ const Newsletter = (prop) => {
               onClick={subscription}
               disabled={!validationResult?.global}
             >
-              <SearchIcon />
+              <DoneIcon />
             </ClassicButton>
           </div>
         )}

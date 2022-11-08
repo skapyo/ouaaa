@@ -8,10 +8,11 @@ import SearchEngine from '../../../components/SearchEngine';
 
 const useStyles = makeStyles((theme) => ({
   titleContainer: {
-    backgroundImage: "url('./cover.jpg')",
+    backgroundImage: "url('./Accueil1.jpg')",
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
     color: 'white',
+    backgroundPosition: 'center center',
     textAlign: 'center',
     [theme.breakpoints.up('md')]: {
       height: '45em',
@@ -37,12 +38,19 @@ const useStyles = makeStyles((theme) => ({
   },
   baseLine: {
     fontSize: '1em',
+    fontWeight: 'bold',
     [theme.breakpoints.up('xs')]: {
       textAlign: 'center',
     },
     [theme.breakpoints.down('xs')]: {
       textAlign: 'justify',
     },
+    margin: 'auto',
+    width: 'fit-content',
+    background: 'rgba(255, 255, 255, 0.7)',
+    padding: '24px',
+    borderRadius: '26px',
+    color: 'black',
   },
   addActor: {
     [theme.breakpoints.up('md')]: {
@@ -58,6 +66,13 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('sm')]: {
       fontSize: '2em',
     },
+    background: 'rgba(255, 255, 255, 0.7)',
+    width: 'fit-content',
+    textAlign: 'center',
+    margin: 'auto',
+    padding: '20px',
+    borderRadius: '26px',
+    color: 'black',
   },
   buttonGrid: {
     fontSize: '1em',
@@ -91,11 +106,11 @@ const PresentationSection = (props) => {
     <Container className={styles.titleContainer} id={props.id}>
       <div className={styles.title}>
         <h1 className={styles.h1}>
-          agir pour la transition écologique
-          {' '}
-          <br />
-          {' '}
-          et sociale en aunis
+            agir pour la transition écologique
+            {' '}
+            <br />
+            {' '}
+            et sociale en aunis
         </h1>
       </div>
 
