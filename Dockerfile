@@ -7,11 +7,12 @@ WORKDIR /app
 ENV PATH /app/node_modules/.bin:$PATH
 # Installing dependencies
 COPY package*.json ./
-RUN npm install
+RUN npm install 
 
 # Copying source files
 COPY . ./
-
+ARG MAX_OLD_SPACE_SIZE=8192
+ENV NODE_OPTIONS=--max-old-space-size=${MAX_OLD_SPACE_SIZE}
 # Building app
 RUN npm run build
 

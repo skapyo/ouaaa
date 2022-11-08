@@ -1222,6 +1222,8 @@ const EditActorForm = (props) => {
             !validationResult?.global && !!validationResult?.result.email
           }
           errorText="Format de l'email invalide."
+          helperText="Un email générique type « contact@structure.fr » est préférable à un mail nominatif type «prenom.nom@gmail.com » notamment pour limiter la pollution publicitaire des boites mail (robots parsant le web)"
+       
         />
         <FormItem
           label="Téléphone"
