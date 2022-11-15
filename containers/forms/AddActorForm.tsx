@@ -984,7 +984,7 @@ const AddActorForm = () => {
         </FormControl>
 
         <FormItem
-          label="Métier / Activité principale"
+          label="Métier / Activité principale de votre structure"
           inputName="activity"
           formChangeHandler={formChangeHandler}
           value={formValues.activity}
