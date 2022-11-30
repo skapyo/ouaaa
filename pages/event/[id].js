@@ -721,7 +721,7 @@ const Event = ({ initialData }) => {
           {/* @ts-ignore */}
           {data && showCategory(data.event.entries)}
         </title>
-        <meta name="description" content={data && (`${data.event.label} ${data.event.city} ${data}` && `${momentTimezone(parseInt(data.event.startedAt)).tz("Europe/Paris").format('DD/MM/YYYY HH:mm:ssZZ')} ${momentTimezone(parseInt(data.event.endedAt)).format('DD/MM/YYYY HH:mm')}${showCategory(data.event.entries)}`)} />
+        <meta name="description" content={data && (`${data.event.label} ${data.event.city} ${data}` && `${momentTimezone(parseInt(data.event.startedAt)).tz("Europe/Paris").format('DD/MM/YYYY HH:mm')} ${momentTimezone(parseInt(data.event.endedAt)).tz("Europe/Paris").format('DD/MM/YYYY HH:mm')}${showCategory(data.event.entries)}`)} />
         {data
           && data.event.pictures.length >= 1
           && data.event.pictures.filter((picture) => picture.logo).length >= 1 && (
