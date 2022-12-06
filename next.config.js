@@ -1,8 +1,7 @@
 const withPWA = require('next-pwa')
 const runtimeCaching = require('next-pwa/cache')
 
-module.exports = withPWA({
-  swcMinify: true,
+module.exports = {
   eslint: {
     // Warning: Dangerously allow production builds to successfully complete even if
     // your project has ESLint errors.
@@ -28,4 +27,4 @@ module.exports = withPWA({
   future: {
     webpack5: true
   },
-});
+};
