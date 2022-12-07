@@ -43,6 +43,10 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  legal: {
+    padding: theme.spacing(4, 0, 4, 0),
+    textAlign: 'justify',
+  },
   passwordRequirements: {
     [theme.breakpoints.up('sm')]: {
       marginTop: theme.spacing(24),
@@ -165,6 +169,7 @@ const SignupForm = () => {
           <Typography component="h1" variant="h5">
             Inscription
           </Typography>
+          
           <TextField
             variant="outlined"
             margin="normal"
@@ -268,6 +273,18 @@ const SignupForm = () => {
             }
             label={<label>J'accepte que les données saisies soient utilisées par OUAAA pour vous contacter conformément à <a href="/legalmention">nos mentions légales </a>*</label>}
           />
+          <div  className={styles.legal}>Les données personnelles relatives à la création du compte (nom/prénom, structure si
+          professionnel, numéro de téléphone, email) sont destinées à permettre l’identification sur le site
+          et l’accès à son compte et aux fonctionnalités correspondantes. Les données sont conservées
+          tant que le compte est actif. Une fois par an, le responsable de traitement peut effectuer une
+          campagne de vérification d’adresse mails pour supprimer les comptes inactifs après vérification
+          par contact téléphonique
+
+          Les fiches acteurs reliées à des comptes inactifs seront mises à jour avec la mention suivante :
+          coordonnées obsolètes à telle date. Pour toute question, vous pouvez joindre l’administrateur du
+          site à contact@ouaaa-transition.fr et exercer vos droits d’accès, de rectification ou de suppression
+          aurprès du DPD à dpd@ouaaa-transition.fr
+          </div>
           <ClassicButton
             fullWidth
             variant="contained"

@@ -4,6 +4,7 @@ import { Box } from '@mui/material';
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { withApollo } from 'hoc/withApollo';
+import { Link } from '@mui/material';
 import Head from 'next/head';
 import CookieConsent from 'react-cookie-consent';
 import Newsletter from '../containers/layouts/Newsletter';
@@ -136,7 +137,7 @@ const Index = () => {
           <PresentationSection id={sections[0]} />
 
           <ThreePoint id={sections[1]} />
-          
+
           <LastActor id={sections[2]} />
 
           <LastEvent id={sections[3]} />
@@ -157,9 +158,15 @@ const Index = () => {
           buttonStyle={{ color: '#2c357d', fontSize: '13px' }}
           expires={150}
         >
-          Ce site n'utilise que des cookies techniques.
-          {' '}
-
+          Gestion de vos préférences sur
+          les cookies :<br /> Ce site ne dépose que des cookies techniques nécessaires
+          au fonctionnement sur votre appareil. Aucun suivi ou mesure d’audience ne sont effectués.
+          <br />
+          <br />
+          Aucun cookie tiers n&#39;est utilisé pour analyser le comportement individuel ou les données
+    personnelles des visiteurs du site. Plus d&#39;informations sur les cookies et les traceurs sur le site de la
+    CNIL : <Link href="https://www.cnil.fr/fr/cookies-et-autres-traceurs/regles/cookies/lignes-directrices-modificatives-et-recommandation" target="_blank" color="inherit" >Cookies et autres traceurs : la CNIL publie des lignes directrices modificatives et sa
+recommandation</Link>
         </CookieConsent>
       </RootRef>
     </AppLayout>

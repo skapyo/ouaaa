@@ -1,26 +1,30 @@
-import { useMutation } from "@apollo/client";
-import { Container, FormControlLabel, makeStyles, Radio, RadioGroup, TextField, Tooltip, Typography } from "@material-ui/core";
-import ClassicButton from "components/buttons/ClassicButton";
-import FormController, { RenderCallback, ValidationRules, ValidationRuleType } from "components/controllers/FormController";
-import ImagesDropZone from "components/ImageCropper/ImagesDropZone";
+import { useMutation } from '@apollo/client';
+import {
+  Container, FormControlLabel, makeStyles, Radio, RadioGroup, TextField, Tooltip, Typography,
+} from '@material-ui/core';
+import ClassicButton from 'components/buttons/ClassicButton';
+import FormController, { RenderCallback, ValidationRules, ValidationRuleType } from 'components/controllers/FormController';
+import ImagesDropZone from 'components/ImageCropper/ImagesDropZone';
 import ImagesDisplay from 'components/ImageCropper/ImagesDisplay';
 import Checkbox from '@material-ui/core/Checkbox';
-import { useSessionState } from "context/session/session";
-import gql from "graphql-tag";
-import { withApollo } from "hoc/withApollo";
-import { useSnackbar } from "notistack";
-import { ChangeEvent, useCallback, useEffect, useState } from "react";
+import { useSessionState } from 'context/session/session';
+import gql from 'graphql-tag';
+import { withApollo } from 'hoc/withApollo';
+import { useSnackbar } from 'notistack';
+import {
+  ChangeEvent, useCallback, useEffect, useState,
+} from 'react';
 import InfoIcon from '@material-ui/icons/Info';
-import useDnDStateManager from "hooks/useDnDStateManager";
-import useImageReader from "hooks/useImageReader";
-import withDndProvider from "hoc/withDnDProvider";
-import { FormatStrikethroughTwoTone } from "@material-ui/icons";
+import useDnDStateManager from 'hooks/useDnDStateManager';
+import useImageReader from 'hooks/useImageReader';
+import withDndProvider from 'hoc/withDnDProvider';
+import { FormatStrikethroughTwoTone } from '@material-ui/icons';
 
 const PROPOSE_ACTORFORM = gql`
   mutation inviteActor($formValues: ProposeActorInfos!) {
     inviteActor(inviteActorInfos: $formValues)
   }
-`
+`;
 
 const useStyles = makeStyles((theme) => ({
   formContainer: {
@@ -28,12 +32,12 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(8),
   },
   field: {
-    marginBottom: theme.spacing(3)
+    marginBottom: theme.spacing(3),
   },
   radioGroup: {
     marginBottom: theme.spacing(3),
-    justifyContent: 'center'
-  }
+    justifyContent: 'center',
+  },
 }));
 
 type FormItemProps = {
@@ -65,7 +69,7 @@ const FormItem = (props: FormItemProps) => {
     multiline,
     fullWidth,
     minRows,
-    maxRows
+    maxRows,
   } = props;
   return (
     <TextField
@@ -108,8 +112,7 @@ const ProposeActorForm = (props) => {
   const Form: RenderCallback = (props) => {
     const { formChangeHandler, formValues, validationResult } = props;
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-    
-    
+
     const handleChangeInvite = () => {
       setNoEmailInvite(!noEmailInvite);
       formValues.sendEmail = noEmailInvite;
@@ -121,29 +124,29 @@ const ProposeActorForm = (props) => {
     ] = useMutation(PROPOSE_ACTORFORM);
 
     const inputs = [
-      
-      
+
     ];
-    if(!user){
+    if (!user) {
       inputs.push({
-        label: 'Votre nom à vous (Facultatif)',
+        label: 'Votre nom à vous',
         name: 'requesterName',
-        required: false,
-        fullWidth: true
+        required: true,
+        errorText: 'Nom requis.',
+        fullWidth: true,
       });
     }
     inputs.push({
-      label: "Nom du contact (Facultatif)",
+      label: 'Nom du contact (Facultatif)',
       name: 'contactName',
       required: false,
-      fullWidth: true
+      fullWidth: true,
     });
     inputs.push({
-      label: noEmailInvite ? "Nom de l'acteur contacté":"Nom de l'acteur à inviter" ,
+      label: noEmailInvite ? "Nom de l'acteur contacté" : "Nom de l'acteur à inviter",
       name: 'actorName',
       required: true,
       errorText: 'Nom requis.',
-      fullWidth: true
+      fullWidth: true,
     });
 
     inputs.push({
@@ -151,38 +154,35 @@ const ProposeActorForm = (props) => {
       name: 'actorEmail',
       required: true,
       errorText: 'Email requis.',
-      fullWidth: true
+      fullWidth: true,
     });
     inputs.push({
       label: noEmailInvite ? "Code postal de l'acteur contacté (Facultatif)" : "Code postal de l'acteur à inviter (Facultatif)",
       name: 'postCode',
       required: false,
-      fullWidth: true
+      fullWidth: true,
     });
-    if(!noEmailInvite){
+    if (!noEmailInvite) {
       inputs.push({
         label: "Message optionnel pour l'acteur ou le contact",
         name: 'message',
         required: false,
         multiline: true,
-        fullWidth: true
+        fullWidth: true,
       });
     }
-   
-
-
 
     const inputError = (name: string) => {
-      return !validationResult?.global && !!validationResult?.result[name] && formValues[name] !== undefined
-    }
+      return !validationResult?.global && !!validationResult?.result[name] && formValues[name] !== undefined;
+    };
 
     const submitContactForm = () => {
       inviteActor({
         variables: {
           formValues: {
-            ...formValues
-          }
-        }
+            ...formValues,
+          },
+        },
       });
     };
 
@@ -193,8 +193,8 @@ const ProposeActorForm = (props) => {
           if (input.name === 'actorName') {
             setLastActorNameSent(formValues[input.name]);
           }
-        formValues[input.name]='';
-      });
+          formValues[input.name] = '';
+        });
       } else if (inviteActorError) {
         enqueueSnackbar('Une erreur s\'est produite, merci de bien vouloir réessayer.', {
           preventDuplicate: true,
@@ -220,14 +220,14 @@ const ProposeActorForm = (props) => {
                 fullWidth={input.fullWidth}
                 minRows={input.minRows}
                 maxRows={input.maxRows}
-              ></FormItem>
+              />
             );
           })}
           {noEmailInviteActor && (
             <FormControlLabel
-            control={<Checkbox onChange={handleChangeInvite}></Checkbox>}
-            label="Inviter un nouvel acteur avec un email automatique "
-          />
+              control={<Checkbox onChange={handleChangeInvite} />}
+              label="Inviter un nouvel acteur avec un email automatique "
+            />
           )}
 
         </div>
@@ -235,7 +235,7 @@ const ProposeActorForm = (props) => {
     });
 
     return (
-      <Container  maxWidth="md" className={styles.formContainer}>
+      <Container maxWidth="md" className={styles.formContainer}>
         { getFormInputs() }
         <ClassicButton
           fullWidth
@@ -243,40 +243,63 @@ const ProposeActorForm = (props) => {
           onClick={submitContactForm}
           disabled={!validationResult?.global}
         >
-          { noEmailInvite?"Ajouter l'acteur":"Inviter le nouvel acteur"}
+          { noEmailInvite ? "Ajouter l'acteur" : 'Inviter le nouvel acteur'}
         </ClassicButton>
       </Container>
-    )
-  }
-
-  const validationRules: ValidationRules = {
-    actorName: {
-      rule: ValidationRuleType.required
-    },
-    actorEmail: {
-      rule: ValidationRuleType.required && ValidationRuleType.email
-    }
+    );
   };
+  let validationRules: ValidationRules;
+  if (!user) {
+    validationRules = {
+      actorName: {
+        rule: ValidationRuleType.required,
+      },
+      requesterName: {
+        rule: ValidationRuleType.required,
+      },
+      actorEmail: {
+        rule: ValidationRuleType.required && ValidationRuleType.email,
+      },
+    };
+  } else {
+    validationRules = {
+      actorName: {
+        rule: ValidationRuleType.required,
+      },
+      actorEmail: {
+        rule: ValidationRuleType.required && ValidationRuleType.email,
+      },
+    };
+  }
 
   if (messageSent) {
     return (
       <div>
-      <div className={styles.formContainer}>
-        <p>Merci de nous aider à faire grandir la communauté de OUAAA. Votre invitation à l'acteur <b>{lastActorNameSent}</b> a bien été envoyé. Vous pouvez continuer à inviter d'autres acteurs.</p>
+        <div className={styles.formContainer}>
+          <p>
+            Merci de nous aider à faire grandir la communauté de OUAAA. Votre invitation à l'acteur
+            {' '}
+            <b>{lastActorNameSent}</b>
+            {' '}
+            a bien été envoyé. Vous pouvez continuer à inviter d'autres acteurs.
+          </p>
+        </div>
+        <FormController
+          render={Form}
+          validationRules={validationRules}
+          initValues={initFormValues}
+        />
+        ;
       </div>
-       <FormController 
-       render={Form} 
-       validationRules={validationRules}
-       initValues={initFormValues} 
-     />;
-     </div>
-    )
+    );
   }
-  return <FormController 
-            render={Form} 
-            validationRules={validationRules}
-            initValues={initFormValues} 
-          />;
+  return (
+    <FormController
+      render={Form}
+      validationRules={validationRules}
+      initValues={initFormValues}
+    />
+  );
 };
 
 export default withDndProvider(withApollo()(ProposeActorForm));

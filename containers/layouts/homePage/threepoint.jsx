@@ -109,6 +109,10 @@ const useStyles = makeStyles((theme) => ({
     backgroundRepeat: 'no-repeat',
     'background-position-x': '5px',
     'background-position-y': '-3px',
+    [theme.breakpoints.down('sm')]: {
+      'background-size': '21%',
+      'background-position-y': '19px',
+    },
 
   },
   buttonInverseOrganisation: {

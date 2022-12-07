@@ -1094,6 +1094,7 @@ const EditActorForm = (props) => {
       formValues.volunteerDescription = actorData.actor.volunteerDescription;
       formValues.shortDescription = actorData.actor.shortDescription;
       formValues.referents = actorData.actor.referents;
+      formValues.contactId = actorData.actor.contact_id;
 
       if (formValues.postCode === '17000') {
         setEstlarochelle(true);
@@ -1222,6 +1223,8 @@ const EditActorForm = (props) => {
             !validationResult?.global && !!validationResult?.result.email
           }
           errorText="Format de l'email invalide."
+          helperText="Un email générique type « contact@structure.fr » est préférable à un mail nominatif type «prenom.nom@gmail.com » notamment pour limiter la pollution publicitaire des boites mail (robots parsant le web)"
+       
         />
         <FormItem
           label="Téléphone"
@@ -1397,7 +1400,7 @@ const EditActorForm = (props) => {
         </FormControl>
         <p />
         <FormItem
-          label="Métier / Activité principale"
+          label="Métier / Activité principale de votre structure"
           inputName="activity"
           formChangeHandler={formChangeHandler}
           value={formValues.activity}

@@ -16,6 +16,9 @@ const useStyles = makeStyles((theme) => ({
   align: {
     'text-align': 'center',
   },
+  legal: {
+    'text-align': 'justify',
+  },
   image: {
     width: '50%',
     [theme.breakpoints.down('md')]: {
@@ -154,6 +157,20 @@ const GrandDefi = () => {
               Tu souhaites t'informer sur le réglement? Télécharge le <Link href={`/réglement_jeu_grand_défi.pdf`} target="_blank">ici</Link><br/>
                <br/>
                <br/>
+               <div  className={styles.legal}>
+               La participation à ce jeu génère la collecte des données personnelles suivantes (nom/prénom,
+                structure si professionnel, numéro de téléphone, email). Ces données sont collectées afin de
+                permettre la gestion du jeu. Les données sont conservés 24 mois. Une fois par an, le
+                responsable de traitement peut effectuer une campagne de vérification d’adresse mails pour
+                supprimer les comptes inactifs après vérification par contact téléphonique.
+                <br/>
+                <br/>
+                Pour toute question, vous pouvez joindre l’administrateur du site à contact@ouaaa-transition.fr et
+                exercer vos droits d’accès, de rectification ou de suppression aurprès du DPD à dpd@ouaaa-
+                transition.fr
+                </div>
+                <br/>
+                <br/>
           </Container>
         </Box>
       </RootRef>
