@@ -84,21 +84,19 @@ export default function SimpleCard({ actor }) {
                   && actor.entries[0].label}
               </Typography>
             </div>
-            { /*
-            { actor.pictures.sort((a, b) => (a.logo ? -1 : 1))[0]&& actor.pictures.sort((a, b) => (a.logo ? -1 : 1))[0].originalPicturePath!=null   && (
+            { actor.pictures.filter((a, b) => (a.logo ? -1 : 1))[0]&& actor.pictures.filter((a, b) => (a.logo ? -1 : 1))[0].originalPicturePath!=null   && (
+            <div style =  {{ width: '100%', height: '100%', position: 'relative', minHeight:"300px"}}>
             <Image
               loader={myLoader}
-              width="100%"
-              height="50px"
-              layout="responsive"
+              fill
               objectFit="contain"
               src={
-                actor.pictures.sort((a, b) => (a.logo ? -1 : 1))[0].originalPicturePath
+                actor.pictures.filter((a, b) => (a.logo ? -1 : 1))[0].originalPicturePath
               }
               alt={actor.name}
             />
-            )}
-            */}
+            </div>
+             )}
           </div>
           <div className={classes.content}>
             <div className={classes.titleDiv}>

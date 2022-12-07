@@ -936,6 +936,7 @@ const EditActorForm = (props) => {
     const submitHandler = useCallback(() => {
       let logoPictures;
       // @ts-ignore
+      debugger;
       if (objectsListLogo) {
         logoPictures = objectsListLogo.map((object) => {
           // return object.file
