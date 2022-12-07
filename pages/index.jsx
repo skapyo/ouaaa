@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { withApollo } from 'hoc/withApollo';
 import Head from 'next/head';
+import CookieConsent from 'react-cookie-consent';
 import Newsletter from '../containers/layouts/Newsletter';
 import Partner from '../containers/layouts/Partner';
 import PresentationSection from '../containers/layouts/homePage/presentationSection';
@@ -13,7 +14,6 @@ import LastActor from '../containers/layouts/homePage/lastActor';
 import ScrollToBottom from '../components/scroll/ScrollToBottom';
 import LastArticle from '../containers/layouts/homePage/lastArticle';
 import LastEvent from '../containers/layouts/homePage/lastEvent';
-import CookieConsent from 'react-cookie-consent';
 
 const useStyles = makeStyles((theme) => ({
   leftTitle: {
@@ -113,38 +113,38 @@ const Index = () => {
   });
   const styles = useStyles(stylesProps);
 
-  const sections = ["PresentationSection", "ThreePoint", "LastActor", "LastEvent", "LastArticle", "Newsletter"];
+  const sections = ['PresentationSection', 'ThreePoint', 'LastActor', 'LastEvent', 'LastArticle', 'Newsletter'];
 
   return (
 
     <AppLayout>
       <Head>
-        <meta property='og:type' content='website' />
-        <meta property='og:title' content='OUAAA!' />
-        <meta property='og:description' content="Plateforme d’information & d'initiative des acteurs de la transition vers une société plus humaine & écologique sur le territoire de l'Aunis  !" />
-        <meta property='og:site_name' content='OUAAA!' />
-        <meta property='og:url' content='https://ouaaa-transition.fr/' />
-        <meta property='og:image' content='https://ouaaa-transition.fr/apple-touch-icon.png' />
-        <meta name='twitter:url' content='https://ouaaa-transition.fr/' />
-        <meta name='twitter:title' content='OUAAA!' />
-        <meta name='twitter:description' content="Plateforme d’information & d'initiative des acteurs de la transition vers une société plus humaine & écologique sur le territoire de l'Aunis  !" />
-        <meta name='twitter:image' content='https://ouaaa-transition.fr/apple-touch-icon.png' />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="OUAAA!" />
+        <meta property="og:description" content="Plateforme d’information & d'initiative des acteurs de la transition vers une société plus humaine & écologique sur le territoire de l'Aunis  !" />
+        <meta property="og:site_name" content="OUAAA!" />
+        <meta property="og:url" content="https://ouaaa-transition.fr/" />
+        <meta property="og:image" content="https://ouaaa-transition.fr/apple-touch-icon.png" />
+        <meta name="twitter:url" content="https://ouaaa-transition.fr/" />
+        <meta name="twitter:title" content="OUAAA!" />
+        <meta name="twitter:description" content="Plateforme d’information & d'initiative des acteurs de la transition vers une société plus humaine & écologique sur le territoire de l'Aunis  !" />
+        <meta name="twitter:image" content="https://ouaaa-transition.fr/apple-touch-icon.png" />
       </Head>
       <RootRef>
         <Box>
 
           <PresentationSection id={sections[0]} />
 
-         <ThreePoint id={sections[1]} />
-
+          <ThreePoint id={sections[1]} />
+          
           <LastActor id={sections[2]} />
 
           <LastEvent id={sections[3]} />
-
+{/*
           <LastArticle id={sections[4]} />
 
           <Newsletter id={sections[5]} />
-
+  */}
           <Partner />
 
           <ScrollToBottom sections={sections} />
@@ -159,7 +159,7 @@ const Index = () => {
         >
           Ce site n'utilise que des cookies techniques.
           {' '}
-        
+
         </CookieConsent>
       </RootRef>
     </AppLayout>

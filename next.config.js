@@ -1,7 +1,8 @@
-const withPWA = require('next-pwa')
-const runtimeCaching = require('next-pwa/cache')
+const withPWA = require('next-pwa');
+const runtimeCaching = require('next-pwa/cache');
 
 module.exports = {
+  reactStrictMode: false,
   eslint: {
     // Warning: Dangerously allow production builds to successfully complete even if
     // your project has ESLint errors.
@@ -16,15 +17,5 @@ module.exports = {
   },
   images: {
     domains: ['localhost', 'static.recette.ouaaa-transition.fr', 'static.recette.ouaaa-transition.fr', 'static.ouaaa-transition.fr', 'ouaaa-transition.fr'],
-  },
-  pwa: {
-    dest: 'public',
-    runtimeCaching,
-    register: true,
-    disable: process.env.NODE_ENV === "development",
-  },
-
-  future: {
-    webpack5: true
   },
 };

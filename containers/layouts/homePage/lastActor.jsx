@@ -1,8 +1,7 @@
 import { Container, makeStyles, Typography, useTheme } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import Slider from 'react-slick/lib';
-import { useQuery } from '@apollo/client';
-import gql from 'graphql-tag';
+import { gql, useQuery } from '@apollo/client';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import CardSliderActor from '../../../components/cards/CardSliderActor';
 import { withApollo } from '../../../hoc/withApollo';
@@ -114,6 +113,7 @@ const LastActor = (props) => {
   }, [actorData]);
 
   function SampleNextArrow(props) {
+    // eslint-disable-next-line react/prop-types
     const { className, style, onClick } = props;
     return (
       <div

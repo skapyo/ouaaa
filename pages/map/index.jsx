@@ -5,8 +5,8 @@ import {
   Grid, Typography, useMediaQuery, Button,
 } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import gql from 'graphql-tag';
-import { useQuery } from '@apollo/client';
+
+import { gql, useQuery } from '@apollo/client';
 import Actors from 'containers/layouts/mapPage/actors';
 import { useRouter } from 'next/router';
 import Head from 'next/head';

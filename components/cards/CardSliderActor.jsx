@@ -64,6 +64,7 @@ const useStyles = makeStyles({
 
 export default function SimpleCard({ actor }) {
   const classes = useStyles();
+  debugger;
   const bull = <span className={classes.bullet}>•</span>;
   const myLoader = ({ src, width, quality }) => {
     return `${process.env.NEXT_PUBLIC_URI}${src}?w=${width}&q=${quality || 75}`;
@@ -83,6 +84,7 @@ export default function SimpleCard({ actor }) {
                   && actor.entries[0].label}
               </Typography>
             </div>
+            { /*
             { actor.pictures.sort((a, b) => (a.logo ? -1 : 1))[0]&& actor.pictures.sort((a, b) => (a.logo ? -1 : 1))[0].originalPicturePath!=null   && (
             <Image
               loader={myLoader}
@@ -96,6 +98,7 @@ export default function SimpleCard({ actor }) {
               alt={actor.name}
             />
             )}
+            */}
           </div>
           <div className={classes.content}>
             <div className={classes.titleDiv}>

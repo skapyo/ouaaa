@@ -75,7 +75,7 @@ export default function SimpleCard({ article }) {
           <div
             className={classes.image}
           >
-            { article.pictures.sort((a, b) => (a.logo ? -1 : 1))[0] && article.pictures.sort((a, b) => (a.logo ? -1 : 1))[0].originalPicturePath != null && (
+           { /*    { article.pictures.sort((a, b) => (a.logo ? -1 : 1))[0] && article.pictures.sort((a, b) => (a.logo ? -1 : 1))[0].originalPicturePath != null && (
             <Image
               loader={myLoader}
               width="100%"
@@ -88,6 +88,7 @@ export default function SimpleCard({ article }) {
               alt={article.name}
             />
             )}
+            */}
           </div>
           <div className={classes.content}>
             <div className={classes.titleDiv}>

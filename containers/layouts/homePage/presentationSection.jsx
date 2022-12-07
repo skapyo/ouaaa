@@ -122,7 +122,7 @@ const PresentationSection = (props) => {
         pour la transition écologique, sociale et démocratique, te donner le calendrier de leurs actions et te permettre de les rejoindre.
       </Typography>
 
-      <SearchEngine />
+      {/* <SearchEngine /> */}
     </Container>
   );
 };
