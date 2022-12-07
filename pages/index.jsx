@@ -141,11 +141,11 @@ const Index = () => {
           <LastActor id={sections[2]} />
 
           <LastEvent id={sections[3]} />
-{/*
+
           <LastArticle id={sections[4]} />
 
           <Newsletter id={sections[5]} />
-  */}
+
           <Partner />
 
           <ScrollToBottom sections={sections} />

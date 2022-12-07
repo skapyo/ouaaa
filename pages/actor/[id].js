@@ -875,8 +875,8 @@ const Actor = ({ initialData }) => {
                       <div className={styles.image}>
                         <Image
                           loader={myLoader}
-                          width="100%"
-                          height="100px"
+                          width="100"
+                          height="100"
                           layout="responsive"
                           objectFit="contain"
                           src={logo.originalPicturePath}
@@ -890,8 +890,8 @@ const Actor = ({ initialData }) => {
                       <Image
                         src="/icons/location.svg"
                         alt="Localisation"
-                        width="25px"
-                        height="25px"
+                        width="25"
+                        height="25"
                         objectFit="contain"
                         className={[styles.icon]}
                       />
@@ -955,8 +955,8 @@ const Actor = ({ initialData }) => {
                         <Grid item xs={3} className={[styles.alignRight]}>
                           <Image
                             src="/icons/phone.svg"
-                            width="25px"
-                            height="25px"
+                            width="25"
+                            height="25"
                             objectFit="contain"
                             alt="Téléphone"
                             className={[styles.icon]}
@@ -977,8 +977,8 @@ const Actor = ({ initialData }) => {
                         <Grid item xs={3} className={[styles.alignRight]}>
                           <Image
                             src="/icons/email.svg"
-                            width="25px"
-                            height="25px"
+                            width="25"
+                            height="25"
                             objectFit="contain"
                             alt="Email"
                             className={[styles.icon]}
@@ -999,8 +999,8 @@ const Actor = ({ initialData }) => {
                         <Grid item xs={3} className={[styles.alignRight]}>
                           <Image
                             src="/icons/web_site.svg"
-                            width="25px"
-                            height="25px"
+                            width="25"
+                            height="25"
                             objectFit="contain"
                             alt="Site Web"
                             className={[styles.icon]}
@@ -1031,8 +1031,8 @@ const Actor = ({ initialData }) => {
                       <Grid item xs={3} className={[styles.alignRight]}>
                         <Image
                           src="/icons/social.svg"
-                          width="25px"
-                          height="25px"
+                          width="25"
+                          height="25"
                           objectFit="contain"
                           alt="Réseau social"
                           className={[styles.icon]}
@@ -1064,8 +1064,8 @@ const Actor = ({ initialData }) => {
                         <Grid item xs={3} className={[styles.alignRight]}>
                           <Image
                             src="/icons/clock.svg"
-                            width="25px"
-                            height="25px"
+                            width="25"
+                            height="25"
                             objectFit="contain"
                             alt="Horaire"
                             className={[styles.icon]}
@@ -1134,8 +1134,8 @@ const Actor = ({ initialData }) => {
                       <Image
                         src="/icons/social.svg"
                         alt="Réseau social"
-                        width="25px"
-                        height="25px"
+                        width="25"
+                        height="25"
                         objectFit="contain"
                         className={[styles.icon]}
                       />
@@ -1254,8 +1254,8 @@ const Actor = ({ initialData }) => {
                                 <Image
                                   src={`/icons/${entry.icon}.svg`}
                                   alt="icon"
-                                  width="30px"
-                                  height="25px"
+                                  width="30"
+                                  height="25"
                                   objectFit="contain"
                                   className={styles.iconEntry}
                                 />
@@ -1280,8 +1280,8 @@ const Actor = ({ initialData }) => {
                                 <Image
                                   src={`/icons/${entry.icon}.svg`}
                                   alt="icon"
-                                  width="30px"
-                                  height="25px"
+                                  width="30"
+                                  height="25"
                                   objectFit="contain"
                                   className={styles.iconEntry}
                                 />
@@ -1305,8 +1305,8 @@ const Actor = ({ initialData }) => {
                       <Image
                         src="/icons/status.svg"
                         alt="Collectif & réseau"
-                        width="25px"
-                        height="25px"
+                        width="25"
+                        height="25"
                         objectFit="contain"
                         className={[styles.icon]}
                       />
@@ -1342,8 +1342,8 @@ const Actor = ({ initialData }) => {
                       <Image
                         src="/icons/public.svg"
                         alt="Collectif & réseau"
-                        width="25px"
-                        height="25px"
+                        width="25"
+                        height="25"
                         objectFit="contain"
                         className={[styles.icon]}
                       />
@@ -1378,8 +1378,8 @@ const Actor = ({ initialData }) => {
                       <Image
                         src="/icons/network.svg"
                         alt="Collectif & réseau"
-                        width="25px"
-                        height="25px"
+                        width="25"
+                        height="25"
                         objectFit="contain"
                         className={[styles.icon]}
                       />

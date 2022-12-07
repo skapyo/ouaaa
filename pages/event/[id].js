@@ -771,8 +771,8 @@ const Event = ({ initialData }) => {
                       && data.event.pictures.filter((picture) => picture.logo)
                         .length >= 1 && (
                         <Image
-                          width="100%"
-                          height="100px"
+                          width="100"
+                          height="100"
                           layout="responsive"
                           objectFit="contain"
                           src={
@@ -796,8 +796,8 @@ const Event = ({ initialData }) => {
                         <Image
                           src="/icons/types.svg"
                           alt="Collectif & réseau"
-                          width="25px"
-                          height="25px"
+                          width="25"
+                          height="25"
                           objectFit="contain"
                           className={[styles.icon]}
                         />
@@ -837,8 +837,8 @@ const Event = ({ initialData }) => {
                           <Image
                             src="/icons/public.svg"
                             alt="Collectif & réseau"
-                            width="25px"
-                            height="25px"
+                            width="25"
+                            height="25"
                             objectFit="contain"
                             className={[styles.icon]}
                           />
@@ -871,8 +871,8 @@ const Event = ({ initialData }) => {
                       <Image
                         src="/icons/location.svg"
                         alt="Localisation"
-                        width="25px"
-                        height="25px"
+                        width="25"
+                        height="25"
                         objectFit="contain"
                         className={[styles.icon]}
                       />
@@ -908,8 +908,8 @@ const Event = ({ initialData }) => {
                         <Image
                           src="/icons/social.svg"
                           alt="Réseau social"
-                          width="25px"
-                          height="25px"
+                          width="25"
+                          height="25"
                           objectFit="contain"
                           className={[styles.icon]}
                         />
@@ -933,8 +933,8 @@ const Event = ({ initialData }) => {
                       <Grid item xs={3} className={[styles.alignRight]}>
                         <Image
                           src="/icons/clock.svg"
-                          width="25px"
-                          height="25px"
+                          width="25"
+                          height="25"
                           objectFit="contain"
                           alt="Horaire"
                           className={[styles.icon]}
@@ -976,8 +976,8 @@ const Event = ({ initialData }) => {
                         <Grid item xs={3} className={[styles.alignRight]}>
                           <Image
                             src="/icons/tarifs.svg"
-                            width="25px"
-                            height="25px"
+                            width="25"
+                            height="25"
                             objectFit="contain"
                             alt="Tarif"
                             className={[styles.icon]}
@@ -1021,8 +1021,8 @@ const Event = ({ initialData }) => {
                     <Grid item xs={3} className={[styles.alignRight]}>
                       <Image
                         src="/icons/social.svg"
-                        width="25px"
-                        height="25px"
+                        width="25"
+                        height="25"
                         objectFit="contain"
                         alt="Réseau social"
                         className={[styles.icon]}
@@ -1120,8 +1120,8 @@ const Event = ({ initialData }) => {
                               :
                               {entry.icon && (
                                 <Image
-                                  width="30px"
-                                  height="25px"
+                                  width="30"
+                                  height="25"
                                   src={`/icons/${entry.icon}.svg`}
                                   alt="icon"
                                   className={styles.iconEntry}
@@ -1145,8 +1145,8 @@ const Event = ({ initialData }) => {
                       <Image
                         src="/icons/status.svg"
                         alt="Collectif & réseau"
-                        width="100%"
-                        height="100%"
+                        width="100"
+                        height="100"
                         layout="responsive"
                         objectFit="contain"
                         className={[styles.icon]}
@@ -1183,8 +1183,8 @@ const Event = ({ initialData }) => {
                       <Image
                         src="/icons/public.svg"
                         alt="Collectif & réseau"
-                        width="100%"
-                        height="100%"
+                        width="100"
+                        height="100"
                         layout="responsive"
                         objectFit="contain"
                         className={[styles.icon]}
@@ -1220,8 +1220,8 @@ const Event = ({ initialData }) => {
                       <Image
                         src="/icons/network.svg"
                         alt="Collectif & réseau"
-                        width="100%"
-                        height="100%"
+                        width="100"
+                        height="100"
                         layout="responsive"
                         objectFit="contain"
                         className={[styles.icon]}

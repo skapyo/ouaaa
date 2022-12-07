@@ -211,8 +211,8 @@ const Actor = React.forwardRef((props, ref) => {
                   <img
                     src="/icons/location.svg"
                     alt="Localisation"
-                    width="25px"
-                    height="25px"
+                    width="25"
+                    height="25"
                     objectFit="contain"
                     className={[classes.icon]}
                   />
@@ -272,8 +272,8 @@ const Actor = React.forwardRef((props, ref) => {
                     <Grid item xs={3} className={[classes.alignRight]}>
                       <img
                         src="/icons/phone.svg"
-                        width="25px"
-                        height="25px"
+                        width="25"
+                        height="25"
                         objectFit="contain"
                         alt="Téléphone"
                         className={[classes.icon]}
@@ -291,8 +291,8 @@ const Actor = React.forwardRef((props, ref) => {
                     <Grid item xs={3} className={[classes.alignRight]}>
                       <img
                         src="/icons/email.svg"
-                        width="25px"
-                        height="25px"
+                        width="25"
+                        height="25"
                         objectFit="contain"
                         alt="Email"
                         className={[classes.icon]}
@@ -313,8 +313,8 @@ const Actor = React.forwardRef((props, ref) => {
                     <Grid item xs={3} className={[classes.alignRight]}>
                       <img
                         src="/icons/web_site.svg"
-                        width="25px"
-                        height="25px"
+                        width="25"
+                        height="25"
                         objectFit="contain"
                         alt="Site Web"
                         className={[classes.icon]}
@@ -340,8 +340,8 @@ const Actor = React.forwardRef((props, ref) => {
                     <Grid item xs={3} className={[classes.alignRight]}>
                       <img
                         src="/icons/social.svg"
-                        width="25px"
-                        height="25px"
+                        width="25"
+                        height="25"
                         objectFit="contain"
                         alt="Réseau social"
                         className={[classes.icon]}
@@ -370,8 +370,8 @@ const Actor = React.forwardRef((props, ref) => {
                     <Grid item xs={3} className={[classes.alignRight]}>
                       <img
                         src="/icons/clock.svg"
-                        width="25px"
-                        height="25px"
+                        width="25"
+                        height="25"
                         objectFit="contain"
                         alt="Horaire"
                         className={[classes.icon]}
@@ -449,8 +449,8 @@ const Actor = React.forwardRef((props, ref) => {
                           <img
                             src={`/icons/${entry.icon}.svg`}
                             alt="icon"
-                            width="30px"
-                            height="25px"
+                            width="30"
+                            height="25"
                             objectFit="contain"
                             className={classes.iconEntry}
                           />
@@ -471,8 +471,8 @@ const Actor = React.forwardRef((props, ref) => {
                   <img
                     src="/icons/status.svg"
                     alt="Collectif & réseau"
-                    width="25px"
-                    height="25px"
+                    width="25"
+                    height="25"
                     objectFit="contain"
                     className={[classes.icon]}
                   />
@@ -505,8 +505,8 @@ const Actor = React.forwardRef((props, ref) => {
                   <img
                     src="/icons/public.svg"
                     alt="Collectif & réseau"
-                    width="25px"
-                    height="25px"
+                    width="25"
+                    height="25"
                     objectFit="contain"
                     className={[classes.icon]}
                   />
@@ -538,8 +538,8 @@ const Actor = React.forwardRef((props, ref) => {
                   <img
                     src="/icons/network.svg"
                     alt="Collectif & réseau"
-                    width="25px"
-                    height="25px"
+                    width="25"
+                    height="25"
                     objectFit="contain"
                     className={[classes.icon]}
                   />
