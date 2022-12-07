@@ -267,7 +267,7 @@ const PresentationSection = (props) => {
 
         <Grid item md={6} className={[styles.align, { position: 'relative', width: '300px', height: '500px' }]}>
           <div className={[styles.align, { position: 'relative', width: '300px', height: '500px' }]}>
-            <Image alt="Mountains" width="100%" height="76%" sizes="33vw" src="/image_accueil.png" />
+            <Image alt="Mountains" fill sizes="33vw" src="/image_accueil.png" />
           </div>
         </Grid>
       </Grid>

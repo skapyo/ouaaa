@@ -299,7 +299,7 @@ function Filters(props) {
   }, [setErrorPostCode]);
 
   const handleEntryChange = useCallback((entries, collection) => {
-    const currentEntries = [...filters.entries || []];
+    const currentEntries = [...(filters.entries || [])];
     entries.forEach((newEntry) => {
       const alreadyChecked = currentEntries.find((subEntries) => subEntries != undefined && subEntries.find((id) => id === newEntry.id));
       if (alreadyChecked) {
