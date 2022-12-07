@@ -137,9 +137,10 @@ const LastArticle = (props) => {
     );
   }
   const theme = useTheme();
-  const mobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const mobile = useMediaQuery(theme.breakpoints.down('xs'));
+  const mediumScreen = useMediaQuery(theme.breakpoints.down('md'));
   const styles = useStyles();
-  const maxImageDisplay = !mobile ? 5 : 1
+  const maxImageDisplay = !mobile ? (mediumScreen ? 2 : 4) : 1
   const settings = {
     dots: true,
     infinite: true,
