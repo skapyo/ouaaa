@@ -6,24 +6,30 @@ import { withApollo } from 'hoc/withApollo';
 import FormController, {
   ValidationRuleType,
 } from 'components/controllers/FormController';
-import { Grid, TextField, Typography, Button } from '@material-ui/core';
+import {
+  Grid, TextField, Typography, Button,
+} from '@material-ui/core';
 import ClassicButton from 'components/buttons/ClassicButton';
 import DoneIcon from '@material-ui/icons/Done';
 import TrendingFlatIcon from '@material-ui/icons/TrendingFlat';
 import { useSessionState } from 'context/session/session';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   newsletter: {
     padding: '2em 0',
     textAlign: 'center',
-    height: '24em',
+   
     [theme.breakpoints.down('md')]: {
       padding: '1em 0',
-      height: '18em',
-    }
+    },
   },
   align: {
     'text-align': 'center',
+  },
+
+  newsletterLegal: {
+    'text-align': 'justify',
+     padding: '1em',
   },
   search: {
     position: 'relative',
@@ -105,14 +111,14 @@ const useStyles = makeStyles(theme => ({
       height: 42,
       padding: '0 1.5em',
       fontSize: 15,
-    }
+    },
   },
   buttonGridIcon: {
     marginRight: 15,
     '& > svg': {
-      fontSize: '30px !important'
-    }
-  }
+      fontSize: '30px !important',
+    },
+  },
 }));
 
 const ADD_NEWSLETTER_EMAIL = gql`
@@ -183,10 +189,27 @@ const Newsletter = (prop) => {
     return (
       <Grid id={prop.id} container direction="column" alignItems="center" justifyContent="space-around" className={styles.newsletter}>
         <Typography variant="h2" className={[styles.cardTitle, styles.align]}>
-          POUR NE RIEN RATER DE <i>OUAAA!</i>
+          POUR NE RIEN RATER DE
+          {' '}
+          <i>OUAAA!</i>
           <br />
           INSCRIVEZ-VOUS À NOTRE NEWSLETTER
+
+   
         </Typography>
+        <div className={styles.newsletterLegal}>
+          Les données personnelles relatives à la création du compte (nom/prénom, structure si
+          professionnel, numéro de téléphone, email) sont destinées à permettre l’identification sur le site
+          et l’accès à son compte et aux fonctionnalités correspondantes. Les données sont conservées
+          tant que le compte est actif. Une fois par an, le responsable de traitement peut effectuer une
+          campagne de vérification d’adresse mails pour supprimer les comptes inactifs après vérification
+          par contact téléphonique
+          <br />
+          Les fiches acteurs reliées à des comptes inactifs seront mises à jour avec la mention suivante :
+          coordonnées obsolètes à telle date. Pour toute question, vous pouvez joindre l’administrateur du
+          site à contact@ouaaa-transition.fr et exercer vos droits d’accès, de rectification ou de suppression
+          aurprès du DPD à dpd@ouaaa-transition.fr
+        </div>
         {!subscribed && !user && (
           <div className={styles.search}>
             <TextField

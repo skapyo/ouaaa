@@ -1094,6 +1094,7 @@ const EditActorForm = (props) => {
       formValues.volunteerDescription = actorData.actor.volunteerDescription;
       formValues.shortDescription = actorData.actor.shortDescription;
       formValues.referents = actorData.actor.referents;
+      formValues.contactId = actorData.actor.contact_id;
 
       if (formValues.postCode === '17000') {
         setEstlarochelle(true);
@@ -1399,7 +1400,7 @@ const EditActorForm = (props) => {
         </FormControl>
         <p />
         <FormItem
-          label="Métier / Activité principale"
+          label="Métier / Activité principale de votre structure"
           inputName="activity"
           formChangeHandler={formChangeHandler}
           value={formValues.activity}

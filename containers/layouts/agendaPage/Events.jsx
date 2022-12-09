@@ -82,6 +82,7 @@ const Events = (props) => {
 
   const sortedEvents = useMemo(() => {
     let localEvents = (events || []).slice();
+    debugger;
     events.forEach((event) => {
       if (!sameDay(event.startedAt, event.endedAt)) {
         const nbDayEvent = moment(new Date(parseInt(event.endedAt))).diff(
@@ -90,8 +91,9 @@ const Events = (props) => {
         );
         if (nbDayEvent >= 1) {
           const newEventForOtherDay = { ...event };
-          event.duration = `Premier jour de l'action. L'action va durer ${nbDayEvent + 1} jours`
-          newEventForOtherDay.duration = `Dernier jour de l'action. L'action a durée  ${nbDayEvent + 1} jours`
+          moment.locale('fr')
+          event.duration = `Du ` + moment(new Date(parseInt(event.startedAt))).format('DD MMMM YYYY') + ` au ` + moment(new Date(parseInt(event.endedAt))).format('DD MMMM YYYY')
+          newEventForOtherDay.duration = `Du ` + moment(new Date(parseInt(event.startedAt))).format('DD MMMM YYYY') + ` au ` + moment(new Date(parseInt(event.endedAt))).format('DD MMMM YYYY')
           newEventForOtherDay.startedAt = moment(
             new Date(parseInt(event.startedAt)),
           )
@@ -166,6 +168,7 @@ const Events = (props) => {
       }
       {
         sortedEvents.length > 0 && sortedEvents.map((event, index) => {
+
           const lastEvent = index > 0 && sortedEvents[index - 1];
           return (
             <div key={event.id + index} className={classes.cardContainer}>
