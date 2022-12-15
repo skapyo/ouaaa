@@ -1557,7 +1557,7 @@ const EditActorForm = (props) => {
               let helperText;
               if (collection.code === 'category') {
                 label = 'Choisissez les sous-sujets dans lesquels vous souhaitez apparaître (en priorité)';
-                helperText = 'Vous avez la possibilité d’ajouter un texte libre pour expliquer votre lien au sujet choisi. Vous pouvez sélectionner autant de sujets que nécessaire, les 3 premiers que vous cocherez serviront à référencer votre page dans les moteurs de recherche. le 1er coché indiquera votre sujet principal.';
+                helperText = 'Vous avez la possibilité d’ajouter un texte libre pour expliquer votre lien au sujet choisi. Vous pouvez sélectionner jusqu’a 3 sujet.';
               } else if (collection.code === 'actor_status') {
                 label = 'Quel est votre statut juridique ?';
                 helperText = 'service public : toutes les collectivités, mairies, cda, cdc participant directement ou via des projets à la transition / ex : la rochelle territoire zéro carbone entreprise : tous les acteurs économiques de la transition, de l’economie sociale et solidaire... association & ONG  : toutes les structures à but non lucratif';

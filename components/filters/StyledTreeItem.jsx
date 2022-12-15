@@ -95,8 +95,8 @@ function StyledTreeItem(props) {
   const entriesContext = useContext(EntriesContext);
   let isThisEntryNotInTopSEO = false;
   if (entriesContext !== undefined) {
-    isThisEntryNotInTopSEO = entriesContext.getList().indexOf(parseInt(other.nodeId, 10)) >= 0 && entriesContext.getList().indexOf(parseInt(other.nodeId, 10)) <= 3;
-     console.log(
+    isThisEntryNotInTopSEO = isForm && ((entriesContext.getList().length >=3 && entriesContext.getList().indexOf(parseInt(other.nodeId, 10)) < 0) && !checked);
+     /*console.log(
       isThisEntryNotInTopSEO +
         ' ' +
         entriesContext.getList() +
@@ -104,7 +104,7 @@ function StyledTreeItem(props) {
         parseInt(other.nodeId, 10)+
         ' ' +
         (entriesContext.getList() <=3 || (entriesContext.getList().indexOf(parseInt(other.nodeId, 10)) >= 0 && entriesContext.getList().indexOf(parseInt(other.nodeId, 10)) <= 3)),
-    ); 
+    ); */
   }
 
   const handleCheckboxChange = (event) => {
@@ -166,17 +166,12 @@ function StyledTreeItem(props) {
             <Typography variant="body2" className={classes.labelText}>
               {labelText}
             </Typography>
-            {isForm && isThisEntryNotInTopSEO && (
-              <Tooltip title="Seuls les 3 premiers sujets seront utilsés pour le référencement">
-                <InfoIcon />
-              </Tooltip>
-            )}
             {description && (
               <Tooltip title={description}>
                 <InfoIcon />
               </Tooltip>
             )}
-            {!hideCheckBox && (entriesContext.getList() <=25 || (entriesContext.getList().indexOf(parseInt(other.nodeId, 10)) > 0 && entriesContext.getList().indexOf(parseInt(other.nodeId, 10)) <= 3) )&& (
+            {!hideCheckBox && (!isThisEntryNotInTopSEO)&& (
               <Checkbox
                 edge="start"
                 tabIndex={-1}

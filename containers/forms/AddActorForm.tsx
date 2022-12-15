@@ -1175,7 +1175,7 @@ const AddActorForm = () => {
                 label =
                   'Choisissez les sous-sujets dans lesquels vous souhaitez apparaître (en priorité)';
                 helperText =
-                  'Vous avez la possibilité d’ajouter un texte libre pour expliquer votre lien au sujet choisi. Vous pouvez sélectionner autant de sujets que nécessaire, les 3 premiers que vous cocherez serviront à référencer votre page dans les moteurs de recherche. le 1er coché indiquera votre sujet principal.';
+                  'Vous avez la possibilité d’ajouter un texte libre pour expliquer votre lien au sujet choisi. Vous pouvez sélectionner jusqu’a 3 sujet.';
               } else if (collection.code === 'actor_status') {
                 label = 'Quel est votre statut ?';
                 helperText =
