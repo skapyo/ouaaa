@@ -42,8 +42,8 @@ const styles = {
 export default function ArticleCard(props) {
   const { article } = props;
 
-  const image = article?.pictures?.sort((a, b) => (a.logo ? -1 : 1))?.[0]?.originalPicturePath || '/icons/planet.svg';
-
+  const image = article?.pictures?.filter((a, b) => (a.logo ? -1 : 1))?.[0]?.originalPicturePath || '/icons/planet.svg';
+  moment.locale('fr');
   const date = moment(parseInt(article.createdAt)).format('dddd DD MMMM YYYY');
 
   const myLoader = ({ src, width, quality }) => {
@@ -59,17 +59,17 @@ export default function ArticleCard(props) {
           <Box sx={styles.imgContainer}>
             {
               image && (
+                <div style =  {{ width: '100%', height: '100%', position: 'relative', minHeight:"300px"}}>
                 <Image
                   loader={myLoader}
-                  width="100%"
-                  height="70px"
-                  layout="responsive"
-                  objectFit="cover"
+                  fill
+                  objectFit="contain"
                   src={image}
                   alt={article.label}
                   unoptimized={!image.startsWith('/static')}
                   priority
                 />
+                </div>
               )
             }
           </Box>

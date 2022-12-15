@@ -64,7 +64,6 @@ const useStyles = makeStyles({
 
 export default function SimpleCard({ actor }) {
   const classes = useStyles();
-  debugger;
   const bull = <span className={classes.bullet}>•</span>;
   const myLoader = ({ src, width, quality }) => {
     return `${process.env.NEXT_PUBLIC_URI}${src}?w=${width}&q=${quality || 75}`;

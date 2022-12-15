@@ -81,8 +81,7 @@ const Events = (props) => {
   const matches = useMediaQuery(theme.breakpoints.up('sm'));
 
   const sortedEvents = useMemo(() => {
-    let localEvents = (events || []).slice();
-    debugger;
+    let localEvents = ( []).slice();
     events.forEach((event) => {
       if (!sameDay(event.startedAt, event.endedAt)) {
         const nbDayEvent = moment(new Date(parseInt(event.endedAt))).diff(
@@ -92,7 +91,8 @@ const Events = (props) => {
         if (nbDayEvent >= 1) {
           const newEventForOtherDay = { ...event };
           moment.locale('fr')
-          event.duration = `Du ` + moment(new Date(parseInt(event.startedAt))).format('DD MMMM YYYY') + ` au ` + moment(new Date(parseInt(event.endedAt))).format('DD MMMM YYYY')
+          event = Object.assign({duration: `Du ` + moment(new Date(parseInt(event.startedAt))).format('DD MMMM YYYY') + ` au ` + moment(new Date(parseInt(event.endedAt))).format('DD MMMM YYYY')}, event);
+          
           newEventForOtherDay.duration = `Du ` + moment(new Date(parseInt(event.startedAt))).format('DD MMMM YYYY') + ` au ` + moment(new Date(parseInt(event.endedAt))).format('DD MMMM YYYY')
           newEventForOtherDay.startedAt = moment(
             new Date(parseInt(event.startedAt)),
@@ -101,8 +101,10 @@ const Events = (props) => {
             .toDate();
           localEvents.push(newEventForOtherDay);
         }
+    
 
       }
+      localEvents.push(event);
     });
     return localEvents.sort(compare);
   }, [events]);

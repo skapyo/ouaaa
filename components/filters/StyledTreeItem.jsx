@@ -95,14 +95,16 @@ function StyledTreeItem(props) {
   const entriesContext = useContext(EntriesContext);
   let isThisEntryNotInTopSEO = false;
   if (entriesContext !== undefined) {
-    isThisEntryNotInTopSEO = entriesContext.getList().indexOf(parseInt(other.nodeId, 10)) >= 3;
-    /* console.log(
-      !isThisEntryNotInTopSEO +
+    isThisEntryNotInTopSEO = entriesContext.getList().indexOf(parseInt(other.nodeId, 10)) >= 0 && entriesContext.getList().indexOf(parseInt(other.nodeId, 10)) <= 3;
+     console.log(
+      isThisEntryNotInTopSEO +
         ' ' +
         entriesContext.getList() +
         ' ' +
-        parseInt(other.nodeId, 10),
-    ); */
+        parseInt(other.nodeId, 10)+
+        ' ' +
+        (entriesContext.getList() <=3 || (entriesContext.getList().indexOf(parseInt(other.nodeId, 10)) >= 0 && entriesContext.getList().indexOf(parseInt(other.nodeId, 10)) <= 3)),
+    ); 
   }
 
   const handleCheckboxChange = (event) => {
@@ -137,7 +139,10 @@ function StyledTreeItem(props) {
   const handleClickItem = useCallback(evt => {
     if (!isParent || !hasSubEntries) {
       evt.stopPropagation();
-      handleCheckboxChange({ target: { checked: !checked } });
+      if(!isForm ){
+        handleCheckboxChange({ target: { checked: !checked } });
+      }
+     
     }
   }, [checked, handleCheckboxChange, isParent]);
 
@@ -171,7 +176,7 @@ function StyledTreeItem(props) {
                 <InfoIcon />
               </Tooltip>
             )}
-            {!hideCheckBox && (
+            {!hideCheckBox && (entriesContext.getList() <=25 || (entriesContext.getList().indexOf(parseInt(other.nodeId, 10)) > 0 && entriesContext.getList().indexOf(parseInt(other.nodeId, 10)) <= 3) )&& (
               <Checkbox
                 edge="start"
                 tabIndex={-1}

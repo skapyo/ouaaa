@@ -298,7 +298,6 @@ const AgendaPageLayout = () => {
 
   const events = useMemo(() => {
     const initialEvents = (eventData?.events || []);
-    debugger;
     const recurringEvents = initialEvents.filter((event) => event.dateRule);
     const allRecurringEvents = recurringEvents.map((evt) => getAllEventsFromRecurringEvent(evt));
     const allEvents = initialEvents.filter((event) => !event.dateRule).concat(allRecurringEvents.reduce((acc, items) => acc.concat(items), [])).filter((event) => { return moment(parseInt(event.startedAt)) > moment().startOf('day'); });
