@@ -1,5 +1,5 @@
 # build environment
-FROM node:13.12.0-alpine as build
+FROM node:16 as build
 
 # Setting working directory. All the path will be relative to WORKDIR
 WORKDIR /app
@@ -13,6 +13,7 @@ RUN npm install --force
 COPY . ./
 ARG MAX_OLD_SPACE_SIZE=8192
 ENV NODE_OPTIONS=--max-old-space-size=${MAX_OLD_SPACE_SIZE}
+
 # Building app
 RUN npm run build
 

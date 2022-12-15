@@ -2,7 +2,7 @@
 const withPWA = require("@ducanh2912/next-pwa").default({
   dest: "public",
 });
-module.exports = withPWA({
+module.exports = {
   reactStrictMode: false,
   eslint: {
     // Warning: Dangerously allow production builds to successfully complete even if
@@ -19,4 +19,4 @@ module.exports = withPWA({
   images: {
     domains: ['localhost', 'static.recette.ouaaa-transition.fr', 'static.recette.ouaaa-transition.fr', 'static.ouaaa-transition.fr', 'ouaaa-transition.fr'],
   },
-});
+};
