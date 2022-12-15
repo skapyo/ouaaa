@@ -1,18 +1,13 @@
 import React from 'react';
 import AppLayout from 'containers/layouts/AppLayout';
-import {
-  Box,
-  Container,
-  makeStyles,
-  RootRef,
-  Typography,
-} from '@material-ui/core';
+import { Box, Container,  Typography } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import Newsletter from '../../containers/layouts/Newsletter';
 
 const useStyles = makeStyles((theme) => ({
   container: {
     width: '90%',
-    [theme.breakpoints.down('md')]: {
+    [theme.breakpoints.down('lg')]: {
       paddingTop: '5em',
     },
    
@@ -25,7 +20,7 @@ const Charter = () => {
   const styles = useStyles();
   return (
     <AppLayout>
-      <RootRef>
+      <>
         <Box>
           <Container className={styles.container}>
             <div className={styles.align}>
@@ -149,7 +144,7 @@ Cette charte est adoptée le 13.10.2021
             </p>
           </Container>
         </Box>
-      </RootRef>
+      </>
     </AppLayout>
   );
 };

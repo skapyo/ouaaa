@@ -1,15 +1,15 @@
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { SpeedDial, SpeedDialIcon, SpeedDialAction } from '@material-ui/lab';
+import { SpeedDial, SpeedDialIcon, SpeedDialAction } from '@mui/material';
 import classnames from 'classnames';
-import { makeStyles } from '@material-ui/core';
+import makeStyles from '@mui/styles/makeStyles';
 
 const useStyles = makeStyles(theme => ({
   fab: {
     position: 'absolute',
     bottom: 15,
     right: 15,
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       bottom: 10,
       right: 10
     }

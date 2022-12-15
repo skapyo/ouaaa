@@ -12,23 +12,23 @@ import {
   Container,
   FormControlLabel,
   Grid,
-  makeStyles,
   Radio,
   TextField,
   Tooltip,
   Typography,
-} from '@material-ui/core';
+} from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import ClassicButton from 'components/buttons/ClassicButton';
 import FormController, {
   RenderCallback,
   ValidationRules,
   ValidationRuleType,
 } from 'components/controllers/FormController';
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
-import ArrowRightIcon from '@material-ui/icons/ArrowRight';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import useGraphQLErrorDisplay from 'hooks/useGraphQLErrorDisplay';
-import Checkbox from '@material-ui/core/Checkbox';
-import Avatar from '@material-ui/core/Avatar';
+import Checkbox from '@mui/material/Checkbox';
+import Avatar from '@mui/material/Avatar';
 import useCookieRedirection from 'hooks/useCookieRedirection';
 import { useSnackbar } from 'notistack';
 import GooglePlacesAutocomplete, {
@@ -37,53 +37,54 @@ import GooglePlacesAutocomplete, {
 } from 'react-google-places-autocomplete';
 import { useRouter, withRouter } from 'next/router';
 import classnames from 'classnames';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText/ListItemText';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
-import Collapse from '@material-ui/core/Collapse/Collapse';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText/ListItemText';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+import Collapse from '@mui/material/Collapse/Collapse';
 import DateFnsUtils from '@date-io/date-fns';
 import moment from 'moment';
-import Dialog from '@material-ui/core/Dialog';
-import AddCircleOutline from '@material-ui/icons/AddCircleOutline';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Button from '@material-ui/core/Button';
+import Dialog from '@mui/material/Dialog';
+import AddCircleOutline from '@mui/icons-material/AddCircleOutline';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Button from '@mui/material/Button';
 import FallbackPageNotFound from 'containers/fallbacks/FallbackPageNotFound';
-import Icon from '@material-ui/core/Icon';
+import Icon from '@mui/material/Icon';
 import ImageCropper from 'components/ImageCropper/ImageCropper';
-import InsertPhotoIcon from '@material-ui/icons/InsertPhoto';
+import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 import { getImageUrl } from 'utils/utils';
-import FormControl from '@material-ui/core/FormControl';
+import FormControl from '@mui/material/FormControl';
 import { useDrag, useDrop } from 'react-dnd';
-import HeightIcon from '@material-ui/core/SvgIcon/SvgIcon';
-import DeleteIcon from '@material-ui/icons/Delete';
+import HeightIcon from '@mui/material/SvgIcon/SvgIcon';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { useDropArea } from 'react-use';
-import { Autocomplete, TreeView } from '@material-ui/lab';
+import { Autocomplete } from '@mui/material';
+import { TreeView } from '@mui/lab';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider'
 import 
   DatePicker 
  from '@mui/lab/DatePicker';
- import DateTimePicker from '@mui/lab/DateTimePicker';
+import DateTimePicker from '@mui/lab/DateTimePicker';
 import {
   KeyboardTimePicker,
 } from '@material-ui/pickers';
-import RadioGroup from '@material-ui/core/RadioGroup';
+import RadioGroup from '@mui/material/RadioGroup';
 import frLocale from 'date-fns/locale/fr';
 import StyledTreeItem from 'components/filters/StyledTreeItem';
-import InfoIcon from '@material-ui/icons/Info';
+import InfoIcon from '@mui/icons-material/Info';
 import CustomRadioGroup from 'components/form/CustomRadioGroup';
 import CustomRadioGroupForm from 'components/form/CustomRadioGroupForm';
 import ImagesDisplay from 'components/ImageCropper/ImagesDisplay';
 import ImagesDropZone from 'components/ImageCropper/ImagesDropZone';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import IconButton from '@material-ui/core/IconButton';
-import { FlashOnTwoTone } from '@material-ui/icons';
+import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
+import IconButton from '@mui/material/IconButton';
+import { FlashOnTwoTone } from '@mui/icons-material';
 import RecurringEventInput from 'components/form/recurringEventInput/RecurringEventInput';
 import RadioGroupForContext from './RadioGroupForContext';
 import withDndProvider from '../../hoc/withDnDProvider';
@@ -1505,7 +1506,7 @@ const EditEventForm = (props) => {
         />
         <Grid className={styles.datetime}>
         <LocalizationProvider locale={frLocale} dateAdapter={AdapterDateFns}>
-            <Grid container justify="space-around">
+            <Grid container justifyContent="space-around">
               <DateTimePicker
                 value={selectedStartDate}
                 onChange={handleStartDateChange}
@@ -1631,7 +1632,7 @@ const EditEventForm = (props) => {
                       primary={`${actor.name}`}
                     />
                     <ListItemSecondaryAction>
-                      <IconButton onClick={() => handleClickDeleteActor(actor)}>
+                      <IconButton onClick={() => handleClickDeleteActor(actor)} size="large">
                         <DeleteIcon />
                       </IconButton>
                     </ListItemSecondaryAction>
@@ -1643,7 +1644,12 @@ const EditEventForm = (props) => {
         </Grid>
 
         <Grid container direction="row">
-          <IconButton key="close" aria-label="Close" color="inherit" onClick={handleClickAddActor}>
+          <IconButton
+            key="close"
+            aria-label="Close"
+            color="inherit"
+            onClick={handleClickAddActor}
+            size="large">
             <AddCircleOutline />
           </IconButton>
 

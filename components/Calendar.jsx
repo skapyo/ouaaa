@@ -1,9 +1,10 @@
 import React, { useCallback } from 'react';
 import { useRouter } from 'next/router';
 import classNames from 'clsx';
-import { makeStyles, Button } from '@material-ui/core';
+import { Button } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import PropTypes from 'prop-types';
-import AddIcon from '@material-ui/icons/Add';
+import AddIcon from '@mui/icons-material/Add';
 
 import { ViewState } from '@devexpress/dx-react-scheduler';
 import {

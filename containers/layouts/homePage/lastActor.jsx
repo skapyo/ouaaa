@@ -9,7 +9,7 @@ import Link from '../../../components/Link';
 
 const useStyles = makeStyles((theme) => ({
   cardTitle: {
-    color: theme.typography.h5.color,
+    color: '#2C367E',
     fontFamily: theme.typography.h5.fontFamily,
     textTransform: 'uppercase',
     fontWeight: '400',

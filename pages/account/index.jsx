@@ -1,6 +1,5 @@
-import {
-  Avatar, Grid, makeStyles, Typography,
-} from '@material-ui/core';
+import { Avatar, Grid, Typography } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import UserInfosForm from 'containers/forms/UserInfosForm';
 import AccountPageLayout from 'containers/layouts/accountPage/AccountPageLayout';
 import React from 'react';
@@ -39,7 +38,7 @@ const AccountPage = () => {
         <Grid item lg={5}>
           <Grid
             container
-            justify="center"
+            justifyContent="center"
             alignItems="center"
             direction="column"
           >

@@ -13,11 +13,11 @@ import {
   FormControlLabel,
   IconButton,
   InputAdornment,
-  makeStyles,
   TextField,
   Typography,
-} from '@material-ui/core';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+} from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import ClassicButton from 'components/buttons/ClassicButton';
 import { useRouter, withRouter } from 'next/router';
 import { useMutation } from '@apollo/client';
@@ -27,8 +27,8 @@ import omitTypename from 'utils/omitTypename';
 import useGraphQLErrorDisplay from 'hooks/useGraphQLErrorDisplay';
 import useCookieRedirection from 'hooks/useCookieRedirection';
 import FallbackEmailNotValidated from 'containers/fallbacks/FallbackEmailNotValidated';
-import Visibility from '@material-ui/icons/Visibility';
-import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Link from '../../components/Link';
 
 const useStyles = makeStyles((theme) => ({
@@ -193,7 +193,7 @@ const SigninForm = () => {
                       aria-label="toggle password visibility"
                       onClick={toggleShowPassword}
                       onMouseDown={toggleShowPassword}
-                    >
+                      size="large">
                       {showPassword ? <Visibility /> : <VisibilityOff />}
                     </IconButton>
                   </InputAdornment>

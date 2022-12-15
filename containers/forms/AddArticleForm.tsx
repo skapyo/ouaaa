@@ -3,13 +3,8 @@ import React, {
 } from 'react';
 import gql from 'graphql-tag';
 import { withApollo } from 'hoc/withApollo';
-import {
-  Container,
-  Grid,
-  makeStyles,
-  TextField,
-  Typography,
-} from '@material-ui/core';
+import { Container, Grid, TextField, Typography } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import ClassicButton from 'components/buttons/ClassicButton';
 import FormController, {
   RenderCallback,
@@ -24,18 +19,18 @@ import classnames from 'classnames';
 import { useRouter } from 'next/router';
 import ImagesDropZone from 'components/ImageCropper/ImagesDropZone';
 import ImagesDisplay from 'components/ImageCropper/ImagesDisplay';
-import List from '@material-ui/core/List';
-import DeleteIcon from '@material-ui/icons/Delete';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText/ListItemText';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import Tooltip from '@material-ui/core/Tooltip';
-import InfoIcon from '@material-ui/icons/Info';
-import AddCircleOutline from '@material-ui/icons/AddCircleOutline';
-import Avatar from '@material-ui/core/Avatar';
-import IconButton from '@material-ui/core/IconButton';
-import { Autocomplete } from '@material-ui/lab';
+import List from '@mui/material/List';
+import DeleteIcon from '@mui/icons-material/Delete';
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText/ListItemText';
+import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
+import Tooltip from '@mui/material/Tooltip';
+import InfoIcon from '@mui/icons-material/Info';
+import AddCircleOutline from '@mui/icons-material/AddCircleOutline';
+import Avatar from '@mui/material/Avatar';
+import IconButton from '@mui/material/IconButton';
+import { Autocomplete } from '@mui/material';
 import { useSessionState } from '../../context/session/session';
 import useImageReader from '../../hooks/useImageReader';
 import useDnDStateManager from '../../hooks/useDnDStateManager';
@@ -733,7 +728,7 @@ const AddArticleForm = ({ actorId }) => {
                       primary={`${actor.name}`}
                     />
                     <ListItemSecondaryAction>
-                      <IconButton onClick={() => handleClickDeleteActor(actor)}>
+                      <IconButton onClick={() => handleClickDeleteActor(actor)} size="large">
                         <DeleteIcon />
                       </IconButton>
                     </ListItemSecondaryAction>
@@ -745,7 +740,12 @@ const AddArticleForm = ({ actorId }) => {
         </Grid>
 
         <Grid container direction="row">
-          <IconButton key="close" aria-label="Close" color="inherit" onClick={handleClickAddActor}>
+          <IconButton
+            key="close"
+            aria-label="Close"
+            color="inherit"
+            onClick={handleClickAddActor}
+            size="large">
             <AddCircleOutline />
           </IconButton>
 

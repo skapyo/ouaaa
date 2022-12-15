@@ -1,17 +1,17 @@
 import React, { useRef, useState } from 'react';
 import L from 'leaflet';
 import { Marker, Tooltip, Popup } from 'react-leaflet';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
-import { makeStyles } from '@material-ui/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { makeStyles } from '@mui/styles';
 import { useLeafletContext } from '@react-leaflet/core';
 import {
   useTheme,
-} from '@material-ui/core';
+} from '@mui/material';
 import EventPopup from '../popup/EventPopup';
 
 const useStyles = makeStyles((theme) => ({
   tooltip: {
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       width: '250px',
     },
 
@@ -26,7 +26,7 @@ const EventMarker = (props) => {
   const [clicked, setClicked] = useState(false);
   const theme = useTheme();
   const styles = useStyles();
-  const matches = useMediaQuery(theme.breakpoints.down('sm'));
+  const matches = useMediaQuery(theme.breakpoints.down('md'));
   let icone;
   let color;
 

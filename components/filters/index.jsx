@@ -4,31 +4,31 @@ import {
   Grid,
   Typography,
   TextField,
-  ExpansionPanel,
-  ExpansionPanelSummary,
-  ExpansionPanelDetails,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
   Button,
   useTheme,
-} from '@material-ui/core';
+} from '@mui/material';
 import SearchBar from 'material-ui-search-bar';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
-import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import DoubleArrowIcon from '@mui/icons-material/DoubleArrow';
 import { Link } from '@mui/material';
 import gql from 'graphql-tag';
 import { useSnackbar } from 'notistack';
 import { useQuery } from '@apollo/client';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import Entries from 'containers/forms/Entries';
 import ProposeActorForm from 'containers/forms/ProposeActorForm';
 
-import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
-import AddIcon from '@material-ui/icons/Add';
-import Modal from '@material-ui/core/Modal';
-import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded';
-import FavoriteRoundedIcon from '@material-ui/icons/FavoriteRounded';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import AddIcon from '@mui/icons-material/Add';
+import Modal from '@mui/material/Modal';
+import FavoriteBorderRoundedIcon from '@mui/icons-material/FavoriteBorderRounded';
+import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded';
 import ParentContainer from './ParentContainer';
 import DateFilter from '../../containers/layouts/agendaPage/DateFilter';
 import { useSessionState } from '../../context/session/session';
@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: 400,
     overflowY: 'auto',
     overflowX: 'hidden',
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       maxWidth: 'none',
       paddingBottom: 56,
     },
@@ -82,7 +82,7 @@ const useStyles = makeStyles((theme) => ({
   },
   expansionPanel: {
     margin: 'inherit!important',
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       '&:nth-last-child(2)': {
         boxShadow: 'none',
       },
@@ -118,7 +118,7 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     position: 'absolute',
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       width: '90%',
     },
     width: '60%',
@@ -266,7 +266,7 @@ function Filters(props) {
   const [openFilters, setOpenFilters] = useState(false);
   const [openModalAddActor, setOpenModalAddActor] = useState(inviteActor);
   const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.down('sm'));
+  const matches = useMediaQuery(theme.breakpoints.down('md'));
   const classes = useStyles({ openFilters });
   const [favorite, setFavorite] = useState(false);
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
@@ -361,7 +361,11 @@ function Filters(props) {
 
   const bodyModalAddActor = (
     <div style={modalStyle} className={classes.paper}>
-      <IconButton aria-label="Close" className={classes.closeButton} onClick={() => setOpenModalAddActor(false)}>
+      <IconButton
+        aria-label="Close"
+        className={classes.closeButton}
+        onClick={() => setOpenModalAddActor(false)}
+        size="large">
         <CloseIcon />
       </IconButton>
       <h2 id="simple-modal-title">{ noEmailInviteActor ? "Ajouter l'acteur que vous avez contacté" : 'Inviter un nouvel acteur de la transition'}</h2>
@@ -418,23 +422,23 @@ function Filters(props) {
 
       {filterCollections.map((collection) => {
         return (
-          <ExpansionPanel
+          <Accordion
             key={collection.id}
             defaultExpanded={IsTree(collection)}
             className={classes.expansionPanel}
           >
-            <ExpansionPanelSummary className={classes.expansionPanelSummary} expandIcon={<ExpandMoreIcon />}>
+            <AccordionSummary className={classes.expansionPanelSummary} expandIcon={<ExpandMoreIcon />}>
               <Typography className={classes.collectionLabel}>
                 {collection.label}
               </Typography>
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails className={classes.expansionPanelDetails}>
+            </AccordionSummary>
+            <AccordionDetails className={classes.expansionPanelDetails}>
               <FilterItem
                 collection={collection}
                 onEntryChange={handleEntryChange}
               />
-            </ExpansionPanelDetails>
-          </ExpansionPanel>
+            </AccordionDetails>
+          </Accordion>
         );
       })}
 

@@ -2,32 +2,26 @@ import React, {
   useEffect, useState, useRef, useMemo,
 } from 'react';
 import AppLayout from 'containers/layouts/AppLayout';
-import {
-  Container,
-  Grid,
-  makeStyles,
-  RootRef,
-  Typography,
-  useTheme,
-} from '@material-ui/core';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { Container, Grid,  Typography, useTheme } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { withApollo } from 'hoc/withApollo.jsx';
 import { useRouter } from 'next/router';
 import gql from 'graphql-tag';
 import { useMutation, useQuery } from '@apollo/client';
 import Slider from 'react-slick/lib';
-import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded';
-import FavoriteRoundedIcon from '@material-ui/icons/FavoriteRounded';
+import FavoriteBorderRoundedIcon from '@mui/icons-material/FavoriteBorderRounded';
+import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded';
 import CardSliderActor from 'components/cards/CardSliderActor';
 import CardSliderEvent from 'components/cards/CardSliderEvent';
-import FacebookIcon from '@material-ui/icons/Facebook';
-import TwitterIcon from '@material-ui/icons/Twitter';
-import WhatsAppIcon from '@material-ui/icons/WhatsApp';
-import TelegramIcon from '@material-ui/icons/Telegram';
-import EmailIcon from '@material-ui/icons/Email';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import TwitterIcon from '@mui/icons-material/Twitter';
+import WhatsAppIcon from '@mui/icons-material/WhatsApp';
+import TelegramIcon from '@mui/icons-material/Telegram';
+import EmailIcon from '@mui/icons-material/Email';
 import Modal from '@mui/material/Modal';
-import CloseIcon from '@material-ui/icons/Close';
-import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import IconButton from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
 
 import {
@@ -45,8 +39,8 @@ import { useCookies } from 'react-cookie';
 import { useSnackbar } from 'notistack';
 import Head from 'next/head';
 import Parser from 'html-react-parser';
-import Fab from '@material-ui/core/Fab';
-import EditIcon from '@material-ui/icons/Edit';
+import Fab from '@mui/material/Fab';
+import EditIcon from '@mui/icons-material/Edit';
 import Link from 'components/Link';
 import { RRule } from 'rrule';
 import Image from 'next/image';
@@ -92,7 +86,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: ({ hasBannerUrl }) => (hasBannerUrl ? -53 : 20),
     marginBottom: 20,
     boxShadow: '0px 0px 38px -14px rgba(0, 0, 0, 0.46)',
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       padding: '2em',
       width: 'auto',
       marginBottom: 0,
@@ -105,7 +99,7 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
     fontWeight: '400',
     fontSize: '3rem !important',
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       fontSize: '1.5rem !important',
     },
   },
@@ -117,7 +111,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up('sm')]: {
       paddingLeft: '2em',
     },
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       width: '100%',
     },
   },
@@ -585,7 +579,7 @@ const Event = ({ initialData }) => {
   };
   const styles = useStyles(stylesProps);
   const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.down('sm'));
+  const matches = useMediaQuery(theme.breakpoints.down('md'));
   const maxSlideToShowEvent = !matches ? 5 : 1;
   const settingsSliderevent = {
     infinite: true,
@@ -751,7 +745,7 @@ const Event = ({ initialData }) => {
         <meta name="twitter:description" content={data && data.event.shortDescription} />
 
       </Head>
-      <RootRef>
+      <>
         <Box>
           {bannerUrl && (
             <Container
@@ -1350,7 +1344,11 @@ const Event = ({ initialData }) => {
               aria-describedby="parent-modal-description"
             >
               <Box sx={style}>
-                <IconButton aria-label="Close" className={styles.closeButton} onClick={() => setOpenModalSlider(false)}>
+                <IconButton
+                  aria-label="Close"
+                  className={styles.closeButton}
+                  onClick={() => setOpenModalSlider(false)}
+                  size="large">
                   <CloseIcon />
                 </IconButton>
                 <Slider {...settingsSliderModal} className={[styles.slider]}>
@@ -1426,7 +1424,7 @@ const Event = ({ initialData }) => {
               </Link>
           )}
         </Box>
-      </RootRef>
+      </>
     </AppLayout>
   );
 };

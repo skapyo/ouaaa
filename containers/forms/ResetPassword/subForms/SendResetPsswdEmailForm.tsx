@@ -1,7 +1,7 @@
 import ClassicButton from 'components/buttons/ClassicButton';
 import { RenderCallback } from 'components/controllers/FormController';
-import { TextField, CircularProgress, Button, Box } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core';
+import { TextField, CircularProgress, Button, Box } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import { useState } from 'react';
 // import { SetEmailContext } from "containers/forms/ResetPassword/ResetPasswordForm"
 

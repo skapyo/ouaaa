@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { makeStyles } from '@material-ui/core';
+import makeStyles from '@mui/styles/makeStyles';
 import {
   MapContainer, TileLayer, Marker, Popup, Tooltip, ZoomControl,
 } from 'react-leaflet';
@@ -16,7 +16,7 @@ const position = [46.1085193, -0.9864794];
 const useStyles = makeStyles((theme) => ({
   mapContainer: {
     height: '100% !important',
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       height: '80vh !important',
     },
   },

@@ -1,12 +1,11 @@
-import {
-  Container, Grid, makeStyles, Typography,
-} from '@material-ui/core';
+import { Container, Grid, Typography } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import React from 'react';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
 import Image from 'next/image';
-import ListItemText from '@material-ui/core/ListItemText';
-import Build from '@material-ui/icons/Build';
+import ListItemText from '@mui/material/ListItemText';
+import Build from '@mui/icons-material/Build';
 import Link from '../../../components/Link';
 
 const useStyles = makeStyles((theme) => ({
@@ -14,13 +13,13 @@ const useStyles = makeStyles((theme) => ({
     padding: '2em',
     backgroundColor: 'white',
     borderRadius: '0.5em',
-    width: '80%',
+    width: '80%!important',
     justify: 'center',
     alignItems: 'center',
     'max-width': '755px',
     'margin-top': '-53px',
     'box-shadow': '0px 0px 38px -14px rgba(0, 0, 0, 0.46)',
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       marginLeft: '0',
       marginRight: '0',
       width: '100%',
@@ -32,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
     fontSize: '2em',
     height: '170px',
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       fontSize: '1.4em',
     },
   },
@@ -83,7 +82,7 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: '11px 13px 22px -10px rgb(0 0 0 / 46%)',
   },
   buttonGridDiv: {
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       textAlign: 'center',
     },
   },
@@ -109,7 +108,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundRepeat: 'no-repeat',
     'background-position-x': '5px',
     'background-position-y': '-3px',
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       'background-size': '21%',
       'background-position-y': '19px',
     },
@@ -161,7 +160,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: '4em',
   },
   flexColumn: {
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       flexDirection: 'column',
       alignItems: 'center',
     },
@@ -279,7 +278,7 @@ const PresentationSection = (props) => {
       <br />
       <Grid
         container
-        justify="center"
+        justifyContent="center"
         className={[styles.align, styles.flexColumn]}
       >
 

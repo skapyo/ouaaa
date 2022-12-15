@@ -1,5 +1,5 @@
-import {Button} from '@material-ui/core';
-import {styled} from '@material-ui/core/styles';
+import {Button} from '@mui/material';
+import {styled} from '@mui/material/styles';
 
 const ClassicButton = styled(Button)({
   // width:'100%',

@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
-import {Button} from '@material-ui/core';
-import {makeStyles} from '@material-ui/core/styles';
+import {Button} from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 
-import YouTubeIcon from '@material-ui/icons/YouTube';
-import InstagramIcon from '@material-ui/icons/Instagram';
-import LinkedInIcon from '@material-ui/icons/LinkedIn';
-import FacebookIcon from '@material-ui/icons/Facebook';
-import LanguageIcon from '@material-ui/icons/Language';
+import YouTubeIcon from '@mui/icons-material/YouTube';
+import InstagramIcon from '@mui/icons-material/Instagram';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import LanguageIcon from '@mui/icons-material/Language';
 
 const useStyles = makeStyles((theme) => ({
   root: {

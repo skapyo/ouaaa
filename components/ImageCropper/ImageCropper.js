@@ -1,13 +1,14 @@
 import React, { useCallback, useState } from 'react';
-import { Grid, Modal } from '@material-ui/core';
+import { Grid, Modal } from '@mui/material';
 import Image from 'material-ui-image';
 import Cropper from 'react-easy-crop';
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
 // import ImgDialog from './ImgDialog'
-import Slider from '@material-ui/core/Slider';
-import Button from '@material-ui/core/Button';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
-import CloseIcon from '@material-ui/icons/Close';
+import Slider from '@mui/material/Slider';
+import Button from '@mui/material/Button';
+import makeStyles from '@mui/styles/makeStyles';
+import withStyles from '@mui/styles/withStyles';
+import CloseIcon from '@mui/icons-material/Close';
 import styles from './styles.module.css';
 import getCroppedImg from './cropImage';
 // const dogImg =
@@ -98,7 +99,7 @@ const ImageCropper = ({
     <Modal open={open} onClose={onClose} className={styles.popup}>
       {/* <Modal.Content> */}
       <div>
-        <Grid container justify="flex-end" className={styles.close}>
+        <Grid container justifyContent="flex-end" className={styles.close}>
           <CloseIcon onClick={onClose} justify="center" alignItems="center" />
         </Grid>
         <div className={styles.cropContainer}>

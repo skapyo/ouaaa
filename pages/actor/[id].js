@@ -5,29 +5,23 @@ import React, {
   useMemo,
 } from 'react';
 import AppLayout from 'containers/layouts/AppLayout';
-import {
-  Container,
-  Grid,
-  makeStyles,
-  RootRef,
-  Typography,
-  useTheme,
-} from '@material-ui/core';
+import { Container, Grid,  Typography, useTheme } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import {
   Tooltip, Modal, Box,
 } from '@mui/material';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { withApollo } from 'hoc/withApollo.jsx';
 import { useRouter } from 'next/router';
 import gql from 'graphql-tag';
 import { useMutation, useQuery } from '@apollo/client';
-import FacebookIcon from '@material-ui/icons/Facebook';
-import TwitterIcon from '@material-ui/icons/Twitter';
-import WhatsAppIcon from '@material-ui/icons/WhatsApp';
-import TelegramIcon from '@material-ui/icons/Telegram';
-import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
-import EmailIcon from '@material-ui/icons/Email';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import TwitterIcon from '@mui/icons-material/Twitter';
+import WhatsAppIcon from '@mui/icons-material/WhatsApp';
+import TelegramIcon from '@mui/icons-material/Telegram';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import EmailIcon from '@mui/icons-material/Email';
 import {
   FacebookShareButton,
   TwitterShareButton,
@@ -41,9 +35,9 @@ import { useCookies } from 'react-cookie';
 import { useReactToPrint } from 'react-to-print';
 import Head from 'next/head';
 import Parser from 'html-react-parser';
-import Fab from '@material-ui/core/Fab';
-import EditIcon from '@material-ui/icons/Edit';
-import PrintIcon from '@material-ui/icons/Print';
+import Fab from '@mui/material/Fab';
+import EditIcon from '@mui/icons-material/Edit';
+import PrintIcon from '@mui/icons-material/Print';
 import Image from 'next/image';
 import Link from 'components/Link';
 import moment from 'moment';
@@ -97,7 +91,7 @@ const useStyles = makeStyles((theme) => ({
       width: '80%',
       padding: '5em',
     },
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       paddingTop: 16,
     },
   },
@@ -121,7 +115,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up('sm')]: {
       paddingLeft: '2em',
     },
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       width: '100%',
       marginTop: 10,
     },
@@ -132,7 +126,7 @@ const useStyles = makeStyles((theme) => ({
     textTransform: 'uppercase',
     textAlign: 'center',
     fontWeight: '400',
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       fontSize: '1.5rem !important',
     },
   },
@@ -200,7 +194,7 @@ const useStyles = makeStyles((theme) => ({
   },
   slider: {
     textAlign: 'center',
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       '& .slick-prev': {
         left: 0,
       },
@@ -283,7 +277,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundImage: "url('/arrow.svg')",
     backgroundRepeat: 'no-repeat',
     'background-position-x': '5px',
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       fontSize: '0.8em',
     },
     textAlign: 'center',
@@ -325,7 +319,7 @@ const useStyles = makeStyles((theme) => ({
     width: '100% !important',
   },
   calendar: {
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       width: '100vw',
       marginLeft: -16,
       '& > *:first-child': {
@@ -517,7 +511,7 @@ const Actor = ({ initialData }) => {
   const [openModalSlider, setOpenModalSlider] = useState(false);
 
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const MapWithNoSSR = dynamic(() => import('../../components/map/Map'), {
     ssr: false,
   });
@@ -680,7 +674,7 @@ const Actor = ({ initialData }) => {
     p: 4,
   };
   const headerRef = React.useRef();
-  const matches = useMediaQuery(theme.breakpoints.down('sm'));
+  const matches = useMediaQuery(theme.breakpoints.down('md'));
   const maxSlideToShowImage = !matches ? 3 : 1;
   const maxSlideToShowArticle = !matches ? 5 : 1;
 
@@ -829,7 +823,7 @@ const Actor = ({ initialData }) => {
         <meta name='twitter:description' content={data && data.actor.shortDescription} />
 
       </Head>
-      <RootRef>
+      <>
         <Box>
           <Typography variant="h1" className={styles.hide}>
             {/* @ts-ignore */}
@@ -864,7 +858,7 @@ const Actor = ({ initialData }) => {
                 <Grid container className={[styles.infoPratiqueGrid]}>
                   <div className={styles.printButton}>
                     <Tooltip title="Imprimer la page acteur">
-                      <IconButton onClick={handlePrint} className={[styles.printIcon]}>
+                      <IconButton onClick={handlePrint} className={[styles.printIcon]} size="large">
                         <PrintIcon />
                       </IconButton>
                     </Tooltip>
@@ -1209,7 +1203,7 @@ const Actor = ({ initialData }) => {
             <Grid container className={[styles.item]}>
               <Grid item xs={3} className={[styles.alignRight]}>
                 <Tooltip title="Imrpimer votre fiche pour le jeu le grand défi">
-                  <IconButton onClick={handleGamePrint} className={[styles.printIcon]}>
+                  <IconButton onClick={handleGamePrint} className={[styles.printIcon]} size="large">
                     <PrintIcon />
                   </IconButton>
                 </Tooltip>
@@ -1505,7 +1499,11 @@ const Actor = ({ initialData }) => {
               aria-describedby="parent-modal-description"
             >
               <Box sx={style}>
-                <IconButton aria-label="Close" className={styles.closeButton} onClick={() => setOpenModalSlider(false)}>
+                <IconButton
+                  aria-label="Close"
+                  className={styles.closeButton}
+                  onClick={() => setOpenModalSlider(false)}
+                  size="large">
                   <CloseIcon />
                 </IconButton>
                 <Slider {...sliderSettings} className={[styles.slider]}>
@@ -1578,7 +1576,7 @@ const Actor = ({ initialData }) => {
             <ActorGameToPrint actor={data.actor} ref={printGameRef} />
           </div>
         </Box>
-      </RootRef>
+      </>
     </AppLayout>
   );
 };

@@ -1,12 +1,13 @@
 import React, { useCallback, useState } from 'react';
-import { Grid, Card } from '@material-ui/core';
+import { Grid, Card } from '@mui/material';
 import { useDrag, useDrop } from 'react-dnd';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
+import withStyles from '@mui/styles/withStyles';
 
 import ImageCropper from 'components/ImageCropper/ImageCropper';
-import DeleteIcon from '@material-ui/icons/Delete';
-import HeightIcon from '@material-ui/icons/Height';
-import { red } from '@material-ui/core/colors';
+import DeleteIcon from '@mui/icons-material/Delete';
+import HeightIcon from '@mui/icons-material/Height';
+import { red } from '@mui/material/colors';
 import styles from './styles.module.css';
 
 const ImagesDisplay = ({

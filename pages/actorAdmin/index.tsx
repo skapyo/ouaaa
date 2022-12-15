@@ -6,13 +6,9 @@ import gql from 'graphql-tag';
 import Moment from 'react-moment';
 import moment from 'moment';
 
-import {
-  createStyles,
-  makeStyles,
-  Theme,
-  Typography,
-  useTheme,
-} from '@material-ui/core';
+import { Theme, Typography, useTheme } from '@mui/material';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
 import {
   Dialog,
   DialogTitle,
@@ -22,14 +18,14 @@ import {
   Tooltip,
   IconButton,
 } from '@mui/material';
-import Paper from '@material-ui/core/Paper/Paper';
-import LastPageIcon from '@material-ui/core/SvgIcon/SvgIcon';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
+import Paper from '@mui/material/Paper/Paper';
+import LastPageIcon from '@mui/material/SvgIcon/SvgIcon';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
 import CircularProgress from '@mui/material/CircularProgress';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import Edit from '@mui/icons-material/Edit';
@@ -151,14 +147,14 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
         onClick={handleFirstPageButtonClick}
         disabled={page === 0}
         aria-label="first page"
-      >
+        size="large">
         {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
       </IconButton>
       <IconButton
         onClick={handleBackButtonClick}
         disabled={page === 0}
         aria-label="previous page"
-      >
+        size="large">
         {theme.direction === 'rtl' ? (
           <KeyboardArrowRight />
         ) : (
@@ -169,7 +165,7 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
         onClick={handleNextButtonClick}
         disabled={page >= Math.ceil(count / rowsPerPage) - 1}
         aria-label="next page"
-      >
+        size="large">
         {theme.direction === 'rtl' ? (
           <KeyboardArrowLeft />
         ) : (
@@ -180,7 +176,7 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
         onClick={handleLastPageButtonClick}
         disabled={page >= Math.ceil(count / rowsPerPage) - 1}
         aria-label="last page"
-      >
+        size="large">
         {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
       </IconButton>
     </div>

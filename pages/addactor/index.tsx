@@ -1,23 +1,19 @@
-import {
-  Container,
-  createStyles,
-  makeStyles,
-  Theme,
-  Typography,
-} from '@material-ui/core';
+import { Container, Theme, Typography } from '@mui/material';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
 import { withApollo } from 'hoc/withApollo';
 import ClassicButton from 'components/buttons/ClassicButton';
 import AddActorForm from 'containers/forms/AddActorForm';
 import CharterForm from 'containers/forms/CharterForm';
 import AddActorPageLayout from 'containers/layouts/addActorPage/AddActorPageLayout';
 import graphqlTag from 'graphql-tag';
-import TreeItem, { TreeItemProps } from '@material-ui/lab/TreeItem';
+import TreeItem, { TreeItemProps } from '@mui/lab/TreeItem';
 import { useQuery } from '@apollo/client';
 import React, { useCallback, useEffect } from 'react';
-import Icon from '@material-ui/core/Icon';
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import StepLabel from '@material-ui/core/StepLabel';
+import Icon from '@mui/material/Icon';
+import Stepper from '@mui/material/Stepper';
+import Step from '@mui/material/Step';
+import StepLabel from '@mui/material/StepLabel';
 import { useSessionState } from 'context/session/session';
 import { useRouter } from 'next/router';
 import { useCookies } from 'react-cookie';
