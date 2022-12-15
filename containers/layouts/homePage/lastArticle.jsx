@@ -7,6 +7,7 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { withApollo } from '../../../hoc/withApollo';
 import CardSliderArticle from '../../../components/cards/CardSliderArticle';
 import Link from '../../../components/Link';
+import ArticleCard from '../../../components/cards/ArticleCard';
 
 const useStyles = makeStyles((theme) => ({
   cardTitle: {
@@ -136,9 +137,10 @@ const LastArticle = (props) => {
     );
   }
   const theme = useTheme();
-  const mobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const mobile = useMediaQuery(theme.breakpoints.down('xs'));
+  const mediumScreen = useMediaQuery(theme.breakpoints.down('md'));
   const styles = useStyles();
-  const maxImageDisplay = !mobile ? 5 : 1
+  const maxImageDisplay = !mobile ? (mediumScreen ? 2 : 4) : 1
   const settings = {
     dots: true,
     infinite: true,
@@ -162,7 +164,7 @@ const LastArticle = (props) => {
       <Slider {...settings} className={[styles.articleCarroussel]}>
         {articleToRender?.articleData &&
           articleToRender.articleData.articles.map((article) => {
-            return <CardSliderArticle key={article.id} article={article} />;
+            return <ArticleCard key={article.id} article={article} />;
           })}
       </Slider>
       <div className={styles.buttonArticle}>

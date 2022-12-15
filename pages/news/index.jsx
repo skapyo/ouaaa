@@ -1,22 +1,9 @@
 import React from 'react';
-import AppLayout from 'containers/layouts/AppLayout';
-import { withApollo } from 'hoc/withApollo.jsx';
-import Grid from '@mui/material/Grid';
-import {
-  Box,
-  Container,
-  makeStyles,
-  RootRef,
-  Typography,
-} from '@material-ui/core';
-import CardSliderArticle from '../../components/cards/CardSliderArticle';
-import Newsletter from '../../containers/layouts/Newsletter';
+import { Grid, Typography, Container, } from '@mui/material';
 
-const useStyles = makeStyles((theme) => ({
-  align: {
-    'text-align': 'center',
-  },
-}));
+import { withApollo } from 'hoc/withApollo.jsx';
+import ArticleCard from 'components/cards/ArticleCard';
+import AppLayout from 'containers/layouts/AppLayout';
 
 const GET_ARTICLES = `
 query articles {
@@ -36,22 +23,26 @@ query articles {
     }
   }
 }`;
+
 const News = (props) => {
-  const styles = useStyles();
+  const { articles } = props;
+
   return (
     <AppLayout>
-      <RootRef>
-        <Box>
-          <Container className={styles.align} maxWidth="md">
-            <Typography variant="h1"  pt={4}>Les Articles</Typography>
-            <Grid container spacing={2} py={4}>
-              {props.initialData.data?.articles && (props?.initialData?.data?.articles?.map((article) => {
-                return <CardSliderArticle key={article.id} article={article} />;
-              }))}
-            </Grid>
-          </Container>
-        </Box>
-      </RootRef>
+      <Container maxWidth="lg">
+        <Typography variant="h1" align="center">Les Articles</Typography>
+        <Grid container spacing={2} py={4} justifyContent='center'>
+          {
+            articles.map((article) => {
+              return (
+                <Grid item key={article.id}>
+                  <ArticleCard article={article} />
+                </Grid>
+              );
+            })
+          }
+        </Grid>
+      </Container>
     </AppLayout>
   );
 };
@@ -66,17 +57,18 @@ export async function getServerSideProps(ctxt) {
       query: GET_ARTICLES,
     }),
   });
- 
+
   const initialData = await res.json();
+
   if (initialData.errors) {
     console.error(
       `Error fetching categories, error message : ${initialData.errors[0].message}`,
     );
   }
-  
+
   return {
     props: {
-      initialData,
+      articles: initialData?.data?.articles || [],
     },
   };
 }

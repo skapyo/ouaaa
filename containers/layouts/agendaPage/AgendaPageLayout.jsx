@@ -244,7 +244,7 @@ const getAllEventsFromRecurringEvent = (event) => {
   const { dateRule } = event;
 
   const rrule = RRule.fromString(`DTSTART:${startDate.format('YYYYMMDD[T]hhmmss[Z]')}\nRRULE:${dateRule}`);
-  return rrule.between(new Date() ,moment().add(1, 'year').toDate()).map((date) => {
+  return rrule.between(new Date(), moment().add(1, 'year').toDate()).map((date) => {
     return {
       ...event,
       startedAt: moment(date).valueOf().toString(),
@@ -298,9 +298,10 @@ const AgendaPageLayout = () => {
 
   const events = useMemo(() => {
     const initialEvents = (eventData?.events || []);
+    debugger;
     const recurringEvents = initialEvents.filter((event) => event.dateRule);
     const allRecurringEvents = recurringEvents.map((evt) => getAllEventsFromRecurringEvent(evt));
-    const allEvents = initialEvents.filter((event) => !event.dateRule).concat(allRecurringEvents.reduce((acc, items) => acc.concat(items), [])).filter((event) => { return moment(parseInt(event.startedAt)) > moment(); });
+    const allEvents = initialEvents.filter((event) => !event.dateRule).concat(allRecurringEvents.reduce((acc, items) => acc.concat(items), [])).filter((event) => { return moment(parseInt(event.startedAt)) > moment().startOf('day'); });
     return allEvents;
   }, [eventData]);
 
