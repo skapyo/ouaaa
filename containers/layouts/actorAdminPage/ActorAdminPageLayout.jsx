@@ -4,12 +4,12 @@ import AppContainer from 'containers/layouts/AppContainer';
 import {
   Grid,
   Box,
-  makeStyles,
   Typography,
   Fab,
   Hidden,
   SwipeableDrawer,
 } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import ActorAdminLeftMenu from 'containers/menus/ActorAdminLeftMenu';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';

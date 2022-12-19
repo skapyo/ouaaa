@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { Grid, Modal } from '@mui/material';
-import Image from 'material-ui-image';
+import Image from 'next/image';
 import Cropper from 'react-easy-crop';
 import Typography from '@mui/material/Typography';
 // import ImgDialog from './ImgDialog'

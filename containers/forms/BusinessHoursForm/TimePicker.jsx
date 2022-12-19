@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { makeStyles } from '@mui/styles';
 import TextField from '@mui/material/TextField';
-import { KeyboardTimePicker } from '@mui/pickers';
+import DatePicker from '@mui/lab/DatePicker'
 import moment from 'moment';
 
 // const defaultTimeRange = {
@@ -51,7 +51,7 @@ export default function TimePicker(props) {
 
   return (
     <form className={classes.container} noValidate>
-      <KeyboardTimePicker
+      <DatePicker
         margin="normal"
         id="time-picker"
         label="à partir de"
@@ -66,7 +66,7 @@ export default function TimePicker(props) {
         minutesStep={5}
         error={!selectedStartDate}
       />
-      <KeyboardTimePicker
+      <DatePicker
         margin="normal"
         id="time-picker"
         label="jusqu'à"
