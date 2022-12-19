@@ -78,6 +78,9 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: 14,
     fontStyle: 'italic',
   },
+  option: {
+    padding: '0.5em 1em 0.5em 1em',
+  }
 }));
 
 const getTextWithSearchValue = (originalText, inputValue) => {
@@ -203,23 +206,23 @@ const SearchEngine = (props) => {
           />
         );
       }}
-      renderOption={(option, state) => {
+      renderOption={(props, option, { inputValue }) => {
         const { label, activity, shortDescription } = option;
-        const { inputValue } = state;
 
         const newLabel = getTextWithSearchValue(label, inputValue);
         const newActivity = getTextWithSearchValue(activity, inputValue);
         const newShortDescription = getTextWithSearchValue(shortDescription, inputValue);
-
         return (
-          <div>
-            <div>
-              {newLabel}
-              {' '}
-              {newActivity && <div className={classes.optionActivity}>{newActivity}</div>}
+          <li {...props}>
+            <div className={classes.option}>
+              <div>
+                {newLabel}
+                {' '}
+                {newActivity && <div className={classes.optionActivity}>{newActivity}</div>}
+              </div>
+              {shortDescription && <div className={classes.optionShortDescription}>{newShortDescription}</div>}
             </div>
-            {shortDescription && <div className={classes.optionShortDescription}>{newShortDescription}</div>}
-          </div>
+            </li>
         );
       }}
     />
