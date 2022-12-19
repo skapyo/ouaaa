@@ -5,12 +5,12 @@ import {
   createTheme,
   ThemeProvider as MuiThemeProvider,
   StyledEngineProvider,
-  adaptV4Theme,
 } from '@mui/material/styles';
 import { ThemeProvider } from 'styled-components';
 import CssBaseline from '@mui/material/CssBaseline';
 import { red } from '@mui/material/colors';
-import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
+import AdapterDateFns from '@date-io/date-fns';
 import MomentUtils from '@date-io/moment';
 import gql from 'graphql-tag';
 import { SessionProvider } from 'context/session/session';
@@ -28,7 +28,7 @@ import 'moment/locale/fr';
 import 'leaflet.markercluster/dist/MarkerCluster.css';
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 
-const theme = createTheme(adaptV4Theme({
+const theme = createTheme({
   palette: {
     primary: {
       main: '#2C367E',
@@ -89,7 +89,7 @@ const theme = createTheme(adaptV4Theme({
       standard: 300,
     },
   },
-}));
+});
 
 const MyApp = (props) => {
   const { Component, pageProps, user } = props;
@@ -120,7 +120,7 @@ const MyApp = (props) => {
       <link rel="apple-touch-icon" href="/icone_512.png"></link>
       <meta name="theme-color" content="#2C367E" />
     </Head>
-    <MuiPickersUtilsProvider utils={MomentUtils}>
+    <LocalizationProvider utils={MomentUtils} dateAdapter={AdapterDateFns}>
       <StyledEngineProvider injectFirst>
         <MuiThemeProvider theme={theme}>
           <ThemeProvider theme={theme}>
@@ -140,7 +140,7 @@ const MyApp = (props) => {
           </ThemeProvider>
         </MuiThemeProvider>
       </StyledEngineProvider>
-    </MuiPickersUtilsProvider>
+    </LocalizationProvider>
   </>;
 };
 

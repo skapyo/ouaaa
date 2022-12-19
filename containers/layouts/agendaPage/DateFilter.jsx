@@ -1,10 +1,10 @@
 import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
-import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import { DatePicker, MuiPickersUtilsProvider } from '@mui/x-date-pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import { fr } from 'date-fns/locale';
 import { format } from 'date-fns';
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
 
 const DateFilter = (props) => {
   const { onDateChange } = props;

@@ -9,11 +9,11 @@ import {
   Fab,
   Hidden,
   SwipeableDrawer,
-} from '@material-ui/core';
+} from '@mui/material';
 import ActorAdminLeftMenu from 'containers/menus/ActorAdminLeftMenu';
-import ExpandLessIcon from '@material-ui/icons/ExpandLess';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import CloseIcon from '@material-ui/icons/Close';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import CloseIcon from '@mui/icons-material/Close';
 
 const useStyles = makeStyles((theme) => ({
   gridContainer: {

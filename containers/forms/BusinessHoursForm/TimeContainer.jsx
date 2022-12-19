@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect, useRef } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import DeleteIcon from '@material-ui/icons/Delete';
+import { makeStyles } from '@mui/styles';
+import Button from '@mui/material/Button';
+import DeleteIcon from '@mui/icons-material/Delete';
 import moment from 'moment';
 
 import ButtonDay from './ButtonDay';

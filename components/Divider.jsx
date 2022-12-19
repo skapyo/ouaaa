@@ -1,5 +1,5 @@
 import { Divider } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { styled } from '@mui/styles';
 
 const DividerCustom = styled(Divider)({
   width: '100%',

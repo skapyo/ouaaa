@@ -67,13 +67,10 @@ import { Autocomplete } from '@mui/material';
 import { TreeView } from '@mui/lab';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider'
-import 
-  DatePicker 
- from '@mui/lab/DatePicker';
+import
+DatePicker
+  from '@mui/lab/DatePicker';
 import DateTimePicker from '@mui/lab/DateTimePicker';
-import {
-  KeyboardTimePicker,
-} from '@material-ui/pickers';
 import RadioGroup from '@mui/material/RadioGroup';
 import frLocale from 'date-fns/locale/fr';
 import StyledTreeItem from 'components/filters/StyledTreeItem';
@@ -921,8 +918,8 @@ const EditEventForm = (props) => {
       formValues.lng = eventData.event.lng;
       formValues.registerLink = eventData.event.registerLink;
       formValues.actors = eventData.event.actors;
-      formValues.parentId =eventData.event !== undefined && eventData.event.parentEvent && eventData.event.parentEvent.id;
-      if(formValues.parentId){
+      formValues.parentId = eventData.event !== undefined && eventData.event.parentEvent && eventData.event.parentEvent.id;
+      if (formValues.parentId) {
         setHasParentEvent(!!formValues.parentId);
       }
       setShowRegisterLink(formValues.registerLink !== undefined && formValues.registerLink !== '');
@@ -1498,14 +1495,14 @@ const EditEventForm = (props) => {
             );
           })
         }
-   
+
         <br />
         <TitleWithTooltip
           title="Calendrier "
           tooltipTitle="Vous pourrez ajouter des infos plus détaillés dans le corps du texte de la déscription ou dans le bloc infos pratiques"
         />
         <Grid className={styles.datetime}>
-        <LocalizationProvider locale={frLocale} dateAdapter={AdapterDateFns}>
+          <LocalizationProvider locale={frLocale} dateAdapter={AdapterDateFns}>
             <Grid container justifyContent="space-around">
               <DateTimePicker
                 value={selectedStartDate}
@@ -1518,10 +1515,10 @@ const EditEventForm = (props) => {
                     && moment(selectedStartDate) <= moment(Date.now())
                     ? 'La date de début ne peut être dans le passé.'
                     : ''
-                     }/>
-                    }
-                    />
-          
+                } />
+                }
+              />
+
               <DateTimePicker
                 value={selectedEndDate}
                 onChange={handleEndDateChange}
@@ -1535,18 +1532,18 @@ const EditEventForm = (props) => {
                   && !!selectedEndDate
                   && selectedStartDate
                 }
-                renderInput={params => <TextField {...params}  label="Date de fin" helperText={
+                renderInput={params => <TextField {...params} label="Date de fin" helperText={
                   selectedStartDate
                     && selectedEndDate
                     && selectedStartDate >= selectedEndDate
                     ? 'La date de fin ne peut être dans le début.'
                     : ''
-                     }/>
-                    }
+                } />
+                }
               />
             </Grid>
-        </LocalizationProvider>
-        <RecurringEventInput onChange={handleChangeDateRule} value={dateRule} startDate={selectedStartDate} />
+          </LocalizationProvider>
+          <RecurringEventInput onChange={handleChangeDateRule} value={dateRule} startDate={selectedStartDate} />
         </Grid>
         <p />
         {
@@ -1679,7 +1676,7 @@ const EditEventForm = (props) => {
 
         <br />
 
- 
+
         <br />
         <Typography className={styles.collectionLabel}>
           Inscription à l’évement
@@ -1736,7 +1733,7 @@ const EditEventForm = (props) => {
         </FormControl>
         <p />
 
- 
+
         <Typography variant="body1" color="primary" className={styles.label}>
           Logo de l'événement
         </Typography>

@@ -10,7 +10,6 @@ import {
   Button,
   useTheme,
 } from '@mui/material';
-import SearchBar from 'material-ui-search-bar';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -27,8 +26,8 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import AddIcon from '@mui/icons-material/Add';
 import Modal from '@mui/material/Modal';
-import FavoriteBorderRoundedIcon from '@mui/icons-material/FavoriteBorderRounded';
-import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded';
+import FavoriteIcon from '@mui/icons-material';
+import FavoriteBorderIcon  from '@mui/icons-material';
 import ParentContainer from './ParentContainer';
 import DateFilter from '../../containers/layouts/agendaPage/DateFilter';
 import { useSessionState } from '../../context/session/session';
@@ -272,7 +271,7 @@ function Filters(props) {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const FavoriteIconComponent = useMemo(() => {
-    return favorite ? FavoriteRoundedIcon : FavoriteBorderRoundedIcon;
+    return favorite ? FavoriteIcon : FavoriteBorderIcon;
   }, [favorite]);
 
   const handleFilterChange = useCallback((name, value) => {
@@ -390,14 +389,14 @@ function Filters(props) {
           />
         )
       }
-      <SearchBar
+    {/* }  <SearchBar
        // value={this.state.value}
         placeholder="Recherche par nom"
         onChange={(newValue) => { handleFilterChange('search', newValue); }}
         onCancelSearch={() => { handleFilterChange('search', ''); }}
 
         // onRequestSearch={() => doSomethingWith(this.state.value)}
-      />
+    />*/}
       <TextField
         variant="outlined"
         label="Code Postal"

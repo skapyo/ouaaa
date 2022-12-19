@@ -3,18 +3,18 @@ import React, {
 } from 'react';
 import {
   Grid, Typography, Button, Container, makeStyles, useTheme,
-} from '@material-ui/core';
+} from '@mui/material';
 import { withApollo } from 'hoc/withApollo';
 import Events from 'containers/layouts/agendaPage/Events';
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/client';
 import Moment from 'react-moment';
 import moment from 'moment';
-import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded';
-import FavoriteRoundedIcon from '@material-ui/icons/FavoriteRounded';
-import Drawer from '@material-ui/core/Drawer';
-import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
+import FavoriteIcon from '@mui/icons-material';
+import FavoriteBorderIcon from '@mui/icons-material';
+import Drawer from '@mui/material/Drawer';
+import DoubleArrowIcon from '@mui/icons-material/DoubleArrow';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { RRule } from 'rrule';
 import dynamic from 'next/dynamic';
 import ButtonGroupSelected from '../../../components/buttons/ButtonGroupSelected';

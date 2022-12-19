@@ -4,7 +4,7 @@ import React, {
 import {
   Grid, Typography, useMediaQuery, Button,
 } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
+import { useTheme } from '@mui/styles';
 
 import makeStyles from '@mui/styles/makeStyles';
 
@@ -502,7 +502,7 @@ const carto = () => {
                   {
                     actorsWithLocation.map((actor) => {
                       return (
-                        <MarkerWithNoSSR  actor={actor} />
+                        <MarkerWithNoSSR actor={actor} />
                       );
                     })
                   }

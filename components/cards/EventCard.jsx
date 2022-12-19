@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { useTheme } from '@mui/material/styles';
+import { useTheme } from '@mui/styles';
 import makeStyles from '@mui/styles/makeStyles';
 import gql from 'graphql-tag';
 import useMediaQuery from '@mui/material/useMediaQuery';
