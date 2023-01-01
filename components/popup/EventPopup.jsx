@@ -98,7 +98,7 @@ const EventPopup = ({ event, onMouseOut }) => {
       >
         <Grid container>
           <Grid item xs={2}>
-            <Favorite event={event} />
+            <Favorite event={event} /> 
           </Grid>
           <Grid item xs={9}>
             <div className={styles.categorie}>

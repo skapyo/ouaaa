@@ -270,9 +270,9 @@ function Filters(props) {
   const [favorite, setFavorite] = useState(false);
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
-  const FavoriteIconComponent = useMemo(() => {
+  const FavoriteIconComponent = () => {
     return favorite ? FavoriteIcon : FavoriteBorderIcon;
-  }, [favorite]);
+  }; 
 
   const handleFilterChange = useCallback((name, value) => {
     const currentFilters = filters || {};

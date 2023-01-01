@@ -42,8 +42,8 @@ const EventMarker = (props) => {
   const suitcasePoint = new L.Icon({
     iconUrl: icone,
     color,
-    fillColor: color,
-    iconAnchor: [13, 34], // point of the icon which will correspond to marker's location
+    fillColor: color, 
+    iconAnchor: [26, 55], // point of the icon which will correspond to marker's location
     iconSize: [60],
     popupAnchor: [1, -25],
     html: `<span style="${markerHtmlStyles}" />`,

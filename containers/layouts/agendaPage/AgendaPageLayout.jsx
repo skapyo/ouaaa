@@ -2,8 +2,9 @@ import React, {
   useCallback, useMemo, useRef, useState,
 } from 'react';
 import {
-  Grid, Typography, Button, Container, makeStyles, useTheme,
+  Grid, Typography, Button, Container,  useTheme,
 } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import { withApollo } from 'hoc/withApollo';
 import Events from 'containers/layouts/agendaPage/Events';
 import gql from 'graphql-tag';
@@ -345,12 +346,12 @@ const AgendaPageLayout = () => {
             keepMounted: true,
           }}
         >
-          <Filters
+         <Filters
             isEventList
             onFiltersChange={handleFiltersChange}
             isCalendarMode={isCalendarMode}
             closeHandler={toggleMenu}
-          />
+          /> 
         </Drawer>
 
         {

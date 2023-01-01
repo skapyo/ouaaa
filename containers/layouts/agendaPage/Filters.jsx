@@ -21,11 +21,13 @@ const Filters = (refetch) => {
   const classes = useStyles();
 
   return (
+    <>
     <Container className={classes.filters}>
       <div className={classes.title}>DATE</div>
       <DateFilter refetch={refetch} />
       <div className={classes.title}>LIEU</div>
     </Container>
+    </>
   );
 };
 

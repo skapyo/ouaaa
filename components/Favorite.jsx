@@ -88,13 +88,17 @@ const Favorite = ({ actor, event, handleFavoriteChange }) => {
     }
   }, [addFavoriteError, addFavoriteLoading, addFavoriteData]);
 
-  const FavoriteIconComponent = useMemo(() => {
+  //TODO : useMemeo removed find an other solution
+  const FavoriteIconComponent = () => {
     return favorite ? FavoriteIcon : FavoriteBorderIcon;
-  }, [favorite]);
+  };
+  
   return (
+    <>
     <div onClick={() => changeFavorite(!favorite)}>
       <FavoriteIconComponent className={classes.favoriteIcon} />
     </div>
+    </>
   );
 };
 
