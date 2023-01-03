@@ -119,7 +119,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ADDArticle = gql`
+const ADD_ARTICLE = gql`
   mutation createArticle(
     $articleInfos: ArticleInfos
     $actorId: Int!
@@ -260,9 +260,9 @@ const TitleWithTooltip = (props: TitleWithTooltipProps) => {
       {
         !!tooltipTitle
         && (
-        <Tooltip title={tooltipTitle} color="primary" className={styles.tooltip}>
-          <InfoIcon />
-        </Tooltip>
+          <Tooltip title={tooltipTitle} color="primary" className={styles.tooltip}>
+            <InfoIcon />
+          </Tooltip>
         )
       }
     </Grid>
@@ -299,7 +299,8 @@ const AddArticleForm = ({ actorId }) => {
     formValues,
   }) => {
     // const { formChangeHandler, formValues, validationResult } = props;
-    const [addArticle, { data, error }] = useMutation(ADDArticle);
+    const [addArticle, { data, error }] = useMutation(ADD_ARTICLE);
+
     const [addPictureArticle, { data: dataPicture, error: errorPicture }] = useMutation(AddPictureArticle);
 
     const [showOtherArticleList, setShowOtherArticleList] = useState(false);
@@ -469,7 +470,7 @@ const AddArticleForm = ({ actorId }) => {
       },
       [setImagesList],
     );
-    
+
     const {
       objectsList,
       moveObject,
@@ -565,7 +566,7 @@ const AddArticleForm = ({ actorId }) => {
 
       // Starts the upload process.
       upload() {
-         return this.loader.file.then( file => new Promise( ( resolve, reject ) => {
+        return this.loader.file.then(file => new Promise((resolve, reject) => {
           addPictureArticle({
             variables: {
               picture: {
@@ -579,10 +580,10 @@ const AddArticleForm = ({ actorId }) => {
             },
           });
 
-          resolve( {
+          resolve({
             default: `${process.env.NEXT_PUBLIC_URI}/static/images/article/${file.name}`
-        } );
-      }));
+          });
+        }));
       }
 
       // Aborts the upload process.
@@ -646,7 +647,7 @@ const AddArticleForm = ({ actorId }) => {
             && !!validationResult?.result.shortDescription
           }
           errorText={`Maximum 90 caractères. ${formValues.shortDescription?.length - 90
-          } caractères en trop.`}
+            } caractères en trop.`}
         />
         <br />
         <Typography variant="body1" color="primary" className={styles.label}>
