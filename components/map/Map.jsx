@@ -6,13 +6,11 @@ import {
 import L from 'leaflet';
 import 'leaflet.markercluster';
 import 'leaflet/dist/leaflet.css';
-import { NoEncryption } from '@material-ui/icons';
 
 L.Icon.Default.mergeOptions({
   iconUrl: null,
 });
 
-const position = [46.1085193, -0.9864794];
 
 const useStyles = makeStyles((theme) => ({
   mapContainer: {
@@ -30,7 +28,11 @@ const Map = (props) => {
   const mapRef = useRef();
   const styles = useStyles();
   const [map, setMap] = useState(null);
-  const { children } = props;
+  let { children,position } = props;
+  if (typeof position === 'undefined'){
+    position = [46.1085193, -0.9864794];
+  }
+
   useEffect(() => {
     if (map) {
       setInterval(() => {

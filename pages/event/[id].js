@@ -1267,6 +1267,7 @@ const Event = ({ initialData }) => {
                   <div className={styles.map}>
                     <MapWithNoSSR
                       ref={mapRef}
+                      position={[data.event.lat, data.event.lng]}
                     >
                       <MarkerWithNoSSR
                         id="map"

@@ -240,19 +240,7 @@ const VIEW_STATE = {
   CALENDAR: 'CALENDAR',
 };
 
-const getAllEventsFromRecurringEvent = (event) => {
-  const startDate = moment(parseInt(event.startedAt));
-  const { dateRule } = event;
 
-  const rrule = RRule.fromString(`DTSTART:${startDate.format('YYYYMMDD[T]hhmmss[Z]')}\nRRULE:${dateRule}`);
-  return rrule.between(new Date(), moment().add(1, 'year').toDate()).map((date) => {
-    return {
-      ...event,
-      startedAt: moment(date).valueOf().toString(),
-      duration: rruleToText(rrule),
-    };
-  });
-};
 
 const AgendaPageLayout = () => {
   const theme = useTheme();
@@ -273,7 +261,7 @@ const AgendaPageLayout = () => {
   const toggleMenu = useCallback(() => {
     setIsMenuOpen(!isMenuOpen);
   }, [isMenuOpen]);
-
+  
   const date = new Date();
 
   date.setHours(0, 0, 0, 0);
@@ -283,11 +271,26 @@ const AgendaPageLayout = () => {
       startingDate: date.toISOString(),
     },
   });
-
+  const [searchDate, setSearchDate] = useState(new Date());
   const handleFiltersChange = useCallback((newFilters) => {
+    setSearchDate(newFilters.startingDate.$d); 
     setFilters(newFilters);
     refetch({ ...newFilters });
   }, [refetch]);
+
+  const getAllEventsFromRecurringEvent = (event) => {
+    let startEventDate = moment(parseInt(event.startedAt));
+    const { dateRule } = event;
+    const rrule = RRule.fromString(`DTSTART:${startEventDate.format('YYYYMMDD[T]hhmmss[Z]')}\nRRULE:${dateRule}`);
+
+    return rrule.between(searchDate, moment().add(6, 'month').toDate()).map((date) => {
+      return {
+        ...event,
+        startedAt: moment(date).valueOf().toString(),
+        duration: rruleToText(rrule),
+      };
+    });
+  };
 
   const fabActions = useMemo(() => {
     return [

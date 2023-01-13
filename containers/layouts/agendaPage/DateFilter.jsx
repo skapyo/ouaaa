@@ -10,6 +10,7 @@ import Grid from '@mui/material/Grid';
 import { StaticDatePicker, frFR } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+
 const DateFilter = (props) => {
   const { onDateChange } = props;
   const [selectedDate, setSelectedDate] = useState(Date.now());
