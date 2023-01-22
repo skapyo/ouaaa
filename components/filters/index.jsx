@@ -1,36 +1,29 @@
-import React, { useState, useCallback, useMemo } from 'react';
-import PropTypes from 'prop-types';
-import {
-  Grid,
-  Typography,
-  TextField,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  Button,
-  useTheme,
-} from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import DoubleArrowIcon from '@mui/icons-material/DoubleArrow';
-import { Link } from '@mui/material';
-import gql from 'graphql-tag';
-import { useSnackbar } from 'notistack';
 import { useQuery } from '@apollo/client';
+import DoubleArrowIcon from '@mui/icons-material/DoubleArrow';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import {
+  Accordion, AccordionDetails, AccordionSummary, Button, Grid, Link, TextField, Typography, useTheme
+} from '@mui/material';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
 import Entries from 'containers/forms/Entries';
 import ProposeActorForm from 'containers/forms/ProposeActorForm';
-
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
+import gql from 'graphql-tag';
+import { useSnackbar } from 'notistack';
+import PropTypes from 'prop-types';
+import React, { useCallback, useMemo, useState } from 'react';
+import { styled, alpha } from '@mui/material/styles';
+import InputBase from '@mui/material/InputBase';
+import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
-import Modal from '@mui/material/Modal';
+import CloseIcon from '@mui/icons-material/Close';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import ParentContainer from './ParentContainer';
+import IconButton from '@mui/material/IconButton';
+import Modal from '@mui/material/Modal';
 import DateFilter from '../../containers/layouts/agendaPage/DateFilter';
 import { useSessionState } from '../../context/session/session';
+import ParentContainer from './ParentContainer';
 
 const useStyles = makeStyles((theme) => ({
   root: (props) => ({
@@ -156,6 +149,47 @@ const style = {
   px: 4,
   pb: 3,
 };
+
+const Search = styled('div')(({ theme }) => ({
+  position: 'relative',
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: alpha(theme.palette.common.white, 0.15),
+  '&:hover': {
+    backgroundColor: alpha(theme.palette.common.white, 0.25),
+  },
+  marginRight: theme.spacing(2),
+  marginLeft: 0,
+  width: '100%',
+  [theme.breakpoints.up('sm')]: {
+    marginLeft: theme.spacing(3),
+    width: 'auto',
+  },
+}));
+
+const SearchIconWrapper = styled('div')(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  height: '100%',
+  position: 'absolute',
+  pointerEvents: 'none',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+}));
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  color: 'inherit',
+  '& .MuiInputBase-input': {
+    padding: theme.spacing(1, 1, 1, 0),
+    // vertical padding + font size from searchIcon
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    [theme.breakpoints.up('md')]: {
+      width: '20ch',
+    },
+  },
+}));
+
 const compare = (a, b) => a.position > b.position;
 
 const IsTree = (collection) => {
@@ -386,14 +420,18 @@ function Filters(props) {
           />
         )
       }
-    {/* }  <SearchBar
-       // value={this.state.value}
-        placeholder="Recherche par nom"
-        onChange={(newValue) => { handleFilterChange('search', newValue); }}
-        onCancelSearch={() => { handleFilterChange('search', ''); }}
-
-        // onRequestSearch={() => doSomethingWith(this.state.value)}
-    />*/}
+        <Search>
+   
+            <SearchIconWrapper>
+              <SearchIcon />
+            </SearchIconWrapper>
+            <StyledInputBase
+             onChange={(newValue) => { handleFilterChange('search', newValue.currentTarget.value); }}
+             onCancelSearch={() => { handleFilterChange('search', ''); }}
+              placeholder="Recherche par nom"
+              inputProps={{ 'aria-label': 'search' }}
+            />
+          </Search>
       <TextField
         variant="outlined"
         label="Code Postal"
