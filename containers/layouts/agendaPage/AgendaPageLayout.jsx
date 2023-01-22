@@ -273,7 +273,9 @@ const AgendaPageLayout = () => {
   });
   const [searchDate, setSearchDate] = useState(new Date());
   const handleFiltersChange = useCallback((newFilters) => {
-    setSearchDate(newFilters.startingDate.$d); 
+    if(newFilters.startingDate!== undefined){
+     setSearchDate(newFilters.startingDate.$d); 
+    }
     setFilters(newFilters);
     refetch({ ...newFilters });
   }, [refetch]);

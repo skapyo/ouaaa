@@ -26,8 +26,8 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import AddIcon from '@mui/icons-material/Add';
 import Modal from '@mui/material/Modal';
-import FavoriteIcon from '@mui/icons-material';
-import FavoriteBorderIcon  from '@mui/icons-material';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ParentContainer from './ParentContainer';
 import DateFilter from '../../containers/layouts/agendaPage/DateFilter';
 import { useSessionState } from '../../context/session/session';
@@ -270,9 +270,6 @@ function Filters(props) {
   const [favorite, setFavorite] = useState(false);
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
-  const FavoriteIconComponent = () => {
-    return favorite ? FavoriteIcon : FavoriteBorderIcon;
-  }; 
 
   const handleFilterChange = useCallback((name, value) => {
     const currentFilters = filters || {};
@@ -411,10 +408,20 @@ function Filters(props) {
       <Grid container className={classes.favoriteGrid}>
         <Grid item xs={5}>
           <div className={classes.favorite} onClick={() => changeFavorite(!favorite)}>
-            <FavoriteIconComponent className={classes.favoriteIcon} />
+          {
+          favorite && (
+            <FavoriteIcon className={classes.favoriteIcon} />
+          )
+        }
+         {
+            !favorite && (
+              <FavoriteBorderIcon className={classes.favoriteIcon} />
+            )
+          }
           </div>
         </Grid>
         <Grid item xs={7}>
+       
           <div>Mes favoris</div>
         </Grid>
       </Grid>

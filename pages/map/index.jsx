@@ -35,10 +35,8 @@ const MarkerClusterWithNoSSR = dynamic(() => import('../../components/map/Marker
   ssr: false,
 });
 
-let matchesWindow = false;
-if (typeof window !== 'undefined') {
-  matchesWindow = window.matchMedia('(max-width: 600px)').matches;
-}
+
+
 
 const drawerWidth = 310;
 
@@ -347,6 +345,8 @@ const carto = () => {
   const [listMode, setListMode] = useState(true);
   const [postCode, setPostCode] = useState(null);
   const [filters, setFilters] = useState(null);
+  const [matchesWindow, setMatchesWindow] = useState(false)
+  const [isNotSSR, seIsNotSSR] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(!matchesWindow);
 
   const toggleMenu = useCallback(() => {
@@ -357,11 +357,17 @@ const carto = () => {
 
   const position = [46.1085193, -0.9864794];
 
+  useEffect(() => {
+    setMatchesWindow(window.matchMedia('(max-width: 600px)').matches) 
+  
+  }, [])
+
   const switchMode = useCallback(() => {
     setListMode(!listMode);
-  }, [listMode]);
+  }, [listMode]); 
 
-  if (typeof window !== 'undefined') {
+  const isSSR = () => typeof window !== 'undefined'; 
+  if (isSSR) {
     const {
       data, refetch,
     } = useQuery(GET_ACTORS, {
