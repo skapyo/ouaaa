@@ -2,14 +2,13 @@ import React, {
   useEffect, useState, useRef, useMemo,
 } from 'react';
 import AppLayout from 'containers/layouts/AppLayout';
-import { Container, Grid,  Typography, useTheme } from '@mui/material';
+import { Container, Grid,  useTheme } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { withApollo } from 'hoc/withApollo.jsx';
 import { useRouter } from 'next/router';
 import Box from '@mui/material/Box';
 
-import { useCookies } from 'react-cookie';
 import { useSnackbar } from 'notistack';
 
 import { useSessionState } from '../../context/session/session';

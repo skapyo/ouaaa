@@ -4,7 +4,6 @@ import { Box, Container,  Typography } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import Grid from '@mui/material/Grid';
 import Head from 'next/head';
-import Newsletter from '../../containers/layouts/Newsletter';
 import Link from '../../components/Link';
 
 const useStyles = makeStyles((theme) => ({

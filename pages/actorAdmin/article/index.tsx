@@ -11,7 +11,7 @@ import createStyles from '@mui/styles/createStyles';
 import makeStyles from '@mui/styles/makeStyles';
 import Paper from '@mui/material/Paper';
 import IconButton from '@mui/material/IconButton';
-import LastPageIcon from '@mui/material/SvgIcon/SvgIcon';
+import LastPageIcon from '@mui/material/SvgIcon';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';

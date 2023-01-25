@@ -8,7 +8,6 @@ import React, {
 import { gql, useMutation, useQuery } from '@apollo/client';
 import { withApollo } from 'hoc/withApollo';
 import {
-  Card,
   Container,
   FormControlLabel,
   Grid,
@@ -39,12 +38,8 @@ import { useRouter, withRouter } from 'next/router';
 import classnames from 'classnames';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import ListItemIcon from '@mui/material/ListItemIcon/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText/ListItemText';
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
-import Collapse from '@mui/material/Collapse/Collapse';
-import DateFnsUtils from '@date-io/date-fns';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
 import moment from 'moment';
 import Dialog from '@mui/material/Dialog';
 import AddCircleOutline from '@mui/icons-material/AddCircleOutline';
@@ -54,22 +49,13 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
 import FallbackPageNotFound from 'containers/fallbacks/FallbackPageNotFound';
-import Icon from '@mui/material/Icon';
-import ImageCropper from 'components/ImageCropper/ImageCropper';
-import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 import { getImageUrl } from 'utils/utils';
 import FormControl from '@mui/material/FormControl';
-import { useDrag, useDrop } from 'react-dnd';
-import HeightIcon from '@mui/material/SvgIcon/SvgIcon';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { useDropArea } from 'react-use';
 import { Autocomplete } from '@mui/material';
 import { TreeView } from '@mui/lab';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider'
-import
-DatePicker
-  from '@mui/lab/DatePicker';
 import DateTimePicker from '@mui/lab/DateTimePicker';
 import RadioGroup from '@mui/material/RadioGroup';
 import frLocale from 'date-fns/locale/fr';
@@ -81,7 +67,6 @@ import ImagesDisplay from 'components/ImageCropper/ImagesDisplay';
 import ImagesDropZone from 'components/ImageCropper/ImagesDropZone';
 import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import IconButton from '@mui/material/IconButton';
-import { FlashOnTwoTone } from '@mui/icons-material';
 import RecurringEventInput from 'components/form/recurringEventInput/RecurringEventInput';
 import RadioGroupForContext from './RadioGroupForContext';
 import withDndProvider from '../../hoc/withDnDProvider';
