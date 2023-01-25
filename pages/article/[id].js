@@ -513,10 +513,10 @@ const Article = ({ initialData }) => {
                 <br />
                 <br />
                 <div className={styles.description}>
-                  <p>
+                  <div>
                     {' '}
                     {data && Parser(data.article.content)}
-                  </p>
+                  </div>
                 </div>
                 <br />
                 <div className={styles.createdAt}>

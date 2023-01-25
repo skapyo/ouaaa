@@ -1,9 +1,12 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { makeStyles } from '@mui/styles';
 import TextField from '@mui/material/TextField';
-import DatePicker from '@mui/lab/DatePicker'
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import moment from 'moment';
 
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 // const defaultTimeRange = {
 //   start: moment().set('minute', 0).set('hour', 8).add(1, 'day').toDate(),
 //   end: moment().set('minute', 0).set('hour', 18).add(1, 'day').toDate(),
@@ -27,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function TimePicker(props) {
+export default function TimePickerContainer(props) {
   const classes = useStyles();
 
   const { selectHours, indexTimer, timeRange } = props;
@@ -51,7 +54,8 @@ export default function TimePicker(props) {
 
   return (
     <form className={classes.container} noValidate>
-      <DatePicker
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <TimePicker
         margin="normal"
         id="time-picker"
         label="à partir de"
@@ -65,8 +69,9 @@ export default function TimePicker(props) {
         ampm={false}
         minutesStep={5}
         error={!selectedStartDate}
+        renderInput={(params) => <TextField {...params} />}
       />
-      <DatePicker
+      <TimePicker
         margin="normal"
         id="time-picker"
         label="jusqu'à"
@@ -78,7 +83,9 @@ export default function TimePicker(props) {
         ampm={false}
         minutesStep={5}
         error={!selectedEndDate}
+        renderInput={(params) => <TextField {...params} />}
       />
+      </LocalizationProvider>
     </form>
   );
 }

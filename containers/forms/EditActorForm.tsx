@@ -1328,7 +1328,20 @@ const EditActorForm = (props) => {
         initData={actorData && actorData?.actor?.openingHours}
       />
 
-      <TitleWithTooltip
+ 
+      <p />
+      <FormItem
+        label="Activité principale de votre structure / Métier"
+        inputName="activity"
+        formChangeHandler={formChangeHandler}
+        value={formValues.activity}
+        required={false}
+        errorBool={false}
+        errorText=""
+        helperText="Indiquez ici l'activité principale ou votre métier.  Cette info servira à mieux référencer votre page dans les moteurs de recherche. Ex : boulanger bio"
+        />
+
+<TitleWithTooltip
         title={(
           <p>
             CONTACT PRIVE pour les échanges avec
@@ -1396,18 +1409,7 @@ const EditActorForm = (props) => {
           )}
         </p>
       </FormControl>
-      <p />
-      <FormItem
-        label="Métier / Activité principale de votre structure"
-        inputName="activity"
-        formChangeHandler={formChangeHandler}
-        value={formValues.activity}
-        required={false}
-        errorBool={false}
-        errorText=""
-        helperText="Indiquez ici votre métier ou activité principale. Cette info servira à mieux référencer votre page dans les moteurs de recherche. Ex : boulanger bio"
-      />
-
+      
       <TitleWithTooltip title="Votre logo" />
 
       {objectsListLogo ? (

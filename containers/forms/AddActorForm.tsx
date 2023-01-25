@@ -917,6 +917,17 @@ const AddActorForm = () => {
 
         <SchedulerContainer onChange={setOpeningHours} />
         <p />
+
+        <FormItem
+          label="Activité principale de votre structure / Métier"
+          inputName="activity"
+          formChangeHandler={formChangeHandler}
+          value={formValues.activity}
+          required={false}
+          errorBool={false}
+          errorText=""
+          helperText="Indiquez ici l'activité principale ou votre métier.  Cette info servira à mieux référencer votre page dans les moteurs de recherche. Ex : boulanger bio"
+        />
         <br />
         <Typography variant="body1" color="primary" className={styles.label}>
           CONTACT PRIVE pour les échanges avec <i>OUAAA!</i>
@@ -975,17 +986,6 @@ const AddActorForm = () => {
             )}
           </p>
         </FormControl>
-
-        <FormItem
-          label="Métier / Activité principale de votre structure"
-          inputName="activity"
-          formChangeHandler={formChangeHandler}
-          value={formValues.activity}
-          required={false}
-          errorBool={false}
-          errorText=""
-          helperText="Indiquez ici votre métier ou activité principale. Cette info servira à mieux référencer votre page dans les moteurs de recherche. Ex : boulanger bio"
-        />
 
         <Typography variant="body1" color="primary" className={styles.label}>
           Votre logo &nbsp;

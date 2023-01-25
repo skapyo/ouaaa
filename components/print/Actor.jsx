@@ -425,9 +425,9 @@ const Actor = React.forwardRef((props, ref) => {
           <br />
           <Grid item md={7} sm={10} className={classes.description}>
             <br />
-            <p>
+            <div>
               {actor && Parser(actor?.description)}
-            </p>
+            </div>
             <div>
               {
                 actor?.entries.map(

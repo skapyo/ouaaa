@@ -5,7 +5,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import moment from 'moment';
 
 import ButtonDay from './ButtonDay';
-import TimePicker from './TimePicker';
+import TimePickerContainer from './TimePickerContainer';
 import PlaceContainer from './PlaceContainer';
 
 const useStyles = makeStyles((theme) => ({
@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     justifyContent: 'center',
   },
-  timepicker: {
+  TimePickerContainer: {
     display: 'flex',
     flexDirection: 'column',
   },
@@ -128,7 +128,7 @@ const TimeContainer = (props) => {
     setPlace(place);
   };
 
-  const deleteTimePicker = (e, index) => {
+  const deleteTimePickerContainer = (e, index) => {
     const tempHours = [...hours];
 
     deleteTimeContainer(e, index);
@@ -192,12 +192,12 @@ const TimeContainer = (props) => {
                 />
               </div>
             </div>
-            <div className={classes.timepicker}>
+            <div className={classes.TimePickerContainer}>
               <div className={classes.timerange}>
                 {hours.length > 0 &&
                   hours.map((timeRange, index) => {
                     return (
-                      <TimePicker
+                      <TimePickerContainer
                         selectHours={selectHours}
                         indexTimer={index}
                         timeRange={timeRange}
@@ -220,7 +220,7 @@ const TimeContainer = (props) => {
         aria-label="delete"
         className={classes.buttonDelete}
         onClick={(e) => {
-          deleteTimePicker(e, indexTimeContainer);
+          deleteTimePickerContainer(e, indexTimeContainer);
         }}
       >
         <DeleteIcon fontSize="small" />
