@@ -5,9 +5,9 @@ import makeStyles from '@mui/styles/makeStyles';
 import gql from 'graphql-tag';
 
 import { useQuery } from '@apollo/client';
-import Paper from '@mui/material/Paper/Paper';
+import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
-import { useRouter, withRouter } from 'next/router';
+import { withRouter } from 'next/router';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -18,7 +18,6 @@ import TableRow from '@mui/material/TableRow';
 import { withApollo } from 'hoc/withApollo';
 import Head from 'next/head';
 import { useSessionState } from '../../context/session/session';
-import Newsletter from '../../containers/layouts/Newsletter';
 import Link from '../../components/Link';
 
 

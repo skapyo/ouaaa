@@ -24,8 +24,8 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-import Paper from '@mui/material/Paper/Paper';
-import LastPageIcon from '@mui/material/SvgIcon/SvgIcon';
+import Paper from '@mui/material/Paper';
+import LastPageIcon from '@mui/material/SvgIcon';
 
 import Edit from '@mui/icons-material/Edit';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
