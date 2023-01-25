@@ -6,13 +6,9 @@ import { useSnackbar } from 'notistack';
 import gql from 'graphql-tag';
 import Moment from 'react-moment';
 
-import {
-  createStyles,
-  makeStyles,
-  Theme,
-  Typography,
-  useTheme,
-} from '@material-ui/core';
+import { Theme, Typography, useTheme } from '@mui/material';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
 import {
   Dialog,
   DialogTitle,
@@ -28,8 +24,8 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-import Paper from '@material-ui/core/Paper/Paper';
-import LastPageIcon from '@material-ui/core/SvgIcon/SvgIcon';
+import Paper from '@mui/material/Paper/Paper';
+import LastPageIcon from '@mui/material/SvgIcon/SvgIcon';
 
 import Edit from '@mui/icons-material/Edit';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
@@ -201,14 +197,14 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
         onClick={handleFirstPageButtonClick}
         disabled={page === 0}
         aria-label="first page"
-      >
+        size="large">
         {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
       </IconButton>
       <IconButton
         onClick={handleBackButtonClick}
         disabled={page === 0}
         aria-label="previous page"
-      >
+        size="large">
         {theme.direction === 'rtl' ? (
           <KeyboardArrowRight />
         ) : (
@@ -219,7 +215,7 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
         onClick={handleNextButtonClick}
         disabled={page >= Math.ceil(count / rowsPerPage) - 1}
         aria-label="next page"
-      >
+        size="large">
         {theme.direction === 'rtl' ? (
           <KeyboardArrowLeft />
         ) : (
@@ -230,7 +226,7 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
         onClick={handleLastPageButtonClick}
         disabled={page >= Math.ceil(count / rowsPerPage) - 1}
         aria-label="last page"
-      >
+        size="large">
         {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
       </IconButton>
     </div>

@@ -1,22 +1,17 @@
 import React from 'react';
 import AppLayout from 'containers/layouts/AppLayout';
-import {
-  Box,
-  Container,
-  makeStyles,
-  RootRef,
-  Typography,
-} from '@material-ui/core';
+import { Box, Container,  Typography } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import Image from 'next/image';
 import Link from 'components/Link';
-import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
+import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import Newsletter from '../../containers/layouts/Newsletter';
-import InfoIcon from '@material-ui/icons/Info';
+import InfoIcon from '@mui/icons-material/Info';
 
 const useStyles = makeStyles((theme) => ({
   container: {
     width: '90%',
-    [theme.breakpoints.down('md')]: {
+    [theme.breakpoints.down('lg')]: {
       paddingTop: '5em',
     },
    
@@ -30,7 +25,7 @@ const Faq = () => {
 
   return (
     <AppLayout>
-      <RootRef>
+      <>
         <Box>
           <Container className={styles.container}>
             <div className={styles.align}>
@@ -192,7 +187,7 @@ const Faq = () => {
           <br />
           </Container>
         </Box>
-      </RootRef>
+      </>
     </AppLayout>
   );
 };

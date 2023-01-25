@@ -1,12 +1,7 @@
 import React from 'react';
 import AppLayout from 'containers/layouts/AppLayout';
-import {
-  Box,
-  Container,
-  makeStyles,
-  RootRef,
-  Typography,
-} from '@material-ui/core';
+import { Box, Container,  Typography } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import Newsletter from '../../containers/layouts/Newsletter';
 import Link from '../../components/Link';
 
@@ -17,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
   },
   container: {
     width: '90%',
-    [theme.breakpoints.down('md')]: {
+    [theme.breakpoints.down('lg')]: {
       paddingTop: '5em',
     },
     'text-align': 'center',
@@ -48,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
     'background-position-x': '5px',
     'background-position-y': '1px',
     fontSize: '1em',
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       fontSize: '0.8em',
     },
   },
@@ -57,7 +52,7 @@ const Participate = () => {
   const styles = useStyles();
   return (
     <AppLayout>
-      <RootRef>
+      <>
         <Box>
           <Container className={styles.container}>
             <Typography variant="h1">Je Participe</Typography>
@@ -108,7 +103,7 @@ const Participate = () => {
             <br/>
           </Container>
         </Box>
-      </RootRef>
+      </>
     </AppLayout>
   );
 };

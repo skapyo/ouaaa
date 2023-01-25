@@ -1,15 +1,16 @@
-import { Container, makeStyles, Typography, useTheme } from '@material-ui/core';
+import { Container, Typography, useTheme } from '@mui/material';
+import {  makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
 import Slider from 'react-slick/lib';
 import { gql, useQuery } from '@apollo/client';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import CardSliderActor from '../../../components/cards/CardSliderActor';
 import { withApollo } from '../../../hoc/withApollo';
 import Link from '../../../components/Link';
 
 const useStyles = makeStyles((theme) => ({
   cardTitle: {
-    color: theme.typography.h5.color,
+    color: '#2C367E',
     fontFamily: theme.typography.h5.fontFamily,
     textTransform: 'uppercase',
     fontWeight: '400',
@@ -37,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
   buttonGrid: {
     fontSize: '1.5em',
     margin: '2.5em 0 2.5em 0 ',
-    
+
     borderRadius: '1.5em',
     padding: '0 3em 0 3em',
     height: '2.5em',
@@ -89,7 +90,7 @@ const LastActor = (props) => {
     }
   `;
 
-  
+
   const [actorToRender, setActorToRender] = useState(null);
 
   const {
@@ -137,7 +138,7 @@ const LastActor = (props) => {
   const theme = useTheme();
   const mobile = useMediaQuery(theme.breakpoints.down('sm'));
   const styles = useStyles();
-  const maxImageDisplay = !mobile?5:1
+  const maxImageDisplay = !mobile ? 5 : 1
   const settings = {
     dots: true,
     infinite: true,
@@ -157,7 +158,7 @@ const LastActor = (props) => {
       <Typography variant="h2" className={[styles.cardTitle]}>
         LES ACTEURS RÉCEMMENTS AJOUTÉS
       </Typography>
-      <div className={[styles.border]}/>
+      <div className={[styles.border]} />
       <Slider {...settings} className={[styles.articleCarroussel]}>
         {actorToRender?.actorData &&
           actorToRender.actorData.actors.map((actor) => {

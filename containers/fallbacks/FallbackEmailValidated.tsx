@@ -2,7 +2,8 @@
 import React from 'react';
 import AppLayout from 'containers/layouts/AppLayout';
 import AppContainer from 'containers/layouts/AppContainer';
-import { Grid, makeStyles, Typography } from '@material-ui/core';
+import { Grid, Typography } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import ClassicButton from 'components/buttons/ClassicButton';
 import Link from 'components/Link';
 
@@ -19,11 +20,11 @@ const FallbackEmailValidated = (props: any) => {
   return (
     <AppLayout>
       <AppContainer>
-        <Grid container justify="center">
+        <Grid container justifyContent="center">
           <Typography variant="h6">
             Votre email {email} a bien été validé.
           </Typography>
-          <Grid container justify="center">
+          <Grid container justifyContent="center">
             <Grid item>
               {/* @ts-ignore */}
               <Link href="/signin">

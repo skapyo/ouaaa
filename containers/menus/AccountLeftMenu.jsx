@@ -1,4 +1,5 @@
-import { List, ListItem, makeStyles, Typography } from '@material-ui/core';
+import { List, ListItem, Typography } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import Link from 'components/Link';
 import { useRouter } from 'next/router';
 

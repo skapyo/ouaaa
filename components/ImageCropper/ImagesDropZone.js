@@ -1,10 +1,11 @@
 /* eslint-disable jsx-a11y/anchor-has-content */
-import { Card, Grid, makeStyles } from '@material-ui/core';
+import { Card, Grid } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import React from 'react';
-import InsertPhotoIcon from '@material-ui/icons/InsertPhoto';
+import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 import { useDropArea } from 'react-use';
-import Button from '@material-ui/core/Button';
-import Hidden from '@material-ui/core/Hidden';
+import Button from '@mui/material/Button';
+import Hidden from '@mui/material/Hidden';
 import { useSnackbar } from 'notistack';
 
 const useStyles = makeStyles((theme) => ({
@@ -57,7 +58,7 @@ const ImagesDropZone = ({ onDropHandler, text }) => {
   return (
     <Card className={styles.dropZone} {...bond}>
       <Grid container alignItems="center">
-        <Hidden mdDown>
+        <Hidden lgDown>
           <Grid item xs={8}>
             <div>
               <div>

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
-import Button from '@material-ui/core/Button';
-import { withStyles } from '@material-ui/core/styles';
+import Button from '@mui/material/Button';
+import { withStyles } from '@mui/styles';
 
 const StyledButton = withStyles({
   root: {
@@ -36,7 +36,7 @@ export default function ButtonDay(props) {
     <StyledButton
       onClick={handleClick}
       variant="contained"
-      style={{ backgroundColor: flag ? '#2C367E' : 'white', color: flag ? 'white' : '#2C367E'}}
+      style={{ backgroundColor: flag ? '#2C367E' : 'white', color: flag ? 'white' : '#2C367E' }}
       data-id={dayId}
       disabled={alreadySelected}
     >

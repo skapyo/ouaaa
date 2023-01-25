@@ -3,15 +3,17 @@ import React, {
 } from 'react';
 import {
   Grid, Typography, useMediaQuery, Button,
-} from '@material-ui/core';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+} from '@mui/material';
+import { useTheme } from '@mui/styles';
+
+import makeStyles from '@mui/styles/makeStyles';
 
 import { gql, useQuery } from '@apollo/client';
 import Actors from 'containers/layouts/mapPage/actors';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
-import Drawer from '@material-ui/core/Drawer';
-import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
+import Drawer from '@mui/material/Drawer';
+import DoubleArrowIcon from '@mui/icons-material/DoubleArrow';
 import dynamic from 'next/dynamic';
 
 import { getImageUrl } from '../../utils/utils';
@@ -33,10 +35,8 @@ const MarkerClusterWithNoSSR = dynamic(() => import('../../components/map/Marker
   ssr: false,
 });
 
-let matchesWindow = false;
-if (typeof window !== 'undefined') {
-  matchesWindow = window.matchMedia('(max-width: 600px)').matches;
-}
+
+
 
 const drawerWidth = 310;
 
@@ -66,7 +66,7 @@ const useStyles = makeStyles((theme) => ({
     height: 'calc(100vh - 100px)',
     flexDirection: 'row',
     flexWrap: 'nowrap',
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       flexDirection: 'column',
       alignItems: 'center',
       height: 'auto',
@@ -96,7 +96,7 @@ const useStyles = makeStyles((theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       position: 'fixed',
       bottom: 10,
       left: 10,
@@ -115,7 +115,7 @@ const useStyles = makeStyles((theme) => ({
       color: '#2C367E',
       backgroundColor: '#fff',
     },
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       position: 'initial',
       marginTop: 25,
       width: '75%',
@@ -277,7 +277,7 @@ const useStyles = makeStyles((theme) => ({
   },
   mapContainer: {
     height: '100% !important',
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       height: '80vh !important',
     },
   },
@@ -334,7 +334,7 @@ const carto = () => {
   const mapRef = useRef();
   const isFirstRef = useRef(true);
   const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.down('sm'));
+  const matches = useMediaQuery(theme.breakpoints.down('md'));
   const router = useRouter();
   const { inviteActor, noEmailInviteActor } = router.query;
   const [categoriesChecked, setCategoriesChecked] = useState(categories.Sujets);
@@ -345,6 +345,8 @@ const carto = () => {
   const [listMode, setListMode] = useState(true);
   const [postCode, setPostCode] = useState(null);
   const [filters, setFilters] = useState(null);
+  const [matchesWindow, setMatchesWindow] = useState(false)
+  const [isNotSSR, seIsNotSSR] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(!matchesWindow);
 
   const toggleMenu = useCallback(() => {
@@ -355,11 +357,17 @@ const carto = () => {
 
   const position = [46.1085193, -0.9864794];
 
+  useEffect(() => {
+    setMatchesWindow(window.matchMedia('(max-width: 600px)').matches) 
+  
+  }, [])
+
   const switchMode = useCallback(() => {
     setListMode(!listMode);
-  }, [listMode]);
+  }, [listMode]); 
 
-  if (typeof window !== 'undefined') {
+  const isSSR = () => typeof window !== 'undefined'; 
+  if (isSSR) {
     const {
       data, refetch,
     } = useQuery(GET_ACTORS, {
@@ -500,7 +508,7 @@ const carto = () => {
                   {
                     actorsWithLocation.map((actor) => {
                       return (
-                        <MarkerWithNoSSR  actor={actor} />
+                        <MarkerWithNoSSR actor={actor} />
                       );
                     })
                   }
@@ -509,7 +517,7 @@ const carto = () => {
             </Grid>
           )}
           {!listMode && (
-            <Grid item xs={12} justify="center" className={styles.gridList}>
+            <Grid item xs={12} justifyContent="center" className={styles.gridList}>
               {typeof data !== 'undefined' && <Actors data={data} />}
             </Grid>
           )}

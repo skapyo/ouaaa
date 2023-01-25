@@ -1,8 +1,8 @@
 import AppLayout from 'containers/layouts/AppLayout';
-import { RootRef } from '@material-ui/core';
+
 import { Box } from '@mui/material';
 import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import { withApollo } from 'hoc/withApollo';
 import { Link } from '@mui/material';
 import Head from 'next/head';
@@ -131,7 +131,7 @@ const Index = () => {
         <meta name="twitter:description" content="Plateforme d’information & d'initiative des acteurs de la transition vers une société plus humaine & écologique sur le territoire de l'Aunis  !" />
         <meta name="twitter:image" content="https://ouaaa-transition.fr/apple-touch-icon.png" />
       </Head>
-      <RootRef>
+      <>
         <Box>
 
           <PresentationSection id={sections[0]} />
@@ -168,7 +168,7 @@ const Index = () => {
     CNIL : <Link href="https://www.cnil.fr/fr/cookies-et-autres-traceurs/regles/cookies/lignes-directrices-modificatives-et-recommandation" target="_blank" color="inherit" >Cookies et autres traceurs : la CNIL publie des lignes directrices modificatives et sa
 recommandation</Link>
         </CookieConsent>
-      </RootRef>
+      </>
     </AppLayout>
   );
 };

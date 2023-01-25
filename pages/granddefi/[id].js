@@ -2,15 +2,9 @@ import React, {
   useEffect, useState, useRef, useMemo,
 } from 'react';
 import AppLayout from 'containers/layouts/AppLayout';
-import {
-  Container,
-  Grid,
-  makeStyles,
-  RootRef,
-  Typography,
-  useTheme,
-} from '@material-ui/core';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { Container, Grid,  Typography, useTheme } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { withApollo } from 'hoc/withApollo.jsx';
 import { useRouter } from 'next/router';
 import Box from '@mui/material/Box';
@@ -50,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: ({ hasBannerUrl }) => (hasBannerUrl ? -53 : 20),
     marginBottom: 20,
     boxShadow: '0px 0px 38px -14px rgba(0, 0, 0, 0.46)',
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       padding: '2em',
       width: 'auto',
       marginBottom: 0,
@@ -61,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: theme.typography.h5.fontFamily,
     textTransform: 'uppercase',
     fontWeight: '400',
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       fontSize: '1.5rem !important',
     },
   },
@@ -78,7 +72,7 @@ const useStyles = makeStyles((theme) => ({
   map: {
     height: '30em',
     width: '30em',
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       width: '100% !important',
     },
   },
@@ -308,11 +302,11 @@ const GrandDefi = ({ initialData }) => {
   };
   const styles = useStyles(stylesProps);
   const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.down('sm'));
+  const matches = useMediaQuery(theme.breakpoints.down('md'));
 
   return (
     <AppLayout>
-      <RootRef>
+      <>
         <Box>
           <Container className={styles.cardInfo}>
             <Grid container>
@@ -331,7 +325,7 @@ const GrandDefi = ({ initialData }) => {
             </Grid>
           </Container>
         </Box>
-      </RootRef>
+      </>
     </AppLayout>
   );
 };

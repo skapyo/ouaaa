@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Grid } from '@material-ui/core';
+import makeStyles from '@mui/styles/makeStyles';
+import { Grid } from '@mui/material';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 
@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
     padding: '2em 0',
     textAlign: 'center',
     cursor: 'pointer',
-    [theme.breakpoints.down('md')]: {
+    [theme.breakpoints.down('lg')]: {
       padding: '1em 0',
     },
     width: '100%',

@@ -1,27 +1,23 @@
 import { useMutation, useQuery } from '@apollo/client';
-import {
-  createStyles,
-  makeStyles,
-  Theme,
-  Typography,
-  useTheme,
-} from '@material-ui/core';
-import IconButton from '@material-ui/core/IconButton';
-import Paper from '@material-ui/core/Paper/Paper';
-import LastPageIcon from '@material-ui/core/SvgIcon/SvgIcon';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableFooter from '@material-ui/core/TableFooter';
-import TableHead from '@material-ui/core/TableHead';
-import TablePagination from '@material-ui/core/TablePagination';
-import TableRow from '@material-ui/core/TableRow';
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import Edit from '@material-ui/icons/Edit';
-import FirstPageIcon from '@material-ui/icons/FirstPage';
-import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
-import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
+import { Theme, Typography, useTheme } from '@mui/material';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
+import IconButton from '@mui/material/IconButton';
+import Paper from '@mui/material/Paper/Paper';
+import LastPageIcon from '@mui/material/SvgIcon/SvgIcon';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableFooter from '@mui/material/TableFooter';
+import TableHead from '@mui/material/TableHead';
+import TablePagination from '@mui/material/TablePagination';
+import TableRow from '@mui/material/TableRow';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import Edit from '@mui/icons-material/Edit';
+import FirstPageIcon from '@mui/icons-material/FirstPage';
+import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
+import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import AdministrationLayout from 'containers/layouts/administration/AdministrationPageLayout';
 import gql from 'graphql-tag';
 import { withApollo } from 'hoc/withApollo';

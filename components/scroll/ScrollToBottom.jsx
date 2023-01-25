@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import {
-  makeStyles,
-} from '@material-ui/core';
+import makeStyles from '@mui/styles/makeStyles';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-import Fab from '@material-ui/core/Fab';
+import Fab from '@mui/material/Fab';
 import { scrollTo } from './scrollTo';
 
 const ScrollButton = ({

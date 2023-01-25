@@ -2,12 +2,8 @@
 import React, {
   useMemo,
 } from 'react';
-import {
-  Container,
-  Grid,
-  makeStyles,
-  Typography,
-} from '@material-ui/core';
+import { Container, Grid, Typography } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import Parser from 'html-react-parser';
 import moment from 'moment';
 import AppLayout from 'containers/layouts/AppLayout';
@@ -26,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
     justify: 'center',
     marginTop: 20,
     alignItems: 'center',
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       paddingTop: 16,
     },
   },
@@ -42,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up('sm')]: {
       paddingLeft: '2em',
     },
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       width: '100%',
       marginTop: 10,
     },
@@ -52,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: theme.typography.h5.fontFamily,
     textTransform: 'uppercase',
     fontWeight: '400',
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       fontSize: '1.5rem !important',
     },
   },
@@ -429,9 +425,9 @@ const Actor = React.forwardRef((props, ref) => {
           <br />
           <Grid item md={7} sm={10} className={classes.description}>
             <br />
-            <p>
+            <div>
               {actor && Parser(actor?.description)}
-            </p>
+            </div>
             <div>
               {
                 actor?.entries.map(

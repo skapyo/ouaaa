@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import L from 'leaflet';
 import { Marker, Tooltip, Popup } from 'react-leaflet';
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles } from '@mui/styles';
 import { useLeafletContext } from '@react-leaflet/core';
 
 const useStyles = makeStyles((theme) => ({

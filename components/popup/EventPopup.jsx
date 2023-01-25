@@ -1,11 +1,11 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import gql from 'graphql-tag';
 import {
   Grid, Typography, useTheme,
-} from '@material-ui/core';
+} from '@mui/material';
 import Moment from 'react-moment';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { Link } from '@mui/material';
 import Favorite from '../Favorite';
 import { getImageUrl } from '../../utils/utils';
@@ -87,7 +87,7 @@ const EventPopup = ({ event, onMouseOut }) => {
   const styles = useStyles();
   const position = [46.1085193, -0.9864794];
   const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.down('sm'));
+  const matches = useMediaQuery(theme.breakpoints.down('md'));
 
   const startDateFormat = !matches ? '[ de ]HH[h]mm' : 'HH[h]mm';
   const endDateFormat = !matches ? '[ à ]HH[h]mm' : '[-]HH[h]mm';
@@ -98,7 +98,7 @@ const EventPopup = ({ event, onMouseOut }) => {
       >
         <Grid container>
           <Grid item xs={2}>
-            <Favorite event={event} />
+            <Favorite event={event} /> 
           </Grid>
           <Grid item xs={9}>
             <div className={styles.categorie}>

@@ -1,14 +1,9 @@
-import {
-  Container,
-  Grid,
-  IconButton,
-  makeStyles,
-  Typography,
-} from '@material-ui/core';
+import { Container, Grid, IconButton, Typography } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import { useRouter, withRouter } from 'next/router';
 import { withApollo } from 'hoc/withApollo';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
 import withDndProvider from '../../hoc/withDnDProvider';
 
 const useStyles = makeStyles((theme) => ({

@@ -1,11 +1,11 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import SearchIcon from '@material-ui/icons/Search';
-import TextField from '@material-ui/core/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
+import CircularProgress from '@mui/material/CircularProgress';
+import SearchIcon from '@mui/icons-material/Search';
+import TextField from '@mui/material/TextField';
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/client';
-import { makeStyles } from '@material-ui/core';
+import makeStyles from '@mui/styles/makeStyles';
 import { useRouter } from 'next/router';
 
 const SEARCH = gql`
@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
     width: '45em',
     paddingTop: '3em',
     margin: 'auto',
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       width: 'auto',
       paddingTop: '1em',
     },
@@ -78,6 +78,9 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: 14,
     fontStyle: 'italic',
   },
+  option: {
+    padding: '0.5em 1em 0.5em 1em',
+  }
 }));
 
 const getTextWithSearchValue = (originalText, inputValue) => {
@@ -177,10 +180,10 @@ const SearchEngine = (props) => {
       open={open}
       groupBy={(option) => option.type}
       getOptionLabel={(option) => option.label}
-      getOptionSelected={(option, currentvalue) => option.label === currentvalue.label}
+      isOptionEqualToValue={(option, currentvalue) => option.label === currentvalue.label}
       noOptionsText="Pas de résultat"
       options={options}
-      filterOptions={filterOptions}
+      filterOptions={filterOptions}ule
       loading={loading}
       popupIcon={(
         <SearchIcon size={48} />
@@ -203,23 +206,23 @@ const SearchEngine = (props) => {
           />
         );
       }}
-      renderOption={(option, state) => {
+      renderOption={(props, option, { inputValue }) => {
         const { label, activity, shortDescription } = option;
-        const { inputValue } = state;
 
         const newLabel = getTextWithSearchValue(label, inputValue);
         const newActivity = getTextWithSearchValue(activity, inputValue);
         const newShortDescription = getTextWithSearchValue(shortDescription, inputValue);
-
         return (
-          <div>
-            <div>
-              {newLabel}
-              {' '}
-              {newActivity && <div className={classes.optionActivity}>{newActivity}</div>}
+          <li {...props}>
+            <div className={classes.option}>
+              <div>
+                {newLabel}
+                {' '}
+                {newActivity && <div className={classes.optionActivity}>{newActivity}</div>}
+              </div>
+              {shortDescription && <div className={classes.optionShortDescription}>{newShortDescription}</div>}
             </div>
-            {shortDescription && <div className={classes.optionShortDescription}>{newShortDescription}</div>}
-          </div>
+            </li>
         );
       }}
     />

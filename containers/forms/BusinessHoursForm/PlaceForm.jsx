@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
-import TextField from '@material-ui/core/TextField';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
+import TextField from '@mui/material/TextField';
+import Input from '@mui/material/Input';
+import InputLabel from '@mui/material/InputLabel';
 
 function PlaceForm({ addPlace }) {
   const [value, setValue] = React.useState('');
