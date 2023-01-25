@@ -9,7 +9,7 @@ import Moment from 'react-moment';
 import { Theme, Typography, useTheme } from '@mui/material';
 import createStyles from '@mui/styles/createStyles';
 import makeStyles from '@mui/styles/makeStyles';
-import Paper from '@mui/material/Paper/Paper';
+import Paper from '@mui/material/Paper';
 import IconButton from '@mui/material/IconButton';
 import LastPageIcon from '@mui/material/SvgIcon/SvgIcon';
 import Dialog from '@mui/material/Dialog';
