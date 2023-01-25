@@ -1096,7 +1096,7 @@ const Event = ({ initialData }) => {
                 <div className={styles.border} />
                 <br />
                 <br />
-                <p>{data && Parser(data.event.description)}</p>
+                <div>{data && Parser(data.event.description)}</div>
                 <div>
                   {data
                     && data.event.entries.map(
@@ -1252,7 +1252,7 @@ const Event = ({ initialData }) => {
                       <div className={styles.border} />
                       <br />
                     </div>
-                    <p>{data && Parser(urlRectification(data.event.practicalInfo))}</p>
+                    <div>{data && Parser(urlRectification(data.event.practicalInfo))}</div>
                   </div>
                 )}
                 <div />

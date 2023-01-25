@@ -772,11 +772,6 @@ const Actor = ({ initialData }) => {
     });
   }, [dataEvents]);
 
-  let url;
-  if (typeof window !== 'undefined') {
-    url = window.location.href;
-  }
-
   const logo = useMemo(() => {
     const logoPictures = actorPictures.filter((picture) => picture.logo);
     return logoPictures.length > 0 ? logoPictures[0] : null;
@@ -1224,9 +1219,9 @@ const Actor = ({ initialData }) => {
                 {!isMobile && <ActorName name={data?.actor?.name} />}
                 <br />
                 <br />
-                <p>
+                <div>
                   {data && Parser(data.actor.description)}
-                </p>
+                </div>
                 <div>
                   {data
                     && data.actor.entries.map(
