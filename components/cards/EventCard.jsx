@@ -30,6 +30,7 @@ const useStyles = makeStyles((theme) => ({
     minHeight: '106px',
     borderLeft: `solid 12px ${props.color}`,
     display: 'flex',
+    fontSize:'0.8em'
   }),
   content: {
     width: '100%',
@@ -113,6 +114,7 @@ const useStyles = makeStyles((theme) => ({
     whiteSpace: 'nowrap',
     textOverflow: 'ellipsis',
     overflow: 'hidden',
+    fontSize:'0.9em'
   }),
   eventDetails: {
     fontStyle: 'italic',
@@ -121,6 +123,7 @@ const useStyles = makeStyles((theme) => ({
     '-webkit-line-clamp': 2,
     '-webkit-box-orient': 'vertical',
     overflow: 'hidden',
+    fontSize:'0.9em'
   },
 }));
 

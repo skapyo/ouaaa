@@ -6,6 +6,7 @@
     "dev": "cross-env NODE_OPTIONS='--inspect' next dev",
     "build": "next build",
     "start": "next start",
+    "turbo": "next dev --turbo",
     "lint": "eslint .",
     "lint:fix": "eslint --fix --ext .js,.jsx ."
   },
@@ -97,7 +98,7 @@
     "slick-carousel": "^1.8.1",
     "styled-components": "^5.3.6",
     "uuid": "^8.3.2",
-    "xlsx": "^0.18.0"
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",

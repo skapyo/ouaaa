@@ -36,6 +36,9 @@ const useStyles = makeStyles({
     marginLeft: 'auto',
     marginRight: 'auto',
   },
+  actorImage: {
+    height:'initial !important'
+  },
   image: {
     backgroundPosition: 'center center',
     backgroundSize: 'contain',
@@ -84,8 +87,9 @@ export default function SimpleCard({ actor }) {
               </Typography>
             </div>
             { actor.pictures.filter((a, b) => (a.logo ? -1 : 1))[0]&& actor.pictures.filter((a, b) => (a.logo ? -1 : 1))[0].originalPicturePath!=null   && (
-            <div style =  {{ width: '100%', height: '100%', position: 'relative', minHeight:"300px"}}>
+            <div style =  {{ width: '100%', position: 'relative', minHeight:"300px"}}>
             <Image
+              className={classes.actorImage} 
               loader={myLoader}
               fill
               objectFit="contain"

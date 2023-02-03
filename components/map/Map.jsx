@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
   mapContainer: {
     height: '100% !important',
     [theme.breakpoints.down('md')]: {
-      height: '80vh !important',
+      height: '63vh !important',
     },
   },
   polygon:{

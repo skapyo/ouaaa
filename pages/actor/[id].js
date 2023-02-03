@@ -187,8 +187,8 @@ const useStyles = makeStyles((theme) => ({
     width: '200px',
     margin: '10px auto',
     '& img': {
-      height: '100%',
-      width: '100%',
+      height: '100%!important',
+      width: '100%!important',
       objectFit: 'contain',
     },
   },
@@ -293,12 +293,13 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: '500',
     color: 'white',
     textTransform: 'uppercase',
-    fontSize: '1.8em',
+    fontSize: '1.5em',
     paddingTop: '2em',
   },
   volunteerDescription: {
     color: 'white',
-    fontSize: '1.2em',
+    fontSize: '1.0em',
+    padding: '0 1.2em 0 1.2em',
   },
   fab: {
     position: 'fixed',
@@ -1551,7 +1552,7 @@ const Actor = ({ initialData }) => {
               className={[styles.articleCarroussel]}
             >
               {dataArticles
-                && dataArticles?.articles.sort((a, b) => (a.createdAt > b.createdAt ? -1 : 1)).map((article) => {
+                && dataArticles?.articles.slice().sort((a, b) => (a.createdAt > b.createdAt ? -1 : 1)).map((article) => {
                   return <CardSliderArticle key={article.id} article={article} />;
                 })}
             </Slider>

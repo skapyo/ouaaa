@@ -79,6 +79,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundRepeat: 'no-repeat',
     backgroundOpacity: ' 0.5',
     borderRadius: '0.5em',
+    fontSize: '0.9em',
     width: '80%',
     justify: 'center',
     alignItems: 'center',
@@ -98,7 +99,7 @@ const useStyles = makeStyles((theme) => ({
     textTransform: 'uppercase',
     textAlign: 'center',
     fontWeight: '400',
-    fontSize: '3rem !important',
+    fontSize: '2.5rem !important',
     [theme.breakpoints.down('md')]: {
       fontSize: '1.5rem !important',
     },
