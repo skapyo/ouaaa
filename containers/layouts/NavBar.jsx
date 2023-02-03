@@ -43,11 +43,13 @@ const useStyles = makeStyles((theme) => ({
   avatar: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
+    marginTop: '5px'
   },
   account: {
     '&:hover': {
       cursor: 'pointer',
     },
+    fontSize:'0.9em'
   },
   popoverPaper: {
     marginTop: theme.spacing(2),

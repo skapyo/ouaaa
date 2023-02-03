@@ -58,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
 
   buttonGrid: {
 
-    fontSize: '1.5em',
+    fontSize: '1.4em',
     margin: '1.5em 0 1.5em 0 ',
     color: 'white',
     'background-color': '#2C367E',
@@ -88,7 +88,7 @@ const useStyles = makeStyles((theme) => ({
   },
   buttonInverseActor: {
 
-    fontSize: '1.5em',
+    fontSize: '1.2em',
     margin: '1.5em 0 1.5em 0 ',
     fontWeight: 'bold',
     borderRadius: '1.5em',
@@ -116,7 +116,7 @@ const useStyles = makeStyles((theme) => ({
   },
   buttonInverseOrganisation: {
 
-    fontSize: '1.5em',
+    fontSize: '1.2em',
     margin: '1.5em 0 1.5em 0 ',
     fontWeight: 'bold',
     borderRadius: '1.5em',
@@ -142,7 +142,7 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: '19%',
   },
   titleGrid: {
-    fontSize: '1.5em',
+    fontSize: '1.3em',
     lineHeight: 'inherit',
     fontWeight: '600',
   },

@@ -43,7 +43,7 @@ const useStyles = makeStyles(theme => ({
   },
   title: {
     color: '#2C367E',
-    fontSize: '2.3em',
+    fontSize: '2.1em',
     display: 'flex',
     flex: 1,
   },
@@ -51,6 +51,7 @@ const useStyles = makeStyles(theme => ({
     textTransform: 'uppercase',
     fontWeight: 'bold',
     color: '#AEAEAE',
+    fontSize: '0.9em'
   },
 }));
 

@@ -30,6 +30,7 @@ const useStyles = makeStyles((theme) => ({
   newsletterLegal: {
     'text-align': 'justify',
      padding: '1em',
+     'font-size': '0.9em'
   },
   search: {
     position: 'relative',

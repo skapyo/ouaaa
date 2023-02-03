@@ -41,7 +41,7 @@ const ActorMarker = (props) => {
     iconUrl: icone,
     color,
     fillColor: color,
-    iconAnchor: [13, 34], // point of the icon which will correspond to marker's location
+    iconAnchor: [25, 59], // point of the icon which will correspond to marker's location
     iconSize: [60],
     popupAnchor: [18, -30],
     html: `<span style="${markerHtmlStyles}" />`,

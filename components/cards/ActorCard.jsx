@@ -115,6 +115,7 @@ const useStyles = makeStyles((theme, props) => ({
   actorDetails: {
     fontStyle: 'italic',
     color: '#A3A3A3',
+    fontSize: '0.8em',
   },
   icon: {
     color: '#bd0b3d',

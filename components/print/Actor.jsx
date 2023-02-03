@@ -28,6 +28,7 @@ const useStyles = makeStyles((theme) => ({
   },
   infoPratiqueGrid: {
     textAlign: 'center',
+    fontSize:"0.9em",
     backgroundColor: '#ededf5',
     borderRadius: 5,
     '& > *:first-child': {
@@ -48,6 +49,8 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: theme.typography.h5.fontFamily,
     textTransform: 'uppercase',
     fontWeight: '400',
+    fontSize: "3rem",
+    wordBreak: 'normal',
     [theme.breakpoints.down('md')]: {
       fontSize: '1.5rem !important',
     },

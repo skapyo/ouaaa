@@ -3,25 +3,25 @@ before_script:
 
 build_image:
   script:
-   # - docker stop gitlab_gitlab_1
+    # - docker stop gitlab_gitlab_1
     - docker build --build-arg NODE_OPTIONS=--max-old-space-size=8012 --cpu-shares=100 --memory=2048m -t  acteurs-de-la-transition-client:prod .
     - docker stop  acteurs-de-la-transition-client
     - docker rm  acteurs-de-la-transition-client
     - cd /home/debian/docker/acteurs-de-la-transition/
     - docker-compose up -d
-   # - docker start gitlab_gitlab_1
+    # - docker start gitlab_gitlab_1
   only:
     - master
 
-  script:
-    - docker build --build-arg NODE_OPTIONS=--max-old-space-size=8012 --cpu-shares=100 --memory=2048m -t  acteurs-de-la-transition-client:recette .
-    - docker stop  acteurs-de-la-transition-client-recette-1
-    - docker rm  acteurs-de-la-transition-client-recette-1
-    - cd /home/debian/docker/acteurs-de-la-transition-recette/
-    - docker-compose up -d
-   # - docker exec -it acteurs-de-la-transition-server npx sequelize --env production db:migrate
-  only:
-    - develop
+#  script:
+#    - docker build --build-arg NODE_OPTIONS=--max-old-space-size=8012 --cpu-shares=100 --memory=2048m -t  acteurs-de-la-transition-client:recette .
+#    - docker stop  acteurs-de-la-transition-client-recette-1
+#    - docker rm  acteurs-de-la-transition-client-recette-1
+#    - cd /home/debian/docker/acteurs-de-la-transition-recette/
+#    - docker-compose up -d
+# - docker exec -it acteurs-de-la-transition-server npx sequelize --env production db:migrate
+#  only:
+#    - develop
 
 variables:
-  GIT_SSL_NO_VERIFY: "1"
+  GIT_SSL_NO_VERIFY: '1'

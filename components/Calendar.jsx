@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
         },
       },
     },
-    backgroundColor: props.backgroundColor,
+    backgroundColor: props.backgroundColor+'!important',
   }),
   text: {
     overflow: 'hidden',
@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
     height: '100%',
   },
   appointment: (props) => ({
-    backgroundColor: props.backgroundColor,
+    backgroundColor: props.backgroundColor+'!important',
   }),
   appointmentContent: {
     padding: '1px 2px',
@@ -59,6 +59,9 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flex: '1 0 0',
     justifyContent: 'flex-end',
+    [theme.breakpoints.up('md')]: {
+      width: 'max-content',
+    },
   },
 }));
 
@@ -70,7 +73,7 @@ const MonthLayout = (props) => {
 const AppointmentContent = (props) => {
   const { data } = props;
   const classes = useStyles();
-  // debugger;
+  //debugger;
   return (
     <Appointments.AppointmentContent
       className={classes.appointmentContent}
@@ -116,12 +119,13 @@ const FlexibleEmptySpaceAddEvent = () => {
   }, [router]);
 
   return (
-    <Toolbar.FlexibleSpace className={classes.actionButton}>
+    <Toolbar.FlexibleSpace>
       <Button
         variant="contained"
         color="secondary"
         startIcon={<AddIcon />}
         onClick={handleClickAddEvent}
+        className={classes.actionButton}
       >
         Ajouter un évènement
       </Button>

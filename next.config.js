@@ -20,3 +20,5 @@ module.exports = {
     domains: ['localhost', 'static.recette.ouaaa-transition.fr', 'static.recette.ouaaa-transition.fr', 'static.ouaaa-transition.fr', 'ouaaa-transition.fr'],
   },
 };
+
+
