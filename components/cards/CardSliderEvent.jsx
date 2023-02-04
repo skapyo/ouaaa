@@ -83,20 +83,19 @@ export default function SimpleCard({ event }) {
                   event.categories[0].label}
               </Typography>
             </div>
-            { /*  {  event.pictures.sort((a, b) => (a.logo ? -1 : 1))[0] && event.pictures.sort((a, b) => (a.logo ? -1 : 1))[0].originalPicturePath!=null && (
+            { event.pictures.filter((a, b) => (a.logo ? -1 : 1))[0] && event.pictures.filter((a, b) => (a.logo ? -1 : 1))[0].originalPicturePath!=null && (
+            <div style =  {{  position: 'relative', height:"130px"}}>
             <Image
               loader={myLoader}
-              width="100%"
-              height="70px"
-              layout="responsive"
+              fill
               objectFit="contain"
               src={
-                event.pictures.sort((a, b) => (a.logo ? -1 : 1))[0].originalPicturePath
+                event.pictures.filter((a, b) => (a.logo ? -1 : 1))[0].originalPicturePath
               }
               alt={event.name}
             />
+            </div>
             )}
-            */}
           </div>
           <div className={classes.content}>
             <div className={classes.titleDiv}>

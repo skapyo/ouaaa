@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('md')]: {
       marginLeft: '0',
       marginRight: '0',
-      width: '100%',
+      width: '100%!important',
       marginTop: 0,
     },
   },
@@ -110,7 +110,6 @@ const useStyles = makeStyles((theme) => ({
     'background-position-y': '-3px',
     [theme.breakpoints.down('md')]: {
       'background-size': '21%',
-      'background-position-y': '19px',
     },
 
   },
@@ -204,7 +203,7 @@ const PresentationSection = (props) => {
                     Tu habites le Territoire du Nord de la Charente-Maritime ou la ville de
                     <b> La Rochelle</b>
                     {' '}
-                    et tu veux
+                    et tu veux{' '}
                     <Link href="/map">trouver une recyclerie, réparer un objet, changer de producteur d'énergie, t'inscrire dans une AMAP, rénover ta maison</Link>
                     {' '}
                     et bien plus encore ? Tu es au bon endroit !

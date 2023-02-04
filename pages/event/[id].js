@@ -764,12 +764,13 @@ const Event = ({ initialData }) => {
                     {data
                       && data.event.pictures.length >= 1
                       && data.event.pictures.filter((picture) => picture.logo)
-                        .length >= 1 && (
+                        .length >= 1 && (    
+                          
+                          <div style =  {{  position: 'relative',height: '200px'}}>
                         <Image
-                          width="100"
-                          height="100"
-                          layout="responsive"
-                          objectFit="contain"
+                        className={styles.eventImage} 
+                        fill
+                        objectFit="contain"
                           src={
                             data.event.pictures.length >= 1
                               ? getImageUrl(
@@ -780,6 +781,7 @@ const Event = ({ initialData }) => {
                               : ''
                           }
                         />
+                        </div>
                     )}
                   </div>
                   {data && (

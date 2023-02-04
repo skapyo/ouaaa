@@ -1521,7 +1521,7 @@ const Actor = ({ initialData }) => {
             </Modal>
             <div>
               <Typography variant="h5" className={[styles.cardTitle]}>
-                LES ÉVÉNEMENTS DE :
+                LES ÉVÉNEMENTS DE 
                 {' '}
                 {data && data?.actor?.name}
               </Typography>
@@ -1540,7 +1540,7 @@ const Actor = ({ initialData }) => {
             <br />
             <div>
               <Typography variant="h5" className={[styles.cardTitle]}>
-                LES ARTICLE DE :
+                LES ARTICLE DE 
                 {' '}
                 {data && data?.actor?.name}
               </Typography>

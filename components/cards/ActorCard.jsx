@@ -111,6 +111,7 @@ const useStyles = makeStyles((theme, props) => ({
     fontWeight: 'bold',
     display: 'flex',
     alignItems: 'center',
+    fontSize: '0.8em',
   },
   actorDetails: {
     fontStyle: 'italic',
