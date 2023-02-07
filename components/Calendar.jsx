@@ -137,7 +137,7 @@ const Calendar = (props) => {
   const {
     events, withViewSwitcher, withAddEvent, className,
   } = props;
-
+debugger;
   const toolbarProps = withAddEvent && {
     flexibleSpaceComponent: FlexibleEmptySpaceAddEvent,
   };

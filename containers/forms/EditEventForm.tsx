@@ -54,9 +54,8 @@ import FormControl from '@mui/material/FormControl';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Autocomplete } from '@mui/material';
 import { TreeView } from '@mui/lab';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider'
-import DateTimePicker from '@mui/lab/DateTimePicker';
+import { LocalizationProvider, DateTimePicker } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import RadioGroup from '@mui/material/RadioGroup';
 import frLocale from 'date-fns/locale/fr';
 import StyledTreeItem from 'components/filters/StyledTreeItem';
@@ -1480,12 +1479,12 @@ const EditEventForm = (props) => {
             );
           })
         }
-
         <br />
         <TitleWithTooltip
           title="Calendrier "
           tooltipTitle="Vous pourrez ajouter des infos plus détaillés dans le corps du texte de la déscription ou dans le bloc infos pratiques"
         />
+         <br />
         <Grid className={styles.datetime}>
           <LocalizationProvider locale={frLocale} dateAdapter={AdapterDateFns}>
             <Grid container justifyContent="space-around">
@@ -1703,7 +1702,9 @@ const EditEventForm = (props) => {
               onChange={() => setShowRegisterLink(true)}
               checked={showRegisterLink}
             />
+    
             {showRegisterLink && (
+              
               <FormItem
                 label="Lien externe de participation à l'événement"
                 inputName="registerLink"
