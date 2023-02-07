@@ -41,6 +41,7 @@ import PrintIcon from '@mui/icons-material/Print';
 import Image from 'next/image';
 import Link from 'components/Link';
 import moment from 'moment';
+import { RRule } from 'rrule';
 import CardSliderArticle from 'components/cards/CardSliderArticle';
 import dynamic from 'next/dynamic';
 import { useSessionState } from '../../context/session/session';
@@ -49,6 +50,7 @@ import {
   entriesHasElementWithCode,
   urlRectification,
   urlWithHttpsdefault,
+  rruleToText
 } from '../../utils/utils';
 import Calendar from '../../components/Calendar';
 import Favorite from '../../components/Favorite';
@@ -363,6 +365,7 @@ query events ($actorId: String){
     startedAt
     endedAt
     published
+    dateRule
     pictures {
       id
       label
@@ -740,23 +743,40 @@ const Actor = ({ initialData }) => {
     });
     return text;
   }
+  const getAllEventsFromRecurringEvent = (event) => {
+    let startEventDate = moment(parseInt(event.startedAt));
+    let endEventDate = moment(parseInt(event.endedAt));
+    const { dateRule } = event;
+    const rrule = RRule.fromString(`DTSTART:${startEventDate.format('YYYYMMDD[T]hhmmss[Z]')}\nRRULE:${dateRule}`);
+    return rrule.between(new Date(), moment().add(6, 'month').toDate()).map((date) => {
+      return {
+        ...event,
+        startedAt: moment(date).valueOf().toString(),
+        endedAt: moment(date).add(endEventDate.hour(), 'hours').valueOf().toString(),
+        duration: rruleToText(rrule),
+      };
+    });
+  };
 
   const events = useMemo(() => {
-    return (dataEvents?.events || []).map((evt) => {
+      const initialEvents = (dataEvents?.events || []);
+      const recurringEvents = initialEvents.filter((event) => event.dateRule);
+      
+      const allRecurringEvents = recurringEvents.map((evt) => getAllEventsFromRecurringEvent(evt));
+      debugger;
+      const allEvents = initialEvents.concat(allRecurringEvents.reduce((acc, items) => acc.concat(items), []));
+
+
+  
+    return allEvents.map((evt) => {
       const startDate = moment(parseInt(evt.startedAt));
       const endDate = moment(parseInt(evt.endedAt));
-
+  
       let recurrentOptions = null;
       const duration = Math.ceil(
         moment.duration(endDate.diff(startDate)).asDays(),
       );
 
-      if (false && duration > 2) {
-        recurrentOptions = {
-          endDate: startDate.endOf('day'),
-          rRule: `FREQ=DAILY;COUNT=${duration}`,
-        };
-      }
 
       return {
         startDate: new Date(parseInt(evt.startedAt)),
