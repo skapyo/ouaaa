@@ -1,10 +1,11 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { Grid, Typography, Container, TextField, Box, IconButton, InputAdornment, CircularProgress, Stack, Tooltip, useMediaQuery, useTheme } from '@mui/material';
+import { Grid, Typography, Container, TextField, Box, IconButton, InputAdornment, CircularProgress, Stack, Tooltip, useMediaQuery, useTheme, Link } from '@mui/material';
 import { useLazyQuery } from '@apollo/client';
 import gql from 'graphql-tag';
 import CloseIcon from '@mui/icons-material/Close';
 import GridViewIcon from '@mui/icons-material/GridView';
 import ViewListIcon from '@mui/icons-material/ViewList';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 import { withApollo } from 'hoc/withApollo.jsx';
 import ArticleCard from 'components/cards/ArticleCard';
@@ -31,21 +32,40 @@ const SEARCH_ARTICLES = gql`
   }
 `;
 
-const GET_ARTICLES = `
-  query articles {
-    articles {
+const GET_RESOURCES = `
+  query resources {
+    resources {
       id
-      label
-      shortDescription
-      createdAt
-      pictures {
+      type
+      article {
         id
         label
-        originalPicturePath
-        originalPictureFilename
-        position
-        logo
-        main
+        shortDescription
+        createdAt
+        pictures {
+          id
+          label
+          originalPicturePath
+          originalPictureFilename
+          position
+          logo
+          main
+        }
+      }
+      recipe {
+        id
+        label
+        shortDescription
+        createdAt
+        pictures {
+          id
+          label
+          originalPicturePath
+          originalPictureFilename
+          position
+          logo
+          main
+        }
       }
     }
   }
@@ -83,7 +103,7 @@ const styles = {
 }
 
 const News = (props) => {
-  const { articles } = props;
+  const { resources } = props;
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -97,13 +117,17 @@ const News = (props) => {
     setSearch(evt.target.value);
   }, [searchArticles]);
 
-  const articlesToRender = useMemo(() => {
+  const resourcesToRender = useMemo(() => {
     if (search) {
       return data?.articles || [];
     }
 
-    return articles;
-  }, [search, articles, data]);
+    return resources
+      .filter(resource => resource.article || resource.recipe)
+      .map(resource => {
+        return resource.article || resource.recipe;
+      });
+  }, [search, resources, data]);
 
   const handleClickEraseSearch = useCallback(() => {
     setSearch('');
@@ -154,6 +178,7 @@ const News = (props) => {
               )
             }}
           />
+
           {
             !isMobile && (
               <Tooltip title={`Changer le mode de vue en ${isGridView ? 'liste' : 'grille'}`} placement='top'>
@@ -163,15 +188,21 @@ const News = (props) => {
               </Tooltip>
             )
           }
+
+          <Link href="/recette/new">
+            <IconButton>
+              <AddCircleIcon />
+            </IconButton>
+          </Link>
         </Box>
         {
           (isGridView || isMobile) && (
             <Grid container spacing={2} py={4} justifyContent='center'>
               {
-                articlesToRender.map((article) => {
+                resourcesToRender.map((resource) => {
                   return (
-                    <Grid item key={article.id}>
-                      <ArticleCard article={article} />
+                    <Grid item key={resource.id}>
+                      <ArticleCard article={resource} />
                     </Grid>
                   );
                 })
@@ -184,9 +215,9 @@ const News = (props) => {
           (!isGridView && !isMobile) && (
             <Stack spacing={2} sx={styles.list}>
               {
-                articlesToRender.map((article) => {
+                resourcesToRender.map((resource) => {
                   return (
-                    <ArticleListItem article={article} />
+                    <ArticleListItem article={resource} />
                   );
                 })
               }
@@ -204,8 +235,8 @@ export async function getServerSideProps(ctxt) {
   const res = await fetch(process.env.NEXT_PUBLIC_API_URI, {
     method: 'POST',
     body: JSON.stringify({
-      operationName: 'articles',
-      query: GET_ARTICLES,
+      operationName: 'resources',
+      query: GET_RESOURCES,
     }),
   });
 
@@ -219,7 +250,7 @@ export async function getServerSideProps(ctxt) {
 
   return {
     props: {
-      articles: initialData?.data?.articles || [],
+      resources: initialData?.data?.resources || [],
     },
   };
 }

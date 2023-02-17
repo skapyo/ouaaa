@@ -1,3 +1,4 @@
+import React, { useCallback, useEffect, useState } from 'react';
 import { useTheme } from '@mui/styles';
 import makeStyles from '@mui/styles/makeStyles';
 import AppBar from '@mui/material/AppBar';
@@ -13,7 +14,6 @@ import {
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import Link from 'components/Link';
 import { useSessionDispatch, useSessionState } from 'context/session/session';
-import React, { useCallback, useEffect } from 'react';
 import { useMutation } from '@apollo/client';
 import gql from 'graphql-tag';
 import { useCookies } from 'react-cookie';
@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       cursor: 'pointer',
     },
-    fontSize:'0.9em'
+    fontSize: '0.9em'
   },
   popoverPaper: {
     marginTop: theme.spacing(2),
@@ -97,6 +97,8 @@ const SIGNOUT = gql`
 
 const NavBar = () => {
   const styles = useStyles();
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorMenuResources, setAnchorMenuResources] = useState(null);
   const user = useSessionState();
   const sessionDispatch = useSessionDispatch();
   const [cookies, setCookie, removeCookie] = useCookies();
@@ -120,13 +122,20 @@ const NavBar = () => {
     }
   }, [data, sessionDispatch]);
 
-  const [anchorEl, setAnchorEl] = React.useState(null);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const handleOpenMenuResources = useCallback((event) => {
+    setAnchorMenuResources(event.target);
+  }, []);
+
+  const handleCloseMenuResources = useCallback(() => {
+    setAnchorMenuResources(null);
+  }, []);
 
   const open = Boolean(anchorEl);
 
@@ -178,9 +187,21 @@ const NavBar = () => {
                       component={Link}
                       className={styles.menuItem}
                       href="/news"
+                      onMouseOver={handleOpenMenuResources}
                     >
                       ARTICLES
                     </MenuItem>
+                    <Menu
+                      id="menu-resources"
+                      anchorEl={anchorMenuResources}
+                      open={Boolean(anchorMenuResources)}
+                      onClose={handleCloseMenuResources}
+                      MenuListProps={{ onMouseLeave: handleCloseMenuResources }}
+                    >
+                      <MenuItem>Articles</MenuItem>
+                      <MenuItem>Articles OUAAA</MenuItem>
+                      <MenuItem>Recettes</MenuItem>
+                    </Menu>
                   </Grid>
                   <Grid item>
                     <MenuItem
