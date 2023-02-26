@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback } from 'react';
+import React, { useMemo, useCallback,useState } from 'react';
 import { Grid, CircularProgress } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import {
@@ -6,11 +6,17 @@ import {
 } from '@mui/material';
 import Moment from 'react-moment';
 import moment from 'moment';
+import Link from '../../../components/Link';
 import DownloadIcon from '@mui/icons-material/Download';
 import PrintIcon from '@mui/icons-material/Print';
+import { Button } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 import EventCard from 'components/cards/EventCard';
 import useExcelExport from '../../../hooks/useExcelExport.ts';
-
+import CloseIcon from '@mui/icons-material/Close';
+import Modal from '@mui/material/Modal';
+import SuggestEventForm from 'containers/forms/SuggestEventForm';
+import Fab from '@mui/material/Fab';
 const useStyles = makeStyles(theme => ({
   '@media print': {
     header: {
@@ -53,6 +59,40 @@ const useStyles = makeStyles(theme => ({
     color: '#AEAEAE',
     fontSize: '0.9em'
   },
+  actionButton: {
+    justifyContent: 'flex-end',
+    [theme.breakpoints.up('md')]: {
+      width: 'max-content',
+    },
+  },
+
+  paper: {
+    position: 'absolute',
+    [theme.breakpoints.down('md')]: {
+      width: '90%',
+    },
+    width: '60%',
+    backgroundColor: theme.palette.background.paper,
+    border: '2px solid #000',
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+  },
+  indication: {
+    fontSize:"0.9em"
+  },
+  addIcon: {
+    width: '15px',
+    height: '15px',
+  },
+  fab: {
+    backgroundColor: '#2C367E',
+    color: 'white',
+    '&:hover': {
+      backgroundColor: '#2C367E',
+      color: 'white',
+      cursor: 'default',
+    },
+  },
 }));
 
 const compare = (a, b) => {
@@ -74,7 +114,18 @@ const sameDay = (date1, date2) => {
     d1.getDate() === d2.getDate()
   );
 };
+function getModalStyle() {
+  const top = 50;
+  const left = 50;
 
+  return {
+    top: `${top}%`,
+    left: `${left}%`,
+    height: '90%',
+    overflow: 'auto',
+    transform: `translate(-${top}%, -${left}%)`,
+  };
+}
 const Events = (props) => {
   const classes = useStyles();
   const { events = [], loading } = props;
@@ -82,6 +133,29 @@ const Events = (props) => {
   const exportData = useExcelExport();
   const matches = useMediaQuery(theme.breakpoints.up('sm'));
 
+  const [modalStyle] = React.useState(getModalStyle);
+  const [openModalAddEvent, setOpenModalAddEvent] = useState(false);
+  const handleOpenModalAddEvent = () => {
+    setOpenModalAddEvent(true);
+  };
+
+  const handleCloseModalAddEvent = () => {
+    setOpenModalAddEvent(false);
+  };
+  const bodyModalAddEvent = (
+    <div style={modalStyle} className={classes.paper}>
+      <IconButton
+        aria-label="Close"
+        className={classes.closeButton}
+        onClick={() => setOpenModalAddEvent(false)}
+        size="large">
+        <CloseIcon />
+      </IconButton>
+      <h2 id="simple-modal-title">Soumettre un nouvel événément</h2>
+      <p className={classes.indication}>Le site vous propose d’envoyer un mail à un acteur pour lui sousmettre d'ajouter un événement qu'il organise dans l'agenda de OUAAA!. Votre mail et votre nom ne sont conservés que le temps d’envoyer le mail. Toutes les traces sont ensuite supprimées. L'acteur reçoit un mail d’invitation lui expliquant également que ses traces (nom/adresse/mail) ne sont pas conservés et l’invitant à ajouter son action. Vous pouvez contacter le Délégué de la Protection des données dpd@ouaaa-transition.fr. Pour toute question, vous pouvez nous contacter <Link href={`/contact`} target="_blank"> en cliquant ici</Link></p>
+      <SuggestEventForm />
+    </div>
+  );
   const sortedEvents = useMemo(() => {
     let localEvents = ([]).slice();
     events.forEach((event) => {
@@ -141,8 +215,32 @@ const Events = (props) => {
           ÉVÉNEMENTS À VENIR
         </h1>
         {
+          !matches && (
+        <Fab size="small" className={classes.fab} aria-label="edit"  onClick={handleOpenModalAddEvent}>
+        <AddIcon className={classes.addIcon} />
+          </Fab>
+       )
+      }
+      <Modal
+        open={openModalAddEvent}
+        onClose={handleCloseModalAddEvent}
+        aria-labelledby="parent-modal-title"
+        aria-describedby="parent-modal-description"
+      >
+        {bodyModalAddEvent}
+      </Modal>
+      
+        {
           matches && (
             <div>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  className={classes.actionButton}
+                  onClick={handleOpenModalAddEvent}
+                >
+                  Un évènement non présent ?
+                </Button>
               <Tooltip title="Imprimer" classes={{ popper: classes.tooltipPopper }}>
                 <IconButton onClick={handleClickPrint} size="large">
                   <PrintIcon />
@@ -157,7 +255,7 @@ const Events = (props) => {
           )
         }
       </div>
-
+ 
       {
         loading && (
           <Grid container justifyContent="center">
@@ -191,6 +289,19 @@ const Events = (props) => {
           )
         })
       }
+       {
+          !matches && (
+            <div>
+            <Button
+                        variant="contained"
+                        color="secondary"
+                        className={classes.actionButton}
+                        onClick={handleOpenModalAddEvent}
+                      >
+                        Un évènement non présent ?
+                      </Button>
+                      </div>
+          )}
     </Grid>
   );
 };

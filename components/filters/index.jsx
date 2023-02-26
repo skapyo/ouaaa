@@ -7,7 +7,7 @@ import {
 import useMediaQuery from '@mui/material/useMediaQuery';
 import makeStyles from '@mui/styles/makeStyles';
 import Entries from 'containers/forms/Entries';
-import ProposeActorForm from 'containers/forms/ProposeActorForm';
+import SuggestActorForm from 'containers/forms/SuggestActorForm';
 import gql from 'graphql-tag';
 import { useSnackbar } from 'notistack';
 import PropTypes from 'prop-types';
@@ -406,7 +406,7 @@ function Filters(props) {
       </IconButton>
       <h2 id="simple-modal-title">{ noEmailInviteActor ? "Ajouter l'acteur que vous avez contacté" : 'Inviter un nouvel acteur de la transition'}</h2>
       <p className={classes.indication}>Le site vous propose d’envoyer un mail de découverte à X en votre nom. Votre mail et votre nom ne sont conservés que le temps d’envoyer le mail. Toutes les traces sont ensuite supprimées. Le destinataire reçoit un mail d’invitation lui expliquant également que ses traces (nom/adresse/mail) ne sont pas conservés et l’invitant à venir découvrir l’initiative, notamment par une prise de contact direct avant de se créer une fiche acteur. Vous pouvez contacter le Délégué de la Protection des données dpd@ouaaa-transition.fr. Pour toute question, vous pouvez nous contacter <Link href={`/contact`} target="_blank"> en cliquant ici</Link></p>
-      <ProposeActorForm noEmailInviteActor={noEmailInviteActor} />
+      <SuggestActorForm noEmailInviteActor={noEmailInviteActor} />
     </div>
   );
   return (
