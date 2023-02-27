@@ -325,11 +325,9 @@ const SuggestEventForm = (props) => {
       <div>
         <div className={styles.formContainer}>
           <p>
-            Merci de nous aider à faire grandir la communauté de OUAAA. Votre invitation à l'acteur
+            Merci de votre aide pour tenir l'agenda OUAAA! à jour.
             {' '}
-            <b>{lastActorNameSent}</b>
-            {' '}
-            a bien été envoyé. Vous pouvez continuer à inviter d'autres acteurs.
+            Votre suggestion a bien été envoyé. Vous pouvez continuer à suggérer d'autres événements si vous le souhaitez.
           </p>
         </div>
         <FormController

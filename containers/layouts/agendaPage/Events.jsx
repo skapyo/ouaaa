@@ -2,7 +2,7 @@ import React, { useMemo, useCallback,useState } from 'react';
 import { Grid, CircularProgress } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import {
-  IconButton, Tooltip, useMediaQuery, useTheme,
+  IconButton, Tooltip, useMediaQuery, useTheme,  FormControlLabel,Radio,
 } from '@mui/material';
 import Moment from 'react-moment';
 import moment from 'moment';
@@ -16,6 +16,7 @@ import useExcelExport from '../../../hooks/useExcelExport.ts';
 import CloseIcon from '@mui/icons-material/Close';
 import Modal from '@mui/material/Modal';
 import SuggestEventForm from 'containers/forms/SuggestEventForm';
+import RadioGroup from '@mui/material/RadioGroup';
 import Fab from '@mui/material/Fab';
 const useStyles = makeStyles(theme => ({
   '@media print': {
@@ -132,7 +133,7 @@ const Events = (props) => {
   const theme = useTheme();
   const exportData = useExcelExport();
   const matches = useMediaQuery(theme.breakpoints.up('sm'));
-
+  const [showSuggest, setShowSuggest] = React.useState(true);
   const [modalStyle] = React.useState(getModalStyle);
   const [openModalAddEvent, setOpenModalAddEvent] = useState(false);
   const handleOpenModalAddEvent = () => {
@@ -142,6 +143,10 @@ const Events = (props) => {
   const handleCloseModalAddEvent = () => {
     setOpenModalAddEvent(false);
   };
+  const handleChangeAddEvent = (action) => {
+    radioGroupContect.setCurrentValue(action.target.value);
+  };
+
   const bodyModalAddEvent = (
     <div style={modalStyle} className={classes.paper}>
       <IconButton
@@ -151,9 +156,35 @@ const Events = (props) => {
         size="large">
         <CloseIcon />
       </IconButton>
-      <h2 id="simple-modal-title">Soumettre un nouvel événément</h2>
-      <p className={classes.indication}>Le site vous propose d’envoyer un mail à un acteur pour lui sousmettre d'ajouter un événement qu'il organise dans l'agenda de OUAAA!. Votre mail et votre nom ne sont conservés que le temps d’envoyer le mail. Toutes les traces sont ensuite supprimées. L'acteur reçoit un mail d’invitation lui expliquant également que ses traces (nom/adresse/mail) ne sont pas conservés et l’invitant à ajouter son action. Vous pouvez contacter le Délégué de la Protection des données dpd@ouaaa-transition.fr. Pour toute question, vous pouvez nous contacter <Link href={`/contact`} target="_blank"> en cliquant ici</Link></p>
-      <SuggestEventForm />
+
+    
+{/*
+      <RadioGroup
+        row
+        defaultValue="actor"
+        onChange={(e) => handleChangeAddEvent(e)}
+      >
+              <FormControlLabel
+                value="actor"
+                control={<Radio />}
+                label="Créer un nouvel événement"
+              />
+               <FormControlLabel
+                value="other"
+                control={<Radio />}
+                label="Suggérer l'ajout d'un nouvel manquant sur OUAAA! à un autre acteur"
+              />
+      </RadioGroup>
+      */}
+      {showSuggest && (
+        <div>
+          <h2 id="simple-modal-title">Soumettre un nouvel événément</h2>
+          <p className={classes.indication}>Le site vous propose d’envoyer un mail à un acteur pour lui sousmettre d'ajouter un événement qu'il organise dans l'agenda de OUAAA!. Votre mail et votre nom ne sont conservés que le temps d’envoyer le mail. Toutes les traces sont ensuite supprimées. L'acteur reçoit un mail d’invitation lui expliquant également que ses traces (nom/adresse/mail) ne sont pas conservés et l’invitant à ajouter son action. Vous pouvez contacter le Délégué de la Protection des données dpd@ouaaa-transition.fr. Pour toute question, vous pouvez nous contacter <Link href={`/contact`} target="_blank"> en cliquant ici</Link></p>
+          <SuggestEventForm />
+      </div> 
+            )
+      }
+      
     </div>
   );
   const sortedEvents = useMemo(() => {
