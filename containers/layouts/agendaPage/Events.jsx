@@ -13,11 +13,19 @@ import { Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import EventCard from 'components/cards/EventCard';
 import useExcelExport from '../../../hooks/useExcelExport.ts';
+import { useSessionState } from '../../../context/session/session';
 import CloseIcon from '@mui/icons-material/Close';
 import Modal from '@mui/material/Modal';
 import SuggestEventForm from 'containers/forms/SuggestEventForm';
 import RadioGroup from '@mui/material/RadioGroup';
 import Fab from '@mui/material/Fab';
+import { useQuery } from '@apollo/client';
+import gql from 'graphql-tag';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+
 const useStyles = makeStyles(theme => ({
   '@media print': {
     header: {
@@ -136,6 +144,8 @@ const Events = (props) => {
   const [showSuggest, setShowSuggest] = React.useState(true);
   const [modalStyle] = React.useState(getModalStyle);
   const [openModalAddEvent, setOpenModalAddEvent] = useState(false);
+  const [dataActorReferent, setDataActorReferent] = useState(null);
+
   const handleOpenModalAddEvent = () => {
     setOpenModalAddEvent(true);
   };
@@ -146,6 +156,83 @@ const Events = (props) => {
   const handleChangeAddEvent = (action) => {
     radioGroupContect.setCurrentValue(action.target.value);
   };
+  const user = useSessionState();
+
+  
+  const GET_ACTORS = gql`
+query actorsAdmin($userId: String!) {
+  actorsAdmin(userId: $userId) {
+    id
+    name
+    address
+    shortDescription
+    createdAt
+    updatedAt
+    city
+    lat
+    lng
+    referents {
+      surname
+      lastname
+      email
+      phone
+    }
+    isValidated
+    dateValidation
+    userValidated {
+      surname
+      lastname
+      email
+      phone
+    }
+    nbVolunteers
+  }
+}
+`;
+  const {
+    loading: loadingDataActorReferent, error: errorDataActorReferent
+  } = useQuery(GET_ACTORS, {
+    fetchPolicy: 'network-only',
+    variables: {
+      userId: user && `${user.id}`,
+    },
+    onCompleted: (data) => {
+      setDataActorReferent(data);
+    },
+  });
+
+  const referentInfo = useMemo(() => {
+    if(user && dataActorReferent && dataActorReferent.length!=0){
+      let links = dataActorReferent.actorsAdmin.map((actor) => {
+        return (<Link href={`/addevent/${actor.id}`}><MenuItem>{actor.name}</MenuItem></Link>)
+      });
+
+    return (
+      <div>
+             <div>Séléctionner votre page acteur  ci dessous pour ajouter un événement sur l'agenda</div>
+            <FormControl variant="standard" sx={{  minWidth: 120 }}>
+              <InputLabel id="demo-simple-select-label">Page acteur</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+              label="Page"
+            
+            >
+            {links}
+            
+            </Select>
+          </FormControl>
+      </div>
+    );
+    }else{
+      return (
+        <div>
+        </div>
+      );
+    }
+
+  }, [dataActorReferent]);
+
 
   const bodyModalAddEvent = (
     <div style={modalStyle} className={classes.paper}>
@@ -157,7 +244,7 @@ const Events = (props) => {
         <CloseIcon />
       </IconButton>
 
-    
+      {referentInfo}
 {/*
       <RadioGroup
         row
@@ -178,7 +265,7 @@ const Events = (props) => {
       */}
       {showSuggest && (
         <div>
-          <h2 id="simple-modal-title">Soumettre un nouvel événément</h2>
+          <h2 id="simple-modal-title">{(user && dataActorReferent && dataActorReferent.length!=0 && "Ou")}  Soumettre un nouvel événément</h2>
           <p className={classes.indication}>Le site vous propose d’envoyer un mail à un acteur pour lui sousmettre d'ajouter un événement qu'il organise dans l'agenda de OUAAA!. Votre mail et votre nom ne sont conservés que le temps d’envoyer le mail. Toutes les traces sont ensuite supprimées. L'acteur reçoit un mail d’invitation lui expliquant également que ses traces (nom/adresse/mail) ne sont pas conservés et l’invitant à ajouter son action. Vous pouvez contacter le Délégué de la Protection des données dpd@ouaaa-transition.fr. Pour toute question, vous pouvez nous contacter <Link href={`/contact`} target="_blank"> en cliquant ici</Link></p>
           <SuggestEventForm />
       </div> 
@@ -238,6 +325,9 @@ const Events = (props) => {
       fileName: 'actions',
     });
   }, [events]);
+
+    
+
 
   return (
     <Grid className={classes.events} container direction="column" wrap="nowrap">
