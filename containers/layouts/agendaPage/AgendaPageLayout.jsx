@@ -384,7 +384,7 @@ const AgendaPageLayout = () => {
 
         {isMapMode && (
           <Grid style={{ width: '100%' }}>
-            <MapWithNoSSR>
+            <MapWithNoSSR scrollWheelZoom={true}>
               <MarkerClusterWithNoSSR>
                 {typeof eventData !== 'undefined'
                   && eventData.events.map((event, index) => {

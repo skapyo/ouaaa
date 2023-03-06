@@ -94,6 +94,7 @@ const CREATE_ACTOR = gql`
       city
       website
       socialNetwork
+      siren
       description
       lat
       lng
@@ -139,6 +140,7 @@ const GET_ACTORS = graphqlTag`
     createdAt,
     updatedAt,
     socialNetwork,
+    siren,
     city,
     lat,
     lng,
@@ -826,6 +828,15 @@ const AddActorForm = () => {
           inputName="website"
           formChangeHandler={formChangeHandler}
           value={formValues.website}
+          required={false}
+          errorBool={false}
+          errorText=""
+        />
+        <FormItem
+          label="Siren"
+          inputName="siren"
+          formChangeHandler={formChangeHandler}
+          value={formValues.siren}
           required={false}
           errorBool={false}
           errorText=""
