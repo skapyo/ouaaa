@@ -102,6 +102,7 @@ const EDIT_ACTOR = gql`
       city
       website
       socialNetwork
+      siren
       description
       lat
       lng
@@ -196,6 +197,7 @@ const GET_ACTOR = gql`
       city
       website
       socialNetwork
+      siren
       description
       lat
       lng
@@ -1094,6 +1096,7 @@ const EditActorForm = (props) => {
       formValues.shortDescription = actorData.actor.shortDescription;
       formValues.referents = actorData.actor.referents;
       formValues.contactId = actorData.actor.contact_id;
+      formValues.siren = actorData.actor.siren;
 
       if (formValues.postCode === '17000') {
         setEstlarochelle(true);
@@ -1254,6 +1257,15 @@ const EditActorForm = (props) => {
         value={formValues.website}
         errorText=""
       />
+        <FormItem
+          label="Siren"
+          inputName="siren"
+          formChangeHandler={formChangeHandler}
+          value={formValues.siren}
+          required={false}
+          errorBool={false}
+          errorText=""
+        />
       <div className={styles.field}>
         <Grid className={styles.location}>
           <GooglePlacesAutocomplete

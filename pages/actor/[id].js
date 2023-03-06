@@ -1429,6 +1429,7 @@ const Actor = ({ initialData }) => {
                     <MapWithNoSSR
                       actor={data.actor}
                       ref={mapRef}
+                      scrollWheelZoom={false}
                       position={[data.actor.lat, data.actor.lng]}
                       id="map"
                     >

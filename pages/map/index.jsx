@@ -503,7 +503,7 @@ const carto = () => {
 
           {listMode && (
             <Grid item style={{ width: '100%' }}>
-              <MapWithNoSSR>
+              <MapWithNoSSR  scrollWheelZoom={true}>
                 <MarkerClusterWithNoSSR>
                   {
                     actorsWithLocation.map((actor) => {

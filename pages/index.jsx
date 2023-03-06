@@ -153,7 +153,7 @@ const Index = () => {
         <CookieConsent
           location="bottom"
           buttonText="J'ai compris"
-          cookieName="myAwesomeCookieName2"
+          cookieName="acceptCookieOUAAA"
           style={{ background: '#2c357d' }}
           buttonStyle={{ color: '#2c357d', fontSize: '13px' }}
           expires={150}
