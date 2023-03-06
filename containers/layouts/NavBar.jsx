@@ -184,9 +184,7 @@ const NavBar = () => {
                   <Grid item>
                     <MenuItem
                       button
-                      component={Link}
                       className={styles.menuItem}
-                      href="/news"
                       onMouseOver={handleOpenMenuResources}
                     >
                       ARTICLES
@@ -198,7 +196,9 @@ const NavBar = () => {
                       onClose={handleCloseMenuResources}
                       MenuListProps={{ onMouseLeave: handleCloseMenuResources }}
                     >
-                      <MenuItem>Articles</MenuItem>
+                      <MenuItem component={Link} href="/news">
+                        Articles
+                      </MenuItem>
                       <MenuItem>Articles OUAAA</MenuItem>
                       <MenuItem>Recettes</MenuItem>
                     </Menu>

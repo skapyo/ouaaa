@@ -188,12 +188,6 @@ const News = (props) => {
               </Tooltip>
             )
           }
-
-          <Link href="/recette/new">
-            <IconButton>
-              <AddCircleIcon />
-            </IconButton>
-          </Link>
         </Box>
         {
           (isGridView || isMobile) && (
