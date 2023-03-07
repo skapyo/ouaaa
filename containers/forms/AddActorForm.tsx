@@ -1,27 +1,22 @@
 /* eslint react/prop-types: 0 */
 import { useMutation, useQuery } from '@apollo/client';
-import {
-  Container,
-  Grid,
-  IconButton,
-  makeStyles,
-  Typography,
-} from '@material-ui/core';
-import DeleteIcon from '@material-ui/icons/Delete';
+import { Container, Grid, IconButton, Typography } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import DeleteIcon from '@mui/icons-material/Delete';
 import BugReportIcon from '@mui/icons-material/BugReport';
-import InfoIcon from '@material-ui/icons/Info';
+import InfoIcon from '@mui/icons-material/Info';
 import CustomRadioGroup from 'components/form/CustomRadioGroup';
-import Tooltip from '@material-ui/core/Tooltip';
-import Checkbox from '@material-ui/core/Checkbox';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
-import ArrowRightIcon from '@material-ui/icons/ArrowRight';
-import TreeView from '@material-ui/lab/TreeView';
+import Tooltip from '@mui/material/Tooltip';
+import Checkbox from '@mui/material/Checkbox';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ArrowRightIcon from '@mui/icons-material/ArrowRight';
+import TreeView from '@mui/lab/TreeView';
 import ClassicButton from 'components/buttons/ClassicButton';
-import Fab from '@material-ui/core/Fab';
-import EditIcon from '@material-ui/icons/Edit';
+import Fab from '@mui/material/Fab';
+import EditIcon from '@mui/icons-material/Edit';
 import CircularProgress from '@mui/material/CircularProgress';
 import FormController, {
   RenderCallback,
@@ -45,15 +40,15 @@ import GooglePlacesAutocomplete, {
   getLatLng,
 } from 'react-google-places-autocomplete';
 import { Redirect } from 'react-router-dom';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
-import { Autocomplete } from '@material-ui/lab';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+import { Autocomplete } from '@mui/material';
 import ImagesDropZone from 'components/ImageCropper/ImagesDropZone';
 import ImagesDisplay from 'components/ImageCropper/ImagesDisplay';
-import Hidden from '@material-ui/core/Hidden';
+import Hidden from '@mui/material/Hidden';
 import useCookieRedirection from '../../hooks/useCookieRedirection';
 import Link from '../../components/Link';
 import StyledTreeItem from '../../components/filters/StyledTreeItem';
@@ -99,6 +94,7 @@ const CREATE_ACTOR = gql`
       city
       website
       socialNetwork
+      siren
       description
       lat
       lng
@@ -144,6 +140,7 @@ const GET_ACTORS = graphqlTag`
     createdAt,
     updatedAt,
     socialNetwork,
+    siren,
     city,
     lat,
     lng,
@@ -718,8 +715,6 @@ const AddActorForm = () => {
       </React.Fragment>
     ));
     return (
-
-      
       <Container component="main" maxWidth="sm">
         <br />
         <Typography className={styles.introduction}>
@@ -837,6 +832,15 @@ const AddActorForm = () => {
           errorBool={false}
           errorText=""
         />
+        <FormItem
+          label="Siren"
+          inputName="siren"
+          formChangeHandler={formChangeHandler}
+          value={formValues.siren}
+          required={false}
+          errorBool={false}
+          errorText=""
+        />
         <div className={styles.field}>
           <Grid className={styles.location}>
             <GooglePlacesAutocomplete
@@ -924,6 +928,17 @@ const AddActorForm = () => {
 
         <SchedulerContainer onChange={setOpeningHours} />
         <p />
+
+        <FormItem
+          label="Activité principale de votre structure / Métier"
+          inputName="activity"
+          formChangeHandler={formChangeHandler}
+          value={formValues.activity}
+          required={false}
+          errorBool={false}
+          errorText=""
+          helperText="Indiquez ici l'activité principale ou votre métier.  Cette info servira à mieux référencer votre page dans les moteurs de recherche. Ex : boulanger bio"
+        />
         <br />
         <Typography variant="body1" color="primary" className={styles.label}>
           CONTACT PRIVE pour les échanges avec <i>OUAAA!</i>
@@ -982,17 +997,6 @@ const AddActorForm = () => {
             )}
           </p>
         </FormControl>
-
-        <FormItem
-          label="Métier / Activité principale de votre structure"
-          inputName="activity"
-          formChangeHandler={formChangeHandler}
-          value={formValues.activity}
-          required={false}
-          errorBool={false}
-          errorText=""
-          helperText="Indiquez ici votre métier ou activité principale. Cette info servira à mieux référencer votre page dans les moteurs de recherche. Ex : boulanger bio"
-        />
 
         <Typography variant="body1" color="primary" className={styles.label}>
           Votre logo &nbsp;
@@ -1090,7 +1094,7 @@ const AddActorForm = () => {
         <br />
         {editorLoaded ? (
           <>
-            <Hidden mdDown>
+            <Hidden lgDown>
               <CKEditor
                 config={{
                   toolbar: ['bold', 'italic', 'link'],
@@ -1133,7 +1137,7 @@ const AddActorForm = () => {
 
         {editorLoaded ? (
           <>
-            <Hidden mdDown>
+            <Hidden lgDown>
               <CKEditor
                 config={{
                   toolbar: ['bold', 'italic', 'link'],
@@ -1175,7 +1179,7 @@ const AddActorForm = () => {
                 label =
                   'Choisissez les sous-sujets dans lesquels vous souhaitez apparaître (en priorité)';
                 helperText =
-                  'Vous avez la possibilité d’ajouter un texte libre pour expliquer votre lien au sujet choisi. Vous pouvez sélectionner autant de sujets que nécessaire, les 3 premiers que vous cocherez serviront à référencer votre page dans les moteurs de recherche. le 1er coché indiquera votre sujet principal.';
+                  'Vous avez la possibilité d’ajouter un texte libre pour expliquer votre lien au sujet choisi. Vous pouvez sélectionner jusqu’a 3 sujet.';
               } else if (collection.code === 'actor_status') {
                 label = 'Quel est votre statut ?';
                 helperText =

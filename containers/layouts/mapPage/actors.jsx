@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
-import { makeStyles } from '@material-ui/core';
+import makeStyles from '@mui/styles/makeStyles';
 import {
   Stack, IconButton, Tooltip, useMediaQuery, useTheme,
 } from '@mui/material';
@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme => ({
     margin: '0',
     paddingBottom: 66,
     padding: '10px 2em',
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       padding: '10px 1em',
     },
   },

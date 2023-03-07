@@ -1,9 +1,10 @@
-import { Container, makeStyles, Typography, useTheme } from '@material-ui/core';
+import { Container, Typography, useTheme } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import React, { useEffect, useState } from 'react';
 import Slider from 'react-slick/lib';
 import { useQuery } from '@apollo/client';
 import gql from 'graphql-tag';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { withApollo } from '../../../hoc/withApollo';
 import CardSliderEvent from '../../../components/cards/CardSliderEvent';
 import Link from '../../../components/Link';
@@ -169,7 +170,7 @@ const LastActor = (props) => {
     );
   }
   const theme = useTheme();
-  const mobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const mobile = useMediaQuery(theme.breakpoints.down('md'));
   const styles = useStyles();
   const maxImageDisplay = !mobile?5:1
   const settings = {

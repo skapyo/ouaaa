@@ -1,10 +1,10 @@
 /* eslint-disable react/jsx-wrap-multilines */
 import React, { useState, useContext, useEffect, useRef } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
-import Button from '@material-ui/core/Button';
-import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+import { makeStyles } from '@mui/styles';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
+import Button from '@mui/material/Button';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { v4 as uuidv4 } from 'uuid';
 
 import TimeContainer from './TimeContainer';
@@ -100,8 +100,8 @@ const SchedulerContainer = (props) => {
   const [timeFrames, setTimeFrames] = useState(
     initData !== undefined
       ? initData.map((data) => {
-          return [data.days, data.hours, data.place, data.id];
-        })
+        return [data.days, data.hours, data.place, data.id];
+      })
       : [],
   );
   const [showPlace, setShowPlace] = useState(

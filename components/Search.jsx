@@ -1,7 +1,7 @@
 import React from 'react';
-import SearchIcon from '@material-ui/core/SvgIcon/SvgIcon';
-import InputBase from '@material-ui/core/InputBase/InputBase';
-import { makeStyles } from '@material-ui/core/styles';
+import SearchIcon from '@mui/material/SvgIcon/SvgIcon';
+import InputBase from '@mui/material/InputBase/InputBase';
+import makeStyles from '@mui/styles/makeStyles';
 
 const useStyles = makeStyles((theme) => ({
   search: {

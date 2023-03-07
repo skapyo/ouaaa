@@ -1,47 +1,198 @@
-import React from 'react';
-import { Grid, Typography, Container, } from '@mui/material';
+import React, { useCallback, useMemo, useState } from 'react';
+import { Grid, Typography, Container, TextField, Box, IconButton, InputAdornment, CircularProgress, Stack, Tooltip, useMediaQuery, useTheme } from '@mui/material';
+import { useLazyQuery } from '@apollo/client';
+import gql from 'graphql-tag';
+import CloseIcon from '@mui/icons-material/Close';
+import GridViewIcon from '@mui/icons-material/GridView';
+import ViewListIcon from '@mui/icons-material/ViewList';
 
 import { withApollo } from 'hoc/withApollo.jsx';
 import ArticleCard from 'components/cards/ArticleCard';
+import ArticleListItem from 'components/list/ArticleListItem';
 import AppLayout from 'containers/layouts/AppLayout';
 
-const GET_ARTICLES = `
-query articles {
-  articles {
-    id
-    label
-    shortDescription
-    createdAt
-    pictures {
+const SEARCH_ARTICLES = gql`
+  query articles($search: String!) {
+    articles(search: $search) {
       id
       label
-      originalPicturePath
-      originalPictureFilename
-      position
-      logo
-      main
+      shortDescription
+      createdAt
+      pictures {
+        id
+        label
+        originalPicturePath
+        originalPictureFilename
+        position
+        logo
+        main
+      }
     }
   }
-}`;
+`;
+
+const GET_ARTICLES = `
+  query articles {
+    articles {
+      id
+      label
+      shortDescription
+      createdAt
+      pictures {
+        id
+        label
+        originalPicturePath
+        originalPictureFilename
+        position
+        logo
+        main
+      }
+    }
+  }
+`;
+
+const styles = {
+  title: {
+    fontSize: {
+      xs: '2.5rem !important',
+      sm: '3rem  !important',
+      md: '4rem  !important',
+    }
+  },
+  searchBox: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    '& > *:not(:first-child)': {
+      marginLeft: '10px'
+    }
+  },
+  searchContainer: {
+    width: {
+      xs: '90%',
+      sm: '80%',
+      md: '50%',
+    },
+  },
+  searchInput: {
+    borderRadius: '30px'
+  },
+  list: {
+    padding: '10px 100px'
+  }
+}
 
 const News = (props) => {
   const { articles } = props;
 
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+  const [search, setSearch] = useState('');
+  const [isGridView, setIsGridView] = useState(true);
+  const [searchArticles, { loading: loadingSearch, error, data }] = useLazyQuery(SEARCH_ARTICLES);
+
+  const handleSearch = useCallback((evt) => {
+    searchArticles({ variables: { search: evt.target.value } });
+    setSearch(evt.target.value);
+  }, [searchArticles]);
+
+  const articlesToRender = useMemo(() => {
+    if (search) {
+      return data?.articles || [];
+    }
+
+    return articles;
+  }, [search, articles, data]);
+
+  const handleClickEraseSearch = useCallback(() => {
+    setSearch('');
+  }, []);
+
+  const searchInputAdornment = useMemo(() => {
+    if (loadingSearch) {
+      return (
+        <CircularProgress />
+      );
+    }
+
+    if (search) {
+      return (
+        <IconButton onClick={handleClickEraseSearch}>
+          <CloseIcon />
+        </IconButton>
+      );
+    }
+
+    return null;
+  }, [handleClickEraseSearch, search, loadingSearch]);
+
+  const handleClickChangeView = useCallback(() => {
+    setIsGridView((prev) => !prev);
+  }, []);
+
+  const viewIcon = useMemo(() => {
+    return !isGridView ? <GridViewIcon /> : <ViewListIcon />;
+  }, [isGridView]);
+
   return (
     <AppLayout>
       <Container maxWidth="lg">
-        <Typography variant="h1" align="center">Les Articles</Typography>
-        <Grid container spacing={2} py={4} justifyContent='center'>
+        <Typography sx={styles.title} variant="h1" align="center">Les Articles</Typography>
+        <Box sx={styles.searchBox}>
+          <TextField
+            sx={styles.searchContainer}
+            onChange={handleSearch}
+            value={search}
+            placeholder='Recherche dans les articles ...'
+            InputProps={{
+              sx: styles.searchInput,
+              endAdornment: (
+                <InputAdornment>
+                  {searchInputAdornment}
+                </InputAdornment>
+              )
+            }}
+          />
           {
-            articles.map((article) => {
-              return (
-                <Grid item key={article.id}>
-                  <ArticleCard article={article} />
-                </Grid>
-              );
-            })
+            !isMobile && (
+              <Tooltip title={`Changer le mode de vue en ${isGridView ? 'liste' : 'grille'}`} placement='top'>
+                <IconButton onClick={handleClickChangeView}>
+                  {viewIcon}
+                </IconButton>
+              </Tooltip>
+            )
           }
-        </Grid>
+        </Box>
+        {
+          (isGridView || isMobile) && (
+            <Grid container spacing={2} py={4} justifyContent='center'>
+              {
+                articlesToRender.map((article) => {
+                  return (
+                    <Grid item key={article.id}>
+                      <ArticleCard article={article} />
+                    </Grid>
+                  );
+                })
+              }
+            </Grid>
+          )
+        }
+
+        {
+          (!isGridView && !isMobile) && (
+            <Stack spacing={2} sx={styles.list}>
+              {
+                articlesToRender.map((article) => {
+                  return (
+                    <ArticleListItem article={article} />
+                  );
+                })
+              }
+            </Stack>
+          )
+        }
       </Container>
     </AppLayout>
   );

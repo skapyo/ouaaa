@@ -1,13 +1,13 @@
 import React, { useCallback, useContext, useState } from 'react';
 
 import PropTypes from 'prop-types';
-import { Checkbox, TextField } from '@material-ui/core';
-import TreeItem from '@material-ui/lab/TreeItem';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import { Checkbox, TextField } from '@mui/material';
+import TreeItem from '@mui/lab/TreeItem';
+import Typography from '@mui/material/Typography';
+import makeStyles from '@mui/styles/makeStyles';
 import { EntriesContext } from 'containers/forms/Entries';
-import Tooltip from '@material-ui/core/Tooltip';
-import InfoIcon from '@material-ui/icons/Info';
+import Tooltip from '@mui/material/Tooltip';
+import InfoIcon from '@mui/icons-material/Info';
 import ParentFilterContext from './ParentFilterContext';
 
 const useTreeItemStyles = makeStyles((theme) => ({
@@ -95,13 +95,15 @@ function StyledTreeItem(props) {
   const entriesContext = useContext(EntriesContext);
   let isThisEntryNotInTopSEO = false;
   if (entriesContext !== undefined) {
-    isThisEntryNotInTopSEO = entriesContext.getList().indexOf(parseInt(other.nodeId, 10)) >= 3;
-    /* console.log(
-      !isThisEntryNotInTopSEO +
+    isThisEntryNotInTopSEO = isForm && ((entriesContext.getList().length >=3 && entriesContext.getList().indexOf(parseInt(other.nodeId, 10)) < 0) && !checked);
+     /*console.log(
+      isThisEntryNotInTopSEO +
         ' ' +
         entriesContext.getList() +
         ' ' +
-        parseInt(other.nodeId, 10),
+        parseInt(other.nodeId, 10)+
+        ' ' +
+        (entriesContext.getList() <=3 || (entriesContext.getList().indexOf(parseInt(other.nodeId, 10)) >= 0 && entriesContext.getList().indexOf(parseInt(other.nodeId, 10)) <= 3)),
     ); */
   }
 
@@ -137,7 +139,10 @@ function StyledTreeItem(props) {
   const handleClickItem = useCallback(evt => {
     if (!isParent || !hasSubEntries) {
       evt.stopPropagation();
-      handleCheckboxChange({ target: { checked: !checked } });
+      if(!isForm ){
+        handleCheckboxChange({ target: { checked: !checked } });
+      }
+     
     }
   }, [checked, handleCheckboxChange, isParent]);
 
@@ -161,17 +166,12 @@ function StyledTreeItem(props) {
             <Typography variant="body2" className={classes.labelText}>
               {labelText}
             </Typography>
-            {isForm && isThisEntryNotInTopSEO && (
-              <Tooltip title="Seuls les 3 premiers sujets seront utilsés pour le référencement">
-                <InfoIcon />
-              </Tooltip>
-            )}
             {description && (
               <Tooltip title={description}>
                 <InfoIcon />
               </Tooltip>
             )}
-            {!hideCheckBox && (
+            {!hideCheckBox && (!isThisEntryNotInTopSEO)&& (
               <Checkbox
                 edge="start"
                 tabIndex={-1}

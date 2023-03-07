@@ -1,12 +1,7 @@
 import React, { ChangeEvent, useContext, useEffect, useState } from 'react';
 import { RenderCallback } from 'components/controllers/FormController';
-import {
-  Box,
-  CircularProgress,
-  Grid,
-  makeStyles,
-  Typography,
-} from '@material-ui/core';
+import { Box, CircularProgress, Grid, Typography } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import TextField from 'components/TextField';
 import gql from 'graphql-tag';
 import { useMutation } from '@apollo/client';
@@ -167,7 +162,7 @@ const ValidateEmailCodeForm: RenderCallback = (props) => {
       <Grid
         container
         direction="row"
-        justify="space-between"
+        justifyContent="space-between"
         alignItems="center"
         spacing={2}
       >

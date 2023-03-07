@@ -11,9 +11,8 @@ import {
   ToggleButton,
   ToggleButtonGroup,
 } from '@mui/material';
-import DatePicker from '@mui/lab/DatePicker';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import moment from 'moment';
 
 const DAYS = ['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU'];
@@ -64,12 +63,25 @@ const styles = {
   menuItem: {
     display: 'flex !important',
   },
+  input: {
+    marginRight: '5px',
+    marginLeft: '5px',
+    '.MuiOutlinedInput-input': {
+      padding: '8px 5px'
+    }
+  },
+  select: {
+    '.MuiSelect-select': {
+      padding: '8px 5px'
+    }
+  },
   buttonDay: {
-    height: '30px !important',
-    width: '30px !important',
+    height: '30px',
+    width: '30px',
     borderRadius: '50% !important',
-    marginRight: '10px !important',
+    marginRight: '10px',
     backgroundColor: 'rgba(86, 86, 86, 0.05) !important',
+    border: '1px solid rgba(0, 0, 0, 0.12) !important',
     '&.Mui-selected': {
       backgroundColor: '#2c367e !important',
       color: 'white  !important',
@@ -140,7 +152,7 @@ const getByDay = (value) => {
 
 const RecurringEventInput = (props) => {
   const { onChange, value, startDate } = props;
- 
+
   const [isRecurring, setIsRecurring] = useState(value !== undefined && value != null);
   const [freq, setFreq] = useState(extractfromString(value, 'FREQ', 'WEEKLY'));
   const [count, setCount] = useState(extractfromString(value, 'COUNT', 1));
@@ -220,14 +232,13 @@ const RecurringEventInput = (props) => {
           values.push(`BYDAY=${currentWeek(startDate)}${DAYS[moment(startDate).day() - 1]}`);
         }
       }
-      debugger;
       onChange(values.join(';'));
     }
   }, [onChange, freq, interval, count, endMode, daysOfWeek, untilDate, monthMode, startDate, isRecurring, value]);
 
   return (
     <Grid container>
-      <Grid item sx={{ p: 2, pl: 3 }}>
+      <Grid item sx={{ p: 2 }}>
         <FormControlLabel
           control={<Checkbox />}
           label="évènement récurrent"
@@ -238,17 +249,18 @@ const RecurringEventInput = (props) => {
         />
       </Grid>
 
-      <GridWrapper item container isOpen={isRecurring} sx={{ p: 2, pl: 2 }}>
+      <GridWrapper item container isOpen={isRecurring} sx={{ p: 2, pl: 4, pt: 0 }}>
         <Grid item container alignItems="center">
           <Grid item>
             Répéter tou(te)s les
           </Grid>
-          <Grid item>
+          <Grid item sx={{ width: '100px' }}>
             <TextField
               type="number"
               variant="outlined"
               value={interval}
               onChange={handleChangeInterval}
+              sx={styles.input}
             />
           </Grid>
           <Grid item>
@@ -256,6 +268,7 @@ const RecurringEventInput = (props) => {
               value={freq}
               onChange={handleChangeFreq}
               fullWidth
+              sx={styles.select}
             >
               <MenuItem sx={styles.menuItem} value="DAILY">jours</MenuItem>
               <MenuItem sx={styles.menuItem} value="WEEKLY">semaines</MenuItem>
@@ -267,8 +280,8 @@ const RecurringEventInput = (props) => {
 
         {
           freq === 'WEEKLY' && (
-            <Grid item container direction="column" alignItems="flex-start">
-              <Grid item>
+            <Grid item container direction="column" alignItems="flex-start" sx={{ mt: 2 }}>
+              <Grid item sx={{ mb: 1 }}>
                 Répéter le
               </Grid>
 
@@ -303,10 +316,11 @@ const RecurringEventInput = (props) => {
 
         {
           freq === 'MONTHLY' && (
-            <Grid>
+            <Grid item sx={{ mt: 2 }}>
               <Select
                 value={monthMode}
                 onChange={handleChangeMonthMode}
+                sx={styles.select}
               >
                 <MenuItem value="date" sx={styles.menuItem}>
                   Tous les mois le
@@ -326,8 +340,8 @@ const RecurringEventInput = (props) => {
           )
         }
 
-        <Grid item container direction="column" alignItems="flex-start">
-          <Grid item sx={{ py: 2 }}>
+        <Grid item container direction="column" alignItems="flex-start" sx={{ mt: 2 }}>
+          <Grid item>
             Se termine
           </Grid>
           <Grid item container alignItems="left" sx={{ pl: 1 }}>
@@ -348,7 +362,7 @@ const RecurringEventInput = (props) => {
                 label={(
                   <Grid container alignItems="center">
                     <Grid item>Le</Grid>
-                    <Grid item>
+                    <Grid item sx={{ width: '175px' }}>
                       <LocalizationProvider dateAdapter={AdapterDateFns}>
                         <DatePicker
                           value={untilDate}
@@ -356,7 +370,7 @@ const RecurringEventInput = (props) => {
                           inputFormat="dd/MM/yyyy"
                           minDate={new Date()}
                           renderInput={(params) => (
-                            <TextField {...params} />
+                            <TextField {...params} sx={styles.input} />
                           )}
                           disabled={endMode !== 'until'}
                         />
@@ -372,12 +386,13 @@ const RecurringEventInput = (props) => {
                 label={(
                   <Grid container alignItems="center">
                     <Grid item>Après</Grid>
-                    <Grid item>
+                    <Grid item sx={{ width: '100px' }}>
                       <TextField
                         type="number"
                         disabled={endMode !== 'nb'}
                         value={count}
                         onChange={handleChangeCount}
+                        sx={styles.input}
                       />
                     </Grid>
                     <Grid item>occurence(s)</Grid>

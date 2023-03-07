@@ -1,12 +1,7 @@
 import React from 'react';
 import AppLayout from 'containers/layouts/AppLayout';
-import {
-  Box,
-  Container,
-  makeStyles,
-  RootRef,
-  Typography,
-} from '@material-ui/core';
+import { Box, Container,  Typography } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import Link from 'components/Link';
 import Newsletter from '../../containers/layouts/Newsletter';
 
@@ -14,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
   align: {
     'text-align': 'center',
     width: '90%',
-    [theme.breakpoints.down('md')]: {
+    [theme.breakpoints.down('lg')]: {
       paddingTop: '5em',
     },
   },
@@ -32,7 +27,7 @@ const About = () => {
   const styles = useStyles();
   return (
     <AppLayout>
-      <RootRef>
+      <>
         <Box>
           <Container className={styles.align}>
             <Typography variant="h1">A propos</Typography>
@@ -121,7 +116,7 @@ A l’écoute des usagers : acteurs inscrits et visiteurs du site, nous recueil
             <br />
           </Container>
         </Box>
-      </RootRef>
+      </>
     </AppLayout>
   );
 };

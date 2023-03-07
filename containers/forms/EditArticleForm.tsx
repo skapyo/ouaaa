@@ -3,25 +3,20 @@ import React, {
 } from 'react';
 import gql from 'graphql-tag';
 import { withApollo } from 'hoc/withApollo';
-import {
-  Container,
-  Grid,
-  makeStyles,
-  TextField,
-  Typography,
-} from '@material-ui/core';
+import { Container, Grid, TextField, Typography } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import ClassicButton from 'components/buttons/ClassicButton';
 import FormController, {
   RenderCallback,
   ValidationRules,
   ValidationRuleType,
 } from 'components/controllers/FormController';
-import Dialog from '@material-ui/core/Dialog';
-import Button from '@material-ui/core/Button';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import Dialog from '@mui/material/Dialog';
+import Button from '@mui/material/Button';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 import { useMutation, useQuery } from '@apollo/client';
 import { getImageUrl } from 'utils/utils';
 import useGraphQLErrorDisplay from 'hooks/useGraphQLErrorDisplay';
@@ -30,20 +25,20 @@ import { useSnackbar } from 'notistack';
 import FallbackPageNotFound from 'containers/fallbacks/FallbackPageNotFound';
 import classnames from 'classnames';
 import { useRouter } from 'next/router';
-import List from '@material-ui/core/List';
-import DeleteIcon from '@material-ui/icons/Delete';
+import List from '@mui/material/List';
+import DeleteIcon from '@mui/icons-material/Delete';
 import ImagesDisplay from 'components/ImageCropper/ImagesDisplay';
 import ImagesDropZone from 'components/ImageCropper/ImagesDropZone';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText/ListItemText';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import Tooltip from '@material-ui/core/Tooltip';
-import InfoIcon from '@material-ui/icons/Info';
-import AddCircleOutline from '@material-ui/icons/AddCircleOutline';
-import Avatar from '@material-ui/core/Avatar';
-import IconButton from '@material-ui/core/IconButton';
-import { Autocomplete } from '@material-ui/lab';
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
+import Tooltip from '@mui/material/Tooltip';
+import InfoIcon from '@mui/icons-material/Info';
+import AddCircleOutline from '@mui/icons-material/AddCircleOutline';
+import Avatar from '@mui/material/Avatar';
+import IconButton from '@mui/material/IconButton';
+import { Autocomplete } from '@mui/material';
 import useImageReader from '../../hooks/useImageReader';
 import useDnDStateManager from '../../hooks/useDnDStateManager';
 import { useSessionState } from '../../context/session/session';
@@ -878,7 +873,7 @@ const EditArticleForm = (props) => {
                       primary={`${actor.name}`}
                     />
                     <ListItemSecondaryAction>
-                      <IconButton onClick={() => handleClickDeleteActor(actor)}>
+                      <IconButton onClick={() => handleClickDeleteActor(actor)} size="large">
                         <DeleteIcon />
                       </IconButton>
                     </ListItemSecondaryAction>
@@ -890,7 +885,12 @@ const EditArticleForm = (props) => {
         </Grid>
 
         <Grid container direction="row">
-          <IconButton key="close" aria-label="Close" color="inherit" onClick={handleClickAddActor}>
+          <IconButton
+            key="close"
+            aria-label="Close"
+            color="inherit"
+            onClick={handleClickAddActor}
+            size="large">
             <AddCircleOutline />
           </IconButton>
 

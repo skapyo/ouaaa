@@ -2,12 +2,8 @@
 import React, {
   useMemo,
 } from 'react';
-import {
-  Container,
-  Grid,
-  makeStyles,
-  Typography,
-} from '@material-ui/core';
+import { Container, Grid, Typography } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import Parser from 'html-react-parser';
 import moment from 'moment';
 import AppLayout from 'containers/layouts/AppLayout';
@@ -26,12 +22,13 @@ const useStyles = makeStyles((theme) => ({
     justify: 'center',
     marginTop: 20,
     alignItems: 'center',
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       paddingTop: 16,
     },
   },
   infoPratiqueGrid: {
     textAlign: 'center',
+    fontSize:"0.9em",
     backgroundColor: '#ededf5',
     borderRadius: 5,
     '& > *:first-child': {
@@ -42,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up('sm')]: {
       paddingLeft: '2em',
     },
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       width: '100%',
       marginTop: 10,
     },
@@ -52,7 +49,9 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: theme.typography.h5.fontFamily,
     textTransform: 'uppercase',
     fontWeight: '400',
-    [theme.breakpoints.down('sm')]: {
+    fontSize: "3rem",
+    wordBreak: 'normal',
+    [theme.breakpoints.down('md')]: {
       fontSize: '1.5rem !important',
     },
   },
@@ -211,8 +210,8 @@ const Actor = React.forwardRef((props, ref) => {
                   <img
                     src="/icons/location.svg"
                     alt="Localisation"
-                    width="25px"
-                    height="25px"
+                    width="25"
+                    height="25"
                     objectFit="contain"
                     className={[classes.icon]}
                   />
@@ -272,8 +271,8 @@ const Actor = React.forwardRef((props, ref) => {
                     <Grid item xs={3} className={[classes.alignRight]}>
                       <img
                         src="/icons/phone.svg"
-                        width="25px"
-                        height="25px"
+                        width="25"
+                        height="25"
                         objectFit="contain"
                         alt="Téléphone"
                         className={[classes.icon]}
@@ -291,8 +290,8 @@ const Actor = React.forwardRef((props, ref) => {
                     <Grid item xs={3} className={[classes.alignRight]}>
                       <img
                         src="/icons/email.svg"
-                        width="25px"
-                        height="25px"
+                        width="25"
+                        height="25"
                         objectFit="contain"
                         alt="Email"
                         className={[classes.icon]}
@@ -313,8 +312,8 @@ const Actor = React.forwardRef((props, ref) => {
                     <Grid item xs={3} className={[classes.alignRight]}>
                       <img
                         src="/icons/web_site.svg"
-                        width="25px"
-                        height="25px"
+                        width="25"
+                        height="25"
                         objectFit="contain"
                         alt="Site Web"
                         className={[classes.icon]}
@@ -340,8 +339,8 @@ const Actor = React.forwardRef((props, ref) => {
                     <Grid item xs={3} className={[classes.alignRight]}>
                       <img
                         src="/icons/social.svg"
-                        width="25px"
-                        height="25px"
+                        width="25"
+                        height="25"
                         objectFit="contain"
                         alt="Réseau social"
                         className={[classes.icon]}
@@ -370,8 +369,8 @@ const Actor = React.forwardRef((props, ref) => {
                     <Grid item xs={3} className={[classes.alignRight]}>
                       <img
                         src="/icons/clock.svg"
-                        width="25px"
-                        height="25px"
+                        width="25"
+                        height="25"
                         objectFit="contain"
                         alt="Horaire"
                         className={[classes.icon]}
@@ -429,9 +428,9 @@ const Actor = React.forwardRef((props, ref) => {
           <br />
           <Grid item md={7} sm={10} className={classes.description}>
             <br />
-            <p>
+            <div>
               {actor && Parser(actor?.description)}
-            </p>
+            </div>
             <div>
               {
                 actor?.entries.map(
@@ -449,8 +448,8 @@ const Actor = React.forwardRef((props, ref) => {
                           <img
                             src={`/icons/${entry.icon}.svg`}
                             alt="icon"
-                            width="30px"
-                            height="25px"
+                            width="30"
+                            height="25"
                             objectFit="contain"
                             className={classes.iconEntry}
                           />
@@ -471,8 +470,8 @@ const Actor = React.forwardRef((props, ref) => {
                   <img
                     src="/icons/status.svg"
                     alt="Collectif & réseau"
-                    width="25px"
-                    height="25px"
+                    width="25"
+                    height="25"
                     objectFit="contain"
                     className={[classes.icon]}
                   />
@@ -505,8 +504,8 @@ const Actor = React.forwardRef((props, ref) => {
                   <img
                     src="/icons/public.svg"
                     alt="Collectif & réseau"
-                    width="25px"
-                    height="25px"
+                    width="25"
+                    height="25"
                     objectFit="contain"
                     className={[classes.icon]}
                   />
@@ -538,8 +537,8 @@ const Actor = React.forwardRef((props, ref) => {
                   <img
                     src="/icons/network.svg"
                     alt="Collectif & réseau"
-                    width="25px"
-                    height="25px"
+                    width="25"
+                    height="25"
                     objectFit="contain"
                     className={[classes.icon]}
                   />

@@ -1,8 +1,8 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
+import makeStyles from '@mui/styles/makeStyles';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
 import Image from 'next/image';
 import Link from '../Link';
 import { getImageUrl } from '../../utils/utils';
@@ -35,6 +35,11 @@ const useStyles = makeStyles({
     display: 'block',
     marginLeft: 'auto',
     marginRight: 'auto',
+  },
+  actorImage: {
+    height:'100%%',
+    width: 'max-content',
+    margin: 'auto'
   },
   image: {
     backgroundPosition: 'center center',
@@ -83,19 +88,20 @@ export default function SimpleCard({ actor }) {
                   && actor.entries[0].label}
               </Typography>
             </div>
-            { actor.pictures.sort((a, b) => (a.logo ? -1 : 1))[0]&& actor.pictures.sort((a, b) => (a.logo ? -1 : 1))[0].originalPicturePath!=null   && (
+            { actor.pictures.filter((a, b) => (a.logo ? -1 : 1))[0]&& actor.pictures.filter((a, b) => (a.logo ? -1 : 1))[0].originalPicturePath!=null   && (
+            <div style =  {{  position: 'relative', height:"130px"}}>
             <Image
+              className={classes.actorImage} 
               loader={myLoader}
-              width="100%"
-              height="50px"
-              layout="responsive"
+              fill
               objectFit="contain"
               src={
-                actor.pictures.sort((a, b) => (a.logo ? -1 : 1))[0].originalPicturePath
+                actor.pictures.filter((a, b) => (a.logo ? -1 : 1))[0].originalPicturePath
               }
               alt={actor.name}
             />
-            )}
+            </div>
+             )}
           </div>
           <div className={classes.content}>
             <div className={classes.titleDiv}>

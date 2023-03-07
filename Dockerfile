@@ -1,5 +1,5 @@
 # build environment
-FROM node:13.12.0-alpine as build
+FROM node:16 as build
 
 # Setting working directory. All the path will be relative to WORKDIR
 WORKDIR /app
@@ -7,7 +7,7 @@ WORKDIR /app
 ENV PATH /app/node_modules/.bin:$PATH
 # Installing dependencies
 COPY package*.json ./
-RUN npm install 
+RUN npm install --force
 
 # Copying source files
 COPY . ./

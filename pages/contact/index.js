@@ -1,11 +1,7 @@
 import React from 'react';
 import AppLayout from 'containers/layouts/AppLayout';
-import {
-  Box,
-  Container,
-  makeStyles,
-  Typography,
-} from '@material-ui/core';
+import { Box, Container, Typography } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import ContactForm from '../../containers/forms/ContactForm';
 
 const useStyles = makeStyles((theme) => ({

@@ -2,7 +2,8 @@ import gql from 'graphql-tag';
 import { useMutation } from '@apollo/client';
 import AppContainer from 'containers/layouts/AppContainer';
 import { useEffect, useState } from 'react';
-import { Grid, makeStyles, Typography } from '@material-ui/core';
+import { Grid, Typography } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import ClassicButton from 'components/buttons/ClassicButton';
 
 const useStyles = makeStyles((theme) => ({
@@ -57,11 +58,11 @@ const FallbackEmailNotValidated = (props: any) => {
           Une erreur s&apos;est produite, merci de réessayer.
         </p>
       )}
-      <Grid container justify="center">
+      <Grid container justifyContent="center">
         <Typography variant="h6">
           Votre email {email} n&apos;est pas validé.
         </Typography>
-        <Grid container justify="center">
+        <Grid container justifyContent="center">
           <Grid item>
             <ClassicButton
               fullWidth

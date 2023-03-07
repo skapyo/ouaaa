@@ -1,5 +1,14 @@
 import { useMutation } from "@apollo/client";
-import { Container, FormControlLabel, makeStyles, Radio, RadioGroup, TextField, Tooltip, Typography } from "@material-ui/core";
+import {
+  Container,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+  TextField,
+  Tooltip,
+  Typography,
+} from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
 import ClassicButton from "components/buttons/ClassicButton";
 import FormController, { RenderCallback, ValidationRules, ValidationRuleType } from "components/controllers/FormController";
 import ImagesDropZone from "components/ImageCropper/ImagesDropZone";
@@ -9,7 +18,7 @@ import gql from "graphql-tag";
 import { withApollo } from "hoc/withApollo";
 import { useSnackbar } from "notistack";
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
-import InfoIcon from '@material-ui/icons/Info';
+import InfoIcon from '@mui/icons-material/Info';
 import useDnDStateManager from "hooks/useDnDStateManager";
 import useImageReader from "hooks/useImageReader";
 import withDndProvider from "hoc/withDnDProvider";

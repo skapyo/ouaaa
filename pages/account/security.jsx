@@ -1,5 +1,6 @@
 import AccountPageLayout from 'containers/layouts/accountPage/AccountPageLayout';
-import { makeStyles, Typography } from '@material-ui/core';
+import { Typography } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import UpdatePasswordForm from 'containers/forms/UpdatePasswordForm';
 
 const useStyles = makeStyles((theme) => ({

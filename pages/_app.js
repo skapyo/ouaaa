@@ -1,11 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Head from 'next/head';
-import { createTheme, ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles';
+import {
+  createTheme,
+  ThemeProvider as MuiThemeProvider,
+  StyledEngineProvider,
+} from '@mui/material/styles';
 import { ThemeProvider } from 'styled-components';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import { red } from '@material-ui/core/colors';
-import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import CssBaseline from '@mui/material/CssBaseline';
+import { red } from '@mui/material/colors';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
+import AdapterDateFns from '@date-io/date-fns';
 import MomentUtils from '@date-io/moment';
 import gql from 'graphql-tag';
 import { SessionProvider } from 'context/session/session';
@@ -68,6 +73,10 @@ const theme = createTheme({
       fontSize: '1.5rem',
       color: '#2C367E',
     },
+    h4: {
+      fontSize: '1.5rem',
+      color: '#2C367E',
+    },
     h5: {
       color: '#2C367E',
     },
@@ -94,25 +103,25 @@ const MyApp = (props) => {
     console.log(`Disable SEO: ${process.env.NEXT_PUBLIC_SEO_DISABLED}`);
   }, []);
 
-  return (
-    <>
-      <Head>
-        <meta charSet="utf-8" />
-        <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-        <title>OUAAA! : Agir pour la Transition Ecologique & Sociale en Aunis | La Rochelle</title>
-        {(process.env.NEXT_PUBLIC_SEO_DISABLED && process.env.NEXT_PUBLIC_SEO_DISABLED.localeCompare('true') === 0) && (
-          <meta name="robots" content="noindex" />
-        )}
+  return <>
+    <Head>
+      <meta charSet="utf-8" />
+      <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+      <title>OUAAA! : Agir pour la Transition Ecologique & Sociale en Aunis | La Rochelle</title>
+      {(process.env.NEXT_PUBLIC_SEO_DISABLED && process.env.NEXT_PUBLIC_SEO_DISABLED.localeCompare('true') === 0) && (
+        <meta name="robots" content="noindex" />
+      )}
 
-        <script
-          type="text/javascript"
-          src="/analytics/piwik-pro.js"
-        />
-        <link rel="manifest" href="/manifest.json" />
-        <link rel="apple-touch-icon" href="/icone_512.png"></link>
-        <meta name="theme-color" content="#2C367E" />
-      </Head>
-      <MuiPickersUtilsProvider utils={MomentUtils}>
+      <script
+        type="text/javascript"
+        src="/analytics/piwik-pro.js"
+      />
+      <link rel="manifest" href="/manifest.json" />
+      <link rel="apple-touch-icon" href="/icone_512.png"></link>
+      <meta name="theme-color" content="#2C367E" />
+    </Head>
+    <LocalizationProvider utils={MomentUtils} dateAdapter={AdapterDateFns}>
+      <StyledEngineProvider injectFirst>
         <MuiThemeProvider theme={theme}>
           <ThemeProvider theme={theme}>
             <SessionProvider init={user}>
@@ -130,9 +139,9 @@ const MyApp = (props) => {
             </SessionProvider>
           </ThemeProvider>
         </MuiThemeProvider>
-      </MuiPickersUtilsProvider>
-    </>
-  );
+      </StyledEngineProvider>
+    </LocalizationProvider>
+  </>;
 };
 
 const ISLOGGED = gql`
