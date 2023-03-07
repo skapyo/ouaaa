@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import { Avatar, Link } from '@mui/material';
 import StyledBoxOnHover from '../animated/StyledBoxOnHover';
 import { getImageUrl } from '../../utils/utils';
@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme, props) => ({
     [theme.breakpoints.up('sm')]: {
       margin: '0 24px',
     },
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       margin: '0 5px',
     },
   },
@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme, props) => ({
     [theme.breakpoints.up('sm')]: {
       width: '100px',
     },
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       width: '50px',
     },
     borderLeft: `dashed 2px ${props.color}`,
@@ -86,7 +86,7 @@ const useStyles = makeStyles((theme, props) => ({
     [theme.breakpoints.up('sm')]: {
       margin: '0 24px 0 0',
     },
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       margin: '0 5px 0 0',
     },
     '& img': {
@@ -111,10 +111,12 @@ const useStyles = makeStyles((theme, props) => ({
     fontWeight: 'bold',
     display: 'flex',
     alignItems: 'center',
+    fontSize: '0.8em',
   },
   actorDetails: {
     fontStyle: 'italic',
     color: '#A3A3A3',
+    fontSize: '0.8em',
   },
   icon: {
     color: '#bd0b3d',

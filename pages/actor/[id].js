@@ -5,29 +5,23 @@ import React, {
   useMemo,
 } from 'react';
 import AppLayout from 'containers/layouts/AppLayout';
-import {
-  Container,
-  Grid,
-  makeStyles,
-  RootRef,
-  Typography,
-  useTheme,
-} from '@material-ui/core';
+import { Container, Grid,  Typography, useTheme } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import {
   Tooltip, Modal, Box,
 } from '@mui/material';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { withApollo } from 'hoc/withApollo.jsx';
 import { useRouter } from 'next/router';
 import gql from 'graphql-tag';
 import { useMutation, useQuery } from '@apollo/client';
-import FacebookIcon from '@material-ui/icons/Facebook';
-import TwitterIcon from '@material-ui/icons/Twitter';
-import WhatsAppIcon from '@material-ui/icons/WhatsApp';
-import TelegramIcon from '@material-ui/icons/Telegram';
-import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
-import EmailIcon from '@material-ui/icons/Email';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import TwitterIcon from '@mui/icons-material/Twitter';
+import WhatsAppIcon from '@mui/icons-material/WhatsApp';
+import TelegramIcon from '@mui/icons-material/Telegram';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import EmailIcon from '@mui/icons-material/Email';
 import {
   FacebookShareButton,
   TwitterShareButton,
@@ -41,12 +35,13 @@ import { useCookies } from 'react-cookie';
 import { useReactToPrint } from 'react-to-print';
 import Head from 'next/head';
 import Parser from 'html-react-parser';
-import Fab from '@material-ui/core/Fab';
-import EditIcon from '@material-ui/icons/Edit';
-import PrintIcon from '@material-ui/icons/Print';
+import Fab from '@mui/material/Fab';
+import EditIcon from '@mui/icons-material/Edit';
+import PrintIcon from '@mui/icons-material/Print';
 import Image from 'next/image';
 import Link from 'components/Link';
 import moment from 'moment';
+import { RRule } from 'rrule';
 import CardSliderArticle from 'components/cards/CardSliderArticle';
 import dynamic from 'next/dynamic';
 import { useSessionState } from '../../context/session/session';
@@ -55,6 +50,7 @@ import {
   entriesHasElementWithCode,
   urlRectification,
   urlWithHttpsdefault,
+  rruleToText
 } from '../../utils/utils';
 import Calendar from '../../components/Calendar';
 import Favorite from '../../components/Favorite';
@@ -97,7 +93,7 @@ const useStyles = makeStyles((theme) => ({
       width: '80%',
       padding: '5em',
     },
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       paddingTop: 16,
     },
   },
@@ -121,7 +117,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up('sm')]: {
       paddingLeft: '2em',
     },
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       width: '100%',
       marginTop: 10,
     },
@@ -132,7 +128,7 @@ const useStyles = makeStyles((theme) => ({
     textTransform: 'uppercase',
     textAlign: 'center',
     fontWeight: '400',
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       fontSize: '1.5rem !important',
     },
   },
@@ -193,14 +189,14 @@ const useStyles = makeStyles((theme) => ({
     width: '200px',
     margin: '10px auto',
     '& img': {
-      height: '100%',
-      width: '100%',
+      height: '100%!important',
+      width: '100%!important',
       objectFit: 'contain',
     },
   },
   slider: {
     textAlign: 'center',
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       '& .slick-prev': {
         left: 0,
       },
@@ -283,7 +279,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundImage: "url('/arrow.svg')",
     backgroundRepeat: 'no-repeat',
     'background-position-x': '5px',
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       fontSize: '0.8em',
     },
     textAlign: 'center',
@@ -299,12 +295,13 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: '500',
     color: 'white',
     textTransform: 'uppercase',
-    fontSize: '1.8em',
+    fontSize: '1.5em',
     paddingTop: '2em',
   },
   volunteerDescription: {
     color: 'white',
-    fontSize: '1.2em',
+    fontSize: '1.0em',
+    padding: '0 1.2em 0 1.2em',
   },
   fab: {
     position: 'fixed',
@@ -325,7 +322,7 @@ const useStyles = makeStyles((theme) => ({
     width: '100% !important',
   },
   calendar: {
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       width: '100vw',
       marginLeft: -16,
       '& > *:first-child': {
@@ -368,6 +365,7 @@ query events ($actorId: String){
     startedAt
     endedAt
     published
+    dateRule
     pictures {
       id
       label
@@ -517,7 +515,7 @@ const Actor = ({ initialData }) => {
   const [openModalSlider, setOpenModalSlider] = useState(false);
 
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const MapWithNoSSR = dynamic(() => import('../../components/map/Map'), {
     ssr: false,
   });
@@ -680,7 +678,7 @@ const Actor = ({ initialData }) => {
     p: 4,
   };
   const headerRef = React.useRef();
-  const matches = useMediaQuery(theme.breakpoints.down('sm'));
+  const matches = useMediaQuery(theme.breakpoints.down('md'));
   const maxSlideToShowImage = !matches ? 3 : 1;
   const maxSlideToShowArticle = !matches ? 5 : 1;
 
@@ -745,23 +743,40 @@ const Actor = ({ initialData }) => {
     });
     return text;
   }
+  const getAllEventsFromRecurringEvent = (event) => {
+    let startEventDate = moment(parseInt(event.startedAt));
+    let endEventDate = moment(parseInt(event.endedAt));
+    const { dateRule } = event;
+    const rrule = RRule.fromString(`DTSTART:${startEventDate.format('YYYYMMDD[T]hhmmss[Z]')}\nRRULE:${dateRule}`);
+    return rrule.between(new Date(), moment().add(6, 'month').toDate()).map((date) => {
+      return {
+        ...event,
+        startedAt: moment(date).valueOf().toString(),
+        endedAt: moment(date).add(endEventDate.hour(), 'hours').valueOf().toString(),
+        duration: rruleToText(rrule),
+      };
+    });
+  };
 
   const events = useMemo(() => {
-    return (dataEvents?.events || []).map((evt) => {
+      const initialEvents = (dataEvents?.events || []);
+      const recurringEvents = initialEvents.filter((event) => event.dateRule);
+      
+      const allRecurringEvents = recurringEvents.map((evt) => getAllEventsFromRecurringEvent(evt));
+      debugger;
+      const allEvents = initialEvents.concat(allRecurringEvents.reduce((acc, items) => acc.concat(items), []));
+
+
+  
+    return allEvents.map((evt) => {
       const startDate = moment(parseInt(evt.startedAt));
       const endDate = moment(parseInt(evt.endedAt));
-
+  
       let recurrentOptions = null;
       const duration = Math.ceil(
         moment.duration(endDate.diff(startDate)).asDays(),
       );
 
-      if (false && duration > 2) {
-        recurrentOptions = {
-          endDate: startDate.endOf('day'),
-          rRule: `FREQ=DAILY;COUNT=${duration}`,
-        };
-      }
 
       return {
         startDate: new Date(parseInt(evt.startedAt)),
@@ -777,11 +792,6 @@ const Actor = ({ initialData }) => {
       };
     });
   }, [dataEvents]);
-
-  let url;
-  if (typeof window !== 'undefined') {
-    url = window.location.href;
-  }
 
   const logo = useMemo(() => {
     const logoPictures = actorPictures.filter((picture) => picture.logo);
@@ -829,7 +839,7 @@ const Actor = ({ initialData }) => {
         <meta name='twitter:description' content={data && data.actor.shortDescription} />
 
       </Head>
-      <RootRef>
+      <>
         <Box>
           <Typography variant="h1" className={styles.hide}>
             {/* @ts-ignore */}
@@ -864,7 +874,7 @@ const Actor = ({ initialData }) => {
                 <Grid container className={[styles.infoPratiqueGrid]}>
                   <div className={styles.printButton}>
                     <Tooltip title="Imprimer la page acteur">
-                      <IconButton onClick={handlePrint} className={[styles.printIcon]}>
+                      <IconButton onClick={handlePrint} className={[styles.printIcon]} size="large">
                         <PrintIcon />
                       </IconButton>
                     </Tooltip>
@@ -875,8 +885,8 @@ const Actor = ({ initialData }) => {
                       <div className={styles.image}>
                         <Image
                           loader={myLoader}
-                          width="100%"
-                          height="100px"
+                          width="100"
+                          height="100"
                           layout="responsive"
                           objectFit="contain"
                           src={logo.originalPicturePath}
@@ -890,8 +900,8 @@ const Actor = ({ initialData }) => {
                       <Image
                         src="/icons/location.svg"
                         alt="Localisation"
-                        width="25px"
-                        height="25px"
+                        width="25"
+                        height="25"
                         objectFit="contain"
                         className={[styles.icon]}
                       />
@@ -955,8 +965,8 @@ const Actor = ({ initialData }) => {
                         <Grid item xs={3} className={[styles.alignRight]}>
                           <Image
                             src="/icons/phone.svg"
-                            width="25px"
-                            height="25px"
+                            width="25"
+                            height="25"
                             objectFit="contain"
                             alt="Téléphone"
                             className={[styles.icon]}
@@ -977,8 +987,8 @@ const Actor = ({ initialData }) => {
                         <Grid item xs={3} className={[styles.alignRight]}>
                           <Image
                             src="/icons/email.svg"
-                            width="25px"
-                            height="25px"
+                            width="25"
+                            height="25"
                             objectFit="contain"
                             alt="Email"
                             className={[styles.icon]}
@@ -999,8 +1009,8 @@ const Actor = ({ initialData }) => {
                         <Grid item xs={3} className={[styles.alignRight]}>
                           <Image
                             src="/icons/web_site.svg"
-                            width="25px"
-                            height="25px"
+                            width="25"
+                            height="25"
                             objectFit="contain"
                             alt="Site Web"
                             className={[styles.icon]}
@@ -1031,8 +1041,8 @@ const Actor = ({ initialData }) => {
                       <Grid item xs={3} className={[styles.alignRight]}>
                         <Image
                           src="/icons/social.svg"
-                          width="25px"
-                          height="25px"
+                          width="25"
+                          height="25"
                           objectFit="contain"
                           alt="Réseau social"
                           className={[styles.icon]}
@@ -1064,8 +1074,8 @@ const Actor = ({ initialData }) => {
                         <Grid item xs={3} className={[styles.alignRight]}>
                           <Image
                             src="/icons/clock.svg"
-                            width="25px"
-                            height="25px"
+                            width="25"
+                            height="25"
                             objectFit="contain"
                             alt="Horaire"
                             className={[styles.icon]}
@@ -1134,8 +1144,8 @@ const Actor = ({ initialData }) => {
                       <Image
                         src="/icons/social.svg"
                         alt="Réseau social"
-                        width="25px"
-                        height="25px"
+                        width="25"
+                        height="25"
                         objectFit="contain"
                         className={[styles.icon]}
                       />
@@ -1209,7 +1219,7 @@ const Actor = ({ initialData }) => {
             <Grid container className={[styles.item]}>
               <Grid item xs={3} className={[styles.alignRight]}>
                 <Tooltip title="Imrpimer votre fiche pour le jeu le grand défi">
-                  <IconButton onClick={handleGamePrint} className={[styles.printIcon]}>
+                  <IconButton onClick={handleGamePrint} className={[styles.printIcon]} size="large">
                     <PrintIcon />
                   </IconButton>
                 </Tooltip>
@@ -1230,9 +1240,9 @@ const Actor = ({ initialData }) => {
                 {!isMobile && <ActorName name={data?.actor?.name} />}
                 <br />
                 <br />
-                <p>
+                <div>
                   {data && Parser(data.actor.description)}
-                </p>
+                </div>
                 <div>
                   {data
                     && data.actor.entries.map(
@@ -1254,8 +1264,8 @@ const Actor = ({ initialData }) => {
                                 <Image
                                   src={`/icons/${entry.icon}.svg`}
                                   alt="icon"
-                                  width="30px"
-                                  height="25px"
+                                  width="30"
+                                  height="25"
                                   objectFit="contain"
                                   className={styles.iconEntry}
                                 />
@@ -1280,8 +1290,8 @@ const Actor = ({ initialData }) => {
                                 <Image
                                   src={`/icons/${entry.icon}.svg`}
                                   alt="icon"
-                                  width="30px"
-                                  height="25px"
+                                  width="30"
+                                  height="25"
                                   objectFit="contain"
                                   className={styles.iconEntry}
                                 />
@@ -1305,8 +1315,8 @@ const Actor = ({ initialData }) => {
                       <Image
                         src="/icons/status.svg"
                         alt="Collectif & réseau"
-                        width="25px"
-                        height="25px"
+                        width="25"
+                        height="25"
                         objectFit="contain"
                         className={[styles.icon]}
                       />
@@ -1342,8 +1352,8 @@ const Actor = ({ initialData }) => {
                       <Image
                         src="/icons/public.svg"
                         alt="Collectif & réseau"
-                        width="25px"
-                        height="25px"
+                        width="25"
+                        height="25"
                         objectFit="contain"
                         className={[styles.icon]}
                       />
@@ -1378,8 +1388,8 @@ const Actor = ({ initialData }) => {
                       <Image
                         src="/icons/network.svg"
                         alt="Collectif & réseau"
-                        width="25px"
-                        height="25px"
+                        width="25"
+                        height="25"
                         objectFit="contain"
                         className={[styles.icon]}
                       />
@@ -1419,6 +1429,8 @@ const Actor = ({ initialData }) => {
                     <MapWithNoSSR
                       actor={data.actor}
                       ref={mapRef}
+                      scrollWheelZoom={false}
+                      position={[data.actor.lat, data.actor.lng]}
                       id="map"
                     >
                       <MarkerWithNoSSR
@@ -1505,7 +1517,11 @@ const Actor = ({ initialData }) => {
               aria-describedby="parent-modal-description"
             >
               <Box sx={style}>
-                <IconButton aria-label="Close" className={styles.closeButton} onClick={() => setOpenModalSlider(false)}>
+                <IconButton
+                  aria-label="Close"
+                  className={styles.closeButton}
+                  onClick={() => setOpenModalSlider(false)}
+                  size="large">
                   <CloseIcon />
                 </IconButton>
                 <Slider {...sliderSettings} className={[styles.slider]}>
@@ -1526,7 +1542,7 @@ const Actor = ({ initialData }) => {
             </Modal>
             <div>
               <Typography variant="h5" className={[styles.cardTitle]}>
-                LES ÉVÉNEMENTS DE :
+                LES ÉVÉNEMENTS DE 
                 {' '}
                 {data && data?.actor?.name}
               </Typography>
@@ -1545,7 +1561,7 @@ const Actor = ({ initialData }) => {
             <br />
             <div>
               <Typography variant="h5" className={[styles.cardTitle]}>
-                LES ARTICLE DE :
+                LES ARTICLE DE 
                 {' '}
                 {data && data?.actor?.name}
               </Typography>
@@ -1557,7 +1573,7 @@ const Actor = ({ initialData }) => {
               className={[styles.articleCarroussel]}
             >
               {dataArticles
-                && dataArticles?.articles.sort((a, b) => (a.createdAt > b.createdAt ? -1 : 1)).map((article) => {
+                && dataArticles?.articles.slice().sort((a, b) => (a.createdAt > b.createdAt ? -1 : 1)).map((article) => {
                   return <CardSliderArticle key={article.id} article={article} />;
                 })}
             </Slider>
@@ -1578,7 +1594,7 @@ const Actor = ({ initialData }) => {
             <ActorGameToPrint actor={data.actor} ref={printGameRef} />
           </div>
         </Box>
-      </RootRef>
+      </>
     </AppLayout>
   );
 };

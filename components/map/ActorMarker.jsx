@@ -1,12 +1,12 @@
 import React, { useRef, useState } from 'react';
 import L from 'leaflet';
 import { Marker, Tooltip, Popup } from 'react-leaflet';
-import { makeStyles } from '@material-ui/styles';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { makeStyles } from '@mui/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { useLeafletContext } from '@react-leaflet/core';
 import {
   useTheme,
-} from '@material-ui/core';
+} from '@mui/material';
 import ActorPopup from '../popup/ActorPopup';
 
 const useStyles = makeStyles((theme) => ({
@@ -24,7 +24,7 @@ const ActorMarker = (props) => {
   const [clicked, setClicked] = useState(false);
   const theme = useTheme();
   const styles = useStyles();
-  const matches = useMediaQuery(theme.breakpoints.down('sm'));
+  const matches = useMediaQuery(theme.breakpoints.down('md'));
   let icone;
   let color;
 
@@ -41,7 +41,7 @@ const ActorMarker = (props) => {
     iconUrl: icone,
     color,
     fillColor: color,
-    iconAnchor: [13, 34], // point of the icon which will correspond to marker's location
+    iconAnchor: [25, 59], // point of the icon which will correspond to marker's location
     iconSize: [60],
     popupAnchor: [18, -30],
     html: `<span style="${markerHtmlStyles}" />`,

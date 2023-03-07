@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import gql from 'graphql-tag';
 import { useMutation } from '@apollo/client';
 import { withApollo } from 'hoc/withApollo';
@@ -8,10 +8,10 @@ import FormController, {
 } from 'components/controllers/FormController';
 import {
   Grid, TextField, Typography, Button,
-} from '@material-ui/core';
+} from '@mui/material';
 import ClassicButton from 'components/buttons/ClassicButton';
-import DoneIcon from '@material-ui/icons/Done';
-import TrendingFlatIcon from '@material-ui/icons/TrendingFlat';
+import DoneIcon from '@mui/icons-material/Done';
+import TrendingFlatIcon from '@mui/icons-material/TrendingFlat';
 import { useSessionState } from 'context/session/session';
 
 const useStyles = makeStyles((theme) => ({
@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     padding: '2em 0',
     textAlign: 'center',
    
-    [theme.breakpoints.down('md')]: {
+    [theme.breakpoints.down('lg')]: {
       padding: '1em 0',
     },
   },
@@ -30,19 +30,20 @@ const useStyles = makeStyles((theme) => ({
   newsletterLegal: {
     'text-align': 'justify',
      padding: '1em',
+     'font-size': '0.9em'
   },
   search: {
     position: 'relative',
     borderRadius: '9em',
     width: '35%',
     margin: '0 auto',
-    [theme.breakpoints.down('md')]: {
+    [theme.breakpoints.down('lg')]: {
       width: '50%',
     },
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       width: '70%',
     },
-    [theme.breakpoints.down('xs')]: {
+    [theme.breakpoints.down('sm')]: {
       width: '100%',
     },
   },
@@ -61,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       cursor: 'pointer',
     },
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       position: 'relative',
       width: '30%',
       margin: '1.4rem auto 0.5rem auto',
@@ -79,7 +80,7 @@ const useStyles = makeStyles((theme) => ({
     margin: '0',
     '& div': {
       borderRadius: '30px',
-      [theme.breakpoints.down('sm')]: {
+      [theme.breakpoints.down('md')]: {
         fontSize: '0.8rem',
       },
     },
@@ -95,7 +96,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '2.2em',
     color: '#2C367E',
     letterSpacing: '2px',
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       fontSize: '1.3em',
     },
   },
@@ -107,7 +108,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '1.5em',
     padding: '0 2em',
     height: 52,
-    [theme.breakpoints.down('md')]: {
+    [theme.breakpoints.down('lg')]: {
       height: 42,
       padding: '0 1.5em',
       fontSize: 15,

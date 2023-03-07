@@ -1,7 +1,8 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded';
-import FavoriteRoundedIcon from '@material-ui/icons/FavoriteRounded';
-import { makeStyles } from '@material-ui/core/styles';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import makeStyles from '@mui/styles/makeStyles';
+
 import { useSnackbar } from 'notistack';
 import gql from 'graphql-tag';
 import { useMutation } from '@apollo/client';
@@ -87,13 +88,22 @@ const Favorite = ({ actor, event, handleFavoriteChange }) => {
     }
   }, [addFavoriteError, addFavoriteLoading, addFavoriteData]);
 
-  const FavoriteIconComponent = useMemo(() => {
-    return favorite ? FavoriteRoundedIcon : FavoriteBorderRoundedIcon;
-  }, [favorite]);
+
   return (
+    <>
     <div onClick={() => changeFavorite(!favorite)}>
-      <FavoriteIconComponent className={classes.favoriteIcon} />
+    {
+          favorite && (
+            <FavoriteIcon className={classes.favoriteIcon} />
+          )
+        }
+         {
+            !favorite && (
+              <FavoriteBorderIcon className={classes.favoriteIcon} />
+            )
+          }
     </div>
+    </>
   );
 };
 

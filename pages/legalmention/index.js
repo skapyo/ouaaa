@@ -1,13 +1,7 @@
 import React from 'react';
 import AppLayout from 'containers/layouts/AppLayout';
-import {
-  Box,
-  Container,
-  makeStyles,
-  RootRef,
-  Typography,
-  Grid,
-} from '@material-ui/core';
+import { Box, Container,  Typography, Grid } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import Newsletter from '../../containers/layouts/Newsletter';
 
 const useStyles = makeStyles((theme) => ({
@@ -24,7 +18,7 @@ const Charter = () => {
 
   return (
     <AppLayout>
-      <RootRef>
+      <>
         <Box>
           <Container component="main" maxWidth="md" className={styles.main}>
             <Typography className={styles.align} variant="h1">Mentions Légales</Typography>
@@ -42,7 +36,7 @@ const Charter = () => {
             <br />
           </Container>
         </Box>
-      </RootRef>
+      </>
     </AppLayout>
   );
 };

@@ -12,22 +12,22 @@ import {
   IconButton,
   Container,
   InputAdornment,
-  makeStyles,
   TextField,
   Typography,
-} from '@material-ui/core';
+} from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import { useSnackbar } from 'notistack';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import ClassicButton from 'components/buttons/ClassicButton';
 import Link from 'components/Link';
 import { useMutation } from '@apollo/client';
 import { useCallback, useEffect, useState } from 'react';
 import useGraphQLErrorDisplay from 'hooks/useGraphQLErrorDisplay';
 import useCookieRedirection from 'hooks/useCookieRedirection';
-import Visibility from '@material-ui/icons/Visibility';
-import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -152,7 +152,7 @@ const SignupForm = () => {
     }, [data, redirect]);
 
     return (
-      <Grid container justify="center">
+      <Grid container justifyContent="center">
         <Grid xs={3} />
         <Grid className={styles.paper} xs={12} md={4}>
           {clicked && (
@@ -225,7 +225,7 @@ const SignupForm = () => {
                     aria-label="toggle password visibility"
                     onClick={handleClickShowPassword}
                     onMouseDown={handleMouseDownPassword}
-                  >
+                    size="large">
                     {showPassword ? <Visibility /> : <VisibilityOff />}
                   </IconButton>
                 </InputAdornment>
@@ -252,7 +252,7 @@ const SignupForm = () => {
                     aria-label="toggle password visibility"
                     onClick={handleClickShowPassword}
                     onMouseDown={handleMouseDownPassword}
-                  >
+                    size="large">
                     {showPassword ? <Visibility /> : <VisibilityOff />}
                   </IconButton>
                 </InputAdornment>

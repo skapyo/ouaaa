@@ -1,4 +1,4 @@
-import { styled, TextField } from '@material-ui/core';
+import { styled, TextField } from '@mui/material';
 
 const StyledTextField = styled(TextField)({
   '& .MuiOutlinedInput-root': {

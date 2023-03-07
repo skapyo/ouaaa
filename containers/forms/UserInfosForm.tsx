@@ -5,15 +5,16 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import { Grid, makeStyles, Typography } from '@material-ui/core';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import { Grid, Typography } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import TextField from 'components/form/TextField';
 import ClassicButton from 'components/buttons/ClassicButton';
-import Button from '@material-ui/core/Button';
+import Button from '@mui/material/Button';
 import { withApollo } from 'hoc/withApollo';
 import { useSessionDispatch, useSessionState } from 'context/session/session';
 import { useSnackbar } from 'notistack';

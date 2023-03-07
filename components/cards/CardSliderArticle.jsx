@@ -1,8 +1,8 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
+import makeStyles from '@mui/styles/makeStyles';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
 import Image from 'next/image';
 import Link from '../Link';
 import Moment from 'react-moment';
@@ -75,7 +75,7 @@ export default function SimpleCard({ article }) {
           <div
             className={classes.image}
           >
-            { article.pictures.sort((a, b) => (a.logo ? -1 : 1))[0] && article.pictures.sort((a, b) => (a.logo ? -1 : 1))[0].originalPicturePath != null && (
+           { /*    { article.pictures.sort((a, b) => (a.logo ? -1 : 1))[0] && article.pictures.sort((a, b) => (a.logo ? -1 : 1))[0].originalPicturePath != null && (
             <Image
               loader={myLoader}
               width="100%"
@@ -88,6 +88,7 @@ export default function SimpleCard({ article }) {
               alt={article.name}
             />
             )}
+            */}
           </div>
           <div className={classes.content}>
             <div className={classes.titleDiv}>

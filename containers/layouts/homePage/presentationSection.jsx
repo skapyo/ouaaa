@@ -1,8 +1,7 @@
-import {
-  Container, makeStyles, Typography, useTheme,
-} from '@material-ui/core';
+import { Container, Typography, useTheme } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import React from 'react';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import Link from '../../../components/Link';
 import SearchEngine from '../../../components/SearchEngine';
 
@@ -42,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up('xs')]: {
       textAlign: 'center',
     },
-    [theme.breakpoints.down('xs')]: {
+    [theme.breakpoints.down('sm')]: {
       textAlign: 'justify',
     },
     margin: 'auto',
@@ -63,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up('md')]: {
       fontSize: '3em',
     },
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       fontSize: '2em',
     },
     background: 'rgba(255, 255, 255, 0.7)',
@@ -100,7 +99,7 @@ const useStyles = makeStyles((theme) => ({
 const PresentationSection = (props) => {
   const styles = useStyles();
   const theme = useTheme();
-  const mobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const mobile = useMediaQuery(theme.breakpoints.down('md'));
 
   return (
     <Container className={styles.titleContainer} id={props.id}>
@@ -121,7 +120,7 @@ const PresentationSection = (props) => {
         pour la transition écologique, sociale et démocratique, te donner le calendrier de leurs actions et te permettre de les rejoindre.
       </Typography>
 
-      <SearchEngine />
+      { <SearchEngine />}
     </Container>
   );
 };

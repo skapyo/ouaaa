@@ -1,8 +1,8 @@
 import React from 'react';
-import { withStyles } from '@material-ui/core/styles';
-import { Menu } from '@material-ui/core';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
+import withStyles from '@mui/styles/withStyles';
+import { Menu } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
 
 const styles = (theme) => ({
   '@media print': {
@@ -46,7 +46,7 @@ class ButtonAppBarCollapse extends React.Component {
 
     return (
       <div className={classes.buttonCollapse}>
-        <IconButton onClick={this.handleMenu}>
+        <IconButton onClick={this.handleMenu} size="large">
           <MenuIcon className={classes.menuIcon} />
         </IconButton>
         <Menu

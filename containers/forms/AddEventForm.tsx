@@ -3,13 +3,8 @@ import React, {
 } from 'react';
 import gql from 'graphql-tag';
 import { withApollo } from 'hoc/withApollo';
-import {
-  Container,
-  Grid,
-  makeStyles,
-  TextField,
-  Typography,
-} from '@material-ui/core';
+import { Container, Grid, TextField, Typography } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import frLocale from 'date-fns/locale/fr';
 import ClassicButton from 'components/buttons/ClassicButton';
 import FormController, {
@@ -19,7 +14,7 @@ import FormController, {
 } from 'components/controllers/FormController';
 import { useMutation, useQuery } from '@apollo/client';
 import useGraphQLErrorDisplay from 'hooks/useGraphQLErrorDisplay';
-import Checkbox from '@material-ui/core/Checkbox';
+import Checkbox from '@mui/material/Checkbox';
 import useCookieRedirection from 'hooks/useCookieRedirection';
 import { useSnackbar } from 'notistack';
 import GooglePlacesAutocomplete, {
@@ -28,33 +23,32 @@ import GooglePlacesAutocomplete, {
 } from 'react-google-places-autocomplete';
 import classnames from 'classnames';
 import { useRouter } from 'next/router';
-import List from '@material-ui/core/List';
-import DeleteIcon from '@material-ui/icons/Delete';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText/ListItemText';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import Tooltip from '@material-ui/core/Tooltip';
-import InfoIcon from '@material-ui/icons/Info';
-import TreeView from '@material-ui/lab/TreeView';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import DateTimePicker from '@mui/lab/DateTimePicker';
+import List from '@mui/material/List';
+import DeleteIcon from '@mui/icons-material/Delete';
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
+import Tooltip from '@mui/material/Tooltip';
+import InfoIcon from '@mui/icons-material/Info';
+import TreeView from '@mui/lab/TreeView';
+import { LocalizationProvider, DateTimePicker } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import moment from 'moment';
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
-import ArrowRightIcon from '@material-ui/icons/ArrowRight';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import CustomRadioGroup from 'components/form/CustomRadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Radio from '@material-ui/core/Radio';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Radio from '@mui/material/Radio';
 import CustomRadioGroupForm from 'components/form/CustomRadioGroupForm';
-import AddCircleOutline from '@material-ui/icons/AddCircleOutline';
-import Avatar from '@material-ui/core/Avatar';
+import AddCircleOutline from '@mui/icons-material/AddCircleOutline';
+import Avatar from '@mui/material/Avatar';
 
 import { getImageUrl } from 'utils/utils';
-import IconButton from '@material-ui/core/IconButton';
-import { Autocomplete } from '@material-ui/lab';
-import FormControl from '@material-ui/core/FormControl';
-import RadioGroup from '@material-ui/core/RadioGroup';
+import IconButton from '@mui/material/IconButton';
+import { Autocomplete } from '@mui/material';
+import FormControl from '@mui/material/FormControl';
+import RadioGroup from '@mui/material/RadioGroup';
 import ImagesDropZone from 'components/ImageCropper/ImagesDropZone';
 import ImagesDisplay from 'components/ImageCropper/ImagesDisplay';
 import RecurringEventInput from 'components/form/recurringEventInput/RecurringEventInput';
@@ -847,8 +841,8 @@ const AddEventForm = ({ actorId }) => {
                 .catch((error) => console.error(error));
               getAddressDetails(results);
             })
-          
-          }
+
+            }
           />
         </Grid>
         <FormItem
@@ -1101,7 +1095,7 @@ const AddEventForm = ({ actorId }) => {
         <br />
         <Grid className={styles.datetime}>
           <LocalizationProvider locale={frLocale} dateAdapter={AdapterDateFns}>
-            <Grid container justify="space-around">
+            <Grid container justifyContent="space-around">
               <DateTimePicker
                 value={selectedStartDate}
                 onChange={handleStartDateChange}
@@ -1243,19 +1237,24 @@ const AddEventForm = ({ actorId }) => {
                       primary={`${actor.name}`}
                     />
                     <ListItemSecondaryAction>
-                      <IconButton onClick={() => handleClickDeleteActor(actor)}>
+                      <IconButton onClick={() => handleClickDeleteActor(actor)} size="large">
                         <DeleteIcon />
                       </IconButton>
                     </ListItemSecondaryAction>
                   </ListItem>
-                )
+                );
               })
             }
           </List>
         </Grid>
 
         <Grid container direction="row">
-          <IconButton key="close" aria-label="Close" color="inherit" onClick={handleClickAddActor}>
+          <IconButton
+            key="close"
+            aria-label="Close"
+            color="inherit"
+            onClick={handleClickAddActor}
+            size="large">
             <AddCircleOutline />
           </IconButton>
 

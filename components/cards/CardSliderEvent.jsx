@@ -1,8 +1,8 @@
 import React from 'react';
-import {makeStyles} from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
+import makeStyles from '@mui/styles/makeStyles';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
 import Moment from 'react-moment';
 import Image from 'next/image';
 import Link from '../Link';
@@ -83,18 +83,18 @@ export default function SimpleCard({ event }) {
                   event.categories[0].label}
               </Typography>
             </div>
-            {  event.pictures.sort((a, b) => (a.logo ? -1 : 1))[0] && event.pictures.sort((a, b) => (a.logo ? -1 : 1))[0].originalPicturePath!=null && (
+            { event.pictures.filter((a, b) => (a.logo ? -1 : 1))[0] && event.pictures.filter((a, b) => (a.logo ? -1 : 1))[0].originalPicturePath!=null && (
+            <div style =  {{  position: 'relative', height:"130px"}}>
             <Image
               loader={myLoader}
-              width="100%"
-              height="70px"
-              layout="responsive"
+              fill
               objectFit="contain"
               src={
-                event.pictures.sort((a, b) => (a.logo ? -1 : 1))[0].originalPicturePath
+                event.pictures.filter((a, b) => (a.logo ? -1 : 1))[0].originalPicturePath
               }
               alt={event.name}
             />
+            </div>
             )}
           </div>
           <div className={classes.content}>

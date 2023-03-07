@@ -1,7 +1,8 @@
 /* eslint react/prop-types: 0 */
 import { ChangeEvent, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { Box, Grid, makeStyles, Typography } from '@material-ui/core';
+import { Box, Grid, Typography } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import TextField from 'components/form/TextField';
 import ClassicButton from 'components/buttons/ClassicButton';
 import { withApollo } from 'hoc/withApollo';

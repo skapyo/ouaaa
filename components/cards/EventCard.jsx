@@ -1,7 +1,8 @@
 import React, { useMemo } from 'react';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { useTheme } from '@mui/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import gql from 'graphql-tag';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import Link from '../Link';
 import Moment from 'react-moment';
 import { getImageUrl } from '../../utils/utils';
@@ -29,6 +30,7 @@ const useStyles = makeStyles((theme) => ({
     minHeight: '106px',
     borderLeft: `solid 12px ${props.color}`,
     display: 'flex',
+    fontSize:'0.8em'
   }),
   content: {
     width: '100%',
@@ -60,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     position: 'relative',
     marginRight: 16,
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       marginRight: 8,
     },
   },
@@ -93,7 +95,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
     borderRadius: '50%',
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       minHeight: 60,
       minWidth: 60,
       marginLeft: 8,
@@ -102,7 +104,7 @@ const useStyles = makeStyles((theme) => ({
   contentText: {
     overflow: 'hidden',
     marginLeft: 12,
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       marginLeft: 8,
     },
   },
@@ -112,6 +114,7 @@ const useStyles = makeStyles((theme) => ({
     whiteSpace: 'nowrap',
     textOverflow: 'ellipsis',
     overflow: 'hidden',
+    fontSize:'0.9em'
   }),
   eventDetails: {
     fontStyle: 'italic',
@@ -120,6 +123,7 @@ const useStyles = makeStyles((theme) => ({
     '-webkit-line-clamp': 2,
     '-webkit-box-orient': 'vertical',
     overflow: 'hidden',
+    fontSize:'0.9em'
   },
 }));
 

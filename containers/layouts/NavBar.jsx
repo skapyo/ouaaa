@@ -1,6 +1,7 @@
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
+import { useTheme } from '@mui/styles';
+import makeStyles from '@mui/styles/makeStyles';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
 import {
   Avatar,
   Container,
@@ -8,8 +9,8 @@ import {
   Grid,
   Menu,
   MenuItem,
-} from '@material-ui/core';
-import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
+} from '@mui/material';
+import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import Link from 'components/Link';
 import { useSessionDispatch, useSessionState } from 'context/session/session';
 import React, { useCallback, useEffect } from 'react';
@@ -42,11 +43,13 @@ const useStyles = makeStyles((theme) => ({
   avatar: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
+    marginTop: '5px'
   },
   account: {
     '&:hover': {
       cursor: 'pointer',
     },
+    fontSize:'0.9em'
   },
   popoverPaper: {
     marginTop: theme.spacing(2),
@@ -64,7 +67,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '3em',
   },
   buttonBar: {
-    [theme.breakpoints.down('md')]: {
+    [theme.breakpoints.down('lg')]: {
       display: 'none',
     },
     margin: '10px',
@@ -75,7 +78,7 @@ const useStyles = makeStyles((theme) => ({
     background: 'transparent',
   },
   navLayout: {
-    [theme.breakpoints.down('md')]: {
+    [theme.breakpoints.down('lg')]: {
       display: 'none',
     },
   },

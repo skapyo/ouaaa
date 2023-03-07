@@ -1,9 +1,10 @@
 import React, { useCallback } from 'react';
 import { useRouter } from 'next/router';
 import classNames from 'clsx';
-import { makeStyles, Button } from '@material-ui/core';
+import { Button } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import PropTypes from 'prop-types';
-import AddIcon from '@material-ui/icons/Add';
+import AddIcon from '@mui/icons-material/Add';
 
 import { ViewState } from '@devexpress/dx-react-scheduler';
 import {
@@ -32,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
         },
       },
     },
-    backgroundColor: props.backgroundColor,
+    backgroundColor: props.backgroundColor+'!important',
   }),
   text: {
     overflow: 'hidden',
@@ -48,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
     height: '100%',
   },
   appointment: (props) => ({
-    backgroundColor: props.backgroundColor,
+    backgroundColor: props.backgroundColor+'!important',
   }),
   appointmentContent: {
     padding: '1px 2px',
@@ -58,7 +59,10 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flex: '1 0 0',
     justifyContent: 'flex-end',
-  },
+    [theme.breakpoints.up('md')]: {
+      width: 'max-content',
+    },
+  }
 }));
 
 const MonthLayout = (props) => {
@@ -66,10 +70,11 @@ const MonthLayout = (props) => {
   return <MonthView.Layout {...props} className={classes.layout} />;
 };
 
+
 const AppointmentContent = (props) => {
   const { data } = props;
   const classes = useStyles();
-  // debugger;
+  //debugger;
   return (
     <Appointments.AppointmentContent
       className={classes.appointmentContent}
@@ -115,12 +120,13 @@ const FlexibleEmptySpaceAddEvent = () => {
   }, [router]);
 
   return (
-    <Toolbar.FlexibleSpace className={classes.actionButton}>
+    <Toolbar.FlexibleSpace>
       <Button
         variant="contained"
         color="secondary"
         startIcon={<AddIcon />}
         onClick={handleClickAddEvent}
+        className={classes.actionButton}
       >
         Ajouter un évènement
       </Button>
@@ -139,6 +145,7 @@ const Calendar = (props) => {
   const defaultMessages = {
     allDay: 'Toute la journée',
   };
+
 
   const RootComponent = useCallback((rootComponentProps) => {
     return (

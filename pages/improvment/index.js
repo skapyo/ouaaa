@@ -1,12 +1,7 @@
 import React from 'react';
 import AppLayout from 'containers/layouts/AppLayout';
-import {
-  Box,
-  Container,
-  makeStyles,
-  RootRef,
-  Typography,
-} from '@material-ui/core';
+import { Box, Container,  Typography } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import Newsletter from '../../containers/layouts/Newsletter';
 
 const useStyles = makeStyles((theme) => ({
@@ -42,7 +37,7 @@ const Improvment = () => {
   const styles = useStyles();
   return (
     <AppLayout>
-      <RootRef>
+      <>
         <Box>
           <Container className={styles.align}>
             <Typography variant="h1">Les fonctionnalités</Typography>
@@ -65,7 +60,7 @@ const Improvment = () => {
             </div>
           </Container>
         </Box>
-      </RootRef>
+      </>
     </AppLayout>
   );
 };

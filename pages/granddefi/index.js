@@ -1,15 +1,9 @@
 import React from 'react';
 import AppLayout from 'containers/layouts/AppLayout';
-import {
-  Box,
-  Container,
-  makeStyles,
-  RootRef,
-  Typography,
-} from '@material-ui/core';
+import { Box, Container,  Typography } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import Grid from '@mui/material/Grid';
 import Head from 'next/head';
-import Newsletter from '../../containers/layouts/Newsletter';
 import Link from '../../components/Link';
 
 const useStyles = makeStyles((theme) => ({
@@ -21,13 +15,13 @@ const useStyles = makeStyles((theme) => ({
   },
   image: {
     width: '50%',
-    [theme.breakpoints.down('md')]: {
+    [theme.breakpoints.down('lg')]: {
       width: '100%',
     },
   },
   container: {
     width: '90%',
-    [theme.breakpoints.down('md')]: {
+    [theme.breakpoints.down('lg')]: {
       paddingTop: '5em',
     },
     'text-align': 'center',
@@ -38,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: theme.typography.h5.fontFamily,
     textTransform: 'uppercase',
     fontWeight: '400',
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       fontSize: '1.5rem !important',
     },
   },
@@ -76,7 +70,7 @@ const useStyles = makeStyles((theme) => ({
     'background-position-x': '5px',
     'background-position-y': '1px',
     fontSize: '1em',
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       fontSize: '0.8em',
     },
   },
@@ -95,7 +89,7 @@ const GrandDefi = () => {
             content={"./image/GrandDefi-LOGO.png"}
           />
       </Head>
-      <RootRef>
+      <>
         <Box>
           <Container className={styles.container}>
             <Typography className={styles.justify}>
@@ -173,7 +167,7 @@ const GrandDefi = () => {
                 <br/>
           </Container>
         </Box>
-      </RootRef>
+      </>
     </AppLayout>
   );
 };

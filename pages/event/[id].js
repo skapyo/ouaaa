@@ -2,32 +2,26 @@ import React, {
   useEffect, useState, useRef, useMemo,
 } from 'react';
 import AppLayout from 'containers/layouts/AppLayout';
-import {
-  Container,
-  Grid,
-  makeStyles,
-  RootRef,
-  Typography,
-  useTheme,
-} from '@material-ui/core';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { Container, Grid,  Typography, useTheme } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { withApollo } from 'hoc/withApollo.jsx';
 import { useRouter } from 'next/router';
 import gql from 'graphql-tag';
 import { useMutation, useQuery } from '@apollo/client';
 import Slider from 'react-slick/lib';
-import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded';
-import FavoriteRoundedIcon from '@material-ui/icons/FavoriteRounded';
+import FavoriteBorderRoundedIcon from '@mui/icons-material/FavoriteBorderRounded';
+import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded';
 import CardSliderActor from 'components/cards/CardSliderActor';
 import CardSliderEvent from 'components/cards/CardSliderEvent';
-import FacebookIcon from '@material-ui/icons/Facebook';
-import TwitterIcon from '@material-ui/icons/Twitter';
-import WhatsAppIcon from '@material-ui/icons/WhatsApp';
-import TelegramIcon from '@material-ui/icons/Telegram';
-import EmailIcon from '@material-ui/icons/Email';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import TwitterIcon from '@mui/icons-material/Twitter';
+import WhatsAppIcon from '@mui/icons-material/WhatsApp';
+import TelegramIcon from '@mui/icons-material/Telegram';
+import EmailIcon from '@mui/icons-material/Email';
 import Modal from '@mui/material/Modal';
-import CloseIcon from '@material-ui/icons/Close';
-import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import IconButton from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
 
 import {
@@ -45,8 +39,8 @@ import { useCookies } from 'react-cookie';
 import { useSnackbar } from 'notistack';
 import Head from 'next/head';
 import Parser from 'html-react-parser';
-import Fab from '@material-ui/core/Fab';
-import EditIcon from '@material-ui/icons/Edit';
+import Fab from '@mui/material/Fab';
+import EditIcon from '@mui/icons-material/Edit';
 import Link from 'components/Link';
 import { RRule } from 'rrule';
 import Image from 'next/image';
@@ -85,6 +79,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundRepeat: 'no-repeat',
     backgroundOpacity: ' 0.5',
     borderRadius: '0.5em',
+    fontSize: '0.9em',
     width: '80%',
     justify: 'center',
     alignItems: 'center',
@@ -92,7 +87,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: ({ hasBannerUrl }) => (hasBannerUrl ? -53 : 20),
     marginBottom: 20,
     boxShadow: '0px 0px 38px -14px rgba(0, 0, 0, 0.46)',
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       padding: '2em',
       width: 'auto',
       marginBottom: 0,
@@ -104,8 +99,8 @@ const useStyles = makeStyles((theme) => ({
     textTransform: 'uppercase',
     textAlign: 'center',
     fontWeight: '400',
-    fontSize: '3rem !important',
-    [theme.breakpoints.down('sm')]: {
+    fontSize: '2.5rem !important',
+    [theme.breakpoints.down('md')]: {
       fontSize: '1.5rem !important',
     },
   },
@@ -117,7 +112,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up('sm')]: {
       paddingLeft: '2em',
     },
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       width: '100%',
     },
   },
@@ -585,7 +580,7 @@ const Event = ({ initialData }) => {
   };
   const styles = useStyles(stylesProps);
   const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.down('sm'));
+  const matches = useMediaQuery(theme.breakpoints.down('md'));
   const maxSlideToShowEvent = !matches ? 5 : 1;
   const settingsSliderevent = {
     infinite: true,
@@ -751,7 +746,7 @@ const Event = ({ initialData }) => {
         <meta name="twitter:description" content={data && data.event.shortDescription} />
 
       </Head>
-      <RootRef>
+      <>
         <Box>
           {bannerUrl && (
             <Container
@@ -769,12 +764,13 @@ const Event = ({ initialData }) => {
                     {data
                       && data.event.pictures.length >= 1
                       && data.event.pictures.filter((picture) => picture.logo)
-                        .length >= 1 && (
+                        .length >= 1 && (    
+                          
+                          <div style =  {{  position: 'relative',height: '200px'}}>
                         <Image
-                          width="100%"
-                          height="100px"
-                          layout="responsive"
-                          objectFit="contain"
+                        className={styles.eventImage} 
+                        fill
+                        objectFit="contain"
                           src={
                             data.event.pictures.length >= 1
                               ? getImageUrl(
@@ -785,6 +781,7 @@ const Event = ({ initialData }) => {
                               : ''
                           }
                         />
+                        </div>
                     )}
                   </div>
                   {data && (
@@ -796,8 +793,8 @@ const Event = ({ initialData }) => {
                         <Image
                           src="/icons/types.svg"
                           alt="Collectif & réseau"
-                          width="25px"
-                          height="25px"
+                          width="25"
+                          height="25"
                           objectFit="contain"
                           className={[styles.icon]}
                         />
@@ -837,8 +834,8 @@ const Event = ({ initialData }) => {
                           <Image
                             src="/icons/public.svg"
                             alt="Collectif & réseau"
-                            width="25px"
-                            height="25px"
+                            width="25"
+                            height="25"
                             objectFit="contain"
                             className={[styles.icon]}
                           />
@@ -871,8 +868,8 @@ const Event = ({ initialData }) => {
                       <Image
                         src="/icons/location.svg"
                         alt="Localisation"
-                        width="25px"
-                        height="25px"
+                        width="25"
+                        height="25"
                         objectFit="contain"
                         className={[styles.icon]}
                       />
@@ -908,8 +905,8 @@ const Event = ({ initialData }) => {
                         <Image
                           src="/icons/social.svg"
                           alt="Réseau social"
-                          width="25px"
-                          height="25px"
+                          width="25"
+                          height="25"
                           objectFit="contain"
                           className={[styles.icon]}
                         />
@@ -933,8 +930,8 @@ const Event = ({ initialData }) => {
                       <Grid item xs={3} className={[styles.alignRight]}>
                         <Image
                           src="/icons/clock.svg"
-                          width="25px"
-                          height="25px"
+                          width="25"
+                          height="25"
                           objectFit="contain"
                           alt="Horaire"
                           className={[styles.icon]}
@@ -976,8 +973,8 @@ const Event = ({ initialData }) => {
                         <Grid item xs={3} className={[styles.alignRight]}>
                           <Image
                             src="/icons/tarifs.svg"
-                            width="25px"
-                            height="25px"
+                            width="25"
+                            height="25"
                             objectFit="contain"
                             alt="Tarif"
                             className={[styles.icon]}
@@ -1021,8 +1018,8 @@ const Event = ({ initialData }) => {
                     <Grid item xs={3} className={[styles.alignRight]}>
                       <Image
                         src="/icons/social.svg"
-                        width="25px"
-                        height="25px"
+                        width="25"
+                        height="25"
                         objectFit="contain"
                         alt="Réseau social"
                         className={[styles.icon]}
@@ -1102,7 +1099,7 @@ const Event = ({ initialData }) => {
                 <div className={styles.border} />
                 <br />
                 <br />
-                <p>{data && Parser(data.event.description)}</p>
+                <div>{data && Parser(data.event.description)}</div>
                 <div>
                   {data
                     && data.event.entries.map(
@@ -1120,8 +1117,8 @@ const Event = ({ initialData }) => {
                               :
                               {entry.icon && (
                                 <Image
-                                  width="30px"
-                                  height="25px"
+                                  width="30"
+                                  height="25"
                                   src={`/icons/${entry.icon}.svg`}
                                   alt="icon"
                                   className={styles.iconEntry}
@@ -1145,8 +1142,8 @@ const Event = ({ initialData }) => {
                       <Image
                         src="/icons/status.svg"
                         alt="Collectif & réseau"
-                        width="100%"
-                        height="100%"
+                        width="100"
+                        height="100"
                         layout="responsive"
                         objectFit="contain"
                         className={[styles.icon]}
@@ -1183,8 +1180,8 @@ const Event = ({ initialData }) => {
                       <Image
                         src="/icons/public.svg"
                         alt="Collectif & réseau"
-                        width="100%"
-                        height="100%"
+                        width="100"
+                        height="100"
                         layout="responsive"
                         objectFit="contain"
                         className={[styles.icon]}
@@ -1220,8 +1217,8 @@ const Event = ({ initialData }) => {
                       <Image
                         src="/icons/network.svg"
                         alt="Collectif & réseau"
-                        width="100%"
-                        height="100%"
+                        width="100"
+                        height="100"
                         layout="responsive"
                         objectFit="contain"
                         className={[styles.icon]}
@@ -1258,7 +1255,7 @@ const Event = ({ initialData }) => {
                       <div className={styles.border} />
                       <br />
                     </div>
-                    <p>{data && Parser(urlRectification(data.event.practicalInfo))}</p>
+                    <div>{data && Parser(urlRectification(data.event.practicalInfo))}</div>
                   </div>
                 )}
                 <div />
@@ -1273,6 +1270,8 @@ const Event = ({ initialData }) => {
                   <div className={styles.map}>
                     <MapWithNoSSR
                       ref={mapRef}
+                      scrollWheelZoom={false}
+                      position={[data.event.lat, data.event.lng]}
                     >
                       <MarkerWithNoSSR
                         id="map"
@@ -1350,7 +1349,11 @@ const Event = ({ initialData }) => {
               aria-describedby="parent-modal-description"
             >
               <Box sx={style}>
-                <IconButton aria-label="Close" className={styles.closeButton} onClick={() => setOpenModalSlider(false)}>
+                <IconButton
+                  aria-label="Close"
+                  className={styles.closeButton}
+                  onClick={() => setOpenModalSlider(false)}
+                  size="large">
                   <CloseIcon />
                 </IconButton>
                 <Slider {...settingsSliderModal} className={[styles.slider]}>
@@ -1426,7 +1429,7 @@ const Event = ({ initialData }) => {
               </Link>
           )}
         </Box>
-      </RootRef>
+      </>
     </AppLayout>
   );
 };

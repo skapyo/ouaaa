@@ -1,24 +1,22 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { makeStyles } from '@material-ui/core';
+import makeStyles from '@mui/styles/makeStyles';
 import {
   MapContainer, TileLayer, Marker, Popup, Tooltip, ZoomControl,Polygon
 } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet.markercluster';
 import 'leaflet/dist/leaflet.css';
-import { NoEncryption } from '@material-ui/icons';
 
 L.Icon.Default.mergeOptions({
   iconUrl: null,
 });
 
-const position = [46.1085193, -0.9864794];
 
 const useStyles = makeStyles((theme) => ({
   mapContainer: {
     height: '100% !important',
-    [theme.breakpoints.down('sm')]: {
-      height: '80vh !important',
+    [theme.breakpoints.down('md')]: {
+      height: '63vh !important',
     },
   },
   polygon:{
@@ -30,7 +28,11 @@ const Map = (props) => {
   const mapRef = useRef();
   const styles = useStyles();
   const [map, setMap] = useState(null);
-  const { children } = props;
+  let { children,position,scrollWheelZoom } = props;
+  if (typeof position === 'undefined'){
+    position = [46.1085193, -0.9864794];
+  }
+
   useEffect(() => {
     if (map) {
       setInterval(() => {
@@ -52,6 +54,7 @@ const Map = (props) => {
       zoom={11}
       className={styles.mapContainer}
       whenCreated={setMap}
+      scrollWheelZoom={scrollWheelZoom}
       zoomControl={false}
       tap={false}
     >

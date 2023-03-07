@@ -2,19 +2,20 @@ import React, {
   useCallback, useMemo, useRef, useState,
 } from 'react';
 import {
-  Grid, Typography, Button, Container, makeStyles, useTheme,
-} from '@material-ui/core';
+  Grid, Typography, Button, Container,  useTheme,
+} from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import { withApollo } from 'hoc/withApollo';
 import Events from 'containers/layouts/agendaPage/Events';
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/client';
 import Moment from 'react-moment';
 import moment from 'moment';
-import FavoriteBorderRoundedIcon from '@material-ui/icons/FavoriteBorderRounded';
-import FavoriteRoundedIcon from '@material-ui/icons/FavoriteRounded';
-import Drawer from '@material-ui/core/Drawer';
-import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
+import FavoriteIcon from '@mui/icons-material';
+import FavoriteBorderIcon from '@mui/icons-material';
+import Drawer from '@mui/material/Drawer';
+import DoubleArrowIcon from '@mui/icons-material/DoubleArrow';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { RRule } from 'rrule';
 import dynamic from 'next/dynamic';
 import ButtonGroupSelected from '../../../components/buttons/ButtonGroupSelected';
@@ -239,19 +240,7 @@ const VIEW_STATE = {
   CALENDAR: 'CALENDAR',
 };
 
-const getAllEventsFromRecurringEvent = (event) => {
-  const startDate = moment(parseInt(event.startedAt));
-  const { dateRule } = event;
 
-  const rrule = RRule.fromString(`DTSTART:${startDate.format('YYYYMMDD[T]hhmmss[Z]')}\nRRULE:${dateRule}`);
-  return rrule.between(new Date(), moment().add(1, 'year').toDate()).map((date) => {
-    return {
-      ...event,
-      startedAt: moment(date).valueOf().toString(),
-      duration: rruleToText(rrule),
-    };
-  });
-};
 
 const AgendaPageLayout = () => {
   const theme = useTheme();
@@ -272,7 +261,7 @@ const AgendaPageLayout = () => {
   const toggleMenu = useCallback(() => {
     setIsMenuOpen(!isMenuOpen);
   }, [isMenuOpen]);
-
+  
   const date = new Date();
 
   date.setHours(0, 0, 0, 0);
@@ -282,11 +271,29 @@ const AgendaPageLayout = () => {
       startingDate: date.toISOString(),
     },
   });
-
+  const [searchDate, setSearchDate] = useState(new Date());
   const handleFiltersChange = useCallback((newFilters) => {
+    debugger;
+    if(newFilters.startingDate!== undefined){
+     setSearchDate(newFilters.startingDate.$d); 
+    }
     setFilters(newFilters);
     refetch({ ...newFilters });
   }, [refetch]);
+
+  const getAllEventsFromRecurringEvent = (event) => {
+    let startEventDate = moment(parseInt(event.startedAt));
+    const { dateRule } = event;
+    const rrule = RRule.fromString(`DTSTART:${startEventDate.format('YYYYMMDD[T]hhmmss[Z]')}\nRRULE:${dateRule}`);
+
+    return rrule.between(searchDate, moment().add(6, 'month').toDate()).map((date) => {
+      return {
+        ...event,
+        startedAt: moment(date).valueOf().toString(),
+        duration: rruleToText(rrule),
+      };
+    });
+  };
 
   const fabActions = useMemo(() => {
     return [
@@ -298,7 +305,6 @@ const AgendaPageLayout = () => {
 
   const events = useMemo(() => {
     const initialEvents = (eventData?.events || []);
-    debugger;
     const recurringEvents = initialEvents.filter((event) => event.dateRule);
     const allRecurringEvents = recurringEvents.map((evt) => getAllEventsFromRecurringEvent(evt));
     const allEvents = initialEvents.filter((event) => !event.dateRule).concat(allRecurringEvents.reduce((acc, items) => acc.concat(items), [])).filter((event) => { return moment(parseInt(event.startedAt)) > moment().startOf('day'); });
@@ -346,12 +352,12 @@ const AgendaPageLayout = () => {
             keepMounted: true,
           }}
         >
-          <Filters
+         <Filters
             isEventList
             onFiltersChange={handleFiltersChange}
             isCalendarMode={isCalendarMode}
             closeHandler={toggleMenu}
-          />
+          /> 
         </Drawer>
 
         {
@@ -378,7 +384,7 @@ const AgendaPageLayout = () => {
 
         {isMapMode && (
           <Grid style={{ width: '100%' }}>
-            <MapWithNoSSR>
+            <MapWithNoSSR scrollWheelZoom={true}>
               <MarkerClusterWithNoSSR>
                 {typeof eventData !== 'undefined'
                   && eventData.events.map((event, index) => {

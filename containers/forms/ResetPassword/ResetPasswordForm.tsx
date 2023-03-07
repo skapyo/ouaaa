@@ -11,10 +11,10 @@ import {
   Avatar,
   Box,
   Container,
-  makeStyles,
   Typography,
-} from '@material-ui/core';
-import VpnKeyOutlinedIcon from '@material-ui/icons/VpnKeyOutlined';
+} from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import VpnKeyOutlinedIcon from '@mui/icons-material/VpnKeyOutlined';
 import ValidateEmailCodeForm from './subForms/ValidateEmailCodeForm';
 
 const useStyles = makeStyles((theme) => ({

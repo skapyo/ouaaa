@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Grid, Typography } from '@material-ui/core';
+import makeStyles from '@mui/styles/makeStyles';
+import { Grid, Typography } from '@mui/material';
 import Image from 'next/image';
 import Favorite from '../Favorite';
 import { getImageUrl } from '../../utils/utils';

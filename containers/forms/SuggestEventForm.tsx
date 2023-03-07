@@ -1,29 +1,51 @@
-import { useMutation } from '@apollo/client';
+import { useMutation,useQuery } from '@apollo/client';
 import {
-  Container, FormControlLabel, makeStyles, Radio, RadioGroup, TextField, Tooltip, Typography,
-} from '@material-ui/core';
+  Container,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+  TextField,
+  Tooltip,
+  Typography,
+} from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import ClassicButton from 'components/buttons/ClassicButton';
 import FormController, { RenderCallback, ValidationRules, ValidationRuleType } from 'components/controllers/FormController';
 import ImagesDropZone from 'components/ImageCropper/ImagesDropZone';
 import ImagesDisplay from 'components/ImageCropper/ImagesDisplay';
-import Checkbox from '@material-ui/core/Checkbox';
+import Checkbox from '@mui/material/Checkbox';
 import { useSessionState } from 'context/session/session';
+import { Autocomplete } from '@mui/material';
 import gql from 'graphql-tag';
 import { withApollo } from 'hoc/withApollo';
 import { useSnackbar } from 'notistack';
 import {
   ChangeEvent, useCallback, useEffect, useState,
 } from 'react';
-import InfoIcon from '@material-ui/icons/Info';
+import InfoIcon from '@mui/icons-material/Info';
 import useDnDStateManager from 'hooks/useDnDStateManager';
 import useImageReader from 'hooks/useImageReader';
 import withDndProvider from 'hoc/withDnDProvider';
-import { FormatStrikethroughTwoTone } from '@material-ui/icons';
-
-const PROPOSE_ACTORFORM = gql`
-  mutation inviteActor($formValues: ProposeActorInfos!) {
-    inviteActor(inviteActorInfos: $formValues)
+import { FormatStrikethroughTwoTone } from '@mui/icons-material';
+import Link from '../../components/Link';
+const SUGGEST_ACTORFORM = gql`
+  mutation suggestEvent($formValues: SuggestEventInfos!) {
+    suggestEvent(suggestEventInfos: $formValues)
   }
+`;
+
+
+const GET_ACTORS = gql`
+query actors {
+  actors {
+    id
+    name
+    pictures {
+      originalPicturePath
+      logo
+    }
+  }
+}
 `;
 
 const useStyles = makeStyles((theme) => ({
@@ -90,9 +112,9 @@ const FormItem = (props: FormItemProps) => {
   );
 };
 
-const ProposeActorForm = (props) => {
+const SuggestEventForm = (props) => {
   const {
-    noEmailInviteActor,
+    noEmailsuggestEvent,
   } = props;
 
   const styles = useStyles();
@@ -100,8 +122,8 @@ const ProposeActorForm = (props) => {
   const [messageSent, setMessageSent] = useState(false);
   const [lastActorNameSent, setLastActorNameSent] = useState('');
   const [category, setCategory] = useState('message');
-  const [noEmailInvite, setNoEmailInvite] = useState(noEmailInviteActor === 'true');
-
+  const [noEmailInvite, setNoEmailInvite] = useState(noEmailsuggestEvent === 'true');
+ 
   const initFormValues = {
     firstName: user?.surname,
     lastName: user?.lastname,
@@ -113,58 +135,40 @@ const ProposeActorForm = (props) => {
     const { formChangeHandler, formValues, validationResult } = props;
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
+    const [showAddActor, setShowAddActor] = useState(false);
+    const [openAddActorlist, setOpenAddActorlist] = useState(false);
+    const { data: dataActors } = useQuery(GET_ACTORS, {});
+ 
     const handleChangeInvite = () => {
       setNoEmailInvite(!noEmailInvite);
-      formValues.sendEmail = noEmailInvite;
     };
 
     const [
-      inviteActor,
-      { data: inviteActorData, error: inviteActorError, loading: inviteActorLoading },
-    ] = useMutation(PROPOSE_ACTORFORM);
+      suggestEvent,
+      { data: suggestEventData, error: suggestEventError, loading: suggestEventLoading },
+    ] = useMutation(SUGGEST_ACTORFORM);
 
     const inputs = [
 
     ];
     if (!user) {
       inputs.push({
-        label: 'Votre nom à vous',
+        label: 'Votre nom',
         name: 'requesterName',
         required: true,
         errorText: 'Nom requis.',
         fullWidth: true,
       });
     }
-    inputs.push({
-      label: 'Nom du contact (Facultatif)',
-      name: 'contactName',
-      required: false,
-      fullWidth: true,
-    });
-    inputs.push({
-      label: noEmailInvite ? "Nom de l'acteur contacté" : "Nom de l'acteur à inviter",
-      name: 'actorName',
-      required: true,
-      errorText: 'Nom requis.',
-      fullWidth: true,
-    });
-
-    inputs.push({
-      label: noEmailInvite ? "Email de l'acteur contacté" : "Email de l'acteur à inviter ou du contact",
-      name: 'actorEmail',
-      required: true,
-      errorText: 'Email requis.',
-      fullWidth: true,
-    });
-    inputs.push({
-      label: noEmailInvite ? "Code postal de l'acteur contacté (Facultatif)" : "Code postal de l'acteur à inviter (Facultatif)",
-      name: 'postCode',
-      required: false,
-      fullWidth: true,
-    });
     if (!noEmailInvite) {
       inputs.push({
-        label: "Message optionnel pour l'acteur ou le contact",
+        label: "Nom et date de l'événement manquant",
+        name: 'eventName',
+        required: true,
+        fullWidth: true,
+      });
+      inputs.push({
+        label: "Message optionnel pour l'acteur",
         name: 'message',
         required: false,
         multiline: true,
@@ -177,7 +181,7 @@ const ProposeActorForm = (props) => {
     };
 
     const submitContactForm = () => {
-      inviteActor({
+      suggestEvent({
         variables: {
           formValues: {
             ...formValues,
@@ -187,7 +191,7 @@ const ProposeActorForm = (props) => {
     };
 
     useEffect(() => {
-      if (!inviteActorLoading && inviteActorData) {
+      if (!suggestEventLoading && suggestEventData) {
         setMessageSent(true);
         inputs.map((input, i) => {
           if (input.name === 'actorName') {
@@ -195,12 +199,21 @@ const ProposeActorForm = (props) => {
           }
           formValues[input.name] = '';
         });
-      } else if (inviteActorError) {
+      } else if (suggestEventError) {
         enqueueSnackbar('Une erreur s\'est produite, merci de bien vouloir réessayer.', {
           preventDuplicate: true,
         });
       }
-    }, [inviteActorData, inviteActorError, inviteActorLoading]);
+    }, [suggestEventData, suggestEventError, suggestEventLoading]);
+
+
+    const handleChangeActor = useCallback((event, value) => {
+      if (value) {
+        formValues.actorId = parseInt(value.id);
+      }
+      setShowAddActor(false);
+      setOpenAddActorlist(false);
+    }, [formValues]);
 
     const getFormInputs = (() => {
       return (
@@ -223,19 +236,54 @@ const ProposeActorForm = (props) => {
               />
             );
           })}
-          {noEmailInviteActor && (
+          {noEmailsuggestEvent && (
             <FormControlLabel
               control={<Checkbox onChange={handleChangeInvite} />}
-              label="Inviter un nouvel acteur avec un email automatique "
+              label="Propose à l'acteur d'ajouter son événément sur OUAAA!"
             />
           )}
 
         </div>
       );
     });
+    const inputChangeHandler = useCallback((event) => {
+      if (event.target.value) {
+        if (event.target.value.length < 3) {
+            setOpenAddActorlist(false);
+        } else {
+          setOpenAddActorlist(true);
+        } 
+      }
+    }, []);
 
     return (
       <Container maxWidth="md" className={styles.formContainer}>
+
+
+{dataActors! && (
+            <Autocomplete
+              id="combo-box-add-actor"
+              options={dataActors.actors}
+              // @ts-ignore
+              getOptionLabel={(option) => `${option.name}`}
+              onChange={handleChangeActor}
+              open={openAddActorlist}
+   
+              // @ts-ignore
+              onInput={inputChangeHandler}
+              // eslint-disable-next-line react/jsx-props-no-spreading
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Acteur (Tapez les 3 premières lettres)"
+                  variant="outlined"
+                  name="actors"
+                />
+              )}
+            />
+)}
+<div>Si l'acteur n'est pas présent, invitez le à rejoindre OUAAA! en cliquant  <Link href={`/map?suggestEvent=true`}> ici</Link></div>
+<br/>
         { getFormInputs() }
         <ClassicButton
           fullWidth
@@ -243,7 +291,7 @@ const ProposeActorForm = (props) => {
           onClick={submitContactForm}
           disabled={!validationResult?.global}
         >
-          { noEmailInvite ? "Ajouter l'acteur" : 'Inviter le nouvel acteur'}
+          { noEmailInvite ? "Ajouter l'acteur" : "Proposer à l'acteur d'ajouter son événément sur OUAAA!"}
         </ClassicButton>
       </Container>
     );
@@ -251,24 +299,24 @@ const ProposeActorForm = (props) => {
   let validationRules: ValidationRules;
   if (!user) {
     validationRules = {
-      actorName: {
+      eventName: {
         rule: ValidationRuleType.required,
       },
       requesterName: {
         rule: ValidationRuleType.required,
       },
-      actorEmail: {
-        rule: ValidationRuleType.required && ValidationRuleType.email,
-      },
+      actorId: {
+        rule: ValidationRuleType.required,
+      }
     };
   } else {
     validationRules = {
-      actorName: {
+      eventName: {
         rule: ValidationRuleType.required,
-      },
-      actorEmail: {
-        rule: ValidationRuleType.required && ValidationRuleType.email,
-      },
+      }
+      , actorId: {
+        rule: ValidationRuleType.required,
+      }
     };
   }
 
@@ -277,11 +325,9 @@ const ProposeActorForm = (props) => {
       <div>
         <div className={styles.formContainer}>
           <p>
-            Merci de nous aider à faire grandir la communauté de OUAAA. Votre invitation à l'acteur
+            Merci de votre aide pour tenir l'agenda OUAAA! à jour.
             {' '}
-            <b>{lastActorNameSent}</b>
-            {' '}
-            a bien été envoyé. Vous pouvez continuer à inviter d'autres acteurs.
+            Votre suggestion a bien été envoyé. Vous pouvez continuer à suggérer d'autres événements si vous le souhaitez.
           </p>
         </div>
         <FormController
@@ -302,4 +348,4 @@ const ProposeActorForm = (props) => {
   );
 };
 
-export default withDndProvider(withApollo()(ProposeActorForm));
+export default withDndProvider(withApollo()(SuggestEventForm));

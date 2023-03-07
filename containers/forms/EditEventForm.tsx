@@ -8,27 +8,26 @@ import React, {
 import { gql, useMutation, useQuery } from '@apollo/client';
 import { withApollo } from 'hoc/withApollo';
 import {
-  Card,
   Container,
   FormControlLabel,
   Grid,
-  makeStyles,
   Radio,
   TextField,
   Tooltip,
   Typography,
-} from '@material-ui/core';
+} from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import ClassicButton from 'components/buttons/ClassicButton';
 import FormController, {
   RenderCallback,
   ValidationRules,
   ValidationRuleType,
 } from 'components/controllers/FormController';
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
-import ArrowRightIcon from '@material-ui/icons/ArrowRight';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import useGraphQLErrorDisplay from 'hooks/useGraphQLErrorDisplay';
-import Checkbox from '@material-ui/core/Checkbox';
-import Avatar from '@material-ui/core/Avatar';
+import Checkbox from '@mui/material/Checkbox';
+import Avatar from '@mui/material/Avatar';
 import useCookieRedirection from 'hooks/useCookieRedirection';
 import { useSnackbar } from 'notistack';
 import GooglePlacesAutocomplete, {
@@ -37,53 +36,36 @@ import GooglePlacesAutocomplete, {
 } from 'react-google-places-autocomplete';
 import { useRouter, withRouter } from 'next/router';
 import classnames from 'classnames';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText/ListItemText';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
-import Collapse from '@material-ui/core/Collapse/Collapse';
-import DateFnsUtils from '@date-io/date-fns';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
 import moment from 'moment';
-import Dialog from '@material-ui/core/Dialog';
-import AddCircleOutline from '@material-ui/icons/AddCircleOutline';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Button from '@material-ui/core/Button';
+import Dialog from '@mui/material/Dialog';
+import AddCircleOutline from '@mui/icons-material/AddCircleOutline';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Button from '@mui/material/Button';
 import FallbackPageNotFound from 'containers/fallbacks/FallbackPageNotFound';
-import Icon from '@material-ui/core/Icon';
-import ImageCropper from 'components/ImageCropper/ImageCropper';
-import InsertPhotoIcon from '@material-ui/icons/InsertPhoto';
 import { getImageUrl } from 'utils/utils';
-import FormControl from '@material-ui/core/FormControl';
-import { useDrag, useDrop } from 'react-dnd';
-import HeightIcon from '@material-ui/core/SvgIcon/SvgIcon';
-import DeleteIcon from '@material-ui/icons/Delete';
-import { useDropArea } from 'react-use';
-import { Autocomplete, TreeView } from '@material-ui/lab';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider'
-import 
-  DatePicker 
- from '@mui/lab/DatePicker';
- import DateTimePicker from '@mui/lab/DateTimePicker';
-import {
-  KeyboardTimePicker,
-} from '@material-ui/pickers';
-import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControl from '@mui/material/FormControl';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { Autocomplete } from '@mui/material';
+import { TreeView } from '@mui/lab';
+import { LocalizationProvider, DateTimePicker } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import RadioGroup from '@mui/material/RadioGroup';
 import frLocale from 'date-fns/locale/fr';
 import StyledTreeItem from 'components/filters/StyledTreeItem';
-import InfoIcon from '@material-ui/icons/Info';
+import InfoIcon from '@mui/icons-material/Info';
 import CustomRadioGroup from 'components/form/CustomRadioGroup';
 import CustomRadioGroupForm from 'components/form/CustomRadioGroupForm';
 import ImagesDisplay from 'components/ImageCropper/ImagesDisplay';
 import ImagesDropZone from 'components/ImageCropper/ImagesDropZone';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import IconButton from '@material-ui/core/IconButton';
-import { FlashOnTwoTone } from '@material-ui/icons';
+import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
+import IconButton from '@mui/material/IconButton';
 import RecurringEventInput from 'components/form/recurringEventInput/RecurringEventInput';
 import RadioGroupForContext from './RadioGroupForContext';
 import withDndProvider from '../../hoc/withDnDProvider';
@@ -920,8 +902,8 @@ const EditEventForm = (props) => {
       formValues.lng = eventData.event.lng;
       formValues.registerLink = eventData.event.registerLink;
       formValues.actors = eventData.event.actors;
-      formValues.parentId =eventData.event !== undefined && eventData.event.parentEvent && eventData.event.parentEvent.id;
-      if(formValues.parentId){
+      formValues.parentId = eventData.event !== undefined && eventData.event.parentEvent && eventData.event.parentEvent.id;
+      if (formValues.parentId) {
         setHasParentEvent(!!formValues.parentId);
       }
       setShowRegisterLink(formValues.registerLink !== undefined && formValues.registerLink !== '');
@@ -1497,15 +1479,15 @@ const EditEventForm = (props) => {
             );
           })
         }
-   
         <br />
         <TitleWithTooltip
           title="Calendrier "
           tooltipTitle="Vous pourrez ajouter des infos plus détaillés dans le corps du texte de la déscription ou dans le bloc infos pratiques"
         />
+         <br />
         <Grid className={styles.datetime}>
-        <LocalizationProvider locale={frLocale} dateAdapter={AdapterDateFns}>
-            <Grid container justify="space-around">
+          <LocalizationProvider locale={frLocale} dateAdapter={AdapterDateFns}>
+            <Grid container justifyContent="space-around">
               <DateTimePicker
                 value={selectedStartDate}
                 onChange={handleStartDateChange}
@@ -1517,10 +1499,10 @@ const EditEventForm = (props) => {
                     && moment(selectedStartDate) <= moment(Date.now())
                     ? 'La date de début ne peut être dans le passé.'
                     : ''
-                     }/>
-                    }
-                    />
-          
+                } />
+                }
+              />
+
               <DateTimePicker
                 value={selectedEndDate}
                 onChange={handleEndDateChange}
@@ -1534,18 +1516,18 @@ const EditEventForm = (props) => {
                   && !!selectedEndDate
                   && selectedStartDate
                 }
-                renderInput={params => <TextField {...params}  label="Date de fin" helperText={
+                renderInput={params => <TextField {...params} label="Date de fin" helperText={
                   selectedStartDate
                     && selectedEndDate
                     && selectedStartDate >= selectedEndDate
                     ? 'La date de fin ne peut être dans le début.'
                     : ''
-                     }/>
-                    }
+                } />
+                }
               />
             </Grid>
-        </LocalizationProvider>
-        <RecurringEventInput onChange={handleChangeDateRule} value={dateRule} startDate={selectedStartDate} />
+          </LocalizationProvider>
+          <RecurringEventInput onChange={handleChangeDateRule} value={dateRule} startDate={selectedStartDate} />
         </Grid>
         <p />
         {
@@ -1631,7 +1613,7 @@ const EditEventForm = (props) => {
                       primary={`${actor.name}`}
                     />
                     <ListItemSecondaryAction>
-                      <IconButton onClick={() => handleClickDeleteActor(actor)}>
+                      <IconButton onClick={() => handleClickDeleteActor(actor)} size="large">
                         <DeleteIcon />
                       </IconButton>
                     </ListItemSecondaryAction>
@@ -1643,7 +1625,12 @@ const EditEventForm = (props) => {
         </Grid>
 
         <Grid container direction="row">
-          <IconButton key="close" aria-label="Close" color="inherit" onClick={handleClickAddActor}>
+          <IconButton
+            key="close"
+            aria-label="Close"
+            color="inherit"
+            onClick={handleClickAddActor}
+            size="large">
             <AddCircleOutline />
           </IconButton>
 
@@ -1673,7 +1660,7 @@ const EditEventForm = (props) => {
 
         <br />
 
- 
+
         <br />
         <Typography className={styles.collectionLabel}>
           Inscription à l’évement
@@ -1715,7 +1702,9 @@ const EditEventForm = (props) => {
               onChange={() => setShowRegisterLink(true)}
               checked={showRegisterLink}
             />
+    
             {showRegisterLink && (
+              
               <FormItem
                 label="Lien externe de participation à l'événement"
                 inputName="registerLink"
@@ -1730,7 +1719,7 @@ const EditEventForm = (props) => {
         </FormControl>
         <p />
 
- 
+
         <Typography variant="body1" color="primary" className={styles.label}>
           Logo de l'événement
         </Typography>

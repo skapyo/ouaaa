@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
-import ArrowRightIcon from '@material-ui/icons/ArrowRight';
-import Badge from '@material-ui/core/Badge';
-import TreeView from '@material-ui/lab/TreeView';
-import { makeStyles } from '@material-ui/core/styles';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ArrowRightIcon from '@mui/icons-material/ArrowRight';
+import Badge from '@mui/material/Badge';
+import TreeView from '@mui/lab/TreeView';
+import makeStyles from '@mui/styles/makeStyles';
 
 import ParentFilterContext from './ParentFilterContext';
 import StyledTreeItem from './StyledTreeItem';
