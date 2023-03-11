@@ -187,7 +187,7 @@ const NavBar = () => {
                       className={styles.menuItem}
                       onMouseOver={handleOpenMenuResources}
                     >
-                      ARTICLES
+                      RESSOURCES
                     </MenuItem>
                     <Menu
                       id="menu-resources"
@@ -203,7 +203,7 @@ const NavBar = () => {
                       <MenuItem>Recettes</MenuItem>
                     </Menu>
                   </Grid>
-                  <Grid item>
+             {/*     <Grid item>
                     <MenuItem
                       button
                       component={Link}
@@ -222,10 +222,11 @@ const NavBar = () => {
                     >
                       JE PARTICIPE
                     </MenuItem>
+  
                   </Grid>
+*/}
 
-
-                  {/*
+                  {
                   <Grid item>
                     <MenuItem
                       button
@@ -236,7 +237,7 @@ const NavBar = () => {
                       A PROPOS
                     </MenuItem>
                   </Grid>
-                  */}
+                  }
 
                   {!user && (
                     <Grid item>
