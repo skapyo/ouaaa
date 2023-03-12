@@ -1583,7 +1583,7 @@ const Actor = ({ initialData }) => {
             <br />
             <div>
               <Typography variant="h5" className={[styles.cardTitle]}>
-                LES ARTICLE DE 
+                LES ARTICLES DE 
                 {' '}
                 {data && data?.actor?.name}
               </Typography>
