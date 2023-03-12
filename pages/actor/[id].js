@@ -220,7 +220,7 @@ const useStyles = makeStyles((theme) => ({
   infoPratiqueItem: {},
   alignLeft: {
     textAlign: 'left',
-    padding: '1em',
+    padding: '1em 0em 1em 0em',
   },
   alignRight: {
     textAlign: 'right',
@@ -333,7 +333,15 @@ const useStyles = makeStyles((theme) => ({
     },
     [theme.breakpoints.up('sm')]: {
       width: '100%',
+      
     },
+  },
+  video: {
+    width: '100%',
+    maxWidth : '500px',
+  },
+  mapContainer: {
+    height: '100% !important'
   },
 }));
 
@@ -466,6 +474,7 @@ query actor($id: String) {
       hours
       place
     }
+    hasVideoVouaaar
   }
 }
 `;
@@ -763,7 +772,6 @@ const Actor = ({ initialData }) => {
       const recurringEvents = initialEvents.filter((event) => event.dateRule);
       
       const allRecurringEvents = recurringEvents.map((evt) => getAllEventsFromRecurringEvent(evt));
-      debugger;
       const allEvents = initialEvents.concat(allRecurringEvents.reduce((acc, items) => acc.concat(items), []));
 
 
@@ -1021,7 +1029,7 @@ const Actor = ({ initialData }) => {
                             Site internet
                           </div>
                           <span className={[styles.infoValue]}>
-                            <a
+                            <Link
                               href={
                                 data && urlWithHttpsdefault(data.actor.website)
                               }
@@ -1029,7 +1037,7 @@ const Actor = ({ initialData }) => {
                               rel="noreferrer"
                             >
                               {data && data.actor.website}
-                            </a>
+                            </Link>
                             {/* @ts-ignore */}
                           </span>
                         </Grid>
@@ -1051,7 +1059,7 @@ const Actor = ({ initialData }) => {
                       <Grid item xs={8} className={[styles.alignLeft]}>
                         <div className={[styles.infoLabel]}>Réseau social</div>
                         <span className={[styles.infoValue]}>
-                          <a
+                          <Link
                             href={
                               data
                               && urlWithHttpsdefault(data.actor.socialNetwork)
@@ -1060,7 +1068,7 @@ const Actor = ({ initialData }) => {
                             rel="noreferrer"
                           >
                             {data && data.actor.socialNetwork}
-                          </a>
+                          </Link>
                           {/* @ts-ignore */}
                         </span>
                       </Grid>
@@ -1432,6 +1440,7 @@ const Actor = ({ initialData }) => {
                       scrollWheelZoom={false}
                       position={[data.actor.lat, data.actor.lng]}
                       id="map"
+                      classMap={styles.mapContainer}
                     >
                       <MarkerWithNoSSR
                         event={data.actor}
@@ -1442,6 +1451,19 @@ const Actor = ({ initialData }) => {
               </Grid>
             </Grid>
             <br />
+            {data && data.actor.hasVideoVouaaar && (
+            <div className={styles.cardTitle}>
+
+                <Typography variant="h3" className={styles.cardTitle}>
+                  Acteur à vouaaar ! 
+                </Typography>
+            <div className={styles.border} />
+            <br />
+            <video controls  className={styles.video}>
+              <source src={"https://static.ouaaa-transition.fr/static/video/"+id+".mov"} />
+            </video>
+            </div>
+            )}
             {data && data.actor.volunteerDescription && (
               <div>
                 <br />

@@ -202,7 +202,7 @@ query actorsAdmin($userId: String!) {
   });
 
   const referentInfo = useMemo(() => {
-    if(user && dataActorReferent && dataActorReferent.length!=0){
+    if(user && dataActorReferent && dataActorReferent.length!=0 && dataActorReferent.actorsAdmin!=0){
       let links = dataActorReferent.actorsAdmin.map((actor) => {
         return (<Link href={`/addevent/${actor.id}`}><MenuItem>{actor.name}</MenuItem></Link>)
       });
@@ -265,7 +265,7 @@ query actorsAdmin($userId: String!) {
       */}
       {showSuggest && (
         <div>
-          <h2 id="simple-modal-title">{(user && dataActorReferent && dataActorReferent.length!=0 && "Ou")}  Soumettre un nouvel événément</h2>
+          <h2 id="simple-modal-title">{(user && dataActorReferent && dataActorReferent.length!=0 && dataActorReferent.actorsAdmin!=0 && "Ou")}  Soumettre un nouvel événément</h2>
           <p className={classes.indication}>Le site vous propose d’envoyer un mail à un acteur pour lui sousmettre d'ajouter un événement qu'il organise dans l'agenda de OUAAA!. Votre mail et votre nom ne sont conservés que le temps d’envoyer le mail. Toutes les traces sont ensuite supprimées. L'acteur reçoit un mail d’invitation lui expliquant également que ses traces (nom/adresse/mail) ne sont pas conservés et l’invitant à ajouter son action. Vous pouvez contacter le Délégué de la Protection des données dpd@ouaaa-transition.fr. Pour toute question, vous pouvez nous contacter <Link href={`/contact`} target="_blank"> en cliquant ici</Link></p>
           <SuggestEventForm />
       </div> 

@@ -306,6 +306,9 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       color: '#2C367E',
     },
+    mapContainer: {
+      height: '100% !important'
+    },
   },
 }));
 
@@ -1272,6 +1275,7 @@ const Event = ({ initialData }) => {
                       ref={mapRef}
                       scrollWheelZoom={false}
                       position={[data.event.lat, data.event.lng]}
+                      classMap={styles.mapContainer}
                     >
                       <MarkerWithNoSSR
                         id="map"
