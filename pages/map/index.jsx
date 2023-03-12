@@ -502,8 +502,8 @@ const carto = () => {
           }
 
           {listMode && (
-            <Grid item style={{ width: '100%' }}>
-              <MapWithNoSSR  scrollWheelZoom={true}>
+            <Grid item style={{ width: '100%',height: '100%' }}>
+              <MapWithNoSSR  scrollWheelZoom={true} classMap={styles.mapContainer}>
                 <MarkerClusterWithNoSSR>
                   {
                     actorsWithLocation.map((actor) => {
