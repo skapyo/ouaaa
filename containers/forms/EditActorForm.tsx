@@ -198,6 +198,7 @@ const GET_ACTOR = gql`
       website
       socialNetwork
       siren
+      hasVideoVouaaar
       description
       lat
       lng
@@ -688,6 +689,7 @@ const EditActorForm = (props) => {
       //    type: 'number',
       maxLimit: 10,
     },
+
   };
 
   const Form: RenderCallback = ({
@@ -706,7 +708,10 @@ const EditActorForm = (props) => {
     const [firstRender, setFirstRender] = useState(true);
     const [deleteActorAndEvent, setdeleteActorAndEvent] = useState(true);
 
-    
+    const [hasVideoVouaaar, setHasVideoVouaaar] = useState(
+     actorData.actor.hasVideoVouaaar,
+    );
+
     const [
       initentriesWithInformation,
       setInitentriesWithInformation,
@@ -729,6 +734,11 @@ const EditActorForm = (props) => {
       { data: deleteData, error: deleteError, loading: deleteLoading },
     ] = useMutation(DELETE_ACTOR);
     const [openDeletePopup, setOpenDeletePopup] = React.useState(false);
+
+    const handleHasVideoVouaaar = () => {
+      setHasVideoVouaaar(!hasVideoVouaaar);
+      formValues.hasVideoVouaaar=!hasVideoVouaaar;
+    };
 
     const handleClickOpen = () => {
       setOpenDeletePopup(true);
@@ -1097,7 +1107,8 @@ const EditActorForm = (props) => {
       formValues.referents = actorData.actor.referents;
       formValues.contactId = actorData.actor.contact_id;
       formValues.siren = actorData.actor.siren;
-
+      formValues.hasVideoVouaaar = actorData.actor.hasVideoVouaaar;
+      
       if (formValues.postCode === '17000') {
         setEstlarochelle(true);
       } else {
@@ -1266,6 +1277,19 @@ const EditActorForm = (props) => {
           errorBool={false}
           errorText=""
         />
+        { user.role === 'admin' && (
+        <FormControlLabel
+                control={
+                  <Checkbox
+                    color="primary"
+                    name="hasVideoVouaaar"
+                    onChange={handleHasVideoVouaaar}
+                    checked={hasVideoVouaaar}
+                  />
+                }
+                label="possède une vidéo de la série acteur à voir. La vidéo doit être déjà présente sur le serveur."
+              />
+      )}
       <div className={styles.field}>
         <Grid className={styles.location}>
           <GooglePlacesAutocomplete

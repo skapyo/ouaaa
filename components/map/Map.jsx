@@ -13,12 +13,6 @@ L.Icon.Default.mergeOptions({
 
 
 const useStyles = makeStyles((theme) => ({
-  mapContainer: {
-    height: '100% !important',
-    [theme.breakpoints.down('md')]: {
-      height: '63vh !important',
-    },
-  },
   polygon:{
     cursor: 'grab',
   }
@@ -28,7 +22,8 @@ const Map = (props) => {
   const mapRef = useRef();
   const styles = useStyles();
   const [map, setMap] = useState(null);
-  let { children,position,scrollWheelZoom } = props;
+  let { children,position,scrollWheelZoom,classMap } = props;
+  //debugger;
   if (typeof position === 'undefined'){
     position = [46.1085193, -0.9864794];
   }
@@ -52,7 +47,7 @@ const Map = (props) => {
       ref={mapRef}
       center={position}
       zoom={11}
-      className={styles.mapContainer}
+      className={classMap} 
       whenCreated={setMap}
       scrollWheelZoom={scrollWheelZoom}
       zoomControl={false}

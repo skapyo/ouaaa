@@ -2,7 +2,7 @@ import makeStyles from '@mui/styles/makeStyles';
 import { Container, Typography } from '@mui/material';
 import Link from 'components/Link';
 import FacebookIcon from '@mui/icons-material/Facebook';
-
+import InstagramIcon from '@mui/icons-material/Instagram';
 const useStyles = makeStyles({
   footer: {
     color: 'white',
@@ -64,6 +64,13 @@ const Footer = () => {
           rel="noreferrer"
         >
           <FacebookIcon className={classes.icons} fontSize="large" />
+        </a>
+        <a
+          href="https://www.instagram.com/ouaaa_transition/"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <InstagramIcon className={classes.icons} fontSize="large" />
         </a>
       </div>
       <div className={classes.links}>
