@@ -306,9 +306,10 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       color: '#2C367E',
     },
-    mapContainer: {
-      height: '100% !important'
-    },
+   
+  },
+  mapContainer: {
+    height: '100% !important'
   },
 }));
 
