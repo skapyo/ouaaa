@@ -416,6 +416,7 @@ query actor($id: String) {
     phone
     website
     description
+    updatedAt
     shortDescription
     socialNetwork
     volunteerDescription
@@ -851,6 +852,7 @@ const Actor = ({ initialData }) => {
                       "thumbnailUrl": "${"https://static.ouaaa-transition.fr/static/video/"+id+".jpg"}",
                       "description": "Présentation de l'acteur ${data.actor.name} dans le cadre de la série de OUAAA! Acteurs à VOUAAAR ! ",
                       "contentUrl": "${"https://static.ouaaa-transition.fr/static/video/"+id+".mov"}",
+                      "UploadDate": "${moment(parseInt(data.actor.updatedAt)).format()}"
                     }`
           }
         </script>
