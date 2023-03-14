@@ -851,7 +851,7 @@ const Actor = ({ initialData }) => {
                       "name":  "Vidéo Acteurs à VOUAAAR ! - ${data.actor.name}",
                       "thumbnailUrl": "${"https://static.ouaaa-transition.fr/static/video/"+id+".jpg"}",
                       "description": "Présentation de l'acteur ${data.actor.name} dans le cadre de la série de OUAAA! Acteurs à VOUAAAR ! ",
-                      "contentUrl": "${"https://static.ouaaa-transition.fr/static/video/"+id+".mov"}",
+                      "contentUrl": "${"https://static.ouaaa-transition.fr/static/video/"+id+".mp4"}",
                       "UploadDate": "${moment(parseInt(data.actor.updatedAt)).format()}"
                     }`
           }
