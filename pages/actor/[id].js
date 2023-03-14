@@ -56,7 +56,6 @@ import Calendar from '../../components/Calendar';
 import Favorite from '../../components/Favorite';
 import ActorToPrint from '../../components/print/Actor';
 import ActorGameToPrint from '../../components/print/ActorGame';
-import Safe from "react-safe"
 
 const useStyles = makeStyles((theme) => ({
   '@media print': {
