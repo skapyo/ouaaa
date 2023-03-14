@@ -56,6 +56,7 @@ import Calendar from '../../components/Calendar';
 import Favorite from '../../components/Favorite';
 import ActorToPrint from '../../components/print/Actor';
 import ActorGameToPrint from '../../components/print/ActorGame';
+import Safe from "react-safe"
 
 const useStyles = makeStyles((theme) => ({
   '@media print': {
@@ -818,6 +819,7 @@ const Actor = ({ initialData }) => {
   return (
     <AppLayout>
       <Head>
+
         <title>
           {/* @ts-ignore */}
           {data && data.actor.name}
@@ -840,7 +842,21 @@ const Actor = ({ initialData }) => {
             <meta name='twitter:image' content={getImageUrl(logo.originalPicturePath)} />
           </>
         )}
-
+        {data && data.actor.hasVideoVouaaar && ( 
+          <>
+           <script type="application/ld+json">
+            {`{
+                      "@context": "https://schema.org/",
+                      "@type": "VideoObject",
+                      "name":  "Vidéo Acteurs à VOUAAAR ! - ${data.actor.name}",
+                      "thumbnailUrl": "${"https://static.ouaaa-transition.fr/static/video/"+id+".jpg"}",
+                      "description": "Présentation de l'acteur ${data.actor.name} dans le cadre de la série de OUAAA! Acteurs à VOUAAAR ! ",
+                      "contentUrl": "${"https://static.ouaaa-transition.fr/static/video/"+id+".mov"}",
+                    }`
+          }
+        </script>
+          </>
+        )}
         <meta property='og:title' content={data && data.actor.name} />
         <meta property='og:description' content={data && data.actor.shortDescription} />
         <meta name='twitter:title' content={data && data.actor.name} />
