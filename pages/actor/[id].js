@@ -1477,7 +1477,7 @@ const Actor = ({ initialData }) => {
             <div className={styles.border} />
             <br />
             <video controls  className={styles.video}>
-              <source src={"https://static.ouaaa-transition.fr/static/video/"+id+".mov"} />
+              <source src={"https://static.ouaaa-transition.fr/static/video/"+id+".mp4"} />
             </video>
             </div>
             )}
