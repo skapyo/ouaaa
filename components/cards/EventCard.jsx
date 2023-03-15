@@ -5,9 +5,10 @@ import gql from 'graphql-tag';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Link from '../Link';
 import Moment from 'react-moment';
+import { Avatar } from '@mui/material';
 import { getImageUrl } from '../../utils/utils';
 import Favorite from '../../components/Favorite';
-
+import Image from 'next/image';
 const ADD_FAVORITE = gql`
   mutation addFavoriteEvent($eventId: Int!,$userId: Int!, $favorite: Boolean!) {
     addFavoriteEvent(eventId: $eventId,userId: $userId, favorite: $favorite) 
@@ -101,6 +102,13 @@ const useStyles = makeStyles((theme) => ({
       marginLeft: 8,
     },
   },
+
+  image: {
+    width:'72px!important',
+    height:'72px!important',
+    position: "relative!Important",
+    borderRadius: '50%',
+  },
   contentText: {
     overflow: 'hidden',
     marginLeft: 12,
@@ -124,6 +132,9 @@ const useStyles = makeStyles((theme) => ({
     '-webkit-box-orient': 'vertical',
     overflow: 'hidden',
     fontSize:'0.9em'
+  },
+  avatar:{
+    backgroundColor: 'white',
   },
 }));
 
@@ -152,12 +163,27 @@ const EventCard = ({ event }) => {
     return `${list.join(', ')}`;
   }, [event.address, event.city]);
 
+  const myLoader = ({ src, width, quality }) => {
+    return src.startsWith('/static') ? `${process.env.NEXT_PUBLIC_URI}${src}?w=${width}&q=${quality || 75}` : src;
+  };
+
   return (
     <div className={classes.card}>
       <div className={classes.content}>
         <Link href={`/event/${event.id}`} target="_blank" color="inherit" underline="none" width="100%">
           <div className={classes.leftContent}>
-            {logoPath && <div className={classes.logo} style={{ backgroundImage: `url(${logoPath})` }} />}
+            {logoPath && (
+              <Avatar
+              className={classes.avatar}
+              sx={{
+                width: 72,
+                height: 72,
+              }}
+            >
+                <Image src={logoPath} alt={event.label} layout="fill" />
+                </Avatar>
+
+          )}
             <div className={classes.contentText}>
               <div className={classes.label}>{event.label}</div>
               <div className={classes.eventDetails}>

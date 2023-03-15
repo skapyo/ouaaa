@@ -245,24 +245,6 @@ query actorsAdmin($userId: String!) {
       </IconButton>
 
       {referentInfo}
-{/*
-      <RadioGroup
-        row
-        defaultValue="actor"
-        onChange={(e) => handleChangeAddEvent(e)}
-      >
-              <FormControlLabel
-                value="actor"
-                control={<Radio />}
-                label="Créer un nouvel événement"
-              />
-               <FormControlLabel
-                value="other"
-                control={<Radio />}
-                label="Suggérer l'ajout d'un nouvel manquant sur OUAAA! à un autre acteur"
-              />
-      </RadioGroup>
-      */}
       {showSuggest && (
         <div>
           <h2 id="simple-modal-title">{(user && dataActorReferent && dataActorReferent.length!=0 && dataActorReferent.actorsAdmin!=0 && "Ou")}  Soumettre un nouvel événément</h2>
