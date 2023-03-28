@@ -1,15 +1,30 @@
-import React, { useMemo, useCallback } from 'react';
+import React, { useMemo, useCallback,useState } from 'react';
 import { Grid, CircularProgress } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import {
-  IconButton, Tooltip, useMediaQuery, useTheme,
+  IconButton, Tooltip, useMediaQuery, useTheme,  FormControlLabel,Radio,
 } from '@mui/material';
 import Moment from 'react-moment';
 import moment from 'moment';
+import Link from '../../../components/Link';
 import DownloadIcon from '@mui/icons-material/Download';
 import PrintIcon from '@mui/icons-material/Print';
+import { Button } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 import EventCard from 'components/cards/EventCard';
 import useExcelExport from '../../../hooks/useExcelExport.ts';
+import { useSessionState } from '../../../context/session/session';
+import CloseIcon from '@mui/icons-material/Close';
+import Modal from '@mui/material/Modal';
+import SuggestEventForm from 'containers/forms/SuggestEventForm';
+import RadioGroup from '@mui/material/RadioGroup';
+import Fab from '@mui/material/Fab';
+import { useQuery } from '@apollo/client';
+import gql from 'graphql-tag';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
 
 const useStyles = makeStyles(theme => ({
   '@media print': {
@@ -53,6 +68,40 @@ const useStyles = makeStyles(theme => ({
     color: '#AEAEAE',
     fontSize: '0.9em'
   },
+  actionButton: {
+    justifyContent: 'flex-end',
+    [theme.breakpoints.up('md')]: {
+      width: 'max-content',
+    },
+  },
+
+  paper: {
+    position: 'absolute',
+    [theme.breakpoints.down('md')]: {
+      width: '90%',
+    },
+    width: '60%',
+    backgroundColor: theme.palette.background.paper,
+    border: '2px solid #000',
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+  },
+  indication: {
+    fontSize:"0.9em"
+  },
+  addIcon: {
+    width: '15px',
+    height: '15px',
+  },
+  fab: {
+    backgroundColor: '#2C367E',
+    color: 'white',
+    '&:hover': {
+      backgroundColor: '#2C367E',
+      color: 'white',
+      cursor: 'default',
+    },
+  },
 }));
 
 const compare = (a, b) => {
@@ -74,14 +123,139 @@ const sameDay = (date1, date2) => {
     d1.getDate() === d2.getDate()
   );
 };
+function getModalStyle() {
+  const top = 50;
+  const left = 50;
 
+  return {
+    top: `${top}%`,
+    left: `${left}%`,
+    height: '90%',
+    overflow: 'auto',
+    transform: `translate(-${top}%, -${left}%)`,
+  };
+}
 const Events = (props) => {
   const classes = useStyles();
   const { events = [], loading } = props;
   const theme = useTheme();
   const exportData = useExcelExport();
   const matches = useMediaQuery(theme.breakpoints.up('sm'));
+  const [showSuggest, setShowSuggest] = React.useState(true);
+  const [modalStyle] = React.useState(getModalStyle);
+  const [openModalAddEvent, setOpenModalAddEvent] = useState(false);
+  const [dataActorReferent, setDataActorReferent] = useState(null);
 
+  const handleOpenModalAddEvent = () => {
+    setOpenModalAddEvent(true);
+  };
+
+  const handleCloseModalAddEvent = () => {
+    setOpenModalAddEvent(false);
+  };
+  const handleChangeAddEvent = (action) => {
+    radioGroupContect.setCurrentValue(action.target.value);
+  };
+  const user = useSessionState();
+
+  
+  const GET_ACTORS = gql`
+query actorsAdmin($userId: String!) {
+  actorsAdmin(userId: $userId) {
+    id
+    name
+    address
+    shortDescription
+    createdAt
+    updatedAt
+    city
+    lat
+    lng
+    referents {
+      surname
+      lastname
+      email
+      phone
+    }
+    isValidated
+    dateValidation
+    userValidated {
+      surname
+      lastname
+      email
+      phone
+    }
+    nbVolunteers
+  }
+}
+`;
+  const {
+    loading: loadingDataActorReferent, error: errorDataActorReferent
+  } = useQuery(GET_ACTORS, {
+    fetchPolicy: 'network-only',
+    variables: {
+      userId: user && `${user.id}`,
+    },
+    onCompleted: (data) => {
+      setDataActorReferent(data);
+    },
+  });
+
+  const referentInfo = useMemo(() => {
+    if(user && dataActorReferent && dataActorReferent.length!=0 && dataActorReferent.actorsAdmin!=0){
+      let links = dataActorReferent.actorsAdmin.map((actor) => {
+        return (<Link href={`/addevent/${actor.id}`}><MenuItem>{actor.name}</MenuItem></Link>)
+      });
+
+    return (
+      <div>
+             <div>Séléctionner votre page acteur  ci dessous pour ajouter un événement sur l'agenda</div>
+            <FormControl variant="standard" sx={{  minWidth: 120 }}>
+              <InputLabel id="demo-simple-select-label">Page acteur</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+              label="Page"
+            
+            >
+            {links}
+            
+            </Select>
+          </FormControl>
+      </div>
+    );
+    }else{
+      return (
+        <div>
+        </div>
+      );
+    }
+
+  }, [dataActorReferent]);
+
+
+  const bodyModalAddEvent = (
+    <div style={modalStyle} className={classes.paper}>
+      <IconButton
+        aria-label="Close"
+        className={classes.closeButton}
+        onClick={() => setOpenModalAddEvent(false)}
+        size="large">
+        <CloseIcon />
+      </IconButton>
+
+      {referentInfo}
+      {showSuggest && (
+        <div>
+          <h2 id="simple-modal-title">{(user && dataActorReferent && dataActorReferent.length!=0 && dataActorReferent.actorsAdmin!=0 && "Ou")}  Soumettre un nouvel événément</h2>
+          <p className={classes.indication}>Le site vous propose d’envoyer un mail à un acteur pour lui sousmettre d'ajouter un événement qu'il organise dans l'agenda de OUAAA!. Votre mail et votre nom ne sont conservés que le temps d’envoyer le mail. Toutes les traces sont ensuite supprimées. L'acteur reçoit un mail d’invitation lui expliquant également que ses traces (nom/adresse/mail) ne sont pas conservés et l’invitant à ajouter son action. Vous pouvez contacter le Délégué de la Protection des données dpd@ouaaa-transition.fr. Pour toute question, vous pouvez nous contacter <Link href={`/contact`} target="_blank"> en cliquant ici</Link></p>
+          <SuggestEventForm />
+      </div> 
+            )
+      }
+      
+    </div>
+  );
   const sortedEvents = useMemo(() => {
     let localEvents = ([]).slice();
     events.forEach((event) => {
@@ -134,6 +308,9 @@ const Events = (props) => {
     });
   }, [events]);
 
+    
+
+
   return (
     <Grid className={classes.events} container direction="column" wrap="nowrap">
       <div className={classes.header}>
@@ -141,8 +318,32 @@ const Events = (props) => {
           ÉVÉNEMENTS À VENIR
         </h1>
         {
+          !matches && (
+        <Fab size="small" className={classes.fab} aria-label="edit"  onClick={handleOpenModalAddEvent}>
+        <AddIcon className={classes.addIcon} />
+          </Fab>
+       )
+      }
+      <Modal
+        open={openModalAddEvent}
+        onClose={handleCloseModalAddEvent}
+        aria-labelledby="parent-modal-title"
+        aria-describedby="parent-modal-description"
+      >
+        {bodyModalAddEvent}
+      </Modal>
+      
+        {
           matches && (
             <div>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  className={classes.actionButton}
+                  onClick={handleOpenModalAddEvent}
+                >
+                  Un évènement non présent ?
+                </Button>
               <Tooltip title="Imprimer" classes={{ popper: classes.tooltipPopper }}>
                 <IconButton onClick={handleClickPrint} size="large">
                   <PrintIcon />
@@ -157,7 +358,7 @@ const Events = (props) => {
           )
         }
       </div>
-
+ 
       {
         loading && (
           <Grid container justifyContent="center">
@@ -191,6 +392,19 @@ const Events = (props) => {
           )
         })
       }
+       {
+          !matches && (
+            <div>
+            <Button
+                        variant="contained"
+                        color="secondary"
+                        className={classes.actionButton}
+                        onClick={handleOpenModalAddEvent}
+                      >
+                        Un évènement non présent ?
+                      </Button>
+                      </div>
+          )}
     </Grid>
   );
 };

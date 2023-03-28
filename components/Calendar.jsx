@@ -62,13 +62,14 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up('md')]: {
       width: 'max-content',
     },
-  },
+  }
 }));
 
 const MonthLayout = (props) => {
   const classes = useStyles();
   return <MonthView.Layout {...props} className={classes.layout} />;
 };
+
 
 const AppointmentContent = (props) => {
   const { data } = props;
@@ -137,13 +138,14 @@ const Calendar = (props) => {
   const {
     events, withViewSwitcher, withAddEvent, className,
   } = props;
-debugger;
+
   const toolbarProps = withAddEvent && {
     flexibleSpaceComponent: FlexibleEmptySpaceAddEvent,
   };
   const defaultMessages = {
     allDay: 'Toute la journée',
   };
+
 
   const RootComponent = useCallback((rootComponentProps) => {
     return (

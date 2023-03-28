@@ -4,7 +4,7 @@ import { Avatar, Link } from '@mui/material';
 import StyledBoxOnHover from '../animated/StyledBoxOnHover';
 import { getImageUrl } from '../../utils/utils';
 import Favorite from '../Favorite';
-
+import Image from 'next/image';
 const useStyles = makeStyles((theme, props) => ({
   '@media print': {
     card: {
@@ -96,6 +96,9 @@ const useStyles = makeStyles((theme, props) => ({
       borderRadius: '50%',
     },
   },
+  avatar:{
+    backgroundColor: 'white',
+  },
   text: {},
   actor: (props) => ({
     textTransform: 'uppercase',
@@ -152,13 +155,15 @@ const ActorCard = ({ actor }) => {
           <div className={classes.leftContent}>
             <div className={classes.image}>
               <Avatar
+              className={classes.avatar}
                 alt={actor.name}
-                src={getActorProfilePicture()}
                 sx={{
                   width: 72,
                   height: 72,
                 }}
-              />
+              >
+                  <Image src={getActorProfilePicture()} alt={actor.name} layout="fill" />
+                  </Avatar>
             </div>
             <div className={classes.text}>
               <div className={classes.actor}>{actorName}</div>

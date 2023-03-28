@@ -15,3 +15,5 @@ public/sw.js
 public/workbox-*.js
 public/workbox-327c579b.js.map
 public/sw.js.map
+public/sw.js.map
+package-lock.json
