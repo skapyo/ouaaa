@@ -25,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
   '@media print': {
     navbar: {
       height: 50,
+     
     },
     logo: {
       width: '12em',
@@ -34,6 +35,7 @@ const useStyles = makeStyles((theme) => ({
     height: '100px',
     backgroundColor: 'white',
     boxShadow: 'none',
+    zIndex: 1,
   },
   buttontest: {
     paddingTop: theme.spacing(1),

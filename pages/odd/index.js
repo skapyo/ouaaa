@@ -3,6 +3,7 @@ import AppLayout from 'containers/layouts/AppLayout';
 import { Box, Container,  Typography } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import Newsletter from '../../containers/layouts/Newsletter';
+import Image from 'next/image';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -33,12 +34,17 @@ const Charter = () => {
             <br />
             <div className={styles.justify}>
               {' '}
-              <p>
+              <div>
                 <div>
                   En 2015, les 193 pays membres de l'ONU signent de façon unanime deux traités importants dont l'accord sur les Objectifs du Développement Durable (ODD). Inspiré par plusieurs pays d'Amérique Latine. Contrairement aux précédents, cet accord va au-delà de l'aide au "tiers-monde". Un effort collectif pour le bien commun !
                 </div>
-                <div className={styles.align}>
-                  <img src="/image/odd-donut_simplifie.jpg" alt="Plancher social, Plancher environnemental" />
+                <div className={styles.align} style =  {{ width: '100%', height: '100%', position: 'relative', minHeight:"300px"}}>
+                  <Image
+                    src="/image/odd-donut_simplifie.jpg"
+                    alt="Plancher social, Plancher environnemental" 
+                    width={200}
+                    height={200} 
+                  />
                 </div>
                 <br />
                 <div>
@@ -48,13 +54,18 @@ const Charter = () => {
                 <div>
                   Décliné en "Agenda 2030", le traité invite chaque pays du Monde à répondre aux enjeux majeurs tout en gardant la possibilité d’aller au-delà du minimum requis par l’accord et proposer des indicateurs plus pertinents.
                 </div>
-                <div className={styles.align}>
-                  <img src="/image/17_ODD_ONU.jpg" alt="ODD ONU" />
+                <div className={styles.align} style =  {{ width: '100%', height: '100%', position: 'relative', minHeight:"300px"}}> 
+                  <Image
+                    src="/image/17_ODD_ONU.jpg"
+                    alt="ODD ONU" 
+                    width={500}
+                    height={300}
+                  />
                 </div>
                 <br />
-              </p>
+              </div>
 
-              <p>
+              <div>
                 <div>
                   Les Objectifs du Développement Durable sont dispatchés en 17 branches et 169 cibles. Toutes celles-ci sont liées et interagissent ensemble. Il subsiste parfois des contradictions. Par exemple : l'ODD santé [3] est clairement impacté positivement par l'éducation [4], l'accès à l'eau [6], les infrastructures [9], etc Mais il propose aussi via la cible [3.3] de mettre fin d'ici 2030 aux maladies tropicales, ce qui pourrait pousser à une lutte sans pitié contre les moustiques sauf que ceux-ci sont indispensables à la biodiversité [14] et [15]… etc !
                 </div>
@@ -75,7 +86,7 @@ const Charter = () => {
                   {' '}
                   propose un système de répartition des acteurs et actions en 4 ensembles et 22 sujets inspirés des Objectifs du Développement Durable et ceux du Collectif National pour la Transition.
                 </div>
-              </p>
+              </div>
             </div>
           </Container>
         </Box>
