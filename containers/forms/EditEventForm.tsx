@@ -294,6 +294,7 @@ const GET_EVENT = gql`
       endedAt
       published
       registerLink
+      limitPlace
       lat
       lng
       address
@@ -425,6 +426,7 @@ type FormItemProps = {
   required: boolean;
   errorBool: boolean;
   errorText: string;
+  type:string;
 };
 
 const FormItem = (props: FormItemProps) => {
@@ -437,6 +439,7 @@ const FormItem = (props: FormItemProps) => {
     required,
     errorBool,
     errorText,
+    type
   } = props;
   return (
     <TextField
@@ -445,6 +448,7 @@ const FormItem = (props: FormItemProps) => {
       value={value}
       label={label}
       name={inputName}
+      type={type}
       onChange={formChangeHandler}
       defaultValue=""
       fullWidth
@@ -1150,6 +1154,7 @@ const EditEventForm = (props) => {
             published: false,
             entries: formValues.entries,
             registerLink: formValues.registerLink,
+            limitPlace: formValues.limitPlace?parseInt(formValues.limitPlace):null,
             lat: parseFloat(formValues.lat),
             lng: parseFloat(formValues.lng),
             address,
@@ -1705,6 +1710,7 @@ const EditEventForm = (props) => {
                     <InfoIcon />
                   </Tooltip>
                 </Grid>
+                
               </Grid>
             </p>
             <FormControlLabel
@@ -1729,6 +1735,16 @@ const EditEventForm = (props) => {
               />
             )}
           </RadioGroup>
+          <FormItem
+                label="Limite maximum de place disponible"
+                inputName="limitPlace"
+                formChangeHandler={formChangeHandler}
+                required={false}
+                errorBool={false}
+                errorText=""
+                type="number"
+                value={formValues.limitPlace}
+              />
         </FormControl>
         <p />
 
