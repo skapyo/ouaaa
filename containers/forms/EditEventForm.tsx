@@ -352,8 +352,10 @@ const GET_EVENT = gql`
         }
       }
       parentEvent {
-          id
-          label
+        id
+        label
+        startedAt
+        endedAt
       }
       dateRule
     }
@@ -761,9 +763,14 @@ const EditEventForm = (props) => {
       !!formValues.parentId,
     );
     const hasParentChangeHandler = (result) => {
+      if(hasParentEvent){
+        formValues.parentEventId=undefined;
+      }
       setHasParentEvent(!hasParentEvent);
+     
     };
     const [showOtherEventList, setShowOtherEventList] = useState(false);
+    const [defaultValueParentEvent, setDefaultValueParentEvent] = useState();
 
     const inputHasParentChangeHandler = (event, value) => {
       if (event.target.value) {
@@ -775,23 +782,29 @@ const EditEventForm = (props) => {
       }
     };
     const autocompleteHasParentHandler = (event, value) => {
+      
       if (value) {
         formValues.parentEventId = value.id;
+      }else{
+        formValues.parentEventId =''
       }
       setShowOtherEventList(false);
     };
+  
 
-    const getDefaultValueParentEvent = () => {
+    useEffect(() => {
       let defaultEvent;
       if (dataEvents && dataEvents.events !== null && eventData.event.parentEvent) {
         dataEvents.events.map((event) => {
           if (event.id === eventData.event.parentEvent.id) {
             defaultEvent = event;
+            setDefaultValueParentEvent(defaultEvent);
+            formValues.parentEventId=event.id;
           }
         });
       }
-      return defaultEvent;
-    };
+
+    }, [dataEvents,defaultValueParentEvent]);
 
     const [
       selectedStartDate,
@@ -1141,7 +1154,7 @@ const EditEventForm = (props) => {
             lng: parseFloat(formValues.lng),
             address,
             postCode: formValues.postCode,
-            parentEventId: formValues.parentEventId,
+            parentEventId: formValues.parentEventId?formValues.parentEventId:null,
             city,
             // @ts-ignore
             actors: formValues.actors.map((item) => item.id),
@@ -1784,7 +1797,8 @@ const EditEventForm = (props) => {
           )}
           label="est affilié à un autre événement existant"
         />
-        {hasParentEvent ? (
+
+        {hasParentEvent  && defaultValueParentEvent ? (
           <Autocomplete
             id="combo-box-parentEvent"
             options={dataEvents && dataEvents.events}
@@ -1794,7 +1808,7 @@ const EditEventForm = (props) => {
             // @ts-ignore
             getOptionLabel={(option) => `${option.label} du ${moment(parseInt(option.startedAt)).format('DD/MM/YYYY HH:mm')} au ${moment(parseInt(option.endedAt)).format('DD/MM/YYYY HH:mm')} `}
             onChange={autocompleteHasParentHandler}
-            defaultValue={getDefaultValueParentEvent()}
+            defaultValue={defaultValueParentEvent}
             style={{ width: 300 }}
             // defaultValue={getDefaultValueParentEvent()}
             // eslint-disable-next-line react/jsx-props-no-spreading
@@ -1813,6 +1827,37 @@ const EditEventForm = (props) => {
         ) : (
           ''
         )}
+      {hasParentEvent  && defaultValueParentEvent ===undefined ?(
+          <Autocomplete
+            id="combo-box-parentEvent"
+            options={dataEvents && dataEvents.events}
+            // @ts-ignore
+            onInput={inputHasParentChangeHandler}
+            open={showOtherEventList}
+            // @ts-ignore
+            getOptionLabel={(option) => `${option.label} du ${moment(parseInt(option.startedAt)).format('DD/MM/YYYY HH:mm')} au ${moment(parseInt(option.endedAt)).format('DD/MM/YYYY HH:mm')} `}
+            onChange={autocompleteHasParentHandler}
+            defaultValue={defaultValueParentEvent}
+            style={{ width: 300 }}
+            // defaultValue={getDefaultValueParentEvent()}
+            // eslint-disable-next-line react/jsx-props-no-spreading
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Evénement parent"
+                variant="outlined"
+                placeholder="Tapez les 3 premières lettres"
+              />
+            )}
+            noOptionsText="Pas d'événement trouvé'"
+            clearText="Effacer"
+            closeText="Fermer"
+          />
+        ) : (
+          ''
+        )}
+
+
         <ClassicButton
           fullWidth
           variant="contained"
