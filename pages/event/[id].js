@@ -1315,7 +1315,7 @@ const Event = ({ initialData }) => {
                   data
                   && data.event.registerLink
                   && data.event.registerLink.length > 1 
-                ) && (data.event.limitPlace === undefined || data.event.limitPlace > data.event.participants.length ) && (
+                ) && (data.event.limitPlace === undefined || data.event.limitPlace === 0 || data.event.limitPlace > data.event.participants.length ) && (
                   <button
                     className={styles.button}
                     onClick={addParticipateHandler}
@@ -1326,7 +1326,7 @@ const Event = ({ initialData }) => {
               {!(data && containUser(data.event.participants))
                 && data
                 && data.event.registerLink
-                && data.event.registerLink.length > 1 && (data.event.limitPlace === undefined || data.event.limitPlace > data.event.participants.length ) && (
+                && data.event.registerLink.length > 1 && (data.event.limitPlace === undefined || data.event.limitPlace === 0 || data.event.limitPlace > data.event.participants.length ) && (
                   <a
                     href={data && data.event.registerLink}
                     target="blank"
@@ -1335,7 +1335,7 @@ const Event = ({ initialData }) => {
                     Je participe
                   </a>
               )}
-              {!(data && containUser(data.event.participants)) && (data.event.limitPlace === data.event.participants.length ) && (
+              {(data.event.limitPlace === data.event.participants.length ) && (
                   <div
                     className={styles.limitPlace}
                   >
