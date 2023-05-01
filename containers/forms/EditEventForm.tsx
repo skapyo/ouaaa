@@ -918,6 +918,7 @@ const EditEventForm = (props) => {
       formValues.lat = eventData.event.lat;
       formValues.lng = eventData.event.lng;
       formValues.registerLink = eventData.event.registerLink;
+      formValues.limitPlace = eventData.event.limitPlace;
       formValues.actors = eventData.event.actors;
       formValues.parentId = eventData.event !== undefined && eventData.event.parentEvent && eventData.event.parentEvent.id;
       if (formValues.parentId) {
@@ -1735,8 +1736,9 @@ const EditEventForm = (props) => {
               />
             )}
           </RadioGroup>
+          <p/>
           <FormItem
-                label="Limite maximum de place disponible"
+                label="Limite maximum des places disponibles"
                 inputName="limitPlace"
                 formChangeHandler={formChangeHandler}
                 required={false}
