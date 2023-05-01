@@ -194,6 +194,7 @@ const ADDEVENT = gql`
       lat
       lng
       registerLink
+      limitPlace
       dateRule
     }
   }
@@ -276,6 +277,7 @@ type FormItemProps = {
   required: boolean;
   errorBool: boolean;
   errorText: string;
+  type:string;
 };
 
 const FormItem = (props: FormItemProps) => {
@@ -288,6 +290,7 @@ const FormItem = (props: FormItemProps) => {
     required,
     errorBool,
     errorText,
+    type,
   } = props;
   return (
     <TextField
@@ -299,6 +302,7 @@ const FormItem = (props: FormItemProps) => {
       onChange={formChangeHandler}
       defaultValue=""
       fullWidth
+      type={type}
       required={required}
       error={errorBool}
       helperText={errorBool ? errorText : ''}
@@ -753,6 +757,7 @@ const AddEventForm = ({ actorId }) => {
             postCode: formValues.postCode,
             city,
             registerLink: formValues.registerLink,
+            limitPlace: formValues.limitPlace?parseInt(formValues.limitPlace):null,
             parentEventId: formValues.parentEventId,
             // @ts-ignore
             actors: formValues.actors.map(item => item.id),
@@ -1335,8 +1340,19 @@ const AddEventForm = ({ actorId }) => {
               />
             )}
           </RadioGroup>
+          <p/>
+          <FormItem
+                label="Limite maximum de places disponibles"
+                inputName="limitPlace"
+                formChangeHandler={formChangeHandler}
+                required={false}
+                errorBool={false}
+                errorText=""
+                type="number"
+                value={formValues.limitPlace}
+              />
         </FormControl>
-        <p />
+        <p/>
         <Typography variant="body1" color="primary" className={styles.label}>
           Logo de l'événement
         </Typography>

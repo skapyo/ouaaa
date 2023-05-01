@@ -416,6 +416,7 @@ query actor($id: String) {
     phone
     website
     description
+    updatedAt
     shortDescription
     socialNetwork
     volunteerDescription
@@ -818,6 +819,7 @@ const Actor = ({ initialData }) => {
   return (
     <AppLayout>
       <Head>
+
         <title>
           {/* @ts-ignore */}
           {data && data.actor.name}
@@ -840,7 +842,22 @@ const Actor = ({ initialData }) => {
             <meta name='twitter:image' content={getImageUrl(logo.originalPicturePath)} />
           </>
         )}
-
+        {data && data.actor.hasVideoVouaaar && ( 
+          <>
+           <script type="application/ld+json">
+            {`{
+                      "@context": "https://schema.org/",
+                      "@type": "VideoObject",
+                      "name":  "Vidéo Acteurs à VOUAAAR ! - ${data.actor.name}",
+                      "thumbnailUrl": "${"https://static.ouaaa-transition.fr/static/video/"+id+".jpg"}",
+                      "description": "Présentation de l'acteur ${data.actor.name} dans le cadre de la série de OUAAA! Acteurs à VOUAAAR ! ",
+                      "contentUrl": "${"https://static.ouaaa-transition.fr/static/video/"+id+".mp4"}",
+                      "UploadDate": "${moment(parseInt(data.actor.updatedAt)).format()}"
+                    }`
+          }
+        </script>
+          </>
+        )}
         <meta property='og:title' content={data && data.actor.name} />
         <meta property='og:description' content={data && data.actor.shortDescription} />
         <meta name='twitter:title' content={data && data.actor.name} />
@@ -1460,7 +1477,7 @@ const Actor = ({ initialData }) => {
             <div className={styles.border} />
             <br />
             <video controls  className={styles.video}>
-              <source src={"https://static.ouaaa-transition.fr/static/video/"+id+".mov"} />
+              <source src={"https://static.ouaaa-transition.fr/static/video/"+id+".mp4"} />
             </video>
             </div>
             )}
@@ -1583,7 +1600,7 @@ const Actor = ({ initialData }) => {
             <br />
             <div>
               <Typography variant="h5" className={[styles.cardTitle]}>
-                LES ARTICLE DE 
+                LES ARTICLES DE 
                 {' '}
                 {data && data?.actor?.name}
               </Typography>

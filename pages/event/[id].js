@@ -232,6 +232,16 @@ const useStyles = makeStyles((theme) => ({
     'background-size': '20%',
     fontSize: '1em',
   },
+  limitPlace: {
+    margin: '2.5em 0 2.5em 0 ',
+    color: 'white',
+    'background-color': '#2C367E',
+    border: 'none',
+
+    borderRadius: '1.5em',
+    padding: '0.5em 3em 0.5em 3em',
+    height: '2.5em'
+  },
   imgModal: {
     padding: '1em',
     maxHeight: '50em',
@@ -327,6 +337,7 @@ const GET_EVENT = `
         endedAt
         dateRule
         registerLink
+        limitPlace
         practicalInfo
         facebookUrl
         favorites {
@@ -1303,8 +1314,8 @@ const Event = ({ initialData }) => {
                 && !(
                   data
                   && data.event.registerLink
-                  && data.event.registerLink.length > 1
-                ) && (
+                  && data.event.registerLink.length > 1 
+                ) && (data.event.limitPlace === undefined || data.event.limitPlace > data.event.participants.length ) && (
                   <button
                     className={styles.button}
                     onClick={addParticipateHandler}
@@ -1315,7 +1326,7 @@ const Event = ({ initialData }) => {
               {!(data && containUser(data.event.participants))
                 && data
                 && data.event.registerLink
-                && data.event.registerLink.length > 1 && (
+                && data.event.registerLink.length > 1 && (data.event.limitPlace === undefined || data.event.limitPlace > data.event.participants.length ) && (
                   <a
                     href={data && data.event.registerLink}
                     target="blank"
@@ -1323,6 +1334,13 @@ const Event = ({ initialData }) => {
                   >
                     Je participe
                   </a>
+              )}
+              {!(data && containUser(data.event.participants)) && (data.event.limitPlace === data.event.participants.length ) && (
+                  <div
+                    className={styles.limitPlace}
+                  >
+                    Evénement complet
+                  </div>
               )}
             </div>
             {data && data.event.pictures && data.event.pictures.length > 0 && (
