@@ -49,7 +49,8 @@ const styles = {
 export default function ArticleCard(props) {
   const { article } = props;
 
-  const image = article?.pictures?.filter((a, b) => (a.logo ? -1 : 1))?.[0]?.originalPicturePath || '/icons/planet.svg';
+
+  const image = article?.pictures?.sort((a, b) => (a.main ? -1 : 1))?.[0]?.originalPicturePath || '/icons/planet.svg';
   moment.locale('fr');
   const date = moment(parseInt(article.createdAt)).format('dddd DD MMMM YYYY');
 
@@ -73,7 +74,6 @@ export default function ArticleCard(props) {
                     objectFit="contain"
                     src={image}
                     alt={article.label}
-                    unoptimized={!image.startsWith('/static')}
                     priority
                   />
                 </div>
