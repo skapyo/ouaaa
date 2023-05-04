@@ -48,9 +48,12 @@ const styles = {
 
 export default function ArticleCard(props) {
   const { article } = props;
+  debugger;
 
+  const picture = [article?.pictures];
 
-  const image = article?.pictures?.sort((a, b) => (a.main ? -1 : 1))?.[0]?.originalPicturePath || '/icons/planet.svg';
+ 
+  const image = picture?.sort((a, b) => (a.main ? -1 : 1))[0][0]?.originalPicturePath || '/icons/planet.svg';
   moment.locale('fr');
   const date = moment(parseInt(article.createdAt)).format('dddd DD MMMM YYYY');
 

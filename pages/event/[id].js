@@ -62,6 +62,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(2),
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
+    backgroundSize: 'contain',
     height: '24em',
     color: 'white',
     'text-align': 'center',

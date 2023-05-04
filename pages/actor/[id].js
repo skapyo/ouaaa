@@ -22,6 +22,7 @@ import TelegramIcon from '@mui/icons-material/Telegram';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import EmailIcon from '@mui/icons-material/Email';
+
 import {
   FacebookShareButton,
   TwitterShareButton,
@@ -54,6 +55,7 @@ import {
 } from '../../utils/utils';
 import Calendar from '../../components/Calendar';
 import Favorite from '../../components/Favorite';
+import ArticleCard from '../../components/cards/ArticleCard';
 import ActorToPrint from '../../components/print/Actor';
 import ActorGameToPrint from '../../components/print/ActorGame';
 
@@ -67,6 +69,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(2),
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
+    backgroundSize: 'contain',
     height: '24em',
     color: 'white',
     'text-align': 'center',
@@ -689,7 +692,7 @@ const Actor = ({ initialData }) => {
   const headerRef = React.useRef();
   const matches = useMediaQuery(theme.breakpoints.down('md'));
   const maxSlideToShowImage = !matches ? 3 : 1;
-  const maxSlideToShowArticle = !matches ? 5 : 1;
+  const maxSlideToShowArticle = !matches ? 3 : 1;
 
   const sliderSettings = {
     infinite: true,
@@ -1606,15 +1609,12 @@ const Actor = ({ initialData }) => {
               <div className={styles.border} />
             </div>
             <br />
-            <Slider
-              {...settingsSliderImageArticle}
-              className={[styles.articleCarroussel]}
-            >
-              {dataArticles
-                && dataArticles?.articles.slice().sort((a, b) => (a.createdAt > b.createdAt ? -1 : 1)).map((article) => {
-                  return <CardSliderArticle key={article.id} article={article} />;
-                })}
-            </Slider>
+            <Slider {...settingsSliderImageArticle} className={[styles.articleCarroussel]}>
+                {dataArticles &&
+                  dataArticles.articles.map((article) => {
+                    return <ArticleCard key={article.id} article={article} />;
+                  })}
+         </Slider>
           </Container>
           {
             ((data && containUser(data.actor.referents)) || (user && user.role === 'admin')) && (
