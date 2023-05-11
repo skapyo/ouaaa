@@ -523,7 +523,7 @@ const Article = ({ initialData }) => {
                   Publié le
                   {' '}
                   <Moment format="DD/MM/YYYY HH:mm" unix>
-                    {data.article && data.article.createdAt / 1000}
+                    {data &&  data.article && data.article.createdAt / 1000}
                   </Moment>
                 </div>
                 {data && data.article.pictures && data.article.pictures.length > 0 && (

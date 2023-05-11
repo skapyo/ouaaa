@@ -86,9 +86,12 @@ const useStyles = makeStyles((theme) => ({
 const getTextWithSearchValue = (originalText, inputValue) => {
   let newOriginalText = originalText;
   if (originalText) {
+    debugger;
     // Find the position value in the original string
-    const matchIndex = originalText.toLowerCase().search(inputValue.toLowerCase());
-
+    var matchIndex = -1;
+    try {
+      matchIndex = originalText.toLowerCase().search(inputValue.toLowerCase());
+    
     if (matchIndex !== -1) {
       // Build string list with the first part, the match part and last part of the original string
       // And return the match part surrounded by bold tag
@@ -99,6 +102,10 @@ const getTextWithSearchValue = (originalText, inputValue) => {
           if (index === 1) return <b key={index}>{part}</b>;
           return part;
         });
+      
+    }
+  }catch(error){
+        
     }
   }
   return newOriginalText;
