@@ -86,7 +86,6 @@ const useStyles = makeStyles((theme) => ({
 const getTextWithSearchValue = (originalText, inputValue) => {
   let newOriginalText = originalText;
   if (originalText) {
-    debugger;
     // Find the position value in the original string
     var matchIndex = -1;
     try {
@@ -163,7 +162,7 @@ const SearchEngine = (props) => {
       router.push(`/event/${option.id}`);
     } if (option.type === 'Acteurs') {
       router.push(`/actor/${option.id}`);
-    } else {
+    } else if (option.type === 'Articles') {
       router.push(`/article/${option.id}`);
     }
   }, [router]);
