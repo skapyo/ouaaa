@@ -121,7 +121,6 @@ const MyApp = (props) => {
       <meta name="theme-color" content="#2C367E" />
     </Head>
     <LocalizationProvider utils={MomentUtils} dateAdapter={AdapterDateFns}>
-      <StyledEngineProvider injectFirst>
         <MuiThemeProvider theme={theme}>
           <ThemeProvider theme={theme}>
             <SessionProvider init={user}>
@@ -139,7 +138,6 @@ const MyApp = (props) => {
             </SessionProvider>
           </ThemeProvider>
         </MuiThemeProvider>
-      </StyledEngineProvider>
     </LocalizationProvider>
   </>;
 };

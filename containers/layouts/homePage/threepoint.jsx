@@ -11,6 +11,8 @@ import Link from '../../../components/Link';
 const useStyles = makeStyles((theme) => ({
   cardInfo: {
     padding: '2em',
+    zIndex: 1,
+    position: 'relative',
     backgroundColor: 'white',
     borderRadius: '0.5em',
     width: '80%!important',
@@ -23,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
       marginLeft: '0',
       marginRight: '0',
       width: '100%!important',
-      marginTop: 0,
+      marginTop: '2em',
     },
   },
   inprogress: {
