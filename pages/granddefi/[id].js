@@ -19,6 +19,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
+    backgroundSize: 'contain',
     height: '24em',
     color: 'white',
     'text-align': 'center',

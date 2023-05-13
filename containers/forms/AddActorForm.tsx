@@ -708,6 +708,14 @@ const AddActorForm = () => {
         setEstlarochelle(false);
       }
     };
+    const [enableOpenData, setEnableOpenData] = useState(false);
+
+    const handleEnableOpenData = () => {
+      setEnableOpenData(!enableOpenData);
+      formValues.enableOpenData=!enableOpenData;
+    };
+
+
     const addLineBreaks = (string) => string.split('\n').map((text, index) => (
       <React.Fragment key={`${text}-${index}`}>
         {text}
@@ -1321,6 +1329,20 @@ const AddActorForm = () => {
             })
         }
         <br />
+
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    value="remember"
+                    color="primary"
+                    onChange={handleEnableOpenData}
+                    checked={enableOpenData}
+                    
+                  />
+                }
+                label="Gagner en visibilité en autorisant votre commune, transicope ou une autre plateforme à afficher vos événements et informations acteurs."
+              />
+              <br/> <br/>
         <div>
           Une fois créé, vous pourrez modifier les informations et ajouter des
           photos dans votre espace acteur

@@ -40,9 +40,9 @@ import Favorite from '../../components/Favorite';
 const useStyles = makeStyles((theme) => ({
   titleContainer: {
     marginTop: theme.spacing(2),
-    backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
+    backgroundSize: 'cover',
     height: '24em',
     color: 'white',
     'text-align': 'center',
@@ -523,7 +523,7 @@ const Article = ({ initialData }) => {
                   Publié le
                   {' '}
                   <Moment format="DD/MM/YYYY HH:mm" unix>
-                    {data.article && data.article.createdAt / 1000}
+                    {data &&  data.article && data.article.createdAt / 1000}
                   </Moment>
                 </div>
                 {data && data.article.pictures && data.article.pictures.length > 0 && (

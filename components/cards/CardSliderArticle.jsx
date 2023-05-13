@@ -65,6 +65,7 @@ const useStyles = makeStyles({
 export default function SimpleCard({ article }) {
   const classes = useStyles();
   const bull = <span className={classes.bullet}>•</span>;
+  const pictureForSort = [article?.pictures]
   const myLoader = ({ src, width, quality }) => {
     return `${process.env.NEXT_PUBLIC_URI}${src}?w=${width}&q=${quality || 75}`;
   };
@@ -75,20 +76,20 @@ export default function SimpleCard({ article }) {
           <div
             className={classes.image}
           >
-           { /*    { article.pictures.sort((a, b) => (a.logo ? -1 : 1))[0] && article.pictures.sort((a, b) => (a.logo ? -1 : 1))[0].originalPicturePath != null && (
+            { pictureForSort.sort((a, b) => (a.main ? -1 : 1))[0] && pictureForSort.sort((a, b) => (a.main? -1 : 1))[0].originalPicturePath!=null && (
+            <div style =  {{  position: 'relative', height:"130px"}}>
             <Image
               loader={myLoader}
-              width="100%"
-              height="70px"
-              layout="responsive"
+              fill
               objectFit="contain"
               src={
-                article.pictures.sort((a, b) => (a.logo ? -1 : 1))[0].originalPicturePath
+                pictureForSort.sort((a, b) => (a.main ? -1 : 1))[0].originalPicturePath
               }
-              alt={article.name}
+              alt={event.name}
             />
+            </div>
             )}
-            */}
+          
           </div>
           <div className={classes.content}>
             <div className={classes.titleDiv}>

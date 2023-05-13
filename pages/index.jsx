@@ -15,6 +15,14 @@ import LastActor from '../containers/layouts/homePage/lastActor';
 import ScrollToBottom from '../components/scroll/ScrollToBottom';
 import LastArticle from '../containers/layouts/homePage/lastArticle';
 import LastEvent from '../containers/layouts/homePage/lastEvent';
+import Modal from '@mui/material/Modal';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import { useCookies } from 'react-cookie';
+import Image from 'next/image';
+import Grid from '@mui/material/Grid';
+import { styled } from '@mui/material/styles';
+import Paper from '@mui/material/Paper';
 
 const useStyles = makeStyles((theme) => ({
   leftTitle: {
@@ -72,6 +80,14 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
     backgroundColor: '#e8f4f2',
   },
+  boxModal: {
+   overflow: 'auto',
+   width: 'auto',
+   [theme.breakpoints.down('md')]: {
+    width: '90%',
+  }, maxHeight:'100%' 
+  }
+
 }));
 
 function SampleNextArrow(props) {
@@ -113,8 +129,31 @@ const Index = () => {
     headerDisplay: 'static',
   });
   const styles = useStyles(stylesProps);
-
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '80%',
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+  };
   const sections = ['PresentationSection', 'ThreePoint', 'LastActor', 'LastEvent', 'LastArticle', 'Newsletter'];
+  const myLoader = ({ src, width, quality }) => {
+    return src.startsWith('/static') ? `${process.env.NEXT_PUBLIC_URI}${src}?w=${width}&q=${quality || 75}` : src;
+  };
+  const [cookies, setCookie] = useCookies(['hasSeenHomeInfoOUAAA']);
+  const [openModalHomeInfo, setOpenModalHomeInfo] = useState(cookies.hasSeenHomeInfoOUAAA!=="true");
+
+  const Item = styled(Paper)(({ theme }) => ({
+    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+    ...theme.typography.body2,
+    padding: theme.spacing(1),
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+  }));
 
   return (
 
@@ -168,6 +207,79 @@ const Index = () => {
     CNIL : <Link href="https://www.cnil.fr/fr/cookies-et-autres-traceurs/regles/cookies/lignes-directrices-modificatives-et-recommandation" target="_blank" color="inherit" >Cookies et autres traceurs : la CNIL publie des lignes directrices modificatives et sa
 recommandation</Link>
         </CookieConsent>
+
+        <Modal
+              open={openModalHomeInfo}
+              onClose={() =>  {setCookie('hasSeenHomeInfoOUAAA',true); setOpenModalHomeInfo(false);}}
+              aria-labelledby="parent-modal-title"
+              aria-describedby="parent-modal-description"
+              style={{ overflow: 'auto',width: 'auto!important', maxHeight:'100%' }}
+            >
+         
+              <Box sx={style}  className={styles.boxModal} >
+                <IconButton
+                  aria-label="Close"
+                  className={styles.closeButton}
+                  onClick={() => {setCookie('hasSeenHomeInfoOUAAA',true); setOpenModalHomeInfo(false);}}
+                  size="large">
+                  <CloseIcon />
+                </IconButton>
+
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm={6}>
+                <Image
+                  loader={myLoader}
+                  width="300"
+                  height="300"
+                  layout="responsive"
+                  src="POPUP-thumb1.png"
+                  alt="ENVIRONNEMENT : AGIR EN 2023"
+                  priority
+                />
+                </Grid>
+                <Grid item  xs={12} sm={6}>
+                    <div    style={{ textAlign: 'center' }}><b>Du 29 MAI au 1er JUIN</b></div> <br/>
+                    <div    style={{ textAlign: 'center', fontSize: '14px' }}>
+                  AUNIS EN TRANSITION élargit la Semaine Super Nulle en Carbone
+                  de La Rochelle Territoire Zéro Carbone à tout l’Aunis ! Et met l’accent sur</div>  <br/>
+                  <div    style={{ textAlign: 'center' }}><b>les LOW-TECH</b></div>  <br/>
+
+                  <div    style={{ textAlign: 'left' }}>
+                  • Charon le 29 mai <br/>
+                  • Surgères le 30 mai <br/>
+                  • Saint-Xandre le 31 mai <br/>
+                  • La Rochelle et Saint-Martin-de-Ré le 1er juin  <br/></div> <br/>
+                  <div    style={{ textAlign: 'center' }}><b>EXPOSITION – JEUX – ATELIERS – CONFÉRENCE-DÉBAT</b></div> <br/>
+
+                  <div    style={{ textAlign: 'center' }}><Link href={`/event/344`} > Retrouvez le programme complet ici  </Link><br/></div>
+
+                </Grid>
+                <Grid item  xs={12} sm={6}>
+                  <Image
+                    loader={myLoader}
+                    width="431"
+                    height="155"
+                    layout="responsive"
+                    src="POPUP-thumb2.png"
+                    alt="ENVIRONNEMENT : AGIR EN 2023"
+                    priority
+                  />
+                </Grid>
+                <Grid item  xs={12} sm={6}>
+                  <Image
+                    loader={myLoader}
+                    width="592"
+                    height="150"
+                    layout="responsive"
+                    src="POPUP-thumb3.png"
+                    alt="ENVIRONNEMENT : AGIR EN 2023"
+                    priority
+                  />
+                </Grid>
+              </Grid>
+            </Box>
+          </Modal>
+
       </>
     </AppLayout>
   );

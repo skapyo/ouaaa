@@ -199,6 +199,7 @@ const GET_ACTOR = gql`
       socialNetwork
       siren
       hasVideoVouaaar
+      enableOpenData
       description
       lat
       lng
@@ -711,6 +712,12 @@ const EditActorForm = (props) => {
     const [hasVideoVouaaar, setHasVideoVouaaar] = useState(
      actorData.actor.hasVideoVouaaar,
     );
+    const [enableOpenData, setEnableOpenData] = useState(actorData.actor.enableOpenData);
+
+    const handleEnableOpenData = () => {
+      setEnableOpenData(!enableOpenData);
+      formValues.enableOpenData=!enableOpenData;
+    };
 
     const [
       initentriesWithInformation,
@@ -1822,6 +1829,20 @@ const EditActorForm = (props) => {
       </Grid>
 
       <br />
+
+      <FormControlLabel
+                control={
+                  <Checkbox
+                    value="remember"
+                    color="primary"
+                    onChange={handleEnableOpenData}
+                    checked={enableOpenData}
+                    
+                  />
+                }
+                label="Gagner en visibilité en autorisant votre commune, transicope ou une autre plateforme à afficher vos événements et informations acteurs."
+              />
+              <br/> <br/>
 
       <Grid item xs={12}>
         

@@ -93,7 +93,6 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 72,
     marginLeft: 12,
     backgroundPosition: 'center',
-    backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
     borderRadius: '50%',
     [theme.breakpoints.down('md')]: {
