@@ -201,8 +201,12 @@ const NavBar = () => {
                       <MenuItem component={Link} href="/news">
                         Articles
                       </MenuItem>
-                      <MenuItem>Articles OUAAA</MenuItem>
-                      <MenuItem>Recettes</MenuItem>
+                      <MenuItem component={Link} href="/news?tag=ouaaa">
+                        Articles OUAAA
+                      </MenuItem>
+                      <MenuItem component={Link} href="/recettes">
+                        Recettes
+                      </MenuItem>
                     </Menu>
                   </Grid>
              {/*     <Grid item>
