@@ -208,9 +208,8 @@ export async function getServerSideProps(ctxt) {
       query: GET_ARTICLES,
     }),
   });
-
   const initialData = await res.json();
-
+ // console.log("test"+JSON.stringify(initialData))
   if (initialData.errors) {
     console.error(
       `Error fetching categories, error message : ${initialData.errors[0].message}`,
