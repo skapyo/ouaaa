@@ -4,15 +4,12 @@ import React from 'react';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Link from '../../../components/Link';
 import SearchEngine from '../../../components/SearchEngine';
-
+import Image from 'next/image';
 const useStyles = makeStyles((theme) => ({
   titleContainer: {
-    backgroundImage: "url('./Accueil1.jpg')",
-    backgroundSize: 'cover',
-    backgroundRepeat: 'no-repeat',
     color: 'white',
-    backgroundPosition: 'center center',
     textAlign: 'center',
+    zIndex:1,
     [theme.breakpoints.up('md')]: {
       height: '45em',
     },
@@ -20,8 +17,14 @@ const useStyles = makeStyles((theme) => ({
       padding: '8em',
     },
   },
+  landingImage: {
+    zIndex: 0,
+    height: "300px",
+  },
   title: {
     padding: '1em',
+    position: "relative",
+    zIndex: 1,
   },
   imageTitle: {
     width: '600px',
@@ -37,7 +40,9 @@ const useStyles = makeStyles((theme) => ({
   },
   baseLine: {
     fontSize: '1em',
+    position: 'relative',
     fontWeight: 'bold',
+    zIndex:1,
     [theme.breakpoints.up('xs')]: {
       textAlign: 'center',
     },
@@ -103,6 +108,14 @@ const PresentationSection = (props) => {
 
   return (
     <Container className={styles.titleContainer} id={props.id}>
+      <Image
+      className={styles.landingImage}
+                    src="/Accueil1.jpg"
+                    alt="Affiche OUAAA!" 
+                    fill
+                    objectFit="cover"
+                    objectPosition="center"
+                  />
       <div className={styles.title}>
         <h1 className={styles.h1}>
             agir pour la transition écologique
