@@ -204,6 +204,9 @@ const NavBar = () => {
                       <MenuItem component={Link} href="/news?tag=ouaaa">
                         Articles OUAAA
                       </MenuItem>
+                      <MenuItem component={Link} href="/video">
+                        Vidéo Acteurs à VOUAAAR!
+                      </MenuItem>
                       <MenuItem component={Link} href="/recettes">
                         Recettes
                       </MenuItem>

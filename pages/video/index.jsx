@@ -8,7 +8,7 @@ import ViewListIcon from '@mui/icons-material/ViewList';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
 import { withApollo } from 'hoc/withApollo.jsx';
-import ArticleCard from 'components/cards/ArticleCard';
+import VideoActorCard from 'components/cards/VideoActorCard';
 import ArticleListItem from 'components/list/ArticleListItem';
 import AppLayout from 'containers/layouts/AppLayout';
 import { useSessionState } from 'context/session/session';
@@ -17,23 +17,13 @@ import Link from 'components/Link';
 
 const SEARCH_RESOURCES = gql`
   query resources($search: String!) {
-    resources(search: $search, type: "recipe") {
+    resources(search: $search, type: "video_actor") {
       id
       type
-      recipe {
+      actor {
         id
-        label
-        shortDescription
-        createdAt
-        pictures {
-          id
-          label
-          originalPicturePath
-          originalPictureFilename
-          position
-          logo
-          main
-        }
+        name
+        hasVideoVouaaar
       }
     }
   }
@@ -41,23 +31,13 @@ const SEARCH_RESOURCES = gql`
 
 const GET_RESOURCES = `
   query resources {
-    resources(type: "recipe") {
+    resources(type: "video_actor") {
       id
       type
-      recipe {
+      actor {
         id
-        label
-        shortDescription
-        createdAt
-        pictures {
-          id
-          label
-          originalPicturePath
-          originalPictureFilename
-          position
-          logo
-          main
-        }
+        name
+        hasVideoVouaaar
       }
     }
   }
@@ -97,14 +77,12 @@ const styles = {
   }
 }
 
-const Recettes = (props) => {
+const Videos = (props) => {
   const { resources } = props;
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const user = useSessionState();
-
-  const { tag } = router.query;
   const [search, setSearch] = useState('');
   const [isGridView, setIsGridView] = useState(true);
   const [searchResources, { loading: loadingSearch, data: searchResults }] = useLazyQuery(SEARCH_RESOURCES);
@@ -119,12 +97,13 @@ const Recettes = (props) => {
 
     if (search) {
       _resources = searchResults?.resources || [];
+     
     }
 
     return _resources
-      .filter(resource => resource.recipe)
+      .filter(resource => resource.actor)
       .map(resource => {
-        return resource.recipe;
+        return resource.actor;
       });
   }, [search, resources, searchResults]);
 
@@ -161,13 +140,13 @@ const Recettes = (props) => {
   return (
     <AppLayout>
       <Container maxWidth="lg">
-        <Typography sx={styles.title} variant="h1" align="center">Les Recettes</Typography>
+        <Typography sx={styles.title} variant="h1" align="center">Vidéos des ACTEUR À VOUAAAR !</Typography>
         <Box sx={styles.searchBox}>
           <TextField
             sx={styles.searchContainer}
             onChange={handleSearch}
             value={search}
-            placeholder='Recherche dans les recettes ...'
+            placeholder='Recherche dans les vidéos ...'
             InputProps={{
               sx: styles.searchInput,
               endAdornment: (
@@ -178,27 +157,6 @@ const Recettes = (props) => {
             }}
           />
 
-          {
-            !isMobile && (
-              <Tooltip title={`Changer le mode de vue en ${isGridView ? 'liste' : 'grille'}`} placement='top'>
-                <IconButton onClick={handleClickChangeView}>
-                  {viewIcon}
-                </IconButton>
-              </Tooltip>
-            )
-          }
-
-          {
-            user && (
-              <Link href='/recette/new' sx={styles.addRecipeBtn}>
-                <Tooltip title='Créer une recette' placement='top'>
-                  <IconButton>
-                    <AddCircleOutlineIcon />
-                  </IconButton>
-                </Tooltip>
-              </Link>
-            )
-          }
         </Box>
         {
           (isGridView || isMobile) && (
@@ -207,7 +165,7 @@ const Recettes = (props) => {
                 resourcesToRender.map((resource) => {
                   return (
                     <Grid item key={resource.id}>
-                      <ArticleCard article={resource} />
+                      <VideoActorCard actor={resource} />
                     </Grid>
                   );
                 })
@@ -234,29 +192,30 @@ const Recettes = (props) => {
   );
 };
 
-export default withApollo()(Recettes);
+export default withApollo()(Videos);
 
 export async function getServerSideProps(ctxt) {
+ 
   const res = await fetch(process.env.NEXT_PUBLIC_API_URI, {
     method: 'POST',
     body: JSON.stringify({
       operationName: 'resources',
       query: GET_RESOURCES,
       variables: {
-        tag: tag,
+        tag: 'video_actor',
       },
       
     }),
   });
 
   const response = await res.json();
-
+ 
   if (response.errors) {
     console.error(
-      `Error fetching recipes, error message : ${response.errors[0].message}`,
+      `Error fetching videos, error message : ${response.errors[0].message}`,
     );
   }
-
+  console.warn(response?.data?.resources)
   return {
     props: {
       resources: response?.data?.resources || [],

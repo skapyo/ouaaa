@@ -11,10 +11,8 @@ import Newsletter from '../containers/layouts/Newsletter';
 import Partner from '../containers/layouts/Partner';
 import PresentationSection from '../containers/layouts/homePage/presentationSection';
 import ThreePoint from '../containers/layouts/homePage/threepoint';
-import LastActor from '../containers/layouts/homePage/lastActor';
 import ScrollToBottom from '../components/scroll/ScrollToBottom';
 import LastArticle from '../containers/layouts/homePage/lastArticle';
-import LastEvent from '../containers/layouts/homePage/lastEvent';
 import Modal from '@mui/material/Modal';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
@@ -23,6 +21,8 @@ import Image from 'next/image';
 import Grid from '@mui/material/Grid';
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
+import { Suspense } from 'react';
+import dynamic from 'next/dynamic';
 
 const useStyles = makeStyles((theme) => ({
   leftTitle: {
@@ -147,6 +147,17 @@ const Index = () => {
   const [cookies, setCookie] = useCookies(['hasSeenHomeInfoOUAAA']);
   const [openModalHomeInfo, setOpenModalHomeInfo] = useState(cookies.hasSeenHomeInfoOUAAA!=="true");
 
+  const DynamicLastActor = dynamic(() => import('../containers/layouts/homePage/lastActor'), {
+    loading: () => <p>Loading.. actor</p>,
+  });
+
+  const DynamicLastEvent = dynamic(() => import('../containers/layouts/homePage/lastEvent'), {
+    loading: () => <p>Loading.. event</p>,
+  });
+
+  const DynamicLastArticle = dynamic(() => import('../containers/layouts/homePage/lastArticle'), {
+    loading: () => <p>Loading.. article</p>,
+  });
   const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
     ...theme.typography.body2,
@@ -177,11 +188,12 @@ const Index = () => {
 
           <ThreePoint id={sections[1]} />
 
-          <LastActor id={sections[2]} />
+          <DynamicLastActor id={sections[2]} />
+    
+          <DynamicLastEvent id={sections[3]} />
 
-          <LastEvent id={sections[3]} />
+          <DynamicLastArticle id={sections[4]} />
 
-          <LastArticle id={sections[4]} />
 
           <Newsletter id={sections[5]} />
 
