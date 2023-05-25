@@ -104,7 +104,6 @@ const Recettes = (props) => {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const user = useSessionState();
 
-  const { tag } = router.query;
   const [search, setSearch] = useState('');
   const [isGridView, setIsGridView] = useState(true);
   const [searchResources, { loading: loadingSearch, data: searchResults }] = useLazyQuery(SEARCH_RESOURCES);
@@ -242,9 +241,6 @@ export async function getServerSideProps(ctxt) {
     body: JSON.stringify({
       operationName: 'resources',
       query: GET_RESOURCES,
-      variables: {
-        tag: tag,
-      },
       
     }),
   });
