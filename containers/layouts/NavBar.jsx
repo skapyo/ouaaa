@@ -375,14 +375,33 @@ const NavBar = () => {
                   <Grid item>
                     <MenuItem
                       button
-                      component={Link}
                       className={styles.menuItem}
-                      href="/news"
+                      onMouseOver={handleOpenMenuResources}
                     >
-                      ARTICLES
+                      RESSOURCES
                     </MenuItem>
+                    <Menu
+                      id="menu-resources"
+                      anchorEl={anchorMenuResources}
+                      open={Boolean(anchorMenuResources)}
+                      onClose={handleCloseMenuResources}
+                      MenuListProps={{ onMouseLeave: handleCloseMenuResources }}
+                    >
+                      <MenuItem component={Link} href="/news">
+                        Articles
+                      </MenuItem>
+                      <MenuItem component={Link} href="/news?tag=ouaaa">
+                        Articles OUAAA
+                      </MenuItem>
+                      <MenuItem component={Link} href="/video">
+                        Vidéo Acteurs à VOUAAAR!
+                      </MenuItem>
+                      <MenuItem component={Link} href="/recettes">
+                        Recettes
+                      </MenuItem>
+                    </Menu>
                   </Grid>
-                  <Grid item>
+             {/*     <Grid item>
                     <MenuItem
                       button
                       component={Link}
@@ -401,8 +420,10 @@ const NavBar = () => {
                     >
                       JE PARTICIPE
                     </MenuItem>
+  
                   </Grid>
-                  {/* <Grid item>
+*/}
+                  <Grid item>
                     <MenuItem
                       button
                       component={Link}
@@ -412,7 +433,6 @@ const NavBar = () => {
                       A PROPOS
                     </MenuItem>
                   </Grid>
-*/}
                   {!user && (
                     <Grid item>
                       {/* @ts-ignore */}
