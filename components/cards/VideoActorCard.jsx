@@ -1,10 +1,21 @@
-import React from 'react';
+import React, {
+  useState,
+} from 'react';
 import makeStyles from '@mui/styles/makeStyles';
 import { Avatar, Link } from '@mui/material';
 import StyledBoxOnHover from '../animated/StyledBoxOnHover';
 import { getImageUrl } from '../../utils/utils';
 import Favorite from '../Favorite';
 import Image from 'next/image';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import { styled } from '@mui/material/styles';
+
+const Item = styled(Paper)(({ theme }) => ({
+  ...theme.typography.body2,
+  textAlign: 'center',
+}));
+
 const useStyles = makeStyles((theme, props) => ({
   '@media print': {
     card: {
@@ -18,14 +29,10 @@ const useStyles = makeStyles((theme, props) => ({
     backgroundColor: 'white',
     borderRadius: '10px',
     minHeight: '106px',
-    borderLeft: `solid 12px ${props.color}`,
-    display: 'flex',
   }),
   content: {
     width: '93%',
     height: '100%',
-    display: 'flex',
-    justifyContent: 'space-between',
     alignItems: 'center',
     [theme.breakpoints.up('sm')]: {
       margin: '0 24px',
@@ -41,8 +48,6 @@ const useStyles = makeStyles((theme, props) => ({
     [theme.breakpoints.down('md')]: {
       width: '50px',
     },
-    borderLeft: `dashed 2px ${props.color}`,
-    display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     '&:hover': {
@@ -76,9 +81,8 @@ const useStyles = makeStyles((theme, props) => ({
     borderRadius: '50%',
     opacity: props.icon ? 1 : 0,
   }),
-  leftContent: {
-    display: 'flex',
-    alignItems: 'center',
+  title: {
+    textAlign: 'center',
   },
   image: {
     height: '72px',
@@ -104,6 +108,7 @@ const useStyles = makeStyles((theme, props) => ({
     textTransform: 'uppercase',
     color: props.color,
     fontWeight: 'bold',
+    textAlign: 'center'
   }),
   label: {
     color: 'black',
@@ -125,6 +130,16 @@ const useStyles = makeStyles((theme, props) => ({
     color: '#bd0b3d',
     width: '20px',
   },
+  video: {
+    [theme.breakpoints.up('sm')]: {
+      width: '500px',
+    },
+    [theme.breakpoints.down('md')]: {
+      width: '100%',
+    },
+    maxWidth : '500px',
+    borderRadius: '23px',
+  },
 }));
 
 const ActorCard = ({ actor }) => {
@@ -132,7 +147,7 @@ const ActorCard = ({ actor }) => {
   const icon = actor?.entries?.[0]? actor.entries[0].icon : 'fruit';
   const actorName = actor.name;
   const classes = useStyles({ color, icon });
-
+  const [showVideo, setShowVideo] = useState(false);
   function stringAvatar(name) {
     if (name !== undefined) {
       return {
@@ -150,53 +165,40 @@ const ActorCard = ({ actor }) => {
 
   return (
     <StyledBoxOnHover className={classes.card}>
-      <Link href={`/actor/${actor.id}`} target="_blank" color="inherit" underline="none" width="100%">
-        <div className={classes.content}>
-          <div className={classes.leftContent}>
-            <div className={classes.image}>
-              <Avatar
-              className={classes.avatar}
-                alt={actor.name}
-                sx={{
-                  width: 72,
-                  height: 72,
-                }}
-              >
-                  <Image src={getActorProfilePicture()} alt={actor.name} layout="fill" />
-                  </Avatar>
-            </div>
-            <div className={classes.text}>
-              <div className={classes.actor}>{actorName}</div>
-              <div className={classes.label}>{actor.label}</div>
-              <div className={classes.actorDetails}>
-                <span>
-                  {/* @ts-ignore */}
-                  {actor.shortDescription}
-                </span>
+       <div>
+        {actor.hasVideoVouaaar && (
+              <div className={classes.cardTitle}>
+                {!showVideo && (
+                  <img  className={classes.video} 
+                    src={"https://static.ouaaa-transition.fr/static/video/"+actor.id+".jpg"} 
+                    alt=""
+                    onMouseOver={() => setShowVideo(true)}
+                    onClick={() => setShowVideo(true)}
+                  />
+                )}
+                 {showVideo && (
+                  <video controls autoplay className={classes.video} 
+                  onMouseOver={event => event.target.play()}
+                  onMouseOut={event => event.target.pause() }
+                  >
+                    <source src={"https://static.ouaaa-transition.fr/static/video/"+actor.id+".mp4"} />
+                  </video>
+                 )}
               </div>
-              {
-                (actor.address || actor.city) && (
-                  <div className={classes.location}>
-                    {/* @ts-ignore */}
-                    <img
-                      src="/icons/location.svg"
-                      alt="Localisation"
-                      className={[classes.icon]}
-                    />
-                    {(actor.address || '').concat(' ').concat(actor.city)}
-                  </div>
-                )
-              }
-            </div>
-          </div>
-          <div className={classes.category}>
-            <span className={classes.opacity} />
-            <span className={classes.categoryIcon} />
-          </div>
-        </div>
-      </Link>
-      <div className={classes.favorite}>
-        <Favorite actor={actor} />
+              )}
+        
+          <Grid  container spacing={2}>
+            <Grid item xs={10}>
+              <Link href={`/actor/${actor.id}`} color="inherit" underline="none" width="100%">
+                <div className={classes.actor}>{actorName}</div>
+              </Link>
+            </Grid> 
+            <Grid item xs={2}>
+              <Favorite actor={actor} />
+            </Grid>
+          </Grid>
+       
+        
       </div>
     </StyledBoxOnHover>
   );
