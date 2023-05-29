@@ -1,8 +1,10 @@
-import React, { useCallback, useEffect, useState, useRef } from 'react';
-import { Container, Button, Typography, TextField } from '@mui/material';
+import React, { useCallback, useEffect, useState, useRef, ChangeEvent, useMemo } from 'react';
+import { Container, Button, Typography, TextField, Grid, Divider, MenuItem } from '@mui/material';
 import gql from 'graphql-tag';
 import { useMutation } from '@apollo/client';
 import { useRouter } from 'next/router';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import { set } from 'lodash';
 
 import { withApollo } from 'hoc/withApollo';
 import FormController, {
@@ -77,6 +79,7 @@ const editorConfig = {
 const styles = {
   container: {
     textAlign: 'center',
+    width: '75%',
   },
   field: {
     marginBottom: (theme) => theme.spacing(3),
@@ -89,14 +92,74 @@ const styles = {
   },
 }
 
+type Unit = {
+  label: string;
+  value: string;
+}
+
+const availableUnits: Unit[] = [
+  {
+    label: 'Kg',
+    value: 'kg',
+  },
+  {
+    label: 'g',
+    value: 'g',
+  },
+  {
+    label: 'mg',
+    value: 'mg',
+  },
+  {
+    label: 'L',
+    value: 'l',
+  },
+  {
+    label: 'mL',
+    value: 'ml',
+  },
+  {
+    label: 'cL',
+    value: 'cl',
+  },
+  {
+    label: 'dL',
+    value: 'dl',
+  },
+  {
+    label: 'Unité',
+    value: 'unity',
+  },
+  {
+    label: 'CàC',
+    value: 'cac',
+  },
+  {
+    label: 'CàS',
+    value: 'cas',
+  },
+];
+
+type Ingredient = {
+  id?: number,
+  name: string,
+  unit: string,
+  quantity: number,
+  impact: number,
+  description: string,
+}
+
 type FormItemProps = {
   label: string;
   inputName: string;
   formChangeHandler: (Article: ChangeArticle) => void;
-  value: string;
-  required: boolean;
-  errorBool: boolean;
-  errorText: string;
+  type?: React.InputHTMLAttributes<unknown>['type'];
+  value: any;
+  required?: boolean;
+  errorBool?: boolean;
+  errorText?: string;
+  select?: boolean;
+  children?: any;
 };
 
 const FormItem = (props: FormItemProps) => {
@@ -108,6 +171,9 @@ const FormItem = (props: FormItemProps) => {
     required,
     errorBool,
     errorText,
+    type,
+    select,
+    children,
   } = props;
   return (
     <TextField
@@ -116,12 +182,17 @@ const FormItem = (props: FormItemProps) => {
       value={value}
       label={label}
       name={inputName}
-      onChange={formChangeHandler}
+      onChange={(evt) => {
+        formChangeHandler(evt);
+      }}
       defaultValue=""
       fullWidth
       required={required}
       error={errorBool}
       helperText={errorBool ? errorText : ''}
+      type={type}
+      select={select}
+      children={children}
     />
   );
 };
@@ -146,8 +217,6 @@ const AddRecipeForm = (props: AddRecipeFormProps) => {
   const [createRecipe, { data, error }] = useMutation(CREATE_RECIPE);
   const { query: { actor: actorId } } = useRouter();
 
-  console.log(actorId);
-
   const Form: RenderCallback = ({
     formChangeHandler,
     validationResult,
@@ -161,10 +230,22 @@ const AddRecipeForm = (props: AddRecipeFormProps) => {
 
     const editorRef = useRef();
 
+    const ingredients: Ingredient[] = useMemo(() => {
+      return formValues.ingredients ? JSON.parse(formValues.ingredients) : [];
+    }, [formValues]);
+
+    const handleChangeIngredient = useCallback((event: ChangeEvent, index: number) => {
+      const values = {
+        ingredients: [...ingredients],
+      };
+
+      set(values, event.target.name, event.target.value);
+
+      formChangeHandler({ target: { name: 'ingredients', value: JSON.stringify(values.ingredients) } });
+    }, [formValues, ingredients]);
+
     // @ts-ignore
     const { CKEditor, ClassicEditor } = editorRef.current || {};
-
-    console.log(formValues)
 
     const handleClickCreate = useCallback(() => {
       createRecipe({
@@ -313,6 +394,105 @@ const AddRecipeForm = (props: AddRecipeFormProps) => {
           onDropHandler={onDropMainHandler}
           text="Déposez ici votre photo principale au format jpg et de poids inférieur à 4Mo"
         />
+
+        <br />
+
+        <Typography variant="body1" color="primary" sx={styles.label}>
+          Ingrédients
+        </Typography>
+
+        <div>
+          {
+            ingredients.map((ingredient: Ingredient, index: number) => {
+              return (
+                <Grid container key={index}>
+                  {ingredients.length > 1 && (
+                    <Grid item xs={12} sx={{ marginBottom: 3 }}>
+                      <Divider variant="middle" />
+                    </Grid>
+                  )}
+                  <Grid item xs={12}>
+                    <FormItem
+                      label="Nom de l'ingrédient"
+                      inputName={`ingredients[${index}].name`}
+                      formChangeHandler={(evt) => {
+                        handleChangeIngredient(evt, index)
+                      }}
+                      value={ingredient.name}
+                    />
+                  </Grid>
+
+                  <Grid container spacing={2}>
+                    <Grid item xs={4}>
+                      <FormItem
+                        label="Quantité"
+                        inputName={`ingredients[${index}].quantity`}
+                        formChangeHandler={(evt) => handleChangeIngredient(evt, index)}
+                        value={ingredient.quantity}
+                        type="number"
+                      />
+                    </Grid>
+
+                    <Grid item xs={4}>
+                      <FormItem
+                        label="Impact"
+                        inputName={`ingredients[${index}].impact`}
+                        formChangeHandler={(evt) => handleChangeIngredient(evt, index)}
+                        value={ingredient.impact}
+                        type="number"
+                      />
+                    </Grid>
+
+                    <Grid item xs={4}>
+                      <FormItem
+                        label="Unité"
+                        inputName={`ingredients[${index}].unit`}
+                        formChangeHandler={(evt) => handleChangeIngredient(evt, index)}
+                        value={ingredient.unit}
+                        select
+                      >
+                        {availableUnits.map((option: Unit) => (
+                          <MenuItem key={option.value} value={option.value}>
+                            {option.label}
+                          </MenuItem>
+                        ))}
+                      </FormItem>
+                    </Grid>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <FormItem
+                      label="Description de l'ingrédient"
+                      inputName={`ingredients[${index}].description`}
+                      formChangeHandler={(evt) => {
+                        handleChangeIngredient(evt, index)
+                      }}
+                      value={ingredient.description}
+                    />
+                  </Grid>
+                </Grid>
+              )
+            })
+          }
+          <Button onClick={() => {
+            const values: Ingredient[] = formValues.ingredients ? JSON.parse(formValues.ingredients) as Ingredient[] : [];
+
+            values.push({ id: undefined, unit: '', quantity: 0, name: '', impact: 0, description: '' });
+
+            const target = {
+              name: 'ingredients',
+              value: JSON.stringify(values)
+            };
+
+            const event = {
+              target,
+            }
+
+            formChangeHandler(event);
+          }}>
+            <AddCircleOutlineIcon sx={{ marginRight: '5px' }} />
+            Ajouter un ingrédient
+          </Button>
+        </div>
 
         <br />
 
