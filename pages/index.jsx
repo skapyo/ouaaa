@@ -199,8 +199,7 @@ const Index = () => {
         >
           Gestion de vos préférences sur
           les cookies :<br /> Ce site ne dépose que des cookies techniques nécessaires
-          au fonctionnement sur votre appareil. Aucun suivi ou mesure d’audience ne sont effectués.
-          <br />
+          au fonctionnement sur votre appareil.
           <br />
           Aucun cookie tiers n&#39;est utilisé pour analyser le comportement individuel ou les données
     personnelles des visiteurs du site. Plus d&#39;informations sur les cookies et les traceurs sur le site de la
@@ -208,7 +207,7 @@ const Index = () => {
 recommandation</Link>
         </CookieConsent>
 
-        <Modal
+    {/**  <Modal
               open={openModalHomeInfo}
               onClose={() =>  {setCookie('hasSeenHomeInfoOUAAA',true); setOpenModalHomeInfo(false);}}
               aria-labelledby="parent-modal-title"
@@ -279,7 +278,7 @@ recommandation</Link>
               </Grid>
             </Box>
           </Modal>
-
+ */}  
       </>
     </AppLayout>
   );
