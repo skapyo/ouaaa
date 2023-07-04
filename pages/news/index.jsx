@@ -6,35 +6,54 @@ import CloseIcon from '@mui/icons-material/Close';
 import GridViewIcon from '@mui/icons-material/GridView';
 import ViewListIcon from '@mui/icons-material/ViewList';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-
+import { useRouter } from 'next/router';
 import { withApollo } from 'hoc/withApollo.jsx';
 import ArticleCard from 'components/cards/ArticleCard';
 import ArticleListItem from 'components/list/ArticleListItem';
 import AppLayout from 'containers/layouts/AppLayout';
 
-const SEARCH_ARTICLES = gql`
-  query articles($search: String!) {
-    articles(search: $search) {
+const SEARCH_RESSOURCE = gql`
+ query resources($search: String) {
+    resources(search: $search) {
       id
-      label
-      shortDescription
-      createdAt
-      pictures {
+      type
+      article {
         id
         label
-        originalPicturePath
-        originalPictureFilename
-        position
-        logo
-        main
+        shortDescription
+        createdAt
+        pictures {
+          id
+          label
+          originalPicturePath
+          originalPictureFilename
+          position
+          logo
+          main
+        }
+      }
+      recipe {
+        id
+        label
+        shortDescription
+        createdAt
+        pictures {
+          id
+          label
+          originalPicturePath
+          originalPictureFilename
+          position
+          logo
+          main
+        }
       }
     }
   }
 `;
 
 const GET_RESOURCES = `
-  query resources {
-    resources {
+  query resources($search: String) {
+    resources(search: $search) {
       id
       type
       article {
@@ -103,14 +122,15 @@ const styles = {
 }
 
 const News = (props) => {
-  const { resources } = props;
+  var { resources } = props;
+  const { query: { tag: tag } } = useRouter();
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const [search, setSearch] = useState('');
   const [isGridView, setIsGridView] = useState(true);
-  const [searchArticles, { loading: loadingSearch, error, data }] = useLazyQuery(SEARCH_ARTICLES);
+  const [searchArticles, { loading: loadingSearch, error, data }] = useLazyQuery(SEARCH_RESSOURCE);
 
   const handleSearch = useCallback((evt) => {
     searchArticles({ variables: { search: evt.target.value } });
@@ -118,12 +138,16 @@ const News = (props) => {
   }, [searchArticles]);
 
   const resourcesToRender = useMemo(() => {
-    if (search) {
-      return data?.articles || [];
+    if (search ) {
+      if(data!==undefined){
+        resources= data.resources;
+      }else{
+        return [];
+      }
     }
-
+  
     return resources
-      .filter(resource => resource.article || resource.recipe)
+      .filter(resource => resource?.article && (tag ===undefined || (tag == "ouaaa" && resource.type=="ARTICLE_OUAAA")) || resource?.recipe )
       .map(resource => {
         return resource.article || resource.recipe;
       });
@@ -162,7 +186,7 @@ const News = (props) => {
   return (
     <AppLayout>
       <Container maxWidth="lg">
-        <Typography sx={styles.title} variant="h1" align="center">Les Articles</Typography>
+        <Typography sx={styles.title} variant="h1" align="center">Les Articles {tag!==undefined && (<>de OUAAA! </>) }</Typography>
         <Box sx={styles.searchBox}>
           <TextField
             sx={styles.searchContainer}
