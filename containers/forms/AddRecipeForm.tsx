@@ -17,15 +17,20 @@ import useDnDStateManager from '../../hooks/useDnDStateManager';
 import ImagesDropZone from 'components/ImageCropper/ImagesDropZone';
 import ImagesDisplay from 'components/ImageCropper/ImagesDisplay';
 import ClassicButton from 'components/buttons/ClassicButton';
+import { useSnackbar } from 'notistack';
+import { useSessionState } from '../../context/session/session';
+
 
 const CREATE_RECIPE = gql`
   mutation createRecipe(
     $recipe: RecipeInput
-    $actorId: ID!
+    $actorId: ID
+    $userId: ID
   ) {
     createRecipe(
       recipe: $recipe
       actorId: $actorId
+      userId: $userId
     ) {
       id
       label
@@ -225,11 +230,14 @@ const AddRecipeForm = (props: AddRecipeFormProps) => {
     const [descriptionEditor, setDescriptionEditor] = useState();
     const [validated, setValidated] = useState(false);
     const [editorLoaded, setEditorLoaded] = useState(false);
-
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
     const [addPictureRecipe, { data: dataPicture, error: errorPicture }] = useMutation(ADD_PICTURE_RECIPE);
-
+    const router = useRouter();
     const editorRef = useRef();
-
+    const user = useSessionState();
+    if (user == null) {
+      enqueueSnackbar('Veuillez vous connecter pour ajouter une recette ');
+    }
     const ingredients: Ingredient[] = useMemo(() => {
       return formValues.ingredients ? JSON.parse(formValues.ingredients) : [];
     }, [formValues]);
@@ -248,6 +256,7 @@ const AddRecipeForm = (props: AddRecipeFormProps) => {
     const { CKEditor, ClassicEditor } = editorRef.current || {};
 
     const handleClickCreate = useCallback(() => {
+      const userId =  parseInt(user.id);
       createRecipe({
         variables: {
           recipe: {
@@ -255,9 +264,20 @@ const AddRecipeForm = (props: AddRecipeFormProps) => {
             content: descriptionEditor?.getData(),
           },
           actorId,
+          userId,      
         }
       });
     }, [createRecipe, formValues]);
+
+    
+    useEffect(() => {
+      if (data) {
+        enqueueSnackbar('Recette créé avec succès.', {
+          preventDuplicate: true,
+        });
+        router.push(`/recette/${data.createRecipe.id}`);
+      }
+    }, [data]);
 
 
     class MyUploadAdapter {

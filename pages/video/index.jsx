@@ -101,7 +101,7 @@ const Videos = (props) => {
     }
 
     return _resources
-      .filter(resource => resource.actor)
+      .filter(resource => resource?.actor)
       .map(resource => {
         return resource.actor;
       });

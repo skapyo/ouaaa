@@ -8,8 +8,8 @@ import ViewListIcon from '@mui/icons-material/ViewList';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
 import { withApollo } from 'hoc/withApollo.jsx';
-import ArticleCard from 'components/cards/ArticleCard';
-import ArticleListItem from 'components/list/ArticleListItem';
+import RecetteCard from 'components/cards/RecetteCard';
+import RecetteListItem from 'components/list/RecetteListItem';
 import AppLayout from 'containers/layouts/AppLayout';
 import { useSessionState } from 'context/session/session';
 import Link from 'components/Link';
@@ -114,6 +114,7 @@ const Recettes = (props) => {
   }, [searchResources]);
 
   const resourcesToRender = useMemo(() => {
+    debugger
     let _resources = resources;
 
     if (search) {
@@ -121,7 +122,7 @@ const Recettes = (props) => {
     }
 
     return _resources
-      .filter(resource => resource.recipe)
+      .filter(resource => resource?.recipe)
       .map(resource => {
         return resource.recipe;
       });
@@ -206,7 +207,7 @@ const Recettes = (props) => {
                 resourcesToRender.map((resource) => {
                   return (
                     <Grid item key={resource.id}>
-                      <ArticleCard article={resource} />
+                      <RecetteCard recette={resource} />
                     </Grid>
                   );
                 })
@@ -221,7 +222,7 @@ const Recettes = (props) => {
               {
                 resourcesToRender.map((resource) => {
                   return (
-                    <ArticleListItem article={resource} />
+                    <RecetteListItem recette={resource} />
                   );
                 })
               }
