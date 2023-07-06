@@ -8,7 +8,7 @@ ENV PATH /app/node_modules/.bin:$PATH
 # Installing dependencies
 COPY package*.json ./
 
-RUN npm install --max_semi_space_size=1  --max_old_space_size=198   --max_executable_size=148 --force
+RUN npm install --max_semi_space_size=1  --max_old_space_size=198   --max_executable_size=148 --legacy-peer-deps
 
 # Copying source files
 COPY . ./
