@@ -5,7 +5,9 @@ import { Button } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import PropTypes from 'prop-types';
 import AddIcon from '@mui/icons-material/Add';
-
+// Add these lines before the import statement
+import { RRuleSet, RRule } from 'rrule';
+export { RRuleSet, RRule };
 import { ViewState } from '@devexpress/dx-react-scheduler';
 import {
   Scheduler,
