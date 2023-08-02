@@ -1647,18 +1647,21 @@ export async function getServerSideProps(ctxt) {
 
   const recurrentOptions = null;
 
+  debugger;
   const res = await fetch(process.env.NEXT_PUBLIC_API_URI, {
     method: 'POST',
+    headers: { 'Content-Type': 'application/json' },  
     body: JSON.stringify({
       operationName: 'actor',
       variables: {
         id: ctxt.params.id,
       },
+       
       query: GET_ACTOR_SSR,
     }),
   });
   const endDate = moment();
-
+  console.log("rrr"+res);
   const initialData = await res.json();
   if (initialData.errors) {
     console.error(
