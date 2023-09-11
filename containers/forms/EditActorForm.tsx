@@ -951,7 +951,7 @@ const EditActorForm = (props) => {
       [setImagesList],
     );
 
-    const submitHandler = useCallback(() => {
+    const submitHandler = useCallback(async () => {
       let logoPictures;
       // @ts-ignore
       if (objectsListLogo) {
@@ -1000,6 +1000,15 @@ const EditActorForm = (props) => {
         });
       }
 
+      const newFiles = new FormData();
+      newFiles.append('myFile', logoPictures[0].file);
+      const result = await fetch('/api/files', {
+        method: 'POST',
+        body: newFiles,
+      });
+
+      console.log(result);
+
       edit({
         variables: {
           formValues: {
@@ -1010,7 +1019,7 @@ const EditActorForm = (props) => {
           // eslint-disable-next-line radix
           actorId: parseInt(actorData.actor.id),
           pictures: files,
-          logoPictures,
+          logoPictures: undefined,
           userId: parseInt(user.id),
           mainPictures,
           // @ts-ignore

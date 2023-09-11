@@ -19,4 +19,12 @@ module.exports = withPWA({
   images: {
     domains: ['localhost', 'static.recette.ouaaa-transition.fr', 'static.recette.ouaaa-transition.fr', 'static.ouaaa-transition.fr', 'ouaaa-transition.fr'],
   },
+  async rewrites() {
+    return [
+      {
+        source: '/api/files',
+        destination: process.env.NEXT_PUBLIC_API_URI.replace('/api/graphql', '/api/files')
+      }
+    ]
+  }
 });
