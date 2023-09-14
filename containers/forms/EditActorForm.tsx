@@ -710,13 +710,13 @@ const EditActorForm = (props) => {
     const [deleteActorAndEvent, setdeleteActorAndEvent] = useState(true);
 
     const [hasVideoVouaaar, setHasVideoVouaaar] = useState(
-     actorData.actor.hasVideoVouaaar,
+      actorData.actor.hasVideoVouaaar,
     );
     const [enableOpenData, setEnableOpenData] = useState(actorData.actor.enableOpenData);
 
     const handleEnableOpenData = () => {
       setEnableOpenData(!enableOpenData);
-      formValues.enableOpenData=!enableOpenData;
+      formValues.enableOpenData = !enableOpenData;
     };
 
     const [
@@ -744,7 +744,7 @@ const EditActorForm = (props) => {
 
     const handleHasVideoVouaaar = () => {
       setHasVideoVouaaar(!hasVideoVouaaar);
-      formValues.hasVideoVouaaar=!hasVideoVouaaar;
+      formValues.hasVideoVouaaar = !hasVideoVouaaar;
     };
 
     const handleClickOpen = () => {
@@ -1001,7 +1001,12 @@ const EditActorForm = (props) => {
       }
 
       const newFiles = new FormData();
-      newFiles.append('myFile', logoPictures[0].file);
+      logoPictures.forEach(element => {
+        if(element.newpic ==true){
+        newFiles.append('files', element.file.originalPicture);
+        }
+      });
+     
       const result = await fetch('/api/files', {
         method: 'POST',
         body: newFiles,
@@ -1124,7 +1129,7 @@ const EditActorForm = (props) => {
       formValues.contactId = actorData.actor.contact_id;
       formValues.siren = actorData.actor.siren;
       formValues.hasVideoVouaaar = actorData.actor.hasVideoVouaaar;
-      
+
       if (formValues.postCode === '17000') {
         setEstlarochelle(true);
       } else {
@@ -1229,61 +1234,61 @@ const EditActorForm = (props) => {
     );
 
     return <>
-    <Container component="main" maxWidth="sm">
-      <FormItem
-        label="Nom"
-        inputName="name"
-        formChangeHandler={formChangeHandler}
-        value={formValues.name}
-        required
-        errorBool={
-          !validationResult?.global && !!validationResult?.result.name
-        }
-        errorText="Nom de l'acteur requis."
-      />
-      <FormItem
-        label="Email"
-        inputName="email"
-        formChangeHandler={formChangeHandler}
-        value={formValues.email}
-        required
-        errorBool={
-          !validationResult?.global && !!validationResult?.result.email
-        }
-        errorText="Format de l'email invalide."
-        helperText="Un email générique type « contact@structure.fr » est préférable à un mail nominatif type «prenom.nom@gmail.com » notamment pour limiter la pollution publicitaire des boites mail (robots parsant le web)"
-     
-      />
-      <FormItem
-        label="Téléphone"
-        inputName="phone"
-        formChangeHandler={formChangeHandler}
-        value={formValues.phone}
-        errorBool={
-          !validationResult?.global && !!validationResult?.result.phone
-        }
-        required={false}
-        errorText="Format du téléphone invalide. Maximum 10 chiffres."
-      />
+      <Container component="main" maxWidth="sm">
+        <FormItem
+          label="Nom"
+          inputName="name"
+          formChangeHandler={formChangeHandler}
+          value={formValues.name}
+          required
+          errorBool={
+            !validationResult?.global && !!validationResult?.result.name
+          }
+          errorText="Nom de l'acteur requis."
+        />
+        <FormItem
+          label="Email"
+          inputName="email"
+          formChangeHandler={formChangeHandler}
+          value={formValues.email}
+          required
+          errorBool={
+            !validationResult?.global && !!validationResult?.result.email
+          }
+          errorText="Format de l'email invalide."
+          helperText="Un email générique type « contact@structure.fr » est préférable à un mail nominatif type «prenom.nom@gmail.com » notamment pour limiter la pollution publicitaire des boites mail (robots parsant le web)"
 
-      <FormItem
-        label="Réseau social"
-        inputName="socialNetwork"
-        formChangeHandler={formChangeHandler}
-        value={formValues.socialNetwork}
-        required={false}
-        errorBool={false}
-        errorText=""
-      />
-      <FormItem
-        label="Site Internet"
-        inputName="website"
-        formChangeHandler={formChangeHandler}
-        required={false}
-        errorBool={false}
-        value={formValues.website}
-        errorText=""
-      />
+        />
+        <FormItem
+          label="Téléphone"
+          inputName="phone"
+          formChangeHandler={formChangeHandler}
+          value={formValues.phone}
+          errorBool={
+            !validationResult?.global && !!validationResult?.result.phone
+          }
+          required={false}
+          errorText="Format du téléphone invalide. Maximum 10 chiffres."
+        />
+
+        <FormItem
+          label="Réseau social"
+          inputName="socialNetwork"
+          formChangeHandler={formChangeHandler}
+          value={formValues.socialNetwork}
+          required={false}
+          errorBool={false}
+          errorText=""
+        />
+        <FormItem
+          label="Site Internet"
+          inputName="website"
+          formChangeHandler={formChangeHandler}
+          required={false}
+          errorBool={false}
+          value={formValues.website}
+          errorText=""
+        />
         <FormItem
           label="Siren"
           inputName="siren"
@@ -1293,48 +1298,48 @@ const EditActorForm = (props) => {
           errorBool={false}
           errorText=""
         />
-        { user.role === 'admin' && (
-        <FormControlLabel
-                control={
-                  <Checkbox
-                    color="primary"
-                    name="hasVideoVouaaar"
-                    onChange={handleHasVideoVouaaar}
-                    checked={hasVideoVouaaar}
-                  />
-                }
-                label="possède une vidéo de la série acteur à voir. La vidéo doit être déjà présente sur le serveur."
+        {user.role === 'admin' && (
+          <FormControlLabel
+            control={
+              <Checkbox
+                color="primary"
+                name="hasVideoVouaaar"
+                onChange={handleHasVideoVouaaar}
+                checked={hasVideoVouaaar}
               />
-      )}
-      <div className={styles.field}>
-        <Grid className={styles.location}>
-          <GooglePlacesAutocomplete
-            apiKey="AIzaSyDvUKXlWS1470oj8C-vD6s62Bs9Y8XQf00"
-            placeholder="Taper et sélectionner la localisation *"
-            initialValue={
-              formValues.address
-                ? formValues.address
-                  .concat(' ')
-                  .concat(formValues.postCode)
-                  .concat(' ')
-                  .concat(formValues.city)
-                : formValues.city && formValues.city
             }
-            onSelect={({ description }) => geocodeByAddress(description).then((results) => {
-              getLatLng(results[0])
-                .then((value) => {
-                  formValues.lat = `${value.lat}`;
-                  formValues.lng = `${value.lng}`;
-                })
-                .catch((error) => console.error(error));
-              getAddressDetails(results);
-            })}
+            label="possède une vidéo de la série acteur à voir. La vidéo doit être déjà présente sur le serveur."
           />
-        </Grid>
-      </div>
-      {
-        /* @ts-ignore */
-        dataCollections.collections
+        )}
+        <div className={styles.field}>
+          <Grid className={styles.location}>
+            <GooglePlacesAutocomplete
+              apiKey="AIzaSyDvUKXlWS1470oj8C-vD6s62Bs9Y8XQf00"
+              placeholder="Taper et sélectionner la localisation *"
+              initialValue={
+                formValues.address
+                  ? formValues.address
+                    .concat(' ')
+                    .concat(formValues.postCode)
+                    .concat(' ')
+                    .concat(formValues.city)
+                  : formValues.city && formValues.city
+              }
+              onSelect={({ description }) => geocodeByAddress(description).then((results) => {
+                getLatLng(results[0])
+                  .then((value) => {
+                    formValues.lat = `${value.lat}`;
+                    formValues.lng = `${value.lng}`;
+                  })
+                  .catch((error) => console.error(error));
+                getAddressDetails(results);
+              })}
+            />
+          </Grid>
+        </div>
+        {
+          /* @ts-ignore */
+          dataCollections.collections
           /* @ts-ignore */
           && dataCollections.collections.map((collection) => {
             if (collection.code !== 'larochelle_quarter' || !estlarochelle) {
@@ -1363,243 +1368,243 @@ const EditActorForm = (props) => {
               </div>
             );
           })
-      }
-
-      <TitleWithTooltip
-        title={addLineBreaks("Jour et heure d'ouverture")}
-        tooltipTitle={addLineBreaks('Pour chaque ligne vous pouvez : \n'
-        + '1. Sélectionner les différents jours où vous êtes ouvert aux mêmes horaires. Le(s) jour(s) sélectionné(s) passe(nt) en bleu foncé.\n'
-        + '2. Indiquer des tranches horaires associés à ce(s) jour(s). Vous pouvez ajouter autant de tranches horaires que nécessaire pour le(s) même(s) jour(s) en cliquant sur la phrase « ajouter des horaires »\n'
-        + '3. Ajouter un lieu à chaque ligne. Vous n’avez pas d’adresse fixe mais êtes mobile de manière récurrentes, en cliquant en haut sur « indiquer des emplacements », c’est possible ! Attention néanmoins, pour les rdv spéciaux qui ne sont pas hebdomadaires ou les marchés… nous vous invitons à créer par la suite des pages événements dédiés à chacune de vos actions. Ces pages événements vous permettront de donner plus d’infos aux visiteurs et d’être visible dans l’agenda. Pour ajouter un lieu, indiquez l’adresse dans l’espace dédié et cliquez n’importe où sur l’écran pour valider. L’adresse s’affichera alors dans un bloc grisé.\n'
-        + '4. une erreur ? un horaire qui n’existe plus ? Tout est modifiable et, si besoin, vous pouvez totalement supprimer la ligne grâce à l\'icone poubelle\n\n'
-    + 'Vous avez rempli votre 1ere ligne mais il vous reste d’autres jours à indiquer ? Cliquez sur le + et ajoutez autant de ligne que nécessaire\n')}
-      />
-
-      <SchedulerContainer
-        onChange={setOpeningHours}
-        initData={actorData && actorData?.actor?.openingHours}
-      />
-
- 
-      <p />
-      <FormItem
-        label="Activité principale de votre structure / Métier"
-        inputName="activity"
-        formChangeHandler={formChangeHandler}
-        value={formValues.activity}
-        required={false}
-        errorBool={false}
-        errorText=""
-        helperText="Indiquez ici l'activité principale ou votre métier.  Cette info servira à mieux référencer votre page dans les moteurs de recherche. Ex : boulanger bio"
-        />
-
-<TitleWithTooltip
-        title={(
-          <p>
-            CONTACT PRIVE pour les échanges avec
-            {' '}
-            <i>OUAAA!</i>
-          </p>
-        )}
-      />
-
-      <FormControl component="fieldset">
-        <RadioGroup
-          row
-          aria-label="gender"
-          name="contact"
-          value={valueContactId}
-          onChange={radioChangeHandler}
-        >
-          <FormControlLabel
-            value="me"
-            control={<Radio />}
-            label="C'est moi "
-          />
-          <FormControlLabel
-            value="other"
-            control={<Radio />}
-            label={(
-              <>
-                c’est un autre (avec un compte
-                {' '}
-                <i>OUAAA!</i>
-                {' '}
-                existant)
-              </>
-            )}
-          />
-        </RadioGroup>
-        <p>
-          {showOtherContact ? (
-            <Autocomplete
-              id="combo-box-demo"
-              options={dataUsers && dataUsers.users}
-              // @ts-ignore
-              onInput={inputChangeHandler}
-              open={showOtherContactList}
-              // @ts-ignore
-              getOptionLabel={(option) => `${option.surname} ${option.lastname}`}
-              onChange={autocompleteHandler}
-              defaultValue={getDefaultValueContact()}
-              style={{ width: 300 }}
-              // eslint-disable-next-line react/jsx-props-no-spreading
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Contact OUAAA!"
-                  variant="outlined"
-                  placeholder="Tapez les 3 premières lettres"
-                />
-              )}
-              noOptionsText="Pas de compte associé"
-              clearText="Effacer"
-              closeText="Fermer"
-            />
-          ) : (
-            ''
-          )}
-        </p>
-      </FormControl>
-      
-      <TitleWithTooltip title="Votre logo" />
-
-      {objectsListLogo ? (
-        <ImagesDisplay
-          cards={objectsListLogo}
-          moveCard={moveObjectLogo}
-          findCard={findObjectLogo}
-          updateDeletedIndicator={updateDeletedIndicatorLogo}
-          updateKeyIndicator={updateKeyIndicatorLogo}
-        />
-      ) : null}
-      <ImagesDropZone
-        onDropHandler={onDropLogoHandler}
-        text="Déposez ici votre logo au format jpg et de poids inférieur à 4Mo"
-      />
-
-      <TitleWithTooltip
-        title="Photo principale"
-        tooltipTitle="Une seule photo principale est possible, vous pouvez supprimer celle affichée via la poubelle puis en télécharger une nouvelle. Seul le format JPG est accepté. Veuillez à ce que le fichier n’excède pas 4Mo"
-      />
-
-      {objectsListMain ? (
-        <ImagesDisplay
-          cards={objectsListMain}
-          moveCard={moveObjectMain}
-          findCard={findObjectMain}
-          updateDeletedIndicator={updateDeletedIndicatorMain}
-          updateKeyIndicator={updateKeyIndicatorMain}
-        />
-      ) : null}
-      <ImagesDropZone
-        onDropHandler={onDropMainHandler}
-        text="Déposez ici votre photo principale au  et de poids inférieur à 4Mo"
-      />
-
-      <TitleWithTooltip
-        title="Autres photos"
-        tooltipTitle="Vous pouvez supprimer l'image affichée via la poubelle puis en télécharger une nouvelle. Seul le format JPG est accepté. Veuillez à ce que chaque fichier n’excède pas 4Mo"
-      />
-
-      {objectsList ? (
-        <ImagesDisplay
-          cards={objectsList}
-          moveCard={moveObject}
-          findCard={findObject}
-          updateDeletedIndicator={updateDeletedIndicator}
-          updateKeyIndicator={updateKeyIndicator}
-        />
-      ) : null}
-      <ImagesDropZone
-        onDropHandler={onDropHandler}
-        text="Déposez ici votre autres photos au format jpg et de poids inférieur à 4Mo"
-      />
-
-      <p />
-
-      <FormItem
-        label="Description courte générale"
-        inputName="shortDescription"
-        formChangeHandler={formChangeHandler}
-        value={formValues.shortDescription}
-        required={false}
-        errorBool={
-          !validationResult?.global
-          && !!validationResult?.result.shortDescription
         }
-        errorText="90 caractères maximum"
-        helperText="Cette description courte s’affichera en vue liste et dans les blocs de survol/clic de la carte. Merci de synthétiser vos objectifs en quelques mots."
-      />
 
-      <TitleWithTooltip title="Description" />
+        <TitleWithTooltip
+          title={addLineBreaks("Jour et heure d'ouverture")}
+          tooltipTitle={addLineBreaks('Pour chaque ligne vous pouvez : \n'
+            + '1. Sélectionner les différents jours où vous êtes ouvert aux mêmes horaires. Le(s) jour(s) sélectionné(s) passe(nt) en bleu foncé.\n'
+            + '2. Indiquer des tranches horaires associés à ce(s) jour(s). Vous pouvez ajouter autant de tranches horaires que nécessaire pour le(s) même(s) jour(s) en cliquant sur la phrase « ajouter des horaires »\n'
+            + '3. Ajouter un lieu à chaque ligne. Vous n’avez pas d’adresse fixe mais êtes mobile de manière récurrentes, en cliquant en haut sur « indiquer des emplacements », c’est possible ! Attention néanmoins, pour les rdv spéciaux qui ne sont pas hebdomadaires ou les marchés… nous vous invitons à créer par la suite des pages événements dédiés à chacune de vos actions. Ces pages événements vous permettront de donner plus d’infos aux visiteurs et d’être visible dans l’agenda. Pour ajouter un lieu, indiquez l’adresse dans l’espace dédié et cliquez n’importe où sur l’écran pour valider. L’adresse s’affichera alors dans un bloc grisé.\n'
+            + '4. une erreur ? un horaire qui n’existe plus ? Tout est modifiable et, si besoin, vous pouvez totalement supprimer la ligne grâce à l\'icone poubelle\n\n'
+            + 'Vous avez rempli votre 1ere ligne mais il vous reste d’autres jours à indiquer ? Cliquez sur le + et ajoutez autant de ligne que nécessaire\n')}
+        />
 
-      <Typography className={styles.helperText}>
-        Cette description longue est intégrée à votre page acteur. Elle se
-        veut la plus explicite et détaillée possible. Un langage simple, des
-        mots compréhensibles de tous, vous permettront d’expliquer de manière
-        didactique vos liens avec les questions de transition, vos
-        missions/actions, votre organisation, etc. Au delà de l’accès à une
-        information claire pour tous les internautes (y compris en situation
-        de handicap) utilisant
-        {' '}
-        <i>OUAAA!</i>
-        , ce texte permettra un meilleur
-        référencement de votre page dans le moteur de recherche interne. Pour
-        cela, pensez à utiliser des mots clé du champ sémantique de votre
-        activité. Ex : vous êtes une asso de recyclerie : zéro déchet,
-        réutilisation, matière, matériaux, économie circulaire, upcycling,
-        nouvelle vie, objet, dépôt, vente, réinsertion….
-      </Typography>
+        <SchedulerContainer
+          onChange={setOpeningHours}
+          initData={actorData && actorData?.actor?.openingHours}
+        />
 
-      <br />
 
-      {editorLoaded ? (
-        <>
-          <CKEditor
-            config={{
-              toolbar: ['bold', 'italic', 'link'],
-            }}
-            editor={ClassicEditor}
-            data={formValues.description}
-            onReady={(editor) => {
-              setDescriptionEditor(editor);
-            }}
+        <p />
+        <FormItem
+          label="Activité principale de votre structure / Métier"
+          inputName="activity"
+          formChangeHandler={formChangeHandler}
+          value={formValues.activity}
+          required={false}
+          errorBool={false}
+          errorText=""
+          helperText="Indiquez ici l'activité principale ou votre métier.  Cette info servira à mieux référencer votre page dans les moteurs de recherche. Ex : boulanger bio"
+        />
+
+        <TitleWithTooltip
+          title={(
+            <p>
+              CONTACT PRIVE pour les échanges avec
+              {' '}
+              <i>OUAAA!</i>
+            </p>
+          )}
+        />
+
+        <FormControl component="fieldset">
+          <RadioGroup
+            row
+            aria-label="gender"
+            name="contact"
+            value={valueContactId}
+            onChange={radioChangeHandler}
+          >
+            <FormControlLabel
+              value="me"
+              control={<Radio />}
+              label="C'est moi "
+            />
+            <FormControlLabel
+              value="other"
+              control={<Radio />}
+              label={(
+                <>
+                  c’est un autre (avec un compte
+                  {' '}
+                  <i>OUAAA!</i>
+                  {' '}
+                  existant)
+                </>
+              )}
+            />
+          </RadioGroup>
+          <p>
+            {showOtherContact ? (
+              <Autocomplete
+                id="combo-box-demo"
+                options={dataUsers && dataUsers.users}
+                // @ts-ignore
+                onInput={inputChangeHandler}
+                open={showOtherContactList}
+                // @ts-ignore
+                getOptionLabel={(option) => `${option.surname} ${option.lastname}`}
+                onChange={autocompleteHandler}
+                defaultValue={getDefaultValueContact()}
+                style={{ width: 300 }}
+                // eslint-disable-next-line react/jsx-props-no-spreading
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Contact OUAAA!"
+                    variant="outlined"
+                    placeholder="Tapez les 3 premières lettres"
+                  />
+                )}
+                noOptionsText="Pas de compte associé"
+                clearText="Effacer"
+                closeText="Fermer"
+              />
+            ) : (
+              ''
+            )}
+          </p>
+        </FormControl>
+
+        <TitleWithTooltip title="Votre logo" />
+
+        {objectsListLogo ? (
+          <ImagesDisplay
+            cards={objectsListLogo}
+            moveCard={moveObjectLogo}
+            findCard={findObjectLogo}
+            updateDeletedIndicator={updateDeletedIndicatorLogo}
+            updateKeyIndicator={updateKeyIndicatorLogo}
           />
-        </>
-      ) : (
-        <div>Editor loading</div>
-      )}
-      <p />
+        ) : null}
+        <ImagesDropZone
+          onDropHandler={onDropLogoHandler}
+          text="Déposez ici votre logo au format jpg et de poids inférieur à 4Mo"
+        />
 
-      <TitleWithTooltip
-        title="Nos recherches en bénévolat :"
-        tooltipTitle="Décrivez ici les missions de bénévolat générales chez vous ou sur un de
+        <TitleWithTooltip
+          title="Photo principale"
+          tooltipTitle="Une seule photo principale est possible, vous pouvez supprimer celle affichée via la poubelle puis en télécharger une nouvelle. Seul le format JPG est accepté. Veuillez à ce que le fichier n’excède pas 4Mo"
+        />
+
+        {objectsListMain ? (
+          <ImagesDisplay
+            cards={objectsListMain}
+            moveCard={moveObjectMain}
+            findCard={findObjectMain}
+            updateDeletedIndicator={updateDeletedIndicatorMain}
+            updateKeyIndicator={updateKeyIndicatorMain}
+          />
+        ) : null}
+        <ImagesDropZone
+          onDropHandler={onDropMainHandler}
+          text="Déposez ici votre photo principale au  et de poids inférieur à 4Mo"
+        />
+
+        <TitleWithTooltip
+          title="Autres photos"
+          tooltipTitle="Vous pouvez supprimer l'image affichée via la poubelle puis en télécharger une nouvelle. Seul le format JPG est accepté. Veuillez à ce que chaque fichier n’excède pas 4Mo"
+        />
+
+        {objectsList ? (
+          <ImagesDisplay
+            cards={objectsList}
+            moveCard={moveObject}
+            findCard={findObject}
+            updateDeletedIndicator={updateDeletedIndicator}
+            updateKeyIndicator={updateKeyIndicator}
+          />
+        ) : null}
+        <ImagesDropZone
+          onDropHandler={onDropHandler}
+          text="Déposez ici votre autres photos au format jpg et de poids inférieur à 4Mo"
+        />
+
+        <p />
+
+        <FormItem
+          label="Description courte générale"
+          inputName="shortDescription"
+          formChangeHandler={formChangeHandler}
+          value={formValues.shortDescription}
+          required={false}
+          errorBool={
+            !validationResult?.global
+            && !!validationResult?.result.shortDescription
+          }
+          errorText="90 caractères maximum"
+          helperText="Cette description courte s’affichera en vue liste et dans les blocs de survol/clic de la carte. Merci de synthétiser vos objectifs en quelques mots."
+        />
+
+        <TitleWithTooltip title="Description" />
+
+        <Typography className={styles.helperText}>
+          Cette description longue est intégrée à votre page acteur. Elle se
+          veut la plus explicite et détaillée possible. Un langage simple, des
+          mots compréhensibles de tous, vous permettront d’expliquer de manière
+          didactique vos liens avec les questions de transition, vos
+          missions/actions, votre organisation, etc. Au delà de l’accès à une
+          information claire pour tous les internautes (y compris en situation
+          de handicap) utilisant
+          {' '}
+          <i>OUAAA!</i>
+          , ce texte permettra un meilleur
+          référencement de votre page dans le moteur de recherche interne. Pour
+          cela, pensez à utiliser des mots clé du champ sémantique de votre
+          activité. Ex : vous êtes une asso de recyclerie : zéro déchet,
+          réutilisation, matière, matériaux, économie circulaire, upcycling,
+          nouvelle vie, objet, dépôt, vente, réinsertion….
+        </Typography>
+
+        <br />
+
+        {editorLoaded ? (
+          <>
+            <CKEditor
+              config={{
+                toolbar: ['bold', 'italic', 'link'],
+              }}
+              editor={ClassicEditor}
+              data={formValues.description}
+              onReady={(editor) => {
+                setDescriptionEditor(editor);
+              }}
+            />
+          </>
+        ) : (
+          <div>Editor loading</div>
+        )}
+        <p />
+
+        <TitleWithTooltip
+          title="Nos recherches en bénévolat :"
+          tooltipTitle="Décrivez ici les missions de bénévolat générales chez vous ou sur un de
           vos projets spécifiques afin de donner envie aux visiteurs de cliquer sur «je deviens
           bénévole» de votre page."
-      />
+        />
 
-      <p />
-      {editorLoaded ? (
-        <>
-          <CKEditor
-            config={{
-              toolbar: ['bold', 'italic', 'link'],
-            }}
-            editor={ClassicEditor}
-            data={formValues.volunteerDescription}
-            onReady={(editor) => {
-              setVolunteerEditor(editor);
-            }}
-          />
-        </>
-      ) : (
-        <div>Editor loading</div>
-      )}
+        <p />
+        {editorLoaded ? (
+          <>
+            <CKEditor
+              config={{
+                toolbar: ['bold', 'italic', 'link'],
+              }}
+              editor={ClassicEditor}
+              data={formValues.volunteerDescription}
+              onReady={(editor) => {
+                setVolunteerEditor(editor);
+              }}
+            />
+          </>
+        ) : (
+          <div>Editor loading</div>
+        )}
 
-      {
-        /* @ts-ignore */
-        dataCollections.collections
+        {
+          /* @ts-ignore */
+          dataCollections.collections
           /* @ts-ignore */
           && dataCollections.collections.map((collection) => {
             if (!collection.actor) return '';
@@ -1768,150 +1773,150 @@ const EditActorForm = (props) => {
               </div>
             );
           })
-      }
+        }
 
-      <TitleWithTooltip
-        title="Référent(s) associé(s) à l’acteur"
-        tooltipTitle="Permet d’ajouter d’autres référents pour un acteur"
-      />
+        <TitleWithTooltip
+          title="Référent(s) associé(s) à l’acteur"
+          tooltipTitle="Permet d’ajouter d’autres référents pour un acteur"
+        />
 
-      <Grid container>
-        <List className={styles.referentList}>
-          {
-            // @ts-ignore
-            (formValues?.referents || []).map((referent) => {
-              return (
-                <ListItem key={referent.id}>
-                  <ListItemIcon>
-                    <Avatar>
-                      {referent.lastname[0] + referent.surname[0]}
-                    </Avatar>
-                  </ListItemIcon>
-                  <ListItemText
-                    id={`referent-list-${referent.id}`}
-                    primary={`${referent.lastname} ${referent.surname}`}
-                  />
-                  <ListItemSecondaryAction>
-                    <IconButton onClick={() => handleClickDeleteReferent(referent)} size="large">
-                      <DeleteIcon />
-                    </IconButton>
-                  </ListItemSecondaryAction>
-                </ListItem>
-              );
-            })
+        <Grid container>
+          <List className={styles.referentList}>
+            {
+              // @ts-ignore
+              (formValues?.referents || []).map((referent) => {
+                return (
+                  <ListItem key={referent.id}>
+                    <ListItemIcon>
+                      <Avatar>
+                        {referent.lastname[0] + referent.surname[0]}
+                      </Avatar>
+                    </ListItemIcon>
+                    <ListItemText
+                      id={`referent-list-${referent.id}`}
+                      primary={`${referent.lastname} ${referent.surname}`}
+                    />
+                    <ListItemSecondaryAction>
+                      <IconButton onClick={() => handleClickDeleteReferent(referent)} size="large">
+                        <DeleteIcon />
+                      </IconButton>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                );
+              })
+            }
+          </List>
+        </Grid>
+
+        <Grid container direction="row">
+          <IconButton
+            key="close"
+            aria-label="Close"
+            color="inherit"
+            onClick={handleClickAddReferent}
+            size="large">
+            <AddCircleOutline />
+          </IconButton>
+
+          {showAddReferent && (
+            <Autocomplete
+              id="combo-box-add-referent"
+              options={dataUsers.users}
+              // @ts-ignore
+              getOptionLabel={(option) => `${option.surname} ${option.lastname}`}
+              onChange={handleChangeReferent}
+              open={openAddReferentlist}
+              style={{ width: 300 }}
+              // @ts-ignore
+              onInput={inputChangeHandler}
+              // eslint-disable-next-line react/jsx-props-no-spreading
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Référents"
+                  variant="outlined"
+                  name="referents"
+                />
+              )}
+            />
+          )}
+        </Grid>
+
+        <br />
+
+        <FormControlLabel
+          control={
+            <Checkbox
+              value="remember"
+              color="primary"
+              onChange={handleEnableOpenData}
+              checked={enableOpenData}
+
+            />
           }
-        </List>
-      </Grid>
+          label="Gagner en visibilité en autorisant votre commune, transicope ou une autre plateforme à afficher vos événements et informations acteurs."
+        />
+        <br /> <br />
 
-      <Grid container direction="row">
-        <IconButton
-          key="close"
-          aria-label="Close"
-          color="inherit"
-          onClick={handleClickAddReferent}
-          size="large">
-          <AddCircleOutline />
-        </IconButton>
+        <Grid item xs={12}>
 
-        {showAddReferent && (
-          <Autocomplete
-            id="combo-box-add-referent"
-            options={dataUsers.users}
-            // @ts-ignore
-            getOptionLabel={(option) => `${option.surname} ${option.lastname}`}
-            onChange={handleChangeReferent}
-            open={openAddReferentlist}
-            style={{ width: 300 }}
-            // @ts-ignore
-            onInput={inputChangeHandler}
-            // eslint-disable-next-line react/jsx-props-no-spreading
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="Référents"
-                variant="outlined"
-                name="referents"
-              />
-            )}
-          />
-        )}
-      </Grid>
-
-      <br />
-
-      <FormControlLabel
-                control={
-                  <Checkbox
-                    value="remember"
-                    color="primary"
-                    onChange={handleEnableOpenData}
-                    checked={enableOpenData}
-                    
-                  />
-                }
-                label="Gagner en visibilité en autorisant votre commune, transicope ou une autre plateforme à afficher vos événements et informations acteurs."
-              />
-              <br/> <br/>
-
-      <Grid item xs={12}>
-        
-        { !editLoading && (
-          <ClassicButton
-          onClick={submitHandler}
-          fullWidth
-          disabled={!validationResult?.global || user == null}
-        >
-          Mettre à jour cet acteur
-      </ClassicButton>
-        )}
-        { editLoading && (
-        <CircularProgress />
-        )}
-        { !deleteLoading && (
-        <ClassicButton
-          fullWidth
-          variant="contained"
-          className={styles.delete}
-          onClick={handleClickOpen}
-        >
-          Supprimer cet acteur
-        </ClassicButton>
-        )}
-        { deleteLoading && (
-          <CircularProgress />
+          {!editLoading && (
+            <ClassicButton
+              onClick={submitHandler}
+              fullWidth
+              disabled={!validationResult?.global || user == null}
+            >
+              Mettre à jour cet acteur
+            </ClassicButton>
+          )}
+          {editLoading && (
+            <CircularProgress />
+          )}
+          {!deleteLoading && (
+            <ClassicButton
+              fullWidth
+              variant="contained"
+              className={styles.delete}
+              onClick={handleClickOpen}
+            >
+              Supprimer cet acteur
+            </ClassicButton>
+          )}
+          {deleteLoading && (
+            <CircularProgress />
           )}
 
-        
-        <Dialog
-          open={openDeletePopup}
-          onClose={handleClose}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <DialogTitle id="alert-dialog-title">
-            Êtes-vous sûr(e) de vouloir supprimer cet acteur ?
-          </DialogTitle>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              Une fois supprimé, cet acteur sera définitivement supprimé. Il
-              ne sera plus visible sur notre plateforme, ni pour vous, ni pour
-              les visiteurs.
-            </DialogContentText>
-            <FormGroup>
-              <FormControlLabel control={<Checkbox defaultChecked onClick={() => setdeleteActorAndEvent(!deleteActorAndEvent)} />} label="je souhaite également supprimer les actions dont l'acteur est l'unique référent" />
-            </FormGroup>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose} color="primary">
-              Annuler
-            </Button>
-            <Button onClick={submitDeleteActor} color="primary" autoFocus>
-              Supprimer
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </Grid>
-    </Container>
+
+          <Dialog
+            open={openDeletePopup}
+            onClose={handleClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title">
+              Êtes-vous sûr(e) de vouloir supprimer cet acteur ?
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                Une fois supprimé, cet acteur sera définitivement supprimé. Il
+                ne sera plus visible sur notre plateforme, ni pour vous, ni pour
+                les visiteurs.
+              </DialogContentText>
+              <FormGroup>
+                <FormControlLabel control={<Checkbox defaultChecked onClick={() => setdeleteActorAndEvent(!deleteActorAndEvent)} />} label="je souhaite également supprimer les actions dont l'acteur est l'unique référent" />
+              </FormGroup>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleClose} color="primary">
+                Annuler
+              </Button>
+              <Button onClick={submitDeleteActor} color="primary" autoFocus>
+                Supprimer
+              </Button>
+            </DialogActions>
+          </Dialog>
+        </Grid>
+      </Container>
     </>;
   };
 
