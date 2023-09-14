@@ -483,7 +483,7 @@ const AddArticleForm = ({ actorId }) => {
     }, result);
 
 
-    const submitHandler = () => {
+    const submitHandler = useCallback(async () => {
       let mainPictures;
       // @ts-ignore
       if (objectsListMain) {
@@ -515,6 +515,34 @@ const AddArticleForm = ({ actorId }) => {
           };
         });
       }
+      const newFiles = new FormData();
+      mainPictures.forEach(element => {
+        if(element.newpic ==true){
+        newFiles.append('files', element.file.originalPicture);
+        }
+      });
+      pictures.forEach(element => {
+        if(element.newpic ==true){
+        newFiles.append('files', element.file.originalPicture);
+        }
+      });
+      const result = await fetch('/api/files', {
+        method: 'POST',
+        body: newFiles,
+      });
+
+      mainPictures.forEach(element => {
+        if(element.newpic ==true){
+          element.file.filename=element.file.originalPicture.name;
+          element.file.originalPicture=undefined;
+        }
+      });
+      pictures.forEach(element => {
+        if(element.newpic ==true){
+          element.file.filename=element.file.originalPicture.name;
+          element.file.originalPicture=undefined;
+        }
+      });
       addArticle({
         variables: {
           articleInfos: {
@@ -533,7 +561,7 @@ const AddArticleForm = ({ actorId }) => {
           pictures,
         },
       });
-    };
+    });
 
     const autocompleteHandler = (Article, valueActor) => {
       const ArticleModified = Article;

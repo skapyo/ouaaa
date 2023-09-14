@@ -1006,13 +1006,39 @@ const EditActorForm = (props) => {
         newFiles.append('files', element.file.originalPicture);
         }
       });
-     
+      mainPictures.forEach(element => {
+        if(element.newpic ==true){
+        newFiles.append('files', element.file.originalPicture);
+        }
+      });
+      files.forEach(element => {
+        if(element.newpic ==true){
+        newFiles.append('files', element.file.originalPicture);
+        }
+      });
       const result = await fetch('/api/files', {
         method: 'POST',
         body: newFiles,
       });
 
-      console.log(result);
+      logoPictures.forEach(element => {
+        if(element.newpic ==true){
+          element.file.filename=element.file.originalPicture.name;
+          element.file.originalPicture=undefined;
+        }
+      });
+      mainPictures.forEach(element => {
+        if(element.newpic ==true){
+          element.file.filename=element.file.originalPicture.name;
+          element.file.originalPicture=undefined;
+        }
+      });
+      files.forEach(element => {
+        if(element.newpic ==true){
+          element.file.filename=element.file.originalPicture.name;
+          element.file.originalPicture=undefined;
+        }
+      });
 
       edit({
         variables: {
@@ -1024,7 +1050,7 @@ const EditActorForm = (props) => {
           // eslint-disable-next-line radix
           actorId: parseInt(actorData.actor.id),
           pictures: files,
-          logoPictures: undefined,
+          logoPictures,
           userId: parseInt(user.id),
           mainPictures,
           // @ts-ignore

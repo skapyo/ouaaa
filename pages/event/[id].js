@@ -1466,6 +1466,7 @@ export default withApollo()(Event);
 export async function getServerSideProps(ctxt) {
   const res = await fetch(process.env.NEXT_PUBLIC_API_URI, {
     method: 'POST',
+    headers: { 'Content-Type': 'application/json' }, 
     body: JSON.stringify({
       operationName: 'event',
       variables: {
