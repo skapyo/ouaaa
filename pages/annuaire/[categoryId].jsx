@@ -87,6 +87,7 @@ export async function getServerSideProps(context) {
   const { categoryId } = context.query;
   const actorsResponse = await fetch(process.env.NEXT_PUBLIC_API_URI, {
     method: 'POST',
+    headers: { 'Content-Type': 'application/json' }, 
     body: JSON.stringify({
       operationName: 'actorsByCategory',
       variables: {
@@ -97,6 +98,7 @@ export async function getServerSideProps(context) {
   });
   const categoryResponse = await fetch(process.env.NEXT_PUBLIC_API_URI, {
     method: 'POST',
+    headers: { 'Content-Type': 'application/json' }, 
     body: JSON.stringify({
       operationName: 'category',
       variables: {

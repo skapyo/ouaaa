@@ -79,6 +79,7 @@ export const getServerSideProps = async ({ res }) => {
 
   const getActor = await fetch(process.env.NEXT_PUBLIC_API_URI, {
     method: 'POST',
+    headers: { 'Content-Type': 'application/json' }, 
     body: JSON.stringify({
       operationName: 'actors',
       variables: {},
@@ -96,6 +97,7 @@ export const getServerSideProps = async ({ res }) => {
 
   const getEvents = await fetch(process.env.NEXT_PUBLIC_API_URI, {
     method: 'POST',
+    headers: { 'Content-Type': 'application/json' }, 
     body: JSON.stringify({
       operationName: 'events',
       variables: {},
@@ -111,6 +113,7 @@ export const getServerSideProps = async ({ res }) => {
   }
   const getCategories = await fetch(process.env.NEXT_PUBLIC_API_URI, {
     method: 'POST',
+    headers: { 'Content-Type': 'application/json' }, 
     body: JSON.stringify({
       operationName: 'categories',
       variables: {},
@@ -127,6 +130,7 @@ export const getServerSideProps = async ({ res }) => {
 
   const getArticles = await fetch(process.env.NEXT_PUBLIC_API_URI, {
     method: 'POST',
+    headers: { 'Content-Type': 'application/json' }, 
     body: JSON.stringify({
       operationName: 'articles',
       variables: {},

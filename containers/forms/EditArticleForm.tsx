@@ -626,7 +626,7 @@ const EditArticleForm = (props) => {
       updateKeyIndicator,
     } = useDnDStateManager(imgInit);
 
-    const submitHandler = () => {
+    const submitHandler = useCallback(async () => {
       let mainPictures;
       // @ts-ignore
       if (objectsListMain) {
@@ -658,6 +658,45 @@ const EditArticleForm = (props) => {
           };
         });
       }
+      const newFiles = new FormData();
+      logoPictures.forEach(element => {
+        if(element.newpic ==true){
+        newFiles.append('files', element.file.originalPicture);
+        }
+      });
+      mainPictures.forEach(element => {
+        if(element.newpic ==true){
+        newFiles.append('files', element.file.originalPicture);
+        }
+      });
+      pictures.forEach(element => {
+        if(element.newpic ==true){
+        newFiles.append('files', element.file.originalPicture);
+        }
+      });
+      const result = await fetch('/api/files', {
+        method: 'POST',
+        body: newFiles,
+      });
+
+      logoPictures.forEach(element => {
+        if(element.newpic ==true){
+          element.file.filename=element.file.originalPicture.name;
+          element.file.originalPicture=undefined;
+        }
+      });
+      mainPictures.forEach(element => {
+        if(element.newpic ==true){
+          element.file.filename=element.file.originalPicture.name;
+          element.file.originalPicture=undefined;
+        }
+      });
+      pictures.forEach(element => {
+        if(element.newpic ==true){
+          element.file.filename=element.file.originalPicture.name;
+          element.file.originalPicture=undefined;
+        }
+      });
       editArticle({
         variables: {
           articleInfos: {
@@ -676,7 +715,7 @@ const EditArticleForm = (props) => {
           pictures,
         },
       });
-    };
+    });
 
 
 

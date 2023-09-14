@@ -121,8 +121,6 @@ const SigninForm = () => {
     );
 
     const handleSignin = useCallback((evt) => {
-      evt.preventDefault();
-      evt.stopPropagation();
 
       signin({
         variables: {
@@ -131,6 +129,9 @@ const SigninForm = () => {
           persistentConnection: checkBoxChecked,
         },
       });
+      evt.preventDefault();
+      evt.stopPropagation();
+
     }, [checkBoxChecked, formValues, signin]);
 
     const handleClickSignup = useCallback(() => {
@@ -141,6 +142,7 @@ const SigninForm = () => {
       if (data && !data?.login?.isEmailValidated) {
         setValidEmail(false);
       } else if (data?.login?.id) {
+        debugger;
         sessionDispatch({
           type: 'login',
           payload: omitTypename(data.login),
