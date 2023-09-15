@@ -641,45 +641,19 @@ const AddActorForm = () => {
         });
       }
 
-      const newFiles = new FormData();
-      logoPictures.forEach(element => {
+      for await (const element of logoPictures.concat(mainPictures).concat(pictures)){
         if(element.newpic ==true){
-        newFiles.append('files', element.file.originalPicture);
-        }
-      });
-      mainPictures.forEach(element => {
-        if(element.newpic ==true){
-        newFiles.append('files', element.file.originalPicture);
-        }
-      });
-      pictures.forEach(element => {
-        if(element.newpic ==true){
-        newFiles.append('files', element.file.originalPicture);
-        }
-      });
-      const result = await fetch('/api/files', {
-        method: 'POST',
-        body: newFiles,
-      });
-
-      logoPictures.forEach(element => {
-        if(element.newpic ==true){
+          const newFiles = new FormData();
+          newFiles.append('files', element.file.originalPicture);
+          await fetch('/api/files', {
+            method: 'POST',
+            body: newFiles,
+          });
           element.file.filename=element.file.originalPicture.name;
           element.file.originalPicture=undefined;
+       
         }
-      });
-      mainPictures.forEach(element => {
-        if(element.newpic ==true){
-          element.file.filename=element.file.originalPicture.name;
-          element.file.originalPicture=undefined;
-        }
-      });
-      pictures.forEach(element => {
-        if(element.newpic ==true){
-          element.file.filename=element.file.originalPicture.name;
-          element.file.originalPicture=undefined;
-        }
-      });
+      }
 
       create({
         variables: {
