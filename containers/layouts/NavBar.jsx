@@ -141,22 +141,6 @@ const NavBar = () => {
   }, []);
 
   const open = Boolean(anchorEl);
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-
-  useEffect(() => {
-    if(!(typeof window === undefined)) { 
-      if (user === undefined || user == null) {
-        enqueueSnackbar(
-          'Veuillez vous connecter pour accéder au PAT-OUAAA!',
-          {
-            preventDuplicate: true,
-          },
-        );
-        router.push('/signin');
-      }
-    }
-  });
-
 
 
   return (

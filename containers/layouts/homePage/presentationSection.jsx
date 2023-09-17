@@ -1,9 +1,12 @@
 import { Container, Typography, useTheme } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
-import React from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Link from '../../../components/Link';
 import SearchEngine from '../../../components/SearchEngine';
+import { useSessionState } from 'context/session/session';
+import { useRouter, withRouter } from 'next/router';
+import { useSnackbar } from 'notistack';
 import Image from 'next/image';
 const useStyles = makeStyles((theme) => ({
   titleContainer: {
@@ -102,10 +105,24 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const PresentationSection = (props) => {
+  const router = useRouter();
   const styles = useStyles();
   const theme = useTheme();
-  const mobile = useMediaQuery(theme.breakpoints.down('md'));
+  const user = useSessionState();
 
+  const mobile = useMediaQuery(theme.breakpoints.down('md'));
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  useEffect(() => {
+  if (user === undefined || user == null) {
+    enqueueSnackbar(
+      'Veuillez vous connecter pour accéder au PAT-OUAAA!',
+      {
+        preventDuplicate: true,
+      },
+    );
+    router.push('/signin');
+  }
+});
   return (
     <Container className={styles.titleContainer} id={props.id}>
       <Image
@@ -138,4 +155,4 @@ const PresentationSection = (props) => {
   );
 };
 
-export default PresentationSection;
+export default withRouter(PresentationSection);

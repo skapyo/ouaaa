@@ -7,22 +7,21 @@ import {
 import { useTheme } from '@mui/styles';
 
 import makeStyles from '@mui/styles/makeStyles';
-
+import { useRouter, withRouter } from 'next/router';
 import { gql, useQuery } from '@apollo/client';
 import Actors from 'containers/layouts/mapPage/actors';
-import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Drawer from '@mui/material/Drawer';
 import DoubleArrowIcon from '@mui/icons-material/DoubleArrow';
 import dynamic from 'next/dynamic';
-
+import { useSnackbar } from 'notistack';
 import { getImageUrl } from '../../utils/utils';
 // eslint-disable-next-line import/no-unresolved
 import ButtonGroupSelected from '../../components/buttons/ButtonGroupSelected';
 import Filters from '../../components/filters';
 import AppLayout from '../../containers/layouts/AppLayout';
 import { withApollo } from '../../hoc/withApollo';
-
+import { useSessionState } from 'context/session/session';
 const MapWithNoSSR = dynamic(() => import('../../components/map/Map'), {
   ssr: false,
 });
@@ -338,6 +337,7 @@ const carto = () => {
   const router = useRouter();
   const { inviteActor, noEmailInviteActor } = router.query;
   const [categoriesChecked, setCategoriesChecked] = useState(categories.Sujets);
+  const user = useSessionState();
 
   const [otherCategoriesChecked, setOtherCategoriesChecked] = useState(
     otherCategories,
@@ -365,6 +365,7 @@ const carto = () => {
   const switchMode = useCallback(() => {
     setListMode(!listMode);
   }, [listMode]); 
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const isSSR = () => typeof window !== 'undefined'; 
   if (isSSR) {
@@ -375,6 +376,18 @@ const carto = () => {
         entries: [categoriesChecked],
         isValidated: true,
       },
+    });
+
+    useEffect(() => {
+      if (user === undefined || user == null) {
+        enqueueSnackbar(
+          'Veuillez vous connecter pour accéder au PAT-OUAAA!',
+          {
+            preventDuplicate: true,
+          },
+        );
+        router.push('/signin');
+      }
     });
 
     useEffect(() => {
@@ -527,4 +540,4 @@ const carto = () => {
   }
   return <div />;
 };
-export default withApollo()(carto);
+export default withRouter(withApollo()(carto));
