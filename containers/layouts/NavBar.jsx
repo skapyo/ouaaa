@@ -207,9 +207,9 @@ const NavBar = () => {
                       <MenuItem component={Link} href="/video">
                         Vidéo Acteurs à VOUAAAR!
                       </MenuItem>
-                      <MenuItem component={Link} href="/recettes">
+                       {/*    <MenuItem component={Link} href="/recettes">
                         Recettes
-                      </MenuItem>
+                      </MenuItem>*/}
                     </Menu>
                   </Grid>
              {/*     <Grid item>
@@ -396,9 +396,9 @@ const NavBar = () => {
                       <MenuItem component={Link} href="/video">
                         Vidéo Acteurs à VOUAAAR!
                       </MenuItem>
-                      <MenuItem component={Link} href="/recettes">
+                      {/*   <MenuItem component={Link} href="/recettes">
                         Recettes
-                      </MenuItem>
+                      </MenuItem> */}
                     </Menu>
                   </Grid>
              {/*     <Grid item>
