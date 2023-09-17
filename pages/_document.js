@@ -9,8 +9,8 @@ export default class MyDocument extends Document {
       <Html lang="en">
         <Head>
           {/* PWA primary color */}
-          <meta name='application-name' content='OUAAA!' />
-          <meta name='apple-mobile-web-app-title' content='OUAAA!' />
+          <meta name='application-name' content='PAT-OUAAA!' />
+          <meta name='apple-mobile-web-app-title' content='PAT-OUAAA!' />
 
           <meta name='apple-mobile-web-app-capable' content='yes' />
           <meta name='apple-mobile-web-app-status-bar-style' content='default' />
@@ -22,7 +22,7 @@ export default class MyDocument extends Document {
           <meta name='msapplication-TileColor' content='#2B5797' />
           <meta name='msapplication-tap-highlight' content='no' />
           <meta name='theme-color' content='#000000' />
-          <meta property='og:site_name' content='OUAAA!' />
+          <meta property='og:site_name' content='PAT-OUAAA!' />
           <meta property='og:type' content='website' />
 
           <link rel='apple-touch-icon' href='/apple-touch-icon.png' />

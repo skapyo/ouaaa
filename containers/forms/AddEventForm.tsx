@@ -910,7 +910,7 @@ const AddEventForm = ({ actorId }) => {
         <br />
         <TitleWithTooltip
           title="Infos pratiques"
-          tooltipTitle="Ici vous pouvez indiquer toutes les infos comme tarifs, parking, moyen d’accès, … elles apparaitront ainsi aux visiteurs de OUAAA dans un bloc dédié plus lisible"
+          tooltipTitle="Ici vous pouvez indiquer toutes les infos comme tarifs, parking, moyen d’accès, … elles apparaitront ainsi aux visiteurs de PAT-OUAAA dans un bloc dédié plus lisible"
         />
         <p />
         {editorLoaded ? (

@@ -239,7 +239,7 @@ const SuggestEventForm = (props) => {
           {noEmailsuggestEvent && (
             <FormControlLabel
               control={<Checkbox onChange={handleChangeInvite} />}
-              label="Propose à l'acteur d'ajouter son événément sur OUAAA!"
+              label="Propose à l'acteur d'ajouter son événément sur PAT-OUAAA!"
             />
           )}
 
@@ -282,7 +282,7 @@ const SuggestEventForm = (props) => {
               )}
             />
 )}
-<div>Si l'acteur n'est pas présent, invitez le à rejoindre OUAAA! en cliquant  <Link href={`/map?suggestEvent=true`}> ici</Link></div>
+<div>Si l'acteur n'est pas présent, invitez le à rejoindre PAT-OUAAA! en cliquant  <Link href={`/map?suggestEvent=true`}> ici</Link></div>
 <br/>
         { getFormInputs() }
         <ClassicButton
@@ -291,7 +291,7 @@ const SuggestEventForm = (props) => {
           onClick={submitContactForm}
           disabled={!validationResult?.global}
         >
-          { noEmailInvite ? "Ajouter l'acteur" : "Proposer à l'acteur d'ajouter son événément sur OUAAA!"}
+          { noEmailInvite ? "Ajouter l'acteur" : "Proposer à l'acteur d'ajouter son événément sur PAT-OUAAA!"}
         </ClassicButton>
       </Container>
     );
@@ -325,7 +325,7 @@ const SuggestEventForm = (props) => {
       <div>
         <div className={styles.formContainer}>
           <p>
-            Merci de votre aide pour tenir l'agenda OUAAA! à jour.
+            Merci de votre aide pour tenir l'agenda PAT-OUAAA! à jour.
             {' '}
             Votre suggestion a bien été envoyé. Vous pouvez continuer à suggérer d'autres événements si vous le souhaitez.
           </p>

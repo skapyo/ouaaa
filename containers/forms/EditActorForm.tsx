@@ -1402,7 +1402,7 @@ const EditActorForm = (props) => {
             <p>
               CONTACT PRIVE pour les échanges avec
               {' '}
-              <i>OUAAA!</i>
+              <i>PAT-OUAAA!</i>
             </p>
           )}
         />
@@ -1427,7 +1427,7 @@ const EditActorForm = (props) => {
                 <>
                   c’est un autre (avec un compte
                   {' '}
-                  <i>OUAAA!</i>
+                  <i>PAT-OUAAA!</i>
                   {' '}
                   existant)
                 </>
@@ -1451,7 +1451,7 @@ const EditActorForm = (props) => {
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    label="Contact OUAAA!"
+                    label="Contact PAT-OUAAA!"
                     variant="outlined"
                     placeholder="Tapez les 3 premières lettres"
                   />
@@ -1547,7 +1547,7 @@ const EditActorForm = (props) => {
           information claire pour tous les internautes (y compris en situation
           de handicap) utilisant
           {' '}
-          <i>OUAAA!</i>
+          <i>PAT-OUAAA!</i>
           , ce texte permettra un meilleur
           référencement de votre page dans le moteur de recherche interne. Pour
           cela, pensez à utiliser des mots clé du champ sémantique de votre

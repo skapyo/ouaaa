@@ -747,14 +747,14 @@ const AddActorForm = () => {
           <br />
           Un acteur de la transition peut avoir n’importe quel statut juridique,
           les collectifs et particuliers peuvent donc aussi être référencés sur{' '}
-          <i>OUAAA!</i>
+          <i>PAT-OUAAA!</i>
         </Typography>
 
         <Typography className={styles.introduction}>
           Pour soumettre votre inscription, nous vous invitons à remplir à
           minima les champs marqués d’une « * ». <br /> Une fois votre
           inscription validée par notre équipe, votre page acteur sera visible
-          de tous les visiteurs de <i>OUAAA!</i>
+          de tous les visiteurs de <i>PAT-OUAAA!</i>
           <br />
           <br />
           Une campagne annuelle de vérification des comptes a lieu afin de
@@ -963,7 +963,7 @@ const AddActorForm = () => {
         />
         <br />
         <Typography variant="body1" color="primary" className={styles.label}>
-          CONTACT PRIVE pour les échanges avec <i>OUAAA!</i>
+          CONTACT PRIVE pour les échanges avec <i>PAT-OUAAA!</i>
         </Typography>
         <FormControl component="fieldset">
           <RadioGroup
@@ -982,7 +982,7 @@ const AddActorForm = () => {
               control={<Radio />}
               label={
                 <>
-                  c’est un autre (avec un compte <i>OUAAA!</i> existant)
+                  c’est un autre (avec un compte <i>PAT-OUAAA!</i> existant)
                 </>
               }
             />
@@ -1005,7 +1005,7 @@ const AddActorForm = () => {
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    label="Contact OUAAA!"
+                    label="Contact PAT-OUAAA!"
                     variant="outlined"
                     placeholder="Tapez les 3 premières lettre du contact"
                   />
@@ -1106,7 +1106,7 @@ const AddActorForm = () => {
           didactique vos liens avec les questions de transition, vos
           missions/actions, votre organisation, etc. Au delà de l’accès à une
           information claire pour tous les internautes (y compris en situation
-          de handicap) utilisant OUAAA !, ce texte permettra un meilleur
+          de handicap) utilisant PAT-OUAAA !, ce texte permettra un meilleur
           référencement de votre page dans le moteur de recherche interne. Pour
           cela, pensez à utiliser des mots clé du champ sémantique de votre
           activité. Ex : vous êtes une asso de recyclerie : zéro déchet,

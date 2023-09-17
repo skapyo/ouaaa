@@ -850,9 +850,9 @@ const Actor = ({ initialData }) => {
             {`{
                       "@context": "https://schema.org/",
                       "@type": "VideoObject",
-                      "name":  "Vidéo Acteurs à VOUAAAR ! - ${data.actor.name}",
+                      "name":  "Vidéo Acteurs à VPAT-OUAAAR ! - ${data.actor.name}",
                       "thumbnailUrl": "${"https://static.ouaaa-transition.fr/static/video/"+id+".jpg"}",
-                      "description": "Présentation de l'acteur ${data.actor.name} dans le cadre de la série de OUAAA! Acteurs à VOUAAAR ! ",
+                      "description": "Présentation de l'acteur ${data.actor.name} dans le cadre de la série de PAT-OUAAA! Acteurs à VPAT-OUAAAR ! ",
                       "contentUrl": "${"https://static.ouaaa-transition.fr/static/video/"+id+".mp4"}",
                       "UploadDate": "${moment(parseInt(data.actor.updatedAt)).format()}"
                     }`

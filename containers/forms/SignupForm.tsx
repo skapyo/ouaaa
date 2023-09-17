@@ -271,7 +271,7 @@ const SignupForm = () => {
                 onChange={formChangeHandler}
               />
             }
-            label={<label>J'accepte que les données saisies soient utilisées par OUAAA pour vous contacter conformément à <a href="/legalmention">nos mentions légales </a>*</label>}
+            label={<label>J'accepte que les données saisies soient utilisées par PAT-OUAAA pour vous contacter conformément à <a href="/legalmention">nos mentions légales </a>*</label>}
           />
           <div  className={styles.legal}>Les données personnelles relatives à la création du compte (nom/prénom, structure si
           professionnel, numéro de téléphone, email) sont destinées à permettre l’identification sur le site

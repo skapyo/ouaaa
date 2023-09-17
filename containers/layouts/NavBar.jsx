@@ -18,9 +18,10 @@ import { useMutation } from '@apollo/client';
 import gql from 'graphql-tag';
 import { useCookies } from 'react-cookie';
 import { useRouter } from 'next/router';
+
 import { withApollo } from 'hoc/withApollo';
 import ButtonAppBarCollapse from './ButtonAppBarCollapse';
-
+import { useSnackbar } from 'notistack';
 const useStyles = makeStyles((theme) => ({
   '@media print': {
     navbar: {
@@ -140,6 +141,23 @@ const NavBar = () => {
   }, []);
 
   const open = Boolean(anchorEl);
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+
+  useEffect(() => {
+    if(!(typeof window === undefined)) { 
+      if (user === undefined || user == null) {
+        enqueueSnackbar(
+          'Veuillez vous connecter pour accéder au PAT-OUAAA!',
+          {
+            preventDuplicate: true,
+          },
+        );
+        router.push('/signin');
+      }
+    }
+  });
+
+
 
   return (
     <AppBar position="static" className={styles.navbar} color="inherit">
@@ -156,7 +174,7 @@ const NavBar = () => {
                 <img
                   className={styles.logo}
                   src="/logo.png"
-                  alt="OUAAA! : Agir pour la Transition Ecologique & Sociale en Aunis | La Rochelle"
+                  alt="PAT-OUAAA! : Agir pour la Transition Ecologique & Sociale en Aunis | La Rochelle"
                 />
               </Link>
             </Grid>
@@ -202,10 +220,10 @@ const NavBar = () => {
                         Articles
                       </MenuItem>
                       <MenuItem component={Link} href="/news?tag=ouaaa">
-                        Articles OUAAA
+                        Articles PAT-OUAAA
                       </MenuItem>
                       <MenuItem component={Link} href="/video">
-                        Vidéo Acteurs à VOUAAAR!
+                        Vidéo Acteurs
                       </MenuItem>
                       <MenuItem component={Link} href="/recettes">
                         Recettes
@@ -391,10 +409,10 @@ const NavBar = () => {
                         Articles
                       </MenuItem>
                       <MenuItem component={Link} href="/news?tag=ouaaa">
-                        Articles OUAAA
+                        Articles PAT-OUAAA
                       </MenuItem>
                       <MenuItem component={Link} href="/video">
-                        Vidéo Acteurs à VOUAAAR!
+                        Vidéo Acteurs 
                       </MenuItem>
                       <MenuItem component={Link} href="/recettes">
                         Recettes

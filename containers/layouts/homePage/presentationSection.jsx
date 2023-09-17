@@ -111,7 +111,7 @@ const PresentationSection = (props) => {
       <Image
       className={styles.landingImage}
                     src="/Accueil1.jpg"
-                    alt="Affiche OUAAA!" 
+                    alt="Affiche PAT-OUAAA!" 
                     fill
                     objectFit="cover"
                     objectPosition="center"

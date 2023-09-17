@@ -50,7 +50,7 @@ const Charter = () => {
               </div>
               <br/>
               <div>
-              OUAAA! affirme son refus d’intégrer toute pratique violente, discriminatoire, anti-démocratique, sexiste, homophobe, xénophobe ou raciste.   </div>
+              PAT-OUAAA! affirme son refus d’intégrer toute pratique violente, discriminatoire, anti-démocratique, sexiste, homophobe, xénophobe ou raciste.   </div>
             </p>
             
             <Typography variant="h5">2. Les usages en fonction des usagers :</Typography>
@@ -84,12 +84,12 @@ const Charter = () => {
               </div>
             </p>
             <div>
-            Dans un esprit collaboratif, de nouvelles fonctionnalités viendront s'ajouter réguliérement. Elles seront basées sur les besoins des utilisateurs et acteurs de OUAAA!
+            Dans un esprit collaboratif, de nouvelles fonctionnalités viendront s'ajouter réguliérement. Elles seront basées sur les besoins des utilisateurs et acteurs de PAT-OUAAA!
               </div>
               <br/>
             <Typography variant="h5">3. Qui peut s’inscrire ?</Typography>
             <p>
-            Dans un principe de neutralité, tous les types d’acteurs (particuliers, associations & ONG, entreprises, entreprises coopératives et services publics) peuvent intégrer OUAAA! S’ils : 
+            Dans un principe de neutralité, tous les types d’acteurs (particuliers, associations & ONG, entreprises, entreprises coopératives et services publics) peuvent intégrer PAT-OUAAA! S’ils : 
             <div>
                 • ont manifesté leur accord avec les valeurs de la charte
               </div>
@@ -129,12 +129,12 @@ const Charter = () => {
               • Nous nous réservons le droit de modifier une information erronée.
               </div>
               <div>
-              • OUAAA! s’engage à respecter le règlement général sur la protection des données (RGPD).
+              • PAT-OUAAA! s’engage à respecter le règlement général sur la protection des données (RGPD).
               </div>
               <br/>
               <div>
                 {' '}
-                Une gouvernance participative (composée d’acteurs et utilisateurs) permet de développer OUAAA!, fixer ses objectifs, réfléchir à son orientation et gérer les différents aspects afférents.
+                Une gouvernance participative (composée d’acteurs et utilisateurs) permet de développer PAT-OUAAA!, fixer ses objectifs, réfléchir à son orientation et gérer les différents aspects afférents.
               </div>
              
               <div>

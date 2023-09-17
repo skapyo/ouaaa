@@ -182,7 +182,7 @@ const AccountPage = () => {
 
   const steps = getSteps();
   function getSteps() {
-    return ['Authentifiez vous', 'Acceptez la charte de OUAAA', "Ajoutez vos informations d'acteur"];
+    return ['Authentifiez vous', 'Acceptez la charte de PAT-OUAAA', "Ajoutez vos informations d'acteur"];
   }
   const user = useSessionState();
 

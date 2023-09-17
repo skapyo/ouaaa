@@ -187,7 +187,7 @@ const Actor = React.forwardRef((props, ref) => {
             <br />
             <br />
             <br />
-            <img className={classes.logo} src="/logo.png" alt="OUAAA! : Agir pour la Transition Ecologique &amp; Sociale en Aunis | La Rochelle" />
+            <img className={classes.logo} src="/logo.png" alt="PAT-OUAAA! : Agir pour la Transition Ecologique &amp; Sociale en Aunis | La Rochelle" />
           </Container>
         </Box>
       </>

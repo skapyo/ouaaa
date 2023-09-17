@@ -44,34 +44,34 @@ const About = () => {
               </div>
               <br />
               <div>
-              C'est ainsi qu'est né le site « OUAAA! -  Agir pour la transition en Aunis » 
-Au fait, pourquoi ce nom ? A l’origine, c’était un acronyme pour : Outils des Acteurs Alternatifs en Aunis. Pour nous, c'est surtout l’effet wOUAAAw !
+              C'est ainsi qu'est né le site « PAT-OUAAA! -  Agir pour la transition en Aunis » 
+Au fait, pourquoi ce nom ? A l’origine, c’était un acronyme pour : Outils des Acteurs Alternatifs en Aunis. Pour nous, c'est surtout l’effet wPAT-OUAAAw !
               </div>
               <br />
-             <b>wOUAAAw, un projet local !</b> <br /> <br />
-             <div>Logo_OUAAA
+             <b>wPAT-OUAAAw, un projet local !</b> <br /> <br />
+             <div>Logo_PAT-OUAAA
              Si le web n’a, par principe pas d’échelle géographique, notre projet a lui un territoire défini intégrant les communautés de communes Aunis Atlantique, Aunis Sud, Île de Ré et l’agglomération de La Rochelle. Cet échelon permet des liens entre zone urbaine et communes rurales pour, par exemple construire une filière agricole vivrière avec les paysans et les consommateurs. C’est aussi les choix pris pour le SCOT, le plan alimentation ou encore celui du projet de monnaie locale « la trémière ». Un territoire résilient !
               </div>
               <br />
-             <b>wOUAAAw, un projet inclusif ! </b> <br /> <br />
+             <b>wPAT-OUAAAw, un projet inclusif ! </b> <br /> <br />
              <div>
-             OUAAA! souhaite promouvoir tous les acteurs oeuvrant pour la transition, valoriser leurs actions et les mobiliser pour sortir de l’entre soi. Ces acteurs peuvent-être des particuliers, associations, ONG, entreprises ou des services publics.
+             PAT-OUAAA! souhaite promouvoir tous les acteurs oeuvrant pour la transition, valoriser leurs actions et les mobiliser pour sortir de l’entre soi. Ces acteurs peuvent-être des particuliers, associations, ONG, entreprises ou des services publics.
 Notre plateforme s’adresse à tous les habitants de l’Aunis : le jeune public, les ados, les étudiants, les femmes, les seniors, les professionnels, les publics précaires, discriminés…
               </div>
               <br />
-             <b>wOUAAAw, un projet engagé !</b> <br /> <br />
+             <b>wPAT-OUAAAw, un projet engagé !</b> <br /> <br />
              <div>
-             Plateforme d’information et d’engagement, OUAAA! veut accélérer la transition vers un fonctionnement plus sobre, plus humain et véritablement « durable ». Nous définissons la transition écologique et sociale comme une évolution vers une société plus juste qui répondrait aux besoins de chacun dans une sobriété propice à la préservation de notre environnement. Sur la base des <Link href="/odd">Objectifs de Développement Durable de l’ONU </Link>, nous avons développé notre propre arborescence en 4 thématiques et 21 sujets pour inclure la diversité des acteurs et actions concernés par la transition.
+             Plateforme d’information et d’engagement, PAT-OUAAA! veut accélérer la transition vers un fonctionnement plus sobre, plus humain et véritablement « durable ». Nous définissons la transition écologique et sociale comme une évolution vers une société plus juste qui répondrait aux besoins de chacun dans une sobriété propice à la préservation de notre environnement. Sur la base des <Link href="/odd">Objectifs de Développement Durable de l’ONU </Link>, nous avons développé notre propre arborescence en 4 thématiques et 21 sujets pour inclure la diversité des acteurs et actions concernés par la transition.
               </div>
               <br />
-             <b>wOUAAAw, un projet coopératif ! </b> <br /> <br />
+             <b>wPAT-OUAAAw, un projet coopératif ! </b> <br /> <br />
              <div>
              Animé par une équipe essentiellement bénévole : sans but lucratif, le site est développé sur la base d’outils libres. Il est utilisable et clonable pour d’autres projets similaires sur d’autres territoires. Nos développeurs ont porté une attention particulière à l’impact écologique de notre site web et à son accessibilité à tous. 
 A l’écoute des usagers : acteurs inscrits et visiteurs du site, nous recueillons leurs besoins et idées afin d’améliorer l’expérience utilisateurs et proposer de nouvelles fonctionnalités.
           <br />
           
           <br />
-          <b>wOUAAAw, ils s’engagent à nos côté !  </b> <br /> <br />
+          <b>wPAT-OUAAAw, ils s’engagent à nos côté !  </b> <br /> <br />
             <img height="100px"  className={styles.image} src ="https://static.ouaaa-transition.fr/static/images/actor/32/32-9WylkfPt1K-original.jpeg" alt="Aunis en transition" />{' '}
           Porté par le collectif Aunis en Transition : l'association reprend le flambeau du Collectif Transition Citoyenne Pays Rochelais avec la volonté de fédérer les acteurs de tout l'Aunis, échelle cohérente pour organiser un territoire résilient. Son ambition est la suivante : Créer du lien entre les acteurs de la transition, favoriser leur coopération, les faire mieux connaitre du grand public.
           <br />

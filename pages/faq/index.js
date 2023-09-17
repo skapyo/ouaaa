@@ -35,7 +35,7 @@ const Faq = () => {
             {' '}
             <br />
             <div>
-              <Typography variant="h2">Comment créer mon compte sur OUAAA! ?</Typography>
+              <Typography variant="h2">Comment créer mon compte sur PAT-OUAAA! ?</Typography>
               <br />
               1. Dans le menu haut de votre écran, cliquez sur
               {' '}
@@ -106,7 +106,7 @@ const Faq = () => {
 
             <Typography variant="h2">C’est où l’Aunis ?</Typography>
             <br />
-            Pour OUAAA!, l’Aunis est défini comme le regroupement des communautés de communes Aunis Atlantique, Aunis Sud, Île de Ré et de l’agglomération de La Rochelle
+            Pour PAT-OUAAA!, l’Aunis est défini comme le regroupement des communautés de communes Aunis Atlantique, Aunis Sud, Île de Ré et de l’agglomération de La Rochelle
             <br />
             <br />
             <Typography variant="h2">Comment remplir ma page acteur ?</Typography>
@@ -115,7 +115,7 @@ const Faq = () => {
             <br />
             2. Rendez vous sur <Link href= "/addactor">la page ajouter un acteur</Link>
             <br />
-            3. Vous confirmer, en cochant la case dédiée, que vous respecter la charte OUAAA ! 
+            3. Vous confirmer, en cochant la case dédiée, que vous respecter la charte PAT-OUAAA ! 
             <br />
             4. Des infos bulles sont insérées dans chaque étape de la création-édition d’une page acteur. Retrouvez les facilement en cliquant sur  <InfoIcon />
             <br />
@@ -166,7 +166,7 @@ const Faq = () => {
           <br />
           1. fournir vos coordonnées à un acteur précis lorsque vous indiquez vouloir mettre un acteur en favori, participer à une action ou devenir bénévole. C’est logique, l’acteur pourra ainsi vous tenir informé en direct !
           <br />
-          2. utiliser en interne pour nos statistiques : savoir quelles sont les pages les plus consultées, par quels moyens vous êtes arrivé chez nous, etc. Tout cela est anonyme. En apprenant à vous connaître, nous pourrons améliorer votre expérience de OUAAA!
+          2. utiliser en interne pour nos statistiques : savoir quelles sont les pages les plus consultées, par quels moyens vous êtes arrivé chez nous, etc. Tout cela est anonyme. En apprenant à vous connaître, nous pourrons améliorer votre expérience de PAT-OUAAA!
 
           <br />
           <br />

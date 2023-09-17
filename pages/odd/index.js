@@ -82,7 +82,7 @@ const Charter = () => {
                 <div>
                   Pour participer à ce grand mouvement collectif,
                   {' '}
-                  <i>OUAAA!</i>
+                  <i>PAT-OUAAA!</i>
                   {' '}
                   propose un système de répartition des acteurs et actions en 4 ensembles et 22 sujets inspirés des Objectifs du Développement Durable et ceux du Collectif National pour la Transition.
                 </div>

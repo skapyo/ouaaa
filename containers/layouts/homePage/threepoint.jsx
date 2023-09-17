@@ -189,10 +189,7 @@ const PresentationSection = (props) => {
         <Grid item md={6}>
           <div className={styles.gridTitle}>
             <Typography variant="h3" className={styles.cardTitle}>
-              <i>OUAAA!</i>
-            </Typography>
-            <Typography variant="h3" className={styles.cardTitle}>
-              C'EST QUOUAAA ?
+              <i>PAT-OUAAA!</i>
             </Typography>
             <div className={styles.border} />
           </div>
@@ -219,7 +216,7 @@ const PresentationSection = (props) => {
                 primary={(
                   <>
                     Le
-                    <b> projet OUAAA! accompagne la transition</b>
+                    <b> projet PAT-OUAAA! accompagne la transition</b>
                     {' '}
                     de notre territoire vers un fonctionnement plus
                     <b> sobre</b>
@@ -249,7 +246,7 @@ const PresentationSection = (props) => {
                 primary={(
                   <>
                     Souhaitant atteindre les objectifs d'un territoire zéro carbone, la plateforme participative
-                    <i>OUAAA!</i>
+                    <i>PAT-OUAAA!</i>
                     {' '}
                     met un coup de projecteur, sur tous celles et ceux qui agissent pour la
                     <b> transition climatique</b>

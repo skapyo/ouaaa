@@ -60,7 +60,7 @@ const Participate = () => {
               <br/>
               <br/>
               <div>
-              Tu cherches comment participer activement à la transition écologique et sociale en Aunis ? <br/> Les acteurs présents sur OUAAA! peuvent avoir des besoins pour organiser un festival, intervenir dans les écoles pour sensibiliser les jeunes, distribuer des repas, nettoyer nos plages… Rendez-vous sur leur  page acteur, un onglet « recherche des bénévoles » t’indique présicément leurs besoins du moment. Il ne te reste plus qu’à cliquer sur « devenir bénévole » et hop ! C’est parti
+              Tu cherches comment participer activement à la transition écologique et sociale en Aunis ? <br/> Les acteurs présents sur PAT-OUAAA! peuvent avoir des besoins pour organiser un festival, intervenir dans les écoles pour sensibiliser les jeunes, distribuer des repas, nettoyer nos plages… Rendez-vous sur leur  page acteur, un onglet « recherche des bénévoles » t’indique présicément leurs besoins du moment. Il ne te reste plus qu’à cliquer sur « devenir bénévole » et hop ! C’est parti
               </div>
               <br/>
               
@@ -79,7 +79,7 @@ const Participate = () => {
               Tu veux changer le monde avec nous ?
             </div>
             <div>
-            OUAAA! est un site collaboratif.  Il est fait pour et par ses usagers, les acteurs recensés et ses partenaires publics ou privés. 
+            PAT-OUAAA! est un site collaboratif.  Il est fait pour et par ses usagers, les acteurs recensés et ses partenaires publics ou privés. 
             </div>
             <br/>
             <div>
@@ -95,7 +95,7 @@ const Participate = () => {
               <a href="https://contact466459.typeform.com/to/x0uyBGSf" target="_blank">
               JE REJOINS L’EQUIPE
                 {' '}
-                <i>OUAAA!</i>
+                <i>PAT-OUAAA!</i>
               </a>
               {/* @ts-ignore */}
             </Typography>

@@ -140,7 +140,7 @@ const Videos = (props) => {
   return (
     <AppLayout>
       <Container maxWidth="lg">
-        <Typography sx={styles.title} variant="h1" align="center">Vidéos des ACTEUR À VOUAAAR !</Typography>
+        <Typography sx={styles.title} variant="h1" align="center">Vidéos des ACTEUR À VPAT-OUAAAR !</Typography>
         <Box sx={styles.searchBox}>
           <TextField
             sx={styles.searchContainer}

@@ -284,7 +284,7 @@ const SuggestActorForm = (props) => {
       <div>
         <div className={styles.formContainer}>
           <p>
-            Merci de nous aider à faire grandir la communauté de OUAAA. Votre invitation à l'acteur
+            Merci de nous aider à faire grandir la communauté de PAT-OUAAA. Votre invitation à l'acteur
             {' '}
             <b>{lastActorNameSent}</b>
             {' '}

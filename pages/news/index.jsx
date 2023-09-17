@@ -147,7 +147,7 @@ const News = (props) => {
     }
   
     return resources
-      .filter(resource => resource?.article && (tag ===undefined || (tag == "ouaaa" && resource.type=="ARTICLE_OUAAA")) || resource?.recipe )
+      .filter(resource => resource?.article && (tag ===undefined || (tag == "ouaaa" && resource.type=="ARTICLE_PAT-OUAAA")) || resource?.recipe )
       .map(resource => {
         return resource.article || resource.recipe;
       });
@@ -186,7 +186,7 @@ const News = (props) => {
   return (
     <AppLayout>
       <Container maxWidth="lg">
-        <Typography sx={styles.title} variant="h1" align="center">Les Articles {tag!==undefined && (<>de OUAAA! </>) }</Typography>
+        <Typography sx={styles.title} variant="h1" align="center">Les Articles {tag!==undefined && (<>de PAT-OUAAA! </>) }</Typography>
         <Box sx={styles.searchBox}>
           <TextField
             sx={styles.searchContainer}

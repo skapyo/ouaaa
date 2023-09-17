@@ -171,13 +171,13 @@ const Index = () => {
     <AppLayout>
       <Head>
         <meta property="og:type" content="website" />
-        <meta property="og:title" content="OUAAA!" />
+        <meta property="og:title" content="PAT-OUAAA!" />
         <meta property="og:description" content="Plateforme d’information & d'initiative des acteurs de la transition vers une société plus humaine & écologique sur le territoire de l'Aunis  !" />
-        <meta property="og:site_name" content="OUAAA!" />
+        <meta property="og:site_name" content="PAT-OUAAA!" />
         <meta property="og:url" content="https://ouaaa-transition.fr/" />
         <meta property="og:image" content="https://ouaaa-transition.fr/apple-touch-icon.png" />
         <meta name="twitter:url" content="https://ouaaa-transition.fr/" />
-        <meta name="twitter:title" content="OUAAA!" />
+        <meta name="twitter:title" content="PAT-OUAAA!" />
         <meta name="twitter:description" content="Plateforme d’information & d'initiative des acteurs de la transition vers une société plus humaine & écologique sur le territoire de l'Aunis  !" />
         <meta name="twitter:image" content="https://ouaaa-transition.fr/apple-touch-icon.png" />
       </Head>
@@ -221,7 +221,7 @@ recommandation</Link>
 
     {/**  <Modal
               open={openModalHomeInfo}
-              onClose={() =>  {setCookie('hasSeenHomeInfoOUAAA',true); setOpenModalHomeInfo(false);}}
+              onClose={() =>  {setCookie('hasSeenHomeInfoPAT-OUAAA',true); setOpenModalHomeInfo(false);}}
               aria-labelledby="parent-modal-title"
               aria-describedby="parent-modal-description"
               style={{ overflow: 'auto',width: 'auto!important', maxHeight:'100%' }}
@@ -231,7 +231,7 @@ recommandation</Link>
                 <IconButton
                   aria-label="Close"
                   className={styles.closeButton}
-                  onClick={() => {setCookie('hasSeenHomeInfoOUAAA',true); setOpenModalHomeInfo(false);}}
+                  onClick={() => {setCookie('hasSeenHomeInfoPAT-OUAAA',true); setOpenModalHomeInfo(false);}}
                   size="large">
                   <CloseIcon />
                 </IconButton>

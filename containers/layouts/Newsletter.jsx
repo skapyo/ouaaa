@@ -192,7 +192,7 @@ const Newsletter = (prop) => {
         <Typography variant="h2" className={[styles.cardTitle, styles.align]}>
           POUR NE RIEN RATER DE
           {' '}
-          <i>OUAAA!</i>
+          <i>PAT-OUAAA!</i>
           <br />
           INSCRIVEZ-VOUS À NOTRE NEWSLETTER
 

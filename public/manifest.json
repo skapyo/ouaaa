@@ -3,8 +3,8 @@
   "background_color": "#f8f8f8",
   "display": "standalone",
   "start_url": "/",
-  "name": "OUAAA!",
-  "short_name": "OUAAA!",
+  "name": "PAT-OUAAA!",
+  "short_name": "PAT-OUAAA!",
   "icons": [
       {
           "src": "/icon-192x192.png",

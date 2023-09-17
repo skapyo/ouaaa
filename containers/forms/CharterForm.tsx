@@ -25,7 +25,7 @@ const CharterForm = (props) => {
       <Typography className={styles.introduction}>
         Félicitations, vous avez un compte
         {' '}
-        <i>OUAAA!</i>
+        <i>PAT-OUAAA!</i>
         {' '}
         personnel et vous vous apprêtez à créer une page Acteur.
         {' '}
@@ -38,7 +38,7 @@ const CharterForm = (props) => {
         afin de savoir si vous
         adhérez aux valeurs de
         {' '}
-        <i>OUAAA!</i>
+        <i>PAT-OUAAA!</i>
         .
       </Typography>
       <br />
