@@ -798,6 +798,117 @@ const AddActorForm = () => {
         )}
         <Typography variant="h2" color="primary" className={styles.label}>
           {' '}
+          Présentation, inscription{' '}
+        </Typography>
+        <Typography className={styles.introduction}>
+        <br />
+            <br />
+        Ce site est destiné à faciliter les travaux des personnes intéressée par le PAT. Elle leur est réservée, n'est pas destinée au public.
+        <br />
+        Nous vous invitons à y inscrire vos coordonnées et activités, qui pourront ainsi être recherchées suivant des filtres de sélection par territoire géographique, par centre d'intérêt, de les localiser sur une carte, d'en générer des listes, de retrouver les rendez-vous sur un agenda commun, de présenter des références de documentation. 
+        <br />
+        Ce référencement est ouvert aux membres actifs du PAT, à ceux qui sont concernés et voudraient le rejoindre, à tous les stades des filières (de la production à la transformation, vente, animation, solidarité,etc..) et quel que soit leur statut (public, privé, de la société civile). 
+        <br />
+        Nous espérons qu'il facilitera la réunion d'informations et la mise en contact, pour une communauté d'intérêts autour de l'agriculture et de l'alimentation.
+        <br />
+        Merci donc de complétez les informations ci-dessous, cela pourra se faire aussi par GT avec leurs référents. Les champs marqués d'une « * » sont indispensables, vous pourrez compléter les autres ultérieurement.
+        <br />
+        Pour information :
+        <br />
+        Le PAT a aussi une importante vocation de sensibilisation, communication, promotion. 
+        <br />
+        Dans un second temps si vous le souhaitez, vous pourrez aussi apparaître sur la partie publique de ce site. Elle est déjà ouverte et certains d'entre vous y sont référencés. Son objectif est de mettre en valeur l'ensemble des acteurs locaux sur des thématiques variées (transport, énergie, environnement, etc), dont alimentation et agriculture. Cela permettrait de développer votre visibilité, et faire connaître les objectifs du PAT aux consommateurs / citoyens pour qu'ils s'y engagent.
+        <br />
+        <br />
+            <br />
+        </Typography>
+
+        <Typography variant="h2" color="primary" className={styles.label}>
+          {' '}
+          CHOIX D’UN GROUPE DE TRAVAIL{' '}
+        </Typography>
+        <br />
+        <Typography className={styles.helperText}>
+          Deux choix maximum, ne cochez que ceux qui correspondent vraiment à l’activité de votre organisation / entreprise, ou ceux auxquels vous pourrez activement participer.
+        </Typography>
+        {
+          /* @ts-ignore */
+          dataCollections.collections &&
+            /* @ts-ignore */
+            dataCollections.collections.map((collection) => {
+              if (collection.code !== 'working_group') return '';
+              return (
+                <div>
+               {
+                    // display &&
+                    !IsTree(collection) && collection.multipleSelection && (
+                      <List>
+                        {collection.entries &&
+                          collection.entries.map((entry) => {
+                            return (
+                              <ListItem key={entry.id} role={undefined} dense>
+                                {/* @ts-ignore */}
+                                <Checkbox
+                                  edge="start"
+                                  tabIndex={-1}
+                                  disableRipple
+                                  onChange={formChangeHandler}
+                                  name="entries"
+                                  value={entry.id}
+                                  onClick={(e) => e.stopPropagation()}
+                                />
+                                <ListItemText primary={entry.label} />
+                                
+                              </ListItem>
+                            );
+                          })}
+                      </List>
+                    )
+                  }
+                </div>
+              );
+            })
+        }
+<br />
+{
+          /* @ts-ignore */
+          dataCollections.collections &&
+            /* @ts-ignore */
+            dataCollections.collections.map((collection) => {
+              if (collection.code !== 'implication') return '';
+              return (
+                <div>
+               {
+                    // display &&
+                    !IsTree(collection) && !collection.multipleSelection && (
+                      <FormControl component="fieldset">
+                        <RadioGroup
+                          row
+                          aria-label="entries"
+                          name="entries"
+                          onChange={formChangeHandler}
+                        >
+                          {collection.entries &&
+                            collection.entries.map((entry) => {
+                              return (
+                                <FormControlLabel
+                                  value={entry.id}
+                                  control={<Radio />}
+                                  label={entry.label}
+                                />
+                              );
+                            })}
+                        </RadioGroup>
+                      </FormControl>
+                    )
+                  }
+                </div>
+              );
+            })
+        }
+        <br />
+        <Typography variant="h2" color="primary" className={styles.label}>
+          {' '}
           Coordonnées{' '}
         </Typography>
         <FormItem
@@ -1194,6 +1305,7 @@ const AddActorForm = () => {
             dataCollections.collections.map((collection) => {
               if (!collection.actor) return '';
               if (collection.code === 'larochelle_quarter') return '';
+              if (collection.code === 'working_group') return '';
               //    const [display, setDisplay] = useState(false);
               let { label } = collection;
               let helperText = '';

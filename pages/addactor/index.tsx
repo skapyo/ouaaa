@@ -214,7 +214,7 @@ const AccountPage = () => {
         variant="h6"
         className={styles.userInfosTitle}
       >
-        Se référencer en tant qu'acteur de la transition
+        Se référencer dans le cadre du Projet Alimentaire Territorial, en tant qu'acteur local de l'agriculture et de l'alimentation
       </Typography>
       <Container component="main" maxWidth="sm">
         <Stepper activeStep={activeStep}>
