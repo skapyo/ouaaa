@@ -20,6 +20,16 @@ const useStyles = makeStyles((theme) => ({
   input: {
     display: 'none',
   },
+  buttonInverse: {
+    color: '#2C367E',
+    'background-color': 'white',
+    width: '90%',
+    '&:hover': {
+      cursor: 'pointer',
+      color: 'white',
+      'background-color': '#2C367E',
+    },
+  },
 }));
 
 const ImagesDropZone = ({ onDropHandler, text }) => {
@@ -77,7 +87,7 @@ const ImagesDropZone = ({ onDropHandler, text }) => {
               type="file"
             />
             <label htmlFor={idInput}>
-              <Button variant="contained" color="primary" component="span">
+              <Button variant="contained" color="primary" className={styles.buttonInverse} component="span">
                 Ajouter une image
               </Button>
             </label>
@@ -94,7 +104,7 @@ const ImagesDropZone = ({ onDropHandler, text }) => {
               type="file"
             />
             <label htmlFor={idInput}>
-              <Button variant="contained" color="primary" component="span">
+              <Button variant="contained" color="primary"  className={styles.buttonInverse} component="span">
                 Ajouter une image
               </Button>
             </label>

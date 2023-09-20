@@ -51,6 +51,12 @@ const useTreeItemStyles = makeStyles((theme) => ({
     fontWeight: 'inherit',
     flexGrow: 1,
   },
+  labelTextParent: {
+    fontWeight: '300',
+    fontSize: '1.5em',
+    flexGrow: 1,
+  },
+ 
   entryDescription: {
     width: '100%',
   },
@@ -163,9 +169,21 @@ function StyledTreeItem(props) {
                 <span className={classes.entriesIcon} style={{ '-webkit-mask': `url('/icons/${icon}.svg') center center / 28px no-repeat`, backgroundColor: `${color}` }} />
               </>
             )}
-            <Typography variant="body2" className={classes.labelText}>
-              {labelText}
-            </Typography>
+             {hasSubEntries && isForm &&  (
+              <>
+                 <Typography variant="body2" className={classes.labelTextParent}   style={{  color: `${color}` }} >
+                  {labelText}
+                </Typography>
+              </>
+            )}
+             {!(hasSubEntries && isForm) && (
+              <>
+                <Typography variant="body2" className={classes.labelText} style={{  color: `${color}` }}  >
+                  {labelText}
+                </Typography>
+              </>
+            )}
+           
             {description && (
               <Tooltip title={description}>
                 <InfoIcon />

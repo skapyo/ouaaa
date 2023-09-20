@@ -6,8 +6,17 @@ import FormControl from '@mui/material/FormControl';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Radio from '@mui/material/Radio';
+import makeStyles from '@mui/styles/makeStyles';
+
+const useStyles = makeStyles((theme, props) => ({
+  formControlLabel: (props) => ({
+    margin: '0px',
+    textAlign: 'left'
+  }),
+}));
 
 function CustomRadioGroup(props) {
+  const classes = useStyles();
   const {
     formChangeHandler,
     defaultValue,
@@ -34,6 +43,7 @@ function CustomRadioGroup(props) {
         name="entries"
         defaultValue={defaultValue}
         onChange={(e) => handleChange(e)}
+        className={classes.formControlLabel}
       >
         {entries
           && entries.map((entry) => {
