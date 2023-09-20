@@ -225,8 +225,8 @@ const SchedulerContainer = (props) => {
             }
             label={
               showPlace
-                ? 'Cacher les emplacements'
-                : 'Indiquer des emplacements'
+                ? 'Cacher les adresses'
+                : 'Indiquer des adresses'
             }
           />
         </div>
