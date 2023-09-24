@@ -741,7 +741,7 @@ const AddActorForm = () => {
       <Container component="main" maxWidth="sm">
         <br />
         <Typography className={styles.introduction}>
-          AAvec votre compte personnel, vous pouvez maintenant créer une ou plusieurs « page acteur », 
+          Avec votre compte personnel, vous pouvez maintenant créer une ou plusieurs « page acteur », 
           pour chacune des structures dont vous êtes membre. 
           Toute personne physique ou morale, organisation privée, publique, de la société civile peut disposer de sa page.
         </Typography>
@@ -1223,7 +1223,7 @@ const AddActorForm = () => {
 
 
         <Typography variant="body1" color="primary" className={styles.label}>
-          Jour et heure d'ouverture {' '}
+          Jour et horaire d'ouverture {' '}
           <Tooltip title={addLineBreaks('Pour chaque ligne vous pouvez : \n'
           + '1. Sélectionner les différents jours où vous êtes ouvert aux mêmes horaires. Le(s) jour(s) sélectionné(s) passe(nt) en bleu foncé.\n'
           + '2. Indiquer des tranches horaires associés à ce(s) jour(s). Vous pouvez ajouter autant de tranches horaires que nécessaire pour le(s) même(s) jour(s) en cliquant sur la phrase « ajouter des horaires »\n'
