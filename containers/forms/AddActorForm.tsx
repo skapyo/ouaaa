@@ -871,6 +871,106 @@ const AddActorForm = () => {
           dataCollections.collections &&
             /* @ts-ignore */
             dataCollections.collections.map((collection) => {
+              if (collection.code !== 'category_organization') return '';
+              //    const [display, setDisplay] = useState(false);
+              let { label } = collection;
+              let helperText = '';
+    
+                label =
+                  "A quelle catégorie correspond votre organisation / entreprise, à quel titre participez-vous";
+    
+          
+
+              return (
+                <div>
+                  <br />
+                  <Typography className={classes.collectionLabel}>
+                    {label}{' '}
+                    {helperText !== '' && (
+                      <Tooltip title={helperText}>
+                        <InfoIcon />
+                      </Tooltip>
+                    )}
+                  </Typography>
+                  <br />
+                  {
+                    // display &&
+                    IsTree(collection) && (
+                      <Entries initValues={[]}>
+                        <TreeView
+                          className={classes.rootTree}
+                          defaultCollapseIcon={<ArrowDropDownIcon />}
+                          defaultExpandIcon={<ArrowRightIcon />}
+                          defaultEndIcon={<div style={{ width: 24 }} />}
+                          defaultExpanded={
+                            collection.entries &&
+                            collection.entries.map((entry) => {
+                              return entry.id;
+                            })
+                          }
+                        >
+                          {collection.entries &&
+                            collection.entries.map((entry) => {
+                              return (
+                                // @ts-ignore
+                                <StyledTreeItem
+                                  key={entry.id}
+                                  nodeId={entry.id}
+                                  labelText={entry.label}
+                                  hideCheckBox
+                                  description={entry.description}
+                                  icon={entry.icon}
+                                  isForm
+                                  bgColor="grey"
+                                  color={entry.color}
+                                  isParent
+                                  hasSubEntries={
+                                    entry.subEntries &&
+                                    entry.subEntries.length > 0
+                                  }
+                                  className={classes.treeParent}
+                                >
+                                  {entry.subEntries &&
+                                    entry.subEntries.map((subEntry) => {
+                                      return (
+                                        <StyledTreeItem
+                                          key={subEntry.id}
+                                          // @ts-ignore
+                                          nodeId={subEntry.id}
+                                          labelText={subEntry.label}
+                                          categoryChange={formChangeHandler}
+                                          description={subEntry.description}
+                                          icon={subEntry.icon}
+                                          color={entry.color}
+                                          isForm
+                                          checked={
+                                            formValues &&
+                                            formValues.entriesWithInformation &&
+                                            isEntriesWithInformationContains(
+                                              formValues.entriesWithInformation,
+                                              subEntry.id,
+                                            )
+                                          }
+                                        />
+                                      );
+                                    })}
+                                </StyledTreeItem>
+                              );
+                            })}
+                        </TreeView>
+                      </Entries>
+                    )
+                  }
+
+                </div>
+              );
+            })
+        }
+{
+          /* @ts-ignore */
+          dataCollections.collections &&
+            /* @ts-ignore */
+            dataCollections.collections.map((collection) => {
               if (collection.code !== 'implication') return '';
               return (
                 <div>
@@ -1175,16 +1275,15 @@ const AddActorForm = () => {
             /* @ts-ignore */
             dataCollections.collections.map((collection) => {
               if (collection.code !== 'category') return '';
-              if (collection.code === 'working_group') return '';
               //    const [display, setDisplay] = useState(false);
               let { label } = collection;
               let helperText = '';
-              if (collection.code === 'category') {
+    
                 label =
                   "Sujets d'actions principaux";
                 helperText =
                   'Vous avez la possibilité d’ajouter un texte libre pour expliquer votre lien au sujet choisi. Vous pouvez sélectionner jusqu’a 3 sujet.';
-              }
+          
 
               return (
                 <div>
@@ -1430,7 +1529,7 @@ const AddActorForm = () => {
               let helperText = '';
               if (collection.code === 'public_target') {
                 label =
-                  'Public';
+                  'Public visé';
                 helperText =
                   'Ici nous vous proposons de choisir votre public principal. Bien sûr à chaque action (événement, campagne…) que vous créerez vous pourrez indiquer des publics différents. de votre public principal. Tout public = familles ; Jeunes adultes = 15-25 ans, étudiants ; précaires = SDF, familles en difficulté, etc. ; discriminés = femmes, LGBTQIA+, migrants, etc';
               } else if (collection.code === 'collectif') {

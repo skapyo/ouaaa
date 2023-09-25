@@ -194,11 +194,6 @@ const Index = () => {
 
           <DynamicLastArticle id={sections[4]} />
 
-
-          <Newsletter id={sections[5]} />
-
-          <Partner />
-
           <ScrollToBottom sections={sections} />
         </Box>
         <CookieConsent

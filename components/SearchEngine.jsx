@@ -198,7 +198,7 @@ const SearchEngine = (props) => {
         return (
           <TextField
             {...params}
-            placeholder="Rechercher un acteur ou une action"
+            placeholder="Rechercher un acteur du PAT ou une action"
             variant="outlined"
             InputProps={{
               ...params.InputProps,

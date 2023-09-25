@@ -135,20 +135,15 @@ const PresentationSection = (props) => {
                   />
       <div className={styles.title}>
         <h1 className={styles.h1}>
-            agir pour la transition écologique
+        PAT-OUAAA! : 
+        <br />
+        agir pour la transition écologique et sociale
             {' '}
             <br />
             {' '}
-            et sociale en aunis
+            à travers le plan alimentaire de territoire
         </h1>
       </div>
-
-      <Typography className={styles.baseLine}>
-        Nous sommes là pour te faire connaître celles et ceux qui oeuvrent
-        {' '}
-        {!mobile && (<br />)}
-        pour la transition écologique, sociale et démocratique, te donner le calendrier de leurs actions et te permettre de les rejoindre.
-      </Typography>
 
       { <SearchEngine />}
     </Container>

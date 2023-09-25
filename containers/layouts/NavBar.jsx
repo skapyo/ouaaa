@@ -87,8 +87,8 @@ const useStyles = makeStyles((theme) => ({
   },
   logo: {
     marginBottom: '-20px',
-    marginTop: '-11px',
-    width: '200px',
+    marginTop: '6px',
+    width: '329px',
   },
 }));
 
@@ -155,11 +155,13 @@ const NavBar = () => {
           >
             <Grid item>
               <Link href="/">
-                <img
+
+<img
                   className={styles.logo}
-                  src="/logo.png"
+                  src="/pat_ouaaa.png"
                   alt="PAT-OUAAA! : Agir pour la Transition Ecologique & Sociale en Aunis | La Rochelle"
                 />
+
               </Link>
             </Grid>
             <div className={styles.navLayout}>
@@ -209,46 +211,8 @@ const NavBar = () => {
                       <MenuItem component={Link} href="/video">
                         Vidéo Acteurs
                       </MenuItem>
-                      <MenuItem component={Link} href="/recettes">
-                        Recettes
-                      </MenuItem>
                     </Menu>
                   </Grid>
-             {/*     <Grid item>
-                    <MenuItem
-                      button
-                      component={Link}
-                      className={styles.menuItem}
-                      href="/granddefi"
-                    >
-                      LE GRAND DEFI
-                    </MenuItem>
-                  </Grid>
-                  <Grid item>
-                    <MenuItem
-                      button
-                      component={Link}
-                      className={styles.menuItem}
-                      href="/participate"
-                    >
-                      JE PARTICIPE
-                    </MenuItem>
-  
-                  </Grid>
-*/}
-
-                  {
-                  <Grid item>
-                    <MenuItem
-                      button
-                      component={Link}
-                      className={styles.menuItem}
-                      href="/about"
-                    >
-                      A PROPOS
-                    </MenuItem>
-                  </Grid>
-                  }
 
                   {!user && (
                     <Grid item>
@@ -312,14 +276,6 @@ const NavBar = () => {
                           href="/account"
                         >
                           Mon compte
-                        </MenuItem>
-                        <MenuItem
-                          button
-                          component={Link}
-                          className={styles.menuItem}
-                          href="/granddefiProgression"
-                        >
-                          Espace grand défi
                         </MenuItem>
                         <MenuItem
                           button
@@ -398,9 +354,6 @@ const NavBar = () => {
                       <MenuItem component={Link} href="/video">
                         Vidéo Acteurs 
                       </MenuItem>
-                      <MenuItem component={Link} href="/recettes">
-                        Recettes
-                      </MenuItem>
                     </Menu>
                   </Grid>
              {/*     <Grid item>
@@ -425,16 +378,6 @@ const NavBar = () => {
   
                   </Grid>
 */}
-                  <Grid item>
-                    <MenuItem
-                      button
-                      component={Link}
-                      className={styles.menuItem}
-                      href="/about"
-                    >
-                      A PROPOS
-                    </MenuItem>
-                  </Grid>
                   {!user && (
                     <Grid item>
                       {/* @ts-ignore */}
@@ -497,14 +440,6 @@ const NavBar = () => {
                           href="/account"
                         >
                           Mon compte
-                        </MenuItem>
-                        <MenuItem
-                          button
-                          component={Link}
-                          className={styles.menuItem}
-                          href="/granddefiProgression"
-                        >
-                          Espace grand défi
                         </MenuItem>
                         <MenuItem
                           button

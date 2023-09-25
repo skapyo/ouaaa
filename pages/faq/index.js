@@ -43,7 +43,7 @@ const Faq = () => {
               {' '}
               puis sur le bouton
               {' '}
-              <img src="/image/creer_compte.png" width="40%" />
+              <img src="/image/creer_compte.png" width="20%" />
               {' '}
               ou par
               {' '}
@@ -61,7 +61,7 @@ const Faq = () => {
             <br />
             <br />
             <div>
-            <Typography variant="h2">A quoi va me servir mon compte sur ouaaa-transition.fr  ? </Typography>
+            <Typography variant="h2">A quoi va me servir mon compte sur pat.ouaaa-transition.fr  ? </Typography>
               <br />
               <br />
               En ayant un compte personnel vous pouvez dès maintenant : créer une ou plusieurs pages acteurs pour parler de structure(s) agissant pour la transition écologique et citoyenne en Aunis
@@ -73,42 +73,8 @@ const Faq = () => {
             <br />
             <br />
 
-            Tous les Particuliers, association & ONG, entreprises, entreprises coopératives et services publics. intervienant pour améliorer, expérimenter, réinventer la société. Il s’intégre dans une ou plusieurs des 4 thématiques suivantes et parmi les 21 sujets associés
+           
 
-            <ul>
-              <li> vivre mieux : Éducation, Formation ; Culture, loisirs, médias ; Santé, bien-être ; Alimentation ; Autres biens et services</li>
-              {' '}
-              <br />
-              <li>vivre ensemble : Solidarité, humanisme ; droits, justice, égalité ; économie, finance ; citoyenneté, démocratie ; recherches et savoirs</li>
-              {' '}
-              <br />
-              <li>produire mieux : agriculture, production ; industrie, transformation ; recyclage, déchets ; mobilité, transports ; énergie</li>
-              {' '}
-              <br />
-              <li>vivre avec la planète : air et climat ; eau ; sol et sous-sol ; biodiversité ; paysages et écosystèmes</li>
-              {' '}
-              <br />
-            </ul>
-            <br />
-            <br />
-            <Typography variant="h2">Y a t il des acteurs qui ne peuvent pas s’inscrire sur  ouaaa-transition.fr ?</Typography>
-            <br />
-            <ul>
-              <li>Les structures nationales ou internationales n’ayant pas succursale sur le territoire de l’Aunis (défini comme le regroupement des communautés de communes : Aunis Atlantique, Aunis Sud, Île de Ré et agglomération de La Rochelle) </li>
-              <br />
-              <li>Les prestations de soin, santé, bien-être, massages, développement personnel ou de coaching induisant des relations humaines d'une teneur particulière (confiance, intimité, ascendant moral, influence) entre les prestataires et leurs clients. </li>
-              <br />
-              <li>Les partis politiques, associations dépendantes de partis ou mouvements à caractère partisan ou prosélyte. </li>
-              <br />
-              <li>Les acteurs ayant une pratique discriminatoire, anti-démocratique, sexiste, homophobe, xénophobe ou raciste.</li>
-              <br />
-            </ul>
-
-            <Typography variant="h2">C’est où l’Aunis ?</Typography>
-            <br />
-            Pour PAT-OUAAA!, l’Aunis est défini comme le regroupement des communautés de communes Aunis Atlantique, Aunis Sud, Île de Ré et de l’agglomération de La Rochelle
-            <br />
-            <br />
             <Typography variant="h2">Comment remplir ma page acteur ?</Typography>
             <br />
             1. Vous devez en premier lieu avoir créer un compte personnel

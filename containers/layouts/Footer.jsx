@@ -8,7 +8,7 @@ const useStyles = makeStyles({
     color: 'white',
     backgroundColor: '#2C367E',
     border: 'none',
-    height: '26em',
+    height: '8em',
     textAlign: 'center',
     paddingTop: '3em',
     marginTop: 'auto',
@@ -51,40 +51,13 @@ const Footer = () => {
     <Container
       className={classes.footer}
     >
-      <Typography variant="h5" className={classes.footerTitle}>
-        RESTONS CONNECTÉS!
-      </Typography>
-      <Typography variant="h6" className={classes.footerSubTitle}>
-        Suivez nos aventures sur les réseaux sociaux :
-      </Typography>
-      <div className={classes.socialNetworks}>
-        <a
-          href="https://www.facebook.com/OuaaaTransition"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <FacebookIcon className={classes.icons} fontSize="large" />
-        </a>
-        <a
-          href="https://www.instagram.com/ouaaa_transition/"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <InstagramIcon className={classes.icons} fontSize="large" />
-        </a>
-      </div>
+  
       <div className={classes.links}>
-        <Link href="/about">À propos</Link>
-        <span> - </span>
         <Link href="/legalmention">Mentions Légales</Link>
         <span> - </span>
         <Link href="/faq">FAQ</Link>
         <span> - </span>
         <Link href="/contact">Contact</Link>
-        <span> - </span>
-        <Link href="/charter">Charte</Link>
-        <span> - </span>
-        <Link href="/odd">ODD</Link>
         <span> - </span>
         <Link href="/annuaire">Annuaire</Link>
       </div>

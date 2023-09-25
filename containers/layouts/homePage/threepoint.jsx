@@ -199,58 +199,31 @@ const PresentationSection = (props) => {
                 className={styles.listItemText}
                 primary={(
                   <>
-                    Tu habites le Territoire du Nord de la Charente-Maritime ou la ville de
-                    <b> La Rochelle</b>
-                    {' '}
-                    et tu veux{' '}
-                    <Link href="/map">trouver une recyclerie, réparer un objet, changer de producteur d'énergie, t'inscrire dans une AMAP, rénover ta maison</Link>
-                    {' '}
-                    et bien plus encore ? Tu es au bon endroit !
-                  </>
-                )}
-              />
-            </ListItem>
-            <ListItem>
-              <ListItemText
-                className={styles.listItemText}
-                primary={(
-                  <>
-                    Le
-                    <b> projet PAT-OUAAA! accompagne la transition</b>
-                    {' '}
-                    de notre territoire vers un fonctionnement plus
-                    <b> sobre</b>
-                    ,
-                    <b> plus solidaire</b>
-                    {' '}
-                    et véritablement
-                    <b> durable</b>
-                    . Tu trouveras ici des informations sur les acteurs qui participent à la transition écologique et sociale dans des domaines aussi variées que :
-                    <b> l'éducation</b>
-                    , la culture, la santé,
-                    <b> l'alimentation</b>
-                    , la justice, l'économie, la citoyenneté, l'agriculture, l'industrie, l'habitat, la mobilité,
-                    <b> l'énergie</b>
-                    , le recyclage, la réduction des déchets,
-                    <b> le développement durable</b>
-                    ,
-                    <b> le climat</b>
-                    , la qualité de l'air, la biodiversité, la gestion de l'eau, l'aménagement du territoire, etc
-                  </>
-                )}
-              />
-            </ListItem>
-            <ListItem>
-              <ListItemText
-                className={styles.listItemText}
-                primary={(
-                  <>
-                    Souhaitant atteindre les objectifs d'un territoire zéro carbone, la plateforme participative
-                    <i>PAT-OUAAA!</i>
-                    {' '}
-                    met un coup de projecteur, sur tous celles et ceux qui agissent pour la
-                    <b> transition climatique</b>
-                    . Cette communauté d’acteurs est présente sur tout le territoire, dans les villes comme dans les villages, de l'anse de l'Aiguillon à l'embouchure de la Charente, de la forêt de Benon au bout de l'île de Ré en passant par Surgères, l’agglomération de La Rochelle, Saint Martin de Ré, Marans, et Châtelaillon-Plage.
+                    Ce site est destiné aux acteurs locaux des secteurs de l'alimentation et de l'agriculture, intéressés par le <b>Projet Alimentaire Territorial  de l'Aunis (PAT)</b>.
+                    <br/> Il doit participer à la réunion d'informations et la mise en contact, pour une communauté d'intérêts.
+                    <br/> 
+Nous vous invitons à inscrire vos coordonnées et activités par le formulaire d'inscription  <Link href="/addactor">
+            <button className={styles.buttonInverseOrganisation}>JE M'INSCRIS EN TANT QU'ACTEUR DU PAT</button>
+          </Link>. <br/>
+          <br/> Votre entreprise, organisation pourra ainsi apparaître, et vous pourrez chercher d'autres acteurs selon des filtres de sélection par territoire géographique, par centre d'intérêt, sur une carte, vous pourrez générer des listes et trouver des coordonnées selon vos centres d'intérêts, retrouver les rendez-vous du PAT sur un agenda commun, chercher des références de documentation. 
+
+          <br/>
+        Ce référencement est ouvert aux membres actifs du PAT, à ceux qui sont concernés et voudraient le rejoindre, quelle que soit leur filière (de la production à la transformation, vente, animation, solidarité, etc..) et leur statut (public, privé, de la société civile). 
+        <br/>
+        Ce service est libre d'usage, vous pourrez adapter ou supprimer vos informations à tout moment.
+        <br/>
+        Merci donc de compléter les informations, cela pourra se faire aussi par groupe de travail, avec leurs référents.
+        <br/>
+        Pour information :
+        <br/>
+        Le PAT a aussi une importante vocation de sensibilisation, communication, promotion. 
+        <br/>
+        Dans un second temps, et si vous le souhaitez, vous pouvez aussi dès à présent apparaître sur la partie publique de ce site, à l'adresse :<Link href="https://ouaaa-transition.fr/">
+        https://ouaaa-transition.fr/
+          </Link>.   
+        <br/>
+        Certains d'entre vous y sont référencés, l'objectif de cet autre site étant de mettre en valeur l'ensemble des acteurs locaux sur des thématiques variées (transport, énergie, environnement, etc.), dont alimentation et agriculture. Cela permettrait de développer votre visibilité, et de faire connaître les objectifs du PAT aux consommateurs / citoyens pour qu'ils s'y engagent.
+        <br/>
                   </>
                 )}
               />
@@ -274,46 +247,7 @@ const PresentationSection = (props) => {
       </Grid>
                 
       <br />
-      <Grid
-        container
-        justifyContent="center"
-        className={[styles.align, styles.flexColumn]}
-      >
-
-        <Grid item md={5} sm={10} className={[styles.gridItem, styles.align]}>
-          <img width="30%" src="./Icone_decouvrir_acteur.png" className={styles.imageGrid} />
-          <Typography className={styles.titleGrid}>
-            Tu es un citoyen et souhaites mieux
-          </Typography>
-          <Typography className={styles.titleGrid}>
-            connaître, soutenir, t'engager ?
-          </Typography>
-          <Link href="/map">
-            <button className={styles.buttonInverseActor}>
-              JE DÉCOUVRE LES ACTEURS
-            </button>
-          </Link>
-        </Grid>
-
-        <Grid item md={5} sm={10} className={[styles.gridItem, styles.align]}>
-          <img
-            width="30%"
-            className={styles.imageGrid}
-            src="./Icone_acteur.png"
-          />
-          <Typography className={styles.titleGrid}>
-            Vous êtes une organisation et vous
-          </Typography>
-          <Typography className={styles.titleGrid}>
-            souhaitez vous faire connaître ?
-          </Typography>
-          <Link href="/addactor">
-            <button className={styles.buttonInverseOrganisation}>JE DEVIENS UN ACTEUR</button>
-          </Link>
-        </Grid>
-
-      </Grid>
-
+  
     </Container>
   );
 };
