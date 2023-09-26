@@ -122,6 +122,12 @@ const GET_COLLECTIONS = gql`
           label
           icon
           description
+          subEntries {
+            id
+            label
+            icon
+            description
+          }
         }
       }
     }
@@ -878,8 +884,6 @@ const AddActorForm = () => {
     
                 label =
                   "A quelle catégorie correspond votre organisation / entreprise, à quel titre participez-vous";
-    
-          
 
               return (
                 <div>
@@ -902,12 +906,6 @@ const AddActorForm = () => {
                           defaultCollapseIcon={<ArrowDropDownIcon />}
                           defaultExpandIcon={<ArrowRightIcon />}
                           defaultEndIcon={<div style={{ width: 24 }} />}
-                          defaultExpanded={
-                            collection.entries &&
-                            collection.entries.map((entry) => {
-                              return entry.id;
-                            })
-                          }
                         >
                           {collection.entries &&
                             collection.entries.map((entry) => {
@@ -942,6 +940,11 @@ const AddActorForm = () => {
                                           description={subEntry.description}
                                           icon={subEntry.icon}
                                           color={entry.color}
+                                          hasSubEntries={
+                                            subEntry.subEntries &&
+                                            subEntry.subEntries.length > 0
+                                          }
+                                        
                                           isForm
                                           checked={
                                             formValues &&
@@ -951,7 +954,36 @@ const AddActorForm = () => {
                                               subEntry.id,
                                             )
                                           }
-                                        />
+                                        > 
+                                          {subEntry.subEntries &&
+                                            subEntry.subEntries.map((subSubEntry) => {
+                                              return (
+                                                <StyledTreeItem
+                                                  key={subSubEntry.id}
+                                                  // @ts-ignore
+                                                  nodeId={subSubEntry.id}
+                                                  labelText={subSubEntry.label}
+                                                  categoryChange={formChangeHandler}
+                                                  description={subSubEntry.description}
+                                                  icon={subSubEntry.icon}
+                                                  color={entry.color}
+                                                  hasSubEntries={
+                                                    subSubEntry.subEntries &&
+                                                    subSubEntry.subEntries.length > 0
+                                                  }
+                                                  isForm
+                                                  checked={
+                                                    formValues &&
+                                                    formValues.entriesWithInformation &&
+                                                    isEntriesWithInformationContains(
+                                                      formValues.entriesWithInformation,
+                                                      subSubEntry.id,
+                                                    )
+                                                  }
+                                                />
+                                              );
+                                            })}
+                                          </StyledTreeItem>
                                       );
                                     })}
                                 </StyledTreeItem>
@@ -1345,6 +1377,7 @@ const AddActorForm = () => {
                                           categoryChange={formChangeHandler}
                                           description={subEntry.description}
                                           icon={subEntry.icon}
+                                          linkDescription
                                           color={entry.color}
                                           isForm
                                           checked={

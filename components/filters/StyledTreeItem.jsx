@@ -94,6 +94,7 @@ function StyledTreeItem(props) {
     icon,
     description,
     hasSubEntries,
+    linkDescription,
     ...other
   } = props;
 
@@ -204,7 +205,7 @@ function StyledTreeItem(props) {
               />
             )}
           </div>
-          {isForm && checked && !hideCheckBox && (
+          {isForm && checked && !hideCheckBox && linkDescription && (
             <TextField
               className={classes.entryDescription}
               variant="outlined"
