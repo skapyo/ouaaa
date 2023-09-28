@@ -1273,7 +1273,7 @@ const Actor = ({ initialData }) => {
                 <div>
                   {data
                     && data.actor.entries.map(
-                      (entry) => entry.parentEntry
+                      (entry) => entry.parentEntry && entry.parentEntry.collection
                         && entry.parentEntry.collection.code === 'category' && (
                           <div>
                             {entry?.actorEntries?.linkDescription && (

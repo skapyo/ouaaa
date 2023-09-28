@@ -241,6 +241,7 @@ const GET_ACTOR = gql`
             topSEO
             id
           }
+          
         }
         collection {
           id
@@ -289,6 +290,12 @@ const GET_COLLECTIONS = gql`
           label
           icon
           description
+          subEntries {
+            id
+            label
+            icon
+            description
+          }
         }
       }
     }
@@ -1291,6 +1298,136 @@ const EditActorForm = (props) => {
         
         <br />
         {
+          /* @ts-ignore */
+          dataCollections.collections &&
+            /* @ts-ignore */
+            dataCollections.collections.map((collection) => {
+              if (collection.code !== 'category_organization') return '';
+              //    const [display, setDisplay] = useState(false);
+              let { label } = collection;
+              let helperText = '';
+    
+                label =
+                  "A quelle catégorie correspond votre organisation / entreprise, à quel titre participez-vous";
+
+              return (
+                <div>
+                  <br />
+                  <Typography className={styles.collectionLabel}>
+                    {label}{' '}
+                    {helperText !== '' && (
+                      <Tooltip title={helperText}>
+                        <InfoIcon />
+                      </Tooltip>
+                    )}
+                  </Typography>
+                  <br />
+                  {
+                    // display &&
+                    IsTree(collection) && (
+                      <Entries initValues={[]}>
+                        <TreeView
+                          className={styles.rootTree}
+                          defaultCollapseIcon={<ArrowDropDownIcon />}
+                          defaultExpandIcon={<ArrowRightIcon />}
+                          defaultEndIcon={<div style={{ width: 24 }} />}
+                        >
+                          {collection.entries &&
+                            collection.entries.map((entry) => {
+                              return (
+                                // @ts-ignore
+                                <StyledTreeItem
+                                  key={entry.id}
+                                  nodeId={entry.id}
+                                  labelText={entry.label}
+                                  hideCheckBox
+                                  description={entry.description}
+                                  icon={entry.icon}
+                                  isForm
+                                  bgColor="grey"
+                                  color={entry.color}
+                                  isParent
+                                  formValues={updateFormValues}
+                                  hasSubEntries={
+                                    entry.subEntries &&
+                                    entry.subEntries.length > 0
+                                  }
+                                  className={styles.treeParent}
+                                >
+                                  {entry.subEntries &&
+                                    entry.subEntries.map((subEntry) => {
+                                      return (
+                                        <StyledTreeItem
+                                          key={subEntry.id}
+                                          // @ts-ignore
+                                          nodeId={subEntry.id}
+                                          labelText={subEntry.label}
+                                          categoryChange={formChangeHandler}
+                                          formValues={updateFormValues}
+                                          description={subEntry.description}
+                                          icon={subEntry.icon}
+                                          color={entry.color}
+                                          hasSubEntries={
+                                            subEntry.subEntries &&
+                                            subEntry.subEntries.length > 0
+                                          }
+                                        
+                                          isForm
+                                          checked={
+                                            formValues &&
+                                            formValues.entriesWithInformation &&
+                                            isEntriesWithInformationContains(
+                                              formValues.entriesWithInformation,
+                                              subEntry.id,
+                                            )
+                                          }
+                                        > 
+                                          {subEntry.subEntries &&
+                                            subEntry.subEntries.map((subSubEntry) => {
+                                              return (
+                                                <StyledTreeItem
+                                                  key={subSubEntry.id}
+                                                  // @ts-ignore
+                                                  nodeId={subSubEntry.id}
+                                                  labelText={subSubEntry.label}
+                                                  categoryChange={formChangeHandler}
+                                                  formValues={updateFormValues}
+                                                  description={subSubEntry.description}
+                                                  icon={subSubEntry.icon}
+                                                  color={entry.color}
+                                                  hasSubEntries={
+                                                    subSubEntry.subEntries &&
+                                                    subSubEntry.subEntries.length > 0
+                                                  }
+                                                  isForm
+                                                  checked={
+                                                    formValues &&
+                                                    formValues.entriesWithInformation &&
+                                                    isEntriesWithInformationContains(
+                                                      formValues.entriesWithInformation,
+                                                      subSubEntry.id,
+                                                    )
+                                                  }
+                                                />
+                                              );
+                                            })}
+                                          </StyledTreeItem>
+                                      );
+                                    })}
+                                </StyledTreeItem>
+                              );
+                            })}
+                        </TreeView>
+                      </Entries>
+                    )
+                  }
+
+                </div>
+              );
+            })
+        }
+        <br />
+        {
 
           /* @ts-ignore */
           dataCollections.collections &&
@@ -1780,6 +1917,8 @@ const EditActorForm = (props) => {
           text="Déposez ici votre autres photos au format jpg et de poids inférieur à 4Mo"
         />
 
+      <p />
+      <br />  
       <Typography variant="body1" color="primary" className={styles.label}>
           Jour et horaire d'ouverture {' '}
           <Tooltip title={addLineBreaks('Pour chaque ligne vous pouvez : \n'
@@ -1797,7 +1936,7 @@ const EditActorForm = (props) => {
           initData={actorData && actorData?.actor?.openingHours}
         />
 
-
+      <br />  
         <p />
   {/*
         <TitleWithTooltip
@@ -1873,102 +2012,7 @@ const EditActorForm = (props) => {
             */}
 
 
-
-
-        {objectsList ? (
-          <ImagesDisplay
-            cards={objectsList}
-            moveCard={moveObject}
-            findCard={findObject}
-            updateDeletedIndicator={updateDeletedIndicator}
-            updateKeyIndicator={updateKeyIndicator}
-          />
-        ) : null}
-        <ImagesDropZone
-          onDropHandler={onDropHandler}
-          text="Déposez ici votre autres photos au format jpg et de poids inférieur à 4Mo"
-        />
-
         <p />
-
-        <FormItem
-          label="Description courte générale"
-          inputName="shortDescription"
-          formChangeHandler={formChangeHandler}
-          value={formValues.shortDescription}
-          required={false}
-          errorBool={
-            !validationResult?.global
-            && !!validationResult?.result.shortDescription
-          }
-          errorText="90 caractères maximum"
-          helperText="Cette description courte s’affichera en vue liste et dans les blocs de survol/clic de la carte. Merci de synthétiser vos objectifs en quelques mots."
-        />
-
-        <TitleWithTooltip title="Description" />
-
-        <Typography className={styles.helperText}>
-          Cette description longue est intégrée à votre page acteur. Elle se
-          veut la plus explicite et détaillée possible. Un langage simple, des
-          mots compréhensibles de tous, vous permettront d’expliquer de manière
-          didactique vos liens avec les questions de transition, vos
-          missions/actions, votre organisation, etc. Au delà de l’accès à une
-          information claire pour tous les internautes (y compris en situation
-          de handicap) utilisant
-          {' '}
-          <i>PAT-OUAAA!</i>
-          , ce texte permettra un meilleur
-          référencement de votre page dans le moteur de recherche interne. Pour
-          cela, pensez à utiliser des mots clé du champ sémantique de votre
-          activité. Ex : vous êtes une asso de recyclerie : zéro déchet,
-          réutilisation, matière, matériaux, économie circulaire, upcycling,
-          nouvelle vie, objet, dépôt, vente, réinsertion….
-        </Typography>
-
-        <br />
-
-        {editorLoaded ? (
-          <>
-            <CKEditor
-              config={{
-                toolbar: ['bold', 'italic', 'link'],
-              }}
-              editor={ClassicEditor}
-              data={formValues.description}
-              onReady={(editor) => {
-                setDescriptionEditor(editor);
-              }}
-            />
-          </>
-        ) : (
-          <div>Editor loading</div>
-        )}
-        <p />
-
-        <TitleWithTooltip
-          title="Nos recherches en bénévolat :"
-          tooltipTitle="Décrivez ici les missions de bénévolat générales chez vous ou sur un de
-          vos projets spécifiques afin de donner envie aux visiteurs de cliquer sur «je deviens
-          bénévole» de votre page."
-        />
-
-        <p />
-        {editorLoaded ? (
-          <>
-            <CKEditor
-              config={{
-                toolbar: ['bold', 'italic', 'link'],
-              }}
-              editor={ClassicEditor}
-              data={formValues.volunteerDescription}
-              onReady={(editor) => {
-                setVolunteerEditor(editor);
-              }}
-            />
-          </>
-        ) : (
-          <div>Editor loading</div>
-        )}
 
         {
           /* @ts-ignore */
@@ -1981,12 +2025,13 @@ const EditActorForm = (props) => {
             if (collection.code === 'category') return '';
             if (collection.code === 'working_group') return '';
             if (collection.code === 'implication') return '';
+            if (collection.code === 'category_organization') return '';
             //    const [display, setDisplay] = useState(false);
             let { label } = collection;
             let helperText;
             if (collection.code === 'public_target') {
               label =
-                'Public';
+                'Public visé';
               helperText =
                 'Ici nous vous proposons de choisir votre public principal. Bien sûr à chaque action (événement, campagne…) que vous créerez vous pourrez indiquer des publics différents. de votre public principal. Tout public = familles ; Jeunes adultes = 15-25 ans, étudiants ; précaires = SDF, familles en difficulté, etc. ; discriminés = femmes, LGBTQIA+, migrants, etc';
             } else if (collection.code === 'collectif') {

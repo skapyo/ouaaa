@@ -1307,6 +1307,7 @@ const AddActorForm = () => {
             /* @ts-ignore */
             dataCollections.collections.map((collection) => {
               if (collection.code !== 'category') return '';
+            
               //    const [display, setDisplay] = useState(false);
               let { label } = collection;
               let helperText = '';
@@ -1557,6 +1558,7 @@ const AddActorForm = () => {
               if (collection.code === 'category') return '';
               if (collection.code === 'working_group') return '';
               if (collection.code === 'implication') return '';
+              if (collection.code === 'category_organization') return '';
               //    const [display, setDisplay] = useState(false);
               let { label } = collection;
               let helperText = '';
