@@ -50,7 +50,7 @@ function ParentContainer(props) {
     const newCheckboxesState = [];
     const newNodesArray = [entry.id];
 
-    entry.subEntries.sort(compare).map(({ id, label, icon, description, actorEntries }) => {
+    entry.subEntries.sort(compare).map(({ id, label, icon, description, actorEntries,subEntries }) => {
       newCheckboxesState.push({
         id,
         label,
@@ -58,6 +58,7 @@ function ParentContainer(props) {
         color: entry.color,
         description,
         checked: false,
+        subEntries
       });
       newNodesArray.push(id);
     });
@@ -85,6 +86,7 @@ function ParentContainer(props) {
   }, [checkboxes]);
 
   const handleToggle = useCallback(() => {
+    debugger;
     setExpanded((oldExpanded) => (oldExpanded.length === 0 ? nodesArray : []));
   }, [nodesArray]);
 
@@ -172,6 +174,7 @@ function ParentContainer(props) {
             checked={parentCheckboxChecked}
             isForm={isForm}
           >
+
             {checkboxes.map((subEntry) => {
               return (
                 <StyledTreeItem
@@ -183,7 +186,33 @@ function ParentContainer(props) {
                   description={subEntry.description}
                   color={entry.color}
                   icon={subEntry.icon}
-                />
+                  isForm={isForm}
+                  hasSubEntries={
+                    subEntry.subEntries &&
+                    subEntry.subEntries.length > 0
+                  }
+                >
+                        {subEntry.subEntries &&
+                          subEntry.subEntries.map((subSubEntry) => {
+                            return (
+                              <StyledTreeItem
+                                key={subSubEntry.id}
+                                // @ts-ignore
+                                nodeId={subSubEntry.id}
+                                expanded={false}
+                                labelText={subSubEntry.label}
+                                checked={subSubEntry.checked}
+                                description={subSubEntry.description}
+                                icon={subSubEntry.icon}
+                                color={subSubEntry.color}
+                                hasSubEntries={
+                                  subSubEntry.subEntries &&
+                                  subSubEntry.subEntries.length > 0
+                                }
+                              />
+                            );
+                          })}
+                  </StyledTreeItem>
               );
             })}
           </StyledTreeItem>

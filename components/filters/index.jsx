@@ -271,6 +271,14 @@ function Filters(props) {
             color
             icon
             description
+            subEntries {
+              id
+              label
+              position
+              color
+              icon
+              description
+            }
           }
         }
         filter
