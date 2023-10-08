@@ -193,7 +193,10 @@ Nous vous invitons à inscrire vos coordonnées et activités par le formulaire 
 </div>
  
 <br />
-<button className={styles.buttonInverseOrganisation}>JE M'INSCRIS EN TANT QU'ACTEUR DU PAT</button>
+<br/>
+    <Link href="/addactor">
+    <button className={styles.buttonInverseOrganisation}>JE M'INSCRIS EN TANT QU'ACTEUR DU PAT</button>
+    </Link>
       </div>
 
       <br />
