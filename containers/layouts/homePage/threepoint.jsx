@@ -189,7 +189,7 @@ const PresentationSection = (props) => {
         <Grid item md={6}>
           <div className={styles.gridTitle}>
             <Typography variant="h3" className={styles.cardTitle}>
-              <i>PAT-OUAAA!</i>
+              <i>Projet Alimentaire de Territoire d’Aunis</i>
             </Typography>
             <div className={styles.border} />
           </div>
@@ -203,7 +203,7 @@ const PresentationSection = (props) => {
                     <br/> Il doit participer à la réunion d'informations et la mise en contact, pour une communauté d'intérêts.
                     <br/> 
 Nous vous invitons à inscrire vos coordonnées et activités par le formulaire d'inscription  <Link href="/addactor">
-            <button className={styles.buttonInverseOrganisation}>JE M'INSCRIS EN TANT QU'ACTEUR DU PAT</button>
+           
           </Link>. <br/>
           <br/> Votre entreprise, organisation pourra ainsi apparaître, et vous pourrez chercher d'autres acteurs selon des filtres de sélection par territoire géographique, par centre d'intérêt, sur une carte, vous pourrez générer des listes et trouver des coordonnées selon vos centres d'intérêts, retrouver les rendez-vous du PAT sur un agenda commun, chercher des références de documentation. 
 
@@ -230,13 +230,7 @@ Nous vous invitons à inscrire vos coordonnées et activités par le formulaire 
             </ListItem>
           </List>
 
-          <div className={styles.buttonGridDiv}>
-            <Link href="/map">
-              <button className={styles.buttonGrid}>
-                VOIR LA CARTE
-              </button>
-            </Link>
-          </div>
+        
         </Grid>
 
    <Grid item md={6} className={[styles.align]} style =  {{ width: '100%'}}>

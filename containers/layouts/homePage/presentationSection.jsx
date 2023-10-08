@@ -29,6 +29,19 @@ const useStyles = makeStyles((theme) => ({
     position: "relative",
     zIndex: 1,
   },
+  subtitle:{
+    background: 'rgba(255, 255, 255, 0.7)',
+    fontSize: '1.2em',
+    fontWeight: 'bold',
+    color: 'black',
+    textAlign: 'justify',
+    [theme.breakpoints.up('md')]: {
+      fontSize: '1.5em',
+    },
+    [theme.breakpoints.down('md')]: {
+      fontSize: '1em',
+    },
+  },
   imageTitle: {
     width: '600px',
     maxWidth: '117%',
@@ -63,6 +76,9 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up('md')]: {
       paddingTop: '1em',
     },
+  },
+  h2 :{
+    fontSize: '0.6em',
   },
   h1: {
     paddingTop: '1em',
@@ -102,6 +118,30 @@ const useStyles = makeStyles((theme) => ({
       backgroundImage: "url('./arrow-hover.svg')",
     },
   },
+  buttonInverseOrganisation: {
+
+    fontSize: '1.2em',
+    margin: '1.5em 0 1.5em 0 ',
+    fontWeight: 'bold',
+    borderRadius: '1.5em',
+    padding: '0.2em 3em 0.2em 3em',
+    minHeight: '2.5em',
+    color: '#d96552',
+    'background-color': 'white',
+    border: '2px solid #d96552',
+    backgroundImage: "url('./arrow-organisation.svg')",
+    '&:hover': {
+      cursor: 'pointer',
+      color: 'white',
+      'background-color': '#d96552',
+      border: 'none',
+      backgroundImage: "url('./arrow-hover-inverse.svg')",
+    },
+    backgroundRepeat: 'no-repeat',
+    'background-position-x': '5px',
+    'background-position-y': '-3px',
+
+  },
 }));
 
 const PresentationSection = (props) => {
@@ -135,17 +175,32 @@ const PresentationSection = (props) => {
                   />
       <div className={styles.title}>
         <h1 className={styles.h1}>
-        PAT-OUAAA! : 
-        <br />
+        Projet Alimentaire de Territoire d’Aunis : 
+        <div className={styles.h2}>
         agir pour la transition écologique et sociale
             {' '}
             <br />
             {' '}
             à travers le plan alimentaire de territoire
+            </div>
         </h1>
+        <br /><br />
+
+        <div className={styles.subtitle}>
+      Ce site est destiné aux acteurs locaux des secteurs de l'alimentation et de l'agriculture, intéressés par le Projet Alimentaire Territorial de l'Aunis (PAT).
+Il doit participer à la réunion d'informations et la mise en contact, pour une communauté d'intérêts.
+Nous vous invitons à inscrire vos coordonnées et activités par le formulaire d'inscription .
+</div>
+ 
+<br />
+<button className={styles.buttonInverseOrganisation}>JE M'INSCRIS EN TANT QU'ACTEUR DU PAT</button>
       </div>
 
-      { <SearchEngine />}
+      <br />
+   
+      <br />
+      { /*<SearchEngine />*/}
+   
     </Container>
   );
 };

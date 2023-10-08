@@ -182,6 +182,16 @@ const NavBar = () => {
                       button
                       component={Link}
                       className={styles.menuItem}
+                      href="/annuaire"
+                    >
+                      ANNUAIRE
+                    </MenuItem>
+                  </Grid>
+                  <Grid item>
+                    <MenuItem
+                      button
+                      component={Link}
+                      className={styles.menuItem}
                       href="/agenda"
                     >
                       AGENDA DES ACTIONS

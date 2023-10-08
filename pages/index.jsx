@@ -188,12 +188,13 @@ const Index = () => {
 
           <ThreePoint id={sections[1]} />
 
+{/*}
           <DynamicLastActor id={sections[2]} />
     
           <DynamicLastEvent id={sections[3]} />
 
           <DynamicLastArticle id={sections[4]} />
-
+  */}
           <ScrollToBottom sections={sections} />
         </Box>
         <CookieConsent
