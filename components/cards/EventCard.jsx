@@ -157,7 +157,7 @@ const EventCard = ({ event }) => {
   }, [event, getImageUrl]);
 
   const addressCity = useMemo(() => {
-    if (!event.city) return 'Adresse manquante';
+    if (!event.city && !event.address) return 'Adresse manquante';
     const list = [event.address, event.city];
     return `${list.join(', ')}`;
   }, [event.address, event.city]);

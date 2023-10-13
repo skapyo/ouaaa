@@ -601,7 +601,7 @@ const AddEventForm = ({ actorId }) => {
         || !formValues.shortDescription
         || !formValues.entries
         || formValues.entries?.length === 0
-        || (!address && !city)
+        || (formValues.lat === undefined || formValues.lng === undefined)
       ) setValidated(false);
       else setValidated(true);
 
@@ -640,6 +640,7 @@ const AddEventForm = ({ actorId }) => {
     };
 
     const getAddressDetails = (results) => {
+      debugger;
       setAddress(
         `${getObjectLongName(results, 'street_number')} ${getObjectLongName(
           results,
@@ -853,6 +854,7 @@ const AddEventForm = ({ actorId }) => {
                 .concat(formValues.city)
             }
             onSelect={({ description }) => geocodeByAddress(description).then((results) => {
+              debugger;
               getLatLng(results[0])
                 .then((value) => {
                   formValues.lat = `${value.lat}`;
