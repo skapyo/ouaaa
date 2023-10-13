@@ -892,7 +892,7 @@ const Event = ({ initialData }) => {
                     <Grid item xs={8} className={[styles.alignLeft]}>
                       <div className={[styles.infoLabel]}>LOCALISATION</div>
                       <span className={[styles.infoValue]}>
-                        {data && !data.event.city && (
+                        {data && !data.event.city   && !data.event.address && (
                           <span> Adresse manquante</span>
                         )}
                         {data && !data.event.address && data.event.city && (
@@ -908,6 +908,12 @@ const Event = ({ initialData }) => {
                             ,
                             {/* @ts-ignore */}
                             {data.event.city}
+                          </span>
+                        )}
+                         {data && data.event.address && (!data.event.city || data.event.city!=='') && (
+                          <span>
+                            {/* @ts-ignore */}
+                            {data && data.event.address}
                           </span>
                         )}
                       </span>
@@ -1464,6 +1470,7 @@ export default withApollo()(Event);
 // It may be called again, on a serverless function, if
 // revalidation is enabled and a new request comes in
 export async function getServerSideProps(ctxt) {
+  console.log('getServerSideProps');
   const res = await fetch(process.env.NEXT_PUBLIC_API_URI, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' }, 

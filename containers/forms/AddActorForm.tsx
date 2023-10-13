@@ -225,6 +225,7 @@ const useStyles = makeStyles((theme) => ({
   treeParent: {
     border: '1px solid #ccc!important',
     padding: '5px 0 5px 0',
+    fontSize: '1.5em!important',
   },
   introduction: {
     textAlign: 'justify',
@@ -740,21 +741,16 @@ const AddActorForm = () => {
       <Container component="main" maxWidth="sm">
         <br />
         <Typography className={styles.introduction}>
-          Voici quelques informations : avec votre compte, vous pouvez créer
-          plusieurs pages Acteurs, mais chacune d’elles doit être créée via ce
-          formulaire. Vous deviendrez alors l’administrateur principal de
-          chacune d’entre elles.
-          <br />
-          Un acteur de la transition peut avoir n’importe quel statut juridique,
-          les collectifs et particuliers peuvent donc aussi être référencés sur{' '}
-          <i>OUAAA!</i>
+          Avec votre compte personnel, vous pouvez maintenant créer une ou plusieurs « page acteur », 
+          pour chacune des structures dont vous êtes membre. 
+          Toute personne physique ou morale, organisation privée, publique, de la société civile peut disposer de sa page.
         </Typography>
 
         <Typography className={styles.introduction}>
-          Pour soumettre votre inscription, nous vous invitons à remplir à
-          minima les champs marqués d’une « * ». <br /> Une fois votre
-          inscription validée par notre équipe, votre page acteur sera visible
-          de tous les visiteurs de <i>OUAAA!</i>
+          Une fois votre inscription validée par notre équipe, votre page sera visible sur le site.
+        <br />
+          Complétez les champs ci-dessous, ceux marqués d'une « * » sont indispensables.
+          Vous pourrez renseigner les autres ultérieurement et actualiser ces informations avec d'autres personnes que vous pouvez ajouter en référent de la page.
           <br />
           <br />
           Une campagne annuelle de vérification des comptes a lieu afin de
@@ -762,13 +758,12 @@ const AddActorForm = () => {
           de contact téléphonique peut avoir lieu.
           <br />
           <br />
-          Vous pourrez actualiser les infos de votre/vos page(s) Acteurs dès que
-          nécessaire via votre espace acteur (rubrique « administrer mes pages
-          acteurs ») via{' '}
+          Vous pourrez actualiser les infos de votre/vos "page(s) acteurs" via votre espace acteur (rubrique « administrer mes pages
+          acteurs ») ou directement via {' '}
           <Fab size="small" className={styles.fab} aria-label="edit">
             <EditIcon className={styles.editIcon} />
           </Fab>{' '}
-          accessible directement depuis votre page acteur.
+          , accessible directement depuis votre page acteur.
         </Typography>
         <br />
         <br />
@@ -800,6 +795,7 @@ const AddActorForm = () => {
           {' '}
           Coordonnées{' '}
         </Typography>
+        <br />
         <FormItem
           label="Nom de l'acteur"
           inputName="name"
@@ -935,92 +931,235 @@ const AddActorForm = () => {
               );
             })
         }
-        <br />
-        <Typography variant="body1" color="primary" className={styles.label}>
-          Jour et heure d'ouverture
-          <Tooltip title={addLineBreaks('Pour chaque ligne vous pouvez : \n'
-          + '1. Sélectionner les différents jours où vous êtes ouvert aux mêmes horaires. Le(s) jour(s) sélectionné(s) passe(nt) en bleu foncé.\n'
-          + '2. Indiquer des tranches horaires associés à ce(s) jour(s). Vous pouvez ajouter autant de tranches horaires que nécessaire pour le(s) même(s) jour(s) en cliquant sur la phrase « ajouter des horaires »\n'
-          + '3. Ajouter un lieu à chaque ligne. Vous n’avez pas d’adresse fixe mais êtes mobile de manière récurrentes, en cliquant en haut sur « indiquer des emplacements », c’est possible ! Attention néanmoins, pour les rdv spéciaux qui ne sont pas hebdomadaires ou les marchés… nous vous invitons à créer par la suite des pages événements dédiés à chacune de vos actions. Ces pages événements vous permettront de donner plus d’infos aux visiteurs et d’être visible dans l’agenda. Pour ajouter un lieu, indiquez l’adresse dans l’espace dédié et cliquez n’importe où sur l’écran pour valider. L’adresse s’affichera alors dans un bloc grisé.\n'
-          + '4. une erreur ? un horaire qui n’existe plus ? Tout est modifiable et, si besoin, vous pouvez totalement supprimer la ligne grâce à l\'icone poubelle\n\n'
-      + 'Vous avez rempli votre 1ere ligne mais il vous reste d’autres jours à indiquer ? Cliquez sur le + et ajoutez autant de ligne que nécessaire\n')}>
-            <InfoIcon />
-          </Tooltip>
-        </Typography>
-
-        <SchedulerContainer onChange={setOpeningHours} />
-        <p />
-
-        <FormItem
-          label="Activité principale de votre structure / Métier"
-          inputName="activity"
-          formChangeHandler={formChangeHandler}
-          value={formValues.activity}
-          required={false}
-          errorBool={false}
-          errorText=""
-          helperText="Indiquez ici l'activité principale ou votre métier.  Cette info servira à mieux référencer votre page dans les moteurs de recherche. Ex : boulanger bio"
-        />
-        <br />
-        <Typography variant="body1" color="primary" className={styles.label}>
-          CONTACT PRIVE pour les échanges avec <i>OUAAA!</i>
-        </Typography>
-        <FormControl component="fieldset">
-          <RadioGroup
-            row
-            aria-label="gender"
-            name="contact"
-            onChange={radioChangeHandler}
-          >
-            <FormControlLabel
-              value="me"
-              control={<Radio />}
-              label="C'est moi "
-            />
-            <FormControlLabel
-              value="other"
-              control={<Radio />}
-              label={
-                <>
-                  c’est un autre (avec un compte <i>OUAAA!</i> existant)
-                </>
+    
+        {
+          /* @ts-ignore */
+          dataCollections.collections &&
+            /* @ts-ignore */
+            dataCollections.collections.map((collection) => {
+              if (collection.code !== 'actor_status') {
+                return '';
               }
-            />
-          </RadioGroup>
-          <p>
-            {showOtherContact ? (
-              <Autocomplete
-                id="combo-box-demo"
-                options={dataUsers.users}
-                // @ts-ignore
-                getOptionLabel={(option) =>
-                  `${option.surname} ${option.lastname}`
-                }
-                onChange={autocompleteHandler}
-                // @ts-ignore
-                onInput={inputChangeHandler}
-                open={showOtherContactList}
-                style={{ width: 300 }}
-                // eslint-disable-next-line react/jsx-props-no-spreading
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Contact OUAAA!"
-                    variant="outlined"
-                    placeholder="Tapez les 3 premières lettre du contact"
-                  />
-                )}
-                noOptionsText="Pas de compte associé"
-                clearText="Effacer"
-                closeText="Fermer"
-              />
-            ) : (
-              ''
-            )}
-          </p>
-        </FormControl>
+              let { label } = collection;
+              let helperText = '';
+
+               label = 'Statut';
+               helperText =
+                'service public : toutes les collectivités, mairies, cda, cdc participant directement ou via des projets à la transition / ex : la rochelle territoire zéro carbone entreprise : tous les acteurs économiques de la transition, de l’economie sociale et solidaire... association & ONG  : toutes les structures à but non lucratif';
+           
+              //    const [display, setDisplay] = useState(false);
+              return (
+                <div>
+                  <br />
+                  <Typography className={classes.collectionLabel}>
+                    {label}{' '}
+                    {helperText !== '' && (
+                      <Tooltip title={helperText}>
+                        <InfoIcon />
+                      </Tooltip>
+                    )}
+                  </Typography>
+                  <br />
+                  {
+                    // display &&
+                    !IsTree(collection) && !collection.multipleSelection && (
+                      <FormControl component="fieldset">
+                        <RadioGroup
+                          row
+                          aria-label="entries"
+                          name="entries"
+                          onChange={formChangeHandler}
+                        >
+                          {collection.entries &&
+                            collection.entries.map((entry) => {
+                              return (
+                                <FormControlLabel
+                                  value={entry.id}
+                                  control={<Radio />}
+                                  label={entry.label}
+                                />
+                              );
+                            })}
+                        </RadioGroup>
+                      </FormControl>
+                    )
+                  }
+                </div>
+              );
+            })
+        }
+        <p />
+        <br />
+    <FormItem
+      label="Activité principale de votre structure / Métier"
+      inputName="activity"
+      formChangeHandler={formChangeHandler}
+      value={formValues.activity}
+      required={false}
+      errorBool={false}
+      errorText=""
+      helperText="Indiquez ici l'activité principale ou votre métier si vous êtes seul dans la structure.  Cette info servira à mieux référencer votre page dans les moteurs de recherche. Ex : boulanger bio"
+    />
+    <br />
+    <FormItem
+          label="Description courte"
+          inputName="shortDescription"
+          formChangeHandler={formChangeHandler}
+          value={formValues.shortDescription}
+          required={false}
+          errorBool={
+            !validationResult?.global &&
+            !!validationResult?.result.shortDescription
+          }
+          errorText="90 caractères maximum"
+          helperText="Indiquez qui vous êtes et ce que vous faites en une dizaine de mots."
+        />
 
         <Typography variant="body1" color="primary" className={styles.label}>
+          Description
+        </Typography>
+        <br />
+        <Typography className={styles.helperText}>
+        Décrivez en une quinzaine de ligne les caractéristiques de votre structure, ce qui en fait un acteur important pour la transition locale : les objectifs, vos actions les plus importantes, des labels de qualité ou des récompenses, son histoire, le nombre d'employés, d'adhérents, vos atouts, vos souhaits ...
+
+        Important : Pour que les utilisateurs vous trouve facilement, intégrez dans votre texte des mots-clés, nécessaires aux moteurs de recherche. Ex pour une recyclerie : zéro déchet - réutilisation - matériaux - économie circulaire - objet - vente, …
+        </Typography>
+        <br />
+        {editorLoaded ? (
+          <>
+            <Hidden lgDown>
+              <CKEditor
+                config={{
+                  toolbar: ['bold', 'italic', 'link'],
+                }}
+                editor={ClassicEditor}
+                data={formValues.description}
+                onReady={(editor) => {
+                  setDescriptionEditor(editor);
+                }}
+              />
+            </Hidden>
+            <Hidden lgUp>
+              <CKEditor
+                config={{
+                  toolbar: ['bold', 'italic', 'link'],
+                }}
+                editor={ClassicEditor}
+                data={formValues.description}
+                onReady={(editor) => {
+                  setDescriptionEditor(editor);
+                }}
+              />
+            </Hidden>
+          </>
+        ) : (
+          <div>Editor loading</div>
+        )}
+
+
+{
+          /* @ts-ignore */
+          dataCollections.collections &&
+            /* @ts-ignore */
+            dataCollections.collections.map((collection) => {
+              if (collection.code !== 'category') return '';
+              //    const [display, setDisplay] = useState(false);
+              let { label } = collection;
+              let helperText = '';
+              if (collection.code === 'category') {
+                label =
+                  "Sujets d'actions principaux";
+                helperText =
+                  'Vous avez la possibilité d’ajouter un texte libre pour expliquer votre lien au sujet choisi. Vous pouvez sélectionner jusqu’a 3 sujet.';
+              } 
+
+              return (
+                <div>
+                  <br />
+                  <Typography className={classes.collectionLabel}>
+                    {label}{' '}
+                    {helperText !== '' && (
+                      <Tooltip title={helperText}>
+                        <InfoIcon />
+                      </Tooltip>
+                    )}
+                  </Typography>
+                  <br />
+                  {
+                    // display &&
+                    IsTree(collection) && (
+                      <Entries initValues={[]}>
+                        <TreeView
+                          className={classes.rootTree}
+                          defaultCollapseIcon={<ArrowDropDownIcon />}
+                          defaultExpandIcon={<ArrowRightIcon />}
+                          defaultEndIcon={<div style={{ width: 24 }} />}
+                          defaultExpanded={
+                            collection.entries &&
+                            collection.entries.map((entry) => {
+                              return entry.id;
+                            })
+                          }
+                        >
+                          {collection.entries &&
+                            collection.entries.map((entry) => {
+                              return (
+                                // @ts-ignore
+                                <StyledTreeItem
+                                  key={entry.id}
+                                  nodeId={entry.id}
+                                  labelText={entry.label}
+                                  hideCheckBox
+                                  description={entry.description}
+                                  icon={entry.icon}
+                                  isForm
+                                  bgColor="grey"
+                                  color={entry.color}
+                                  isParent
+                                  hasSubEntries={
+                                    entry.subEntries &&
+                                    entry.subEntries.length > 0
+                                  }
+                                  className={classes.treeParent}
+                                >
+                                  {entry.subEntries &&
+                                    entry.subEntries.map((subEntry) => {
+                                      return (
+                                        <StyledTreeItem
+                                          key={subEntry.id}
+                                          // @ts-ignore
+                                          nodeId={subEntry.id}
+                                          labelText={subEntry.label}
+                                          categoryChange={formChangeHandler}
+                                          description={subEntry.description}
+                                          icon={subEntry.icon}
+                                          color={entry.color}
+                                          isForm
+                                          checked={
+                                            formValues &&
+                                            formValues.entriesWithInformation &&
+                                            isEntriesWithInformationContains(
+                                              formValues.entriesWithInformation,
+                                              subEntry.id,
+                                            )
+                                          }
+                                        />
+                                      );
+                                    })}
+                                </StyledTreeItem>
+                              );
+                            })}
+                        </TreeView>
+                      </Entries>
+                    )
+                  }
+
+                </div>
+              );
+            })
+        }
+ <br />
+<Typography variant="body1" color="primary" className={styles.label}>
           Votre logo &nbsp;
           <Tooltip title="Une seule photo de logo possible, vous pouvez supprimer celle affichée via la poubelle puis en télécharger une nouvelle. Seul le format JPG est accepté. Veillez à ce que le fichier n’excède pas 4Mo">
             <InfoIcon />
@@ -1079,114 +1218,89 @@ const AddActorForm = () => {
           onDropHandler={onDropHandler}
           text="Déposez ici vos autres photos au format jpg et de poids inférieur à 4Mo"
         />
+       
 
-        <p />
-        <FormItem
-          label="Description courte générale"
-          inputName="shortDescription"
-          formChangeHandler={formChangeHandler}
-          value={formValues.shortDescription}
-          required={false}
-          errorBool={
-            !validationResult?.global &&
-            !!validationResult?.result.shortDescription
-          }
-          errorText="90 caractères maximum"
-          helperText="Cette description courte s’affichera en vue liste et dans les blocs de survol/clic de la carte. Merci de synthétiser vos objectifs en quelques mots."
-        />
+
 
         <Typography variant="body1" color="primary" className={styles.label}>
-          Description
-        </Typography>
-        <br />
-        <Typography className={styles.helperText}>
-          Cette description longue est intégrée à votre page acteur. Elle se
-          veut la plus explicite et détaillée possible. Un langage simple, des
-          mots compréhensibles de tous, vous permettront d’expliquer de manière
-          didactique vos liens avec les questions de transition, vos
-          missions/actions, votre organisation, etc. Au delà de l’accès à une
-          information claire pour tous les internautes (y compris en situation
-          de handicap) utilisant OUAAA !, ce texte permettra un meilleur
-          référencement de votre page dans le moteur de recherche interne. Pour
-          cela, pensez à utiliser des mots clé du champ sémantique de votre
-          activité. Ex : vous êtes une asso de recyclerie : zéro déchet,
-          réutilisation, matière, matériaux, économie circulaire, upcycling,
-          nouvelle vie, objet, dépôt, vente, réinsertion….
-        </Typography>
-        <br />
-        {editorLoaded ? (
-          <>
-            <Hidden lgDown>
-              <CKEditor
-                config={{
-                  toolbar: ['bold', 'italic', 'link'],
-                }}
-                editor={ClassicEditor}
-                data={formValues.description}
-                onReady={(editor) => {
-                  setDescriptionEditor(editor);
-                }}
-              />
-            </Hidden>
-            <Hidden lgUp>
-              <CKEditor
-                config={{
-                  toolbar: ['bold', 'italic', 'link'],
-                }}
-                editor={ClassicEditor}
-                data={formValues.description}
-                onReady={(editor) => {
-                  setDescriptionEditor(editor);
-                }}
-              />
-            </Hidden>
-          </>
-        ) : (
-          <div>Editor loading</div>
-        )}
-        <Typography variant="body1" color="primary" className={styles.label}>
-          Nos recherches en bénévolat :{' '}
-          <Tooltip
-            title="
-          Décrivez ici les missions de bénévolat générales chez vous ou sur un de
-          vos projets spécifiques afin de donner envie aux visiteurs de cliquer sur «je deviens
-          bénévole» de votre page."
-          >
+          Jour et horaire d'ouverture {' '}
+          <Tooltip title={addLineBreaks('Pour chaque ligne vous pouvez : \n'
+          + '1. Sélectionner les différents jours où vous êtes ouvert aux mêmes horaires. Le(s) jour(s) sélectionné(s) passe(nt) en bleu foncé.\n'
+          + '2. Indiquer des tranches horaires associés à ce(s) jour(s). Vous pouvez ajouter autant de tranches horaires que nécessaire pour le(s) même(s) jour(s) en cliquant sur la phrase « ajouter des horaires »\n'
+          + '3. Ajouter un lieu à chaque ligne. Vous n’avez pas d’adresse fixe mais êtes mobile de manière récurrentes, en cliquant en haut sur « indiquer des emplacements », c’est possible ! Attention néanmoins, pour les rdv spéciaux qui ne sont pas hebdomadaires ou les marchés… nous vous invitons à créer par la suite des pages événements dédiés à chacune de vos actions. Ces pages événements vous permettront de donner plus d’infos aux visiteurs et d’être visible dans l’agenda. Pour ajouter un lieu, indiquez l’adresse dans l’espace dédié et cliquez n’importe où sur l’écran pour valider. L’adresse s’affichera alors dans un bloc grisé.\n'
+          + '4. une erreur ? un horaire qui n’existe plus ? Tout est modifiable et, si besoin, vous pouvez totalement supprimer la ligne grâce à l\'icone poubelle\n\n'
+      + 'Vous avez rempli votre 1ere ligne mais il vous reste d’autres jours à indiquer ? Cliquez sur le + et ajoutez autant de ligne que nécessaire\n')}>
             <InfoIcon />
           </Tooltip>
         </Typography>
+        <Typography className={styles.helperText}>Si vous faites de l’accueil du public, ou si vous avez un standard téléphonique</Typography>
+        <SchedulerContainer onChange={setOpeningHours} />
+        
+        <br />
+        {/*
+        <Typography variant="body1" color="primary" className={styles.label}>
+          CONTACT PRIVE pour les échanges avec <i>OUAAA!</i>
+        </Typography>
+        <FormControl component="fieldset">
+          <RadioGroup
+            row
+            aria-label="gender"
+            name="contact"
+            onChange={radioChangeHandler}
+          >
+            <FormControlLabel
+              value="me"
+              control={<Radio />}
+              label="C'est moi "
+            />
+            <FormControlLabel
+              value="other"
+              control={<Radio />}
+              label={
+                <>
+                  c’est un autre (avec un compte <i>OUAAA!</i> existant)
+                </>
+              }
+            />
+          </RadioGroup>
+          <p>
+            {showOtherContact ? (
+              <Autocomplete
+                id="combo-box-demo"
+                options={dataUsers.users}
+                // @ts-ignore
+                getOptionLabel={(option) =>
+                  `${option.surname} ${option.lastname}`
+                }
+                onChange={autocompleteHandler}
+                // @ts-ignore
+                onInput={inputChangeHandler}
+                open={showOtherContactList}
+                style={{ width: 300 }}
+                // eslint-disable-next-line react/jsx-props-no-spreading
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Contact OUAAA!"
+                    variant="outlined"
+                    placeholder="Tapez les 3 premières lettre du contact"
+                  />
+                )}
+                noOptionsText="Pas de compte associé"
+                clearText="Effacer"
+                closeText="Fermer"
+              />
+            ) : (
+              ''
+            )}
+          </p>
+        </FormControl>
+              */}
+      
+
+      
         <p />
 
-        {editorLoaded ? (
-          <>
-            <Hidden lgDown>
-              <CKEditor
-                config={{
-                  toolbar: ['bold', 'italic', 'link'],
-                }}
-                editor={ClassicEditor}
-                data={formValues.volunteerDescription}
-                onReady={(editor) => {
-                  setVolunteerEditor(editor);
-                }}
-              />
-            </Hidden>
-            <Hidden lgUp>
-              <CKEditor
-                config={{
-                  toolbar: ['bold', 'italic', 'link'],
-                }}
-                editor={ClassicEditor}
-                data={formValues.volunteerDescription}
-                onReady={(editor) => {
-                  setVolunteerEditor(editor);
-                }}
-              />
-            </Hidden>
-          </>
-        ) : (
-          <div>Editor loading</div>
-        )}
         {
           /* @ts-ignore */
           dataCollections.collections &&
@@ -1194,30 +1308,23 @@ const AddActorForm = () => {
             dataCollections.collections.map((collection) => {
               if (!collection.actor) return '';
               if (collection.code === 'larochelle_quarter') return '';
+              if (collection.code === 'actor_status') return '';
+              if (collection.code === 'category') return '';
               //    const [display, setDisplay] = useState(false);
               let { label } = collection;
               let helperText = '';
-              if (collection.code === 'category') {
+              if (collection.code === 'public_target') {
                 label =
-                  'Choisissez les sous-sujets dans lesquels vous souhaitez apparaître (en priorité)';
-                helperText =
-                  'Vous avez la possibilité d’ajouter un texte libre pour expliquer votre lien au sujet choisi. Vous pouvez sélectionner jusqu’a 3 sujet.';
-              } else if (collection.code === 'actor_status') {
-                label = 'Quel est votre statut ?';
-                helperText =
-                  'service public : toutes les collectivités, mairies, cda, cdc participant directement ou via des projets à la transition / ex : la rochelle territoire zéro carbone entreprise : tous les acteurs économiques de la transition, de l’economie sociale et solidaire... association & ONG  : toutes les structures à but non lucratif';
-              } else if (collection.code === 'public_target') {
-                label =
-                  'Quel public visez vous principalement dans vos actions ?';
+                  'Public';
                 helperText =
                   'Ici nous vous proposons de choisir votre public principal. Bien sûr à chaque action (événement, campagne…) que vous créerez vous pourrez indiquer des publics différents. de votre public principal. Tout public = familles ; Jeunes adultes = 15-25 ans, étudiants ; précaires = SDF, familles en difficulté, etc. ; discriminés = femmes, LGBTQIA+, migrants, etc';
               } else if (collection.code === 'collectif') {
                 label =
-                  'En tant qu’acteur, je fais partie des collectifs & réseaux suivants :';
+                  'Membre de collectifs ou réseaux :';
                 helperText =
                   'Sont référencés ici des collectifs et réseaux du territoire. Les groupes locaux de réseaux nationaux (ex Greenpeace) ne sont pas inclus dans cette liste';
               } else if (collection.code === 'actor_location_action') {
-                label = "Territoire d'action (1 seul choix) *";
+                label = "Périmètre d'action (1 seul choix) *";
                 helperText =
                   'Si vous êtes une antenne, le territoire d’action est celui qui concerne votre structure chapeau (ex : Greenpeace, choisir « International »)';
               }
@@ -1234,73 +1341,6 @@ const AddActorForm = () => {
                     )}
                   </Typography>
                   <br />
-                  {
-                    // display &&
-                    IsTree(collection) && (
-                      <Entries initValues={[]}>
-                        <TreeView
-                          className={classes.rootTree}
-                          defaultCollapseIcon={<ArrowDropDownIcon />}
-                          defaultExpandIcon={<ArrowRightIcon />}
-                          defaultEndIcon={<div style={{ width: 24 }} />}
-                          defaultExpanded={
-                            collection.entries &&
-                            collection.entries.map((entry) => {
-                              return entry.id;
-                            })
-                          }
-                        >
-                          {collection.entries &&
-                            collection.entries.map((entry) => {
-                              return (
-                                // @ts-ignore
-                                <StyledTreeItem
-                                  key={entry.id}
-                                  nodeId={entry.id}
-                                  labelText={entry.label}
-                                  hideCheckBox
-                                  description={entry.description}
-                                  icon={entry.icon}
-                                  isForm
-                                  bgColor="grey"
-                                  isParent
-                                  hasSubEntries={
-                                    entry.subEntries &&
-                                    entry.subEntries.length > 0
-                                  }
-                                  className={classes.treeParent}
-                                >
-                                  {entry.subEntries &&
-                                    entry.subEntries.map((subEntry) => {
-                                      return (
-                                        <StyledTreeItem
-                                          key={subEntry.id}
-                                          // @ts-ignore
-                                          nodeId={subEntry.id}
-                                          labelText={subEntry.label}
-                                          categoryChange={formChangeHandler}
-                                          description={subEntry.description}
-                                          icon={subEntry.icon}
-                                          color={entry.color}
-                                          isForm
-                                          checked={
-                                            formValues &&
-                                            formValues.entriesWithInformation &&
-                                            isEntriesWithInformationContains(
-                                              formValues.entriesWithInformation,
-                                              subEntry.id,
-                                            )
-                                          }
-                                        />
-                                      );
-                                    })}
-                                </StyledTreeItem>
-                              );
-                            })}
-                        </TreeView>
-                      </Entries>
-                    )
-                  }
 
                   {
                     // display &&
@@ -1311,7 +1351,6 @@ const AddActorForm = () => {
                             return (
                               <ListItem key={entry.id} role={undefined} dense>
                                 {/* @ts-ignore */}
-                                <ListItemText primary={entry.label} />
                                 <Checkbox
                                   edge="start"
                                   tabIndex={-1}
@@ -1321,6 +1360,8 @@ const AddActorForm = () => {
                                   value={entry.id}
                                   onClick={(e) => e.stopPropagation()}
                                 />
+                                <ListItemText primary={entry.label} />
+                               
                               </ListItem>
                             );
                           })}
@@ -1342,6 +1383,51 @@ const AddActorForm = () => {
               );
             })
         }
+          <p />
+       
+       <Typography variant="body1" color="primary" className={styles.label}>
+         Besoins en bénévolat :{' '}
+         <Tooltip
+           title="
+         Décrivez ici les missions de bénévolat générales chez vous ou sur un de
+         vos projets spécifiques afin de donner envie aux visiteurs de cliquer sur «je deviens
+         bénévole» de votre page."
+         >
+           <InfoIcon />
+         </Tooltip>
+       </Typography>
+
+       {editorLoaded ? (
+          <>
+            <Hidden lgDown>
+              <CKEditor
+                config={{
+                  toolbar: ['bold', 'italic', 'link'],
+                }}
+                editor={ClassicEditor}
+                data={formValues.volunteerDescription}
+                onReady={(editor) => {
+                  setVolunteerEditor(editor);
+                }}
+              />
+            </Hidden>
+            <Hidden lgUp>
+              <CKEditor
+                config={{
+                  toolbar: ['bold', 'italic', 'link'],
+                }}
+                editor={ClassicEditor}
+                data={formValues.volunteerDescription}
+                onReady={(editor) => {
+                  setVolunteerEditor(editor);
+                }}
+              />
+            </Hidden>
+          </>
+        ) : (
+          <div>Editor loading</div>
+        )}
+
         <br />
 
               <FormControlLabel
@@ -1368,7 +1454,7 @@ const AddActorForm = () => {
             onClick={submitHandler}
             disabled={!validationResult?.global}
           >
-            Créer le nouvel acteur
+            Créer votre page
           </ClassicButton>
           )}
           { createLoading && (
@@ -1377,7 +1463,7 @@ const AddActorForm = () => {
         </Grid>
         <br />
         <div>
-          Un problème lors de la création, reportez le nous en cliquant ici 
+        Pour les questions concernant la création de votre page, cliquez ici
           <Link href={`/contact`} target="_blank"><BugReportIcon /></Link>
         </div>
         <br />

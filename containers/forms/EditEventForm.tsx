@@ -836,7 +836,7 @@ const EditEventForm = (props) => {
         || !formValues.shortDescription
         // || !formValues.categories
         // || formValues.categories?.length === 0
-        || (!address && !city)
+        || (formValues.lat === undefined || formValues.lng === undefined)
       ) setValidated(false);
       else setValidated(true);
     });
@@ -873,7 +873,7 @@ const EditEventForm = (props) => {
 
     const getAddressDetails = (results) => {
       setAddress(
-        `${getObjectLongName(results, 'street_number')} ${getObjectLongName(
+        `${getObjectLongName(results, 'street_number')!==''?getObjectLongName(results, 'street_number'):getObjectLongName(results, "administrative_area_level_2")} ${getObjectLongName(
           results,
           'route',
         )}`.trim(),
@@ -1228,6 +1228,7 @@ const EditEventForm = (props) => {
                 .concat(formValues.city)
             }
             onSelect={({ description }) => geocodeByAddress(description).then((results) => {
+              debugger;
               getLatLng(results[0])
                 .then((value) => {
                   formValues.lat = `${value.lat}`;
