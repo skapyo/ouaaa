@@ -182,7 +182,7 @@ const NavBar = () => {
                       button
                       component={Link}
                       className={styles.menuItem}
-                      href="/annuaire"
+                      href="//map?list=true"
                     >
                       ANNUAIRE
                     </MenuItem>

@@ -335,7 +335,8 @@ const carto = () => {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down('md'));
   const router = useRouter();
-  const { inviteActor, noEmailInviteActor } = router.query;
+  const { inviteActor, noEmailInviteActor,list } = router.query;
+  
   const [categoriesChecked, setCategoriesChecked] = useState(categories.Sujets);
   const user = useSessionState();
 
@@ -365,6 +366,16 @@ const carto = () => {
   const switchMode = useCallback(() => {
     setListMode(!listMode);
   }, [listMode]); 
+
+  useEffect(() => {
+    if(list!==undefined){
+      setListMode(false)
+    }else{
+      setListMode(true)
+    }
+    
+  
+  }, [list])
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const isSSR = () => typeof window !== 'undefined'; 
@@ -455,11 +466,17 @@ const carto = () => {
     });
 
     const fabActions = useMemo(() => {
+      if(list!==undefined){
+        return [
+          { name: 'list', label: 'Liste', onClick: switchMode },
+          { name: 'map', label: 'Carte', onClick: switchMode },
+        ];
+      }
       return [
         { name: 'map', label: 'Carte', onClick: switchMode },
         { name: 'list', label: 'Liste', onClick: switchMode },
       ];
-    }, [switchMode]);
+    }, [switchMode,list]);
 
     const actorsWithLocation = useMemo(() => {
       return (data?.actors || []).filter((actor) => actor.lat && actor.lng);
@@ -517,7 +534,6 @@ const carto = () => {
           {listMode && (
             <Grid item style={{ width: '100%',height: '100%' }}>
               <MapWithNoSSR  scrollWheelZoom={true} classMap={styles.mapContainer}>
-                <MarkerClusterWithNoSSR>
                   {
                     actorsWithLocation.map((actor) => {
                       return (
@@ -525,7 +541,6 @@ const carto = () => {
                       );
                     })
                   }
-                </MarkerClusterWithNoSSR>
               </MapWithNoSSR>
             </Grid>
           )}

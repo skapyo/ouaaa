@@ -247,7 +247,7 @@ const AgendaPageLayout = () => {
   const matches = useMediaQuery(theme.breakpoints.down('sm'));
 
   const mapRef = useRef();
-  const [viewMode, setViewMode] = useState(VIEW_STATE.LIST);
+  const [viewMode, setViewMode] = useState(VIEW_STATE.CALENDAR);
   const [favorite, setFavorite] = useState(false);
   const [filters, setFilters] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(!matchesWindow);
@@ -297,9 +297,10 @@ const AgendaPageLayout = () => {
 
   const fabActions = useMemo(() => {
     return [
+      { name: 'calendar', label: 'Calendrier', onClick: () => setViewMode(VIEW_STATE.CALENDAR) },
       { name: 'list', label: 'Liste', onClick: () => setViewMode(VIEW_STATE.LIST) },
       { name: 'map', label: 'Carte', onClick: () => setViewMode(VIEW_STATE.MAP) },
-      { name: 'calendar', label: 'Calendrier', onClick: () => setViewMode(VIEW_STATE.CALENDAR) },
+   
     ];
   }, []);
 

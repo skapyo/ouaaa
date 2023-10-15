@@ -451,11 +451,11 @@ function Filters(props) {
             <StyledInputBase
              onChange={(newValue) => { handleFilterChange('search', newValue.currentTarget.value); }}
              onCancelSearch={() => { handleFilterChange('search', ''); }}
-              placeholder="Recherche par nom"
+              placeholder="Recherche"
               inputProps={{ 'aria-label': 'search' }}
             />
           </Search>
-      <TextField
+  {/*   <TextField
         variant="outlined"
         label="Code Postal"
         name="postCode"
@@ -486,7 +486,7 @@ function Filters(props) {
           <div>Mes favoris</div>
         </Grid>
       </Grid>
-
+        */}
       {filterCollections.map((collection) => {
         return (
           <Accordion

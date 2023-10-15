@@ -17,13 +17,14 @@ const useExcelExport = () => {
     const { data, columns, columnLabels, columnOptions, sheetName, fileName } = params;
     let ws: any;
     let dataToExport = data;
-
+    const XLSX = require('xlsx');
     /* Get specific columns */
     if (columns) {
       dataToExport = data.map(dataObject => pick(dataObject, columns));
     }
 
     if (columnLabels) {
+      debugger;
       /* Create worksheet with custom headers */
       ws = XLSX.utils.aoa_to_sheet([columnLabels as any[]]);
       /* Add to the worksheet all values without header */

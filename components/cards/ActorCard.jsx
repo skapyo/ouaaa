@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme, props) => ({
   card: (props) => ({
     backgroundColor: 'white',
     borderRadius: '10px',
-    minHeight: '106px',
+    minHeight: '50px',
     borderLeft: `solid 12px ${props.color}`,
     display: 'flex',
   }),
@@ -152,28 +152,8 @@ const ActorCard = ({ actor }) => {
     <StyledBoxOnHover className={classes.card}>
       <Link href={`/actor/${actor.id}`} target="_blank" color="inherit" underline="none" width="100%">
         <div className={classes.content}>
-          <div className={classes.leftContent}>
-            <div className={classes.image}>
-              <Avatar
-              className={classes.avatar}
-                alt={actor.name}
-                sx={{
-                  width: 72,
-                  height: 72,
-                }}
-              >
-                  <Image src={getActorProfilePicture()} alt={actor.name} layout="fill" />
-                  </Avatar>
-            </div>
-            <div className={classes.text}>
-              <div className={classes.actor}>{actorName}</div>
-              <div className={classes.label}>{actor.label}</div>
-              <div className={classes.actorDetails}>
-                <span>
-                  {/* @ts-ignore */}
-                  {actor.shortDescription}
-                </span>
-              </div>
+              <span className={classes.actor}>{actorName}</span>
+              <span className={classes.label}>{actor.label}</span>
               {
                 (actor.address || actor.city) && (
                   <div className={classes.location}>
@@ -187,17 +167,8 @@ const ActorCard = ({ actor }) => {
                   </div>
                 )
               }
-            </div>
-          </div>
-          <div className={classes.category}>
-            <span className={classes.opacity} />
-            <span className={classes.categoryIcon} />
-          </div>
         </div>
       </Link>
-      <div className={classes.favorite}>
-        <Favorite actor={actor} />
-      </div>
     </StyledBoxOnHover>
   );
 };
