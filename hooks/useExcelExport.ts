@@ -17,7 +17,7 @@ const useExcelExport = () => {
     const { data, columns, columnLabels, columnOptions, sheetName, fileName } = params;
     let ws: any;
     let dataToExport = data;
-
+    const XLSX = require('xlsx');
     /* Get specific columns */
     if (columns) {
       dataToExport = data.map(dataObject => pick(dataObject, columns));
