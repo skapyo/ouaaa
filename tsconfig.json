@@ -29,5 +29,5 @@
     "**/*.ts",
     "**/*.tsx",
     "components/Link.jsx"
-  ]
+, "pages/acteur/[actorUrl].js"  ]
 }

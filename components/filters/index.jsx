@@ -21,7 +21,10 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import IconButton from '@mui/material/IconButton';
 import Modal from '@mui/material/Modal';
+import Switch from '@mui/material/Switch';
 import DateFilter from '../../containers/layouts/agendaPage/DateFilter';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import { useSessionState } from '../../context/session/session';
 import ParentContainer from './ParentContainer';
 
@@ -324,6 +327,12 @@ function Filters(props) {
     handleFilterChange('startingDate', date);
   }, [handleFilterChange]);
 
+
+  const handleChangeperiodicEvent = useCallback((e) => {
+  
+    handleFilterChange('periodicEvent', e.target.checked);
+  }, [handleFilterChange]);
+
   const handleChangePostCode = useCallback((e) => {
     const regex = /[0-9]{5}/g;
     if (
@@ -458,6 +467,13 @@ function Filters(props) {
           errorPostCode ? 'Le code postal doit être composé de 5 chiffres' : ''
         }
       />
+      {isEventList && (
+       <Grid  container className={classes.favoriteGrid}>
+        <Grid item>
+        <FormControlLabel control={<Switch defaultChecked onChange={handleChangeperiodicEvent} />} label="Evénements récurents" />
+        </Grid>
+      </Grid>
+      )}
       <Grid container className={classes.favoriteGrid}>
         <Grid item xs={5}>
           <div className={classes.favorite} onClick={() => changeFavorite(!favorite)}>

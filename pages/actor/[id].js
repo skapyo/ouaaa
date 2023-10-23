@@ -1661,7 +1661,7 @@ export async function getServerSideProps(ctxt) {
     }),
   });
   const endDate = moment();
-  console.log("rrr"+res);
+
   const initialData = await res.json();
   if (initialData.errors) {
     console.error(
