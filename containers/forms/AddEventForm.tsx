@@ -1281,7 +1281,7 @@ const AddEventForm = ({ actorId }) => {
             <AddCircleOutline />
           </IconButton>
 
-          {showAddActor && (
+          {showAddActor && dataActors && (
             <Autocomplete
               id="combo-box-add-actor"
               options={dataActors.actors}

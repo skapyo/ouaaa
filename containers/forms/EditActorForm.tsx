@@ -169,6 +169,10 @@ const EDIT_ACTOR = gql`
         surname
         lastname
       }
+      isPartOf {
+        id
+        name
+      }
     }
   }
 `;
@@ -185,6 +189,14 @@ const GET_USERS = graphqlTag`
   }
 `;
 
+const GET_ACTORS = gql`
+query actors {
+  actors {
+    id
+    name
+  }
+}
+`;
 const GET_ACTOR = gql`
   query actor($id: String!) {
     actor(id: $id) {
@@ -264,6 +276,10 @@ const GET_ACTOR = gql`
         id
         surname
         lastname
+      }
+      isPartOf {
+        id
+        name
       }
     }
   }
@@ -477,7 +493,9 @@ const EditActorForm = (props) => {
   const [openingHours, setOpeningHours] = useState();
 
   const { data: dataUsers } = useQuery(GET_USERS, {});
+  const { data: datactors } = useQuery(GET_ACTORS, {});
 
+  
   const [open] = React.useState([false]);
   const router = useRouter();
 
@@ -726,6 +744,8 @@ const EditActorForm = (props) => {
     ] = useState([]);
     const [showAddReferent, setShowAddReferent] = useState(false);
     const [openAddReferentlist, setOpenAddReferentlist] = useState(false);
+    const [showAddIsPartOf, setShowAddIsPartOf] = useState(false);
+    const [openAddIsPartOflist, setOpenAddIsPartOflist] = useState(false);
     const [
       edit,
       { data: editData, loading: editLoading, error: editError },
@@ -800,16 +820,22 @@ const EditActorForm = (props) => {
         if (event.target.value.length < 3) {
           if (event.target.name === 'referents') {
             setOpenAddReferentlist(false);
+          } else if (event.target.name === 'isPartOf') {
+            setOpenAddIsPartOflist(false);
           } else {
             setShowOtherContactList(false);
           }
         } else if (event.target.name === 'referents') {
           setOpenAddReferentlist(true);
+        } else if (event.target.name === 'isPartOf') {
+          setOpenAddIsPartOflist(true);
         } else {
           setShowOtherContactList(true);
         }
       }
     }, []);
+
+    
 
     const autocompleteHandler = (event, value) => {
       if (value) {
@@ -829,6 +855,20 @@ const EditActorForm = (props) => {
         }
         setShowAddReferent(false);
         setOpenAddReferentlist(false);
+      },
+      [formValues],
+    );
+    const handleChangeIsPartOf = useCallback(
+      (event, value) => {
+        if (value) {
+          // @ts-ignore
+          const currentIsPartOf: string[] = formValues.isPartOf || [];
+          currentIsPartOf.push(value);
+          // @ts-ignore
+          formValues.isPartOf = currentIsPartOf;
+        }
+        setShowAddIsPartOf(false);
+        setOpenAddIsPartOflist(false);
       },
       [formValues],
     );
@@ -1020,6 +1060,7 @@ const EditActorForm = (props) => {
             ...formValues,
             // @ts-ignore
             referents: formValues.referents.map((item) => item.id),
+            isPartOf: formValues.isPartOf.map((item) => item.id),
           },
           // eslint-disable-next-line radix
           actorId: parseInt(actorData.actor.id),
@@ -1126,6 +1167,7 @@ const EditActorForm = (props) => {
       formValues.volunteerDescription = actorData.actor.volunteerDescription;
       formValues.shortDescription = actorData.actor.shortDescription;
       formValues.referents = actorData.actor.referents;
+      formValues.isPartOf = actorData.actor.isPartOf;
       formValues.contactId = actorData.actor.contact_id;
       formValues.siren = actorData.actor.siren;
       formValues.hasVideoVouaaar = actorData.actor.hasVideoVouaaar;
@@ -1227,6 +1269,29 @@ const EditActorForm = (props) => {
             // @ts-ignore
             value: currentReferents,
             name: 'referents',
+          },
+        });
+      },
+      [formValues],
+    );
+
+    const handleClickAddIsPartOf = useCallback(() => {
+      setShowAddIsPartOf(!showAddIsPartOf);
+    }, [showAddIsPartOf]);
+
+    const  handleClickDeleteIsPartOf = useCallback(
+      (isPartOf) => {
+        // @ts-ignore
+        let currentIsPartOf = [...formValues.isPartOf];
+        // @ts-ignore
+        currentIsPartOf = currentIsPartOf.filter(
+          (item) => item.id !== isPartOf.id,
+        );
+        formChangeHandler({
+          target: {
+            // @ts-ignore
+            value: isPartOf,
+            name: 'isPartOf',
           },
         });
       },
@@ -2041,7 +2106,73 @@ const EditActorForm = (props) => {
         </Grid>
 
         <br />
+        <TitleWithTooltip
+          title="Fait partie du réseau ou collectif"
+          tooltipTitle="Permet d’ajouter le réseau ou collectif auquel appartient l’acteur"
+        />
 
+        <Grid container>
+          <List className={styles.referentList}>
+            {
+              // @ts-ignore
+              (formValues?.isPartOf || []).map((ispartof) => {
+                return (
+                  <ListItem key={ispartof.id}>
+                    <ListItemIcon>
+                      <Avatar>
+                        {ispartof.name[0]}
+                      </Avatar>
+                    </ListItemIcon>
+                    <ListItemText
+                      id={`ispartof-list-${ispartof.id}`}
+                      primary={`${ispartof.name}`}
+                    />
+                    <ListItemSecondaryAction>
+                      <IconButton onClick={() => handleClickDeleteIsPartOf(ispartof)} size="large">
+                        <DeleteIcon />
+                      </IconButton>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                );
+              })
+            }
+          </List>
+        </Grid>
+
+        <Grid container direction="row">
+          <IconButton
+            key="close"
+            aria-label="Close"
+            color="inherit"
+            onClick={handleClickAddIsPartOf}
+            size="large">
+            <AddCircleOutline />
+          </IconButton>
+
+          {showAddIsPartOf && datactors && (
+            <Autocomplete
+              id="combo-box-add-isPartOf"
+              options={datactors.actors}
+              // @ts-ignore
+              getOptionLabel={(option) => `${option.name}`}
+              onChange={handleChangeIsPartOf}
+              open={openAddIsPartOflist}
+              style={{ width: 300 }}
+              // @ts-ignore
+              onInput={inputChangeHandler}
+              // eslint-disable-next-line react/jsx-props-no-spreading
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Fait partie du collectif ou réseau"
+                  variant="outlined"
+                  name="isPartOf"
+                />
+              )}
+            />
+          )}
+        </Grid>
+        <b/>
         <FormControlLabel
           control={
             <Checkbox
