@@ -1549,7 +1549,7 @@ const Actor = ({ initialData }) => {
                 })}
             </Slider>
             
-            {data && data.actor && data.actor.lat && data.actor.lng && data.actor.members.length > 0 && (
+            {data && data.actor && data.actor.members.length > 0 && (
               <>
            
                   <div className={styles.map}>
@@ -1557,7 +1557,6 @@ const Actor = ({ initialData }) => {
                       actor={data.actor}
                       ref={mapRef}
                       scrollWheelZoom={false}
-                      position={[data.actor.lat, data.actor.lng]}
                       id="map"
                       classMap={styles.mapContainer}
                     >
