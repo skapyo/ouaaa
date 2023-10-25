@@ -43,7 +43,7 @@ import Image from 'next/image';
 import Link from 'components/Link';
 import moment from 'moment';
 import { RRule } from 'rrule';
-import CardSliderArticle from 'components/cards/CardSliderArticle';
+import CardSliderActor from 'components/cards/CardSliderActor';
 import dynamic from 'next/dynamic';
 import { useSessionState } from '../../context/session/session';
 import {
@@ -185,6 +185,9 @@ const useStyles = makeStyles((theme) => ({
   descriptionInfoDiv: {
     display: 'inline-block',
     margin: '0em 1em 0em 1em',
+  },
+  articleCarroussel: {
+    paddingTop: '2em',
   },
   image: {
     height: '200px',
@@ -478,6 +481,38 @@ query actor($id: String) {
       place
     }
     hasVideoVouaaar
+    memberOf {
+      id
+      name
+      address
+      lat
+      lng
+      pictures {
+        id
+        label
+        originalPicturePath
+        originalPictureFilename
+        position
+        logo
+        main
+      }
+    }
+    members {
+      id
+      name
+      address
+      lat
+      lng
+      pictures {
+        id
+        label
+        originalPicturePath
+        originalPictureFilename
+        position
+        logo
+        main
+      }
+    }
   }
 }
 `;
@@ -535,7 +570,10 @@ const Actor = ({ initialData }) => {
   const MarkerWithNoSSR = dynamic(() => import('../../components/map/MarkerEventLocation'), {
     ssr: false,
   });
-
+  const MarkerActorWithNoSSR = dynamic(() => import('../../components/map/ActorMarker'), {
+    ssr: false,
+  });
+  
   const {
     data: dataArticles,
   } = useQuery(GET_ARTICLES, {
@@ -704,7 +742,8 @@ const Actor = ({ initialData }) => {
 
   const actorPictures = data?.actor?.pictures || [];
   const articles = dataArticles?.articles || [];
-
+  const actorMemberOfPictures = data?.actor?.memberOf || [];
+  const actorMembersPictures = data?.actor?.members || [];
   const settingsSliderImage = useMemo(() => {
     return {
       ...sliderSettings,
@@ -713,6 +752,22 @@ const Actor = ({ initialData }) => {
         : actorPictures.length,
     };
   }, [actorPictures, sliderSettings, maxSlideToShowImage]);
+  const settingsSliderImageActorMemberOf = useMemo(() => {
+    return {
+      ...sliderSettings,
+      slidesToShow: actorMemberOfPictures.length >= maxSlideToShowImage
+        ? maxSlideToShowImage
+        : actorMemberOfPictures.length,
+    };
+  }, [actorMemberOfPictures, sliderSettings, maxSlideToShowImage]);
+  const settingsSliderImageActorMembers = useMemo(() => {
+    return {
+      ...sliderSettings,
+      slidesToShow: actorMembersPictures.length >= maxSlideToShowImage
+        ? maxSlideToShowImage
+        : actorMembersPictures.length,
+    };
+  }, [actorMemberOfPictures, sliderSettings, maxSlideToShowImage]);
 
   const settingsSliderImageArticle = useMemo(() => {
     return {
@@ -1442,8 +1497,9 @@ const Actor = ({ initialData }) => {
                       </span>
                     </div>
                 )}
-
                 <div />
+                {data &&  data.actor.members==0 &&(
+                <>
                 <br />
                 <Typography variant="h3" className={styles.cardTitle}>
                   ACCES
@@ -1461,14 +1517,64 @@ const Actor = ({ initialData }) => {
                       id="map"
                       classMap={styles.mapContainer}
                     >
-                      <MarkerWithNoSSR
+                
+                        <MarkerWithNoSSR
                         event={data.actor}
                       />
+                      
+                    
                     </MapWithNoSSR>
                   </div>
                 )}
+                </>
+                )}
               </Grid>
             </Grid>
+            {data && data.actor.members && data.actor.members.length > 0 && (
+                <div>
+                     <br />
+                  <Typography variant="h5" className={styles.cardTitle}>
+                    Les acteurs du collectif / réseau
+                  </Typography>
+                  <div className={styles.border} />
+                  <br />
+                </div>
+              )}
+            <Slider
+              {...settingsSliderImageActorMembers}
+            >
+              {data
+                && data.actor.members.map((actor) => {
+                  return <CardSliderActor key={actor.id} actor={actor} />;
+                })}
+            </Slider>
+            
+            {data && data.actor && data.actor.lat && data.actor.lng && data.actor.members.length > 0 && (
+              <>
+           
+                  <div className={styles.map}>
+                    <MapWithNoSSR
+                      actor={data.actor}
+                      ref={mapRef}
+                      scrollWheelZoom={false}
+                      position={[data.actor.lat, data.actor.lng]}
+                      id="map"
+                      classMap={styles.mapContainer}
+                    >
+                     
+                      { data.actor?.members?.map((actor) => {
+                      return (
+                        <MarkerActorWithNoSSR actor={actor} />
+                      );
+                      })
+                    }
+                    </MapWithNoSSR>
+                  </div>
+                  </>
+                )}
+                
+            <br />
+          
             <br />
             {data && data.actor.hasVideoVouaaar && (
             <div className={styles.cardTitle}>
@@ -1615,6 +1721,26 @@ const Actor = ({ initialData }) => {
                     return <ArticleCard key={article.id} article={article} />;
                   })}
          </Slider>
+   
+            <br />
+          {data && data.actor.memberOf && data.actor.memberOf.length > 0 && (
+                <div>
+                  <Typography variant="h5" className={styles.cardTitle}>
+                    Fait partie du collectif / réseau
+                  </Typography>
+                  <div className={styles.border} />
+                  <br />
+                </div>
+              )}
+            <Slider
+              {...settingsSliderImageActorMemberOf}
+            >
+              {data
+                && data.actor.memberOf.map((actor) => {
+                  return <CardSliderActor key={actor.id} actor={actor} />;
+                })}
+            </Slider>
+            <br />
           </Container>
           {
             ((data && containUser(data.actor.referents)) || (user && user.role === 'admin')) && (
@@ -1663,6 +1789,14 @@ export async function getServerSideProps(ctxt) {
   const endDate = moment();
 
   const initialData = await res.json();
+
+  console.log(
+    ` SSR actor id ${ctxt.params.id} fetch in ${
+      endDate.diff(startDate, 'seconds')
+    } seconds`,
+  );
+  console.log(initialData.data.actor.members[0]);
+
   if (initialData.errors) {
     console.error(
       ` Error fetching actor id ${
