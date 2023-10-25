@@ -250,6 +250,7 @@ const AgendaPageLayout = () => {
   const [viewMode, setViewMode] = useState(VIEW_STATE.LIST);
   const [favorite, setFavorite] = useState(false);
   const [filters, setFilters] = useState(null);
+  const [recuringEvent, setRecuringEvent] = useState(true);
   const [isMenuOpen, setIsMenuOpen] = useState(!matchesWindow);
 
   const isListMode = useMemo(() => viewMode === VIEW_STATE.LIST, [viewMode, VIEW_STATE]);
@@ -278,6 +279,7 @@ const AgendaPageLayout = () => {
      setSearchDate(newFilters.startingDate.$d); 
     }
     setFilters(newFilters);
+    setRecuringEvent(newFilters!=undefined && newFilters!=null && newFilters['periodicEvent']!=undefined && newFilters['periodicEvent']==true? true:false)
     refetch({ ...newFilters });
   }, [refetch]);
 
@@ -304,12 +306,14 @@ const AgendaPageLayout = () => {
   }, []);
 
   const events = useMemo(() => {
+    debugger;
     const initialEvents = (eventData?.events || []);
     const recurringEvents = initialEvents.filter((event) => event.dateRule);
-    const allRecurringEvents = recurringEvents.map((evt) => getAllEventsFromRecurringEvent(evt));
+  
+    const allRecurringEvents = (!recuringEvent? []  :  recurringEvents.map((evt) => getAllEventsFromRecurringEvent(evt)));
     const allEvents = initialEvents.filter((event) => !event.dateRule).concat(allRecurringEvents.reduce((acc, items) => acc.concat(items), [])).filter((event) => { return moment(parseInt(event.startedAt)) > moment().startOf('day'); });
     return allEvents;
-  }, [eventData]);
+  }, [eventData,recuringEvent,refetch]);
 
   const calendarEvents = useMemo(() => {
     const initialEvents = (eventData?.events || []);

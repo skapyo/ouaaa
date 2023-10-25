@@ -169,6 +169,10 @@ const EDIT_ACTOR = gql`
         surname
         lastname
       }
+      memberOf {
+        id
+        name
+      }
     }
   }
 `;
@@ -185,6 +189,14 @@ const GET_USERS = graphqlTag`
   }
 `;
 
+const GET_ACTORS = gql`
+query actors {
+  actors {
+    id
+    name
+  }
+}
+`;
 const GET_ACTOR = gql`
   query actor($id: String!) {
     actor(id: $id) {
@@ -264,6 +276,10 @@ const GET_ACTOR = gql`
         id
         surname
         lastname
+      }
+      memberOf {
+        id
+        name
       }
     }
   }
@@ -477,6 +493,8 @@ const EditActorForm = (props) => {
   const [openingHours, setOpeningHours] = useState();
 
   const { data: dataUsers } = useQuery(GET_USERS, {});
+  const { data: datactors } = useQuery(GET_ACTORS, {});
+
 
   const [open] = React.useState([false]);
   const router = useRouter();
@@ -726,6 +744,8 @@ const EditActorForm = (props) => {
     ] = useState([]);
     const [showAddReferent, setShowAddReferent] = useState(false);
     const [openAddReferentlist, setOpenAddReferentlist] = useState(false);
+    const [showAddMemberOf, setShowAddMemberOf] = useState(false);
+    const [openAddMemberOflist, setOpenAddMemberOflist] = useState(false);
     const [
       edit,
       { data: editData, loading: editLoading, error: editError },
@@ -800,16 +820,22 @@ const EditActorForm = (props) => {
         if (event.target.value.length < 3) {
           if (event.target.name === 'referents') {
             setOpenAddReferentlist(false);
+          } else if (event.target.name === 'memberOf') {
+            setOpenAddMemberOflist(false);
           } else {
             setShowOtherContactList(false);
           }
         } else if (event.target.name === 'referents') {
           setOpenAddReferentlist(true);
+        } else if (event.target.name === 'memberOf') {
+          setOpenAddMemberOflist(true);
         } else {
           setShowOtherContactList(true);
         }
       }
     }, []);
+
+
 
     const autocompleteHandler = (event, value) => {
       if (value) {
@@ -829,6 +855,20 @@ const EditActorForm = (props) => {
         }
         setShowAddReferent(false);
         setOpenAddReferentlist(false);
+      },
+      [formValues],
+    );
+    const handleChangeMemberOf = useCallback(
+      (event, value) => {
+        if (value) {
+          // @ts-ignore
+          const currentMemberOf: string[] = formValues.memberOf || [];
+          currentMemberOf.push(value);
+          // @ts-ignore
+          formValues.memberOf = currentMemberOf;
+        }
+        setShowAddMemberOf(false);
+        setOpenAddMemberOflist(false);
       },
       [formValues],
     );
@@ -1000,17 +1040,17 @@ const EditActorForm = (props) => {
           };
         });
       }
-      for await (const element of logoPictures.concat(mainPictures).concat(files)){
-        if(element.newpic ==true){
+      for await (const element of logoPictures.concat(mainPictures).concat(files)) {
+        if (element.newpic == true) {
           const newFiles = new FormData();
           newFiles.append('files', element.file.originalPicture);
           await fetch('/api/files', {
             method: 'POST',
             body: newFiles,
           });
-          element.file.filename=element.file.originalPicture.name;
-          element.file.originalPicture=undefined;
-       
+          element.file.filename = element.file.originalPicture.name;
+          element.file.originalPicture = undefined;
+
         }
       }
 
@@ -1020,6 +1060,7 @@ const EditActorForm = (props) => {
             ...formValues,
             // @ts-ignore
             referents: formValues.referents.map((item) => item.id),
+            memberOf: formValues.memberOf.map((item) => item.id),
           },
           // eslint-disable-next-line radix
           actorId: parseInt(actorData.actor.id),
@@ -1126,6 +1167,7 @@ const EditActorForm = (props) => {
       formValues.volunteerDescription = actorData.actor.volunteerDescription;
       formValues.shortDescription = actorData.actor.shortDescription;
       formValues.referents = actorData.actor.referents;
+      formValues.memberOf = actorData.actor.memberOf;
       formValues.contactId = actorData.actor.contact_id;
       formValues.siren = actorData.actor.siren;
       formValues.hasVideoVouaaar = actorData.actor.hasVideoVouaaar;
@@ -1227,6 +1269,29 @@ const EditActorForm = (props) => {
             // @ts-ignore
             value: currentReferents,
             name: 'referents',
+          },
+        });
+      },
+      [formValues],
+    );
+
+    const handleClickAddMemberOf = useCallback(() => {
+      setShowAddMemberOf(!showAddMemberOf);
+    }, [showAddMemberOf]);
+
+    const handleClickDeleteMemberOf = useCallback(
+      (memberOf) => {
+        // @ts-ignore
+        let currentMemberOf = [...formValues.memberOf];
+        // @ts-ignore
+        currentMemberOf = currentMemberOf.filter(
+          (item) => item.id !== memberOf.id,
+        );
+        formChangeHandler({
+          target: {
+            // @ts-ignore
+            value: memberOf,
+            name: 'memberOf',
           },
         });
       },
@@ -1371,22 +1436,22 @@ const EditActorForm = (props) => {
         }
 
 
-{
+        {
           /* @ts-ignore */
           dataCollections.collections &&
-            /* @ts-ignore */
-            dataCollections.collections.map((collection) => {
-              if (collection.code !== 'actor_status') {
-                return '';
-              }
-              let { label } = collection;
-              let helperText = '';
+          /* @ts-ignore */
+          dataCollections.collections.map((collection) => {
+            if (collection.code !== 'actor_status') {
+              return '';
+            }
+            let { label } = collection;
+            let helperText = '';
 
-               label = 'Statut';
-               helperText =
-                'service public : toutes les collectivités, mairies, cda, cdc participant directement ou via des projets à la transition / ex : la rochelle territoire zéro carbone entreprise : tous les acteurs économiques de la transition, de l’economie sociale et solidaire... association & ONG  : toutes les structures à but non lucratif';
-           
-                let defaultValue = '';
+            label = 'Statut';
+            helperText =
+              'service public : toutes les collectivités, mairies, cda, cdc participant directement ou via des projets à la transition / ex : la rochelle territoire zéro carbone entreprise : tous les acteurs économiques de la transition, de l’economie sociale et solidaire... association & ONG  : toutes les structures à but non lucratif';
+
+            let defaultValue = '';
             if (
               !IsTree(collection)
               && !collection.multipleSelection
@@ -1405,36 +1470,36 @@ const EditActorForm = (props) => {
                 if (isPresent) defaultValue = entry;
               });
             }
-              //    const [display, setDisplay] = useState(false);
-              return (
-                <div>
-                  <br />
-                  <Typography className={styles.collectionLabel}>
-                    {label}{' '}
-                    {helperText !== '' && (
-                      <Tooltip title={helperText}>
-                        <InfoIcon />
-                      </Tooltip>
-                    )}
-                  </Typography>
-                  <br />
-                  {
-                    // display &&
-                    !IsTree(collection) && !collection.multipleSelection && (
-                      <FormControl component="fieldset">
-                         <RadioGroupForContext initValue={defaultValue}>
-                      <CustomRadioGroup
-                        formChangeHandler={formChangeHandler}
-                        entries={collection.entries}
-                        defaultValue={defaultValue}
-                      />
-                    </RadioGroupForContext>
-                      </FormControl>
-                    )
-                  }
-                </div>
-              );
-            })
+            //    const [display, setDisplay] = useState(false);
+            return (
+              <div>
+                <br />
+                <Typography className={styles.collectionLabel}>
+                  {label}{' '}
+                  {helperText !== '' && (
+                    <Tooltip title={helperText}>
+                      <InfoIcon />
+                    </Tooltip>
+                  )}
+                </Typography>
+                <br />
+                {
+                  // display &&
+                  !IsTree(collection) && !collection.multipleSelection && (
+                    <FormControl component="fieldset">
+                      <RadioGroupForContext initValue={defaultValue}>
+                        <CustomRadioGroup
+                          formChangeHandler={formChangeHandler}
+                          entries={collection.entries}
+                          defaultValue={defaultValue}
+                        />
+                      </RadioGroupForContext>
+                    </FormControl>
+                  )
+                }
+              </div>
+            );
+          })
         }
         <p />
         <br />
@@ -1516,9 +1581,9 @@ const EditActorForm = (props) => {
             let { label } = collection;
             let helperText;
             if (collection.code === 'category') {
-              label =  "Sujets d'actions principaux";
+              label = "Sujets d'actions principaux";
               helperText = 'Vous avez la possibilité d’ajouter un texte libre pour expliquer votre lien au sujet choisi. Vous pouvez sélectionner jusqu’a 3 sujet.';
-            } 
+            }
             let defaultValue = '';
             if (
               !IsTree(collection)
@@ -1678,14 +1743,14 @@ const EditActorForm = (props) => {
           text="Déposez ici votre autres photos au format jpg et de poids inférieur à 4Mo"
         />
 
-      <Typography variant="body1" color="primary" className={styles.label}>
+        <Typography variant="body1" color="primary" className={styles.label}>
           Jour et horaire d'ouverture {' '}
           <Tooltip title={addLineBreaks('Pour chaque ligne vous pouvez : \n'
-          + '1. Sélectionner les différents jours où vous êtes ouvert aux mêmes horaires. Le(s) jour(s) sélectionné(s) passe(nt) en bleu foncé.\n'
-          + '2. Indiquer des tranches horaires associés à ce(s) jour(s). Vous pouvez ajouter autant de tranches horaires que nécessaire pour le(s) même(s) jour(s) en cliquant sur la phrase « ajouter des horaires »\n'
-          + '3. Ajouter un lieu à chaque ligne. Vous n’avez pas d’adresse fixe mais êtes mobile de manière récurrentes, en cliquant en haut sur « indiquer des emplacements », c’est possible ! Attention néanmoins, pour les rdv spéciaux qui ne sont pas hebdomadaires ou les marchés… nous vous invitons à créer par la suite des pages événements dédiés à chacune de vos actions. Ces pages événements vous permettront de donner plus d’infos aux visiteurs et d’être visible dans l’agenda. Pour ajouter un lieu, indiquez l’adresse dans l’espace dédié et cliquez n’importe où sur l’écran pour valider. L’adresse s’affichera alors dans un bloc grisé.\n'
-          + '4. une erreur ? un horaire qui n’existe plus ? Tout est modifiable et, si besoin, vous pouvez totalement supprimer la ligne grâce à l\'icone poubelle\n\n'
-      + 'Vous avez rempli votre 1ere ligne mais il vous reste d’autres jours à indiquer ? Cliquez sur le + et ajoutez autant de ligne que nécessaire\n')}>
+            + '1. Sélectionner les différents jours où vous êtes ouvert aux mêmes horaires. Le(s) jour(s) sélectionné(s) passe(nt) en bleu foncé.\n'
+            + '2. Indiquer des tranches horaires associés à ce(s) jour(s). Vous pouvez ajouter autant de tranches horaires que nécessaire pour le(s) même(s) jour(s) en cliquant sur la phrase « ajouter des horaires »\n'
+            + '3. Ajouter un lieu à chaque ligne. Vous n’avez pas d’adresse fixe mais êtes mobile de manière récurrentes, en cliquant en haut sur « indiquer des emplacements », c’est possible ! Attention néanmoins, pour les rdv spéciaux qui ne sont pas hebdomadaires ou les marchés… nous vous invitons à créer par la suite des pages événements dédiés à chacune de vos actions. Ces pages événements vous permettront de donner plus d’infos aux visiteurs et d’être visible dans l’agenda. Pour ajouter un lieu, indiquez l’adresse dans l’espace dédié et cliquez n’importe où sur l’écran pour valider. L’adresse s’affichera alors dans un bloc grisé.\n'
+            + '4. une erreur ? un horaire qui n’existe plus ? Tout est modifiable et, si besoin, vous pouvez totalement supprimer la ligne grâce à l\'icone poubelle\n\n'
+            + 'Vous avez rempli votre 1ere ligne mais il vous reste d’autres jours à indiquer ? Cliquez sur le + et ajoutez autant de ligne que nécessaire\n')}>
             <InfoIcon />
           </Tooltip>
         </Typography>
@@ -1697,7 +1762,7 @@ const EditActorForm = (props) => {
 
 
         <p />
-  {/*
+        {/*
         <TitleWithTooltip
           title={(
             <p>
@@ -1770,7 +1835,7 @@ const EditActorForm = (props) => {
       
             */}
 
-      
+
 
 
         {
@@ -1924,7 +1989,7 @@ const EditActorForm = (props) => {
                                 onClick={(e) => e.stopPropagation()}
                               />
                               <ListItemText primary={entry.label} />
-                              
+
                             </ListItem>
                           );
                         })}
@@ -1949,7 +2014,7 @@ const EditActorForm = (props) => {
         }
 
 
-    <TitleWithTooltip
+        <TitleWithTooltip
           title="Nos recherches en bénévolat :"
           tooltipTitle="Décrivez ici les missions de bénévolat générales chez vous ou sur un de
           vos projets spécifiques afin de donner envie aux visiteurs de cliquer sur «je deviens
@@ -2041,7 +2106,73 @@ const EditActorForm = (props) => {
         </Grid>
 
         <br />
+        <TitleWithTooltip
+          title="Fait partie du réseau ou collectif"
+          tooltipTitle="Permet d’ajouter le réseau ou collectif auquel appartient l’acteur"
+        />
 
+        <Grid container>
+          <List className={styles.referentList}>
+            {
+              // @ts-ignore
+              (formValues?.memberOf || []).map((ispartof) => {
+                return (
+                  <ListItem key={ispartof.id}>
+                    <ListItemIcon>
+                      <Avatar>
+                        {ispartof.name[0]}
+                      </Avatar>
+                    </ListItemIcon>
+                    <ListItemText
+                      id={`ispartof-list-${ispartof.id}`}
+                      primary={`${ispartof.name}`}
+                    />
+                    <ListItemSecondaryAction>
+                      <IconButton onClick={() => handleClickDeleteMemberOf(ispartof)} size="large">
+                        <DeleteIcon />
+                      </IconButton>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                );
+              })
+            }
+          </List>
+        </Grid>
+
+        <Grid container direction="row">
+          <IconButton
+            key="close"
+            aria-label="Close"
+            color="inherit"
+            onClick={handleClickAddMemberOf}
+            size="large">
+            <AddCircleOutline />
+          </IconButton>
+
+          {showAddMemberOf && datactors && (
+            <Autocomplete
+              id="combo-box-add-memberOf"
+              options={datactors.actors}
+              // @ts-ignore
+              getOptionLabel={(option) => `${option.name}`}
+              onChange={handleChangeMemberOf}
+              open={openAddMemberOflist}
+              style={{ width: 300 }}
+              // @ts-ignore
+              onInput={inputChangeHandler}
+              // eslint-disable-next-line react/jsx-props-no-spreading
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Fait partie du collectif ou réseau"
+                  variant="outlined"
+                  name="memberOf"
+                />
+              )}
+            />
+          )}
+        </Grid>
+        <b />
         <FormControlLabel
           control={
             <Checkbox
