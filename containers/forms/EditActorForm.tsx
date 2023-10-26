@@ -1287,10 +1287,11 @@ const EditActorForm = (props) => {
         currentMemberOf = currentMemberOf.filter(
           (item) => item.id !== memberOf.id,
         );
+
         formChangeHandler({
           target: {
             // @ts-ignore
-            value: memberOf,
+            value: currentMemberOf,
             name: 'memberOf',
           },
         });
