@@ -58,8 +58,6 @@ const Footer = () => {
         <Link href="/faq">FAQ</Link>
         <span> - </span>
         <Link href="/contact">Contact</Link>
-        <span> - </span>
-        <Link href="/annuaire">Annuaire</Link>
       </div>
       <div className={classes.logo} />
     </Container>

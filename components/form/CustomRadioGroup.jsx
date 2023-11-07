@@ -7,6 +7,8 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Radio from '@mui/material/Radio';
 import makeStyles from '@mui/styles/makeStyles';
+import Tooltip from '@mui/material/Tooltip';
+import InfoIcon from '@mui/icons-material/Info';
 
 const useStyles = makeStyles((theme, props) => ({
   formControlLabel: (props) => ({
@@ -48,12 +50,15 @@ function CustomRadioGroup(props) {
         {entries
           && entries.map((entry) => {
             return (
+              <>
               <FormControlLabel
                 key={entry.id}
                 value={entry.id}
                 control={<Radio />}
                 label={entry.label}
               />
+              
+              </>
             );
           })}
       </RadioGroup>

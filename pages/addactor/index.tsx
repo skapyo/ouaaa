@@ -182,7 +182,7 @@ const AccountPage = () => {
 
   const steps = getSteps();
   function getSteps() {
-    return ['Authentifiez vous', 'Acceptez la charte de PAT-OUAAA', "Ajoutez vos informations d'acteur"];
+    return ['Authentifiez vous', "Ajoutez vos informations d'acteur"];
   }
   const user = useSessionState();
 
@@ -190,7 +190,7 @@ const AccountPage = () => {
     setCookie('redirect_url', router.asPath, { path: '/' });
   }, [setCookie, router.asPath]);
 
-  const [charterAccepted, setCharterAccepted] = React.useState(false);
+  const [charterAccepted, setCharterAccepted] = React.useState(true);
   let initalValue;
   if (!user) {
     initalValue = 0;
@@ -200,7 +200,7 @@ const AccountPage = () => {
   const [activeStep, setActiveStep] = React.useState(initalValue);
 
   const handleChangeCharter = (results, name) => {
-    setActiveStep(3);
+    setActiveStep(2);
     setCharterAccepted(!charterAccepted);
   };
 

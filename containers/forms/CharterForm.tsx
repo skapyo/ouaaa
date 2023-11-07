@@ -30,15 +30,6 @@ const CharterForm = (props) => {
         personnel et vous vous apprêtez à créer une page Acteur.
         {' '}
         <br />
-
-        Nous vous invitons à lire notre
-        {' '}
-        <a href="/charter" target="blank">charte</a>
-        {' '}
-        afin de savoir si vous
-        adhérez aux valeurs de
-        {' '}
-        <i>PAT-OUAAA!</i>
         .
       </Typography>
       <br />

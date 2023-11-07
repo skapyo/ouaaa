@@ -1241,25 +1241,6 @@ const Actor = ({ initialData }) => {
                       </span>
                     </Grid>
                   </Grid>
-                  {
-            ((data && containUser(data.actor.referents)) || (user && user.role === 'admin')) && (
-            <Grid container className={[styles.item]}>
-              <Grid item xs={3} className={[styles.alignRight]}>
-                <Tooltip title="Imrpimer votre fiche pour le jeu le grand défi">
-                  <IconButton onClick={handleGamePrint} className={[styles.printIcon]} size="large">
-                    <PrintIcon />
-                  </IconButton>
-                </Tooltip>
-              </Grid>
-              <Grid item xs={8} className={[styles.alignLeft]}>
-                <div className={[styles.game]}>
-                  Imprimer votre fiche pour le jeu le grand défi
-                </div>
-
-              </Grid>
-            </Grid>
-            )
-          }
                 </Grid>
               </Grid>
               <br />

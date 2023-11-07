@@ -221,6 +221,9 @@ const NavBar = () => {
                       <MenuItem component={Link} href="/video">
                         Vidéo Acteurs
                       </MenuItem>
+                      <MenuItem component={Link}   target="_blank" href="https://ferme.yeswiki.net/marchebioaunis/?AtelierpaT#null">
+                        Médiathèque
+                      </MenuItem>
                     </Menu>
                   </Grid>
 
@@ -363,6 +366,9 @@ const NavBar = () => {
                       </MenuItem>
                       <MenuItem component={Link} href="/video">
                         Vidéo Acteurs 
+                      </MenuItem>
+                      <MenuItem component={Link} target="_blank" href="https://ferme.yeswiki.net/marchebioaunis/?AtelierpaT#null">
+                        Médiathèque
                       </MenuItem>
                     </Menu>
                   </Grid>

@@ -28,7 +28,7 @@ const ActorMarker = (props) => {
   let icone;
   let color;
 
-  if (actor?.entries?.[0]?.icon) {
+  if (false && actor?.entries?.[0]?.icon) {
     icone = `/icons/marker/marker_${actor.entries[0].icon}.svg`;
     color = actor.entries[0].color;
   } else {
@@ -36,7 +36,19 @@ const ActorMarker = (props) => {
     color = 'ref';
   }
 
-  const markerHtmlStyles = 'background-color: red';
+  const myCustomColour = '#583470'
+
+  const markerHtmlStyles = `
+    background-color: ${myCustomColour};
+    width: 3rem;
+    height: 3rem;
+    display: block;
+    left: -1.5rem;
+    top: -1.5rem;
+    position: relative;
+    border-radius: 3rem 3rem 0;
+    transform: rotate(45deg);
+    border: 1px solid #FFFFFF`;
   const suitcasePoint = new L.Icon({
     iconUrl: icone,
     color,

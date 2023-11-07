@@ -509,19 +509,6 @@ function Filters(props) {
         );
       })}
 
-      {
-      !isEventList && (
-        <Button
-          variant="contained"
-          color="secondary"
-          className={classes.inviteActor}
-          startIcon={<AddIcon />}
-          onClick={handleOpenModalAddActor}
-        >
-          Inviter un acteur non référencé
-        </Button>
-      )
-    }
       <Modal
         open={openModalAddActor}
         onClose={handleCloseModalAddActor}

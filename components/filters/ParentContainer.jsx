@@ -86,7 +86,7 @@ function ParentContainer(props) {
   }, [checkboxes]);
 
   const handleToggle = useCallback(() => {
-    debugger;
+    //debugger;
     setExpanded((oldExpanded) => (oldExpanded.length === 0 ? nodesArray : []));
   }, [nodesArray]);
 

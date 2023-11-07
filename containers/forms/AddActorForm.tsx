@@ -1569,9 +1569,9 @@ const AddActorForm = () => {
                   'Ici nous vous proposons de choisir votre public principal. Bien sûr à chaque action (événement, campagne…) que vous créerez vous pourrez indiquer des publics différents. de votre public principal. Tout public = familles ; Jeunes adultes = 15-25 ans, étudiants ; précaires = SDF, familles en difficulté, etc. ; discriminés = femmes, LGBTQIA+, migrants, etc';
               } else if (collection.code === 'collectif') {
                 label =
-                  'Membre de collectifs ou réseaux :';
+                  'DEMARCHE COLLECTIVE :';
                 helperText =
-                  'Sont référencés ici des collectifs et réseaux du territoire. Les groupes locaux de réseaux nationaux (ex Greenpeace) ne sont pas inclus dans cette liste';
+                  '(RÉSEAU, LABEL)';
               } else if (collection.code === 'actor_location_action') {
                 label = "Périmètre d'action (1 seul choix) *";
                 helperText =
@@ -1610,7 +1610,11 @@ const AddActorForm = () => {
                                   onClick={(e) => e.stopPropagation()}
                                 />
                                 <ListItemText primary={entry.label} />
-
+                                {entry.description! && entry.description !== '' && (
+                                  <Tooltip title={entry.description}>
+                                    <InfoIcon />
+                                  </Tooltip>
+                                )}
                               </ListItem>
                             );
                           })}

@@ -187,7 +187,7 @@ const News = (props) => {
     <AppLayout>
       <Container maxWidth="lg">
 
-      <iframe class="yeswiki_frame" width="960" height="700" frameborder="0" src="https://ferme.yeswiki.net/marchebioaunis/?AtelierpaT#null"></iframe>
+      <iframe class="yeswiki_frame" width="960" height="700" frameborder="0" src="https://documents.ouaaa-transition.fr/s/pzBCSxWMNrYL5gc"></iframe>
         <Typography sx={styles.title} variant="h1" align="center">Les Articles {tag!==undefined && (<>de PAT-OUAAA! </>) }</Typography>
         <Box sx={styles.searchBox}>
           <TextField
