@@ -1233,17 +1233,7 @@ const AddActorForm = () => {
             })
         }
         <p />
-        <br />
-    <FormItem
-      label="Activité principale de votre structure / Métier"
-      inputName="activity"
-      formChangeHandler={formChangeHandler}
-      value={formValues.activity}
-      required={false}
-      errorBool={false}
-      errorText=""
-      helperText="Indiquez ici l'activité principale ou votre métier si vous êtes seul dans la structure.  Cette info servira à mieux référencer votre page dans les moteurs de recherche. Ex : boulanger bio"
-    />
+
     <br />
     <FormItem
           label="Description courte"
@@ -1468,82 +1458,7 @@ const AddActorForm = () => {
 
 
 
-        <Typography variant="body1" color="primary" className={styles.label}>
-          Jour et horaire d'ouverture {' '}
-          <Tooltip title={addLineBreaks('Pour chaque ligne vous pouvez : \n'
-          + '1. Sélectionner les différents jours où vous êtes ouvert aux mêmes horaires. Le(s) jour(s) sélectionné(s) passe(nt) en bleu foncé.\n'
-          + '2. Indiquer des tranches horaires associés à ce(s) jour(s). Vous pouvez ajouter autant de tranches horaires que nécessaire pour le(s) même(s) jour(s) en cliquant sur la phrase « ajouter des horaires »\n'
-          + '3. Ajouter un lieu à chaque ligne. Vous n’avez pas d’adresse fixe mais êtes mobile de manière récurrentes, en cliquant en haut sur « indiquer des emplacements », c’est possible ! Attention néanmoins, pour les rdv spéciaux qui ne sont pas hebdomadaires ou les marchés… nous vous invitons à créer par la suite des pages événements dédiés à chacune de vos actions. Ces pages événements vous permettront de donner plus d’infos aux visiteurs et d’être visible dans l’agenda. Pour ajouter un lieu, indiquez l’adresse dans l’espace dédié et cliquez n’importe où sur l’écran pour valider. L’adresse s’affichera alors dans un bloc grisé.\n'
-          + '4. une erreur ? un horaire qui n’existe plus ? Tout est modifiable et, si besoin, vous pouvez totalement supprimer la ligne grâce à l\'icone poubelle\n\n'
-      + 'Vous avez rempli votre 1ere ligne mais il vous reste d’autres jours à indiquer ? Cliquez sur le + et ajoutez autant de ligne que nécessaire\n')}>
-            <InfoIcon />
-          </Tooltip>
-        </Typography>
-        <Typography className={styles.helperText}>Si vous faites de l’accueil du public, ou si vous avez un standard téléphonique</Typography>
-        <SchedulerContainer onChange={setOpeningHours} />
-
-        <br />
-        {/*
-        <Typography variant="body1" color="primary" className={styles.label}>
-          CONTACT PRIVE pour les échanges avec <i>OUAAA!</i>
-        </Typography>
-        <FormControl component="fieldset">
-          <RadioGroup
-            row
-            aria-label="gender"
-            name="contact"
-            onChange={radioChangeHandler}
-          >
-            <FormControlLabel
-              value="me"
-              control={<Radio />}
-              label="C'est moi "
-            />
-            <FormControlLabel
-              value="other"
-              control={<Radio />}
-              label={
-                <>
-                  c’est un autre (avec un compte <i>OUAAA!</i> existant)
-                </>
-              }
-            />
-          </RadioGroup>
-          <p>
-            {showOtherContact ? (
-              <Autocomplete
-                id="combo-box-demo"
-                options={dataUsers.users}
-                // @ts-ignore
-                getOptionLabel={(option) =>
-                  `${option.surname} ${option.lastname}`
-                }
-                onChange={autocompleteHandler}
-                // @ts-ignore
-                onInput={inputChangeHandler}
-                open={showOtherContactList}
-                style={{ width: 300 }}
-                // eslint-disable-next-line react/jsx-props-no-spreading
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Contact OUAAA!"
-                    variant="outlined"
-                    placeholder="Tapez les 3 premières lettre du contact"
-                  />
-                )}
-                noOptionsText="Pas de compte associé"
-                clearText="Effacer"
-                closeText="Fermer"
-              />
-            ) : (
-              ''
-            )}
-          </p>
-        </FormControl>
-              */}
-
-
+      
 
         <p />
 
@@ -1556,6 +1471,7 @@ const AddActorForm = () => {
               if (collection.code === 'larochelle_quarter') return '';
               if (collection.code === 'actor_status') return '';
               if (collection.code === 'category') return '';
+              if (collection.code === 'public_target') return '';
               if (collection.code === 'working_group') return '';
               if (collection.code === 'implication') return '';
               if (collection.code === 'category_organization') return '';
@@ -1638,63 +1554,8 @@ const AddActorForm = () => {
         }
           <p />
 
-       <Typography variant="body1" color="primary" className={styles.label}>
-         Besoins en bénévolat :{' '}
-         <Tooltip
-           title="
-         Décrivez ici les missions de bénévolat générales chez vous ou sur un de
-         vos projets spécifiques afin de donner envie aux visiteurs de cliquer sur «je deviens
-         bénévole» de votre page."
-         >
-           <InfoIcon />
-         </Tooltip>
-       </Typography>
-
-       {editorLoaded ? (
-          <>
-            <Hidden lgDown>
-              <CKEditor
-                config={{
-                  toolbar: ['bold', 'italic', 'link'],
-                }}
-                editor={ClassicEditor}
-                data={formValues.volunteerDescription}
-                onReady={(editor) => {
-                  setVolunteerEditor(editor);
-                }}
-              />
-            </Hidden>
-            <Hidden lgUp>
-              <CKEditor
-                config={{
-                  toolbar: ['bold', 'italic', 'link'],
-                }}
-                editor={ClassicEditor}
-                data={formValues.volunteerDescription}
-                onReady={(editor) => {
-                  setVolunteerEditor(editor);
-                }}
-              />
-            </Hidden>
-          </>
-        ) : (
-          <div>Editor loading</div>
-        )}
-
+     
         <br />
-
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    value="remember"
-                    color="primary"
-                    onChange={handleEnableOpenData}
-                    checked={enableOpenData}
-                    
-                  />
-                }
-                label="Gagner en visibilité en autorisant votre commune, transicope ou une autre plateforme à afficher vos événements et informations acteurs."
-              />
               <br/> <br/>
         <div>
           Une fois créé, vous pourrez modifier les informations et ajouter des

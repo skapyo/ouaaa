@@ -1676,17 +1676,6 @@ const EditActorForm = (props) => {
             })
         }
         <p />
-        <br />
-        <FormItem
-          label="Activité principale de votre structure / Métier"
-          inputName="activity"
-          formChangeHandler={formChangeHandler}
-          value={formValues.activity}
-          required={false}
-          errorBool={false}
-          errorText=""
-          helperText="Indiquez ici l'activité principale ou votre métier.  Cette info servira à mieux référencer votre page dans les moteurs de recherche. Ex : boulanger bio"
-        />
 
         <p />
 
@@ -2024,6 +2013,7 @@ const EditActorForm = (props) => {
             if (collection.code === 'actor_status') return '';
             if (collection.code === 'category') return '';
             if (collection.code === 'working_group') return '';
+            if (collection.code === 'public_target') return '';
             if (collection.code === 'implication') return '';
             if (collection.code === 'category_organization') return '';
             //    const [display, setDisplay] = useState(false);
@@ -2193,30 +2183,7 @@ const EditActorForm = (props) => {
         }
 
 
-    <TitleWithTooltip
-          title="Nos recherches en bénévolat :"
-          tooltipTitle="Décrivez ici les missions de bénévolat générales chez vous ou sur un de
-          vos projets spécifiques afin de donner envie aux visiteurs de cliquer sur «je deviens
-          bénévole» de votre page."
-        />
 
-        <p />
-        {editorLoaded ? (
-          <>
-            <CKEditor
-              config={{
-                toolbar: ['bold', 'italic', 'link'],
-              }}
-              editor={ClassicEditor}
-              data={formValues.volunteerDescription}
-              onReady={(editor) => {
-                setVolunteerEditor(editor);
-              }}
-            />
-          </>
-        ) : (
-          <div>Editor loading</div>
-        )}
         <TitleWithTooltip
           title="Référent(s) associé(s) à l’acteur"
           tooltipTitle="Permet d’ajouter d’autres référents pour un acteur"
@@ -2286,19 +2253,8 @@ const EditActorForm = (props) => {
 
         <br />
 
-        <FormControlLabel
-          control={
-            <Checkbox
-              value="remember"
-              color="primary"
-              onChange={handleEnableOpenData}
-              checked={enableOpenData}
 
-            />
-          }
-          label="Gagner en visibilité en autorisant votre commune, transicope ou une autre plateforme à afficher vos événements et informations acteurs."
-        />
-        <br /> <br />
+        <br />
 
         <Grid item xs={12}>
 
