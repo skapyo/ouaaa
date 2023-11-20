@@ -756,12 +756,6 @@ const AddActorForm = () => {
           Une fois votre inscription validée par notre équipe, votre page sera visible sur le site.
         <br />
           Complétez les champs ci-dessous, ceux marqués d'une « * » sont indispensables.
-          Vous pourrez renseigner les autres ultérieurement et actualiser ces informations avec d'autres personnes que vous pouvez ajouter en référent de la page.
-          <br />
-          <br />
-          Une campagne annuelle de vérification des comptes a lieu afin de
-          vérifier la validité des adresses email. A cet effet une prise
-          de contact téléphonique peut avoir lieu.
           <br />
           <br />
           Vous pourrez actualiser les infos de votre/vos "page(s) acteurs" via votre espace acteur (rubrique « administrer mes pages
@@ -811,15 +805,6 @@ const AddActorForm = () => {
         Ce référencement est ouvert aux membres actifs du PAT, à ceux qui sont concernés et voudraient le rejoindre, à tous les stades des filières (de la production à la transformation, vente, animation, solidarité,etc..) et quel que soit leur statut (public, privé, de la société civile).
         <br />
         Nous espérons qu'il facilitera la réunion d'informations et la mise en contact, pour une communauté d'intérêts autour de l'agriculture et de l'alimentation.
-        <br />
-        Merci donc de complétez les informations ci-dessous, cela pourra se faire aussi par GT avec leurs référents. Les champs marqués d'une « * » sont indispensables, vous pourrez compléter les autres ultérieurement.
-        <br />
-        Pour information :
-        <br />
-        Le PAT a aussi une importante vocation de sensibilisation, communication, promotion.
-        <br />
-        Dans un second temps si vous le souhaitez, vous pourrez aussi apparaître sur la partie publique de ce site. Elle est déjà ouverte et certains d'entre vous y sont référencés. Son objectif est de mettre en valeur l'ensemble des acteurs locaux sur des thématiques variées (transport, énergie, environnement, etc), dont alimentation et agriculture. Cela permettrait de développer votre visibilité, et faire connaître les objectifs du PAT aux consommateurs / citoyens pour qu'ils s'y engagent.
-        <br />
         <br />
             <br />
         </Typography>
