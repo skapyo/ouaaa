@@ -24,7 +24,7 @@ const useExcelExport = () => {
     }
 
     if (columnLabels) {
-      debugger;
+    //  debugger;
       /* Create worksheet with custom headers */
       ws = XLSX.utils.aoa_to_sheet([columnLabels as any[]]);
       /* Add to the worksheet all values without header */

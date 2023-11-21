@@ -142,7 +142,7 @@ const SigninForm = () => {
       if (data && !data?.login?.isEmailValidated) {
         setValidEmail(false);
       } else if (data?.login?.id) {
-        debugger;
+       // debugger;
         sessionDispatch({
           type: 'login',
           payload: omitTypename(data.login),
