@@ -114,7 +114,7 @@ const Recettes = (props) => {
   }, [searchResources]);
 
   const resourcesToRender = useMemo(() => {
-    debugger
+    //debugger
     let _resources = resources;
 
     if (search) {

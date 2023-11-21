@@ -61,6 +61,21 @@ function ParentContainer(props) {
         subEntries
       });
       newNodesArray.push(id);
+      subEntries.sort(compare).map(({ id, label, icon, description, actorEntries,subEntries }) => {
+        newCheckboxesState.push({
+          id,
+          label,
+          icon,
+          color: entry.color,
+          description,
+          checked: false,
+          subEntries
+        });
+        newNodesArray.push(id);
+  
+        
+      });
+      
     });
 
     setNodesArray(newNodesArray);
@@ -122,6 +137,7 @@ function ParentContainer(props) {
   }, [checkboxes]);
 
   const handleChildCheckboxChange = useCallback((isChecked, index) => {
+
     const newCheckState = checkboxes.map((aCheckbox) => {
       return index == aCheckbox.id
         ? { ...aCheckbox, checked: isChecked }
@@ -197,8 +213,10 @@ function ParentContainer(props) {
                             return (
                               <StyledTreeItem
                                 key={subSubEntry.id}
+                                id={subSubEntry.id}
                                 // @ts-ignore
                                 nodeId={subSubEntry.id}
+                                isForm={isForm}
                                 expanded={false}
                                 labelText={subSubEntry.label}
                                 checked={subSubEntry.checked}

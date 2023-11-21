@@ -312,6 +312,11 @@ const GET_ACTORS = gql`
           code
           label
           color
+           collection{
+              id
+              code
+              label
+            }
         }
         collection{
           id

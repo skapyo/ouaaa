@@ -27,11 +27,11 @@ const ActorMarker = (props) => {
   const matches = useMediaQuery(theme.breakpoints.down('md'));
   let icone;
   let color;
-  debugger;
-  if (actor?.entries?.filter(e => e.collection?.code == "category_organization")?.length > 0) {
+ 
+
+  if (actor?.entries?.filter(e => e.collection?.code == "category_organization" || e.parentEntry?.collection?.code == "category_organization"  )?.length > 0) {
     icone = `/icons/icon.svg`;
-    color = actor?.entries?.filter(e => e.collection.code == "category_organization")[0].color;
-    debugger;
+    color = actor?.entries?.filter(e => e.collection?.code == "category_organization" || e.parentEntry?.collection?.code == "category_organization"  )[0].parentEntry.color;
   } else {
     icone = '/icons/icon.svg';
 

@@ -101,7 +101,7 @@ function StyledTreeItem(props) {
   const entriesContext = useContext(EntriesContext);
   let isThisEntryNotInTopSEO = false;
   if (entriesContext !== undefined) {
-    isThisEntryNotInTopSEO = isForm && ((entriesContext.getList().length >=3 && entriesContext.getList().indexOf(parseInt(other.nodeId, 10)) < 0) && !checked);
+    isThisEntryNotInTopSEO = isForm && ((false && entriesContext.getList().indexOf(parseInt(other.nodeId, 10)) < 0) && !checked);
      /*console.log(
       isThisEntryNotInTopSEO +
         ' ' +
