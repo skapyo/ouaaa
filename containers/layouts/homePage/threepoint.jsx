@@ -216,14 +216,7 @@ Nous vous invitons à inscrire vos coordonnées et activités par le formulaire 
         <br/>
         Pour information :
         <br/>
-        Le PAT a aussi une importante vocation de sensibilisation, communication, promotion. 
-        <br/>
-        Dans un second temps, et si vous le souhaitez, vous pouvez aussi dès à présent apparaître sur la partie publique de ce site, à l'adresse :<Link href="https://ouaaa-transition.fr/">
-        https://ouaaa-transition.fr/
-          </Link>.   
-        <br/>
-        Certains d'entre vous y sont référencés, l'objectif de cet autre site étant de mettre en valeur l'ensemble des acteurs locaux sur des thématiques variées (transport, énergie, environnement, etc.), dont alimentation et agriculture. Cela permettrait de développer votre visibilité, et de faire connaître les objectifs du PAT aux consommateurs / citoyens pour qu'ils s'y engagent.
-        <br/>
+      
                   </>
                 )}
               />
