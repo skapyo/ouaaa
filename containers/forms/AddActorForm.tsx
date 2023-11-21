@@ -667,8 +667,6 @@ const AddActorForm = () => {
           formValues,
           // @ts-ignore
           description: descriptionEditor.getData(),
-          // @ts-ignore
-          volunteerDescription: volunteerEditor.getData(),
           userId: parseInt(user.id),
           logoPictures,
           mainPictures,

@@ -313,6 +313,11 @@ const GET_ACTORS = gql`
           label
           color
         }
+        collection{
+          id
+          code
+          label
+        }
       }
       favorites{
         id

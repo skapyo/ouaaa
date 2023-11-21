@@ -27,16 +27,17 @@ const ActorMarker = (props) => {
   const matches = useMediaQuery(theme.breakpoints.down('md'));
   let icone;
   let color;
+debugger;
 
-  if (false && actor?.entries?.[0]?.icon) {
-    icone = `/icons/marker/marker_${actor.entries[0].icon}.svg`;
-    color = actor.entries[0].color;
+  if (actor?.entries?.filter(e => e.category?.code == "category_organization")?.length > 0) {
+    icone = `/icons/icon.svg`;
+    color = actor?.entries?.filter(e => e.category.code == "category_organization")[0].color;
   } else {
-    icone = '/icons/place.svg';
-    color = 'ref';
+    icone = '/icons/icon.svg';
+  
   }
-
-  const myCustomColour = '#583470'
+  color = '#CD5C5C';
+  const myCustomColour = '#CD5C5C'
 
   const markerHtmlStyles = `
     background-color: ${myCustomColour};
@@ -53,8 +54,8 @@ const ActorMarker = (props) => {
     iconUrl: icone,
     color,
     fillColor: color,
-    iconAnchor: [25, 59], // point of the icon which will correspond to marker's location
-    iconSize: [60],
+    iconAnchor: [15, 32], // point of the icon which will correspond to marker's location
+    iconSize: [20],
     popupAnchor: [18, -30],
     html: `<span style="${markerHtmlStyles}" />`,
   });

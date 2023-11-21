@@ -1036,8 +1036,6 @@ const EditActorForm = (props) => {
           mainPictures,
           // @ts-ignore
           description: descriptionEditor.getData(),
-          // @ts-ignore
-          volunteerDescription: volunteerEditor.getData(),
           openingHours,
         },
       });
