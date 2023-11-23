@@ -176,13 +176,19 @@ const AccountPage = () => {
   const classes = useTreeItemStyles();
   const [cookies, setCookie, removeCookie] = useCookies();
   const router = useRouter();
+  const { proposeNewActor } = router.query;
   const { data, loading, error } = useQuery(GET_CATEGORIES, {
     fetchPolicy: 'network-only',
   });
 
   const steps = getSteps();
   function getSteps() {
-    return ['Authentifiez vous', 'Acceptez la charte de OUAAA', "Ajoutez vos informations d'acteur"];
+    if(proposeNewActor === undefined){
+      return ['Authentifiez vous', 'Acceptez la charte de OUAAA', "Ajoutez vos informations d'acteur"];
+    }else{
+      return ['Authentifiez vous', 'Proposez un nouvel acteur'];
+    }
+    
   }
   const user = useSessionState();
 
@@ -214,7 +220,16 @@ const AccountPage = () => {
         variant="h6"
         className={styles.userInfosTitle}
       >
+        {proposeNewActor === undefined && (
+          <>
         Se référencer en tant qu'acteur de la transition
+        </>
+        ) }
+       {proposeNewActor !== undefined && (
+          <>
+          Proposer un nouvel acteur
+          </>
+      )}
       </Typography>
       <Container component="main" maxWidth="sm">
         <Stepper activeStep={activeStep}>
@@ -229,8 +244,8 @@ const AccountPage = () => {
           })}
         </Stepper>
       </Container>
-      {user && !charterAccepted && <CharterForm handleChangeCharter={handleChangeCharter} />}
-      {user && charterAccepted && <AddActorForm />}
+      {user && (!charterAccepted  && proposeNewActor === undefined)&& <CharterForm handleChangeCharter={handleChangeCharter} />}
+      {user && (charterAccepted || proposeNewActor !== undefined)&& <AddActorForm />}
       {!user && (
         <div className={styles.registerInfo}>
           <div>

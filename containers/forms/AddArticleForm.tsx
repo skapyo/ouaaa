@@ -369,6 +369,7 @@ const AddArticleForm = ({ actorId }) => {
     const handleChangeActor = useCallback((Article, value) => {
       if (value) {
         // @ts-ignore
+        debugger;
         const currentActors: string[] = formValues.actors || [];
         currentActors.push(value);
         // @ts-ignore

@@ -697,6 +697,7 @@ const EditArticleForm = (props) => {
 
 
     const handleChangeActor = useCallback((Article, value) => {
+      debugger;
       if (value) {
         // @ts-ignore
         const currentActors: string[] = formValues.actors || [];
