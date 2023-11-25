@@ -87,8 +87,17 @@ const useStyles = makeStyles((theme) => ({
   logo: {
     marginBottom: '-20px',
     marginTop: '-11px',
-    width: '200px',
+    maxWidth: '200px',
+    width: '100%',
   },
+  toolbar:{
+    padding: 0,
+  },
+  logoGrid:{
+    [theme.breakpoints.down('lg')]: {
+    width:'60%',
+  },
+}
 }));
 
 const SIGNOUT = gql`
@@ -144,14 +153,14 @@ const NavBar = () => {
   return (
     <AppBar position="static" className={styles.navbar} color="inherit">
       <Container>
-        <Toolbar>
+        <Toolbar  className={styles.toolbar}>
           <Grid
             container
             direction="row"
             justifyContent="space-between"
             alignItems="center"
           >
-            <Grid item>
+            <Grid item  className={styles.logoGrid}>
               <Link href="/">
                 <img
                   className={styles.logo}
