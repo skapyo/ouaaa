@@ -61,6 +61,7 @@ function ParentContainer(props) {
         subEntries
       });
       newNodesArray.push(id);
+      if(subEntries!=undefined){
       subEntries.sort(compare).map(({ id, label, icon, description, actorEntries,subEntries }) => {
         newCheckboxesState.push({
           id,
@@ -71,11 +72,12 @@ function ParentContainer(props) {
           checked: false,
           subEntries
         });
+    
         newNodesArray.push(id);
   
         
       });
-      
+    }
     });
 
     setNodesArray(newNodesArray);
