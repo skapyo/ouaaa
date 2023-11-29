@@ -1,6 +1,6 @@
 import { Container, Typography, useTheme } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
-import React, { useEffect, useState } from 'react';
+import React, { useMemo,useEffect, useState } from 'react';
 import Slider from 'react-slick/lib';
 import { useQuery } from '@apollo/client';
 import gql from 'graphql-tag';
@@ -8,7 +8,9 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { withApollo } from '../../../hoc/withApollo';
 import CardSliderEvent from '../../../components/cards/CardSliderEvent';
 import Link from '../../../components/Link';
-
+import { RRule } from 'rrule';
+import moment from 'moment';
+import { getImageUrl, rruleToText } from '../../../utils/utils';
 
 const useStyles = makeStyles((theme) => ({
   cardTitle: {
@@ -93,6 +95,7 @@ const LastActor = (props) => {
         lng
         address
         city
+        dateRule
         entries {
           label
           icon
@@ -135,7 +138,6 @@ const LastActor = (props) => {
     error: errorEvent,
   } = useQuery(GET_EVENTS, {
     variables: {
-      limit: 4,
       sort: 'startedAt',
       way: 'ASC',
       startingDate: date.toISOString(),
@@ -181,12 +183,88 @@ const LastActor = (props) => {
         ? maxImageDisplay
         : eventToRender?.eventData && eventToRender.eventData.events.length,
     slidesToScroll: 1,
-    // autoplay: true,
-    // autoplaySpeed: 2000,
+ //    autoplay: true,
+   //  autoplaySpeed: 3000,
     //  pauseOnHover: true,
     nextArrow: <SampleNextArrow />,
     prevArrow: <SamplePrevArrow />,
   };
+  const compare = (a, b) => {
+    let comparison = 0;
+    if (a.startedAt > b.startedAt) {
+      comparison = 1;
+    } else if (a.startedAt < b.startedAt) {
+      comparison = -1;
+    }
+    return comparison;
+  };
+
+  const getAllEventsFromRecurringEvent = (event) => {
+    let startEventDate = moment(parseInt(event.startedAt));
+    const { dateRule } = event;
+    const rrule = RRule.fromString(`DTSTART:${startEventDate.format('YYYYMMDD[T]hhmmss[Z]')}\nRRULE:${dateRule}`);
+
+    return rrule.between(new Date(), moment().add(1, 'month').toDate()).map((date) => {
+      return {
+        ...event,
+        startedAt: moment(date).valueOf().toString(),
+        duration: rruleToText(rrule),
+      };
+    });
+  };
+
+
+  const sameDay = (date1, date2) => {
+    const d1 = new Date(parseInt(date1));
+    const d2 = new Date(parseInt(date2));
+    return (
+      d1.getFullYear() === d2.getFullYear() &&
+      d1.getMonth() === d2.getMonth() &&
+      d1.getDate() === d2.getDate()
+    );
+  };
+  const events = useMemo(() => {
+
+    const initialEvents = (eventToRender?.eventData?.events || []);
+    const recurringEvents = initialEvents.filter((event) => event.dateRule);
+  debugger;
+    const allRecurringEvents = (  recurringEvents.map((evt) => getAllEventsFromRecurringEvent(evt)));
+    const allEvents = initialEvents.filter((event) => !event.dateRule).concat(allRecurringEvents.reduce((acc, items) => acc.concat(items), [])).filter((event) => { return moment(parseInt(event.startedAt)) > moment().startOf('day'); });
+    return allEvents;
+  }, [eventToRender]);
+
+  
+  const sortedEvents = useMemo(() => {
+    let localEvents = ([]).slice();
+    events?.forEach((event) => {
+      if (!sameDay(event.startedAt, event.endedAt)) {
+        const nbDayEvent = moment(new Date(parseInt(event.endedAt))).diff(
+          moment(new Date(parseInt(event.startedAt))),
+          'days',
+        );
+        if (nbDayEvent >= 1) {
+          const newEventForOtherDay = { ...event };
+          moment.locale('fr')
+          event = Object.assign({ duration: `Du ` + moment(new Date(parseInt(event.startedAt))).format('DD MMMM YYYY') + ` au ` + moment(new Date(parseInt(event.endedAt))).format('DD MMMM YYYY') }, event);
+
+          newEventForOtherDay.duration = `Du ` + moment(new Date(parseInt(event.startedAt))).format('DD MMMM YYYY') + ` au ` + moment(new Date(parseInt(event.endedAt))).format('DD MMMM YYYY')
+          newEventForOtherDay.startedAt = moment(
+            new Date(parseInt(event.startedAt)),
+          )
+            .add(nbDayEvent, 'days')
+            .toDate();
+          localEvents.push(newEventForOtherDay);
+        }
+
+
+      }
+      
+      localEvents.push(event);
+    });
+    debugger;
+    return localEvents.sort(compare);
+  }, [events]);
+
   return (
     <Container className={[styles.event]} id={props.id}>
       <Typography variant="h5" className={[styles.cardTitle]}>
@@ -194,8 +272,7 @@ const LastActor = (props) => {
       </Typography>
       <div className={[styles.border]}/>
       <Slider {...settings} className={[styles.articleCarroussel]}>
-        {eventToRender?.eventData &&
-          eventToRender.eventData.events.map((event) => {
+        {sortedEvents.map((event,index) => {
             return <CardSliderEvent key={event.id} event={event} />;
           })}
       </Slider>

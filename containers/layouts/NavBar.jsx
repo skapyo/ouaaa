@@ -20,7 +20,7 @@ import { useCookies } from 'react-cookie';
 import { useRouter } from 'next/router';
 import { withApollo } from 'hoc/withApollo';
 import ButtonAppBarCollapse from './ButtonAppBarCollapse';
-
+import Divider from '@mui/material/Divider';
 const useStyles = makeStyles((theme) => ({
   '@media print': {
     navbar: {
@@ -210,6 +210,7 @@ const NavBar = () => {
                       <MenuItem component={Link} href="/news">
                         Articles
                       </MenuItem>
+                      <Divider />
                       <MenuItem component={Link} href="/news?tag=ouaaa">
                         Articles OUAAA
                       </MenuItem>
