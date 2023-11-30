@@ -519,6 +519,7 @@ function Filters(props) {
 
       {
       !isEventList && (
+        <>
         <Button
           variant="contained"
           color="secondary"
@@ -528,7 +529,25 @@ function Filters(props) {
         >
           Inviter un acteur non référencé
         </Button>
+        { (user.role === 'admin' || user.role === 'acteurAdminRole') && (
+          <>
+           <Link href={`/addactor?proposeNewActor=true`}>
+            <Button
+            variant="contained"
+            color="secondary"
+            className={classes.inviteActor}
+            startIcon={<AddIcon />}
+          >
+            Ajouter un acteur non référencé
+          </Button>
+        </Link>
+         </>    
+          )}
+        </>
+     
       )
+
+      
     }
       <Modal
         open={openModalAddActor}
