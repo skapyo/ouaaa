@@ -28,9 +28,12 @@ const ActorMarker = (props) => {
   let icone;
   let color;
  
-
-  if (actor?.entries?.filter(e => e.collection?.code == "category_organization" || e.parentEntry?.collection?.code == "category_organization"  )?.length > 0) {
+  if (actor?.entries?.filter(e => e.color!==undefined && e.color!==null)?.length > 0) {
     icone = `/icons/icon.svg`;
+    color = actor?.entries?.filter(e => e.color!==undefined && e.color!==null)[0].color;
+  }else if (actor?.entries?.filter(e => e.collection?.code == "category_organization" || e.parentEntry?.collection?.code == "category_organization"  )?.length > 0) {
+    icone = `/icons/icon.svg`;
+    debugger;
     color = actor?.entries?.filter(e => e.collection?.code == "category_organization" || e.parentEntry?.collection?.code == "category_organization"  )[0].parentEntry.color;
   } else {
     icone = '/icons/icon.svg';

@@ -58,6 +58,7 @@ function ParentContainer(props) {
         color: entry.color,
         description,
         checked: false,
+        isSubEntries: false,
         subEntries
       });
       newNodesArray.push(id);
@@ -70,6 +71,7 @@ function ParentContainer(props) {
           color: entry.color,
           description,
           checked: false,
+          isSubEntries: true,
           subEntries
         });
     
@@ -194,6 +196,7 @@ function ParentContainer(props) {
           >
 
             {checkboxes.map((subEntry) => {
+              if(!subEntry.isSubEntries){
               return (
                 <StyledTreeItem
                   key={subEntry.id}
@@ -210,9 +213,31 @@ function ParentContainer(props) {
                     subEntry.subEntries.length > 0
                   }
                 >
-                       
+                              {subEntry.subEntries &&
+                          subEntry.subEntries.map((subSubEntry) => {
+                            return (
+                              <StyledTreeItem
+                                key={subSubEntry.id}
+                                id={subSubEntry.id}
+                                // @ts-ignore
+                                nodeId={subSubEntry.id}
+                                isForm={isForm}
+                                expanded={false}
+                                labelText={subSubEntry.label}
+                                checked={subSubEntry.checked}
+                                description={subSubEntry.description}
+                                icon={subSubEntry.icon}
+                                color={subSubEntry.color}
+                                hasSubEntries={
+                                  subSubEntry.subEntries &&
+                                  subSubEntry.subEntries.length > 0
+                                }
+                              />
+                            );
+                          })}
                   </StyledTreeItem>
               );
+              }
             })}
           </StyledTreeItem>
         </TreeView>
