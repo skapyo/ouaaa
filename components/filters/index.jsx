@@ -470,7 +470,7 @@ function Filters(props) {
       {isEventList && (
        <Grid  container className={classes.favoriteGrid}>
         <Grid item>
-        <FormControlLabel control={<Switch defaultChecked onChange={handleChangeperiodicEvent} />} label="Evénements récurents" />
+        <FormControlLabel control={<Switch defaultChecked onChange={handleChangeperiodicEvent} />} label="Evénements récurrents" />
         </Grid>
       </Grid>
       )}

@@ -48,6 +48,15 @@ const useStyles = makeStyles((theme) => ({
     'text-align': 'center',
     padding: '3em',
   },
+  bannerUrl: {
+    maxHeight: '23em',
+    marginBottom: '4em',
+    maxWidth: '100%',
+  },
+  bannerDiv: {
+    textAlign: 'center',
+  },
+ 
   align: {
     'text-align': 'center',
   },
@@ -298,6 +307,7 @@ const GET_ARTICLE = `
         content
         shortDescription
         createdAt
+        bannerPrincipalPicture
         pictures {
           id
           label
@@ -474,7 +484,7 @@ const Article = ({ initialData }) => {
           {' '}
           {/* @ts-ignore */}
         </title>
-        {bannerUrl && (
+        {bannerUrl &&  (
         <>
           <meta
             property="og:image"
@@ -495,13 +505,24 @@ const Article = ({ initialData }) => {
       </Head>
       <>
         <Box>
-          {bannerUrl && (
+          {bannerUrl  &&  data.article.bannerPrincipalPicture && (
             <Container
               className={styles.titleContainer}
               style={{
                 backgroundImage: `url(${getImageUrl(bannerUrl)})`,
               }}
             />
+          )}
+            {!data.article.bannerPrincipalPicture && (
+              <div  className={[styles.bannerDiv]}>
+               
+                <img
+                    src={getImageUrl(bannerUrl)}
+                    className={[styles.bannerUrl]}
+                            />
+  
+            </div>
+        
           )}
           <Container className={styles.cardInfo}>
             <Grid container>
