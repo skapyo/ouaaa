@@ -64,6 +64,11 @@ const useStyles = makeStyles({
 });
 
 export default function SimpleCard({ event }) {
+
+ 
+  const startDateFormat = '[De ]HH[h]mm' ;
+  const endDateFormat = '[ à ]HH[h]mm';
+
   const classes = useStyles();
   const bull = <span className={classes.bullet}>•</span>;
   const myLoader = ({ src, width, quality }) => {
@@ -98,19 +103,40 @@ export default function SimpleCard({ event }) {
             )}
           </div>
           <div className={classes.content}>
+            
+  
+                  <>
+                   <Moment
+                  locale="fr"
+                  format="DD MMMM YYYY"
+                  className={classes.date}
+                  unix
+                >
+                  {event.startedAt / 1000} 
+                </Moment>
+                <br/>
+                    <Moment format={startDateFormat} unix>
+                      {event.startedAt / 1000}
+                    </Moment>
+                    <Moment format={endDateFormat} unix>
+                      {event.endedAt / 1000}
+                    </Moment>
+                  </>
+               <br/>
+                {event.duration && (
+                <>
+                  {event.duration}
+                  {' '}
+                  .
+                </>
+              )}
             <div className={classes.titleDiv}>
               <Typography className={classes.title}>
                 {event && event.label}
               </Typography>
-              <Typography className={classes.date} color="textSecondary">
-                <Moment format="DD/MM HH:mm" unix>
-                  {event && event.startedAt / 1000}
-                </Moment>
-              </Typography>
-            </div>
-            <Typography variant="body" component="p">
-              {event && event.shortDescription}
-            </Typography>
+              
+             
+               </div>
           </div>
         </CardContent>
       </Card>

@@ -43,6 +43,9 @@ import useImageReader from '../../hooks/useImageReader';
 import useDnDStateManager from '../../hooks/useDnDStateManager';
 import { useSessionState } from '../../context/session/session';
 import withDndProvider from '../../hoc/withDnDProvider';
+import Switch from '@mui/material/Switch';
+import FormControlLabel from '@mui/material/FormControlLabel';
+
 const useStyles = makeStyles((theme) => ({
   field: {
     marginBottom: theme.spacing(3),
@@ -173,6 +176,7 @@ const GET_ARTICLE = gql`
       label
       content
       shortDescription
+      bannerPrincipalPicture
       actors{
         id
         name
@@ -443,6 +447,9 @@ const EditArticleForm = (props) => {
     const [state, setState] = React.useState({});
     const [address, setAddress] = useState('');
     const [city, setCity] = useState('');
+    const [bannerPrincipalPicture, setBannerPrincipalPicture] = useState(true);
+
+    
     const [validated, setValidated] = useState(false);
     const [showAddActor, setShowAddActor] = useState(false);
     const [actors] = useState([]);
@@ -477,12 +484,14 @@ const EditArticleForm = (props) => {
       formValues.label = '';
       formValues.shortDescription = '';
       formValues.content = '';
+      setBannerPrincipalPicture(false);
     };
     const updateFormValues = () => {
       formValues.label = articleData.article.label;
       formValues.content = articleData.article.content;
       formValues.shortDescription = articleData.article.shortDescription;
       formValues.actors = articleData.article.actors;
+      setBannerPrincipalPicture(articleData.article.bannerPrincipalPicture);
       validateForm();
     };
     if (firstRender) {
@@ -679,6 +688,7 @@ const EditArticleForm = (props) => {
           articleInfos: {
             label: formValues.label,
             shortDescription: formValues.shortDescription,
+            bannerPrincipalPicture: bannerPrincipalPicture,
             content: formValues.content,
             published: true,
             // @ts-ignore
@@ -820,6 +830,7 @@ const EditArticleForm = (props) => {
           onDropHandler={onDropMainHandler}
           text="Déposez ici votre photo principale au format jpg et de poids inférieur à 4Mo"
         />
+        <FormControlLabel control={<Switch checked={bannerPrincipalPicture}   name="bannerPrincipalPicture"  onChange={() => setBannerPrincipalPicture(!bannerPrincipalPicture)}  />} label="Image affichée en bandeau" />
         <br />
         <Typography variant="body1" color="primary" className={styles.label}>
           Contenu de l'article *

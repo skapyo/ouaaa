@@ -281,6 +281,10 @@ const GET_ACTOR = gql`
         id
         name
       }
+      referencingActor {
+        id
+        name
+      }
     }
   }
 `;
@@ -495,10 +499,10 @@ const EditActorForm = (props) => {
   const { data: dataUsers } = useQuery(GET_USERS, {});
   const { data: datactors } = useQuery(GET_ACTORS, {});
 
-
+  
   const [open] = React.useState([false]);
   const router = useRouter();
-
+  const { addAsReferent } = router.query;
   function containUser(list) {
     let isContained = false;
     if (user !== null) {
@@ -527,7 +531,7 @@ const EditActorForm = (props) => {
         );
         router.push('/');
       } else if (
-        !(containUser(data.actor.referents) || user.role === 'admin')
+        !(containUser(data.actor.referents) || user.role === 'admin' || (data.actor.referencingActor && addAsReferent !== undefined))
       ) {
         enqueueSnackbar("Vous n'avez pas les droits d'éditer cet acteur", {
           preventDuplicate: true,
@@ -738,6 +742,7 @@ const EditActorForm = (props) => {
       formValues.enableOpenData = !enableOpenData;
     };
 
+   
     const [
       initentriesWithInformation,
       setInitentriesWithInformation,
@@ -1167,6 +1172,13 @@ const EditActorForm = (props) => {
       formValues.volunteerDescription = actorData.actor.volunteerDescription;
       formValues.shortDescription = actorData.actor.shortDescription;
       formValues.referents = actorData.actor.referents;
+      if(addAsReferent !== undefined && actorData.actor.referencingActor) {
+        const currentReferents: string[] = formValues.referents || [];
+        currentReferents.push(user);
+        // @ts-ignore
+        formValues.referents = currentReferents;
+        formValues.removeReferencingActor = true;
+      }
       formValues.memberOf = actorData.actor.memberOf;
       formValues.contactId = actorData.actor.contact_id;
       formValues.siren = actorData.actor.siren;
@@ -2189,13 +2201,22 @@ const EditActorForm = (props) => {
 
         <Grid item xs={12}>
 
-          {!editLoading && (
+          {!editLoading &&!(actorData?.actor.referencingActor && addAsReferent !== undefined) && (
             <ClassicButton
               onClick={submitHandler}
               fullWidth
               disabled={!validationResult?.global || user == null}
             >
               Mettre à jour cet acteur
+            </ClassicButton>
+          )}
+               {!editLoading &&(actorData?.actor.referencingActor && addAsReferent !== undefined) && (
+            <ClassicButton
+              onClick={submitHandler}
+              fullWidth
+              disabled={!validationResult?.global || user == null}
+            >
+              Devenir référent 
             </ClassicButton>
           )}
           {editLoading && (
