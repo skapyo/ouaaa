@@ -529,7 +529,7 @@ function Filters(props) {
         >
           Inviter un acteur non référencé
         </Button>
-        { (user.role === 'admin' || user.role === 'acteurAdminRole') && (
+        { (user?.role === 'admin' || user?.role === 'acteurAdminRole') && (
           <>
            <Link href={`/addactor?proposeNewActor=true`}>
             <Button
