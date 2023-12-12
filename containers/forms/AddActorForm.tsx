@@ -647,7 +647,7 @@ query actorsAdmin($userId: String!) {
     }, []);
 
     const submitHandler = useCallback(async () => {
-      let logoPictures;
+      let logoPictures =[];
       // @ts-ignore
       if (objectsListLogo) {
         logoPictures = objectsListLogo.map((object) => {
@@ -663,7 +663,7 @@ query actorsAdmin($userId: String!) {
           };
         });
       }
-      let mainPictures;
+      let mainPictures=[];
       // @ts-ignore
       if (objectsListMain) {
         mainPictures = objectsListMain.map((object) => {
@@ -679,7 +679,7 @@ query actorsAdmin($userId: String!) {
           };
         });
       }
-      let pictures;
+      let pictures=[];
       // @ts-ignore
       if (objectsList) {
         pictures = objectsList.map((object) => {
@@ -713,9 +713,9 @@ query actorsAdmin($userId: String!) {
         variables: {
           formValues,
           // @ts-ignore
-          description: descriptionEditor.getData(),
+          description: descriptionEditor!==undefined?descriptionEditor.getData():"",
           // @ts-ignore
-          volunteerDescription: volunteerEditor.getData(),
+          volunteerDescription: volunteerEditor!==undefined?volunteerEditor.getData():"",
           userId: parseInt(user.id),
           logoPictures,
           mainPictures,
@@ -878,6 +878,8 @@ query actorsAdmin($userId: String!) {
           errorText="Format de l'email invalide."
           helperText="Un email générique type « contact@structure.fr » est préférable à un mail nominatif type «prenom.nom@gmail.com » notamment pour limiter la pollution publicitaire des boites mail (robots parsant le web)"
         />
+           { proposeNewActor === undefined && (
+            <>
         <FormItem
           label="Téléphone"
           inputName="phone"
@@ -916,6 +918,8 @@ query actorsAdmin($userId: String!) {
           errorBool={false}
           errorText=""
         />
+        </>
+           )}
         <div className={styles.field}>
           <Grid className={styles.location}>
             <GooglePlacesAutocomplete
@@ -1047,6 +1051,7 @@ query actorsAdmin($userId: String!) {
         }
         <p />
         <br />
+        { proposeNewActor === undefined && (
     <FormItem
       label="Activité principale de votre structure / Métier"
       inputName="activity"
@@ -1057,6 +1062,7 @@ query actorsAdmin($userId: String!) {
       errorText=""
       helperText="Indiquez ici l'activité principale ou votre métier si vous êtes seul dans la structure.  Cette info servira à mieux référencer votre page dans les moteurs de recherche. Ex : boulanger bio"
     />
+    )}
     <br />
     <FormItem
           label="Description courte"
@@ -1072,6 +1078,8 @@ query actorsAdmin($userId: String!) {
           helperText="Indiquez qui vous êtes et ce que vous faites en une dizaine de mots."
         />
 
+    { proposeNewActor === undefined && (
+      <>
         <Typography variant="body1" color="primary" className={styles.label}>
           Description
         </Typography>
@@ -1485,7 +1493,8 @@ query actorsAdmin($userId: String!) {
           <div>Editor loading</div>
         )}
 
-     
+     </>
+    )}
         <br />
         {proposeNewActor === undefined && (
           <>
