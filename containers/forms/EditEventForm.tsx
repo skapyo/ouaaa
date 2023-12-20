@@ -1228,7 +1228,6 @@ const EditEventForm = (props) => {
                 .concat(formValues.city)
             }
             onSelect={({ description }) => geocodeByAddress(description).then((results) => {
-              debugger;
               getLatLng(results[0])
                 .then((value) => {
                   formValues.lat = `${value.lat}`;

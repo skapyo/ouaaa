@@ -1772,7 +1772,6 @@ export async function getServerSideProps(ctxt) {
 
   const recurrentOptions = null;
 
-  debugger;
   const res = await fetch(process.env.NEXT_PUBLIC_API_URI, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },  

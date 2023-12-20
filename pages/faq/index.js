@@ -43,7 +43,8 @@ const Faq = () => {
               {' '}
               puis sur le bouton
               {' '}
-              <img src="/image/creer_compte.png" width="40%" />
+              <Image src="/image/creer_compte.png"  width={300} height={50}
+                    objectFit="contain" />
               {' '}
               ou par
               {' '}

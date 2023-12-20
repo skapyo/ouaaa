@@ -330,6 +330,8 @@ const AddActorForm = () => {
   const [checked, setChecked] = useState([0]);
   const classes = useStyles();
   const router = useRouter();
+  const [dataActorReferent, setDataActorReferent] = useState(null);
+  const { proposeNewActor } = router.query;
   const { data: dataAdminActors } = useQuery(GET_ACTORS, {
     variables: {
       userId: user.id,
@@ -364,6 +366,50 @@ const AddActorForm = () => {
       },
     },
   );
+
+  const GET_ADMIN_ACTORS = gql`
+query actorsAdmin($userId: String!) {
+  actorsAdmin(userId: $userId) {
+    id
+    name
+    address
+    shortDescription
+    createdAt
+    updatedAt
+    city
+    lat
+    lng
+    referents {
+      surname
+      lastname
+      email
+      phone
+    }
+    isValidated
+    dateValidation
+    userValidated {
+      surname
+      lastname
+      email
+      phone
+    }
+    nbVolunteers
+  }
+}
+`;
+
+  const {
+    loading: loadingDataActorReferent, error: errorDataActorReferent
+  } = useQuery(GET_ADMIN_ACTORS, {
+    fetchPolicy: 'network-only',
+    variables: {
+      userId: user && `${user.id}`,
+    },
+    onCompleted: (data) => {
+      setDataActorReferent(data);
+    },
+  });
+
   const handleToggle = (value: number, index: number) => () => {
     const currentIndex = checked.indexOf(value);
     const newChecked = [...checked];
@@ -553,6 +599,13 @@ const AddActorForm = () => {
       },
       [setImagesMainList, objectsListMain],
     );
+
+    const handleChangeReferencingActor = useCallback((Article, value) => {
+      if (value) {
+        formValues.referencingActor = value.id;
+      }
+    }, [formValues]);
+
     useEffect(() => {
       if (resultMain) addValuesMain(resultMain);
       // @ts-ignore
@@ -594,7 +647,7 @@ const AddActorForm = () => {
     }, []);
 
     const submitHandler = useCallback(async () => {
-      let logoPictures;
+      let logoPictures =[];
       // @ts-ignore
       if (objectsListLogo) {
         logoPictures = objectsListLogo.map((object) => {
@@ -610,7 +663,7 @@ const AddActorForm = () => {
           };
         });
       }
-      let mainPictures;
+      let mainPictures=[];
       // @ts-ignore
       if (objectsListMain) {
         mainPictures = objectsListMain.map((object) => {
@@ -626,7 +679,7 @@ const AddActorForm = () => {
           };
         });
       }
-      let pictures;
+      let pictures=[];
       // @ts-ignore
       if (objectsList) {
         pictures = objectsList.map((object) => {
@@ -660,9 +713,9 @@ const AddActorForm = () => {
         variables: {
           formValues,
           // @ts-ignore
-          description: descriptionEditor.getData(),
+          description: descriptionEditor!==undefined?descriptionEditor.getData():"",
           // @ts-ignore
-          volunteerDescription: volunteerEditor.getData(),
+          volunteerDescription: volunteerEditor!==undefined?volunteerEditor.getData():"",
           userId: parseInt(user.id),
           logoPictures,
           mainPictures,
@@ -740,6 +793,8 @@ const AddActorForm = () => {
     return (
       <Container component="main" maxWidth="sm">
         <br />
+        { proposeNewActor === undefined && (
+          <>
         <Typography className={styles.introduction}>
           Avec votre compte personnel, vous pouvez maintenant créer une ou plusieurs « page acteur », 
           pour chacune des structures dont vous êtes membre. 
@@ -791,6 +846,8 @@ const AddActorForm = () => {
             <br />
           </Typography>
         )}
+        </>
+        )}
         <Typography variant="h2" color="primary" className={styles.label}>
           {' '}
           Coordonnées{' '}
@@ -821,6 +878,8 @@ const AddActorForm = () => {
           errorText="Format de l'email invalide."
           helperText="Un email générique type « contact@structure.fr » est préférable à un mail nominatif type «prenom.nom@gmail.com » notamment pour limiter la pollution publicitaire des boites mail (robots parsant le web)"
         />
+           { proposeNewActor === undefined && (
+            <>
         <FormItem
           label="Téléphone"
           inputName="phone"
@@ -859,6 +918,8 @@ const AddActorForm = () => {
           errorBool={false}
           errorText=""
         />
+        </>
+           )}
         <div className={styles.field}>
           <Grid className={styles.location}>
             <GooglePlacesAutocomplete
@@ -990,6 +1051,7 @@ const AddActorForm = () => {
         }
         <p />
         <br />
+        { proposeNewActor === undefined && (
     <FormItem
       label="Activité principale de votre structure / Métier"
       inputName="activity"
@@ -1000,6 +1062,7 @@ const AddActorForm = () => {
       errorText=""
       helperText="Indiquez ici l'activité principale ou votre métier si vous êtes seul dans la structure.  Cette info servira à mieux référencer votre page dans les moteurs de recherche. Ex : boulanger bio"
     />
+    )}
     <br />
     <FormItem
           label="Description courte"
@@ -1015,6 +1078,8 @@ const AddActorForm = () => {
           helperText="Indiquez qui vous êtes et ce que vous faites en une dizaine de mots."
         />
 
+    { proposeNewActor === undefined && (
+      <>
         <Typography variant="body1" color="primary" className={styles.label}>
           Description
         </Typography>
@@ -1428,8 +1493,11 @@ const AddActorForm = () => {
           <div>Editor loading</div>
         )}
 
+     </>
+    )}
         <br />
-
+        {proposeNewActor === undefined && (
+          <>
               <FormControlLabel
                 control={
                   <Checkbox
@@ -1442,11 +1510,42 @@ const AddActorForm = () => {
                 }
                 label="Gagner en visibilité en autorisant votre commune, transicope ou une autre plateforme à afficher vos événements et informations acteurs."
               />
+       
               <br/> <br/>
         <div>
           Une fois créé, vous pourrez modifier les informations et ajouter des
           photos dans votre espace acteur
         </div>
+        </>
+         )}
+         {proposeNewActor !== undefined && (
+          <>
+
+      { dataActorReferent && (
+            <Autocomplete
+              id="combo-box-add-actor"
+              options={dataActorReferent.actorsAdmin}
+              // @ts-ignore
+              getOptionLabel={(option) => `${option.name}`}
+              style={{ width: 600 }}
+              // @ts-ignore
+              onChange={handleChangeReferencingActor}
+              // eslint-disable-next-line react/jsx-props-no-spreading
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Ajouter cet acteur en tant que"
+                  required
+                  variant="outlined"
+                />
+              )}
+            />
+          )}
+          <br/>
+          Un email sera envoyé à l'acteur pour le prévenir que vous l'avez ajouté sur la plateforme
+          et l'inviter à compléter sa page et devenir administrateur de celle-ci.
+        </>
+         )}
         <p />
         <Grid item xs={12}>
           { !createLoading && (
@@ -1454,7 +1553,16 @@ const AddActorForm = () => {
             onClick={submitHandler}
             disabled={!validationResult?.global}
           >
+             {proposeNewActor === undefined && (
+          <>
             Créer votre page
+        </>
+          )}
+          {proposeNewActor !== undefined && (
+          <>
+            Ajouter cet acteur
+        </>
+          )}
           </ClassicButton>
           )}
           { createLoading && (

@@ -5,6 +5,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import Link from '../../../components/Link';
 import SearchEngine from '../../../components/SearchEngine';
 import Image from 'next/image';
+
 const useStyles = makeStyles((theme) => ({
   titleContainer: {
     color: 'white',
@@ -17,6 +18,7 @@ const useStyles = makeStyles((theme) => ({
       padding: '8em',
     },
   },
+
   landingImage: {
     zIndex: 0,
     height: "300px",
@@ -56,11 +58,6 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '26px',
     color: 'black',
   },
-  addActor: {
-    [theme.breakpoints.up('md')]: {
-      paddingTop: '1em',
-    },
-  },
   h1: {
     paddingTop: '1em',
     textTransform: 'uppercase',
@@ -78,27 +75,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '26px',
     color: 'black',
   },
-  buttonGrid: {
-    fontSize: '1em',
-    margin: '1.5em 0 1.5em 0 ',
-    color: 'white',
-    backgroundColor: 'transparent',
-    border: '2px solid white',
-    borderRadius: '1.5em',
-    padding: '0.2em 3em 0.2em 3em',
-    minHeight: '2.5em',
-    backgroundImage: "url('./arrow.svg')",
-    backgroundRepeat: 'no-repeat',
-    backgroundPositionX: 5,
-    backgroundPositionY: -2,
-    '&:hover': {
-      cursor: 'pointer',
-      color: '#2C367E',
-      backgroundColor: 'white',
-      border: '2px solid #2C367E',
-      backgroundImage: "url('./arrow-hover.svg')",
-    },
-  },
+
 }));
 
 const PresentationSection = (props) => {
@@ -132,7 +109,6 @@ const PresentationSection = (props) => {
         {!mobile && (<br />)}
         pour la transition écologique, sociale et démocratique, te donner le calendrier de leurs actions et te permettre de les rejoindre.
       </Typography>
-
       { <SearchEngine />}
     </Container>
   );

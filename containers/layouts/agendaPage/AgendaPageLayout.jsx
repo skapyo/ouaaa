@@ -306,7 +306,6 @@ const AgendaPageLayout = () => {
   }, []);
 
   const events = useMemo(() => {
-    debugger;
     const initialEvents = (eventData?.events || []);
     const recurringEvents = initialEvents.filter((event) => event.dateRule);
   
