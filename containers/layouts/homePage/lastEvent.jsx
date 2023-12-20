@@ -227,7 +227,6 @@ const LastActor = (props) => {
 
     const initialEvents = (eventToRender?.eventData?.events || []);
     const recurringEvents = initialEvents.filter((event) => event.dateRule);
-  debugger;
     const allRecurringEvents = (  recurringEvents.map((evt) => getAllEventsFromRecurringEvent(evt)));
     const allEvents = initialEvents.filter((event) => !event.dateRule).concat(allRecurringEvents.reduce((acc, items) => acc.concat(items), [])).filter((event) => { return moment(parseInt(event.startedAt)) > moment().startOf('day'); });
     return allEvents;
@@ -261,7 +260,6 @@ const LastActor = (props) => {
       
       localEvents.push(event);
     });
-    debugger;
     return localEvents.sort(compare);
   }, [events]);
 

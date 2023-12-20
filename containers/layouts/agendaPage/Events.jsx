@@ -209,7 +209,7 @@ query actorsAdmin($userId: String!) {
 
     return (
       <div>
-             <div>Séléctionner votre page acteur  ci dessous pour ajouter un événement sur l'agenda</div>
+             <div>Sélectionner votre page acteur ci dessous pour ajouter un événement sur l'agenda</div>
             <FormControl variant="standard" sx={{  minWidth: 120 }}>
               <InputLabel id="demo-simple-select-label">Page acteur</InputLabel>
               <Select
@@ -233,6 +233,39 @@ query actorsAdmin($userId: String!) {
 
   }, [dataActorReferent]);
 
+  const addEventFromOtherActor = useMemo(() => {
+    if (user && dataActorReferent && dataActorReferent.length !== 0 && dataActorReferent.actorsAdmin !== 0) {
+      let links = dataActorReferent.actorsAdmin.map((actor) => {
+        return (
+          <Link href={`/addevent/${actor.id}?proposeEvent=true`}>
+            <MenuItem>{actor.name}</MenuItem>
+          </Link>
+        );
+      });
+
+      return (
+        <div>
+          <div>Sélectionnez l'acteur existant pour ajouter l'événement sur l'agenda</div>
+          <FormControl variant="standard" sx={{ minWidth: 120 }}>
+            <InputLabel id="demo-simple-select-label">Acteur existant</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              label="Page"
+            >
+              {links}
+            </Select>
+          </FormControl>
+        </div>
+      );
+    } else {
+      return (
+        <div>
+        </div>
+      );
+    }
+
+  }, [dataActorReferent]);
 
   const bodyModalAddEvent = (
     <div style={modalStyle} className={classes.paper}>
@@ -245,6 +278,14 @@ query actorsAdmin($userId: String!) {
       </IconButton>
 
       {referentInfo}
+
+      {(user?.role === 'admin' || user?.role === 'acteurAdminRole') && (
+        <>
+        {addEventFromOtherActor}
+        </>
+      )
+      }
+
       {showSuggest && (
         <div>
           <h2 id="simple-modal-title">{(user && dataActorReferent && dataActorReferent.length!=0 && dataActorReferent.actorsAdmin!=0 && "Ou")}  Soumettre un nouvel événément</h2>

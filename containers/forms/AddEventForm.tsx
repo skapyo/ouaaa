@@ -251,6 +251,38 @@ const GET_COLLECTIONS = gql`
   }
 `;
 
+const GET_ADMIN_ACTORS = gql`
+query actorsAdmin($userId: String!) {
+  actorsAdmin(userId: $userId) {
+    id
+    name
+    address
+    shortDescription
+    createdAt
+    updatedAt
+    city
+    lat
+    lng
+    referents {
+      surname
+      lastname
+      email
+      phone
+    }
+    isValidated
+    dateValidation
+    userValidated {
+      surname
+      lastname
+      email
+      phone
+    }
+    nbVolunteers
+  }
+}
+`;
+
+
 const GET_ACTOR = gql`
   query actor($id: String!) {
     actor(id: $id) {
@@ -394,6 +426,7 @@ const AddEventForm = ({ actorId }) => {
 
     const [showOtherEventList, setShowOtherEventList] = useState(false);
     const [locationError, setlocationError] = useState(true);
+  
     const { data: dataActors } = useQuery(GET_ACTORS, {});
     const { data: dataEvents } = useQuery(GET_EVENTS, {
       variables: {
@@ -433,6 +466,8 @@ const AddEventForm = ({ actorId }) => {
     const [actors] = useState([]);
     const [actorsId] = useState([]);
     const [dateRule, setDateRule] = useState();
+    const { proposeEvent } = router.query;
+    const [dataActorReferent, setDataActorReferent] = useState(null);
     const {
       loading: actorLoading,
       error: actorError,
@@ -459,8 +494,27 @@ const AddEventForm = ({ actorId }) => {
           name: 'actors'
         }
       })
+      
+    }, [formValues]);
+    const handleChangeReferencingActor = useCallback((Article, value) => {
+      if (value) {
+        formValues.referencingActor = value.id;
+      }
     }, [formValues]);
 
+    const {
+      loading: loadingDataActorReferent, error: errorDataActorReferent
+    } = useQuery(GET_ADMIN_ACTORS, {
+      fetchPolicy: 'network-only',
+      variables: {
+        userId: user && `${user.id}`,
+      },
+      onCompleted: (data) => {
+        setDataActorReferent(data);
+      },
+    });
+
+    
     const [
       setImagesLogoList,
       loadingLogo,
@@ -640,7 +694,6 @@ const AddEventForm = ({ actorId }) => {
     };
 
     const getAddressDetails = (results) => {
-      debugger;
       setAddress(
         `${getObjectLongName(results, 'street_number')} ${getObjectLongName(
           results,
@@ -776,6 +829,7 @@ const AddEventForm = ({ actorId }) => {
             registerLink: formValues.registerLink,
             limitPlace: formValues.limitPlace?parseInt(formValues.limitPlace):null,
             parentEventId: formValues.parentEventId,
+            referencingActor: formValues.referencingActor,
             // @ts-ignore
             actors: formValues.actors.map(item => item.id),
             dateRule,
@@ -821,11 +875,14 @@ const AddEventForm = ({ actorId }) => {
     const handleChangeDateRule = useCallback((rule) => {
       setDateRule(rule);
     }, []);
+    const addActionText = proposeEvent !== undefined && actorData
+    ? `Ajouter une action pour ${actorData.actor.name}`
+    : 'Ajouter une action';
 
     return (
       <Container component="main" maxWidth="sm" className={styles.container}>
         <Typography className={styles.field} color="secondary" variant="h6">
-          Ajouter une action
+            {addActionText}
         </Typography>
         <FormItem
           label="Nom de l'action"
@@ -854,7 +911,6 @@ const AddEventForm = ({ actorId }) => {
                 .concat(formValues.city)
             }
             onSelect={({ description }) => geocodeByAddress(description).then((results) => {
-              debugger;
               getLatLng(results[0])
                 .then((value) => {
                   formValues.lat = `${value.lat}`;
@@ -1462,6 +1518,41 @@ const AddEventForm = ({ actorId }) => {
         ) : (
           ''
         )}
+
+      {proposeEvent !== undefined && (
+          <>
+ <br/>
+ <br/>
+      { actorData && dataActorReferent && (
+            <Autocomplete
+              id="combo-box-add-actor"
+              options={dataActorReferent.actorsAdmin}
+              // @ts-ignore
+              getOptionLabel={(option) => `${option.name}`}
+              style={{ width: 600 }}
+              // @ts-ignore
+              onChange={handleChangeReferencingActor}
+              // eslint-disable-next-line react/jsx-props-no-spreading
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                    label={`Vous ajoutez l'action de ${actorData.actor.name} en tant que`}
+                  required
+                  variant="outlined"
+                />
+              )}
+            />
+          )}
+          <br/>
+          { actorData && (
+            <>
+          Un email sera envoyé à {actorData.actor.name} pour le prévenir que vous avez ajouté une action à sa place.
+          </>
+          )}
+          <br/>
+        </>
+         )}
+
         <ClassicButton
           fullWidth
           variant="contained"
