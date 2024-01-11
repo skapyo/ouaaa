@@ -22,6 +22,9 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     height: '100%',
   },
+  title:{
+    textAlign: 'center',
+  }
 }));
 const GET_ENTRY = `
 query entry($id: String!) {
@@ -73,6 +76,7 @@ const AnnuaireEntryPage = ({ entry, actors }) => {
   let reg = new RegExp(find, 'g');
   const mapRef = useRef();
 
+  
  
   const theme = useTheme();
   const stylesProps = useMemo(() => ({
@@ -89,21 +93,20 @@ const AnnuaireEntryPage = ({ entry, actors }) => {
   return (
     <AppLayout>
       <Head>
-        <title>
+        <title className={styles.title}>
           { entry.data.entry.description?.replace(reg ,', ').substring(0, entry.data.entry.description.length > 90 ? 90 : entry.data.entry.description.length) } La rochelle
         </title>
         <meta name="description" content={ entry.data.entry.label + ' - ' +entry.data.entry.description} />
       </Head>
-
-      
-
       <Container sx={{
         backgroundColor: '#F6F6F6',
       }}
       >
         <Container maxWidth="md">
           <Typography variant="h1" pt={4}>{ entry.data.entry.label }</Typography>
+          <br/>
           <Typography variant="h2">{ entry.data.entry.description }</Typography>
+          <br/>
               <>
                   <div className={styles.map}>
                     <MapWithNoSSR

@@ -230,6 +230,8 @@ function StyledTreeItem(props) {
         label: classes.label,
       }}
       {...other}
+
+      
     />
   );
 }
