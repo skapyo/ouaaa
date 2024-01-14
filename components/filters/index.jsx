@@ -25,6 +25,8 @@ import Switch from '@mui/material/Switch';
 import DateFilter from '../../containers/layouts/agendaPage/DateFilter';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { useSessionState } from '../../context/session/session';
 import ParentContainer from './ParentContainer';
 
@@ -283,7 +285,16 @@ function Filters(props) {
     }
   `;
 
-
+const GET_COLLECTIVE_ACTORS = gql`
+  {
+  actorsCollective {
+    id
+    name
+    address
+    shortDescription
+  }
+}
+`;
 
 
 
@@ -304,6 +315,7 @@ function Filters(props) {
   const [modalStyle] = React.useState(getModalStyle);
 
   const [dataCollections, setDataCollections] = useState(null);
+  const [dataActorCollective, setActorCollective] = useState(null);
   const [dataActorReferent, setDataActorReferent] = useState(null);
   const [errorPostCode, setErrorPostCode] = useState(false);
   const [filters, setFilters] = useState({});
@@ -363,6 +375,23 @@ function Filters(props) {
 
     handleFilterChange('entries', currentEntries);
   }, [filters, handleFilterChange]);
+
+ 
+    const handleActorCollectiveChange = useCallback((entryId, checked) => {
+      const currentActorsCollective = [...(filters.actorsCollective || [])];
+      if (checked) {
+        currentActorsCollective.push(entryId);
+      } else {
+        const index = currentActorsCollective.indexOf(entryId);
+        if (index !== -1) {
+          currentActorsCollective.splice(index, 1);
+        }
+      }
+      handleFilterChange('actorsCollective', currentActorsCollective);
+    }, [filters, handleFilterChange]);
+
+   
+
   const user = useSessionState();
   const changeFavorite = (isFavorite) => {
     if (user == null) {
@@ -391,6 +420,18 @@ function Filters(props) {
       },
     },
   );
+  const { loading: loadingCollectiveActors, error: errorCollectiveActors } = useQuery(
+    GET_COLLECTIVE_ACTORS,
+    {
+      fetchPolicy: 'network-only',
+      onCompleted: (data) => {
+        setActorCollective(data);
+      },
+    },
+  );
+
+
+  
   const handleOpenModalAddActor = () => {
     setOpenModalAddActor(true);
   };
@@ -517,6 +558,32 @@ function Filters(props) {
         );
       })}
 
+      <Accordion
+            className={classes.expansionPanel}
+          >
+            <AccordionSummary className={classes.expansionPanelSummary} expandIcon={<ExpandMoreIcon />}>
+              <Typography className={classes.collectionLabel}>
+                Collectif
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails className={classes.expansionPanelDetails}>
+            {dataActorCollective?.actorsCollective?.map((actor) => (
+
+             <>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <Link href={`/actor/${actor.id}`} style={{ paddingTop: '6px' }} target="_blank"><OpenInNewIcon /></Link>
+                  <FormControlLabel
+                   style={{  marginLeft: '0px' }}
+                    key={actor.id}
+                    control={<Checkbox onChange={(event) => handleActorCollectiveChange(actor.id, event.target.checked)} />}
+                    label={<span style={{ fontSize: '15px', marginLeft: '15px' }}>{actor.name}</span>}
+                    labelPlacement="start"
+                  />
+                </div>
+              </>
+            ))}
+            </AccordionDetails>
+          </Accordion>
       {
       !isEventList && (
         <>
