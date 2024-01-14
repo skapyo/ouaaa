@@ -2,7 +2,7 @@
 import React, {
   useMemo,
 } from 'react';
-import { Container, Grid, Typography } from '@mui/material';
+import { Container, Grid, Typography,Link } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import Parser from 'html-react-parser';
 import moment from 'moment';
@@ -543,18 +543,20 @@ const Actor = React.forwardRef((props, ref) => {
                     className={[classes.icon]}
                   />
                   <div className={[classes.descriptionInfoLabel]}>
-                    Collectif & réseaux
+                    Réseaux
                   </div>
                   <span className={[classes.descriptionInfoValue]}>
                     {
                       actor?.entries.map((entry) => entry.collection?.code === 'collectif' && (
                         <div>
+                         
                           <Typography
                             variant="h7"
                             className={classes.cardTitleCategories}
                           >
                             {` ${entry && entry.label}`}
                           </Typography>
+            
                         </div>
                       ))
                     }

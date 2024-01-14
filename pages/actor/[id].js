@@ -430,6 +430,7 @@ query actor($id: String) {
       id
     }
     entries {
+      id
       label
       icon
       actorEntries {
@@ -1396,7 +1397,7 @@ const Actor = ({ initialData }) => {
                     <div className={[styles.descriptionInfoDiv]}>
                       <Image
                         src="/icons/status.svg"
-                        alt="Collectif & réseau"
+                        alt="Status"
                         width="25"
                         height="25"
                         objectFit="contain"
@@ -1433,7 +1434,7 @@ const Actor = ({ initialData }) => {
                     <div className={[styles.descriptionInfoDiv]}>
                       <Image
                         src="/icons/public.svg"
-                        alt="Collectif & réseau"
+                        alt="Public principal visé"
                         width="25"
                         height="25"
                         objectFit="contain"
@@ -1469,14 +1470,14 @@ const Actor = ({ initialData }) => {
                     <div className={[styles.descriptionInfoDiv]}>
                       <Image
                         src="/icons/network.svg"
-                        alt="Collectif & réseau"
+                        alt="Réseau"
                         width="25"
                         height="25"
                         objectFit="contain"
                         className={[styles.icon]}
                       />
                       <div className={[styles.descriptionInfoLabel]}>
-                        Collectif & réseaux
+                        Réseaux
                       </div>
                       <span className={[styles.descriptionInfoValue]}>
                         {data
@@ -1485,12 +1486,14 @@ const Actor = ({ initialData }) => {
                               && entry.collection
                               && entry.collection.code === 'collectif' && (
                                 <div>
+                                  <Link href={`/entry/${entry.id}`} target="_blank">
                                   <Typography
                                     variant="h7"
                                     className={styles.cardTitleCategories}
                                   >
                                     {` ${entry && entry.label}`}
                                   </Typography>
+                                  </Link>
                                 </div>
                             ),
                           )}
@@ -1534,7 +1537,7 @@ const Actor = ({ initialData }) => {
                 <div>
                      <br />
                   <Typography variant="h5" className={styles.cardTitle}>
-                    Les acteurs du collectif / réseau
+                    Les acteurs du collectif
                   </Typography>
                   <div className={styles.border} />
                   <br />
@@ -1725,7 +1728,7 @@ const Actor = ({ initialData }) => {
           {data && data.actor.memberOf && data.actor.memberOf.length > 0 && (
                 <div>
                   <Typography variant="h5" className={styles.cardTitle}>
-                    Fait partie du collectif / réseau
+                    Fait partie du collectif
                   </Typography>
                   <div className={styles.border} />
                   <br />
@@ -1793,7 +1796,6 @@ export async function getServerSideProps(ctxt) {
       endDate.diff(startDate, 'seconds')
     } seconds`,
   );
-  console.log(initialData.data.actor.members[0]);
 
   if (initialData.errors) {
     console.error(

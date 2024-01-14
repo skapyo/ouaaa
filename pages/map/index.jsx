@@ -295,8 +295,8 @@ const otherCategories = {
 };
 
 const GET_ACTORS = gql`
-  query actors($entries: [[String]], $search: String,$postCode: String,$favoritesForUser: String,$isValidated: Boolean) {
-    actors(entries: $entries, search: $search,postCode: $postCode,favoritesForUser: $favoritesForUser,isValidated: $isValidated) {
+  query actors($entries: [[String]], $search: String,$postCode: String,$favoritesForUser: String,$isValidated: Boolean,$actorsCollective: [[String]]) {
+    actors(entries: $entries, search: $search,postCode: $postCode,favoritesForUser: $favoritesForUser,isValidated: $isValidated,actorsCollective:$actorsCollective) {
       id
       name
       address
