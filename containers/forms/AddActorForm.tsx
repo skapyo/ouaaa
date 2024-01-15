@@ -13,11 +13,16 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
+import ListItemIcon from '@mui/material/ListItemIcon';
 import TreeView from '@mui/lab/TreeView';
+import Avatar from '@mui/material/Avatar';
 import ClassicButton from 'components/buttons/ClassicButton';
 import Fab from '@mui/material/Fab';
 import EditIcon from '@mui/icons-material/Edit';
+import AddCircleOutline from '@mui/icons-material/AddCircleOutline';
 import CircularProgress from '@mui/material/CircularProgress';
+import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
+import classnames from 'classnames';
 import FormController, {
   RenderCallback,
 } from 'components/controllers/FormController';
@@ -127,7 +132,7 @@ const GET_COLLECTIONS = gql`
     }
   }
 `;
-const GET_ACTORS = graphqlTag`
+const GET_ACTORS_ADMIN = graphqlTag`
 
   query actorsAdmin (
     $userId: String!
@@ -157,7 +162,14 @@ const GET_ACTORS = graphqlTag`
   }
 
 `;
-
+const GET_ACTORS = graphqlTag`
+query actors {
+  actors {
+    id
+    name
+  }
+}
+`;
 const GET_USERS = graphqlTag`
 
   query users
@@ -249,6 +261,9 @@ const useStyles = makeStyles((theme) => ({
     width: '15px',
     height: '15px',
   },
+  referentList: {
+    flex: 1,
+  },
 }));
 
 type FormItemProps = {
@@ -332,12 +347,13 @@ const AddActorForm = () => {
   const router = useRouter();
   const [dataActorReferent, setDataActorReferent] = useState(null);
   const { proposeNewActor } = router.query;
-  const { data: dataAdminActors } = useQuery(GET_ACTORS, {
+  const { data: dataAdminActors } = useQuery(GET_ACTORS_ADMIN, {
     variables: {
       userId: user.id,
     },
     fetchPolicy: 'no-cache',
   });
+  const { data: datactors } = useQuery(GET_ACTORS, {});
   const { data: dataUsers } = useQuery(GET_USERS, {});
   const [open, setOpen] = React.useState([false]);
   const [cookies, setCookie, removeCookie] = useCookies();
@@ -461,7 +477,8 @@ query actorsAdmin($userId: String!) {
     const [descriptionEditor, setDescriptionEditor] = useState();
     const [volunteerEditor, setVolunteerEditor] = useState();
     const [openingHours, setOpeningHours] = useState();
-
+    const [showAddMemberOf, setShowAddMemberOf] = useState(false);
+    const [openAddMemberOflist, setOpenAddMemberOflist] = useState(false);
     const [estlarochelle, setEstlarochelle] = useState(false);
     const [
       create,
@@ -477,9 +494,17 @@ query actorsAdmin($userId: String!) {
     const inputChangeHandler = (event, value) => {
       if (event.target.value) {
         if (event.target.value.length < 3) {
-          setShowOtherContactList(false);
+          if (event.target.name === 'memberOf') {
+            setOpenAddMemberOflist(false);
+          } else {
+            setShowOtherContactList(false);
+          }
         } else {
+          if (event.target.name === 'memberOf') {
+            setOpenAddMemberOflist(true);
+          } else {
           setShowOtherContactList(true);
+          }
         }
       }
     };
@@ -509,6 +534,22 @@ query actorsAdmin($userId: String!) {
       }
       return false;
     };
+
+    const handleChangeMemberOf = useCallback(
+      (event, value) => {
+        if (value) {
+          // @ts-ignore
+          const currentMemberOf: string[] = formValues.memberOf || [];
+          currentMemberOf.push(value);
+          // @ts-ignore
+          formValues.memberOf = currentMemberOf;
+        }
+        setShowAddMemberOf(false);
+        setOpenAddMemberOflist(false);
+      },
+      [formValues],
+    );
+
 
     const {
       objectsList: objectsListLogo,
@@ -711,7 +752,11 @@ query actorsAdmin($userId: String!) {
 
       create({
         variables: {
-          formValues,
+          formValues: {
+            ...formValues,
+            // @ts-ignore
+            memberOf: formValues.memberOf.map((item) => item.id),
+          },
           // @ts-ignore
           description: descriptionEditor!==undefined?descriptionEditor.getData():"",
           // @ts-ignore
@@ -782,7 +827,82 @@ query actorsAdmin($userId: String!) {
       setEnableOpenData(!enableOpenData);
       formValues.enableOpenData=!enableOpenData;
     };
+    const handleClickDeleteReferent = useCallback(
+      (referent) => {
+        // @ts-ignore
+        let currentReferents = [...formValues.referents];
+        // @ts-ignore
+        currentReferents = currentReferents.filter(
+          (item) => item.id !== referent.id,
+        );
+        formChangeHandler({
+          target: {
+            // @ts-ignore
+            value: currentReferents,
+            name: 'referents',
+          },
+        });
+      },
+      [formValues],
+    );
 
+    const handleClickAddMemberOf = useCallback(() => {
+      setShowAddMemberOf(!showAddMemberOf);
+    }, [showAddMemberOf]);
+
+    type TitleWithTooltipProps = {
+      title: string | any;
+      tooltipTitle?: string;
+      collection?: boolean;
+    };
+    
+    const TitleWithTooltip = (props: TitleWithTooltipProps) => {
+      const { title, tooltipTitle, collection = false } = props;
+      const styles = useStyles();
+    
+      return (
+        <Grid
+          container
+          justifyContent="center"
+          alignItems="center"
+          className={styles.titleContainer}
+        >
+          <Typography
+            color="primary"
+            className={classnames(
+              collection ? styles.collectionLabel : styles.label,
+              styles.labelDefault,
+            )}
+          >
+            {title}
+          </Typography>
+          {!!tooltipTitle && (
+            <Tooltip title={tooltipTitle} color="primary">
+              <InfoIcon />
+            </Tooltip>
+          )}
+        </Grid>
+      );
+    };
+    const handleClickDeleteMemberOf = useCallback(
+      (memberOf) => {
+        // @ts-ignore
+        let currentMemberOf = [...formValues.memberOf];
+        // @ts-ignore
+        currentMemberOf = currentMemberOf.filter(
+          (item) => item.id !== memberOf.id,
+        );
+
+        formChangeHandler({
+          target: {
+            // @ts-ignore
+            value: currentMemberOf,
+            name: 'memberOf',
+          },
+        });
+      },
+      [formValues],
+    );
 
     const addLineBreaks = (string) => string.split('\n').map((text, index) => (
       <React.Fragment key={`${text}-${index}`}>
@@ -1495,6 +1615,75 @@ query actorsAdmin($userId: String!) {
 
      </>
     )}
+
+<br />
+        <TitleWithTooltip
+          title="Fait partie du collectif (Acteur existant sur OUAAA!)"
+          tooltipTitle="Permet d’ajouter le collectif auquel appartient l’acteur"
+        />
+
+        <Grid container>
+          <List className={styles.referentList}>
+            {
+              // @ts-ignore
+              (formValues?.memberOf || []).map((ispartof) => {
+                return (
+                  <ListItem key={ispartof.id}>
+                    <ListItemIcon>
+                      <Avatar>
+                        {ispartof.name[0]}
+                      </Avatar>
+                    </ListItemIcon>
+                    <ListItemText
+                      id={`ispartof-list-${ispartof.id}`}
+                      primary={`${ispartof.name}`}
+                    />
+                    <ListItemSecondaryAction>
+                      <IconButton onClick={() => handleClickDeleteMemberOf(ispartof)} size="large">
+                        <DeleteIcon />
+                      </IconButton>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                );
+              })
+            }
+          </List>
+        </Grid>
+
+        <Grid container direction="row">
+          <IconButton
+            key="close"
+            aria-label="Close"
+            color="inherit"
+            onClick={handleClickAddMemberOf}
+            size="large">
+            <AddCircleOutline />
+          </IconButton>
+
+          {showAddMemberOf && datactors && (
+            <Autocomplete
+              id="combo-box-add-memberOf"
+              options={datactors.actors}
+              // @ts-ignore
+              getOptionLabel={(option) => `${option.name}`}
+              onChange={handleChangeMemberOf}
+              open={openAddMemberOflist}
+              style={{ width: 300 }}
+              // @ts-ignore
+              onInput={inputChangeHandler}
+              // eslint-disable-next-line react/jsx-props-no-spreading
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Fait partie du collectif"
+                  variant="outlined"
+                  name="memberOf"
+                />
+              )}
+            />
+          )}
+        </Grid>
+
         <br />
         {proposeNewActor === undefined && (
           <>
