@@ -2120,8 +2120,8 @@ const EditActorForm = (props) => {
 
         <br />
         <TitleWithTooltip
-          title="Fait partie du réseau ou collectif"
-          tooltipTitle="Permet d’ajouter le réseau ou collectif auquel appartient l’acteur"
+          title="Fait partie du collectif (Acteur existant sur OUAAA!)"
+          tooltipTitle="Permet d’ajouter le collectif auquel appartient l’acteur"
         />
 
         <Grid container>
@@ -2177,7 +2177,7 @@ const EditActorForm = (props) => {
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  label="Fait partie du collectif ou réseau"
+                  label="Fait partie du collectif (Acteur existant sur OUAAA!)"
                   variant="outlined"
                   name="memberOf"
                 />
