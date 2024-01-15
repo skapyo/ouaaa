@@ -596,7 +596,7 @@ const GET_COLLECTIVE_ACTORS = gql`
         >
           Inviter un acteur non référencé
         </Button>
-        { (user?.role === 'admin' || user?.role === 'acteurAdminRole') && (
+        { (user?.role === 'admin' || user?.role === 'acteurAdminRole'  || user?.role === 'proposeActorRole') && (
           <>
            <Link href={`/addactor?proposeNewActor=true`}>
             <Button
