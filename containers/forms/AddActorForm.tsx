@@ -1485,7 +1485,8 @@ query actorsAdmin($userId: String!) {
 
       
         <p />
-
+        </>
+    )}
         {
           /* @ts-ignore */
           dataCollections.collections &&
@@ -1495,6 +1496,11 @@ query actorsAdmin($userId: String!) {
               if (collection.code === 'larochelle_quarter') return '';
               if (collection.code === 'actor_status') return '';
               if (collection.code === 'category') return '';
+
+              if(proposeNewActor === undefined){
+                if (collection.code === 'public_target') return '';
+                if (collection.code === 'actor_location_action') return '';
+              }
               //    const [display, setDisplay] = useState(false);
               let { label } = collection;
               let helperText = '';
@@ -1569,7 +1575,8 @@ query actorsAdmin($userId: String!) {
             })
         }
           <p />
-       
+          {proposeNewActor === undefined && (
+          <>
        <Typography variant="body1" color="primary" className={styles.label}>
          Besoins en bénévolat :{' '}
          <Tooltip
