@@ -755,7 +755,7 @@ query actorsAdmin($userId: String!) {
           formValues: {
             ...formValues,
             // @ts-ignore
-            memberOf: formValues.memberOf.map((item) => item.id),
+            memberOf: formValues.memberOf?.map((item) => item.id),
           },
           // @ts-ignore
           description: descriptionEditor!==undefined?descriptionEditor.getData():"",
@@ -1497,9 +1497,9 @@ query actorsAdmin($userId: String!) {
               if (collection.code === 'actor_status') return '';
               if (collection.code === 'category') return '';
 
-              if(proposeNewActor === undefined){
-                if (collection.code === 'public_target') return '';
-                if (collection.code === 'actor_location_action') return '';
+              if(proposeNewActor !== undefined){
+                if (collection.code !== 'collectif') return '';
+
               }
               //    const [display, setDisplay] = useState(false);
               let { label } = collection;
