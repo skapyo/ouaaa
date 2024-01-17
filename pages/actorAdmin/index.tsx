@@ -35,6 +35,8 @@ import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import AddCircleOutline from '@mui/icons-material/AddCircleOutline';
 import ZoomInIcon from '@mui/icons-material/ZoomIn';
 import DownloadIcon from '@mui/icons-material/Download';
+import Box from '@mui/material/Box';
+import { DataGrid } from '@mui/x-data-grid';
 
 import useExcelExport from 'hooks/useExcelExport';
 import ActorAdminPageLayout from 'containers/layouts/actorAdminPage/ActorAdminPageLayout';
@@ -141,6 +143,8 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
     onChangePage(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
   };
 
+  
+  
   return (
     <div className={classes.root}>
       <IconButton
@@ -203,6 +207,7 @@ const VolunteerList = (props: any) => {
   if (loading) return <LinearProgress />;
 
   return (
+
     <Table>
       <TableHead>
         <TableRow>
@@ -408,6 +413,38 @@ const ActorAdminPage = () => {
     });
   }, [volunteersToExport]);
 
+  const columns = [
+    { field: 'id', headerName: 'ID', width: 90 },
+    {
+      field: 'firstName',
+      headerName: 'First name',
+      width: 150,
+      editable: true,
+    },
+    {
+      field: 'lastName',
+      headerName: 'Last name',
+      width: 150,
+      editable: true,
+    },
+    {
+      field: 'age',
+      headerName: 'Age',
+      type: 'number',
+      width: 110,
+      editable: true,
+    },
+    {
+      field: 'fullName',
+      headerName: 'Full name',
+      description: 'This column has a value getter and is not sortable.',
+      sortable: false,
+      width: 160,
+      valueGetter: (params) =>
+        `${params.row.firstName || ''} ${params.row.lastName || ''}`,
+    },
+  ];
+  
   return (
     <ActorAdminPageLayout>
       <Grid container>
@@ -429,6 +466,23 @@ const ActorAdminPage = () => {
       </Grid>
 
       {typeof data !== 'undefined' && (
+      <>
+          <Box sx={{ height: 400, width: '100%' }}>
+          <DataGrid
+            rows={data.actorsAdmin}
+            columns={columns}
+            initialState={{
+              pagination: {
+                paginationModel: {
+                  pageSize: 5,
+                },
+              },
+            }}
+            pageSizeOptions={[5]}
+            checkboxSelection
+            disableRowSelectionOnClick
+          />
+          </Box>
         <TableContainer component={Paper}>
           <Table className={styles.table} aria-label="custom pagination table">
             <TableHead>
@@ -602,6 +656,7 @@ const ActorAdminPage = () => {
             </TableBody>
           </Table>
         </TableContainer>
+        </>
       )}
 
       <Dialog open={openModal} onBackdropClick={closeModal} maxWidth="lg">

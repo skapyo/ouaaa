@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import Badge from '@mui/material/Badge';
-import TreeView from '@mui/lab/TreeView';
+import { TreeView } from '@mui/x-tree-view/TreeView';
 import makeStyles from '@mui/styles/makeStyles';
 
 import ParentFilterContext from './ParentFilterContext';
