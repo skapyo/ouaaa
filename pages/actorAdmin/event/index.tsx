@@ -33,6 +33,7 @@ import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import FirstPageIcon from '@mui/icons-material/FirstPage';
 import ZoomInIcon from '@mui/icons-material/ZoomIn';
 import DownloadIcon from '@mui/icons-material/Download';
+import { DataGrid,	frFR } from '@mui/x-data-grid';
 
 import useExcelExport from 'hooks/useExcelExport';
 import ActorAdminPageLayout from 'containers/layouts/actorAdminPage/ActorAdminPageLayout';
@@ -308,6 +309,87 @@ const EventAdminPage = () => {
     row = dataAdminEvent.eventsAdmin.length;
   }
 
+  const columns = [
+    {
+      field: 'label',
+      headerName: 'Nom',
+      width: 150,
+      editable: false,
+      renderCell: (params) =>
+      <Link href={`/event/${params.row.id}`}>
+                        {params.row.label}
+                      </Link>,
+    },
+    {
+      field: 'startedAt',
+      headerName: 'Date de début',
+      type: 'dateTime',
+      width: 170,
+      editable: false,
+      valueGetter: (value ) => {
+        return new Date(parseInt(value.value))
+      },
+
+    },
+    {
+      field: 'endedAt',
+      headerName: 'Date de fin',
+      type: 'dateTime',
+      width: 200,
+      editable: false,
+      valueGetter: (value) => value && new Date(parseInt(value.value)),
+    },
+    {
+      field: 'createdAt',
+      headerName: 'Date de création',
+      type: 'dateTime',
+      width: 200,
+      editable: false,
+      valueGetter: (value) => value && new Date(parseInt(value.value)),
+    },
+    {
+      field: 'updatedAt',
+      headerName: 'Dernière date de modification',
+      type: 'dateTime',
+      width: 200,
+      editable: false,
+      valueGetter: (value) => value && new Date(parseInt(value.value)),
+    },
+    {
+      field: 'volunteer',
+      headerName: 'Participants',
+      width: 150,
+      editable: false,
+      renderCell: (params) =>
+      <NbParticipantsItem
+      event={params.row}
+                        className={styles.nbParticipantsItem}
+                        onClick={handleClickParticipantsEvent}
+                      />,
+    },
+    {
+      field: 'link',
+      headerName: "Lien de l'événement",
+      width: 150,
+      editable: false,
+      renderCell: (params) =>
+      <Link href={`/event/${params.row.id}`}>
+                        {params.row.label}
+                      </Link>,
+    },
+    {
+      field: 'edit',
+      headerName: "Editer l'événement",
+      width: 150,
+      editable: false,
+      renderCell: (params) =>
+      <Link href={`/actorAdmin/event/${params.row.id}`}>
+                        <Edit />
+                      </Link>,
+    }
+      ];
+
+
   const emptyRows =
     rowsPerPage - Math.min(rowsPerPage, row - page * rowsPerPage);
 
@@ -356,121 +438,31 @@ const EventAdminPage = () => {
         {/* @ts-ignore */}
         Vous pouvez ajouter une nouvelle action depuis l'écran <Link href='/actorAdmin'>Administrer mes pages acteurs</Link>
       </Typography>
+
+
       {typeof dataAdminEvent !== 'undefined' && (
-        <TableContainer component={Paper}>
-          <Table aria-label="custom pagination table">
-            <TableHead>
-              <TableRow>
-                <TableCell component="th" scope="row">
-                  Nom
-                </TableCell>
-                <TableCell style={{ width: 160 }} align="left">
-                  Date de début
-                </TableCell>
-                <TableCell style={{ width: 160 }} align="left">
-                  Date de fin
-                </TableCell>
-                <TableCell style={{ width: 160 }} align="left">
-                  Date de création
-                </TableCell>
-                <TableCell style={{ width: 160 }} align="left">
-                  Dernière date de modification
-                </TableCell>
-                <TableCell style={{ width: 160 }} align="left">
-                  Ville
-                </TableCell>
-                <TableCell style={{ width: 160 }} align="left">
-                  Référents
-                </TableCell>
-                <TableCell style={{ width: 160 }} align="left">
-                  Participants
-                </TableCell>
-                <TableCell style={{ width: 160 }} align="left">
-                  Lien de l'événement
-                </TableCell>
-                <TableCell style={{ width: 160 }} align="left">
-                  Editer l'événement
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {typeof dataAdminEvent !== 'undefined' &&
-                dataAdminEvent.eventsAdmin.map((event) => (
-                  <TableRow key={event.id} hover>
-                    <TableCell component="th" scope="row">
-                      {/* @ts-ignore */}
-                      <Link href={`/event/${event.id}`}>{event.label}</Link>
-                    </TableCell>
-                    <TableCell style={{ width: 160 }} align="left">
-                      <Moment format="DD/MM/YY HH:mm" unix>
-                        {event.startedAt / 1000}
-                      </Moment>
-                    </TableCell>
-                    <TableCell style={{ width: 160 }} align="left">
-                      <Moment format="DD/MM/YY HH:mm" unix>
-                        {event.endedAt / 1000}
-                      </Moment>
-                    </TableCell>
-                    <TableCell style={{ width: 160 }} align="left">
-                      <Moment format="DD/MM HH:mm" unix>
-                        {event.createdAt / 1000}
-                      </Moment>
-                    </TableCell>
-                    <TableCell style={{ width: 160 }} align="left">
-                      <Moment format="DD/MM HH:mm" unix>
-                        {event.updatedAt / 1000}
-                      </Moment>
-                    </TableCell>
-                    <TableCell style={{ width: 160 }} align="left">
-                      {event.city}
-                    </TableCell>
-                    <TableCell style={{ width: 160 }} align="left">
-                      {typeof event.referents !== 'undefined' &&
-                        event.referents.map((referent) => {
-                          {
-                            referent.surname;
-                          }
-                          {
-                            referent.lastname;
-                          }
-                          {
-                            referent.email;
-                          }
-                          {
-                            referent.phone;
-                          }
-                        })}
-                    </TableCell>
-                    <TableCell>
-                      <NbParticipantsItem
-                        event={event}
-                        className={styles.nbParticipantsItem}
-                        onClick={handleClickParticipantsEvent}
-                      />
-                    </TableCell>
-                    <TableCell style={{ width: 160 }} align="left">
-                      {/* @ts-ignore */}
-                      <Link href={`/event/${event.id}`}>
-                        Lien vers page événement
-                      </Link>
-                    </TableCell>
-                    <TableCell style={{ width: 160 }} align="right">
-                      {/* @ts-ignore */}
-                      <Link href={`/actorAdmin/event/${event.id}`}>
-                        <Edit />
-                      </Link>
-                    </TableCell>
-                  </TableRow>
-                ))}
-
-              <TableRow style={{ height: 53 * emptyRows }}>
-                <TableCell colSpan={6} />
-              </TableRow>
-            </TableBody>
-          </Table>
-        </TableContainer>
-      )}
-
+      <>
+          <div style={{ width: '100%' }}>
+          <DataGrid
+          style={{ width: '100%' }}
+           localeText={frFR.components.MuiDataGrid.defaultProps.localeText}
+            rows={ dataAdminEvent.eventsAdmin}
+            columns={columns}
+            initialState={{
+              pagination: {
+                paginationModel: {
+                  pageSize: 10,
+                },
+              },
+            }}
+            pageSizeOptions={[10]}
+            disableRowSelectionOnClick
+            autoHeight 
+          />
+          </div>
+        </>
+      )}*
+   
       <Dialog open={openModal} onBackdropClick={closeModal} maxWidth="lg">
         <DialogTitle classes={{ root: styles.dialogTitle }}>
           <Grid xs={11}>Participants pour l'évènement <i>{(participantsEvent as any)?.label}</i></Grid>

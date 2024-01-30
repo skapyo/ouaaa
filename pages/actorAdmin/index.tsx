@@ -608,11 +608,11 @@ const ActorAdminPage = () => {
             initialState={{
               pagination: {
                 paginationModel: {
-                  pageSize: 25,
+                  pageSize: 10,
                 },
               },
             }}
-            pageSizeOptions={[25]}
+            pageSizeOptions={[10]}
             disableRowSelectionOnClick
             autoHeight 
           />

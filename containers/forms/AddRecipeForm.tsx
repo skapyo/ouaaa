@@ -1,11 +1,12 @@
 import React, { useCallback, useEffect, useState, useRef, ChangeEvent, useMemo } from 'react';
 import { Container, Button, Typography, TextField, Grid, Divider, MenuItem } from '@mui/material';
-import gql from 'graphql-tag';
-import { useMutation } from '@apollo/client';
+import { default as gql, default as graphqlTag } from 'graphql-tag';
+import { useMutation, useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { set } from 'lodash';
-
+import Select from '@mui/material/Select';
+import InputLabel from '@mui/material/InputLabel';
 import { withApollo } from 'hoc/withApollo';
 import FormController, {
   RenderCallback,
@@ -45,6 +46,26 @@ const CREATE_RECIPE = gql`
   }
 `;
 
+const GET_INGREDIENTBASEALIM = graphqlTag`
+query ingredientBaseAlim {
+  ingredientBaseAlim {
+    id
+    produit
+    poids
+    energie
+    proteines
+    lipides
+    glucides
+    empreinteCarbone
+    agriculture
+    transformation
+    emballage
+    transport
+    distribution
+    consommation
+  }
+}
+`;
 const ADD_PICTURE_RECIPE = gql`
   mutation addPictureRecipe($picture: InputPictureType) {
     addPictureRecipe(picture: $picture) {
@@ -221,7 +242,7 @@ const AddRecipeForm = (props: AddRecipeFormProps) => {
 
   const [createRecipe, { data, error }] = useMutation(CREATE_RECIPE);
   const { query: { actor: actorId } } = useRouter();
-
+  const { data: dataIngredientBaseAlim } = useQuery(GET_INGREDIENTBASEALIM, {});
   const Form: RenderCallback = ({
     formChangeHandler,
     validationResult,
@@ -441,7 +462,20 @@ const AddRecipeForm = (props: AddRecipeFormProps) => {
                       value={ingredient.name}
                     />
                   </Grid>
-
+                  <Grid item xs={12}>
+                    <InputLabel id="ingredient-label">Select Ingredient</InputLabel>
+                    <Select
+                      labelId="ingredient-label"
+                      id="ingredient-select"
+                      label="Select Ingredient"
+                    >
+                      {dataIngredientBaseAlim?.ingredientBaseAlim.map((ingredient) => (
+                        <MenuItem key={ingredient.id} value={ingredient.produit}>
+                          {ingredient.produit}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </Grid>
                   <Grid container spacing={2}>
                     <Grid item xs={4}>
                       <FormItem
