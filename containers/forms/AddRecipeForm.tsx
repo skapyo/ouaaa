@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState, useRef, ChangeEvent, useMemo } from 'react';
-import { Container, Button, Typography, TextField, Grid, Divider, MenuItem } from '@mui/material';
+import { Container, Button, Typography, TextField, Grid, Divider, MenuItem, Autocomplete } from '@mui/material';
 import { default as gql, default as graphqlTag } from 'graphql-tag';
 import { useMutation, useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
@@ -20,6 +20,7 @@ import ImagesDisplay from 'components/ImageCropper/ImagesDisplay';
 import ClassicButton from 'components/buttons/ClassicButton';
 import { useSnackbar } from 'notistack';
 import { useSessionState } from '../../context/session/session';
+import { IngredientItem } from 'components/IngredientItem';
 
 
 const CREATE_RECIPE = gql`
@@ -41,6 +42,7 @@ const CREATE_RECIPE = gql`
         name
         unit
         quantity
+        baseAlimIngredientId
       }
     }
   }
@@ -63,6 +65,10 @@ query ingredientBaseAlim {
     transport
     distribution
     consommation
+    poidsParUnite
+    densite
+    poidsParCuillereASoupe
+    poidsParCuillereACafe
   }
 }
 `;
@@ -118,66 +124,21 @@ const styles = {
   },
 }
 
-type Unit = {
-  label: string;
-  value: string;
-}
 
-const availableUnits: Unit[] = [
-  {
-    label: 'Kg',
-    value: 'kg',
-  },
-  {
-    label: 'g',
-    value: 'g',
-  },
-  {
-    label: 'mg',
-    value: 'mg',
-  },
-  {
-    label: 'L',
-    value: 'l',
-  },
-  {
-    label: 'mL',
-    value: 'ml',
-  },
-  {
-    label: 'cL',
-    value: 'cl',
-  },
-  {
-    label: 'dL',
-    value: 'dl',
-  },
-  {
-    label: 'Unité',
-    value: 'unity',
-  },
-  {
-    label: 'CàC',
-    value: 'cac',
-  },
-  {
-    label: 'CàS',
-    value: 'cas',
-  },
-];
 
 type Ingredient = {
   id?: number,
   name: string,
   unit: string,
   quantity: number,
-  impact: number,
+  baseAlimIngredientId: number,
   description: string,
 }
 
 type FormItemProps = {
   label: string;
   inputName: string;
+  placeholder?: string;
   formChangeHandler: (Article: ChangeArticle) => void;
   type?: React.InputHTMLAttributes<unknown>['type'];
   value: any;
@@ -200,6 +161,7 @@ const FormItem = (props: FormItemProps) => {
     type,
     select,
     children,
+    placeholder,
   } = props;
   return (
     <TextField
@@ -215,6 +177,7 @@ const FormItem = (props: FormItemProps) => {
       fullWidth
       required={required}
       error={errorBool}
+      placeholder={placeholder}
       helperText={errorBool ? errorText : ''}
       type={type}
       select={select}
@@ -239,7 +202,7 @@ type AddRecipeFormProps = {
 
 const AddRecipeForm = (props: AddRecipeFormProps) => {
   const { } = props;
-
+ 
   const [createRecipe, { data, error }] = useMutation(CREATE_RECIPE);
   const { query: { actor: actorId } } = useRouter();
   const { data: dataIngredientBaseAlim } = useQuery(GET_INGREDIENTBASEALIM, {});
@@ -267,7 +230,7 @@ const AddRecipeForm = (props: AddRecipeFormProps) => {
       const values = {
         ingredients: [...ingredients],
       };
-
+      console.log('values', values);
       set(values, event.target.name, event.target.value);
 
       formChangeHandler({ target: { name: 'ingredients', value: JSON.stringify(values.ingredients) } });
@@ -282,6 +245,7 @@ const AddRecipeForm = (props: AddRecipeFormProps) => {
         variables: {
           recipe: {
             ...formValues,
+            ingredients: JSON.parse(formValues.ingredients),
             content: descriptionEditor?.getData(),
           },
           actorId,
@@ -377,6 +341,7 @@ const AddRecipeForm = (props: AddRecipeFormProps) => {
       resultMain,
       imagesMainListState,
     ] = useImageReader();
+ const [showIngredientForm, setShowIngredientForm] = useState(false);
 
     const onDropMainHandler = useCallback((files) => {
       // @ts-ignore
@@ -441,96 +406,26 @@ const AddRecipeForm = (props: AddRecipeFormProps) => {
         <Typography variant="body1" color="primary" sx={styles.label}>
           Ingrédients
         </Typography>
-
+        <br/>
         <div>
           {
             ingredients.map((ingredient: Ingredient, index: number) => {
-              return (
-                <Grid container key={index}>
-                  {ingredients.length > 1 && (
-                    <Grid item xs={12} sx={{ marginBottom: 3 }}>
-                      <Divider variant="middle" />
-                    </Grid>
-                  )}
-                  <Grid item xs={12}>
-                    <FormItem
-                      label="Nom de l'ingrédient"
-                      inputName={`ingredients[${index}].name`}
-                      formChangeHandler={(evt) => {
-                        handleChangeIngredient(evt, index)
-                      }}
-                      value={ingredient.name}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <InputLabel id="ingredient-label">Select Ingredient</InputLabel>
-                    <Select
-                      labelId="ingredient-label"
-                      id="ingredient-select"
-                      label="Select Ingredient"
-                    >
-                      {dataIngredientBaseAlim?.ingredientBaseAlim.map((ingredient) => (
-                        <MenuItem key={ingredient.id} value={ingredient.produit}>
-                          {ingredient.produit}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </Grid>
-                  <Grid container spacing={2}>
-                    <Grid item xs={4}>
-                      <FormItem
-                        label="Quantité"
-                        inputName={`ingredients[${index}].quantity`}
-                        formChangeHandler={(evt) => handleChangeIngredient(evt, index)}
-                        value={ingredient.quantity}
-                        type="number"
-                      />
-                    </Grid>
-
-                    <Grid item xs={4}>
-                      <FormItem
-                        label="Impact"
-                        inputName={`ingredients[${index}].impact`}
-                        formChangeHandler={(evt) => handleChangeIngredient(evt, index)}
-                        value={ingredient.impact}
-                        type="number"
-                      />
-                    </Grid>
-
-                    <Grid item xs={4}>
-                      <FormItem
-                        label="Unité"
-                        inputName={`ingredients[${index}].unit`}
-                        formChangeHandler={(evt) => handleChangeIngredient(evt, index)}
-                        value={ingredient.unit}
-                        select
-                      >
-                        {availableUnits.map((option: Unit) => (
-                          <MenuItem key={option.value} value={option.value}>
-                            {option.label}
-                          </MenuItem>
-                        ))}
-                      </FormItem>
-                    </Grid>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <FormItem
-                      label="Description de l'ingrédient"
-                      inputName={`ingredients[${index}].description`}
-                      formChangeHandler={(evt) => {
-                        handleChangeIngredient(evt, index)
-                      }}
-                      value={ingredient.description}
-                    />
-                  </Grid>
-                </Grid>
+             
+             return ( <IngredientItem
+              key={index}
+              ingredient={ingredient}
+              index={index}
+              dataIngredientBaseAlim = {dataIngredientBaseAlim}
+              handleChangeIngredient={handleChangeIngredient}
+            />
+            
               )
             })
           }
           <Button onClick={() => {
             const values: Ingredient[] = formValues.ingredients ? JSON.parse(formValues.ingredients) as Ingredient[] : [];
 
-            values.push({ id: undefined, unit: '', quantity: 0, name: '', impact: 0, description: '' });
+            values.push({ id: undefined, unit: '', quantity: 0, name: '', baseAlimIngredientId: 0, description: '' });
 
             const target = {
               name: 'ingredients',
