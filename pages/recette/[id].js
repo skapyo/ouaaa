@@ -16,6 +16,10 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import InfoIcon from '@mui/icons-material/Info';
 import Tooltip from '@mui/material/Tooltip';
+import Link from 'components/Link';
+import Fab from '@mui/material/Fab';
+import EditIcon from '@mui/icons-material/Edit';
+import { useSessionState } from '../../context/session/session';
 
 const GET_RECEIPE = `
   query recipe($id: String) {
@@ -82,6 +86,17 @@ const useStyles = makeStyles((theme) => ({
       marginBottom: 0,
     },
   },
+  fab: {
+    position: 'fixed',
+    bottom: '40px',
+    right: '40px',
+    zIndex: '1400',
+    backgroundColor: '#2C367E',
+    color: 'white',
+    '&:hover': {
+      color: '#2C367E',
+    },
+  },
   align: {
     'text-align': 'center',
   },
@@ -129,6 +144,7 @@ const useStyles = makeStyles((theme) => ({
 const RecipeById = ({ initialData }) => {
   const { data } = initialData;
 
+  const user = useSessionState();
   const bannerUrl = useMemo(() => {
     return (data?.recipe?.pictures || []).filter((picture) => picture.main).length >= 1
       ? data.recipe.pictures.filter((picture) => picture.main)[0].originalPicturePath
@@ -280,9 +296,20 @@ const RecipeById = ({ initialData }) => {
                 </Grid>
               </Grid>
             </Container>
+
+            {
+              (data && (user && data.recipe?.user?.id === user.id ) || (user && user.role === 'admin')) && (
+                <Link href={`/actorAdmin/recipe/${ data.recipe.id}`}>
+                  <Fab className={styles.fab} aria-label="edit">
+                    <EditIcon />
+                  </Fab>
+                </Link>
+              )
+            }
           </Box>
         </AppLayout>
-      );
+
+);
 };
 
 
