@@ -197,11 +197,11 @@ export const IngredientItem: React.FC<IngredientItemProps> = ({
                         />
                     )}
                     {!isButtonClicked && (
-                        <Button onClick={handleButtonClick}> Ajouter un ingrédient non présent sans impact carbone</Button>
+                        <Button onClick={handleButtonClick}> Ajouter un ingrédient non présent (impact carbone non calculé)</Button>
                     )}
                     {isButtonClicked && (
                         <FormItem
-                            label="Nom de l'ingrédient non présent sans impact carbone"
+                            label="Nom de l'ingrédient non présent (impact carbone non calculé)"
                             inputName={`ingredients[${index}].name`}
                             formChangeHandler={(evt) => {
                                 handleChangeIngredient(evt, index);

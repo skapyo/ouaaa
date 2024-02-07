@@ -245,7 +245,10 @@ const AddRecipeForm = (props: AddRecipeFormProps) => {
         variables: {
           recipe: {
             ...formValues,
-            ingredients: JSON.parse(formValues.ingredients),
+            ingredients: JSON.parse(formValues.ingredients).map((ingredient) => ({
+              ...ingredient,
+              quantity: parseInt(ingredient.quantity),
+            })),
             content: descriptionEditor?.getData(),
           },
           actorId,
