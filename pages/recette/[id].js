@@ -204,6 +204,14 @@ const RecipeById = ({ initialData }) => {
         hasBannerUrl: bannerUrl !== null,
       }), []);
       const styles = useStyles(stylesProps);
+      const columnSum = data.recipe.ingredients.reduce((sum, ingredient) => {
+        const carbonFootprint = calculateCarbonFootprint(
+          ingredient.quantity,
+          ingredient.IngredientBaseAlim,
+          ingredient.unit
+        );
+        return sum + carbonFootprint;
+      }, 0);
 
       return (
         <AppLayout>
@@ -273,6 +281,16 @@ const RecipeById = ({ initialData }) => {
                               </TableCell>
                             </TableRow>
                           ))}
+                           <TableRow >
+                              <TableCell></TableCell>
+                              <TableCell align="right"></TableCell>
+                              <TableCell align="right"></TableCell>
+                              <TableCell align="right">
+                            
+                               Total :  {columnSum}
+                    
+                              </TableCell>
+                            </TableRow>
                         </TableBody>
                       </Table>
                     </TableContainer>

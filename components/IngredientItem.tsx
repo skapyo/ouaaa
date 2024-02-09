@@ -164,7 +164,8 @@ export const IngredientItem: React.FC<IngredientItemProps> = ({
     const handleAutocompleteChange = (event: React.ChangeEvent<{}>, value: any) => {
         setIngredientBaseAlimSelected(value);
         event.target.name = `ingredients[${index}].baseAlimIngredientId`;
-        event.target.value = value.id;
+        event.target.value = value!==null?value.id:null;
+        ingredient.baseAlimIngredientId=value!==null?value.id:null;
         handleChangeIngredient(event, index); // Call handleChangeIngredient with event and index
     };
 
@@ -179,22 +180,26 @@ export const IngredientItem: React.FC<IngredientItemProps> = ({
             <Grid container spacing={2}>
                 <Grid item xs={5}>
                     {!isButtonClicked && (
-                        <Autocomplete
-                            disablePortal
-                            id="combo-box-demo"
-                            name="ingredientBaseAlim"
-                            getOptionLabel={(option) => `${option.produit}`}
-                            options={dataIngredientBaseAlim.ingredientBaseAlim}
-                            onChange={handleAutocompleteChange}
-                            renderInput={(params) => (
-                                <TextField
-                                    {...params}
-                                    label="Choisir un ingrédient existant avec son impact carbone."
-                                    variant="outlined"
-                                    name={`ingredients[${index}].name`}
-                                />
-                            )}
-                        />
+                       <Autocomplete
+                       disablePortal
+                       id="combo-box-demo"
+                       getOptionLabel={(option: any) => `${option.produit}`}
+                       options={dataIngredientBaseAlim.ingredientBaseAlim}
+                       value={ingredient.baseAlimIngredientId ? 
+                           dataIngredientBaseAlim.ingredientBaseAlim.find(option => {
+                               return parseInt(option.id) === parseInt(ingredient.baseAlimIngredientId);
+                           }) 
+                           : null}
+                       onChange={handleAutocompleteChange}
+                       renderInput={(params) => (
+                           <TextField
+                               {...params}
+                               label="Choisir un ingrédient existant avec son impact carbone."
+                               variant="outlined"
+                               name={`ingredients[${index}].name`}
+                           />
+                       )}
+                   />
                     )}
                     {!isButtonClicked && (
                         <Button onClick={handleButtonClick}> Ajouter un ingrédient non présent (impact carbone non calculé)</Button>
