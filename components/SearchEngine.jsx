@@ -189,7 +189,7 @@ const SearchEngine = (props) => {
       isOptionEqualToValue={(option, currentvalue) => option.label === currentvalue.label}
       noOptionsText="Pas de résultat"
       options={options}
-      filterOptions={filterOptions}ule
+      filterOptions={filterOptions}
       loading={loading}
       popupIcon={(
         <SearchIcon size={48} />

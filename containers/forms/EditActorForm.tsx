@@ -33,7 +33,8 @@ import FormControl from '@mui/material/FormControl';
 import Radio from '@mui/material/Radio';
 import Tooltip from '@mui/material/Tooltip';
 import Avatar from '@mui/material/Avatar';
-import TreeView from '@mui/lab/TreeView';
+import { TreeView } from '@mui/x-tree-view/TreeView';
+import { TreeItem } from '@mui/x-tree-view/TreeItem';
 import { Autocomplete } from '@mui/material';
 import Head from 'next/head';
 import InfoIcon from '@mui/icons-material/Info';
@@ -1626,6 +1627,7 @@ const EditActorForm = (props) => {
                 {
                   // display &&
                   IsTree(collection) && (
+                    <> sdqsdsd
                     // @ts-ignore
                     <Entries initValues={initentriesWithInformation}>
                       <TreeView
@@ -1695,6 +1697,7 @@ const EditActorForm = (props) => {
                           })}
                       </TreeView>
                     </Entries>
+                    </>
                   )
                 }
               </div>

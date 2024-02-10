@@ -21,6 +21,7 @@ import {
 import Paper from '@mui/material/Paper';
 import LastPageIcon from '@mui/material/SvgIcon';
 import Table from '@mui/material/Table';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
@@ -35,6 +36,8 @@ import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import AddCircleOutline from '@mui/icons-material/AddCircleOutline';
 import ZoomInIcon from '@mui/icons-material/ZoomIn';
 import DownloadIcon from '@mui/icons-material/Download';
+import Box from '@mui/material/Box';
+import { DataGrid,	frFR } from '@mui/x-data-grid';
 
 import useExcelExport from 'hooks/useExcelExport';
 import ActorAdminPageLayout from 'containers/layouts/actorAdminPage/ActorAdminPageLayout';
@@ -141,6 +144,8 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
     onChangePage(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
   };
 
+  
+  
   return (
     <div className={classes.root}>
       <IconButton
@@ -203,6 +208,7 @@ const VolunteerList = (props: any) => {
   if (loading) return <LinearProgress />;
 
   return (
+
     <Table>
       <TableHead>
         <TableRow>
@@ -386,6 +392,7 @@ const ActorAdminPage = () => {
     }
   );
 
+
   useEffect(() => {
     if (dataValidateActor) {
       refetch();
@@ -408,9 +415,170 @@ const ActorAdminPage = () => {
     });
   }, [volunteersToExport]);
 
+  const columns = [
+    {
+      field: 'name',
+      headerName: 'Nom',
+      width: 150,
+      editable: false,
+      renderCell: (params) =>
+      <Link href={`/actor/${params.row.id}`}>
+                        {params.row.name}
+                      </Link>,
+    },
+    {
+      field: 'createdAt',
+      headerName: 'Date de création',
+      type: 'dateTime',
+      width: 170,
+      editable: false,
+      valueGetter: (value ) => {
+        return new Date(parseInt(value.value))
+      },
+
+    },
+    {
+      field: 'updatedAt',
+      headerName: 'Date de dernière modification',
+      type: 'dateTime',
+      width: 200,
+      editable: false,
+      valueGetter: (value) => value && new Date(parseInt(value.value)),
+    },
+    {
+      field: 'city',
+      headerName: 'Ville',
+      width: 160,
+    },
+    {
+      field: 'link',
+      headerName: 'Lien Page acteur',
+      width: 150,
+      editable: false,
+      renderCell: (params) =>
+      <Link href={`/actor/${params.row.id}`}>
+                        {params.row.name}
+                      </Link>,
+    },
+    {
+      field: 'edit',
+      headerName: 'Editer la page',
+      width: 150,
+      editable: false,
+      renderCell: (params) =>
+      <Link href={`/actorAdmin/actor/${params.row.id}`}>
+                        <Edit />
+                      </Link>,
+    },
+    {
+      field: 'volunteer',
+      headerName: 'Volontaires',
+      width: 150,
+      editable: false,
+      renderCell: (params) =>
+      <NbVolunteersItem
+                        actor={params.row}
+                        className={styles.nbVolunteersItem}
+                        onClick={handleClickVolunteersActor}
+                      />,
+    },
+    ...(user && user.role === 'admin'
+    ? [
+      {
+        field: 'validate',
+        headerName: 'Validation',
+        width: 150,
+        editable: false,
+        renderCell: (params) =>{
+        return <>{!loadingValidateActor
+          && (
+            <CheckCircleIcon
+              style={{
+                color: params.row.isValidated ? 'green' : 'orange',
+              }}
+              onClick={() => validate(params.row)}
+            />
+          )}
+        {loadingValidateActor && (
+          <CircularProgress />
+        )}</>},
+      },
+      {
+        field: 'dateValidation',
+        headerName: 'Date de validation',
+        type: 'dateTime',
+        width: 200,
+        editable: false,
+        valueGetter: (value) =>  value.value && new Date(parseInt(value.value)),
+      },
+      
+      {
+        field: 'userValidated',
+        headerName: 'Personne ayant validé',
+        width: 170,
+        editable: false,
+        valueGetter: (value) => {
+          if (value.row.userValidated && value.row.userValidated.surname && value.row.userValidated.lastname) {
+            return value.row.userValidated.surname + ' ' + value.row.userValidated.lastname;
+          } else {
+            return ''; 
+          }
+        },
+      },
+      {
+        field: 'addAction',
+        headerName: 'Ajouter une nouvelle action',
+        width: 170,
+        editable: false,
+        renderCell: (params) =>
+        <Link href={`/addevent/${params.row.id}`}>
+        <AddCircleOutline />
+      </Link>,
+      },
+      {
+        field: 'addArticle',
+        headerName: 'Ajouter un nouvel article',
+        width: 170,
+        editable: false,
+        renderCell: (params) =>
+        <Link href={`/addarticle/${params.row.id}`}>
+        <AddCircleOutline />
+      </Link>,
+      },
+      {
+        field: 'addRecipe',
+        headerName: 'Ajouter une nouvelle recette',
+        width: 170,
+        editable: false,
+        renderCell: (params) =>
+        <Link href={`/recette/new?actor${params.row.id}`}>
+        <AddCircleOutline />
+      </Link>,
+      },
+      ]
+    : []),
+  ];
+
+  const columnVisibilityModel = React.useMemo(() => {
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  
+    if (!isMobile) {
+      return {
+        updatedAt: true,
+        city: true,
+        volunteer: true,
+      };
+    }
+    return {
+      updatedAt: false,
+      city: false,
+      volunteer: false,
+    };
+  });
   return (
     <ActorAdminPageLayout>
-      <Grid container>
+      <Grid container  style={{ width: '100%' }}>
         <Grid item xs={9}>
           <Typography
             color="secondary"
@@ -429,179 +597,27 @@ const ActorAdminPage = () => {
       </Grid>
 
       {typeof data !== 'undefined' && (
-        <TableContainer component={Paper}>
-          <Table className={styles.table} aria-label="custom pagination table">
-            <TableHead>
-              <TableRow>
-                <TableCell component="th" scope="row">
-                  Nom
-                </TableCell>
-                <TableCell style={{ width: 160 }} align="left">
-                  Date de création
-                </TableCell>
-                <TableCell style={{ width: 160 }} align="left">
-                  Dernière date de modification
-                </TableCell>
-                <TableCell style={{ width: 160 }} align="left">
-                  Ville
-                </TableCell>
-                <TableCell style={{ width: 160 }} align="left">
-                  Référents
-                </TableCell>
-                <TableCell style={{ width: 160 }} align="left">
-                  Lien Page acteur
-                </TableCell>
-                <TableCell style={{ width: 160 }} align="left">
-                  Editer la page
-                </TableCell>
-                <TableCell style={{ width: 160 }} align="left">
-                  Volontaires
-                </TableCell>
-
-                {user && user.role === 'admin' && (
-                  <>
-                    <TableCell style={{ width: 160 }} align="left">
-                      Validation
-                    </TableCell>
-                    <TableCell style={{ width: 160 }} align="left">
-                      Date de validation
-                    </TableCell>
-                    <TableCell style={{ width: 160 }} align="left">
-                      Personne ayant validé
-                    </TableCell>
-
-                  </>
-                )}
-                <TableCell style={{ width: 160 }} align="left">
-                  Ajouter une nouvelle action
-                </TableCell>
-                <TableCell style={{ width: 160 }} align="left">
-                  Ajouter un nouvel article
-                </TableCell>
-                <TableCell style={{ width: 160 }} align="left">
-                  Ajouter une nouvelle recette
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {typeof data !== 'undefined'
-                && data.actorsAdmin.map((actor) => (
-                  <TableRow key={actor.id} hover>
-                    <TableCell component="th" scope="row">
-                      {/* @ts-ignore */}
-                      <Link href={`/actor/${actor.id}`}>
-                        {actor.name}
-                      </Link>
-                    </TableCell>
-                    <TableCell style={{ width: 160 }} align="left">
-                      <Moment format="DD/MM/YY HH:mm" unix>
-                        {actor.createdAt / 1000}
-                      </Moment>
-                    </TableCell>
-                    <TableCell style={{ width: 160 }} align="left">
-                      <Moment format="DD/MM/YY HH:mm" unix>
-                        {actor.updatedAt / 1000}
-                      </Moment>
-                    </TableCell>
-                    <TableCell style={{ width: 160 }} align="left">
-                      {actor.city}
-                    </TableCell>
-                    <TableCell style={{ width: 160 }} align="left">
-                      {typeof actor.referents !== 'undefined'
-                        && actor.referents.map((referent) => {
-                          {
-                            referent.surname;
-                          }
-                          {
-                            referent.lastname;
-                          }
-                          {
-                            referent.email;
-                          }
-                          {
-                            referent.phone;
-                          }
-                        })}
-                    </TableCell>
-                    <TableCell style={{ width: 160 }} align="center">
-                      {/* @ts-ignore */}
-                      <Link href={`/actor/${actor.id}`}>
-                        Lien vers page acteur
-                      </Link>
-                    </TableCell>
-
-                    <TableCell style={{ width: 160 }} align="center">
-                      {/* @ts-ignore */}
-                      <Link href={`/actorAdmin/actor/${actor.id}`}>
-                        <Edit />
-                      </Link>
-                    </TableCell>
-
-                    <TableCell>
-                      <NbVolunteersItem
-                        actor={actor}
-                        className={styles.nbVolunteersItem}
-                        onClick={handleClickVolunteersActor}
-                      />
-                    </TableCell>
-
-                    {user && user.role == 'admin' && (
-                      <>
-                        <TableCell style={{ width: 160 }} align="center">
-                          {!loadingValidateActor
-                            && (
-                              <CheckCircleIcon
-                                style={{
-                                  color: actor.isValidated ? 'green' : 'orange',
-                                }}
-                                onClick={() => validate(actor)}
-                              />
-                            )}
-                          {loadingValidateActor && (
-                            <CircularProgress />
-                          )}
-                        </TableCell>
-                        <TableCell style={{ width: 160 }} align="center">
-                          {actor.dateValidation && (
-                            <Moment format="DD/MM HH:mm" unix>
-                              {actor.dateValidation / 1000}
-                            </Moment>
-                          )}
-                        </TableCell>
-                        <TableCell style={{ width: 160 }} align="center">
-                          {actor.userValidated && actor.userValidated.surname}
-                          {' '}
-                          {actor.userValidated && actor.userValidated.lastname}
-                        </TableCell>
-                      </>
-                    )}
-                    <TableCell style={{ width: 160 }} align="center">
-                      {/* @ts-ignore */}
-                      <Link href={`/addevent/${actor.id}`}>
-                        <AddCircleOutline />
-                      </Link>
-                    </TableCell>
-                    <TableCell style={{ width: 160 }} align="center">
-                      {/* @ts-ignore */}
-                      <Link href={`/addarticle/${actor.id}`}>
-                        <AddCircleOutline />
-                      </Link>
-                    </TableCell>
-                    <TableCell style={{ width: 160 }} align="center">
-                      {/* @ts-ignore */}
-                      <Link href={`/recette/new?actor=${actor.id}`}>
-                        <AddCircleOutline />
-                      </Link>
-                    </TableCell>
-                  </TableRow>
-                ))}
-
-              <TableRow style={{ height: 53 * emptyRows }}>
-                <TableCell colSpan={6} />
-              </TableRow>
-            </TableBody>
-          </Table>
-        </TableContainer>
+      <>
+          <div style={{ width: '100%' }}>
+          <DataGrid
+          style={{ width: '100%' }}
+           localeText={frFR.components.MuiDataGrid.defaultProps.localeText}
+            rows={ data.actorsAdmin}
+            columns={columns}
+            columnVisibilityModel={columnVisibilityModel}
+            initialState={{
+              pagination: {
+                paginationModel: {
+                  pageSize: 10,
+                },
+              },
+            }}
+            pageSizeOptions={[10]}
+            disableRowSelectionOnClick
+            autoHeight 
+          />
+          </div>
+        </>
       )}
 
       <Dialog open={openModal} onBackdropClick={closeModal} maxWidth="lg">

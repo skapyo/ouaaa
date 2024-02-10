@@ -61,7 +61,7 @@ const ActorAdminPageLayout = ({ children }) => {
                 <ActorAdminLeftMenu />
               </Grid>
             </Hidden>
-            <Grid item lg={10}>
+            <Grid item lg={10} style={{ width: '100%' }}>
               {children}
             </Grid>
           </Grid>

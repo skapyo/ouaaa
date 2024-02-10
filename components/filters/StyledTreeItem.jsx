@@ -2,7 +2,7 @@ import React, { useCallback, useContext, useState } from 'react';
 
 import PropTypes from 'prop-types';
 import { Checkbox, TextField } from '@mui/material';
-import TreeItem from '@mui/lab/TreeItem';
+import { TreeView, TreeItem } from '@mui/x-tree-view';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
 import { EntriesContext } from 'containers/forms/Entries';

@@ -18,23 +18,22 @@ import useDnDStateManager from '../../hooks/useDnDStateManager';
 import ImagesDropZone from 'components/ImageCropper/ImagesDropZone';
 import ImagesDisplay from 'components/ImageCropper/ImagesDisplay';
 import ClassicButton from 'components/buttons/ClassicButton';
+import { getImageUrl } from 'utils/utils';
 import { useSnackbar } from 'notistack';
 import { useSessionState } from '../../context/session/session';
 import { IngredientItem } from 'components/IngredientItem';
 import withDndProvider from '../../hoc/withDnDProvider';
 
-const CREATE_RECIPE = gql`
-  mutation createRecipe(
+const EDIT_RECIPE = gql`
+  mutation editRecipe(
     $recipe: RecipeInput
-    $actorId: ID
-    $userId: ID
+    $recipeId: Int!
     $mainPictures: [InputPictureType]
   ) {
-    createRecipe(
+    editRecipe(
       recipe: $recipe
-      actorId: $actorId
+      recipeId: $recipeId
       mainPictures: $mainPictures
-      userId: $userId
     ) {
       id
       label
@@ -46,6 +45,36 @@ const CREATE_RECIPE = gql`
         quantity
         baseAlimIngredientId
       }
+    }
+  }
+`;
+const GET_RECIPE = gql`
+  query getRecipe($recipeId: String!) {
+    recipe(id: $recipeId) {
+      id
+      label
+      content
+      shortDescription
+      ingredients {
+        id
+        name
+        quantity
+        unit
+        description
+        IngredientBaseAlim {
+          id
+        }
+     
+      }
+      pictures {
+          id
+          label
+          originalPicturePath
+          originalPictureFilename
+          position
+          logo
+          main
+        }
     }
   }
 `;
@@ -81,6 +110,7 @@ const ADD_PICTURE_RECIPE = gql`
     }
   }
 `;
+
 
 const editorConfig = {
   extraPlugins: [(editor: any) => { }],
@@ -198,21 +228,24 @@ const validationRules: ValidationRules = {
   },
 };
 
-type AddRecipeFormProps = {
+type EditRecipeFormProps = {
 
 }
 
-const AddRecipeForm = (props: AddRecipeFormProps) => {
+const EditRecipeForm = (props: EditRecipeFormProps) => {
   const { } = props;
  
-  const [createRecipe, { data, error }] = useMutation(CREATE_RECIPE);
+  const [editRecipe, { data, error }] = useMutation(EDIT_RECIPE);
   const { query: { actor: actorId } } = useRouter();
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const { data: dataIngredientBaseAlim } = useQuery(GET_INGREDIENTBASEALIM, {});
   const Form: RenderCallback = ({
     formChangeHandler,
     validationResult,
     formValues,
   }) => {
+   
+
     const [descriptionEditor, setDescriptionEditor] = useState();
     const [validated, setValidated] = useState(false);
     const [editorLoaded, setEditorLoaded] = useState(false);
@@ -221,6 +254,7 @@ const AddRecipeForm = (props: AddRecipeFormProps) => {
     const router = useRouter();
     const editorRef = useRef();
     const user = useSessionState();
+    const [firstRender, setFirstRender] = useState(true);
     if (user == null) {
       enqueueSnackbar('Veuillez vous connecter pour ajouter une recette ');
     }
@@ -228,7 +262,86 @@ const AddRecipeForm = (props: AddRecipeFormProps) => {
       return formValues.ingredients ? JSON.parse(formValues.ingredients) : [];
     }, [formValues]);
 
+    const handleChangeIngredient = useCallback((event: ChangeEvent, index: number) => {
+      const values = {
+        ingredients: [...ingredients],
+      };
+      console.log('values', values);
+      set(values, event.target.name, event.target.value);
 
+      formChangeHandler({ target: { name: 'ingredients', value: JSON.stringify(values.ingredients) } });
+    }, [formValues, ingredients]);
+
+
+   
+    const initFormValues = () => {
+      formValues.label = '';
+      formValues.shortDescription = '';
+      formValues.content = '';
+      //setBannerPrincipalPicture(false);
+    };
+   
+    const {
+      loading: recipeLoading,
+      error: recipeError,
+      data: recipeData,
+    } = useQuery(GET_RECIPE, {
+      variables: { recipeId: props.id.toString() },
+      fetchPolicy: 'no-cache',
+      onCompleted: (dataRecipe) => {
+        if (user === undefined || user == null) {
+          enqueueSnackbar(
+            'Veuillez vous connecter pour effectuer des modifications.',
+            {
+              preventDuplicate: true,
+            },
+          );
+          router.push('/');
+        } else if (!(dataRecipe.recipe.user.id  === user.id   ||  user.role === 'admin')) {
+          enqueueSnackbar(
+            "Vous n'avez pas les droits d'éditer cette recette",
+            {
+              preventDuplicate: true,
+            },
+          );
+          router.push('/');
+        }
+      },
+    });
+
+    // @ts-ignore
+    const { CKEditor, ClassicEditor } = editorRef.current || {};
+    const imgInitMain = [];
+    if (
+      recipeData
+      && recipeData.recipe.pictures
+      && recipeData.recipe.pictures.length > 0
+    ) {
+      recipeData.recipe.pictures
+        .sort((a, b) => (a.position > b.position ? 1 : -1))
+        .map((picture, index) => {
+          if (picture.main) {
+            imgInitMain.push({
+              // @ts-ignore
+              id: index,
+              // @ts-ignore
+              file: null,
+              // @ts-ignore
+              img: getImageUrl(picture.originalPicturePath),
+              // @ts-ignore
+              activated: true,
+              // @ts-ignore
+              deleted: false,
+              // @ts-ignore
+              newpic: false,
+              // @ts-ignore
+              serverId: picture.id,
+              // @ts-ignore
+              position: picture.position,
+            });
+          }
+        });
+    }
     const {
       objectsList: objectsListMain,
       moveObject: moveObjectMain,
@@ -238,23 +351,13 @@ const AddRecipeForm = (props: AddRecipeFormProps) => {
       initState: initStateMain,
       addValues: addValuesMain,
       updateKeyIndicator: updateKeyIndicatorMain,
-    } = useDnDStateManager([]);
+    } = useDnDStateManager(imgInitMain);
 
-    
-    const handleChangeIngredient = useCallback((event: ChangeEvent, index: number) => {
-      const values = {
-        ingredients: [...ingredients],
-      };
-      set(values, event.target.name, event.target.value);
+ 
 
-      formChangeHandler({ target: { name: 'ingredients', value: JSON.stringify(values.ingredients) } });
-    }, [formValues, ingredients]);
-
-    // @ts-ignore
-    const { CKEditor, ClassicEditor } = editorRef.current || {};
-
-    const handleClickCreate =  useCallback(async () => {
+    const handleClickUpdate = useCallback(async () => {
       let mainPictures;
+      debugger;
       // @ts-ignore
       if (objectsListMain) {
         mainPictures = objectsListMain.map((object) => {
@@ -269,45 +372,51 @@ const AddRecipeForm = (props: AddRecipeFormProps) => {
             },
           };
         });
-      }
-      for await (const element of mainPictures){
-        if(element.newpic ==true){
-          const newFiles = new FormData();
-          newFiles.append('files', element.file.originalPicture);
-          await fetch('/api/files', {
-            method: 'POST',
-            body: newFiles,
-          });
-          element.file.filename=element.file.originalPicture.name;
-          element.file.originalPicture=undefined;
-       
+
+        for await (const element of mainPictures){
+          if(element.newpic ==true){
+            const newFiles = new FormData();
+            newFiles.append('files', element.file.originalPicture);
+            await fetch('/api/files', {
+              method: 'POST',
+              body: newFiles,
+            });
+            element.file.filename=element.file.originalPicture.name;
+            element.file.originalPicture=undefined;
+         
+          }
         }
+  
       }
       const userId =  parseInt(user.id);
-      createRecipe({
+      editRecipe({
         variables: {
           recipe: {
             ...formValues,
-            ingredients: formValues.ingredients!==undefined?JSON.parse(formValues.ingredients).map((ingredient) => ({
-              ...ingredient,
-              quantity: parseInt(ingredient.quantity),
-            })):null,
-            content: descriptionEditor?.getData(),
+            ingredients: JSON.parse(formValues.ingredients).map((ingredient) => {
+              const { IngredientBaseAlim,__typename, ...rest } = ingredient; // Extracting "IngredientBaseAlim" and the rest of the attributes
+              return {
+                  ...rest, // Spread the remaining attributes
+                  quantity: parseInt(rest.quantity),
+                  baseAlimIngredientId: parseInt(rest.baseAlimIngredientId),
+              };
+            }),
+            content: descriptionEditor?.getData(), 
+           
           },
-          actorId,
-          userId,
-          mainPictures,      
+          recipeId: parseInt(recipeData.recipe.id),   
+          mainPictures, 
         }
       });
-    }, [createRecipe, formValues,objectsListMain]);
+    }, [editRecipe, formValues,objectsListMain]);
 
     
     useEffect(() => {
       if (data) {
-        enqueueSnackbar('Recette créé avec succès.', {
+        enqueueSnackbar('Recette modifié avec succès.', {
           preventDuplicate: true,
         });
-        router.push(`/recette/${data.createRecipe.id}`);
+        router.push(`/recette/${data.editRecipe.id}`);
       }
     }, [data]);
 
@@ -361,7 +470,8 @@ const AddRecipeForm = (props: AddRecipeFormProps) => {
       };
       setEditorLoaded(true);
     }, []);
-
+  
+  
 
     const validateForm = () => {
       if (
@@ -371,6 +481,25 @@ const AddRecipeForm = (props: AddRecipeFormProps) => {
       ) setValidated(false);
       else setValidated(true);
     };
+    const updateFormValues = () => {
+      formValues.label = recipeData.recipe.label;
+      formValues.content = recipeData.recipe.content;
+      formValues.shortDescription = recipeData.recipe.shortDescription;
+      formValues.ingredients =  JSON.stringify(recipeData.recipe.ingredients.map((ingredient) => ({ ...ingredient, baseAlimIngredientId: ingredient.IngredientBaseAlim.id })));
+    //  setBannerPrincipalPicture(recipeData.recipe.bannerPrincipalPicture);
+      formChangeHandler({ target: { name: 'label', value: recipeData.recipe.label } } as React.ChangeEvent<HTMLInputElement>);
+      validateForm();
+    };
+    
+    if (firstRender) {
+      initFormValues();
+    }
+    if (firstRender && !recipeLoading && !recipeError && dataIngredientBaseAlim!== undefined) {
+      updateFormValues();
+      setFirstRender(false);
+    }
+
+    
 
     const [
       setImagesMainList,
@@ -383,7 +512,6 @@ const AddRecipeForm = (props: AddRecipeFormProps) => {
       if (resultMain) addValuesMain(resultMain);
       // @ts-ignore
     }, resultMain);
-    
 
  const [showIngredientForm, setShowIngredientForm] = useState(false);
 
@@ -395,7 +523,7 @@ const AddRecipeForm = (props: AddRecipeFormProps) => {
     return (
       <Container component="main" sx={styles.container}>
         <Typography sx={styles.field} color="secondary" variant="h6">
-          Ajouter une recette
+          Editer une recette
         </Typography>
 
         <FormItem
@@ -515,10 +643,10 @@ const AddRecipeForm = (props: AddRecipeFormProps) => {
           fullWidth
           variant="contained"
           sx={styles.submit}
-          onClick={handleClickCreate}
+          onClick={handleClickUpdate}
           disabled={!validationResult?.global || !validated}
         >
-          Créer la recette
+           Mettre à jour la recette
         </ClassicButton>
       </Container>
     )
@@ -529,4 +657,4 @@ const AddRecipeForm = (props: AddRecipeFormProps) => {
   )
 };
 
-export default withDndProvider(withApollo()(AddRecipeForm));
+export default withDndProvider(withApollo()(EditRecipeForm));

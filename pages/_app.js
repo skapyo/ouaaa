@@ -20,7 +20,6 @@ import './styles.css';
 import '../containers/layouts/agendaPage/DateFilter.css';
 import 'leaflet/dist/leaflet.css';
 import 'react-google-places-autocomplete/dist/index.min.css';
-import '@brainhubeu/react-carousel/lib/style.css';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import 'react-leaflet-markercluster/dist/styles.min.css';

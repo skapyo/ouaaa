@@ -1273,6 +1273,7 @@ query actorsAdmin($userId: String!) {
                   {
                     // display &&
                     IsTree(collection) && (
+                     
                       <Entries initValues={[]}>
                         <TreeView
                           className={classes.rootTree}
