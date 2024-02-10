@@ -16,6 +16,9 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import InfoIcon from '@mui/icons-material/Info';
 import Tooltip from '@mui/material/Tooltip';
+import {
+  getImageUrl
+} from '../../utils/utils';
 import Link from 'components/Link';
 import Fab from '@mui/material/Fab';
 import EditIcon from '@mui/icons-material/Edit';

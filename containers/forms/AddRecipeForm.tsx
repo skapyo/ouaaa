@@ -21,17 +21,19 @@ import ClassicButton from 'components/buttons/ClassicButton';
 import { useSnackbar } from 'notistack';
 import { useSessionState } from '../../context/session/session';
 import { IngredientItem } from 'components/IngredientItem';
-
+import withDndProvider from '../../hoc/withDnDProvider';
 
 const CREATE_RECIPE = gql`
   mutation createRecipe(
     $recipe: RecipeInput
     $actorId: ID
     $userId: ID
+    $mainPictures: [InputPictureType]
   ) {
     createRecipe(
       recipe: $recipe
       actorId: $actorId
+      mainPictures: $mainPictures
       userId: $userId
     ) {
       id
@@ -226,11 +228,23 @@ const AddRecipeForm = (props: AddRecipeFormProps) => {
       return formValues.ingredients ? JSON.parse(formValues.ingredients) : [];
     }, [formValues]);
 
+
+    const {
+      objectsList: objectsListMain,
+      moveObject: moveObjectMain,
+      findObject: findObjectMain,
+      updateActiveIndicator: updateActiveIndicatorMain,
+      updateDeletedIndicator: updateDeletedIndicatorMain,
+      initState: initStateMain,
+      addValues: addValuesMain,
+      updateKeyIndicator: updateKeyIndicatorMain,
+    } = useDnDStateManager([]);
+
+    
     const handleChangeIngredient = useCallback((event: ChangeEvent, index: number) => {
       const values = {
         ingredients: [...ingredients],
       };
-      console.log('values', values);
       set(values, event.target.name, event.target.value);
 
       formChangeHandler({ target: { name: 'ingredients', value: JSON.stringify(values.ingredients) } });
@@ -239,23 +253,53 @@ const AddRecipeForm = (props: AddRecipeFormProps) => {
     // @ts-ignore
     const { CKEditor, ClassicEditor } = editorRef.current || {};
 
-    const handleClickCreate = useCallback(() => {
+    const handleClickCreate =  useCallback(async () => {
+      let mainPictures;
+      // @ts-ignore
+      if (objectsListMain) {
+        mainPictures = objectsListMain.map((object) => {
+          // return object.file
+          return {
+            id: object.serverId,
+            newpic: object.newpic,
+            deleted: object.deleted,
+            main: true,
+            file: {
+              originalPicture: object.file,
+            },
+          };
+        });
+      }
+      for await (const element of mainPictures){
+        if(element.newpic ==true){
+          const newFiles = new FormData();
+          newFiles.append('files', element.file.originalPicture);
+          await fetch('/api/files', {
+            method: 'POST',
+            body: newFiles,
+          });
+          element.file.filename=element.file.originalPicture.name;
+          element.file.originalPicture=undefined;
+       
+        }
+      }
       const userId =  parseInt(user.id);
       createRecipe({
         variables: {
           recipe: {
             ...formValues,
-            ingredients: JSON.parse(formValues.ingredients).map((ingredient) => ({
+            ingredients: formValues.ingredients!==undefined?JSON.parse(formValues.ingredients).map((ingredient) => ({
               ...ingredient,
               quantity: parseInt(ingredient.quantity),
-            })),
+            })):null,
             content: descriptionEditor?.getData(),
           },
           actorId,
-          userId,      
+          userId,
+          mainPictures,      
         }
       });
-    }, [createRecipe, formValues]);
+    }, [createRecipe, formValues,objectsListMain]);
 
     
     useEffect(() => {
@@ -318,16 +362,6 @@ const AddRecipeForm = (props: AddRecipeFormProps) => {
       setEditorLoaded(true);
     }, []);
 
-    const {
-      objectsList: objectsListMain,
-      moveObject: moveObjectMain,
-      findObject: findObjectMain,
-      updateActiveIndicator: updateActiveIndicatorMain,
-      updateDeletedIndicator: updateDeletedIndicatorMain,
-      initState: initStateMain,
-      addValues: addValuesMain,
-      updateKeyIndicator: updateKeyIndicatorMain,
-    } = useDnDStateManager([]);
 
     const validateForm = () => {
       if (
@@ -344,6 +378,13 @@ const AddRecipeForm = (props: AddRecipeFormProps) => {
       resultMain,
       imagesMainListState,
     ] = useImageReader();
+
+    useEffect(() => {
+      if (resultMain) addValuesMain(resultMain);
+      // @ts-ignore
+    }, resultMain);
+    
+
  const [showIngredientForm, setShowIngredientForm] = useState(false);
 
     const onDropMainHandler = useCallback((files) => {
@@ -488,4 +529,4 @@ const AddRecipeForm = (props: AddRecipeFormProps) => {
   )
 };
 
-export default withApollo()(AddRecipeForm);
+export default withDndProvider(withApollo()(AddRecipeForm));

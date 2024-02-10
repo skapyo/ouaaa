@@ -5,6 +5,7 @@ import update from 'immutability-helper';
 const useDnDStateManager = (initialState = []) => {
   const [objectsList, setObjectsList] = useState(initialState);
   const [objectsListSaved, setobjectsListSaved] = useState(initialState);
+  debugger;
   // function to init state
   const initState = useCallback(
     (state) => {
@@ -19,6 +20,7 @@ const useDnDStateManager = (initialState = []) => {
     const newArrayTemp = update(objectsList, {
       $push: values,
     });
+   
     setObjectsList(
       newArrayTemp.map((value, index) => {
         return { ...value, id: index };

@@ -18,6 +18,7 @@ import useDnDStateManager from '../../hooks/useDnDStateManager';
 import ImagesDropZone from 'components/ImageCropper/ImagesDropZone';
 import ImagesDisplay from 'components/ImageCropper/ImagesDisplay';
 import ClassicButton from 'components/buttons/ClassicButton';
+import { getImageUrl } from 'utils/utils';
 import { useSnackbar } from 'notistack';
 import { useSessionState } from '../../context/session/session';
 import { IngredientItem } from 'components/IngredientItem';
@@ -63,7 +64,17 @@ const GET_RECIPE = gql`
         IngredientBaseAlim {
           id
         }
+     
       }
+      pictures {
+          id
+          label
+          originalPicturePath
+          originalPictureFilename
+          position
+          logo
+          main
+        }
     }
   }
 `;
@@ -300,6 +311,49 @@ const EditRecipeForm = (props: EditRecipeFormProps) => {
 
     // @ts-ignore
     const { CKEditor, ClassicEditor } = editorRef.current || {};
+    const imgInitMain = [];
+    if (
+      recipeData
+      && recipeData.recipe.pictures
+      && recipeData.recipe.pictures.length > 0
+    ) {
+      recipeData.recipe.pictures
+        .sort((a, b) => (a.position > b.position ? 1 : -1))
+        .map((picture, index) => {
+          if (picture.main) {
+            imgInitMain.push({
+              // @ts-ignore
+              id: index,
+              // @ts-ignore
+              file: null,
+              // @ts-ignore
+              img: getImageUrl(picture.originalPicturePath),
+              // @ts-ignore
+              activated: true,
+              // @ts-ignore
+              deleted: false,
+              // @ts-ignore
+              newpic: false,
+              // @ts-ignore
+              serverId: picture.id,
+              // @ts-ignore
+              position: picture.position,
+            });
+          }
+        });
+    }
+    const {
+      objectsList: objectsListMain,
+      moveObject: moveObjectMain,
+      findObject: findObjectMain,
+      updateActiveIndicator: updateActiveIndicatorMain,
+      updateDeletedIndicator: updateDeletedIndicatorMain,
+      initState: initStateMain,
+      addValues: addValuesMain,
+      updateKeyIndicator: updateKeyIndicatorMain,
+    } = useDnDStateManager(imgInitMain);
+
+ 
 
     const handleClickUpdate = useCallback(async () => {
       let mainPictures;
@@ -354,7 +408,7 @@ const EditRecipeForm = (props: EditRecipeFormProps) => {
           mainPictures, 
         }
       });
-    }, [editRecipe, formValues]);
+    }, [editRecipe, formValues,objectsListMain]);
 
     
     useEffect(() => {
@@ -416,49 +470,8 @@ const EditRecipeForm = (props: EditRecipeFormProps) => {
       };
       setEditorLoaded(true);
     }, []);
-    const imgInitMain = [];
-    if (
-      recipeData
-      && recipeData.recipe.pictures
-      && recipeData.recipe.pictures.length > 0
-    ) {
-      recipeData.recipe.pictures
-        .sort((a, b) => (a.position > b.position ? 1 : -1))
-        .map((picture, index) => {
-          if (picture.main) {
-            imgInitMain.push({
-              // @ts-ignore
-              id: index,
-              // @ts-ignore
-              file: null,
-              // @ts-ignore
-              img: getImageUrl(picture.originalPicturePath),
-              // @ts-ignore
-              activated: true,
-              // @ts-ignore
-              deleted: false,
-              // @ts-ignore
-              newpic: false,
-              // @ts-ignore
-              serverId: picture.id,
-              // @ts-ignore
-              position: picture.position,
-            });
-          }
-        });
-    }
-    const {
-      objectsList: objectsListMain,
-      moveObject: moveObjectMain,
-      findObject: findObjectMain,
-      updateActiveIndicator: updateActiveIndicatorMain,
-      updateDeletedIndicator: updateDeletedIndicatorMain,
-      initState: initStateMain,
-      addValues: addValuesMain,
-      updateKeyIndicator: updateKeyIndicatorMain,
-    } = useDnDStateManager(imgInitMain);
-
- 
+  
+  
 
     const validateForm = () => {
       if (
@@ -499,6 +512,7 @@ const EditRecipeForm = (props: EditRecipeFormProps) => {
       if (resultMain) addValuesMain(resultMain);
       // @ts-ignore
     }, resultMain);
+
  const [showIngredientForm, setShowIngredientForm] = useState(false);
 
     const onDropMainHandler = useCallback((files) => {
