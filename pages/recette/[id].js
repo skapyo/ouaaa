@@ -90,6 +90,11 @@ const useStyles = makeStyles((theme) => ({
       marginBottom: 0,
     },
   },
+  bannerUrl: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+  },
   fab: {
     position: 'fixed',
     bottom: '40px',
@@ -328,7 +333,7 @@ const RecipeById = ({ initialData }) => {
                     <br/>
                       <img
                           src={getImageUrl(bannerUrl)}
-                          className={[styles.bannerUrl]}
+                          className={[styles.bannerUrl]} 
                                   />
         
                   </div>
@@ -396,7 +401,6 @@ export async function getServerSideProps(ctxt) {
       }`,
     );
   } else {
-    debugger;
     console.log('initialData', initialData.data.recipe);
   }
 

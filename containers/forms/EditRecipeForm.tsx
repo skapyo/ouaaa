@@ -500,6 +500,7 @@ const EditRecipeForm = (props: EditRecipeFormProps) => {
               return {
                   ...rest, // Spread the remaining attributes
                   quantity: parseInt(rest.quantity),
+                  id: parseInt(rest.id),
                   baseAlimIngredientId: parseInt(rest.baseAlimIngredientId),
               };
             }),
