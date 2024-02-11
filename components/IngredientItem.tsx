@@ -126,7 +126,7 @@ export const IngredientItem: React.FC<IngredientItemProps> = ({
     dataIngredientBaseAlim,
 }) => {
    
-    const [isButtonClicked, setIsButtonClicked] = React.useState(false);
+    const [isButtonClicked, setIsButtonClicked] = React.useState(ingredient.IngredientBaseAlim==null && ingredient.name!==null&& ingredient.name!=='');
     const [ingredientBaseAlimSelected, setIngredientBaseAlimSelected] = React.useState<any>(null);
     const [filteredUnits, setFilteredUnits] = React.useState<Unit[]>([]);
 
@@ -157,8 +157,12 @@ export const IngredientItem: React.FC<IngredientItemProps> = ({
         setFilteredUnits(updatedFilteredUnits);
     }, [ingredientBaseAlimSelected]);
 
-    const handleButtonClick = () => {
+    const handleButtonClick = (event: React.ChangeEvent<{}>, value: any) => {
         setIsButtonClicked(true);
+        event.target.name = `ingredients[${index}].baseAlimIngredientId`;
+        event.target.value = null;
+        ingredient.baseAlimIngredientId=null;
+        handleChangeIngredient(event, index); // Call handleChangeIngredient with event and index
     };
 
     const handleAutocompleteChange = (event: React.ChangeEvent<{}>, value: any) => {

@@ -36,6 +36,7 @@ const GET_RECEIPE = `
         id
         originalPicturePath
         label
+        main
       }
       ingredients {
         id
@@ -154,34 +155,54 @@ const RecipeById = ({ initialData }) => {
       : null;
   }, [data]);
 
-  const calculateCarbonFootprint = (quantity, baseIngredientAlim, unit) => {
-    let coefficient = 1;
-    if(unit === 'g') {
-      coefficient = 0.001;
+  const showCarbonFootPrint = (carbonFootprint) => {
+
+    if (carbonFootprint ==0) {
+      carbonFootprint ="Non calculé"
     }
-    if(unit === 'mg') {
-      coefficient  =0.0001;
-    }
-    
-    if(unit === 'kg') {
-      coefficient = 1;
-    }
-    if(unit === 'L') {
-      coefficient = 1*baseIngredientAlim.densite;
-    }
-    if(unit === 'cl') {
-      coefficient = 0.01*baseIngredientAlim.densite;
-    }
-    if(unit === 'ml') {
-      coefficient = 0.001*baseIngredientAlim.densite;
-    }
-    if(unit === 'cuillère à soupe') {
-      coefficient =baseIngredientAlim.poidsParCuillereASoupe;
-    }
-    if(unit === 'cuillère à café') {
-      coefficient = baseIngredientAlim.poidsParCuillereACafe;
-    }
+      else  if (carbonFootprint <0.001) {
+          carbonFootprint = (carbonFootprint * 1000).toFixed(2) + ' g';
+          
+        } else {
+          carbonFootprint = (parseInt(carbonFootprint)).toFixed(2);
+        }
+    return carbonFootprint;
+  };
+
+      const calculateCarbonFootprint = (quantity, baseIngredientAlim, unit) => {
+       
+        if(baseIngredientAlim && baseIngredientAlim!==null){
+        let coefficient = 1;
+        if(unit === 'g') {
+          coefficient = 0.001;
+        }
+        if(unit === 'mg') {
+          coefficient  =0.0001;
+        }
+        
+        if(unit === 'kg') {
+          coefficient = 1;
+        }
+        if(unit === 'L') {
+          coefficient = 1*baseIngredientAlim.densite;
+        }
+        if(unit === 'cl') {
+          coefficient = 0.01*baseIngredientAlim.densite;
+        }
+        if(unit === 'ml') {
+          coefficient = 0.001*baseIngredientAlim.densite;
+        }
+        if(unit === 'cuillère à soupe') {
+          coefficient =baseIngredientAlim.poidsParCuillereASoupe;
+        }
+        if(unit === 'cuillère à café') {
+          coefficient = baseIngredientAlim.poidsParCuillereACafe;
+        }
+        
         return quantity * baseIngredientAlim.empreinteCarbone * coefficient;
+      }else{
+        return 0;
+      }
       };
       const textExplantationCarbonFootprintCalculation = (ingredientBaseAlim) => {
         const agriculture = (ingredientBaseAlim?.agriculture * 100).toFixed(2);
@@ -208,12 +229,15 @@ const RecipeById = ({ initialData }) => {
       }), []);
       const styles = useStyles(stylesProps);
       const columnSum = data.recipe.ingredients.reduce((sum, ingredient) => {
-        const carbonFootprint = calculateCarbonFootprint(
-          ingredient.quantity,
-          ingredient.IngredientBaseAlim,
-          ingredient.unit
-        );
-        return sum + carbonFootprint;
+        let carbonFootprint =0;
+        if( ingredient.IngredientBaseAlim &&  ingredient.IngredientBaseAlim!==null ){
+          carbonFootprint =  calculateCarbonFootprint(
+            ingredient.quantity,
+            ingredient.IngredientBaseAlim,
+            ingredient.unit
+          );
+        }
+        return showCarbonFootPrint(sum + carbonFootprint);
       }, 0);
 
       return (
@@ -225,13 +249,13 @@ const RecipeById = ({ initialData }) => {
             </title>
             <meta name="description" content={data && (`${data.recipe.label}`)} />
             {data?.recipe?.pictures?.length >= 1
-              && data.recipe.pictures.filter((picture) => picture.logo).length >= 1 && (
+              && data.recipe.pictures.filter((picture) => picture.main).length >= 1 && (
                 <meta
                   property="og:image"
                   content={
                     data.recipe.pictures.length >= 1
                       ? getImageUrl(
-                        data.recipe.pictures.filter((picture) => picture.logo)[0]
+                        data.recipe.pictures.filter((picture) => picture.main)[0]
                           .originalPicturePath,
                       )
                       : ''
@@ -239,7 +263,7 @@ const RecipeById = ({ initialData }) => {
                 />
             )}
             {data?.recipe?.pictures?.length >= 1
-              && data.recipe.pictures.filter((picture) => picture.logo).length >= 0 && (
+              && data.recipe.pictures.filter((picture) => picture.main).length >= 0 && (
               <meta
                 property="og:image"
                 content={getImageUrl(bannerUrl)}
@@ -268,15 +292,15 @@ const RecipeById = ({ initialData }) => {
                         <TableBody>
                           { data.recipe.ingredients.map((ingredient) => (
                             <TableRow key={ingredient.id}>
-                              <TableCell>{ingredient.IngredientBaseAlim ? ingredient.IngredientBaseAlim.produit : ingredient.label}</TableCell>
+                              <TableCell>{ingredient.IngredientBaseAlim && ingredient.IngredientBaseAlim.produit ? ingredient.IngredientBaseAlim.produit : ingredient.name}</TableCell>
                               <TableCell align="right">{ingredient.quantity}</TableCell>
                               <TableCell align="right">{ingredient.unit}</TableCell>
                               <TableCell align="right">
-                                {calculateCarbonFootprint(
+                                {showCarbonFootPrint(calculateCarbonFootprint(
                                   ingredient.quantity,
                                   ingredient.IngredientBaseAlim,
                                   ingredient.unit
-                                )}
+                                ))}
                                 {" "}
                                 <Tooltip title={textExplantationCarbonFootprintCalculation(ingredient.IngredientBaseAlim)}>
                                   <InfoIcon />
@@ -298,6 +322,17 @@ const RecipeById = ({ initialData }) => {
                       </Table>
                     </TableContainer>
                   </Grid>
+                  {data?.recipe?.pictures?.length >= 1
+                  && data.recipe.pictures.filter((picture) => picture.main).length >= 0 && (
+                    <div  className={[styles.bannerDiv]}>
+                    <br/>
+                      <img
+                          src={getImageUrl(bannerUrl)}
+                          className={[styles.bannerUrl]}
+                                  />
+        
+                  </div>
+                  )}
                 </Grid>
                 <Grid item md={7} sm={10} className={styles.description}>
                   <Grid container>
@@ -361,7 +396,8 @@ export async function getServerSideProps(ctxt) {
       }`,
     );
   } else {
-    console.log('initialData', initialData.data.recipe.ingredients);
+    debugger;
+    console.log('initialData', initialData.data.recipe);
   }
 
   return {

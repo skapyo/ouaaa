@@ -290,6 +290,7 @@ const AddRecipeForm = (props: AddRecipeFormProps) => {
             ...formValues,
             ingredients: formValues.ingredients!==undefined?JSON.parse(formValues.ingredients).map((ingredient) => ({
               ...ingredient,
+              baseAlimIngredientId: (ingredient.baseAlimIngredientId && ingredient.baseAlimIngredientId!=="null" )?parseInt(ingredient.baseAlimIngredientId):null,
               quantity: parseInt(ingredient.quantity),
             })):null,
             content: descriptionEditor?.getData(),
