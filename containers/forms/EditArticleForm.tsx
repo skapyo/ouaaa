@@ -331,7 +331,6 @@ const EditArticleForm = (props) => {
   });
 
   const imgInitMain = [];
-  debugger;
   if (
     articleData
     && articleData.article.pictures

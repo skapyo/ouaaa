@@ -5,7 +5,6 @@ import update from 'immutability-helper';
 const useDnDStateManager = (initialState = []) => {
   const [objectsList, setObjectsList] = useState(initialState);
   const [objectsListSaved, setobjectsListSaved] = useState(initialState);
-  debugger;
   // function to init state
   const initState = useCallback(
     (state) => {
