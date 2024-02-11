@@ -371,7 +371,7 @@ debugger;
                       fill
                       objectFit="contain"
                       src={
-                        bannerUrl
+                        getImageUrl(bannerUrl)
                       }
                       alt={data.recipe.name}
               
