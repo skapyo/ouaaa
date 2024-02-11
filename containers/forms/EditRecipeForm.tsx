@@ -18,6 +18,7 @@ import useDnDStateManager from '../../hooks/useDnDStateManager';
 import ImagesDropZone from 'components/ImageCropper/ImagesDropZone';
 import ImagesDisplay from 'components/ImageCropper/ImagesDisplay';
 import ClassicButton from 'components/buttons/ClassicButton';
+import FallbackPageNotFound from 'containers/fallbacks/FallbackPageNotFound';
 import { getImageUrl } from 'utils/utils';
 import { useSnackbar } from 'notistack';
 import { useSessionState } from '../../context/session/session';
@@ -232,6 +233,8 @@ type EditRecipeFormProps = {
 
 }
 
+
+
 const EditRecipeForm = (props: EditRecipeFormProps) => {
   const { } = props;
  
@@ -239,6 +242,71 @@ const EditRecipeForm = (props: EditRecipeFormProps) => {
   const { query: { actor: actorId } } = useRouter();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const { data: dataIngredientBaseAlim } = useQuery(GET_INGREDIENTBASEALIM, {});
+  const user = useSessionState();
+  const router = useRouter();
+
+  const {
+    loading: recipeLoading,
+    error: recipeError,
+    data: recipeData,
+  } = useQuery(GET_RECIPE, {
+    variables: { recipeId: props.id.toString() },
+    fetchPolicy: 'no-cache',
+    onCompleted: (dataRecipe) => {
+      if (user === undefined || user == null) {
+        enqueueSnackbar(
+          'Veuillez vous connecter pour effectuer des modifications.',
+          {
+            preventDuplicate: true,
+          },
+        );
+        router.push('/');
+      } else if (!(dataRecipe.recipe.user.id  === user.id   ||  user.role === 'admin')) {
+        enqueueSnackbar(
+          "Vous n'avez pas les droits d'éditer cette recette",
+          {
+            preventDuplicate: true,
+          },
+        );
+        router.push('/');
+      }
+    },
+  });
+
+  const imgInitMain = [];
+  if (
+    recipeData
+    && recipeData.recipe.pictures
+    && recipeData.recipe.pictures.length > 0
+  ) {
+    recipeData.recipe.pictures
+      .sort((a, b) => (a.position > b.position ? 1 : -1))
+      .map((picture, index) => {
+        if (picture.main) {
+          imgInitMain.push({
+            // @ts-ignore
+            id: index,
+            // @ts-ignore
+            file: null,
+            // @ts-ignore
+            img: getImageUrl(picture.originalPicturePath),
+            // @ts-ignore
+            activated: true,
+            // @ts-ignore
+            deleted: false,
+            // @ts-ignore
+            newpic: false,
+            // @ts-ignore
+            serverId: picture.id,
+            // @ts-ignore
+            position: picture.position,
+          });
+        }
+      });
+  }
+
+
+
   const Form: RenderCallback = ({
     formChangeHandler,
     validationResult,
@@ -251,9 +319,9 @@ const EditRecipeForm = (props: EditRecipeFormProps) => {
     const [editorLoaded, setEditorLoaded] = useState(false);
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
     const [addPictureRecipe, { data: dataPicture, error: errorPicture }] = useMutation(ADD_PICTURE_RECIPE);
-    const router = useRouter();
+  
     const editorRef = useRef();
-    const user = useSessionState();
+
     const [firstRender, setFirstRender] = useState(true);
     if (user == null) {
       enqueueSnackbar('Veuillez vous connecter pour ajouter une recette ');
@@ -281,135 +349,11 @@ const EditRecipeForm = (props: EditRecipeFormProps) => {
       //setBannerPrincipalPicture(false);
     };
    
-    const {
-      loading: recipeLoading,
-      error: recipeError,
-      data: recipeData,
-    } = useQuery(GET_RECIPE, {
-      variables: { recipeId: props.id.toString() },
-      fetchPolicy: 'no-cache',
-      onCompleted: (dataRecipe) => {
-        if (user === undefined || user == null) {
-          enqueueSnackbar(
-            'Veuillez vous connecter pour effectuer des modifications.',
-            {
-              preventDuplicate: true,
-            },
-          );
-          router.push('/');
-        } else if (!(dataRecipe.recipe.user.id  === user.id   ||  user.role === 'admin')) {
-          enqueueSnackbar(
-            "Vous n'avez pas les droits d'éditer cette recette",
-            {
-              preventDuplicate: true,
-            },
-          );
-          router.push('/');
-        }
-      },
-    });
+  
 
     // @ts-ignore
     const { CKEditor, ClassicEditor } = editorRef.current || {};
-    const imgInitMain = [];
-    if (
-      recipeData
-      && recipeData.recipe.pictures
-      && recipeData.recipe.pictures.length > 0
-    ) {
-      recipeData.recipe.pictures
-        .sort((a, b) => (a.position > b.position ? 1 : -1))
-        .map((picture, index) => {
-          if (picture.main) {
-            imgInitMain.push({
-              // @ts-ignore
-              id: index,
-              // @ts-ignore
-              file: null,
-              // @ts-ignore
-              img: getImageUrl(picture.originalPicturePath),
-              // @ts-ignore
-              activated: true,
-              // @ts-ignore
-              deleted: false,
-              // @ts-ignore
-              newpic: false,
-              // @ts-ignore
-              serverId: picture.id,
-              // @ts-ignore
-              position: picture.position,
-            });
-          }
-        });
-    }
-    const {
-      objectsList: objectsListMain,
-      moveObject: moveObjectMain,
-      findObject: findObjectMain,
-      updateActiveIndicator: updateActiveIndicatorMain,
-      updateDeletedIndicator: updateDeletedIndicatorMain,
-      initState: initStateMain,
-      addValues: addValuesMain,
-      updateKeyIndicator: updateKeyIndicatorMain,
-    } = useDnDStateManager(imgInitMain);
-
- 
-
-    const handleClickUpdate = useCallback(async () => {
-      let mainPictures;
-      debugger;
-      // @ts-ignore
-      if (objectsListMain) {
-        mainPictures = objectsListMain.map((object) => {
-          // return object.file
-          return {
-            id: object.serverId,
-            newpic: object.newpic,
-            deleted: object.deleted,
-            main: true,
-            file: {
-              originalPicture: object.file,
-            },
-          };
-        });
-
-        for await (const element of mainPictures){
-          if(element.newpic ==true){
-            const newFiles = new FormData();
-            newFiles.append('files', element.file.originalPicture);
-            await fetch('/api/files', {
-              method: 'POST',
-              body: newFiles,
-            });
-            element.file.filename=element.file.originalPicture.name;
-            element.file.originalPicture=undefined;
-         
-          }
-        }
-  
-      }
-      const userId =  parseInt(user.id);
-      editRecipe({
-        variables: {
-          recipe: {
-            ...formValues,
-            ingredients: JSON.parse(formValues.ingredients).map((ingredient) => {
-              const { IngredientBaseAlim,__typename, ...rest } = ingredient; // Extracting "IngredientBaseAlim" and the rest of the attributes
-              return {
-                  ...rest, // Spread the remaining attributes
-                  quantity: parseInt(rest.quantity),
-                  baseAlimIngredientId: parseInt(rest.baseAlimIngredientId),
-              };
-            }),
-            content: descriptionEditor?.getData(), 
-           
-          },
-          recipeId: parseInt(recipeData.recipe.id),   
-          mainPictures, 
-        }
-      });
-    }, [editRecipe, formValues,objectsListMain]);
-
+   
     
     useEffect(() => {
       if (data) {
@@ -485,7 +429,7 @@ const EditRecipeForm = (props: EditRecipeFormProps) => {
       formValues.label = recipeData.recipe.label;
       formValues.content = recipeData.recipe.content;
       formValues.shortDescription = recipeData.recipe.shortDescription;
-      formValues.ingredients =  JSON.stringify(recipeData.recipe.ingredients.map((ingredient) => ({ ...ingredient, baseAlimIngredientId: ingredient.IngredientBaseAlim.id })));
+      formValues.ingredients =  JSON.stringify(recipeData.recipe.ingredients.map((ingredient) => ({ ...ingredient, baseAlimIngredientId: ingredient.IngredientBaseAlim?ingredient.IngredientBaseAlim.id:null })));
     //  setBannerPrincipalPicture(recipeData.recipe.bannerPrincipalPicture);
       formChangeHandler({ target: { name: 'label', value: recipeData.recipe.label } } as React.ChangeEvent<HTMLInputElement>);
       validateForm();
@@ -500,6 +444,73 @@ const EditRecipeForm = (props: EditRecipeFormProps) => {
     }
 
     
+   
+    const {
+      objectsList: objectsListMain,
+      moveObject: moveObjectMain,
+      findObject: findObjectMain,
+      updateActiveIndicator: updateActiveIndicatorMain,
+      updateDeletedIndicator: updateDeletedIndicatorMain,
+      initState: initStateMain,
+      addValues: addValuesMain,
+      updateKeyIndicator: updateKeyIndicatorMain,
+    } = useDnDStateManager(imgInitMain);
+
+ 
+
+    const handleClickUpdate = useCallback(async () => {
+      let mainPictures;
+      // @ts-ignore
+      if (objectsListMain) {
+        mainPictures = objectsListMain.map((object) => {
+          // return object.file
+          return {
+            id: object.serverId,
+            newpic: object.newpic,
+            deleted: object.deleted,
+            main: true,
+            file: {
+              originalPicture: object.file,
+            },
+          };
+        });
+
+        for await (const element of mainPictures){
+          if(element.newpic ==true){
+            const newFiles = new FormData();
+            newFiles.append('files', element.file.originalPicture);
+            await fetch('/api/files', {
+              method: 'POST',
+              body: newFiles,
+            });
+            element.file.filename=element.file.originalPicture.name;
+            element.file.originalPicture=undefined;
+         
+          }
+        }
+  
+      }
+      const userId =  parseInt(user.id);
+      editRecipe({
+        variables: {
+          recipe: {
+            ...formValues,
+            ingredients: JSON.parse(formValues.ingredients).map((ingredient) => {
+              const { IngredientBaseAlim,__typename, ...rest } = ingredient; // Extracting "IngredientBaseAlim" and the rest of the attributes
+              return {
+                  ...rest, // Spread the remaining attributes
+                  quantity: parseInt(rest.quantity),
+                  baseAlimIngredientId: parseInt(rest.baseAlimIngredientId),
+              };
+            }),
+            content: descriptionEditor?.getData(), 
+           
+          },
+          recipeId: parseInt(recipeData.recipe.id),   
+          mainPictures, 
+        }
+      });
+    }, [editRecipe, formValues,objectsListMain]);
 
     const [
       setImagesMainList,
@@ -651,7 +662,12 @@ const EditRecipeForm = (props: EditRecipeFormProps) => {
       </Container>
     )
   }
-
+  if (recipeLoading) {
+    return null;
+  }
+  if (recipeError) {
+    return <FallbackPageNotFound />;
+  }
   return (
     <FormController render={Form} validationRules={validationRules} />
   )
