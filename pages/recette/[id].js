@@ -16,6 +16,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import InfoIcon from '@mui/icons-material/Info';
 import Tooltip from '@mui/material/Tooltip';
+import Image from 'next/image';
 import {
   getImageUrl
 } from '../../utils/utils';
@@ -90,6 +91,13 @@ const useStyles = makeStyles((theme) => ({
       marginBottom: 0,
     },
   },
+  containerDescription: {
+      justifyContent: 'space-evenly',
+  },
+  title: {
+    marginTop: '3em',
+    marginBottom: '2em'
+  },
   bannerUrl: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -161,7 +169,7 @@ const RecipeById = ({ initialData }) => {
   }, [data]);
 
   const showCarbonFootPrint = (carbonFootprint) => {
-
+debugger;
     if (carbonFootprint ==0) {
       carbonFootprint ="Non calculé"
     }
@@ -169,7 +177,7 @@ const RecipeById = ({ initialData }) => {
           carbonFootprint = (carbonFootprint * 1000).toFixed(2) + ' g';
           
         } else {
-          carbonFootprint = (parseInt(carbonFootprint)).toFixed(2);
+          carbonFootprint = (parseFloat(carbonFootprint)).toFixed(2);
         }
     return carbonFootprint;
   };
@@ -177,6 +185,7 @@ const RecipeById = ({ initialData }) => {
       const calculateCarbonFootprint = (quantity, baseIngredientAlim, unit) => {
        
         if(baseIngredientAlim && baseIngredientAlim!==null){
+          
         let coefficient = 1;
         if(unit === 'g') {
           coefficient = 0.001;
@@ -242,7 +251,7 @@ const RecipeById = ({ initialData }) => {
             ingredient.unit
           );
         }
-        return showCarbonFootPrint(sum + carbonFootprint);
+        return sum + carbonFootprint;
       }, 0);
 
       return (
@@ -281,66 +290,7 @@ const RecipeById = ({ initialData }) => {
           </Head>
           <Box>
             <Container className={styles.cardInfo}>
-              <Grid container>
-                <Grid item md={5} sm={10} className={[styles.align]}>
-                  <Grid container className={[styles.ingredientInfoGrid]}>
-                    <TableContainer>
-                      <Table aria-label="Ingredient Table" size="small">
-                        <TableHead>
-                          <TableRow>
-                            <TableCell>Produit</TableCell>
-                            <TableCell align="right">Quantité</TableCell>
-                            <TableCell align="right">Unité</TableCell>
-                            <TableCell align="right">Empreinte Carbone (kg CO2)</TableCell>
-                          </TableRow>
-                        </TableHead>
-                        <TableBody>
-                          { data.recipe.ingredients.map((ingredient) => (
-                            <TableRow key={ingredient.id}>
-                              <TableCell>{ingredient.IngredientBaseAlim && ingredient.IngredientBaseAlim.produit ? ingredient.IngredientBaseAlim.produit : ingredient.name}</TableCell>
-                              <TableCell align="right">{ingredient.quantity}</TableCell>
-                              <TableCell align="right">{ingredient.unit}</TableCell>
-                              <TableCell align="right">
-                                {showCarbonFootPrint(calculateCarbonFootprint(
-                                  ingredient.quantity,
-                                  ingredient.IngredientBaseAlim,
-                                  ingredient.unit
-                                ))}
-                                {" "}
-                                <Tooltip title={textExplantationCarbonFootprintCalculation(ingredient.IngredientBaseAlim)}>
-                                  <InfoIcon />
-                                </Tooltip>
-                              </TableCell>
-                            </TableRow>
-                          ))}
-                           <TableRow >
-                              <TableCell></TableCell>
-                              <TableCell align="right"></TableCell>
-                              <TableCell align="right"></TableCell>
-                              <TableCell align="right">
-                            
-                               Total :  {columnSum}
-                    
-                              </TableCell>
-                            </TableRow>
-                        </TableBody>
-                      </Table>
-                    </TableContainer>
-                  </Grid>
-                  {data?.recipe?.pictures?.length >= 1
-                  && data.recipe.pictures.filter((picture) => picture.main).length >= 0 && (
-                    <div  className={[styles.bannerDiv]}>
-                    <br/>
-                      <img
-                          src={getImageUrl(bannerUrl)}
-                          className={[styles.bannerUrl]} 
-                                  />
-        
-                  </div>
-                  )}
-                </Grid>
-                <Grid item md={7} sm={10} className={styles.description}>
-                  <Grid container>
+            <Grid container className={styles.title}>
                     <div style={{ width: "100%" }}>
                     <Typography variant="h1" className={styles.cardTitle} align="center">
                       {data && data.recipe.label}
@@ -351,11 +301,88 @@ const RecipeById = ({ initialData }) => {
                     <br/>
                     <br/>
                   </Grid>
+              <Grid container className={styles.containerDescription}>
+           
+                <Grid item md={5} sm={10} className={[styles.align]}>
+                  <Grid container className={[styles.ingredientInfoGrid]}>
+                    <TableContainer>
+                      <Table aria-label="Ingredient Table" size="small">
+                        <TableHead>
+                          <TableRow>
+                            <TableCell>Produit</TableCell>
+                            <TableCell align="right">Qte</TableCell>
+                            <TableCell align="right">Unité</TableCell>
+                            <TableCell align="right">Empreinte Carbone (kg CO2)</TableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          { data.recipe.ingredients.map((ingredient) => (
+                            <TableRow key={ingredient.id}>
+                              <TableCell>{ingredient.IngredientBaseAlim && ingredient.IngredientBaseAlim.produit ? ingredient.IngredientBaseAlim.produit : ingredient.name}</TableCell>
+                              <TableCell align="right">{ingredient.quantity}</TableCell>
+                              <TableCell align="right">{ingredient.unit}</TableCell>
+                              <TableCell align="right" style={{ fontSize: '0.775rem' }}>
+                                {showCarbonFootPrint(calculateCarbonFootprint(
+                                  ingredient.quantity,
+                                  ingredient.IngredientBaseAlim,
+                                  ingredient.unit
+                                ))}
+                                {ingredient.IngredientBaseAlim != null && (
+                                  <>
+                                    {' '}
+                                    <Tooltip title={textExplantationCarbonFootprintCalculation(ingredient.IngredientBaseAlim)}>
+                                      <InfoIcon />
+                                    </Tooltip>
+                                  </>
+                                )}
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                           <TableRow >
+                              <TableCell></TableCell>
+                              <TableCell align="right"></TableCell>
+                              <TableCell align="right"></TableCell>
+                              <TableCell align="right">
+                            
+                               Total :  {showCarbonFootPrint(columnSum)}
+                    
+                              </TableCell>
+                            </TableRow>
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                  </Grid>
+              
+                </Grid>
+                <Grid item md={7} sm={10} className={styles.description}>
+                 
                   <Grid container>
                     <div>{data && Parser(data.recipe.content)}</div>
                   </Grid>
                 </Grid>
+                <Grid container>
+                {data?.recipe?.pictures?.length >= 1
+                  && data.recipe.pictures.filter((picture) => picture.main).length >= 0 && (
+                    <div style =  {{  position: 'relative', width:"100%" , marginTop: "2em"}}>
+                    <br/>
+                    <br/>
+                    <br/>
+                      <Image
+                      fill
+                      objectFit="contain"
+                      src={
+                        bannerUrl
+                      }
+                      alt={data.recipe.name}
+              
+                          className={[styles.bannerUrl]} 
+                                  />
+        
+                  </div>
+                  )}
+                  </Grid>
               </Grid>
+             
             </Container>
 
             {
