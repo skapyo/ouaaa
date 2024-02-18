@@ -133,9 +133,20 @@ export const IngredientItem: React.FC<IngredientItemProps> = ({
     React.useEffect(() => {
         const updatedFilteredUnits = availableUnits.filter((unit) => {
          
-            if (unit.value === 'ml' || unit.value === 'cl' || unit.value === 'dl'  || unit.value === 'l') {
+            debugger;
+           if(!ingredientBaseAlimSelected || ingredientBaseAlimSelected.baseAlimIngredientId === null){
+                return true;
+           }
+           if (unit.value === 'kg' || unit.value === 'g' || unit.value === 'mg') {
                 if (ingredientBaseAlimSelected && ingredientBaseAlimSelected.densite !== null) {
-                    return unit.value === 'ml' || unit.value === 'cl' || unit.value === 'dl';
+                    return false;
+                }else{
+                    return unit.value === 'kg' || unit.value === 'g' || unit.value === 'mg';
+                }
+        }
+            else if (unit.value === 'ml' || unit.value === 'cl' || unit.value === 'dl'  || unit.value === 'l') {
+                if (ingredientBaseAlimSelected && ingredientBaseAlimSelected.densite !== null) {
+                    return unit.value === 'ml' || unit.value === 'cl' || unit.value === 'dl' || unit.value === 'l';
                 }
             } else if (unit.value === 'unity') {
                 if (ingredientBaseAlimSelected && ingredientBaseAlimSelected.poidsParUnite !== null) {
@@ -206,7 +217,7 @@ export const IngredientItem: React.FC<IngredientItemProps> = ({
                    />
                     )}
                     {!isButtonClicked && (
-                        <Button onClick={handleButtonClick}> Ajouter un ingrédient non présent (impact carbone non calculé)</Button>
+                        <Button onClick={handleButtonClick}> Ingrédient non présent dans la liste ? L'impact carbone ne sera pas calculé pour cette ingrédient</Button>
                     )}
                     {isButtonClicked && (
                         <FormItem
