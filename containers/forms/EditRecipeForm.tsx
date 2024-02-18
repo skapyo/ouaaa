@@ -504,6 +504,7 @@ const EditRecipeForm = (props: EditRecipeFormProps) => {
                   baseAlimIngredientId: parseInt(rest.baseAlimIngredientId),
               };
             }),
+            nbPerson: parseInt(formValues.nbPerson),
             content: descriptionEditor?.getData(), 
            
           },
@@ -549,7 +550,13 @@ const EditRecipeForm = (props: EditRecipeFormProps) => {
           }
           errorText="Nom de la recette requis."
         />
-
+  <FormItem
+          label="Nombre de persoone"
+          inputName="nbPerson"
+          formChangeHandler={formChangeHandler}
+          value={formValues.nbPerson}
+          type='number'
+        />
         <FormItem
           label="Description de la recette"
           inputName="shortDescription"
@@ -563,6 +570,9 @@ const EditRecipeForm = (props: EditRecipeFormProps) => {
           errorText={`Maximum 90 caractères. ${formValues.shortDescription?.length - 90
             } caractères en trop.`}
         />
+
+        
+    
 
         <br />
 

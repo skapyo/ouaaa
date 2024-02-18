@@ -292,8 +292,10 @@ const AddRecipeForm = (props: AddRecipeFormProps) => {
               ...ingredient,
               baseAlimIngredientId: (ingredient.baseAlimIngredientId && ingredient.baseAlimIngredientId!=="null" )?parseInt(ingredient.baseAlimIngredientId):null,
               quantity: parseInt(ingredient.quantity),
+              
             })):null,
             content: descriptionEditor?.getData(),
+            nbPerson: parseInt(formValues.nbPerson),
           },
           actorId,
           userId,
@@ -409,6 +411,14 @@ const AddRecipeForm = (props: AddRecipeFormProps) => {
             !validationResult?.global && !!validationResult?.result.label
           }
           errorText="Nom de la recette requis."
+        />
+
+      <FormItem
+          label="Nombre de personne"
+          inputName="nbPerson"
+          formChangeHandler={formChangeHandler}
+          value={formValues.nbPerson}
+          type='number'
         />
 
         <FormItem

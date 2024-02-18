@@ -24,6 +24,7 @@ import Link from 'components/Link';
 import Fab from '@mui/material/Fab';
 import EditIcon from '@mui/icons-material/Edit';
 import { useSessionState } from '../../context/session/session';
+import Modal from '@mui/material/Modal';
 
 const GET_RECEIPE = `
   query recipe($id: String) {
@@ -38,6 +39,11 @@ const GET_RECEIPE = `
         originalPicturePath
         label
         main
+      }
+      user {
+        id
+        surname
+        lastname
       }
       ingredients {
         id
@@ -102,6 +108,8 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
+    position: 'relative!important',
+    maxHeight: '250px',
   },
   fab: {
     position: 'fixed',
@@ -194,6 +202,9 @@ debugger;
           coefficient  =0.0001;
         }
         
+        if(unit === 'unity') {
+          coefficient = baseIngredientAlim.poidsParUnite;
+        }
         if(unit === 'kg') {
           coefficient = 1;
         }
@@ -253,7 +264,13 @@ debugger;
         }
         return sum + carbonFootprint;
       }, 0);
+      const [showModal, setShowModal] = useState(false);
 
+      const handleImageClick = () => {
+        setShowModal(true);
+      };
+
+  
       return (
         <AppLayout>
           <Head>
@@ -290,6 +307,7 @@ debugger;
           </Head>
           <Box>
             <Container className={styles.cardInfo}>
+             
             <Grid container className={styles.title}>
                     <div style={{ width: "100%" }}>
                     <Typography variant="h1" className={styles.cardTitle} align="center">
@@ -300,7 +318,15 @@ debugger;
                     <div className={styles.border} />
                     <br/>
                     <br/>
+              </Grid>
+              { data && data.recipe.nbPerson && (
+                <Grid container>
+                  <br/>
+                    Nombre de personne : {data.recipe.nbPerson}
+                    <br/>
+                    <br/>
                   </Grid>
+              )}
               <Grid container className={styles.containerDescription}>
            
                 <Grid item md={5} sm={10} className={[styles.align]}>
@@ -320,7 +346,9 @@ debugger;
                             <TableRow key={ingredient.id}>
                               <TableCell>{ingredient.IngredientBaseAlim && ingredient.IngredientBaseAlim.produit ? ingredient.IngredientBaseAlim.produit : ingredient.name}</TableCell>
                               <TableCell align="right">{ingredient.quantity}</TableCell>
-                              <TableCell align="right">{ingredient.unit}</TableCell>
+                             
+                                <TableCell align="right"> {ingredient.unit !== 'unity' && (<>{ingredient.unit}</>)}</TableCell>
+                              
                               <TableCell align="right" style={{ fontSize: '0.775rem' }}>
                                 {showCarbonFootPrint(calculateCarbonFootprint(
                                   ingredient.quantity,
@@ -367,19 +395,39 @@ debugger;
                     <br/>
                     <br/>
                     <br/>
-                      <Image
-                      fill
-                      objectFit="contain"
-                      src={
-                        getImageUrl(bannerUrl)
-                      }
-                      alt={data.recipe.name}
-              
-                          className={[styles.bannerUrl]} 
-                                  />
-        
-                  </div>
+                      
+                        <div>
+                          <Image
+                            fill
+                            objectFit="contain"
+                            src={
+                              getImageUrl(bannerUrl)
+                            }
+                            alt={data.recipe.name}
+                            className={[styles.bannerUrl]}
+                            onClick={handleImageClick}
+                          />
+
+                          <Modal show={true} onHide={() => setShowModal(false)} centered>
+                            <Box>
+                              <Image
+                                fill
+                                objectFit="contain"
+                                src={
+                                  getImageUrl(bannerUrl)
+                                }
+                                alt={data.recipe.name}
+                                className={[styles.bannerUrl]}
+                              />
+                            </Box>
+                          </Modal>
+                        </div>
+                      </div>
                   )}
+                  </Grid>
+                  <Grid container>
+                  <br/>
+                    Proposé par : {data.recipe.user?.surname} {data.recipe.user?.lastname}
                   </Grid>
               </Grid>
              
