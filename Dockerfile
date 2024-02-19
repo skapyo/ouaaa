@@ -1,5 +1,6 @@
 # build environment
-FROM node:16 as build
+#FROM node:16 as build
+FROM node:21.6.0 as build
 
 # Setting working directory. All the path will be relative to WORKDIR
 WORKDIR /app
@@ -7,7 +8,7 @@ WORKDIR /app
 ENV PATH /app/node_modules/.bin:$PATH
 # Installing dependencies
 COPY package*.json ./
-
+RUN ulimit -a
 RUN npm install --max_semi_space_size=1  --max_old_space_size=198   --max_executable_size=148 --legacy-peer-deps
 
 # Copying source files
