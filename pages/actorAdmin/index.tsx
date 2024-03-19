@@ -426,6 +426,8 @@ const ActorAdminPage = () => {
                         {params.row.name}
                       </Link>,
     },
+    ...(user && user.role === 'admin'
+    ? [
     {
       field: 'createdAt',
       headerName: 'Date de création',
@@ -445,6 +447,8 @@ const ActorAdminPage = () => {
       editable: false,
       valueGetter: (value) => value && new Date(parseInt(value.value)),
     },
+  ]
+  : []),
     {
       field: 'city',
       headerName: 'Ville',
@@ -469,6 +473,36 @@ const ActorAdminPage = () => {
       <Link href={`/actorAdmin/actor/${params.row.id}`}>
                         <Edit />
                       </Link>,
+    },
+    {
+      field: 'addAction',
+      headerName: 'Ajouter un nouvel événement',
+      width: 200,
+      editable: false,
+      renderCell: (params) =>
+      <Link href={`/addevent/${params.row.id}`}>
+      <AddCircleOutline />
+    </Link>,
+    },
+    {
+      field: 'addArticle',
+      headerName: 'Ajouter un nouvel article',
+      width: 200,
+      editable: false,
+      renderCell: (params) =>
+      <Link href={`/addarticle/${params.row.id}`}>
+      <AddCircleOutline />
+    </Link>,
+    },
+    {
+      field: 'addRecipe',
+      headerName: 'Ajouter une nouvelle recette',
+      width: 170,
+      editable: false,
+      renderCell: (params) =>
+      <Link href={`/recette/new?actor${params.row.id}`}>
+      <AddCircleOutline />
+    </Link>,
     },
     {
       field: 'volunteer',
@@ -524,36 +558,6 @@ const ActorAdminPage = () => {
             return ''; 
           }
         },
-      },
-      {
-        field: 'addAction',
-        headerName: 'Ajouter une nouvelle action',
-        width: 170,
-        editable: false,
-        renderCell: (params) =>
-        <Link href={`/addevent/${params.row.id}`}>
-        <AddCircleOutline />
-      </Link>,
-      },
-      {
-        field: 'addArticle',
-        headerName: 'Ajouter un nouvel article',
-        width: 170,
-        editable: false,
-        renderCell: (params) =>
-        <Link href={`/addarticle/${params.row.id}`}>
-        <AddCircleOutline />
-      </Link>,
-      },
-      {
-        field: 'addRecipe',
-        headerName: 'Ajouter une nouvelle recette',
-        width: 170,
-        editable: false,
-        renderCell: (params) =>
-        <Link href={`/recette/new?actor${params.row.id}`}>
-        <AddCircleOutline />
-      </Link>,
       },
       ]
     : []),
