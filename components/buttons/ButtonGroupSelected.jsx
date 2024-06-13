@@ -54,12 +54,13 @@ const ButtonGroupSelected = props => {
   }, [selectedButton]);
 
   return (
-    <ButtonGroup color="primary" className={classNames(classes.root, className)}>
+    <ButtonGroup className={classNames(classes.root, className)}>
       {
         buttons.map(button => {
           return (
             <Button
-              variant={selectedButton === button.name ? 'contained' : 'outlined'}
+              variant={selectedButton === button.name ? 'contained' : ''}
+              classes={selectedButton === button.name ? classes.unselected : ''}
               onClick={() => handleClick(button)}
             >
               {button.label}

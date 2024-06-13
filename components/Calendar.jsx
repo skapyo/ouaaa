@@ -112,13 +112,13 @@ const Appointment = (props) => {
   );
 };
 
-const FlexibleEmptySpaceAddEvent = () => {
+const FlexibleEmptySpaceAddEvent = prop() => {
   const classes = useStyles();
   const router = useRouter();
 
   const handleClickAddEvent = useCallback(() => {
     const { id } = router.query;
-    router.push(`/addevent/${id}`);
+    router.push(`/admin/events/add?actorId=${prop.actor.id}`);
   }, [router]);
 
   return (
@@ -138,11 +138,11 @@ const FlexibleEmptySpaceAddEvent = () => {
 
 const Calendar = (props) => {
   const {
-    events, withViewSwitcher, withAddEvent, className,
+    events, withViewSwitcher, withAddEvent, className,actor,startDate
   } = props;
 
   const toolbarProps = withAddEvent && {
-    flexibleSpaceComponent: FlexibleEmptySpaceAddEvent,
+    flexibleSpaceComponent: () => <FlexibleEmptySpaceAddEvent actor={actor} />,
   };
   const defaultMessages = {
     allDay: 'Toute la journée',
@@ -166,7 +166,7 @@ const Calendar = (props) => {
       rootComponent={RootComponent}
     >
       <ViewState
-        defaultCurrentDate={new Date()}
+        defaultCurrentDate={startDate!==undefined?startDate:new Date()}
       />
 
       <Toolbar

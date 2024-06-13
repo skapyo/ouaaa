@@ -84,7 +84,7 @@ const PresentationSection = (props) => {
   const mobile = useMediaQuery(theme.breakpoints.down('md'));
 
   return (
-    <Container className={styles.titleContainer} id={props.id}>
+    <Container  maxWidth="xl" className={styles.titleContainer} id={props.id}>
       <Image
       className={styles.landingImage}
                     src="/Accueil1.jpg"

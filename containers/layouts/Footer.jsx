@@ -3,10 +3,10 @@ import { Container, Typography } from '@mui/material';
 import Link from 'components/Link';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import InstagramIcon from '@mui/icons-material/Instagram';
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   footer: {
     color: 'white',
-    backgroundColor: '#2C367E',
+    backgroundColor: theme.palette.primary.main,
     border: 'none',
     height: '26em',
     textAlign: 'center',
@@ -42,7 +42,7 @@ const useStyles = makeStyles({
     },
   },
   logo: {},
-});
+}));
 
 const Footer = () => {
   const classes = useStyles();

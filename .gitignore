@@ -1,8 +1,6 @@
 node_modules
 .dist/
 test
-package - save.json
-package-lock - save.json
 .VSCodeCounter
 .idea/
 .idea/
@@ -15,6 +13,8 @@ public/sw.js
 public/workbox-*.js
 public/workbox-327c579b.js.map
 public/sw.js.map
-public/sw.js.map
-package-lock.json
-public/sw.js.map
+.env.development
+.env.production
+.env.local
+config.json
+next.config.js

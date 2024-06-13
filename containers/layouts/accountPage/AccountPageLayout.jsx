@@ -7,6 +7,7 @@ import {
   Fab,
   Hidden,
   SwipeableDrawer,
+  Container,
 } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import AccountLeftMenu from 'containers/menus/AccountLeftMenu';
@@ -16,12 +17,6 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useCallback, useState } from 'react';
 
 const useStyles = makeStyles((theme) => ({
-  gridContainer: {
-    marginTop: theme.spacing(5),
-  },
-  title: {
-    fontWeight: '700',
-  },
   fab: {
     position: 'fixed',
     bottom: '40px',
@@ -50,22 +45,22 @@ const AccountPageLayout = ({ children }) => {
 
   return (
     <AppLayout>
-      <AppContainer maxWidth="lg">
-        <Typography variant="h4" className={styles.title} color="primary">
-          Mon compte
-        </Typography>
-        <Box className={styles.gridContainer}>
-          <Grid container spacing={10}>
-            <Hidden smDown>
-              <Grid item lg={3}>
-                <AccountLeftMenu />
-              </Grid>
-            </Hidden>
-            <Grid item lg={9}>
-              {children}
-            </Grid>
+      <Container maxWidth="lg">
+        <Grid container justifyContent="center" mt={3} mb={3}>
+          <Grid item xs={12} mb={4}>
+            <Typography variant="h4" color="primary" textAlign="center" fontWeight="bold">
+              Mon compte
+            </Typography>
           </Grid>
-        </Box>
+          <Hidden smDown>
+            <Grid item lg={3}>
+              <AccountLeftMenu />
+            </Grid>
+          </Hidden>
+          <Grid item lg={9}>
+            {children}
+          </Grid>
+        </Grid>
         <Hidden smUp>
           {!openDrawer && (
             <Fab className={styles.fab} size="large" onClick={openDrawerHander}>
@@ -100,7 +95,7 @@ const AccountPageLayout = ({ children }) => {
             onOpen={openDrawerHander}
           >
             <Box m={2}>
-              <Typography variant="h6">Mon compte :</Typography>
+            <Typography variant="h6">Mon compte</Typography>
             </Box>
             <Grid
               container
@@ -112,7 +107,7 @@ const AccountPageLayout = ({ children }) => {
             </Grid>
           </SwipeableDrawer>
         </Hidden>
-      </AppContainer>
+        </Container>
     </AppLayout>
   );
 };

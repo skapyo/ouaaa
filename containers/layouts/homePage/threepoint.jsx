@@ -18,7 +18,6 @@ const useStyles = makeStyles((theme) => ({
     width: '80%!important',
     justify: 'center',
     alignItems: 'center',
-    'max-width': '755px',
     'margin-top': '-53px',
     'box-shadow': '0px 0px 38px -14px rgba(0, 0, 0, 0.46)',
     [theme.breakpoints.down('md')]: {
@@ -184,7 +183,7 @@ const PresentationSection = (props) => {
   const styles = useStyles();
 
   return (
-    <Container className={styles.cardInfo} id={props.id}>
+    <Container maxWidth="xl" className={styles.cardInfo} id={props.id}>
       <Grid container spacing={3} className={styles.flexColumn}>
         <Grid item md={6}>
           <div className={styles.gridTitle}>

@@ -26,5 +26,14 @@ module.exports = withPWA({
         destination: process.env.NEXT_PUBLIC_API_URI.replace('/api/graphql', '/api/files')
       }
     ]
+  },
+  async redirects() {
+    return [
+      {
+        source: '/map',
+        destination: '/carte',
+        permanent: true,
+      },
+    ]
   }
 });

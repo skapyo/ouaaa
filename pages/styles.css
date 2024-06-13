@@ -56,10 +56,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.MuiContainer-maxWidthLg {
-  max-width: none !important;
-}
-
 .MuiStepIcon-root.MuiStepIcon-active {
   color: #2C367E !important;
 }

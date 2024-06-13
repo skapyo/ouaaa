@@ -1,27 +1,32 @@
 before_script:
   - docker info
 
-#build_image:
-#  script:
-# - docker stop gitlab_gitlab_1
-#   - docker build --build-arg NODE_OPTIONS=--max-old-space-size=8012 --cpu-shares=100 --memory=2048m -t  acteurs-de-la-transition-client:prod .
-#   - docker stop  acteurs-de-la-transition-client
-#   - docker rm  acteurs-de-la-transition-client
-#    - cd /home/debian/docker/acteurs-de-la-transition/
-#    - docker-compose up -d
-# - docker start gitlab_gitlab_1
-#  only:
-#    - master
+variables:
+  SESSION_SECRET: "$SESSION_SECRET"
+  EMAIL_USER: "$EMAIL_USER"
+  EMAIL_PORT: "$EMAIL_PORT"
+  EMAIL_PASSWORD: "$EMAIL_PASSWORD"
+  EMAIL_HOST: "$EMAIL_HOST"
+  EMAIL_FROM: "$EMAIL_FROM"
 
-#  script:
-#    - docker build --build-arg NODE_OPTIONS=--max-old-space-size=8012 --cpu-shares=100 --memory=2048m -t  acteurs-de-la-transition-client:recette .
-#    - docker stop  acteurs-de-la-transition-client-recette-1
-#    - docker rm  acteurs-de-la-transition-client-recette-1
-#    - cd /home/debian/docker/acteurs-de-la-transition-recette/
-#    - docker-compose up -d
-# - docker exec -it acteurs-de-la-transition-server npx sequelize --env production db:migrate
-#  only:
-#    - develop
+build_image:
+  script:
+    - docker build --build-arg NEXT_PUBLIC_SEO_DISABLED=$NEXT_PUBLIC_SEO_DISABLED --build-arg NEXT_PUBLIC_API_URI=$NEXT_PUBLIC_API_URI --build-arg NEXT_PUBLIC_URI=$NEXT_PUBLIC_URI --build-arg NEXT_PUBLIC_BASE_URL=$NEXT_PUBLIC_BASE_URL --cpu-shares=300 --memory=5096m  -t  acteurs-de-la-transition-client:recette .
+    - cd /home/debian/docker/acteurs-de-la-transition/
+    - docker-compose up -d
+  only:
+    - develop
+
+push_image_and_deploy:
+  script:
+    - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - docker build --build-arg NEXT_PUBLIC_SEO_DISABLED=false --build-arg NEXT_PUBLIC_API_URI=$NEXT_PUBLIC_API_URI_PROD --build-arg NEXT_PUBLIC_URI=$NEXT_PUBLIC_URI_PROD --build-arg NEXT_PUBLIC_BASE_URL=$NEXT_PUBLIC_BASE_URL_PROD --cpu-shares=300 --memory=5096m  -t  skapyo02/acteurs-de-la-transition-client:prod .
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD 
+    - docker push skapyo02/tour-alternatiba-frontend:prod
+    #- ssh -o StrictHostKeyChecking=no yoan@nausicaa.alternatiba.eu 'cd /home/docker/tour && docker pull skapyo02/tour-alternatiba-frontend:prod && docker compose up -d'
+  only:
+    - main
 
 variables:
   GIT_SSL_NO_VERIFY: '1'

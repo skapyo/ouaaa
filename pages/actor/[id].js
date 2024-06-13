@@ -1297,6 +1297,7 @@ const Actor = ({ initialData }) => {
                       </span>
                     </Grid>
                   </Grid>
+                  
                   {
             ((data && containUser(data.actor.referents)) || (user && user.role === 'admin')) && (
             <Grid container className={[styles.item]}>

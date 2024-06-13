@@ -69,6 +69,7 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: '1em',
   },
   event: {
+    width: '100%',
     paddingTop: '5em',
     paddingBottom: '5em',
     textAlign: 'center',
@@ -264,7 +265,7 @@ const LastActor = (props) => {
   }, [events]);
 
   return (
-    <Container className={[styles.event]} id={props.id}>
+    <Container   className={[styles.event]} id={props.id}>
       <Typography variant="h5" className={[styles.cardTitle]}>
         LES ÉVÉNEMENTS À VENIR
       </Typography>

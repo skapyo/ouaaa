@@ -2,13 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Head from 'next/head';
 import {
-  createTheme,
   ThemeProvider as MuiThemeProvider,
-  StyledEngineProvider,
 } from '@mui/material/styles';
 import { ThemeProvider } from 'styled-components';
 import CssBaseline from '@mui/material/CssBaseline';
-import { red } from '@mui/material/colors';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import AdapterDateFns from '@date-io/date-fns';
 import MomentUtils from '@date-io/moment';
@@ -16,79 +13,17 @@ import gql from 'graphql-tag';
 import { SessionProvider } from 'context/session/session';
 import omitTypename from 'utils/omitTypename';
 import { SnackbarProvider } from 'notistack';
+import theme from '../src/theme.ts';
+
 import './styles.css';
 import '../containers/layouts/agendaPage/DateFilter.css';
 import 'leaflet/dist/leaflet.css';
 import 'react-google-places-autocomplete/dist/index.min.css';
 import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
-import 'react-leaflet-markercluster/dist/styles.min.css';
+//import 'react-leaflet-markercluster/dist/styles.min.css';
 import 'moment/locale/fr';
 import 'leaflet.markercluster/dist/MarkerCluster.css';
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
-
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#2C367E',
-      light: '#a0a8df',
-    },
-    secondary: {
-      main: '#2C367E',
-    },
-    warning: {
-      main: '#BF083E',
-    },
-    error: {
-      main: red.A400,
-    },
-    background: {
-      default: '#fff',
-      grey: '#F6F6F6',
-    },
-    text: {
-      primary: '#3c3b37',
-    },
-    lightBox: {
-      main: '#F7F7F7',
-    },
-    shadow: {
-      main: 'rgba(10, 14, 18, .1)',
-    },
-  },
-  typography: {
-    body1: {
-      lineHeight: 1.7,
-    },
-    h1: {
-      fontSize: '4rem',
-      color: '#2C367E',
-    },
-    h2: {
-      fontSize: '1.5rem',
-      color: '#2C367E',
-    },
-    h3: {
-      fontSize: '1.5rem',
-      color: '#2C367E',
-    },
-    h4: {
-      fontSize: '1.5rem',
-      color: '#2C367E',
-    },
-    h5: {
-      color: '#2C367E',
-    },
-  },
-  transitions: {
-    easing: {
-      easeInOut: 'cubic-bezier(0.4, 0, 0.2, 1)',
-    },
-    duration: {
-      standard: 300,
-    },
-  },
-});
 
 const MyApp = (props) => {
   const { Component, pageProps, user } = props;
@@ -116,8 +51,26 @@ const MyApp = (props) => {
         src="/analytics/piwik-pro.js"
       />
       <link rel="manifest" href="/manifest.json" />
-      <link rel="apple-touch-icon" href="/icone_512.png"></link>
-      <meta name="theme-color" content="#2C367E" />
+      <link rel="icon" href="/favicon-32x32.png" sizes="32x32"></link>
+      <link rel="icon" href="/favicon-192x192.png" sizes="192x192"></link>
+      <link rel="apple-touch-icon" href="/apple-touch-icon.png"></link>
+
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Paytone+One&display=swap" />
+      <meta name="theme-color" content="#0b8253" />
+
+      <meta property="og:type" content="website" />
+      <meta property="og:title" content="OUAAA!" />
+      <meta property="og:description" content="OUAAA! : Agir pour la Transition Ecologique & Sociale en Aunis | La Rochelle" />
+      <meta property="og:site_name" content="OUAAA! : Agir pour la Transition Ecologique & Sociale en Aunis | La Rochelle" />
+      <meta property="og:url" content="https://ouaaa-transition.fr//" />
+      <meta property="og:image" content="https://ouaaa-transition.fr//apple-touch-icon.png" />
+      <meta name="twitter:url" content="https://ouaaa-transition.fr/" />
+      <meta name="twitter:title" content="OUAAA!" />
+      <meta name="twitter:description" content="OUAAA! : Agir pour la Transition Ecologique & Sociale en Aunis | La Rochelle" />
+      <meta name="twitter:image" content="https://ouaaa-transition.fr//apple-touch-icon.png" />
+      <meta name="application-name" content="OUAAA!" />
+      <meta name="apple-mobile-web-app-title" content="OUAAA! : Agir pour la Transition Ecologique & Sociale en Aunis | La Rochelle" />
+
     </Head>
     <LocalizationProvider utils={MomentUtils} dateAdapter={AdapterDateFns}>
         <MuiThemeProvider theme={theme}>

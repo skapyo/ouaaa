@@ -7,8 +7,10 @@ import Link from '../Link';
 import Moment from 'react-moment';
 import { Avatar } from '@mui/material';
 import { getImageUrl } from '../../utils/utils';
+import StyledBoxOnHover from '../animated/StyledBoxOnHover';
 import Favorite from '../../components/Favorite';
 import Image from 'next/image';
+import eventCategories from 'src/eventCategories';
 const ADD_FAVORITE = gql`
   mutation addFavoriteEvent($eventId: Int!,$userId: Int!, $favorite: Boolean!) {
     addFavoriteEvent(eventId: $eventId,userId: $userId, favorite: $favorite) 
@@ -26,20 +28,26 @@ const useStyles = makeStyles((theme) => ({
   },
   card: (props) => ({
     backgroundColor: 'white',
-    borderRadius: '10px',
-    margin: '16px 0',
-    minHeight: '106px',
-    borderLeft: `solid 12px ${props.color}`,
+
+    [theme.breakpoints.up('sm')]: {
+      minHeight: '120px',
+    },
+    [theme.breakpoints.down('md')]: {
+      minHeight: '80px',
+    },
     display: 'flex',
-    fontSize:'0.8em'
   }),
   content: {
-    width: '100%',
+    width: '93%',
+    height: '100%',
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    '& a': {
-      overflow: 'hidden',
+    [theme.breakpoints.up('sm')]: {
+      margin: '0 24px',
+    },
+    [theme.breakpoints.down('md')]: {
+      margin: '0 5px',
     },
   },
   favorite: (props) => ({
@@ -167,7 +175,8 @@ const EventCard = ({ event }) => {
   };
 
   return (
-    <div className={classes.card}>
+    <StyledBoxOnHover className={classes.card}>
+
       <div className={classes.content}>
         <Link href={`/event/${event.id}`} target="_blank" color="inherit" underline="none" width="100%">
           <div className={classes.leftContent}>
@@ -227,7 +236,7 @@ const EventCard = ({ event }) => {
       <div className={classes.favorite}>
         <Favorite event={event} />
       </div>
-    </div>
+    </StyledBoxOnHover>
   );
 };
 

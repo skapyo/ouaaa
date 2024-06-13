@@ -9,7 +9,7 @@ const StyledBoxOnHover = styled(Box)`
     duration: theme.transitions.duration.standard,
   })};
   &:hover {
-    box-shadow: 0 15px 40px ${theme.palette.shadow.main};
+  box-shadow: 0 15px 40px rgba(10, 14, 18, .1);
   }
   `}
 `;
