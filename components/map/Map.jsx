@@ -36,7 +36,7 @@ const Map = (props) => {
   const mapRef = useRef();
   const styles = useStyles();
   const [map, setMap] = useState(null);
-  let { children,position,scrollWheelZoom,classMap } = props;
+  let { children,position,scrollWheelZoom,classMap,zoom } = props;
   //debugger;
   if (typeof position === 'undefined'){
     position = [46.1085193, -0.9864794];
@@ -72,7 +72,7 @@ const Map = (props) => {
     <MapContainer
       ref={mapRef}
       center={position}
-        zoom={zoom!==undefined?zoom:11}
+      zoom={zoom!==undefined?zoom:11}
       className={classMap} 
       whenCreated={setMap}
       scrollWheelZoom={scrollWheelZoom}

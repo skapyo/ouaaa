@@ -156,93 +156,12 @@ const theme = createTheme(colorTheme, {
         },
       },
     },
-    MuiButton: {
-      variants: [
-        {
-          props: { variant: 'hoverScaled' },
-          style: {
-            backgroundColor: colorTheme.palette.green.main,
-            color: colorTheme.palette.green.contrastText,
-            fontSize: '16px',
-            padding: colorTheme.spacing(1.5, 4),
-            borderRadius: '4px',
-            textTransform: 'uppercase',
-            border: '1px solid',
-            fontWeight: 'bold',
-            textAlign: 'center',
-            display: 'block',
-            width: 'fit-content',
-            transition: '200ms ease-in-out',
-            '&:hover': {
-              background: colorTheme.palette.white.main,
-              color: colorTheme.palette.white.contrastText,
-              borderColor: colorTheme.palette.white.contrastText,
-              transform: 'scaleX(1.05) scaleY(1.05)',
-            },
-          },
-        },
-        {
-          props: { variant: 'hoverScaled', color: 'primary' },
-          style: {
-            backgroundColor: colorTheme.palette.primary.main,
-            color: colorTheme.palette.primary.contrastText,
-            '&:hover': {
-              background: colorTheme.palette.green.main,
-              color: colorTheme.palette.green.contrastText,
-              borderColor: colorTheme.palette.green.contrastText,
-            },
-          }
-        },
-        {
-          props: { variant: 'hoverScaled', color: 'secondary' },
-          style: {
-            backgroundColor: colorTheme.palette.secondary.main,
-            color: colorTheme.palette.secondary.contrastText,
-            '&:hover': {
-              background: colorTheme.palette.white.main,
-              color: colorTheme.palette.green.main,
-              borderColor: colorTheme.palette.green.main,
-            },
-          }
-        },
-        {
-          props: { variant: 'hoverScaled', color: 'tertiary' },
-          style: {
-            backgroundColor: colorTheme.palette.tertiary.main,
-            color: colorTheme.palette.tertiary.contrastText,
-            '&:hover': {
-              background: colorTheme.palette.primary.main,
-              color: colorTheme.palette.primary.contrastText,
-              borderColor: colorTheme.palette.primary.contrastText,
-            },
-          }
-        },
-        {
-          props: { variant: 'hoverScaled', color: 'greenInverted' },
-          style: {
-            backgroundColor: colorTheme.palette.white.main,
-            color: colorTheme.palette.green.main,
-            '&:hover': {
-              background: colorTheme.palette.white.main,
-              color: colorTheme.palette.white.contrastText,
-              borderColor: colorTheme.palette.white.contrastText,
-            },
-          }
-        }
-      ],
-    },
     MuiCard: {
       defaultProps: {
         square: true,
       },
       styleOverrides: {
-        root: {
-          border: '5px solid',
-          borderColor: colorTheme.palette.secondary.main,
-          backgroundColor: colorTheme.palette.secondary.main,
-          textAlign: 'center',
-          transition: 'transform 300ms ease 0ms',
-        }
+
       },
       variants: [
         {
@@ -269,7 +188,8 @@ const theme = createTheme(colorTheme, {
       styleOverrides: {
         root: {
           paddingTop: colorTheme.spacing(3),
-          paddingBottom: colorTheme.spacing(2)
+          paddingBottom: colorTheme.spacing(2),
+
         }
       }
     },

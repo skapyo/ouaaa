@@ -17,6 +17,7 @@ const useStyles = makeStyles({
     '&:hover': {
       cursor: 'pointer',
     },
+
   },
   bullet: {
     display: 'inline-block',

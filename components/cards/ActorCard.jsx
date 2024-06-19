@@ -20,6 +20,7 @@ const useStyles = makeStyles((theme, props) => ({
     minHeight: '106px',
     borderLeft: `solid 12px ${props.color}`,
     display: 'flex',
+    backgroundColor: 'white',
   }),
   content: {
     width: '93%',

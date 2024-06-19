@@ -112,13 +112,13 @@ const Appointment = (props) => {
   );
 };
 
-const FlexibleEmptySpaceAddEvent = prop() => {
+const FlexibleEmptySpaceAddEvent = (prop) => {
   const classes = useStyles();
   const router = useRouter();
 
   const handleClickAddEvent = useCallback(() => {
-    const { id } = router.query;
-    router.push(`/admin/events/add?actorId=${prop.actor.id}`);
+
+    router.push(`/admin/events/add?stageId=${prop.stage.id}`);
   }, [router]);
 
   return (
