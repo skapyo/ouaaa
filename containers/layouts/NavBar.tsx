@@ -195,8 +195,8 @@ const NavBar = () => {
                 <MenuItem component={Link} href="/account">
                   Mon compte
                 </MenuItem>
-                <MenuItem component={Link} href="/admin/stages">
-                  Espace référent
+                <MenuItem component={Link} href="/admin/actors">
+                  Espace acteur
                 </MenuItem>
                 <MenuItem onClick={signoutHandler}>Se déconnecter</MenuItem>
               </>

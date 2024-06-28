@@ -14,9 +14,9 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import StageForm, { StageFields } from 'containers/forms/StageForm';
 import StageDeletionModal from 'components/modals/StageDeletionModal';
 
-const GET_STAGE = gql`
-  query stage($stageId: String!) {
-    stage(id: $stageId) {
+const GET_ACTOR = gql`
+  query actor($actorId: String!) {
+    actor(id: $actorId) {
       id
       name
       email
@@ -52,18 +52,18 @@ const GET_STAGE = gql`
   }
 `;
 
-const EDIT_STAGE = gql`
+const EDIT_ACTOR = gql`
   mutation editStage(
-    $stageInfos: StageInfos
-    $stageId: Int!
+    $actorInfos: StageInfos
+    $actorId: Int!
     $description: String!
     $mainPictures: [InputPictureType]
     $pictures: [InputPictureType]
     $partnerPictures: [InputPictureType]
   ) {
     editStage(
-      stageInfos: $stageInfos
-      stageId: $stageId
+      actorInfos: $actorInfos
+      actorId: $actorId
       description: $description
       mainPictures: $mainPictures
       pictures: $pictures
@@ -75,9 +75,9 @@ const EDIT_STAGE = gql`
   }
 `;
 
-const DELETE_STAGE = gql`
-  mutation deleteStage($stageId: Int!, $deleteEvent: Boolean) {
-    deleteStage(stageId: $stageId, deleteEvent: $deleteEvent)
+const DELETE_ACTOR = gql`
+  mutation deleteStage($actorId: Int!, $deleteEvent: Boolean) {
+    deleteStage(actorId: $actorId, deleteEvent: $deleteEvent)
   }
 `;
 
@@ -87,27 +87,27 @@ const EditStage = () => {
   const router = useRouter();
   const { id } = router.query;
 
-  const { data: stageData, error: getError } = useQuery(GET_STAGE, {
-    variables: { stageId: id },
+  const { data: actorData, error: getError } = useQuery(GET_ACTOR, {
+    variables: { actorId: id },
     fetchPolicy: 'no-cache',
   });
-  const [editStage, { data, loading, error }] = useMutation(EDIT_STAGE);
-  const [deleteStage, { loading: deleteLoading, data: deleteData, error: deleteError }] = useMutation(DELETE_STAGE);
+  const [editStage, { data, loading, error }] = useMutation(EDIT_ACTOR);
+  const [deleteStage, { loading: deleteLoading, data: deleteData, error: deleteError }] = useMutation(DELETE_ACTOR);
 
   const [deletionModalOpen, setDeletionModalOpen] = useState(false);
 
   useGraphQLErrorDisplay(error);
 
-  // Redirect if non-existent or non-authorized stage
+  // Redirect if non-existent or non-authorized actor
   useEffect(() => {
-    if (stageData?.stage && user?.role === 'user') {
-      if (!stageData.stage.referents.map((r) => r.id).includes(user.id)) {
+    if (actorData?.actor && user?.role === 'user') {
+      if (!actorData.actor.referents.map((r) => r.id).includes(user.id)) {
         router.push('/');
       }
     } else if (getError) {
       router.push('/');
     }
-  }, [stageData, getError]);
+  }, [actorData, getError]);
 
   useEffect(() => {
     if (data && data.editStage) {
@@ -123,7 +123,7 @@ const EditStage = () => {
       enqueueSnackbar('Etape supprimée.', {
         preventDuplicate: true,
       });
-      router.push(`/admin/stages`);
+      router.push(`/admin/actors`);
     } else if (deleteError) {
       enqueueSnackbar("La suppression de l'étape a échoué.", {
         preventDuplicate: true,
@@ -134,7 +134,7 @@ const EditStage = () => {
   const handleDeletion = useCallback(() => {
     deleteStage({
       variables: {
-        stageId: parseInt(`${id}`, 10),
+        actorId: parseInt(`${id}`, 10),
         deleteEvent: true,
       },
     });
@@ -163,8 +163,8 @@ const EditStage = () => {
 
     editStage({
       variables: {
-        stageId: parseInt(id, 10),
-        stageInfos: {
+        actorId: parseInt(id, 10),
+        actorInfos: {
           name: address.city,
           email,
           address: address.address,
@@ -201,14 +201,14 @@ const EditStage = () => {
     });
   }, []);
 
-  if (!stageData?.stage) {
+  if (!actorData?.actor) {
     return null;
   }
 
-  const { stage } = stageData;
+  const { actor } = actorData;
 
-  const startedAt = new Date(parseInt(stage.startedAt, 10));
-  const endedAt = new Date(parseInt(stage.endedAt, 10));
+  const startedAt = new Date(parseInt(actor.startedAt, 10));
+  const endedAt = new Date(parseInt(actor.endedAt, 10));
 
   return (
     <AdminPageLayout authorizedRoles={['user', 'admin']}>
@@ -218,50 +218,50 @@ const EditStage = () => {
         </Typography>
         <StageForm
           showReferents
-          referentsList={user?.role === 'user' ? stage.referents : undefined}
+          referentsList={user?.role === 'user' ? actor.referents : undefined}
           disabledFields={
             user?.role === 'user' ? ['address', 'startedAt', 'endedAt', 'isExtendedStage', 'referents'] : []
           }
           defaultValues={{
             address: {
-              address: stage.address || stage.city,
-              postcode: stage.postCode,
-              city: stage.city,
-              lat: parseFloat(stage.lat),
-              lng: parseFloat(stage.lng),
+              address: actor.address || actor.city,
+              postcode: actor.postCode,
+              city: actor.city,
+              lat: parseFloat(actor.lat),
+              lng: parseFloat(actor.lng),
             },
-            email: stage.email,
+            email: actor.email,
             startedAt: startedAt.toISOString(),
             endedAt: endedAt.toISOString(),
             showHours: startedAt.getHours() !== 0 || endedAt.getHours() !== 0,
-            isExtendedStage: stage.extendStage,
-            shortDescription: stage.shortDescription,
-            description: stage.description,
-            website: stage.website,
-            volunteerAction: stage.volunteerAction,
-            volunteerForm: stage.volunteerForm,
-            mainPicture: stage.pictures
+            isExtendedStage: actor.extendStage,
+            shortDescription: actor.shortDescription,
+            description: actor.description,
+            website: actor.website,
+            volunteerAction: actor.volunteerAction,
+            volunteerForm: actor.volunteerForm,
+            mainPicture: actor.pictures
               .filter((p) => p.main && !p.partner)
               .map((p) => ({
                 id: p.id,
                 src: p.originalPicturePath,
                 deleted: false,
               })),
-            pictures: stage.pictures
+            pictures: actor.pictures
               .filter((p) => !p.main && !p.partner)
               .map((p) => ({
                 id: p.id,
                 src: p.originalPicturePath,
                 deleted: false,
               })),
-            partners: stage.pictures
+            partners: actor.pictures
               .filter((p) => !p.main && p.partner)
               .map((p) => ({
                 id: p.id,
                 src: p.originalPicturePath,
                 deleted: false,
               })),
-            referents: stage.referents.map((r) => r.id),
+            referents: actor.referents.map((r) => r.id),
           }}
           submitLabel="Mettre à jour l'étape"
           loading={loading || data?.editStage}
