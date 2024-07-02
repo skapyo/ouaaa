@@ -1627,7 +1627,7 @@ const EditActorForm = (props) => {
                 {
                   // display &&
                   IsTree(collection) && (
-                    <> sdqsdsd
+                    <> 
                     // @ts-ignore
                     <Entries initValues={initentriesWithInformation}>
                       <TreeView

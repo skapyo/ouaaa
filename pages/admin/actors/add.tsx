@@ -9,7 +9,7 @@ import { withApollo } from '../../../hoc/withApollo';
 import AdminPageLayout from '../../../containers/layouts/AdminPageLayout';
 import useGraphQLErrorDisplay from '../../../hooks/useGraphQLErrorDisplay';
 import { formatPicture, uploadPictures } from '../../../components/fields/ImageUploadField';
-import StageForm, { StageFields } from 'containers/forms/StageForm';
+import ActorForm, { StageFields } from 'containers/forms/ActorForm';
 
 const ADD_STAGE = gql`
   mutation createStage(
@@ -108,12 +108,12 @@ const AddStage = () => {
     <AdminPageLayout authorizedRoles={['admin']}>
       <Container maxWidth="md">
         <Typography color="secondary" variant="h2" textAlign="center">
-          Ajouter une étape
+          Ajouter une page acteur
         </Typography>
 
-        <StageForm
+        <ActorForm
           loading={loading || data?.createStage}
-          submitLabel="Créer l'étape"
+          submitLabel="Créer la page acteur"
           onSubmit={handleSubmit}
           defaultValues={{ showHours: true }}
         />

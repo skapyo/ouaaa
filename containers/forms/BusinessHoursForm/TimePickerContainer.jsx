@@ -53,7 +53,7 @@ export default function TimePickerContainer(props) {
   }, [selectedStartDate, selectedEndDate]);
 
   return (
-    <form className={classes.container} noValidate>
+    <div className={classes.container} noValidate>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
       <TimePicker
         margin="normal"
@@ -86,6 +86,6 @@ export default function TimePickerContainer(props) {
         renderInput={(params) => <TextField {...params} />}
       />
       </LocalizationProvider>
-    </form>
+    </div>
   );
 }

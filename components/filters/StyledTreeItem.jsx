@@ -1,5 +1,4 @@
 import React, { useCallback, useContext, useState } from 'react';
-
 import PropTypes from 'prop-types';
 import { Checkbox, TextField } from '@mui/material';
 import { TreeView, TreeItem } from '@mui/x-tree-view';
@@ -16,7 +15,6 @@ const useTreeItemStyles = makeStyles((theme) => ({
     '&:hover > $content': {
       backgroundColor: theme.palette.action.hover,
     },
-
     '&:focus > $content $label, &:hover > $content $label, &$selected > $content $label': {
       backgroundColor: 'transparent',
     },
@@ -56,7 +54,6 @@ const useTreeItemStyles = makeStyles((theme) => ({
     fontSize: '1.5em',
     flexGrow: 1,
   },
- 
   entryDescription: {
     width: '100%',
   },
@@ -87,7 +84,6 @@ function StyledTreeItem(props) {
     categoryChange,
     handleChildCheckboxChange,
     hideCheckBox,
-    checked,
     id,
     isParent,
     isForm,
@@ -99,23 +95,18 @@ function StyledTreeItem(props) {
 
   const context = useContext(ParentFilterContext);
   const entriesContext = useContext(EntriesContext);
+  const [checked, setChecked] = useState(props.checked);
+
   let isThisEntryNotInTopSEO = false;
   if (entriesContext !== undefined) {
-    isThisEntryNotInTopSEO = isForm && ((entriesContext.getList().length >=3 && entriesContext.getList().indexOf(parseInt(other.nodeId, 10)) < 0) && !checked);
-     /*console.log(
-      isThisEntryNotInTopSEO +
-        ' ' +
-        entriesContext.getList() +
-        ' ' +
-        parseInt(other.nodeId, 10)+
-        ' ' +
-        (entriesContext.getList() <=3 || (entriesContext.getList().indexOf(parseInt(other.nodeId, 10)) >= 0 && entriesContext.getList().indexOf(parseInt(other.nodeId, 10)) <= 3)),
-    ); */
+    isThisEntryNotInTopSEO = isForm && ((entriesContext.getList().length >= 3 && entriesContext.getList().indexOf(parseInt(other.nodeId, 10)) < 0) && !checked);
   }
 
   const handleCheckboxChange = (event) => {
     const checkStatus = event.target.checked;
+    setChecked(checkStatus);
     const index = parseInt(id, 10);
+
     if (isParent) {
       context.handleParentCheckboxChange(checkStatus);
       context.checkHandleToggle(event);
@@ -124,11 +115,9 @@ function StyledTreeItem(props) {
       if (entriesContext) {
         let isTopSEO;
         if (checkStatus) {
-          isTopSEO = !entriesContext.addCheckedCheckbox(
-            parseInt(other.nodeId, 10),
-          );
+          isTopSEO = !entriesContext.addCheckedCheckbox(parseInt(other.nodeId, 10));
         } else {
-          entriesContext.removeCheckedCheckbox(parseInt(other.nodeId), 10);
+          entriesContext.removeCheckedCheckbox(parseInt(other.nodeId, 10));
         }
         eventEntry.target.entryId = other.nodeId;
         eventEntry.target.topSEO = isTopSEO;
@@ -142,13 +131,12 @@ function StyledTreeItem(props) {
     }
   };
 
-  const handleClickItem = useCallback(evt => {
+  const handleClickItem = useCallback((evt) => {
     if (!isParent || !hasSubEntries) {
       evt.stopPropagation();
-      if(!isForm ){
+      if (!isForm) {
         handleCheckboxChange({ target: { checked: !checked } });
       }
-     
     }
   }, [checked, handleCheckboxChange, isParent]);
 
@@ -166,30 +154,29 @@ function StyledTreeItem(props) {
           <div className={classes.labelRoot} onClick={handleClickItem}>
             {icon && (
               <>
-                <span className={classes.entriesIcon} style={{ '-webkit-mask': `url('/icons/${icon}.svg') center center / 28px no-repeat`, backgroundColor: `${color}` }} />
+                <span className={classes.entriesIcon} style={{ WebkitMask: `url('/icons/${icon}.svg') center center / 28px no-repeat`, backgroundColor: `${color}` }} />
               </>
             )}
-             {hasSubEntries && isForm &&  (
+            {hasSubEntries && isForm && (
               <>
-                 <Typography variant="body2" className={classes.labelTextParent}   style={{  color: `${color}` }} >
+                <Typography variant="body2" className={classes.labelTextParent} style={{ color: `${color}` }}>
                   {labelText}
                 </Typography>
               </>
             )}
-             {!(hasSubEntries && isForm) && (
+            {!(hasSubEntries && isForm) && (
               <>
-                <Typography variant="body2" className={classes.labelText} style={{  color: `${color}` }}  >
+                <Typography variant="body2" className={classes.labelText} style={{ color: `${color}` }}>
                   {labelText}
                 </Typography>
               </>
             )}
-           
             {description && (
               <Tooltip title={description}>
                 <InfoIcon />
               </Tooltip>
             )}
-            {!hideCheckBox && (!isThisEntryNotInTopSEO)&& (
+            {!hideCheckBox && (!isThisEntryNotInTopSEO) && (
               <Checkbox
                 edge="start"
                 tabIndex={-1}
@@ -230,8 +217,6 @@ function StyledTreeItem(props) {
         label: classes.label,
       }}
       {...other}
-
-      
     />
   );
 }
@@ -239,15 +224,15 @@ function StyledTreeItem(props) {
 StyledTreeItem.propTypes = {
   bgColor: PropTypes.string,
   color: PropTypes.string,
-  checked: PropTypes.boolean,
+  checked: PropTypes.bool,
   labelText: PropTypes.string.isRequired,
   categoryChange: PropTypes.func,
   handleChildCheckboxChange: PropTypes.func,
-  hideCheckBox: PropTypes.boolean,
-  isParent: PropTypes.boolean,
+  hideCheckBox: PropTypes.bool,
+  isParent: PropTypes.bool,
   id: PropTypes.string,
-  isForm: PropTypes.boolean,
-  hasSubEntries: PropTypes.boolean,
+  isForm: PropTypes.bool,
+  hasSubEntries: PropTypes.bool,
   icon: PropTypes.string,
   description: PropTypes.string,
 };

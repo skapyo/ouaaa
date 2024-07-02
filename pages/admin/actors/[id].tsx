@@ -11,7 +11,7 @@ import useGraphQLErrorDisplay from '../../../hooks/useGraphQLErrorDisplay';
 import { formatPicture, uploadPictures } from '../../../components/fields/ImageUploadField';
 import { useSessionState } from 'context/session/session';
 import LoadingButton from '@mui/lab/LoadingButton';
-import StageForm, { StageFields } from 'containers/forms/StageForm';
+import ActorForm, { StageFields } from 'containers/forms/ActorForm';
 import StageDeletionModal from 'components/modals/StageDeletionModal';
 
 const GET_ACTOR = gql`
@@ -216,7 +216,7 @@ const EditStage = () => {
         <Typography color="secondary" variant="h2" textAlign="center">
           Editer une étape
         </Typography>
-        <StageForm
+        <ActorForm
           showReferents
           referentsList={user?.role === 'user' ? actor.referents : undefined}
           disabledFields={

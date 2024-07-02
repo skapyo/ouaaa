@@ -14,7 +14,8 @@ import ListItemText from '@mui/material/ListItemText';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import TreeView from '@mui/lab/TreeView';
+import { TreeView } from '@mui/x-tree-view/TreeView';
+import { TreeItem } from '@mui/x-tree-view/TreeItem';
 import Avatar from '@mui/material/Avatar';
 import ClassicButton from 'components/buttons/ClassicButton';
 import Fab from '@mui/material/Fab';
@@ -1423,65 +1424,7 @@ query actorsAdmin($userId: String!) {
         <SchedulerContainer onChange={setOpeningHours} />
         
         <br />
-        {/*
-        <Typography variant="body1" color="primary" className={styles.label}>
-          CONTACT PRIVE pour les échanges avec <i>OUAAA!</i>
-        </Typography>
-        <FormControl component="fieldset">
-          <RadioGroup
-            row
-            aria-label="gender"
-            name="contact"
-            onChange={radioChangeHandler}
-          >
-            <FormControlLabel
-              value="me"
-              control={<Radio />}
-              label="C'est moi "
-            />
-            <FormControlLabel
-              value="other"
-              control={<Radio />}
-              label={
-                <>
-                  c’est un autre (avec un compte <i>OUAAA!</i> existant)
-                </>
-              }
-            />
-          </RadioGroup>
-          <p>
-            {showOtherContact ? (
-              <Autocomplete
-                id="combo-box-demo"
-                options={dataUsers.users}
-                // @ts-ignore
-                getOptionLabel={(option) =>
-                  `${option.surname} ${option.lastname}`
-                }
-                onChange={autocompleteHandler}
-                // @ts-ignore
-                onInput={inputChangeHandler}
-                open={showOtherContactList}
-                style={{ width: 300 }}
-                // eslint-disable-next-line react/jsx-props-no-spreading
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Contact OUAAA!"
-                    variant="outlined"
-                    placeholder="Tapez les 3 premières lettre du contact"
-                  />
-                )}
-                noOptionsText="Pas de compte associé"
-                clearText="Effacer"
-                closeText="Fermer"
-              />
-            ) : (
-              ''
-            )}
-          </p>
-        </FormControl>
-              */}
+
       
 
       
