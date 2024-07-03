@@ -9,95 +9,118 @@ import { withApollo } from '../../../hoc/withApollo';
 import AdminPageLayout from '../../../containers/layouts/AdminPageLayout';
 import useGraphQLErrorDisplay from '../../../hooks/useGraphQLErrorDisplay';
 import { formatPicture, uploadPictures } from '../../../components/fields/ImageUploadField';
-import ActorForm, { StageFields } from 'containers/forms/ActorForm';
+import ActorForm, { ActorFields } from 'containers/forms/ActorForm';
+import { useSessionDispatch, useSessionState } from 'context/session/session';
 
 const ADD_STAGE = gql`
-  mutation createStage(
-    $stageInfos: StageInfos
+  mutation createActor(
+    $actorInfos: ActorInfos
+    $userId: Int!
     $description: String!
+    $volunteerDescription: String
+    $logoPictures: [InputPictureType]
     $mainPictures: [InputPictureType]
-    $partnerPictures: [InputPictureType]
     $pictures: [InputPictureType]
+    $openingHours: [InputOpeningHour]
   ) {
-    createStage(
-      stageInfos: $stageInfos
+    createActor(
+      actorInfos: $actorInfos
+      userId: $userId
       description: $description
-      mainPictures: $mainPictures
+      volunteerDescription: $volunteerDescription
       pictures: $pictures
-      partnerPictures: $partnerPictures
+      mainPictures: $mainPictures
+      logoPictures: $logoPictures
+      openingHours: $openingHours
     ) {
       id
       name
+      url
     }
   }
 `;
 
-const AddStage = () => {
+const AddActor = () => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
-  const [addStage, { data, loading, error }] = useMutation(ADD_STAGE);
+  const user = useSessionState();
+  const [addActor, { data, loading, error }] = useMutation(ADD_STAGE);
 
   useGraphQLErrorDisplay(error);
   useEffect(() => {
     if (data) {
-      enqueueSnackbar('Etape créée avec succès.', {
+      enqueueSnackbar('Page acteur créée avec succès.', {
         preventDuplicate: true,
       });
-      router.push(`/etape/${data.createStage.name}`);
+      router.push(`/acteur/${data.createActor.url}`);
     }
   }, [data]);
 
-  const handleSubmit: SubmitHandler<StageFields> = useCallback(async (formValues) => {
+  const handleSubmit: SubmitHandler<ActorFields> = useCallback(async (formValues) => {
     const {
       address,
       email,
+      phone,
       shortDescription,
       description,
-      startedAt,
-      endedAt,
-      isExtendedStage,
       mainPicture,
       website,
-      volunteerAction,
-      volunteerForm,
+      socialNetwork,
+      activity,
+      entries,
+      entriesWithInformation,
+      volunteerDescription,
+      siren,
+      enableOpenData,
+      memberOf,
+      referencingActor,
+      removeReferencingActor,
+      logoPicture,
       pictures,
-      partners,
     } = formValues;
 
-    await uploadPictures([...mainPicture, ...pictures, ...partners]);
+    debugger;
+    await uploadPictures([ ...logoPicture,...mainPicture, ...pictures,]);
 
-    addStage({
+    addActor({
       variables: {
-        stageInfos: {
+        actorInfos: {
           name: address.city,
           email,
+          phone,
           address: address.address,
           postCode: address.postcode,
           city: address.city,
           shortDescription,
           lat: address.lat,
           lng: address.lng,
-          startedAt,
+          activity,
           website,
-          volunteerAction,
-          volunteerForm,
-          endedAt,
-          extendStage: isExtendedStage,
+          socialNetwork,
+          entries,
+          entriesWithInformation,
+          volunteerDescription,
+          siren,
+          enableOpenData,
+          memberOf,
+          referencingActor,
+          removeReferencingActor
         },
+        userId: parseInt(user.id),
         description,
         mainPictures: mainPicture.map((picture) => ({
           main: true,
-          partner: false,
+          logo: false,
           ...formatPicture(picture),
         })),
         pictures: pictures.map((picture) => ({
           main: false,
-          partner: false,
+          logo: false,
           ...formatPicture(picture),
         })),
-        partnerPictures: partners.map((picture) => ({
+        logoPictures: logoPicture.map((picture) => ({
+          logo: true,
           main: false,
-          partner: true,
           ...formatPicture(picture),
         })),
       },
@@ -112,14 +135,14 @@ const AddStage = () => {
         </Typography>
 
         <ActorForm
-          loading={loading || data?.createStage}
+          loading={loading || data?.createActor}
           submitLabel="Créer la page acteur"
           onSubmit={handleSubmit}
-          defaultValues={{ showHours: true }}
+          defaultValues={{ }}
         />
       </Container>
     </AdminPageLayout>
   );
 };
 
-export default withApollo()(AddStage);
+export default withApollo()(AddActor);

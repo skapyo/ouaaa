@@ -954,7 +954,7 @@ query actorsAdmin($userId: String!) {
               return (
                 <Typography>
                   {/* @ts-ignore */}
-                  <Link href={`/actorAdmin/actor/${actor.id}`}>
+                  <Link href={`/admin/actors/${actor.id}`}>
                     {actor.name}
                   </Link>{' '}
                 </Typography>

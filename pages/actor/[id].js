@@ -1747,7 +1747,7 @@ const Actor = ({ initialData }) => {
           </Container>
           {
             ((data && containUser(data.actor.referents)) || (user && user.role === 'admin')) && (
-              <Link href={`/actorAdmin/actor/${id}`}>
+              <Link href={`/admin/actors/${id}`}>
                 <Fab className={styles.fab} aria-label="edit">
                   <EditIcon />
                 </Fab>

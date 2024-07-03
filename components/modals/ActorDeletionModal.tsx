@@ -7,17 +7,17 @@ type Props = {
   onSubmit: () => void;
 };
 
-const StageDeletionModal: React.FC<Props> = ({ open, onClose, onSubmit }) => (
+const ActorDeletionModal: React.FC<Props> = ({ open, onClose, onSubmit }) => (
   <Dialog
     open={open}
     onClose={onClose}
     aria-labelledby="alert-dialog-title"
     aria-describedby="alert-dialog-description"
   >
-    <DialogTitle id="alert-dialog-title">Êtes-vous sûr(e) de vouloir supprimer cette étape ?</DialogTitle>
+    <DialogTitle id="alert-dialog-title">Êtes-vous sûr(e) de vouloir supprimer cette page acteur ?</DialogTitle>
     <DialogContent>
       <DialogContentText id="alert-dialog-description">
-      Une fois supprimée, cette étape ainsi que ses activités associées seront définitivement supprimés
+      Une fois supprimée, cette page acteur ainsi que ses événements associées seront définitivement supprimés
       </DialogContentText>
     </DialogContent>
     <DialogActions>
@@ -31,4 +31,4 @@ const StageDeletionModal: React.FC<Props> = ({ open, onClose, onSubmit }) => (
   </Dialog>
 );
 
-export default StageDeletionModal;
+export default ActorDeletionModal;

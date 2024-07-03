@@ -466,7 +466,7 @@ const ActorAdminPage = () => {
       width: 150,
       editable: false,
       renderCell: (params) =>
-      <Link href={`/actorAdmin/actor/${params.row.id}`}>
+      <Link href={`/admin/actors/${params.row.id}`}>
                         <Edit />
                       </Link>,
     },

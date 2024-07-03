@@ -32,10 +32,14 @@ function CustomRadioGroup(props) {
     //  formChangeHandler(event);
     const eventModified = event;
     eventModified.target.oldValueToRemove = radioGroupContect.getCurrentValue();
-    formChangeHandler(event);
+    if(formChangeHandler){
+      formChangeHandler(event);
+    }
+  
     radioGroupContect.setCurrentValue(eventModified.target.value);
   };
   return (
+    
     <FormControl component="fieldset">
       <RadioGroup
         row

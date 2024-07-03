@@ -85,18 +85,36 @@ const GET_COLLECTIONS = gql`
     }
   }
 `;
+export type EntriesWithInformation = {
+    entryId: number
+    linkDescription: string
+    topSEO: boolean
+};
+
 export type ActorFields = {
-  address: LocationType;
-  email: string;
-  startedAt: string | null;
-  endedAt: string | null;
-  showHours: boolean;
-  isExtendedStage: boolean;
-  shortDescription: string;
-  description: string;
-  website: string;
-  volunteerAction: 'email' | 'externForm' | 'internForm';
-  volunteerForm: string;
+  email: String
+  phone: String
+  address: String
+  postCode: String
+  city: String
+  website: String
+  socialNetwork: String
+  activity: String
+  description: String
+  lat: String
+  lng: String
+  entries: [String]
+  entriesWithInformation: [EntriesWithInformation]
+  shortDescription: String
+  contactId: String
+  volunteerDescription: String,
+  siren: String
+  hasVideoVouaaar: Boolean
+  enableOpenData: Boolean
+  memberOf: [String]
+  referencingActor: String
+  removeReferencingActor: Boolean
+  logoPicture: FileType[];
   mainPicture: FileType[];
   pictures: FileType[];
   partners: FileType[];
@@ -309,7 +327,9 @@ const ActorForm = ({
             label="Réseau social"
           />  
 
-          <UrlInputField name="website" label="Site Internet" />
+          <UrlInputField
+           name="website"
+            label="Site Internet" />
 
           <TextInputField
             name="siren"
@@ -343,25 +363,11 @@ const ActorForm = ({
                   {
                     // display &&
                     !IsTree(collection) && !collection.multipleSelection && (
-                      <FormControl component="fieldset">
-                        <RadioGroup
-                          row
-                          aria-label="entries"
-                          name="entries"
-                        >
-                          {collection.entries &&
-                            collection.entries.map((entry) => {
-                              return (
-                          
-                                <FormControlLabel
-                                  value={entry.id}
-                                  control={<Radio />}
-                                  label={entry.label}
-                                />
-                              );
-                            })}
-                        </RadioGroup>
-                      </FormControl>
+                      <RadioField
+                      name="entries"
+                      label={collection.label}
+                      options={collection.entries && collection.entries.map(entry => ({ value: entry.id, label: entry.label }))}
+                      row={true} />
                     )
                   }
                 </div>
@@ -401,24 +407,10 @@ const ActorForm = ({
                   {
                     // display &&
                     !IsTree(collection) && !collection.multipleSelection && (
-                      <FormControl component="fieldset">
-                        <RadioGroup
-                          row
-                          aria-label="entries"
-                          name="entries"
-                        >
-                          {collection.entries &&
-                            collection.entries.map((entry) => {
-                              return (
-                                <FormControlLabel
-                                  value={entry.id}
-                                  control={<Radio />}
-                                  label={entry.label}
-                                />
-                              );
-                            })}
-                        </RadioGroup>
-                      </FormControl>
+                      <RadioField
+                      name="entries"
+                      options={collection.entries && collection.entries.map(entry => ({ value: entry.id, label: entry.label }))}
+                      row={true}/>
                     )
                   }
                 </div>
@@ -555,7 +547,13 @@ const ActorForm = ({
           })
         }
 
-
+<ImageUploadField
+            name="logoPicture"
+            label="Logo"
+            filesLimit={1}
+            dropzoneText="Déposez ici votre Logo principale au format jpg et de poids inférieur à 4Mo"
+            sx={{ marginTop: 6 }}
+          />
           <ImageUploadField
             name="mainPicture"
             label="Photo principale"
@@ -631,36 +629,29 @@ const ActorForm = ({
                   {
                     // display &&
                     !IsTree(collection) && collection.multipleSelection && (
-                      <List>
+                      <Stack direction={{ xs: 'column', md: 'column' }} spacing={2} justifyContent="center">
                         {collection.entries &&
                           collection.entries.map((entry) => {
                             return (
-                              <ListItem key={entry.id} role={undefined} dense>
-                                {/* @ts-ignore */}
-                                <Checkbox
-                                  edge="start"
-                                  tabIndex={-1}
-                                  disableRipple
+                              <CheckboxField
                                   name="entries"
+                                  label={entry.label}
                                   value={entry.id}
-                                  onClick={(e) => e.stopPropagation()}
                                 />
-                                <ListItemText primary={entry.label} />
-                               
-                              </ListItem>
                             );
                           })}
-                      </List>
+                      </Stack>
                     )
                   }
                   {
                     // display &&
                     !IsTree(collection) && !collection.multipleSelection && (
-                      <RadioGroupForContext initValue={' '}>
-                        <CustomRadioGroup
-                          entries={collection.entries}
-                        />
-                      </RadioGroupForContext>
+                      <RadioField
+                      name="entries"
+                      label={collection.label}
+                      options={collection.entries && collection.entries.map(entry => ({ value: entry.id, label: entry.label }))}
+                      row={true}
+                    />
                     )
                   }
                 </div>
@@ -682,22 +673,9 @@ const ActorForm = ({
 
 
         <br />
-          {
-            <AutocompleteField
-              name="referents"
-              label="Référent·es associé·es à l’acteur"
-              multiple
-              options={(data?.users || referentsList || []).map((u) => ({
-                id: u.id,
-                label: `${u.surname} ${u.lastname}`,
-              }))}
-              disabled={disabledFields?.includes('referents')}
-            />
-          }
-
 {
             <AutocompleteField
-              name="referents"
+              name="memberOf"
               label="Fait partie du collectif (Acteur existant sur OUAAA!)"
               multiple
               options={( datactors?.actors || []).map((u) => ({

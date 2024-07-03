@@ -4,7 +4,7 @@ import { RegisterOptions, useController, useFormContext } from 'react-hook-form'
 
 type Props = {
   name: string;
-  label: string;
+  label?: string;
   options: { value: string; label: string }[];
   rules?: RegisterOptions;
   helperText?: string;
