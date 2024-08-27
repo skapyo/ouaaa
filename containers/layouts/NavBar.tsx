@@ -13,12 +13,12 @@ import {
   Typography,
   IconButton,
   Breakpoint,
+  Divider,
 } from '@mui/material';
 import { useSessionDispatch, useSessionState } from 'context/session/session';
 import { useMutation } from '@apollo/client';
 import gql from 'graphql-tag';
 import { withApollo } from 'hoc/withApollo';
-import Divider from '@mui/material/Divider';
 import Person2Icon from '@mui/icons-material/Person2';
 import MenuIcon from '@mui/icons-material/Menu';
 import Link from 'next/link';
@@ -33,7 +33,6 @@ const CustomToolbar = styled(Toolbar)(({ theme }) => ({
     padding: '15px 60px',
   },
 }));
-
 
 const MenuButton = styled(Button)<ButtonProps>(({ theme, variant }) => ({
   textTransform: 'uppercase',
@@ -51,7 +50,6 @@ const MenuButton = styled(Button)<ButtonProps>(({ theme, variant }) => ({
   }),
 }));
 
-
 const SIGNOUT = gql`
   mutation logout {
     logout
@@ -59,10 +57,12 @@ const SIGNOUT = gql`
 `;
 
 const NavBar = () => {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [userMenuAnchorEl, setUserMenuAnchorEl] = useState<null | HTMLElement>(null);
+  const [resourcesMenuAnchorEl, setResourcesMenuAnchorEl] = useState<null | HTMLElement>(null);
   const user = useSessionState();
   const sessionDispatch = useSessionDispatch();
   const [signout, { data }] = useMutation(SIGNOUT);
+
   useEffect(() => {
     if (data?.logout) {
       sessionDispatch({
@@ -71,139 +71,197 @@ const NavBar = () => {
     }
   }, [data, sessionDispatch]);
 
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
+  const handleUserMenuClick = (event: React.MouseEvent<HTMLElement>) => {
+    setUserMenuAnchorEl(event.currentTarget);
   };
 
-  const handleClose = () => {
-    setAnchorEl(null);
+  const handleUserMenuClose = () => {
+    setUserMenuAnchorEl(null);
+  };
+
+  const handleResourcesMenuClick = (event: React.MouseEvent<HTMLElement>) => {
+    setResourcesMenuAnchorEl(event.currentTarget);
+  };
+
+  const handleResourcesMenuClose = () => {
+    setResourcesMenuAnchorEl(null);
   };
 
   const signoutHandler = useCallback(() => {
     signout();
-    handleClose();
+    handleUserMenuClose();
   }, [signout]);
 
-  const open = Boolean(anchorEl);
+  const userMenuOpen = Boolean(userMenuAnchorEl);
+  const resourcesMenuOpen = Boolean(resourcesMenuAnchorEl);
 
-  const items: { label: string; link: string; hideCondition?: boolean }[] = [
+  const items: { label: string; link?: string; hideCondition?: boolean; submenu?: { label: string; link: string }[] }[] = [
     { label: "CARTE DES ACTEURS", link: '/carte' },
     { label: "AGENDA DES ACTIONS", link: '/agenda' },
-    { label: 'RESSOURCES', link: '/en-savoir-plus' },
     {
-      label: 'Actualités',
-      link: '/actualites',
- },
-];
- /*
- <MenuItem component={Link} href="/news">
- Articles
-</MenuItem>
-<Divider />
-<MenuItem component={Link} href="/news?tag=ouaaa">
- Articles OUAAA
-</MenuItem>
-<MenuItem component={Link} href="/video">
- Vidéo Acteurs à VOUAAAR!
-</MenuItem>
-{    <MenuItem component={Link} href="/recettes">
- Recettes
-</MenuItem>}
+      label: 'RESSOURCES',
+      submenu: [
+        { label: "Articles", link: '/news' },
+        { label: "Articles OUAAA", link: '/news?tag=ouaaa' },
+        { label: "Vidéo Acteurs à VOUAAAR!", link: '/video' },
+        { label: "Recettes", link: '/recettes' },
+      ],
+    },
+  ];
 
-  ];*/
-  
   const breakpoint: Breakpoint = 'lg';
 
-  
   return (
     <AppBar position="sticky" sx={{ position: { [breakpoint]: 'static' } }} elevation={0}>
-    <CustomToolbar>
-    <Link href="/">
-      <Box component="img" src="/logo_header.png" alt="OUAAA! : Agir pour la Transition Ecologique & Sociale en Aunis | La Rochelle" sx={{ height: { xs: '50px', sm: '90px' } }} />
-    </Link>
-          <Box sx={{ flexGrow: 1 }} />
-          <Stack direction="row" spacing={2} sx={{ display: { xs: 'none', [breakpoint]: 'flex' } }}>
-            {items.map(
-              (item) =>
-                !item.hideCondition && (
-                  <MenuButton key={item.label} variant="text" component={Link} href={item.link}>
+      <CustomToolbar>
+        <Link href="/">
+          <Box component="img" src="/logo_header.png" alt="OUAAA! : Agir pour la Transition Ecologique & Sociale en Aunis | La Rochelle" sx={{ height: { xs: '50px', sm: '90px' } }} />
+        </Link>
+        <Box sx={{ flexGrow: 1 }} />
+        <Stack direction="row" spacing={2} sx={{ display: { xs: 'none', [breakpoint]: 'flex' } }}>
+          {items.map((item) =>
+            !item.hideCondition && (
+              <React.Fragment key={item.label}>
+                {/* Main menu button or text */}
+                {item.link ? (
+                  <MenuButton variant="text" component={Link} href={item.link}>
                     {item.label}
                   </MenuButton>
-                ),
-            )}
-            {user ? (
-              <Stack direction="row" onClick={handleClick} sx={{ cursor: 'pointer' }}>
-                <Avatar sx={{ mx: 1, mt: '5px' }} aria-controls="userMenu" aria-haspopup="true" />
-                <Typography sx={{ fontSize: '0.9em' }}>
-                  {user.surname}
-                  <br />
-                  {user.lastname}
-                </Typography>
-              </Stack>
-            ) : (
-              <MenuButton variant="contained" disableElevation component={Link} href="/signin">
-                <Person2Icon />
-              </MenuButton>
-            )}
-             </Stack>
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            onClick={handleClick}
-            sx={{ display: { [breakpoint]: 'none' } }}
-          >
-            <MenuIcon />
-          </IconButton>
-
-          <Menu
-            id="userMenu"
-            open={Boolean(anchorEl)}
-            anchorEl={anchorEl}
-            onClose={handleClose}
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'right',
-            }}
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-            sx={{ '& .MuiMenu-paper': { marginTop: 2 } }}
-          >
-            {items.map(
-              (item) =>
-                !item.hideCondition && (
-                  <MenuItem
-                    key={item.label}
-                    sx={{ display: { [breakpoint]: 'none' } }}
-                    component={Link}
-                    href={item.link}
-                  >
+                ) : (
+                  <MenuButton variant="text" onClick={handleResourcesMenuClick}>
                     {item.label}
-                  </MenuItem>
-                ),
-            )}
-            <Divider sx={{ display: { [breakpoint]: 'none' } }} />
-            {!user && (
-              <MenuItem component={Link} href="/signin">
-                Se connecter
+                  </MenuButton>
+                )}
+
+                {/* Submenu handling for RESSOURCES */}
+                {item.submenu && (
+                  <Menu
+                    id="resourcesMenu"
+                    open={resourcesMenuOpen}
+                    anchorEl={resourcesMenuAnchorEl}
+                    onClose={handleResourcesMenuClose}
+                    anchorOrigin={{
+                      vertical: 'bottom',
+                      horizontal: 'right',
+                    }}
+                    transformOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right',
+                    }}
+                  >
+                    {item.submenu.map((subItem) => (
+                      <MenuItem key={subItem.label} component={Link} href={subItem.link} onClick={handleResourcesMenuClose}>
+                        {subItem.label}
+                      </MenuItem>
+                    ))}
+                  </Menu>
+                )}
+              </React.Fragment>
+            ),
+          )}
+          {user ? (
+            <Stack direction="row" onClick={handleUserMenuClick} sx={{ cursor: 'pointer' }}>
+              <Avatar sx={{ mx: 1, mt: '5px' }} aria-controls="userMenu" aria-haspopup="true" />
+              <Typography sx={{ fontSize: '0.9em' }}>
+                {user.surname}
+                <br />
+                {user.lastname}
+              </Typography>
+            </Stack>
+          ) : (
+            <MenuButton variant="contained" disableElevation component={Link} href="/signin">
+              <Person2Icon />
+            </MenuButton>
+          )}
+        </Stack>
+        <IconButton
+          edge="start"
+          color="inherit"
+          aria-label="menu"
+          onClick={handleUserMenuClick}
+          sx={{ display: { [breakpoint]: 'none' } }}
+        >
+          <MenuIcon />
+        </IconButton>
+
+        <Menu
+          id="userMenu"
+          open={userMenuOpen}
+          anchorEl={userMenuAnchorEl}
+          onClose={handleUserMenuClose}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          sx={{ '& .MuiMenu-paper': { marginTop: 2 } }}
+        >
+          {items.map(
+            (item) =>
+              !item.hideCondition && (
+                <React.Fragment key={item.label}>
+                  {/* Main menu item */}
+                  {item.link ? (
+                    <MenuItem
+                      sx={{ display: { [breakpoint]: 'none' } }}
+                      component={Link}
+                      href={item.link}
+                    >
+                      {item.label}
+                    </MenuItem>
+                  ) : (
+                    <Typography
+                      sx={{
+                        display: { [breakpoint]: 'none' },
+                        padding: '10px 16px',
+                        fontWeight: 'bold',
+                      }}
+                    >
+                      {item.label}
+                    </Typography>
+                  )}
+                  {/* Submenu items */}
+                  {item.submenu && (
+                    <>
+                      <Divider sx={{ display: { [breakpoint]: 'none' } }} />
+                      {item.submenu.map((subItem) => (
+                        <MenuItem
+                          key={subItem.label}
+                          sx={{ display: { [breakpoint]: 'none' } }}
+                          component={Link}
+                          href={subItem.link}
+                        >
+                          {subItem.label}
+                        </MenuItem>
+                      ))}
+                    </>
+                  )}
+                </React.Fragment>
+              ),
+          )}
+          <Divider sx={{ display: { [breakpoint]: 'none' } }} />
+          {!user && (
+            <MenuItem component={Link} href="/signin">
+              Se connecter
+            </MenuItem>
+          )}
+          {user && (
+            <>
+              <MenuItem component={Link} href="/account">
+                Mon compte
               </MenuItem>
-            )}
-            {user && (
-              <>
-                <MenuItem component={Link} href="/account">
-                  Mon compte
-                </MenuItem>
-                <MenuItem component={Link} href="/admin/actors">
-                  Espace acteur
-                </MenuItem>
-                <MenuItem onClick={signoutHandler}>Se déconnecter</MenuItem>
-              </>
-            )}
-          </Menu>
-        </CustomToolbar>
-      </AppBar>
+              <MenuItem component={Link} href="/admin/actors">
+                Espace acteur
+              </MenuItem>
+              <MenuItem onClick={signoutHandler}>Se déconnecter</MenuItem>
+            </>
+          )}
+        </Menu>
+      </CustomToolbar>
+    </AppBar>
   );
 };
 

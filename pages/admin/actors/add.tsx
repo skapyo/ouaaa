@@ -58,6 +58,7 @@ const AddActor = () => {
 
   const handleSubmit: SubmitHandler<ActorFields> = useCallback(async (formValues) => {
     const {
+      name,
       address,
       email,
       phone,
@@ -85,7 +86,7 @@ const AddActor = () => {
     addActor({
       variables: {
         actorInfos: {
-          name: address.city,
+          name,
           email,
           phone,
           address: address.address,

@@ -1,0 +1,52 @@
+.container figure {
+  position: relative;
+}
+
+.container figure figcaption {
+  position: absolute;
+  bottom: 13px;
+  text-align: center;
+  background: linear-gradient(0deg,rgba(0,0,0,.7),rgba(0,0,0,.3) 70%,transparent);
+  color: white;
+  font-family: "gill sans", Arial, sans-serif;
+  font-style: italic;
+  font-size: 13px;
+  width: calc(100% - 10px);
+  left: 5px;
+}
+
+.container img {
+  height: auto;
+  width: 100%;
+  border: 5px solid;
+  border-color: #2D529E;
+}
+
+.container :global(.image) {
+  margin: auto;
+}
+
+.container :global(.image-style-side) {
+  float: right;
+  margin-right: 0;
+}
+
+.container :global(.image-style-align-left) {
+  float: left;
+  margin: 40px;
+  margin-left: 0;
+}
+
+.container :global(.image-style-align-right) {
+  float: right;
+  margin: 40px;
+  margin-right: 0;
+}
+
+.container :global(.image-style-block-align-left) {
+  margin-left: 0;
+}
+
+.container :global(.image-style-block-align-right) {
+  margin-right: 0;
+}

@@ -11,7 +11,7 @@ import AdminPageLayout from '../../../containers/layouts/AdminPageLayout';
 import useGraphQLErrorDisplay from '../../../hooks/useGraphQLErrorDisplay';
 import { useSessionState } from 'context/session/session';
 import { AddCircleOutline } from '@mui/icons-material';
-import StageDeletionModal from 'components/modals/StageDeletionModal';
+import ActorDeletionModal from 'components/modals/ActorDeletionModal';
 import ZoomInIcon from '@mui/icons-material/ZoomIn';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -54,8 +54,8 @@ const VALIDATE_ACTOR = gql`
   }
 `;
 const DELETE_ACTOR = gql`
-  mutation deleteStage($actorId: Int!, $deleteEvent: Boolean) {
-    deleteStage(actorId: $actorId, deleteEvent: $deleteEvent)
+  mutation deleteActor($actorId: Int!, $deleteEvent: Boolean) {
+    deleteActor(actorId: $actorId, deleteEvent: $deleteEvent)
   }
 `;
 
@@ -64,15 +64,15 @@ const ActorsAdminPage = () => {
   const user = useSessionState();
 
   const { data, error: getError, refetch } = useQuery(GET_ACTORS, { variables: { canAdmin: true } });
-  const [deleteStage, { loading: deleteLoading, data: deleteData, error: deleteError }] = useMutation(DELETE_ACTOR);
+  const [deleteActor, { loading: deleteLoading, data: deleteData, error: deleteError }] = useMutation(DELETE_ACTOR);
   const [volunteersActor, setVolunteersActor] = useState(null);
   const [openModal, setOpenModal] = useState(false);
-  const [deletionPendingStageId, setDeletionPendingStageId] = useState<null | string>(null);
+  const [deletionPendingActorId, setDeletionPendingActorId] = useState<null | string>(null);
 
   useGraphQLErrorDisplay(getError);
 
   useEffect(() => {
-    if (!deleteLoading && deleteData?.deleteStage) {
+    if (!deleteLoading && deleteData?.deleteActor) {
       refetch();
       enqueueSnackbar('Etape supprimée.', {
         preventDuplicate: true,
@@ -85,16 +85,16 @@ const ActorsAdminPage = () => {
   }, [deleteData, deleteError, deleteLoading]);
 
   const handleDeletion = useCallback(() => {
-    if (deletionPendingStageId) {
-      deleteStage({
+    if (deletionPendingActorId) {
+      deleteActor({
         variables: {
-          actorId: parseInt(deletionPendingStageId, 10),
+          actorId: parseInt(deletionPendingActorId, 10),
           deleteEvent: true,
         },
       });
-      setDeletionPendingStageId(null);
+      setDeletionPendingActorId(null);
     }
-  }, [deletionPendingStageId]);
+  }, [deletionPendingActorId]);
 
   const formatDate = (timestamp: string) => {
     const date = new Date(parseInt(timestamp, 10));
@@ -327,9 +327,9 @@ const NbVolunteersItem = (props: any) => {
         autoHeight
       />
 
-      <StageDeletionModal
-        open={deletionPendingStageId !== null}
-        onClose={() => setDeletionPendingStageId(null)}
+      <ActorDeletionModal
+        open={deletionPendingActorId !== null}
+        onClose={() => setDeletionPendingActorId(null)}
         onSubmit={() => handleDeletion()}
       />
     </AdminPageLayout>

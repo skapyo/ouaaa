@@ -289,8 +289,10 @@ const EditActor = () => {
             shortDescription: actor.shortDescription,
             description: actor.description,
             website: actor.website,
+            volunteerDescription: actor.volunteerDescription,
             volunteerAction: actor.volunteerAction,
             volunteerForm: actor.volunteerForm,
+            entries: actor.entries.map((e) => e.id),
             mainPicture: actor.pictures
               .filter((p) => p.main && !p.partner)
               .map((p) => ({

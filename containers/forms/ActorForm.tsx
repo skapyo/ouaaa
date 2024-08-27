@@ -92,6 +92,7 @@ export type EntriesWithInformation = {
 };
 
 export type ActorFields = {
+  name : String
   email: String
   phone: String
   address: String
@@ -410,6 +411,7 @@ const ActorForm = ({
                       <RadioField
                       name="entries"
                       options={collection.entries && collection.entries.map(entry => ({ value: entry.id, label: entry.label }))}
+                    
                       row={true}/>
                     )
                   }
@@ -666,9 +668,6 @@ const ActorForm = ({
             label="Nos recherches en bénévolat"
             helperText={
               "Décrivez ici les missions de bénévolat générales chez vous ou sur un devos projets spécifiques afin de donner envie aux visiteurs de cliquer sur «je deviens bénévole» de votre page."}
-            rules={{
-              required: "Description de l'activité requise",
-            }}
           />
 
 

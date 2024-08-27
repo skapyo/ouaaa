@@ -35,7 +35,7 @@ import { useSnackbar } from 'notistack';
 import { useCookies } from 'react-cookie';
 import { useReactToPrint } from 'react-to-print';
 import Head from 'next/head';
-import Parser from 'html-react-parser';
+import RichTextContent from 'components/RichTextContent';
 import Fab from '@mui/material/Fab';
 import EditIcon from '@mui/icons-material/Edit';
 import PrintIcon from '@mui/icons-material/Print';
@@ -89,7 +89,6 @@ const useStyles = makeStyles((theme) => ({
     justify: 'center',
     marginTop: ({ hasBannerUrl }) => (hasBannerUrl ? -53 : 20),
     alignItems: 'center',
-    maxWidth: 755,
     boxShadow: '0px 0px 38px -14px rgba(0, 0, 0, 0.46)',
     [theme.breakpoints.up('sm')]: {
       width: '80%',
@@ -1325,7 +1324,7 @@ const Actor = ({ initialData }) => {
                 <br />
                 <br />
                 <div>
-                  {data && Parser(data.actor.description)}
+                  {data && <RichTextContent content={data.actor.description} />}
                 </div>
                 <div>
                   {data
@@ -1699,6 +1698,7 @@ const Actor = ({ initialData }) => {
               <div className={styles.border} />
             </div>
             <br />
+            {/** TODO FIX
             <Calendar
               events={events}
               withViewSwitcher={false}
@@ -1708,6 +1708,7 @@ const Actor = ({ initialData }) => {
               }
               className={styles.calendar}
             />
+            **/}
             <br />
             <div>
               <Typography variant="h5" className={[styles.cardTitle]}>

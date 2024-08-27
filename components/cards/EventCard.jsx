@@ -10,7 +10,6 @@ import { getImageUrl } from '../../utils/utils';
 import StyledBoxOnHover from '../animated/StyledBoxOnHover';
 import Favorite from '../../components/Favorite';
 import Image from 'next/image';
-import eventCategories from 'src/eventCategories';
 const ADD_FAVORITE = gql`
   mutation addFavoriteEvent($eventId: Int!,$userId: Int!, $favorite: Boolean!) {
     addFavoriteEvent(eventId: $eventId,userId: $userId, favorite: $favorite) 

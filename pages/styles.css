@@ -28,9 +28,7 @@ body {
 .slick-prev {
   left: -10px!important;
 }
-.image {
-  max-width: 200px;
-}
+
 /* fallback */
 @font-face {
   font-family: 'Material Icons';
@@ -65,7 +63,4 @@ body {
 
 a:not(:hover) {
   text-decoration: none!important;
-}
-.image img{
-  width: 100%;
 }

@@ -1,10 +1,10 @@
-import React, { useCallback, useContext, useState } from 'react';
+import React, { useCallback, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Checkbox, TextField } from '@mui/material';
 import { TreeView, TreeItem } from '@mui/x-tree-view';
 import Typography from '@mui/material/Typography';
 import makeStyles from '@mui/styles/makeStyles';
-import { EntriesContext } from 'containers/forms/Entries';
+import { useFormContext, useController, RegisterOptions } from 'react-hook-form';
 import Tooltip from '@mui/material/Tooltip';
 import InfoIcon from '@mui/icons-material/Info';
 import ParentFilterContext from './ParentFilterContext';
@@ -94,60 +94,36 @@ function StyledTreeItem(props) {
   } = props;
 
   const context = useContext(ParentFilterContext);
-  const entriesContext = useContext(EntriesContext);
-  const [checked, setChecked] = useState(props.checked);
+  const { control, setValue } = useFormContext(); // Access form context
+  const {
+    field: { value: checked, onChange: handleCheckboxChange },
+  } = useController({
+    name: id, // Unique name for the field
+    control,
+    defaultValue: props.checked || false,
+  });
 
   let isThisEntryNotInTopSEO = false;
-  if (entriesContext !== undefined) {
-    isThisEntryNotInTopSEO = isForm && ((entriesContext.getList().length >= 3 && entriesContext.getList().indexOf(parseInt(other.nodeId, 10)) < 0) && !checked);
+  if (context.entriesContext !== undefined) {
+    isThisEntryNotInTopSEO = isForm && ((context.entriesContext.getList().length >= 3 && context.entriesContext.getList().indexOf(parseInt(other.nodeId, 10)) < 0) && !checked);
   }
-
-  const handleCheckboxChange = (event) => {
-    const checkStatus = event.target.checked;
-    setChecked(checkStatus);
-    const index = parseInt(id, 10);
-
-    if (isParent) {
-      context.handleParentCheckboxChange(checkStatus);
-      context.checkHandleToggle(event);
-    } else {
-      const eventEntry = event;
-      if (entriesContext) {
-        let isTopSEO;
-        if (checkStatus) {
-          isTopSEO = !entriesContext.addCheckedCheckbox(parseInt(other.nodeId, 10));
-        } else {
-          entriesContext.removeCheckedCheckbox(parseInt(other.nodeId, 10));
-        }
-        eventEntry.target.entryId = other.nodeId;
-        eventEntry.target.topSEO = isTopSEO;
-      }
-      if (typeof categoryChange !== 'undefined') {
-        categoryChange(eventEntry);
-      }
-      if (typeof context.handleChildCheckboxChange !== 'undefined') {
-        context.handleChildCheckboxChange(checkStatus, index);
-      }
-    }
-  };
 
   const handleClickItem = useCallback((evt) => {
     if (!isParent || !hasSubEntries) {
       evt.stopPropagation();
       if (!isForm) {
-        handleCheckboxChange({ target: { checked: !checked } });
+        handleCheckboxChange(!checked);
       }
     }
   }, [checked, handleCheckboxChange, isParent]);
 
   const handleDescriptionChange = (event) => {
-    const eventEntry = event;
-    eventEntry.target.entryId = other.nodeId;
-    eventEntry.target.linkDescription = event.target.value;
-    categoryChange(event);
+    setValue(`description-${other.nodeId}`, event.target.value);
+    categoryChange({ ...event, target: { ...event.target, entryId: other.nodeId, linkDescription: event.target.value } });
   };
 
   return (
+    
     <TreeItem
       label={(
         <div>
@@ -176,17 +152,17 @@ function StyledTreeItem(props) {
                 <InfoIcon />
               </Tooltip>
             )}
-            {!hideCheckBox && (!isThisEntryNotInTopSEO) && (
+            {!hideCheckBox && !isThisEntryNotInTopSEO && (
               <Checkbox
                 edge="start"
                 tabIndex={-1}
                 disableRipple
-                name="entries"
+                name={`checkbox-${id}`}
                 value={other.nodeId}
                 className={classes.checkbox}
                 style={{ color: '#2C367E' }}
                 checked={checked}
-                onChange={handleCheckboxChange}
+                onChange={(e) => handleCheckboxChange(e.target.checked)}
                 onClick={(e) => e.stopPropagation()}
               />
             )}
@@ -195,11 +171,10 @@ function StyledTreeItem(props) {
             <TextField
               className={classes.entryDescription}
               variant="outlined"
-              name="linkDescription"
+              name={`description-${other.nodeId}`}
               placeholder={`Votre lien avec le sujet ${labelText}`}
               onChange={handleDescriptionChange}
               value={other.linkDescription}
-              linkDescription
             />
           )}
         </div>
